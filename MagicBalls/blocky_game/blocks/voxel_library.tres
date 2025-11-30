@@ -1,0 +1,243 @@
+[gd_resource type="VoxelBlockyLibrary" load_steps=57 format=3 uid="uid://ctn2wqssoxvj5"]
+
+[ext_resource type="ArrayMesh" uid="uid://rq0nk6t5jqyc" path="res://blocky_game/blocks/grass/grass.obj" id="1"]
+[ext_resource type="ArrayMesh" uid="uid://dmi1fa4udxhx3" path="res://blocky_game/blocks/dirt/dirt.obj" id="2"]
+[ext_resource type="Material" uid="uid://bvllkch8a7b0w" path="res://blocky_game/blocks/terrain_material.tres" id="2_r7axq"]
+[ext_resource type="ArrayMesh" uid="uid://dungrukis54l4" path="res://blocky_game/blocks/log/log_y.obj" id="3"]
+[ext_resource type="ArrayMesh" uid="uid://cttendrth7rqh" path="res://blocky_game/blocks/log/log_x.obj" id="4"]
+[ext_resource type="ArrayMesh" uid="uid://bur41ote1leoo" path="res://blocky_game/blocks/log/log_z.obj" id="5"]
+[ext_resource type="ArrayMesh" uid="uid://b1ip507w1anoc" path="res://blocky_game/blocks/stairs/stairs_nx.obj" id="6"]
+[ext_resource type="Material" uid="uid://o6pjkujm0owf" path="res://blocky_game/blocks/terrain_material_foliage.tres" id="6_7k7uf"]
+[ext_resource type="ArrayMesh" uid="uid://dm05scqbatw2v" path="res://blocky_game/blocks/planks/planks.obj" id="7"]
+[ext_resource type="ArrayMesh" uid="uid://djfyehvrktts5" path="res://blocky_game/blocks/tall_grass/tall_grass.obj" id="8"]
+[ext_resource type="Material" path="res://blocky_game/blocks/terrain_material_transparent.tres" id="8_l6bxt"]
+[ext_resource type="ArrayMesh" uid="uid://xue4bt84vwsg" path="res://blocky_game/blocks/stairs/stairs_px.obj" id="9"]
+[ext_resource type="ArrayMesh" uid="uid://b3t5agd28fn0v" path="res://blocky_game/blocks/stairs/stairs_pz.obj" id="10"]
+[ext_resource type="ArrayMesh" uid="uid://c2hopote1vb14" path="res://blocky_game/blocks/stairs/stairs_nz.obj" id="11"]
+[ext_resource type="ArrayMesh" uid="uid://0i1jxsk65d0u" path="res://blocky_game/blocks/glass/glass.obj" id="12"]
+[ext_resource type="ArrayMesh" uid="uid://31q4wrlmcpbj" path="res://blocky_game/blocks/water/water_full.obj" id="13"]
+[ext_resource type="ArrayMesh" uid="uid://ym6qkw5kje5g" path="res://blocky_game/blocks/water/water_top.obj" id="14"]
+[ext_resource type="ArrayMesh" uid="uid://c3gahur20k4ev" path="res://blocky_game/blocks/rail/rail_slope_nz.obj" id="15"]
+[ext_resource type="ArrayMesh" uid="uid://csgscqf8ymc12" path="res://blocky_game/blocks/rail/rail_slope_px.obj" id="16"]
+[ext_resource type="ArrayMesh" uid="uid://bonu5trc4yi21" path="res://blocky_game/blocks/rail/rail_slope_pz.obj" id="17"]
+[ext_resource type="ArrayMesh" uid="uid://f6rvul3s0bj3" path="res://blocky_game/blocks/rail/rail_turn_px.obj" id="18"]
+[ext_resource type="ArrayMesh" uid="uid://dbiv52qgatf44" path="res://blocky_game/blocks/rail/rail_turn_nz.obj" id="19"]
+[ext_resource type="ArrayMesh" uid="uid://bx3qdxx5wahaw" path="res://blocky_game/blocks/rail/rail_x.obj" id="20"]
+[ext_resource type="ArrayMesh" uid="uid://cpe2fdu3515s8" path="res://blocky_game/blocks/rail/rail_z.obj" id="21"]
+[ext_resource type="ArrayMesh" uid="uid://gtm7tbbwvroc" path="res://blocky_game/blocks/rail/rail_turn_nx.obj" id="22"]
+[ext_resource type="ArrayMesh" uid="uid://bmt0xks6jivyi" path="res://blocky_game/blocks/rail/rail_turn_pz.obj" id="23"]
+[ext_resource type="ArrayMesh" uid="uid://c6qtk2kyul3nn" path="res://blocky_game/blocks/rail/rail_slope_nx.obj" id="24"]
+[ext_resource type="ArrayMesh" uid="uid://c2lwrnrx0on2g" path="res://blocky_game/blocks/leaves/leaves.obj" id="25"]
+[ext_resource type="ArrayMesh" uid="uid://bhkxvih1xa2a0" path="res://blocky_game/blocks/dead_shrub/dead_shrub.obj" id="26"]
+
+[sub_resource type="VoxelBlockyModelEmpty" id="VoxelBlockyModelEmpty_mk2sr"]
+resource_name = "air"
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_7h3nj"]
+resource_name = "dirt"
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("2")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_7ws3s"]
+resource_name = "grass"
+random_tickable = true
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("1")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_dgg18"]
+resource_name = "log_x"
+random_tickable = true
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("4")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_82a53"]
+resource_name = "log_y"
+random_tickable = true
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("3")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_rid6c"]
+resource_name = "log_z"
+random_tickable = true
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("5")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_w6frs"]
+resource_name = "stairs_nx"
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.5, 1), AABB(0, 0.5, 0, 0.5, 0.5, 1)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("6")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_b3d46"]
+resource_name = "planks"
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("7")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_ilklx"]
+resource_name = "tall_grass"
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("8")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_8o2q5"]
+resource_name = "stairs_nz"
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.5, 1), AABB(0, 0.5, 0, 1, 0.5, 0.5)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("11")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_dos6x"]
+resource_name = "stairs_px"
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.5, 1), AABB(0.5, 0.5, 0, 0.5, 0.5, 1)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("9")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_ldqsp"]
+resource_name = "stairs_pz"
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.5, 1), AABB(0, 0.5, 0.5, 1, 0.5, 0.5)])
+material_override_0 = ExtResource("2_r7axq")
+collision_enabled_0 = true
+mesh = ExtResource("10")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_rqv2x"]
+resource_name = "glass"
+transparency_index = 2
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.5, 1)])
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("12")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_lt74g"]
+resource_name = "water_top"
+transparency_index = 1
+material_override_0 = ExtResource("8_l6bxt")
+collision_enabled_0 = true
+mesh = ExtResource("14")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_rydis"]
+resource_name = "water_full"
+transparency_index = 1
+material_override_0 = ExtResource("8_l6bxt")
+collision_enabled_0 = true
+mesh = ExtResource("13")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_k70eq"]
+resource_name = "rail_x"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("20")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_7pgsh"]
+resource_name = "rail_z"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("21")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_qbgg8"]
+resource_name = "rail_turn_nx"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("22")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_iqgm8"]
+resource_name = "rail_turn_px"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("18")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_1mglx"]
+resource_name = "rail_turn_nz"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("19")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_udleu"]
+resource_name = "rail_turn_pz"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("23")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_p61kv"]
+resource_name = "rail_slope_nx"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("24")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_txenr"]
+resource_name = "rail_slope_px"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("16")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_ruhud"]
+resource_name = "rail_slope_nz"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("15")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_5qhvr"]
+resource_name = "rail_slope_pz"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 0.125, 1)])
+collision_mask = 2
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("17")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_g6mep"]
+resource_name = "leaves"
+transparency_index = 1
+collision_aabbs = Array[AABB]([AABB(0, 0, 0, 1, 1, 1)])
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("25")
+
+[sub_resource type="VoxelBlockyModelMesh" id="VoxelBlockyModelMesh_kcviq"]
+resource_name = "dead_shrub"
+material_override_0 = ExtResource("6_7k7uf")
+collision_enabled_0 = true
+mesh = ExtResource("26")
+
+[resource]
+models = Array[VoxelBlockyModel]([SubResource("VoxelBlockyModelEmpty_mk2sr"), SubResource("VoxelBlockyModelMesh_7h3nj"), SubResource("VoxelBlockyModelMesh_7ws3s"), SubResource("VoxelBlockyModelMesh_dgg18"), SubResource("VoxelBlockyModelMesh_82a53"), SubResource("VoxelBlockyModelMesh_rid6c"), SubResource("VoxelBlockyModelMesh_w6frs"), SubResource("VoxelBlockyModelMesh_b3d46"), SubResource("VoxelBlockyModelMesh_ilklx"), SubResource("VoxelBlockyModelMesh_8o2q5"), SubResource("VoxelBlockyModelMesh_dos6x"), SubResource("VoxelBlockyModelMesh_ldqsp"), SubResource("VoxelBlockyModelMesh_rqv2x"), SubResource("VoxelBlockyModelMesh_lt74g"), SubResource("VoxelBlockyModelMesh_rydis"), SubResource("VoxelBlockyModelMesh_k70eq"), SubResource("VoxelBlockyModelMesh_7pgsh"), SubResource("VoxelBlockyModelMesh_qbgg8"), SubResource("VoxelBlockyModelMesh_iqgm8"), SubResource("VoxelBlockyModelMesh_1mglx"), SubResource("VoxelBlockyModelMesh_udleu"), SubResource("VoxelBlockyModelMesh_p61kv"), SubResource("VoxelBlockyModelMesh_txenr"), SubResource("VoxelBlockyModelMesh_ruhud"), SubResource("VoxelBlockyModelMesh_5qhvr"), SubResource("VoxelBlockyModelMesh_g6mep"), SubResource("VoxelBlockyModelMesh_kcviq")])
