@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="New Game Project"
-config/features=PackedStringArray("4.4")
+run/main_scene="uid://cliwi34yk5hra"
+config/features=PackedStringArray("4.5", "Double Precision")
 config/icon="res://icon.png"
 
 [autoload]
