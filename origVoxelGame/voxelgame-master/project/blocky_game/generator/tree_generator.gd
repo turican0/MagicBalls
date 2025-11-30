@@ -72,4 +72,3 @@ func generate() -> Structure:
 		buffer.set_voxel(v, rpos.x, rpos.y, rpos.z, channel)
 
 	return structure
-
