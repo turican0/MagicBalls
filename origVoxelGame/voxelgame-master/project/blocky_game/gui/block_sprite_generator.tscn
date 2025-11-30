@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://0tp72w52ddwh"]
+
+[ext_resource type="Script" path="res://blocky_game/gui/block_sprite_generator.gd" id="1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ga5ik"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_lbffk"]
+sky_material = SubResource("ProceduralSkyMaterial_ga5ik")
+
+[sub_resource type="Environment" id="Environment_vbpqs"]
+background_mode = 2
+sky = SubResource("Sky_lbffk")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node" type="Node"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vbpqs")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(128, 128)
+render_target_update_mode = 3
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(-0.467119, 0.447433, -0.76263, 0, 0.862514, 0.506034, 0.884195, 0.236378, -0.402896, -0.530722, 1.19951, -0.0522263)
+projection = 1
+current = true
+size = 1.62453
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewport"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
+visible = false
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.90295, -0.173518, -0.393157, 0.424509, 0.502534, 0.753162, 0.0668873, -0.846966, 0.527423, 3.45617, 1.75451, 0)
