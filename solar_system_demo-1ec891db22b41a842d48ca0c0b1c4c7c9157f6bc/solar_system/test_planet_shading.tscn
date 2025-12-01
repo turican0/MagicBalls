@@ -3,7 +3,7 @@
 [ext_resource type="Material" uid="uid://cp754ky7maqj2" path="res://solar_system/materials/planet_material_grassy.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://c36velgas3n3k" path="res://addons/zylann.atmosphere/planet_atmosphere.tscn" id="3_j5ksx"]
 [ext_resource type="VoxelGeneratorGraph" uid="uid://b4umpxnew5cgx" path="res://solar_system/voxel_graph_planet_v4.tres" id="4"]
-[ext_resource type="Shader" path="res://addons/zylann.atmosphere/shaders/planet_atmosphere_v1_clouds.gdshader" id="4_3o5ts"]
+[ext_resource type="Shader" uid="uid://b0ejfp8ryb7x3" path="res://addons/zylann.atmosphere/shaders/planet_atmosphere_v1_clouds.gdshader" id="4_3o5ts"]
 [ext_resource type="NoiseTexture3D" uid="uid://cudqtkcf6wrj2" path="res://solar_system/atmosphere/noise_texture_3d.res" id="5_mft80"]
 [ext_resource type="Cubemap" uid="uid://ghi3h7wjp2ep" path="res://solar_system/atmosphere/cloud_coverage_mars.tres" id="6_ei3xl"]
 
@@ -74,17 +74,17 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="4"]
 render_priority = 0
 shader = SubResource("3")
-shader_parameter/albedo = null
-shader_parameter/specular = null
-shader_parameter/metallic = null
-shader_parameter/roughness = null
-shader_parameter/point_size = null
-shader_parameter/normal_scale = null
-shader_parameter/uv1_blend_sharpness = null
-shader_parameter/uv1_scale = null
-shader_parameter/uv1_offset = null
-shader_parameter/uv2_scale = null
-shader_parameter/uv2_offset = null
+shader_parameter/albedo = Color(0, 0, 0, 1)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/point_size = 0.0
+shader_parameter/normal_scale = 0.0
+shader_parameter/uv1_blend_sharpness = 0.0
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
 
 [sub_resource type="SphereMesh" id="5"]
 radius = 200.0
@@ -128,13 +128,13 @@ shader_params/u_day_color1 = Color(0.5, 0.8, 1, 1)
 shader_params/u_night_color0 = Color(0.2, 0.4, 0.8, 1)
 shader_params/u_night_color1 = Color(0.2, 0.4, 0.8, 1)
 shader_params/u_day_night_transition_scale = 2.0
-shader_params/u_cloud_shape_invert = 1.0
-shader_params/u_cloud_coverage_bias = 0.05
-shader_params/u_cloud_shape_factor = 0.4
-shader_params/u_cloud_shape_scale = 0.002
 shader_params/u_cloud_density_scale = 0.005
 shader_params/u_cloud_bottom = 0.2
 shader_params/u_cloud_top = 0.5
 shader_params/u_cloud_blend = 0.5
 shader_params/u_cloud_shape_texture = ExtResource("5_mft80")
+shader_params/u_cloud_shape_invert = 1.0
+shader_params/u_cloud_coverage_bias = 0.05
+shader_params/u_cloud_shape_factor = 0.4
+shader_params/u_cloud_shape_scale = 0.002
 shader_params/u_cloud_coverage_cubemap = ExtResource("6_ei3xl")
