@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://cp754ky7maqj2"]
+
+[ext_resource type="Shader" path="res://solar_system/materials/planet_ground.gdshader" id="1"]
+[ext_resource type="Texture2D" uid="uid://dq0s3scgs2ncg" path="res://textures/grass_albedo.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://jfywo4xd75ku" path="res://textures/Rocks07_col.webp" id="2_ylcsf"]
+[ext_resource type="Texture2D" uid="uid://dvpf64ui03kn5" path="res://textures/Rocks07_nrm.webp" id="3_780vy"]
+[ext_resource type="Texture2D" uid="uid://ksj4nnvstubh" path="res://textures/grass_normal.png" id="4"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1")
+shader_parameter/u_transition_mask = null
+shader_parameter/u_lod_fade = null
+shader_parameter/u_voxel_virtual_texture_tile_size = null
+shader_parameter/u_voxel_virtual_texture_fade = null
+shader_parameter/u_voxel_cell_size = null
+shader_parameter/u_voxel_block_size = null
+shader_parameter/u_voxel_virtual_texture_offset_scale = null
+shader_parameter/u_mountain_height = 10000.0
+shader_parameter/u_top_modulate = Color(1, 1, 1, 1)
+shader_parameter/u_block_local_transform = null
+shader_parameter/u_top_albedo_texture = ExtResource("2")
+shader_parameter/u_top_normal_texture = ExtResource("4")
+shader_parameter/u_side_albedo_texture = ExtResource("2_ylcsf")
+shader_parameter/u_side_normal_texture = ExtResource("3_780vy")
