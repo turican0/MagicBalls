@@ -1,6 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://di5fovhcyd7re"]
+[gd_scene load_steps=12 format=3 uid="uid://di5fovhcyd7re"]
 
-[ext_resource type="Script" path="res://demo/src/Enemy.gd" id="1_yudyn"]
+[ext_resource type="Script" uid="uid://6j2rrp5f1gjs" path="res://demo/src/Enemy.gd" id="1_yudyn"]
+[ext_resource type="Texture2D" uid="uid://c1ybnltkj8k3m" path="res://assets/sphere/Metal048C_2K-PNG_Color.png" id="2_bbyao"]
+[ext_resource type="Texture2D" uid="uid://4571ecam64gq" path="res://assets/sphere/Metal048C_2K-PNG_Metalness.png" id="3_8eh44"]
+[ext_resource type="Texture2D" uid="uid://c4n7aw68tphwj" path="res://assets/sphere/Metal048C_2K-PNG_Roughness.png" id="3_hp3i2"]
+[ext_resource type="Texture2D" uid="uid://c38470ojxanbi" path="res://assets/sphere/Metal048C_2K-PNG_NormalGL.png" id="4_8eh44"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lwhhq"]
 height = 1.5
@@ -11,6 +15,17 @@ height = 1.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d4cor"]
 albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ak2ch"]
+albedo_texture = ExtResource("2_bbyao")
+metallic = 1.0
+metallic_texture = ExtResource("3_8eh44")
+roughness_texture = ExtResource("3_hp3i2")
+normal_enabled = true
+normal_texture = ExtResource("4_8eh44")
+
+[sub_resource type="SphereMesh" id="SphereMesh_2ml7a"]
+material = SubResource("StandardMaterial3D_ak2ch")
 
 [node name="Enemy" type="CharacterBody3D"]
 collision_layer = 2
@@ -26,9 +41,14 @@ shape = SubResource("SeparationRayShape3D_i8f01")
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_lsqiy")
 surface_material_override/0 = SubResource("StandardMaterial3D_d4cor")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 2.0
 debug_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("SphereMesh_2ml7a")
