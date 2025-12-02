@@ -15,6 +15,10 @@ run/main_scene="uid://chol2xlfbq7cu"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/terrain_3d/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
