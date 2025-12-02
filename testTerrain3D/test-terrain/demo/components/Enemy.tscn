@@ -1,10 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://di5fovhcyd7re"]
+[gd_scene load_steps=11 format=3 uid="uid://di5fovhcyd7re"]
 
 [ext_resource type="Script" uid="uid://6j2rrp5f1gjs" path="res://demo/src/Enemy.gd" id="1_yudyn"]
 [ext_resource type="Texture2D" uid="uid://c1ybnltkj8k3m" path="res://assets/sphere/Metal048C_2K-PNG_Color.png" id="2_bbyao"]
-[ext_resource type="Texture2D" uid="uid://4571ecam64gq" path="res://assets/sphere/Metal048C_2K-PNG_Metalness.png" id="3_8eh44"]
-[ext_resource type="Texture2D" uid="uid://c4n7aw68tphwj" path="res://assets/sphere/Metal048C_2K-PNG_Roughness.png" id="3_hp3i2"]
-[ext_resource type="Texture2D" uid="uid://c38470ojxanbi" path="res://assets/sphere/Metal048C_2K-PNG_NormalGL.png" id="4_8eh44"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lwhhq"]
 height = 1.5
@@ -16,13 +13,22 @@ height = 1.5
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d4cor"]
 albedo_color = Color(1, 0, 0, 1)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_13w7s"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rkbbe"]
+noise = SubResource("FastNoiseLite_13w7s")
+seamless = true
+as_normal_map = true
+bump_strength = 6.2
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ak2ch"]
 albedo_texture = ExtResource("2_bbyao")
+albedo_texture_force_srgb = true
 metallic = 1.0
-metallic_texture = ExtResource("3_8eh44")
-roughness_texture = ExtResource("3_hp3i2")
+roughness = 0.2
 normal_enabled = true
-normal_texture = ExtResource("4_8eh44")
+normal_texture = SubResource("NoiseTexture2D_rkbbe")
+clearcoat_enabled = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_2ml7a"]
 material = SubResource("StandardMaterial3D_ak2ch")
