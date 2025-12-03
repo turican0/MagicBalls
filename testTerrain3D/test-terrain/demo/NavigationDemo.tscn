@@ -1,6 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://x34e4v60vdmy"]
+[gd_scene load_steps=15 format=3 uid="uid://x34e4v60vdmy"]
 
-[ext_resource type="Script" path="res://demo/src/DemoScene.gd" id="1_po4vw"]
+[ext_resource type="Script" uid="uid://chstoagn42gbr" path="res://demo/src/DemoScene.gd" id="1_po4vw"]
 [ext_resource type="PackedScene" uid="uid://bb2lp50sjndus" path="res://demo/components/Environment.tscn" id="2_i74wg"]
 [ext_resource type="PackedScene" uid="uid://dwnhqfjq7v1pq" path="res://demo/components/Borders.tscn" id="3_3upu0"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://demo/components/Player.tscn" id="4_fk3ul"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://demo/components/UI.tscn" id="5_rc7e2"]
 [ext_resource type="NavigationMesh" uid="uid://yf3fu23666k8" path="res://demo/data/nav_mesh.res" id="8_6jfdr"]
 [ext_resource type="Terrain3DAssets" uid="uid://dal3jhw6241qg" path="res://demo/data/assets.tres" id="10_qmhh8"]
+[ext_resource type="Script" uid="uid://brdlhlevwdawb" path="res://demo/terrain_3d.gd" id="10_rf2hf"]
 [ext_resource type="PackedScene" uid="uid://di5fovhcyd7re" path="res://demo/components/Enemy.tscn" id="12_b2xl8"]
 
 [sub_resource type="Gradient" id="Gradient_vr1m7"]
@@ -27,9 +28,9 @@ domain_warp_fractal_lacunarity = 1.5
 domain_warp_fractal_gain = 1.0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bov7h"]
-seamless = true
-color_ramp = SubResource("Gradient_vr1m7")
 noise = SubResource("FastNoiseLite_d8lcj")
+color_ramp = SubResource("Gradient_vr1m7")
+seamless = true
 
 [sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_s5mq5"]
 _shader_parameters = {
@@ -47,7 +48,7 @@ _shader_parameters = {
 "dual_scale_texture": 0,
 "enable_macro_variation": true,
 "enable_projection": true,
-"height_blending": true,
+&"flat_terrain_normals": false,
 "macro_variation1": Color(0.878431, 0.862745, 0.901961, 1),
 "macro_variation2": Color(0.898039, 0.898039, 0.803922, 1),
 "macro_variation_slope": 0.333,
@@ -56,9 +57,7 @@ _shader_parameters = {
 "noise1_offset": Vector2(0.5, 0.5),
 "noise1_scale": 0.04,
 "noise2_scale": 0.076,
-"noise3_scale": 0.225,
 "noise_texture": SubResource("NoiseTexture2D_bov7h"),
-"projection_angular_division": 1.436,
 "projection_threshold": 0.8,
 "tri_scale_reduction": 0.3
 }
@@ -95,4 +94,5 @@ assets = ExtResource("10_qmhh8")
 collision_mask = 3
 mesh_size = 64
 top_level = true
+script = ExtResource("10_rf2hf")
 metadata/_edit_lock_ = true

@@ -68,7 +68,10 @@ func shoot_bullet() -> void:
 	var dir: Vector3 = -%Camera3D.global_transform.basis.z
 	
 	bullet.direction = dir.normalized()
+	bullet.direction.y = 0.0
+	bullet.direction = bullet.direction.normalized()
 	bullet.global_transform.origin = global_transform.origin + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
+	#bullet.global_position = global_position + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
 	get_tree().current_scene.add_child(bullet)
 
 func _input(p_event: InputEvent) -> void:
