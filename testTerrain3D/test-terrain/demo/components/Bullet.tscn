@@ -1,7 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://bgu4ojcecgsin"]
 
 [ext_resource type="Script" uid="uid://dcuehf17hv5o7" path="res://demo/components/Bullet.gd" id="1_67jft"]
-[ext_resource type="PackedScene" uid="uid://x34e4v60vdmy" path="res://demo/NavigationDemo.tscn" id="2_e63ey"]
 [ext_resource type="Texture2D" uid="uid://c1ybnltkj8k3m" path="res://assets/sphere/Metal048C_2K-PNG_Color.png" id="2_hrg2b"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_67jft"]
@@ -29,7 +28,6 @@ material = SubResource("StandardMaterial3D_ed81m")
 [node name="Bullet" type="CharacterBody3D"]
 motion_mode = 1
 script = ExtResource("1_67jft")
-terrain_scene_node = ExtResource("2_e63ey")
 
 [node name="CollisionShapeBody" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_67jft")
