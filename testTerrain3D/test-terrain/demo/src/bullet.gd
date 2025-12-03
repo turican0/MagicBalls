@@ -1,4 +1,4 @@
-extends CharacterBody3D
+extends Node3D
 
 @export var speed: float = 50.0
 @export var life_distance: float = 10.0  # kolik sekund střela existuje
@@ -19,9 +19,9 @@ var first_run: bool = true
 func _ready() -> void:
 	# Pro jistotu normalizujeme směr
 	#direction = direction.normalized()
-	floor_snap_length = 0.0
-	floor_stop_on_slope = false
-	floor_max_angle = 0.0  # Nebere ohled na úhly podlahy
+	#floor_snap_length = 0.0
+	#floor_stop_on_slope = false
+	#floor_max_angle = 0.0  # Nebere ohled na úhly podlahy
 	
 	terrain_ref = get_node("/root/Demo/NavigationRegion3D/Terrain3D")
 	

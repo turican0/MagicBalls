@@ -64,7 +64,7 @@ func get_camera_relative_input() -> Vector3:
 func shoot_bullet() -> void:
 	if bullet_scene == null:
 		return
-	var bullet: CharacterBody3D = bullet_scene.instantiate()
+	var bullet: Node3D = bullet_scene.instantiate()
 	var dir: Vector3 = -%Camera3D.global_transform.basis.z
 	
 	bullet.direction = dir.normalized()
