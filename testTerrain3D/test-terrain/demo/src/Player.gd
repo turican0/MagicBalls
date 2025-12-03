@@ -70,9 +70,10 @@ func shoot_bullet() -> void:
 	bullet.direction = dir.normalized()
 	bullet.direction.y = 0.0
 	bullet.direction = bullet.direction.normalized()
-	bullet.global_transform.origin = global_transform.origin + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
 	#bullet.global_position = global_position + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
 	get_tree().current_scene.add_child(bullet)
+	bullet.global_position = global_position + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
+	
 
 func _input(p_event: InputEvent) -> void:
 	if p_event is InputEventMouseButton and p_event.button_index == MOUSE_BUTTON_LEFT and p_event.pressed:

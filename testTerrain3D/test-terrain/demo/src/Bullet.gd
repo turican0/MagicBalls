@@ -7,9 +7,10 @@ extends Node3D
 @export var damage_strength: float = -1.0  # Síla snížení výšky (negativní pro damage)
 
 var direction: Vector3 = Vector3.ZERO
-var timer: float = 0.0
+#var timer: float = 0.0
 var last_position: Vector3
-var tick_queue: Array = []
+var aplicated_tick: int = 0
+#var tick_queue: Array = []
 var terrain_ref: Terrain3D
 
 var begin_position: Vector3
@@ -28,6 +29,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if first_run:
 		begin_position = global_position
+		last_position = global_position
 		first_run = false
 	# Pohyb projektilu
 	global_position += direction * speed * delta
@@ -37,22 +39,12 @@ func _physics_process(delta: float) -> void:
 		## Např. if collision.get_collider().has_method("take_damage"): ...
 		#queue_free()  # Znič při jakékoliv kolizi
 	# pokud jsme uletěli dostatečnou vzdálenost, přidej body do fronty
-	var distance = last_position.distance_to(global_transform.origin)
-	if distance >= tick_distance:
-		var steps = int(distance / tick_distance)
-		for i in range(1, steps + 1):
-			var t = i / float(steps)
-			var point = last_position.lerp(global_transform.origin, t)
-			tick_queue.append(point)
-		last_position = global_transform.origin
-
-	# zpracování všech ticků ve frontě
-	while tick_queue.size() > 0:
-		var point = tick_queue.pop_front()
-		if terrain_ref:
+	var distance_count: int = int(last_position.distance_to(global_position)/tick_distance)
+	if distance_count > 0:		
+		for i in range(0, distance_count):
+			var point = last_position.lerp(global_position, i)
 			terrain_ref._apply_terrain_damage(point, damage_radius, damage_strength)
-		else:
-			push_warning("Terrain3D reference not set! Skipping damage.")
+		last_position = global_position
 			
 		# Konec životnosti
 	var total_distance = global_position.distance_to(begin_position)
