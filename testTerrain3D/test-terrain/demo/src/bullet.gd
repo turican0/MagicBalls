@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 @export var speed: float = 50.0
-@export var lifetime: float = 3.0   # kolik sekund střela existuje
+@export var life_distance: float = 10.0  # kolik sekund střela existuje
 @export var tick_distance: float = 1.0  # vzdálenost mezi deformacemi
 @export var damage_radius: float = 2.0  # Radius deformace pro každou tick
 @export var damage_strength: float = -1.0  # Síla snížení výšky (negativní pro damage)
@@ -12,16 +12,23 @@ var last_position: Vector3
 var tick_queue: Array = []
 var terrain_ref: Terrain3D
 
+var begin_position: Vector3
+
+var first_run: bool = true
+
 func _ready() -> void:
 	# Pro jistotu normalizujeme směr
-	direction = direction.normalized()
+	#direction = direction.normalized()
 	floor_snap_length = 0.0
 	floor_stop_on_slope = false
 	floor_max_angle = 0.0  # Nebere ohled na úhly podlahy
 	
 	terrain_ref = get_node("/root/Demo/NavigationRegion3D/Terrain3D")
-
+	
 func _physics_process(delta: float) -> void:
+	if first_run:
+		begin_position = global_position
+		first_run = false
 	# Pohyb projektilu
 	global_position += direction * speed * delta
 	#velocity = direction * speed
@@ -46,3 +53,8 @@ func _physics_process(delta: float) -> void:
 			terrain_ref._apply_terrain_damage(point, damage_radius, damage_strength)
 		else:
 			push_warning("Terrain3D reference not set! Skipping damage.")
+			
+		# Konec životnosti
+	var total_distance = global_position.distance_to(begin_position)
+	if total_distance >= life_distance:
+		queue_free()
