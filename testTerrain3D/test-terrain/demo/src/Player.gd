@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+@export var bullet_scene: PackedScene
+
 @export var MOVE_SPEED: float = 50.0
 @export var JUMP_SPEED: float = 2.0
 @export var first_person: bool = false : 
@@ -59,8 +61,19 @@ func get_camera_relative_input() -> Vector3:
 		MOVE_SPEED = clamp(MOVE_SPEED - .5, 5, 9999)
 	return input_dir
 
+func shoot_bullet() -> void:
+	if bullet_scene == null:
+		return
+	var bullet: CharacterBody3D = bullet_scene.instantiate()
+	var dir: Vector3 = -%Camera3D.global_transform.basis.z
+	
+	bullet.direction = dir.normalized()
+	bullet.global_transform.origin = global_transform.origin + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
+	get_tree().current_scene.add_child(bullet)
 
 func _input(p_event: InputEvent) -> void:
+	if p_event is InputEventMouseButton and p_event.button_index == MOUSE_BUTTON_LEFT and p_event.pressed:
+		shoot_bullet()
 	if p_event is InputEventMouseButton and p_event.pressed:
 		if p_event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			MOVE_SPEED = clamp(MOVE_SPEED + 5, 5, 9999)

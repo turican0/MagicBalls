@@ -26,6 +26,7 @@ clearcoat_enabled = true
 material = SubResource("StandardMaterial3D_ed81m")
 
 [node name="Bullet" type="CharacterBody3D"]
+motion_mode = 1
 script = ExtResource("1_67jft")
 
 [node name="CollisionShapeBody" type="CollisionShape3D" parent="."]

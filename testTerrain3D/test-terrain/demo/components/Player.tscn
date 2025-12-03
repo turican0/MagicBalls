@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://domhm87hbhbg1"]
+[gd_scene load_steps=8 format=3 uid="uid://domhm87hbhbg1"]
 
-[ext_resource type="Script" path="res://demo/src/Player.gd" id="1_nm1yx"]
-[ext_resource type="Script" path="res://demo/src/CameraManager.gd" id="2_loos7"]
+[ext_resource type="Script" uid="uid://dajlr3n5wjwmb" path="res://demo/src/Player.gd" id="1_nm1yx"]
+[ext_resource type="Script" uid="uid://b62ppvc03a6b1" path="res://demo/src/CameraManager.gd" id="2_loos7"]
+[ext_resource type="PackedScene" uid="uid://bgu4ojcecgsin" path="res://demo/components/Bullet.tscn" id="2_sgnwv"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_smq6u"]
 
@@ -15,6 +16,7 @@ height = 1.5
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_nm1yx")
+bullet_scene = ExtResource("2_sgnwv")
 
 [node name="CameraManager" type="Node3D" parent="."]
 script = ExtResource("2_loos7")
