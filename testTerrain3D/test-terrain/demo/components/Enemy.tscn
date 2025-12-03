@@ -1,0 +1,60 @@
+[gd_scene load_steps=11 format=3 uid="uid://di5fovhcyd7re"]
+
+[ext_resource type="Script" uid="uid://6j2rrp5f1gjs" path="res://demo/src/Enemy.gd" id="1_yudyn"]
+[ext_resource type="Texture2D" uid="uid://c1ybnltkj8k3m" path="res://assets/sphere/Metal048C_2K-PNG_Color.png" id="2_bbyao"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lwhhq"]
+height = 1.5
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_i8f01"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_lsqiy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d4cor"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_13w7s"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rkbbe"]
+noise = SubResource("FastNoiseLite_13w7s")
+seamless = true
+as_normal_map = true
+bump_strength = 6.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ak2ch"]
+albedo_texture = ExtResource("2_bbyao")
+albedo_texture_force_srgb = true
+metallic = 1.0
+roughness = 0.2
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_rkbbe")
+clearcoat_enabled = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_2ml7a"]
+material = SubResource("StandardMaterial3D_ak2ch")
+
+[node name="Enemy" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_yudyn")
+
+[node name="CollisionShapeBody" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CapsuleShape3D_lwhhq")
+
+[node name="CollisionShapeRay" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0)
+shape = SubResource("SeparationRayShape3D_i8f01")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_lsqiy")
+surface_material_override/0 = SubResource("StandardMaterial3D_d4cor")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 2.0
+debug_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("SphereMesh_2ml7a")

@@ -1,0 +1,6 @@
+[gd_resource type="VoxelGeneratorScript" load_steps=2 format=3 uid="uid://c2t872uuy64lx"]
+
+[ext_resource type="Script" uid="uid://c4r2nfie5t4uh" path="res://noise_generator.gd" id="1_24008"]
+
+[resource]
+script = ExtResource("1_24008")
