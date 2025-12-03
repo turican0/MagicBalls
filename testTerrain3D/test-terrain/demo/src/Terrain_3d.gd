@@ -65,29 +65,49 @@ func reset_terrain_height_for_testing() -> void:
 	for region_location in all_regions.keys():
 		var region: Terrain3DRegion = all_regions[region_location]
 
-		# Tato metoda by měla být k dispozici přímo na objektu Terrain3DRegion
-		# a provádí efektivní vyplnění bez nutnosti iterovat v GDScriptu.
-		region.fill_map(MAP_HEIGHT, 0.0) 
+		# Získání velikosti a formátu výškové mapy z existujícího regionu
+		var current_height_map: Image = region.get_map(MAP_HEIGHT)
+		if current_height_map.is_empty():
+			push_warning("Region at " + str(region_location) + " has no height map data.")
+			continue
 
-		# Označení regionu jako modifikovaného
-		data.set_region_modified(region_location, true)
+		#if first_region_size.x == 0:
+			#first_region_size = current_height_map.get_size()
+
+		# Vytvoření nové Image, která má stejnou velikost a formát (FORMAT_RF pro 32-bit float)
+		# a která bude inicializována nulami (0.0)
+		var blank_image := Image.create(
+		current_height_map.get_width(), 
+		current_height_map.get_height(), 
+		false, 
+		Image.FORMAT_RF # 32-bit float
+		)
+		# Poznámka: Image.create() vytvoří Image, kde jsou všechny pixely defaultně nulové.
+
+		# Nahrazení původní mapy nulovou mapou
+		region.set_map(MAP_HEIGHT, blank_image)
+
+		# Přepočítání výškového rozsahu (min/max), který bude nyní (0, 0)
+		region.calc_height_range() 
+
+		# Označení regionu jako modifikovaného, aby byl uložen a aktualizován
+		region.set_modified(true) 
 		regions_reset_count += 1
 
 	# 3. Aktualizace a notifikace Godotu o masivní změně
 
-	# A. Volání update_maps k vynucení překreslení/mipmaps (all_regions = true je klíčové)
-	# 3 je hodnota pro update VŠECH map (height, control, color)
-	data.update_maps(3, true, false) 
+	# A. Vynucení aktualizace všech map (rebuild indexů a textur)
+	data.update_maps(Terrain3DRegion.MapType.TYPE_MAX, true, false) 
 
 	# B. Získání celkových hranic pro notifikaci Terrain3D uzlu
-	var terrain_bounds: AABB = data.get_bounds()
-	var half_size_x: float = terrain_bounds.size.x / 2.0
-	var half_size_z: float = terrain_bounds.size.z / 2.0
+	#var terrain_bounds: AABB = data.get_bounds()
+	#var half_size_x: float = terrain_bounds.size.x / 2.0
+	#var half_size_z: float = terrain_bounds.size.z / 2.0
 
-	## Upozornění na změnu celého rozsahu terénu pro aktualizaci kolize
+	# Upozornění na změnu celého rozsahu terénu pro aktualizaci kolize
 	#notify_region_modified(
 	#Vector3(terrain_bounds.position.x - half_size_x, 0, terrain_bounds.position.z - half_size_z), 
 	#Vector3(terrain_bounds.position.x + half_size_x, 0, terrain_bounds.position.z + half_size_z)
 	#)
-#
-	#print("Vynulování výšky terénu dokončeno. Resetováno regionů: " + str(regions_reset_count))
+
+	print("Vynulování výšky terénu dokončeno. Resetováno regionů: " + str(regions_reset_count))
