@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dfje04v6keeiq"
+path="res://.godot/imported/RoundCube.obj-ebc196ebb9e756d007459a4795131784.mesh"
+
+[deps]
+
+files=["res://.godot/imported/RoundCube.obj-ebc196ebb9e756d007459a4795131784.mesh"]
+
+source_file="res://demo/Sky-demo/demo/assets/meshes/RoundCube.obj"
+dest_files=["res://.godot/imported/RoundCube.obj-ebc196ebb9e756d007459a4795131784.mesh", "res://.godot/imported/RoundCube.obj-ebc196ebb9e756d007459a4795131784.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

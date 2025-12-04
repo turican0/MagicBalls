@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dlye2mrl4eaf0"
+path="res://.godot/imported/Triangle.obj-8affbde7e84b9ce22b1d76a982d0f404.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Triangle.obj-8affbde7e84b9ce22b1d76a982d0f404.mesh"]
+
+source_file="res://demo/Sky-demo/demo/assets/meshes/Triangle.obj"
+dest_files=["res://.godot/imported/Triangle.obj-8affbde7e84b9ce22b1d76a982d0f404.mesh", "res://.godot/imported/Triangle.obj-8affbde7e84b9ce22b1d76a982d0f404.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cv4gbcuvj16hw"
+path="res://.godot/imported/Suzanne.obj-7682e53844057cda2a61db7ebd6ee94e.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Suzanne.obj-7682e53844057cda2a61db7ebd6ee94e.mesh"]
+
+source_file="res://demo/Sky-demo/demo/assets/meshes/Suzanne.obj"
+dest_files=["res://.godot/imported/Suzanne.obj-7682e53844057cda2a61db7ebd6ee94e.mesh", "res://.godot/imported/Suzanne.obj-7682e53844057cda2a61db7ebd6ee94e.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

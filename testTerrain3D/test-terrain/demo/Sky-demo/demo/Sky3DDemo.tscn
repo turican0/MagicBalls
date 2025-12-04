@@ -1,0 +1,264 @@
+[gd_scene load_steps=17 format=3 uid="uid://c5friqigqdh4k"]
+
+[ext_resource type="PackedScene" uid="uid://dipn6t27p0nap" path="res://demo/assets/scenes/PrimitivesCity.tscn" id="2"]
+[ext_resource type="Script" uid="uid://deo0gxkmk2ahd" path="res://addons/sky_3d/src/Sky3D.gd" id="2_cejat"]
+[ext_resource type="Script" uid="uid://cjmkcj8hwm7ts" path="res://addons/sky_3d/src/TimeOfDay.gd" id="3"]
+[ext_resource type="Script" uid="uid://b4tkplvh7fq40" path="res://addons/sky_3d/src/SkyDome.gd" id="4"]
+[ext_resource type="Shader" uid="uid://cvd0x7lon1ur6" path="res://addons/sky_3d/shaders/SkyMaterial.gdshader" id="4_v8wrf"]
+[ext_resource type="Texture2D" uid="uid://c1vwcdcdvb74a" path="res://addons/sky_3d/assets/thirdparty/textures/milkyway/Milkyway.jpg" id="5_0j4pb"]
+[ext_resource type="Texture2D" uid="uid://cecwdqjol0ckd" path="res://addons/sky_3d/assets/textures/noiseClouds.png" id="5_rt0jr"]
+[ext_resource type="Texture2D" uid="uid://cfqk60lpl5ljv" path="res://addons/sky_3d/assets/resources/SNoise.tres" id="6_1g8sw"]
+[ext_resource type="Texture2D" uid="uid://2r8ylu6rg5dp" path="res://addons/sky_3d/assets/thirdparty/textures/moon/MoonMap.png" id="6_v8wrf"]
+[ext_resource type="Texture2D" uid="uid://djpfuyxkryegn" path="res://addons/sky_3d/assets/textures/noise.jpg" id="7_d0ed4"]
+[ext_resource type="Texture2D" uid="uid://bm7dot7t7u1q4" path="res://addons/sky_3d/assets/thirdparty/textures/milkyway/StarField.jpg" id="8_humls"]
+
+[sub_resource type="GDScript" id="GDScript_v8wrf"]
+script/source = "extends Node3D
+
+## Combination Player and Camera Manager
+## Included as a scene script (a bad practice) so it does not conflict with the Terrain3D demo when
+## used together.
+
+@export var move_speed: float = 60.0
+
+const CAMERA_MAX_PITCH: float = deg_to_rad(70)
+const CAMERA_MIN_PITCH: float = deg_to_rad(-89.9)
+const CAMERA_RATIO: float = .625
+
+@export var mouse_sensitivity: float = .002
+@export var mouse_y_inversion: float = -1.0
+
+@onready var _camera_yaw: Node3D = self
+@onready var _camera_pitch: Node3D = $Camera3D
+
+
+func _init() -> void:
+	RenderingServer.set_debug_generate_wireframes(true)
+	
+	
+func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _physics_process(p_delta: float) -> void:
+	position += get_camera_relative_input().normalized() * move_speed * p_delta
+
+
+func _input(p_event: InputEvent) -> void:
+	if p_event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		rotate_camera(p_event.relative)
+		get_viewport().set_input_as_handled()
+		return
+	if p_event is InputEventMouseButton and p_event.pressed:
+		if p_event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			$Camera3D.fov = max($Camera3D.fov - 2., 5.)
+		elif p_event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			$Camera3D.fov = min($Camera3D.fov + 2., 160.)
+		return
+	if p_event is InputEventKey and p_event.pressed:
+		match p_event.keycode:
+			KEY_F8:
+				get_tree().quit()
+			KEY_F10:
+				var vp: Viewport = get_viewport()
+				vp.debug_draw = (vp.debug_draw + 1 ) % 6
+				get_viewport().set_input_as_handled()
+			KEY_F11:
+				toggle_fullscreen()
+				get_viewport().set_input_as_handled()
+			KEY_ESCAPE, KEY_F12:
+				if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
+					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				else:
+					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+				get_viewport().set_input_as_handled()
+
+
+# Returns the input vector relative to the camera. Forward is always the direction the camera is facing
+func get_camera_relative_input() -> Vector3:
+	var input_dir: Vector3 = Vector3.ZERO
+	if Input.is_key_pressed(KEY_A): # Left
+		input_dir -= global_transform.basis.x
+	if Input.is_key_pressed(KEY_D): # Right
+		input_dir += global_transform.basis.x
+	if Input.is_key_pressed(KEY_W): # Forward
+		input_dir -= global_transform.basis.z
+	if Input.is_key_pressed(KEY_S): # Backward
+		input_dir += global_transform.basis.z
+	if Input.is_key_pressed(KEY_E) or Input.is_key_pressed(KEY_SPACE): # Up
+		input_dir += global_transform.basis.y
+	if Input.is_key_pressed(KEY_Q): # Down
+		input_dir -= global_transform.basis.y
+	if Input.is_key_pressed(KEY_KP_ADD) or Input.is_key_pressed(KEY_EQUAL):
+		move_speed = clamp(move_speed + .5, 5, 9999)
+	if Input.is_key_pressed(KEY_KP_SUBTRACT) or Input.is_key_pressed(KEY_MINUS):
+		move_speed = clamp(move_speed - .5, 5, 9999)
+	return input_dir
+	
+	
+func rotate_camera(p_relative:Vector2) -> void:
+	_camera_yaw.rotation.y -= p_relative.x * mouse_sensitivity
+	_camera_yaw.orthonormalize()
+	_camera_pitch.rotation.x += p_relative.y * mouse_sensitivity * CAMERA_RATIO * mouse_y_inversion 
+	_camera_pitch.rotation.x = clamp(_camera_pitch.rotation.x, CAMERA_MIN_PITCH, CAMERA_MAX_PITCH)
+
+
+func toggle_fullscreen() -> void:
+	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN or \\
+		DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_size(Vector2(1280, 720))
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v8wrf"]
+shader = ExtResource("4_v8wrf")
+shader_parameter/sky_visible = true
+shader_parameter/color_correction = Vector2(0, 1)
+shader_parameter/ground_color = Color(0.3, 0.3, 0.3, 1)
+shader_parameter/horizon_offset = 0.0
+shader_parameter/atm_darkness = 0.5
+shader_parameter/atm_sun_intensity = 18.0
+shader_parameter/atm_day_tint = Color(0.807843, 0.909804, 1, 1)
+shader_parameter/atm_horizon_light_tint = Color(0.980392, 0.635294, 0.462745, 1)
+shader_parameter/atm_night_tint = Color(0.0569916, 0.0675948, 0.0848248, 0.337974)
+shader_parameter/atm_level_params = Vector3(1, 0, 0)
+shader_parameter/atm_thickness = 0.7
+shader_parameter/atm_beta_ray = Vector3(5.80454e-06, 1.35629e-05, 3.31126e-05)
+shader_parameter/atm_beta_mie = Vector3(3.038e-08, 3.038e-08, 3.038e-08)
+shader_parameter/sun_disk_color = Color(0.996094, 0.541334, 0.140076, 1)
+shader_parameter/sun_disk_intensity = 30.0
+shader_parameter/sun_disk_size = 0.02
+shader_parameter/atm_sun_mie_tint = Color(1, 1, 1, 1)
+shader_parameter/atm_sun_mie_intensity = 1.0
+shader_parameter/atm_sun_partial_mie_phase = Vector3(0.36, 1.64, 1.6)
+shader_parameter/moon_color = Color(1, 1, 1, 1)
+shader_parameter/moon_texture = ExtResource("6_v8wrf")
+shader_parameter/moon_texture_alignment = Vector3(7, 1.4, 4.8)
+shader_parameter/moon_texture_flip_u = false
+shader_parameter/moon_texture_flip_v = false
+shader_parameter/moon_size = 0.07
+shader_parameter/atm_moon_mie_tint = Color(0.137255, 0.184314, 0.292196, 1)
+shader_parameter/atm_moon_mie_intensity = 0.0
+shader_parameter/atm_moon_partial_mie_phase = Vector3(0.36, 1.64, 1.6)
+shader_parameter/starmap_color = Color(0.709804, 0.709804, 0.709804, 0.854902)
+shader_parameter/starmap_texture = ExtResource("5_0j4pb")
+shader_parameter/starmap_flip_u = false
+shader_parameter/starmap_flip_v = false
+shader_parameter/starmap_alignment = Vector3(2.68288, -0.25891, 0.40101)
+shader_parameter/star_rotation_offset = 9.38899
+shader_parameter/star_rotation = -9.68271
+shader_parameter/star_tilt = -1.29154
+shader_parameter/star_field_color = Color(1, 1, 1, 1)
+shader_parameter/star_field_texture = ExtResource("8_humls")
+shader_parameter/star_scintillation = 0.75
+shader_parameter/star_scintillation_speed = 0.01
+shader_parameter/noise_tex = ExtResource("7_d0ed4")
+shader_parameter/cirrus_visible = true
+shader_parameter/cirrus_coverage = 0.5
+shader_parameter/cirrus_thickness = 1.7
+shader_parameter/cirrus_absorption = 2.0
+shader_parameter/cirrus_sky_tint_fade = 0.5
+shader_parameter/cirrus_intensity = 10.0
+shader_parameter/cirrus_size = 1.0
+shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
+shader_parameter/cirrus_position1 = Vector2(0.597194, 5.86677e-06)
+shader_parameter/cirrus_position2 = Vector2(0.597194, 5.86677e-06)
+shader_parameter/cirrus_day_color = Color(0.824, 0.875, 1, 1)
+shader_parameter/cirrus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
+shader_parameter/cirrus_night_color = Color(0.09, 0.094, 0.129, 1)
+shader_parameter/cirrus_texture = ExtResource("6_1g8sw")
+shader_parameter/cumulus_visible = true
+shader_parameter/cumulus_coverage = 0.55
+shader_parameter/cumulus_thickness = 0.0243
+shader_parameter/cumulus_absorption = 2.0
+shader_parameter/cumulus_noise_freq = 2.7
+shader_parameter/cumulus_sky_tint_fade = 0.0
+shader_parameter/cumulus_intensity = 0.6
+shader_parameter/cumulus_size = 0.5
+shader_parameter/cumulus_position = Vector2(7.98623, 2.93344e-05)
+shader_parameter/cumulus_texture = ExtResource("5_rt0jr")
+shader_parameter/cumulus_day_color = Color(0.823529, 0.87451, 1, 1)
+shader_parameter/cumulus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
+shader_parameter/cumulus_night_color = Color(0.090196, 0.094118, 0.129412, 1)
+shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.04244, 0.412)
+shader_parameter/cumulus_mie_intensity = 1.0
+shader_parameter/show_azimuthal_grid = false
+shader_parameter/azimuthal_grid_color = Color(0.871, 0.722, 0.529, 1)
+shader_parameter/azimuthal_grid_rotation_offset = 0.03
+shader_parameter/show_equatorial_grid = false
+shader_parameter/equatorial_grid_color = Color(0, 0.75, 1, 1)
+shader_parameter/equatorial_grid_rotation_offset = 0.03
+shader_parameter/moon_matrix = Basis(2.98023e-08, -0.820482, -0.571673, -0.470096, -0.504567, 0.72417, -0.882615, 0.268741, -0.385705)
+
+[sub_resource type="Sky" id="Sky_0j4pb"]
+sky_material = SubResource("ShaderMaterial_v8wrf")
+
+[sub_resource type="Environment" id="Environment_1g8sw"]
+background_mode = 2
+sky = SubResource("Sky_0j4pb")
+ambient_light_source = 3
+ambient_light_color = Color(0.391144, 0.232463, 0.160552, 1)
+ambient_light_sky_contribution = 0.7
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_white = 6.0
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_d0ed4"]
+
+[node name="Main" type="Node3D"]
+
+[node name="PrimitivesCity" parent="." instance=ExtResource("2")]
+
+[node name="CameraManager" type="Node3D" parent="."]
+transform = Transform3D(0.0801989, 0, -0.996779, 0, 1, 0, 0.996779, 0, 0.0801989, -7.677, 4, 3.686)
+script = SubResource("GDScript_v8wrf")
+
+[node name="Camera3D" type="Camera3D" parent="CameraManager"]
+transform = Transform3D(1, 0, 0, 0, 0.987688, 0.156434, 0, -0.156434, 0.987688, 0, 0, 0)
+fov = 70.0
+far = 8192.0
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+update_mode = 1
+size = Vector3(2000, 2000, 2000)
+origin_offset = Vector3(0, 5, 0)
+
+[node name="Sky3D" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1g8sw")
+camera_attributes = SubResource("CameraAttributesPractical_d0ed4")
+script = ExtResource("2_cejat")
+current_time = 6.15
+wind_speed = 7.0
+wind_direction = 1.5708
+metadata/_custom_type_script = "uid://deo0gxkmk2ahd"
+
+[node name="SunLight" type="DirectionalLight3D" parent="Sky3D"]
+transform = Transform3D(0, -0.399137, 0.916891, 0.995464, -0.0872337, -0.0379742, 0.0951407, 0.912732, 0.397327, 0.916891, -0.0379742, 0.397327)
+light_color = Color(0.98, 0.523, 0.294, 1)
+light_energy = 0.0
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 600.0
+
+[node name="MoonLight" type="DirectionalLight3D" parent="Sky3D"]
+transform = Transform3D(0, -0.470096, -0.882615, -0.820482, -0.504567, 0.268741, -0.571673, 0.72417, -0.385705, -0.882615, 0.268741, -0.385705)
+light_color = Color(0.572549, 0.776471, 0.956863, 1)
+light_energy = 0.0
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 256.0
+
+[node name="SkyDome" type="Node" parent="Sky3D"]
+script = ExtResource("4")
+sun_azimuth = -1.97971
+sun_altitude = -1.60878
+moon_azimuth = -5.12438
+moon_altitude = -1.29871
+fog_density = 0.01
+wind_speed = 7.0
+wind_direction = 1.5708
+
+[node name="TimeOfDay" type="Node" parent="Sky3D"]
+script = ExtResource("3")
+dome_path = NodePath("../SkyDome")
+current_time = 6.15

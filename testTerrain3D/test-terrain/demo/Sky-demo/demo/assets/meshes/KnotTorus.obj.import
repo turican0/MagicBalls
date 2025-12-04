@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cr4asb0j76cfa"
+path="res://.godot/imported/KnotTorus.obj-5ae3a7d87c7dbc7d857fdc352e9d056d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/KnotTorus.obj-5ae3a7d87c7dbc7d857fdc352e9d056d.mesh"]
+
+source_file="res://demo/Sky-demo/demo/assets/meshes/KnotTorus.obj"
+dest_files=["res://.godot/imported/KnotTorus.obj-5ae3a7d87c7dbc7d857fdc352e9d056d.mesh", "res://.godot/imported/KnotTorus.obj-5ae3a7d87c7dbc7d857fdc352e9d056d.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false
