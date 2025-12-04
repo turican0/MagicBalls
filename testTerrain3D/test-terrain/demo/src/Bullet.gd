@@ -1,9 +1,9 @@
 extends Node3D
 
 @export var speed: float = 50.0
-@export var life_distance: float = 10.0  # kolik sekund střela existuje
-@export var tick_distance: float = 1.0  # vzdálenost mezi deformacemi
-@export var damage_radius: float = 2.0  # Radius deformace pro každou tick
+@export var life_distance: float = 100.0  # kolik sekund střela existuje
+@export var tick_distance: float = 10.0  # vzdálenost mezi deformacemi
+@export var damage_radius: float = 20.0  # Radius deformace pro každou tick
 @export var damage_strength: float = -1.0  # Síla snížení výšky (negativní pro damage)
 
 var direction: Vector3 = Vector3.ZERO

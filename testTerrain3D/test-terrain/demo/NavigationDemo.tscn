@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://demo/components/UI.tscn" id="5_rc7e2"]
 [ext_resource type="NavigationMesh" uid="uid://yf3fu23666k8" path="res://demo/data/nav_mesh.res" id="8_6jfdr"]
 [ext_resource type="Terrain3DAssets" uid="uid://dal3jhw6241qg" path="res://demo/data/assets.tres" id="10_qmhh8"]
-[ext_resource type="Script" uid="uid://brdlhlevwdawb" path="res://demo/terrain_3d.gd" id="10_rf2hf"]
+[ext_resource type="Script" uid="uid://p657460dndbp" path="res://demo/src/terrain_3d.gd" id="10_rf2hf"]
 [ext_resource type="PackedScene" uid="uid://di5fovhcyd7re" path="res://demo/components/Enemy.tscn" id="12_b2xl8"]
 
 [sub_resource type="Gradient" id="Gradient_vr1m7"]

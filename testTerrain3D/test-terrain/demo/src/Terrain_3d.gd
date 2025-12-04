@@ -5,7 +5,8 @@ extends Terrain3D
 @export var default_strength: float = -5.0
 
 func _apply_terrain_damage(point: Vector3, radius: float = default_radius, strength: float = default_strength) -> void:
-	reset_terrain_height_for_testing()
+	#increase_height(point, 10.0)
+	#reset_terrain_height_for_testing()
 	var current_data: Terrain3DData = get_data()
 	if not current_data:
 		push_error("Terrain3DData not available!")
@@ -42,6 +43,8 @@ func _apply_terrain_damage(point: Vector3, radius: float = default_radius, stren
 			
 			var new_height: float = current_height + damage
 			data.set_height(pos, new_height)
+	data.update_maps(0,true,true)
+	collision.update(true)
 	
 	# Manuální update regionu pro jistotu (Terrain3D to obvykle zvládne automaticky)
 	#notify_region_modified(point - Vector3(radius, 0, radius), point + Vector3(radius, 0, radius))
