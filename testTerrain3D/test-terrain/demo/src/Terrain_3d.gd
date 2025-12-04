@@ -43,7 +43,7 @@ func _apply_terrain_damage(point: Vector3, radius: float = default_radius, stren
 			
 			var new_height: float = current_height + damage
 			data.set_height(pos, new_height)
-	data.update_maps(0,true,true)
+	data.update_maps(Terrain3DRegion.MapType.TYPE_HEIGHT,true,true)
 	collision.update(true)
 	
 	# Manuální update regionu pro jistotu (Terrain3D to obvykle zvládne automaticky)
@@ -51,7 +51,7 @@ func _apply_terrain_damage(point: Vector3, radius: float = default_radius, stren
 	
 func reset_terrain_height_for_testing() -> void:
 	# Konstanta pro výškovou mapu (index 0) - Toto je správné z API Terrain3DRegion/Data
-	const MAP_HEIGHT: int = 0
+	#const MAP_HEIGHT: int = 0
 
 	# 1. Získání Dictionary všech regionů
 	# Klíč: Vector2i (pozice regionu), Hodnota: Terrain3DRegion
@@ -69,7 +69,7 @@ func reset_terrain_height_for_testing() -> void:
 		var region: Terrain3DRegion = all_regions[region_location]
 
 		# Získání velikosti a formátu výškové mapy z existujícího regionu
-		var current_height_map: Image = region.get_map(MAP_HEIGHT)
+		var current_height_map: Image = region.get_map(Terrain3DRegion.MapType.TYPE_HEIGHT)
 		if current_height_map.is_empty():
 			push_warning("Region at " + str(region_location) + " has no height map data.")
 			continue
@@ -88,7 +88,7 @@ func reset_terrain_height_for_testing() -> void:
 		# Poznámka: Image.create() vytvoří Image, kde jsou všechny pixely defaultně nulové.
 
 		# Nahrazení původní mapy nulovou mapou
-		region.set_map(MAP_HEIGHT, blank_image)
+		region.set_map(Terrain3DRegion.MapType.TYPE_HEIGHT, blank_image)
 
 		# Přepočítání výškového rozsahu (min/max), který bude nyní (0, 0)
 		region.calc_height_range() 
