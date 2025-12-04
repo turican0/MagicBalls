@@ -1,10 +1,12 @@
-[gd_resource type="Terrain3DAssets" load_steps=11 format=3 uid="uid://dal3jhw6241qg"]
+[gd_resource type="Terrain3DAssets" load_steps=14 format=3 uid="uid://dal3jhw6241qg"]
 
 [ext_resource type="PackedScene" uid="uid://bn5nf4esciwex" path="res://demo/assets/models/LODExample.tscn" id="1_4jrdu"]
 [ext_resource type="Texture2D" uid="uid://c88j3oj0lf6om" path="res://demo/assets/textures/rock023_alb_ht.png" id="2_pog6b"]
 [ext_resource type="Texture2D" uid="uid://ddprscrpsofah" path="res://demo/assets/textures/ground037_alb_ht.png" id="3_g8f2m"]
 [ext_resource type="Texture2D" uid="uid://c307hdmos4gtm" path="res://demo/assets/textures/rock023_nrm_rgh.png" id="3_wncaf"]
 [ext_resource type="Texture2D" uid="uid://c1ots7w6i0i1q" path="res://demo/assets/textures/ground037_nrm_rgh.png" id="4_aw5y1"]
+[ext_resource type="Texture2D" uid="uid://dua53lv5mve4x" path="res://demo/assets/textures/Ice002_1K-JPG_Color.png" id="6_e6edf"]
+[ext_resource type="Texture2D" uid="uid://dmmh680i2mn6m" path="res://demo/assets/textures/Ice002_1K-JPG_NormalGL.png" id="7_cmr6o"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2vqk"]
 transparency = 4
@@ -52,6 +54,12 @@ ao_strength = 2.0
 uv_scale = 0.2
 detiling_rotation = 0.161
 
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_uyhyi"]
+name = "Ice002_1K-JPG_Color"
+id = 2
+albedo_texture = ExtResource("6_e6edf")
+normal_texture = ExtResource("7_cmr6o")
+
 [resource]
 mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_2qf8x"), SubResource("Terrain3DMeshAsset_or12t")])
-texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_lha57"), SubResource("Terrain3DTextureAsset_od0q7")])
+texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_lha57"), SubResource("Terrain3DTextureAsset_od0q7"), SubResource("Terrain3DTextureAsset_uyhyi")])

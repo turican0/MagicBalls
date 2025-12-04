@@ -19,6 +19,14 @@ config/icon="res://icon.svg"
 
 enabled=PackedStringArray("res://addons/sky_3d/plugin.cfg", "res://addons/terrain_3d/plugin.cfg")
 
+[importer_defaults]
+
+texture={
+&"compress/channel_pack": 1,
+&"compress/mode": 4,
+&"mipmaps/generate": true
+}
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
