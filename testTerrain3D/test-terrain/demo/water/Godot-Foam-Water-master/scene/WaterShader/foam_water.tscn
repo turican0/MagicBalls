@@ -1,0 +1,138 @@
+[gd_scene load_steps=20 format=3 uid="uid://b2ljgd074bsd5"]
+
+[ext_resource type="Script" uid="uid://cc3qxxmhquht8" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/foam_water.gd" id="1_qgik2"]
+[ext_resource type="Material" uid="uid://ct4tfb0wwk3vs" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/water_material.tres" id="2_qqaqx"]
+[ext_resource type="Texture2D" uid="uid://cbacv62t68uhx" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/textures/aerial_beach_01_diff_1k.jpg" id="3_c5uum"]
+[ext_resource type="Texture2D" uid="uid://bc5q005wt877g" path="res://demo/water/Godot-Foam-Water-master/assets/images/Sky_EpicBlueSunset.png" id="3_f4q1b"]
+[ext_resource type="AudioStream" uid="uid://bxrhamegax4pr" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/ocean-waves.mp3" id="4_a4n3x"]
+[ext_resource type="Texture2D" uid="uid://csbt823wewl2y" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/textures/aerial_beach_01_nor_gl_1k.jpg" id="4_cssso"]
+[ext_resource type="Texture2D" uid="uid://cfjgqwav8hhqk" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/textures/aerial_beach_01_rough_1k.jpg" id="5_na7y1"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_ynkkp"]
+size = Vector2(100, 100)
+subdivide_width = 400
+subdivide_depth = 400
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_th0g8"]
+disable_ambient_light = true
+albedo_texture = ExtResource("3_c5uum")
+metallic_specular = 0.05
+roughness_texture = ExtResource("5_na7y1")
+normal_enabled = true
+normal_scale = 2.5
+normal_texture = ExtResource("4_cssso")
+uv1_scale = Vector3(4, 4, 4)
+
+[sub_resource type="QuadMesh" id="QuadMesh_b217x"]
+material = SubResource("StandardMaterial3D_th0g8")
+size = Vector2(125, 100)
+orientation = 1
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_6l26w"]
+panorama = ExtResource("3_f4q1b")
+
+[sub_resource type="Sky" id="Sky_7bli4"]
+sky_material = SubResource("PanoramaSkyMaterial_6l26w")
+
+[sub_resource type="Environment" id="Environment_bfrrs"]
+background_mode = 2
+sky = SubResource("Sky_7bli4")
+ambient_light_color = Color(1, 1, 1, 1)
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m3f7p"]
+albedo_color = Color(1, 0.381284, 0.115167, 1)
+metallic = 0.62
+roughness = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_5jyxd"]
+material = SubResource("StandardMaterial3D_m3f7p")
+radius = 2.0
+height = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jv71r"]
+cull_mode = 2
+albedo_color = Color(0.564963, 0.184844, 0.633055, 1)
+roughness = 0.31
+
+[sub_resource type="BoxMesh" id="BoxMesh_v458w"]
+material = SubResource("StandardMaterial3D_jv71r")
+size = Vector3(10, 0.5, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vmsxl"]
+albedo_color = Color(1, 0, 0.00392157, 1)
+roughness = 0.47
+
+[sub_resource type="PrismMesh" id="PrismMesh_y85b2"]
+material = SubResource("StandardMaterial3D_vmsxl")
+
+[node name="SampleScene" type="Node3D"]
+script = ExtResource("1_qgik2")
+
+[node name="MainLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 9.94661, 0)
+shadow_enabled = true
+shadow_opacity = 0.55
+
+[node name="SecondaryLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.0408637, 0.999165, 0, -0.999165, -0.0408637, 0, 11.8897, -8.9436)
+visible = false
+light_color = Color(0, 0.504167, 0.55, 1)
+light_energy = 0.238
+light_indirect_energy = 0.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.333807, 0.666548, -0.666548, 0, 0.707107, 0.707107, 0.942641, 0.236037, -0.236037, -12.58, 10.12, -6.69)
+visible = false
+cull_mask = 1048573
+current = true
+far = 200.0
+
+[node name="WaterFoam" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_ynkkp")
+surface_material_override/0 = ExtResource("2_qqaqx")
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.978405, 0.206699, 0, -0.206699, 0.978405, 0, 0, 0, 1, 0, -10.063768, 0)
+visible = false
+mesh = SubResource("QuadMesh_b217x")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_bfrrs")
+
+[node name="Sphere" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("SphereMesh_5jyxd")
+
+[node name="Ramp" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.775969, 0.200115, 0.598185, 0, 0.94834, -0.317255, -0.630771, 0.24618, 0.735883, -8.22224, 0, -10.5959)
+visible = false
+mesh = SubResource("BoxMesh_v458w")
+
+[node name="Triangle" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.49911, 0.970225, -3.57929, 2.18475, 3.35065, -0.00678724, 2.99659, -1.95751, -1.78567, 9.14986, -0.42153317, -13.6414)
+visible = false
+mesh = SubResource("PrismMesh_y85b2")
+
+[node name="Triangle2" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.31168, -2.1581, 0.612695, 2.18475, 3.35065, -0.00678724, -0.509569, 0.340265, 3.95279, -16.7607, -0.3438049, 6.63603)
+visible = false
+mesh = SubResource("PrismMesh_y85b2")
+
+[node name="Pixellate" type="HBoxContainer" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CheckBox" type="CheckBox" parent="Pixellate"]
+visible = false
+layout_mode = 2
+text = "Pixelate"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_a4n3x")
+volume_db = 3.0
+autoplay = true
+
+[connection signal="toggled" from="Pixellate/CheckBox" to="." method="_on_check_box_toggled"]

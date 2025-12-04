@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://x34e4v60vdmy"]
+[gd_scene load_steps=31 format=3 uid="uid://x34e4v60vdmy"]
 
 [ext_resource type="Script" uid="uid://chstoagn42gbr" path="res://demo/src/DemoScene.gd" id="1_po4vw"]
 [ext_resource type="PackedScene" uid="uid://dwnhqfjq7v1pq" path="res://demo/components/Borders.tscn" id="3_3upu0"]
@@ -19,6 +19,7 @@
 [ext_resource type="Script" uid="uid://b4tkplvh7fq40" path="res://addons/sky_3d/src/SkyDome.gd" id="11_jmdsm"]
 [ext_resource type="PackedScene" uid="uid://di5fovhcyd7re" path="res://demo/components/Enemy.tscn" id="12_b2xl8"]
 [ext_resource type="Script" uid="uid://cjmkcj8hwm7ts" path="res://addons/sky_3d/src/TimeOfDay.gd" id="12_ojoex"]
+[ext_resource type="Material" uid="uid://ct4tfb0wwk3vs" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/water_material.tres" id="21_ch65t"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a6n5c"]
 shader = ExtResource("3_10bv2")
@@ -56,7 +57,7 @@ shader_parameter/starmap_flip_u = false
 shader_parameter/starmap_flip_v = false
 shader_parameter/starmap_alignment = Vector3(2.68288, -0.25891, 0.40101)
 shader_parameter/star_rotation_offset = 9.38899
-shader_parameter/star_rotation = -10.670648950757867
+shader_parameter/star_rotation = -11.06632575996381
 shader_parameter/star_tilt = -1.2915436464758039
 shader_parameter/star_field_color = Color(1, 1, 1, 1)
 shader_parameter/star_field_texture = ExtResource("8_6lbwu")
@@ -71,8 +72,8 @@ shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_intensity = 10.0
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.19275187, 0.19275187)
-shader_parameter/cirrus_position2 = Vector2(0.19275187, 0.19275187)
+shader_parameter/cirrus_position1 = Vector2(0.11333089, 0.11333089)
+shader_parameter/cirrus_position2 = Vector2(0.11333089, 0.11333089)
 shader_parameter/cirrus_day_color = Color(0.824, 0.875, 1, 1)
 shader_parameter/cirrus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
 shader_parameter/cirrus_night_color = Color(0.09, 0.094, 0.129, 1)
@@ -85,7 +86,7 @@ shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_intensity = 0.6
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(0.96359456, 0.96359456)
+shader_parameter/cumulus_position = Vector2(10.577048, 10.577048)
 shader_parameter/cumulus_texture = ExtResource("5_ch65t")
 shader_parameter/cumulus_day_color = Color(0.823529, 0.87451, 1, 1)
 shader_parameter/cumulus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
@@ -98,7 +99,7 @@ shader_parameter/azimuthal_grid_rotation_offset = 0.03
 shader_parameter/show_equatorial_grid = false
 shader_parameter/equatorial_grid_color = Color(0, 0.75, 1, 1)
 shader_parameter/equatorial_grid_rotation_offset = 0.03
-shader_parameter/moon_matrix = Basis(-1.4901161e-08, -0.76698875, 0.6416607, -0.7974952, 0.38713014, 0.46274373, -0.60332537, -0.51172125, -0.6116698)
+shader_parameter/moon_matrix = Basis(0, -0.8824213, 0.47046015, -0.109800786, -0.46761554, -0.8770858, 0.99395365, -0.05165689, -0.09689055)
 
 [sub_resource type="Sky" id="Sky_l86mf"]
 sky_material = SubResource("ShaderMaterial_a6n5c")
@@ -168,6 +169,15 @@ world_background = 0
 auto_shader = true
 dual_scaling = true
 
+[sub_resource type="QuadMesh" id="QuadMesh_7erbs"]
+size = Vector2(10000, 10000)
+subdivide_width = 400
+subdivide_depth = 400
+
+[sub_resource type="QuadMesh" id="QuadMesh_qxi3g"]
+material = ExtResource("21_ch65t")
+size = Vector2(10000, 10000)
+
 [node name="Demo" type="Node"]
 script = ExtResource("1_po4vw")
 
@@ -177,32 +187,33 @@ script = ExtResource("1_po4vw")
 environment = SubResource("Environment_wo5b4")
 camera_attributes = SubResource("CameraAttributesPractical_55reg")
 script = ExtResource("10_y32s5")
-current_time = 9.913360768469381
-minutes_per_day = 1.0
+current_time = 10.11
+minutes_per_day = 0.0
 wind_direction = 2.35619451204804
 
 [node name="SunLight" type="DirectionalLight3D" parent="Sky3D"]
-transform = Transform3D(0, -0.89494455, 0.44617733, 0.6690397, 0.33161086, 0.66514665, -0.7432266, 0.29851037, 0.5987535, 0.44617733, 0.66514665, 0.5987535)
+transform = Transform3D(0, -0.8971697, 0.4416861, 0.6237592, 0.34522918, 0.7012427, -0.78161657, 0.27550578, 0.5596178, 0.4416861, 0.7012427, 0.5596178)
 shadow_enabled = true
 
 [node name="MoonLight" type="DirectionalLight3D" parent="Sky3D"]
-transform = Transform3D(0, -0.7974952, -0.60332537, -0.7669887, 0.38713014, -0.51172125, 0.64166063, 0.46274373, -0.6116698, -0.60332537, -0.51172125, -0.6116698)
+transform = Transform3D(0, -0.109800786, 0.99395365, -0.88242126, -0.46761554, -0.051656894, 0.47046012, -0.8770858, -0.096890554, 0.9939536, -0.05165689, -0.09689055)
 light_color = Color(0.572549, 0.776471, 0.956863, 1)
 light_energy = 0.0
 
 [node name="SkyDome" type="Node" parent="Sky3D"]
 script = ExtResource("11_jmdsm")
-sun_azimuth = -2.5011854
-sun_altitude = -0.84310615
-moon_azimuth = -5.504655
-moon_altitude = -2.1079834
+sun_azimuth = -2.4734325
+sun_altitude = -0.79365724
+moon_azimuth = -1.4736234
+moon_altitude = -1.6224762
 wind_direction = 2.35619451204804
 
 [node name="TimeOfDay" type="Node" parent="Sky3D"]
 script = ExtResource("12_ojoex")
 dome_path = NodePath("../SkyDome")
-minutes_per_day = 1.0
-current_time = 9.913360768469381
+minutes_per_day = 0.0
+current_time = 10.11
+day = 21
 
 [node name="Borders" parent="." instance=ExtResource("3_3upu0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 512, -2.5, 512)
@@ -228,3 +239,13 @@ mesh_size = 64
 top_level = true
 script = ExtResource("10_rf2hf")
 metadata/_edit_lock_ = true
+
+[node name="WaterFoam" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 0, 0, -1, 0, 0, 1, 0)
+visible = false
+mesh = SubResource("QuadMesh_7erbs")
+surface_material_override/0 = ExtResource("21_ch65t")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_qxi3g")
