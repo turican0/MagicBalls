@@ -2,6 +2,9 @@ extends Node
 
 var terrain: Terrain3D
 
+@export var green_ta: Terrain3DTextureAsset
+@export var brown_ta: Terrain3DTextureAsset
+@export var terrain_script_source: Script
 
 func _ready() -> void:
 	$UI.player = $Player
@@ -22,22 +25,23 @@ func create_terrain() -> Terrain3D:
 	var green_gr := Gradient.new()
 	green_gr.set_color(0, Color.from_hsv(100./360., .35, .3))
 	green_gr.set_color(1, Color.from_hsv(120./360., .4, .37))
-	var green_ta: Terrain3DTextureAsset = await create_texture_asset("Grass", green_gr, 1024)
-	green_ta.uv_scale = 0.1
-	green_ta.detiling_rotation = 0.1
+	var green_tax: Terrain3DTextureAsset = await create_texture_asset("Grass", green_gr, 1024)
+	green_tax.uv_scale = 0.1
+	green_tax.detiling_rotation = 0.1
 
 	var brown_gr := Gradient.new()
 	brown_gr.set_color(0, Color.from_hsv(30./360., .4, .3))
 	brown_gr.set_color(1, Color.from_hsv(30./360., .4, .4))
-	var brown_ta: Terrain3DTextureAsset = await create_texture_asset("Dirt", brown_gr, 1024)
-	brown_ta.uv_scale = 0.03
-	green_ta.detiling_rotation = 0.1
+	var brown_tax: Terrain3DTextureAsset = await create_texture_asset("Dirt", brown_gr, 1024)
+	brown_tax.uv_scale = 0.03
+	brown_tax.detiling_rotation = 0.1
 	
 	var grass_ma: Terrain3DMeshAsset = create_mesh_asset("Grass", Color.from_hsv(120./360., .4, .37)) 
 
 	# Create a terrain
-	var terrain := Terrain3D.new()
+	terrain = Terrain3D.new()
 	terrain.name = "Terrain3D"
+	terrain.set_script(terrain_script_source)
 	add_child(terrain, true)
 
 	# Set material and assets
@@ -57,7 +61,7 @@ func create_terrain() -> Terrain3D:
 	for x in img.get_width():
 		for y in img.get_height():
 			img.set_pixel(x, y, Color(noise.get_noise_2d(x, y), 0., 0., 1.))
-	terrain.region_size = 1024
+	terrain.region_size = Terrain3D.SIZE_1024
 	terrain.data.import_images([img, null, null], Vector3(-1024, 0, -1024), 0.0, 150.0)
 
 	# Instance foliage

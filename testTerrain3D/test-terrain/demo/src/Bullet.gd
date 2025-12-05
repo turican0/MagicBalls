@@ -24,7 +24,8 @@ func _ready() -> void:
 	#floor_stop_on_slope = false
 	#floor_max_angle = 0.0  # Nebere ohled na úhly podlahy
 	
-	terrain_ref = get_node("/root/Demo/NavigationRegion3D/Terrain3D")
+	#terrain_ref = get_node("/root/Demo/NavigationRegion3D/Terrain3D")
+	terrain_ref = get_parent().terrain
 	
 func _physics_process(delta: float) -> void:
 	if first_run:
