@@ -5,6 +5,8 @@ var terrain: Terrain3D
 @export var green_ta: Terrain3DTextureAsset
 @export var brown_ta: Terrain3DTextureAsset
 @export var terrain_script_source: Script
+@export var grass_particle: PackedScene
+
 
 func _ready() -> void:
 	$UI.player = $Player
@@ -56,6 +58,11 @@ func load_terrain(level_name: String) -> Terrain3D:
 	terrain.region_size = Terrain3D.SIZE_64
 	terrain.data.import_images([img_heightmap, null, null], Vector3(-64, 0, -64), 0.0, 150.0)
 
+	var new_level_instance = grass_particle.instantiate()
+	terrain.add_child(new_level_instance)
+
+	#var new_level_instance = grass_particle.instantiate()
+	#new_level_instance.terrain = terrain
 	
 	# Generate height map w/ 32-bit noise and import it with scale
 	#var noise := FastNoiseLite.new()
@@ -83,7 +90,7 @@ func load_terrain(level_name: String) -> Terrain3D:
 			if(red_value_255_grass>0):
 				var pos := Vector3(x, 0, y) - Vector3(width_grass, 0, width_grass) * .5
 				pos.y = terrain.data.get_height(pos)
-				xforms.push_back(Transform3D(Basis(), pos))	
+				xforms.push_back(Transform3D(Basis(), pos))
 	terrain.instancer.add_transforms(0, xforms)
 	
 	#var xforms: Array[Transform3D]
