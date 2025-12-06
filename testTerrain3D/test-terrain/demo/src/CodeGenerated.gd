@@ -12,13 +12,94 @@ func _ready() -> void:
 	if has_node("RunThisSceneLabel3D"):
 		$RunThisSceneLabel3D.queue_free()
 
-	terrain = await create_terrain()
+	#terrain = await create_terrain()
+	terrain = await load_terrain("level1")
 
 	# Enable runtime navigation baking using the terrain
 	# Enable `Debug/Visible Navigation` if you wish to see it
 	$RuntimeNavigationBaker.terrain = terrain
 	$RuntimeNavigationBaker.enabled = true
 
+func load_terrain(level_name: String) -> Terrain3D:
+	var grass_ma: Terrain3DMeshAsset = create_mesh_asset("Grass", Color.from_hsv(120./360., .4, .37)) 
+
+	# Create a terrain
+	terrain = Terrain3D.new()
+	terrain.name = "Terrain3D"
+	terrain.set_script(terrain_script_source)
+	add_child(terrain, true)
+
+	# Set material and assets
+	terrain.material.world_background = Terrain3DMaterial.NONE
+	terrain.material.auto_shader = true
+	terrain.material.set_shader_param("auto_slope", 10)
+	terrain.material.set_shader_param("blend_sharpness", .975)
+	terrain.assets = Terrain3DAssets.new()
+	terrain.assets.set_texture(0, green_ta)
+	terrain.assets.set_texture(1, brown_ta)
+	terrain.assets.set_mesh_asset(0, grass_ma)
+
+	var image_path_heightmap = "res://levels/"+level_name+"/heightmap.png"
+	var image_heightmap = Image.load_from_file(image_path_heightmap)
+	image_heightmap.convert(Image.FORMAT_RGB8)
+	var img_width_heightmap = image_heightmap.get_width()
+	var img_height_heightmap = image_heightmap.get_height()
+	#print("Načten obrázek s rozměry: ", img_width, "x", img_height)
+	var img_heightmap: Image = Image.create_empty(img_width_heightmap, img_height_heightmap, false, Image.FORMAT_RF)
+	for y in range(img_height_heightmap):
+		for x in range(img_width_heightmap):
+			var color_heightmap = image_heightmap.get_pixel(x, y)
+			var red_value_heightmap = color_heightmap.r
+			var red_value_255_heightmap = round(red_value_heightmap * 255)
+			img_heightmap.set_pixel(x, y, Color(red_value_255_heightmap/(256*10), 0., 0., 1.))
+			#print("Pixel [", x, ", ", y, "] - Red (0-255): ", red_value_255, ", Red (0.0-1.0): ", red_value)
+	terrain.region_size = Terrain3D.SIZE_64
+	terrain.data.import_images([img_heightmap, null, null], Vector3(-64, 0, -64), 0.0, 150.0)
+
+	
+	# Generate height map w/ 32-bit noise and import it with scale
+	#var noise := FastNoiseLite.new()
+	#noise.frequency = 0.0005
+	#var img: Image = Image.create_empty(2048, 2048, false, Image.FORMAT_RF)
+	#for x in img.get_width():
+		#for y in img.get_height():
+			#img.set_pixel(x, y, Color(noise.get_noise_2d(x, y), 0., 0., 1.))
+	#terrain.region_size = Terrain3D.SIZE_1024
+	#terrain.data.import_images([img, null, null], Vector3(-1024, 0, -1024), 0.0, 150.0)
+
+	# Instance foliage
+	var image_path_grass = "res://levels/"+level_name+"/grass.png"
+	var image_grass = Image.load_from_file(image_path_grass)
+	image_grass.convert(Image.FORMAT_RGB8)
+	var img_width_grass = image_grass.get_width()
+	var img_height_grass = image_grass.get_height()
+	var xforms: Array[Transform3D]
+	var width_grass: int = 100
+	for y in range(img_height_grass):
+		for x in range(img_width_grass):
+			var color_grass = image_grass.get_pixel(x, y)
+			var red_value_grass = color_grass.r
+			var red_value_255_grass = round(red_value_grass * 255)
+			if(red_value_255_grass>0):
+				var pos := Vector3(x, 0, y) - Vector3(width_grass, 0, width_grass) * .5
+				pos.y = terrain.data.get_height(pos)
+				xforms.push_back(Transform3D(Basis(), pos))	
+	terrain.instancer.add_transforms(0, xforms)
+	
+	#var xforms: Array[Transform3D]
+	#var width: int = 100
+	#var step: int = 2
+	#for x in range(0, width, step):
+		#for z in range(0, width, step):
+			#var pos := Vector3(x, 0, z) - Vector3(width, 0, width) * .5
+			#pos.y = terrain.data.get_height(pos)
+			#xforms.push_back(Transform3D(Basis(), pos))
+	#terrain.instancer.add_transforms(0, xforms)
+
+	# Enable the next line and `Debug/Visible Collision Shapes` to see collision
+	#terrain.collision.mode = Terrain3DCollision.DYNAMIC_EDITOR
+
+	return terrain
 
 func create_terrain() -> Terrain3D:
 	# Create textures
