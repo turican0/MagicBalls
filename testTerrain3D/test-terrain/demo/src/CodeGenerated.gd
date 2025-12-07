@@ -60,15 +60,9 @@ func load_terrain(level_name: String) -> Terrain3D:
 	terrain.data.import_images([img_heightmap, null, null], Vector3(-64, 0, -64), 0.0, 150.0)
 
 	var new_level_instance = grass_particle.instantiate()
-	#var image_path_grass = "res://levels/"+level_name+"/heightmap.png"
-	#var grass_texture: Texture2D = load(image_path_grass)
-	## ❗ NOVÝ KÓD MÍSTO ŘÁDKU 63 ❗
-	## Získáme Process Material a nastavíme uniform proměnnou
-	#if new_level_instance.process_material is ShaderMaterial:
-		#var material: ShaderMaterial = new_level_instance.process_material
-		## Nastavte uniform "Grass Height Map" (grass_height_map) na vaši Texture2D
-		#material.set_shader_parameter("grass_height_map", grass_texture)
-	## ❗ KONEC NOVÉHO KÓDU ❗
+	var image_path_grass = "res://levels/"+level_name+"/grass.png"
+	var grass_texture: Texture2D = load(image_path_grass)
+	new_level_instance.grass_height_map = grass_texture
 	terrain.add_child(new_level_instance)
 
 	#var new_level_instance = grass_particle.instantiate()
