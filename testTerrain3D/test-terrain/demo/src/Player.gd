@@ -93,11 +93,12 @@ func shoot_bullet() -> void:
 	if bullet_scene == null:
 		return
 	var bullet: Node3D = bullet_scene.instantiate()
-	var dir: Vector3 = -%Camera3D.global_transform.basis.z
+	#var dir: Vector3 = -%Camera3D.global_transform.basis.z
 	
-	bullet.direction = dir.normalized()
-	bullet.direction.y = 0.0
-	bullet.direction = bullet.direction.normalized()
+	#bullet.direction = dir.normalized()
+	#bullet.direction.y = 0.0
+	#bullet.direction = bullet.direction.normalized()
+	bullet.direction = direction2
 	#bullet.global_position = global_position + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = global_position + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
