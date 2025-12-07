@@ -6,6 +6,7 @@ var terrain: Terrain3D
 @export var brown_ta: Terrain3DTextureAsset
 @export var terrain_script_source: Script
 @export var grass_particle: PackedScene
+@export var vase_mesh: PackedScene
 
 
 func _ready() -> void:
@@ -15,7 +16,7 @@ func _ready() -> void:
 		$RunThisSceneLabel3D.queue_free()
 
 	#terrain = await create_terrain()
-	terrain = await load_terrain("level1")
+	terrain = load_terrain("level1")
 
 	# Enable runtime navigation baking using the terrain
 	# Enable `Debug/Visible Navigation` if you wish to see it
@@ -74,7 +75,7 @@ func load_terrain(level_name: String) -> Terrain3D:
 	#terrain.region_size = Terrain3D.SIZE_1024
 	#terrain.data.import_images([img, null, null], Vector3(-1024, 0, -1024), 0.0, 150.0)
 
-	# Instance foliage
+	# Instance grass1
 	var image_path_grass = "res://levels/"+level_name+"/grass.png"
 	var image_grass = Image.load_from_file(image_path_grass)
 	image_grass.convert(Image.FORMAT_RGB8)
@@ -91,7 +92,24 @@ func load_terrain(level_name: String) -> Terrain3D:
 				var pos := Vector3(x, 0, y) - Vector3(width_grass, 0, width_grass) * .5
 				pos.y = terrain.data.get_height(pos)
 				xforms.push_back(Transform3D(Basis(), pos))
+				
 	terrain.instancer.add_transforms(0, xforms)
+	
+	# Instance objects
+	var image_path_objects = "res://levels/"+level_name+"/objects.png"
+	var image_objects = Image.load_from_file(image_path_objects)
+	image_objects.convert(Image.FORMAT_RGB8)
+	var img_width_objects = image_objects.get_width()
+	var img_height_objects = image_objects.get_height()
+	for y in range(img_height_objects):
+		for x in range(img_width_objects):
+			var color_objects = image_objects.get_pixel(x, y)
+			var red_value_objects = color_objects.r
+			var red_value_255_objects = round(red_value_objects * 255)
+			if(red_value_255_objects==3):
+				var vase_mesh2: Node = vase_mesh.instantiate()
+				vase_mesh2.global_position += Vector3(x-img_width_objects-0.5, 0, y-img_height_objects)
+				terrain.add_child(vase_mesh2)
 	
 	#var xforms: Array[Transform3D]
 	#var width: int = 100

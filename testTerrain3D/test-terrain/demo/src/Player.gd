@@ -2,6 +2,8 @@ extends CharacterBody3D
 
 @export var bullet_scene: PackedScene
 
+@export var ROTATION_SPEED: float = 1.0
+
 @export var MOVE_SPEED: float = 50.0
 @export var JUMP_SPEED: float = 2.0
 @export var first_person: bool = false : 
@@ -30,11 +32,19 @@ extends CharacterBody3D
 
 func _physics_process(p_delta) -> void:
 	var direction: Vector3 = get_camera_relative_input()
+	#var h_input_dir: Vector2 = Vector2(direction.x, direction.z)
 	var h_veloc: Vector2 = Vector2(direction.x, direction.z).normalized() * MOVE_SPEED
 	if Input.is_key_pressed(KEY_SHIFT):
 		h_veloc *= 2
 	velocity.x = h_veloc.x
 	velocity.z = h_veloc.y
+	
+	# --- KÓD PRO ROTACI HRÁČE ---
+	#if h_input_dir.length_squared() > 0.0:
+		#var target_direction: Vector3 = Vector3(h_input_dir.x, 0, h_input_dir.y).normalized()
+		#var target_rotation: float = atan2(target_direction.x, target_direction.z)
+		#rotation.y = lerp_angle(rotation.y, target_rotation, p_delta * ROTATION_SPEED)
+		
 	if gravity_enabled:
 		velocity.y -= 40 * p_delta
 	move_and_slide()
