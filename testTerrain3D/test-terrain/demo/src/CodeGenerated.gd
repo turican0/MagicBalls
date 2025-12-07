@@ -79,20 +79,19 @@ func load_terrain(level_name: String) -> Terrain3D:
 	#terrain.data.import_images([img, null, null], Vector3(-1024, 0, -1024), 0.0, 150.0)
 
 	# Instance grass1
-	var image_path_grass2 = "res://levels/"+level_name+"/grass.png"
-	var image_grass = Image.load_from_file(image_path_grass2)
-	image_grass.convert(Image.FORMAT_RGB8)
-	var img_width_grass = image_grass.get_width()
-	var img_height_grass = image_grass.get_height()
+	var image_path_mesches = "res://levels/"+level_name+"/mesches.png"
+	var image_mesches = Image.load_from_file(image_path_mesches)
+	image_mesches.convert(Image.FORMAT_RGB8)
+	var img_width_mesches = image_mesches.get_width()
+	var img_height_mesches = image_mesches.get_height()
 	var xforms: Array[Transform3D]
-	var width_grass: int = 100
-	for y in range(img_height_grass):
-		for x in range(img_width_grass):
-			var color_grass = image_grass.get_pixel(x, y)
-			var red_value_grass = color_grass.r
-			var red_value_255_grass = round(red_value_grass * 255)
-			if(red_value_255_grass>0):
-				var pos := Vector3(x, 0, y) - Vector3(width_grass, 0, width_grass) * .5
+	for y in range(img_height_mesches):
+		for x in range(img_width_mesches):
+			var color_mesches = image_mesches.get_pixel(x, y)
+			var red_value_mesches = color_mesches.r
+			var red_value_255_mesches = round(red_value_mesches * 255)
+			if(red_value_255_mesches==3):
+				var pos := Vector3(x-img_width_mesches-0.5, 0, y-img_height_mesches-0.5)
 				pos.y = terrain.data.get_height(pos)
 				xforms.push_back(Transform3D(Basis(), pos))
 				
@@ -111,7 +110,7 @@ func load_terrain(level_name: String) -> Terrain3D:
 			var red_value_255_objects = round(red_value_objects * 255)
 			if(red_value_255_objects==3):
 				var vase_mesh2: Node = vase_mesh.instantiate()
-				vase_mesh2.global_position += Vector3(x-img_width_objects-0.5, 0, y-img_height_objects)
+				vase_mesh2.global_position += Vector3(x-img_width_objects-0.5, 0, y-img_height_objects-0.5)
 				terrain.add_child(vase_mesh2)
 	
 	#var xforms: Array[Transform3D]
