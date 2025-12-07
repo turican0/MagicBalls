@@ -11,6 +11,7 @@ render_mode disable_velocity, disable_force;
 group_uniforms options;
 uniform sampler2D main_noise;
 uniform float main_noise_scale = 0.01;
+uniform sampler2D grass_height_map; // <--- NOVÁ UNIFORM PROMĚNNÁ PRO REGULACI VÝŠKY
 uniform vec3 position_offset = vec3(0.);
 uniform bool align_to_normal = true;
 uniform float normal_strength : hint_range(0.01, 1.0, 0.01) = 0.3;
@@ -178,6 +179,12 @@ void start() {
 	TRANSFORM = mat4(1.0);
 	vec3 orientation = vec3(0., 1., 0.);
 
+	// --- LOGIKA PRO REGULACI VÝŠKY Z PNG ---
+	vec2 height_uv = (pos.xz + _region_size / 2.0) / _region_size;
+	float height_modifier_value = texture(grass_height_map, height_uv).r;
+	//float height_scale_factor = 1.0 + (height_modifier_value * 1.5);
+	// --- KONEC LOGIKY ---
+
 	vec2 uv = (pos.xz) * main_noise_scale;
 	float noise = textureLod(main_noise, uv, 0.0).r;
 	float clods = smoothstep(clod_min_threshold, clod_max_threshold, noise) * clod_scale_boost;
@@ -187,7 +194,7 @@ void start() {
 	// Calculate scale
 	vec3 scale = vec3(
 		mix(min_scale.x, max_scale.x, r.x) * width_modifier,
-		mix(min_scale.y, max_scale.y, r.y) + clods,
+		(mix(min_scale.y, max_scale.y, r.y) + clods) * height_modifier_value, // <--- FINÁLNÍ NÁSOBENÍ FAKTOREM Z PNG
 		mix(min_scale.z, max_scale.z, r.z) * width_modifier) * patch;
 
 	// Apply scale to offset
