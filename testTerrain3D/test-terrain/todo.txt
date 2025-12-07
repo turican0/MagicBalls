@@ -1,0 +1,8 @@
+grass shader omezit dle textury
+upravit vysku objektu dle terenu
+upravit mechches dle terenu
+upravit pohyb hrace
+pridat hranice
+zobrazit ruzna kouzla
+pridat kulicky start a cil
+pridat zvuky a finalni sekvenci
