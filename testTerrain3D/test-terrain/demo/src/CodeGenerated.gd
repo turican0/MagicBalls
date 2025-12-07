@@ -62,7 +62,7 @@ func load_terrain(level_name: String) -> Terrain3D:
 	var new_level_instance = grass_particle.instantiate()
 	var image_path_grass = "res://levels/"+level_name+"/grass.png"
 	var grass_texture: Texture2D = load(image_path_grass)
-	new_level_instance.grass_height_map = grass_texture
+	new_level_instance.process_material.set_shader_parameter("grass_height_map", grass_texture)
 	terrain.add_child(new_level_instance)
 
 	#var new_level_instance = grass_particle.instantiate()

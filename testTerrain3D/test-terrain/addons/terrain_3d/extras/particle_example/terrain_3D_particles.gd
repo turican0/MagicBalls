@@ -77,9 +77,6 @@ extends Node3D
 ## Access to process material parameters
 @export var process_material: ShaderMaterial
 
-## **NOVÁ PROMĚNNÁ:** Mapa pro regulaci výšky trávy. Musí být kompatibilní s `sampler2D` v shaderu.
-@export var grass_height_map: Texture2D # <--- TOTO JSME PŘIDALI
-
 ## The mesh that each particle will render
 @export var mesh: Mesh
 
@@ -224,9 +221,6 @@ func _update_process_parameters() -> void:
 	if process_material:
 		var process_rid: RID = process_material.get_rid()
 		if terrain and process_rid.is_valid():
-			# 1. NASTAVENÍ grass_height_map
-			if grass_height_map:
-				RenderingServer.material_set_param(process_rid, "grass_height_map", grass_height_map)
 			RenderingServer.material_set_param(process_rid, "_background_mode", terrain.material.world_background)
 			RenderingServer.material_set_param(process_rid, "_vertex_spacing", terrain.vertex_spacing)
 			RenderingServer.material_set_param(process_rid, "_vertex_density", 1.0 / terrain.vertex_spacing)
