@@ -113,6 +113,8 @@ func load_terrain(level_name: String) -> Terrain3D:
 				vase_mesh2.global_position += Vector3(x-img_width_objects-0.5, 0, y-img_height_objects-0.5)
 				terrain.add_child(vase_mesh2)
 	
+	$Player.terrain = terrain
+	
 	#var xforms: Array[Transform3D]
 	#var width: int = 100
 	#var step: int = 2

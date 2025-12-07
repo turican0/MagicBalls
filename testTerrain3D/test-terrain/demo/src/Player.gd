@@ -6,6 +6,9 @@ extends CharacterBody3D
 
 @export var MOVE_SPEED: float = 50.0
 @export var JUMP_SPEED: float = 2.0
+
+@export var terrain: Terrain3D
+
 @export var first_person: bool = false : 
 	set(p_value):
 		first_person = p_value
@@ -29,6 +32,8 @@ extends CharacterBody3D
 		$CollisionShapeBody.disabled = ! collision_enabled
 		$CollisionShapeRay.disabled = ! collision_enabled
 
+var speed: float = 0
+var direction2: Vector3 = Vector3(0,0,-1)
 
 func _physics_process(p_delta) -> void:
 	var direction: Vector3 = get_camera_relative_input()
@@ -47,20 +52,33 @@ func _physics_process(p_delta) -> void:
 		
 	if gravity_enabled:
 		velocity.y -= 40 * p_delta
-	move_and_slide()
-
+	self.position+=direction2*speed*p_delta
+	
+	var terrain_height_y: float = terrain.data.get_height(global_position)
+	if(terrain_height_y+2<global_position.y):
+		global_position.y-=0.1
+	else:
+		if(terrain_height_y+2>global_position.y):
+			global_position.y+=0.1
+	#move_and_slide()
 
 # Returns the input vector relative to the camera. Forward is always the direction the camera is facing
 func get_camera_relative_input() -> Vector3:
 	var input_dir: Vector3 = Vector3.ZERO
 	if Input.is_key_pressed(KEY_A): # Left
-		input_dir -= %Camera3D.global_transform.basis.x
+		direction2 = direction2.rotated(Vector3.UP, 0.01)
+		look_at(global_position + direction2, Vector3.UP)
+		#input_dir -= %Camera3D.global_transform.basis.x
 	if Input.is_key_pressed(KEY_D): # Right
-		input_dir += %Camera3D.global_transform.basis.x
+		direction2 = direction2.rotated(Vector3.UP, -0.01)
+		look_at(global_position + direction2, Vector3.UP)
+		#input_dir += %Camera3D.global_transform.basis.x
 	if Input.is_key_pressed(KEY_W): # Forward
-		input_dir -= %Camera3D.global_transform.basis.z
+		speed=speed+0.1
+		#input_dir -= %Camera3D.global_transform.basis.z
 	if Input.is_key_pressed(KEY_S): # Backward
-		input_dir += %Camera3D.global_transform.basis.z
+		speed=speed-0.1
+		#input_dir += %Camera3D.global_transform.basis.z
 	if Input.is_key_pressed(KEY_E) or Input.is_key_pressed(KEY_SPACE): # Up
 		velocity.y += JUMP_SPEED + MOVE_SPEED*.016
 	if Input.is_key_pressed(KEY_Q): # Down

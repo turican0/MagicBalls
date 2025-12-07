@@ -19,6 +19,12 @@ height = 1.5
 collision_layer = 2
 script = ExtResource("1_nm1yx")
 bullet_scene = ExtResource("2_sgnwv")
+ROTATION_SPEED = null
+MOVE_SPEED = null
+JUMP_SPEED = null
+first_person = null
+gravity_enabled = null
+collision_enabled = null
 
 [node name="CameraManager" type="Node3D" parent="."]
 script = ExtResource("2_loos7")
