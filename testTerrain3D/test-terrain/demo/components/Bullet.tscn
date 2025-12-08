@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgu4ojcecgsin"]
+[gd_scene load_steps=8 format=3 uid="uid://bgu4ojcecgsin"]
 
-[ext_resource type="Script" uid="uid://go0hlwfwbf6s" path="res://demo/src/bullet.gd" id="1_67jft"]
+[ext_resource type="Script" uid="uid://go0hlwfwbf6s" path="res://demo/src/Bullet.gd" id="1_67jft"]
 [ext_resource type="Texture2D" uid="uid://c1ybnltkj8k3m" path="res://assets/sphere/Metal048C_2K-PNG_Color.png" id="2_hrg2b"]
+[ext_resource type="AudioStream" uid="uid://bkeqq2u55xdan" path="res://sound/sound1_fireball.wav" id="3_hrg2b"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_hrg2b"]
 
@@ -28,3 +29,7 @@ script = ExtResource("1_67jft")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_q35ch")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_hrg2b")
+autoplay = true

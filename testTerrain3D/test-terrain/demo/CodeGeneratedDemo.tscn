@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://cofnhdcclon1w"]
+[gd_scene load_steps=33 format=3 uid="uid://cofnhdcclon1w"]
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://demo/src/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://demo/components/Player.tscn" id="2_3v2uf"]
@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://b4tkplvh7fq40" path="res://addons/sky_3d/src/SkyDome.gd" id="15_f8b3d"]
 [ext_resource type="Script" uid="uid://cjmkcj8hwm7ts" path="res://addons/sky_3d/src/TimeOfDay.gd" id="16_cktu3"]
 [ext_resource type="Material" uid="uid://ct4tfb0wwk3vs" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/water_material.tres" id="20_j6jac"]
+[ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
 
 [sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_6sg7e"]
 name = "ground037_alb_ht"
@@ -62,7 +63,7 @@ shader_parameter/moon_texture_flip_u = false
 shader_parameter/moon_texture_flip_v = false
 shader_parameter/moon_size = 0.07
 shader_parameter/atm_moon_mie_tint = Color(0.137255, 0.184314, 0.292196, 1)
-shader_parameter/atm_moon_mie_intensity = 0.0
+shader_parameter/atm_moon_mie_intensity = 0.7
 shader_parameter/atm_moon_partial_mie_phase = Vector3(0.36, 1.64, 1.6)
 shader_parameter/starmap_color = Color(0.709804, 0.709804, 0.709804, 0.854902)
 shader_parameter/starmap_texture = ExtResource("13_8jd4p")
@@ -70,7 +71,7 @@ shader_parameter/starmap_flip_u = false
 shader_parameter/starmap_flip_v = false
 shader_parameter/starmap_alignment = Vector3(2.68288, -0.25891, 0.40101)
 shader_parameter/star_rotation_offset = 9.38899
-shader_parameter/star_rotation = -12.562060733517582
+shader_parameter/star_rotation = -11.661581351634325
 shader_parameter/star_tilt = -1.2915436464758039
 shader_parameter/star_field_color = Color(1, 1, 1, 1)
 shader_parameter/star_field_texture = ExtResource("12_jp8wu")
@@ -85,8 +86,8 @@ shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_intensity = 10.0
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.06833022, 0.06833022)
-shader_parameter/cirrus_position2 = Vector2(0.06833022, 0.06833022)
+shader_parameter/cirrus_position1 = Vector2(0.47978446, 0.47978446)
+shader_parameter/cirrus_position2 = Vector2(0.47978446, 0.47978446)
 shader_parameter/cirrus_day_color = Color(0.824, 0.875, 1, 1)
 shader_parameter/cirrus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
 shader_parameter/cirrus_night_color = Color(0.09, 0.094, 0.129, 1)
@@ -99,7 +100,7 @@ shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_intensity = 0.6
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(0.34164357, 0.34164357)
+shader_parameter/cumulus_position = Vector2(2.3986986, 2.3986986)
 shader_parameter/cumulus_texture = ExtResource("9_grerw")
 shader_parameter/cumulus_day_color = Color(0.823529, 0.87451, 1, 1)
 shader_parameter/cumulus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
@@ -112,7 +113,7 @@ shader_parameter/azimuthal_grid_rotation_offset = 0.03
 shader_parameter/show_equatorial_grid = false
 shader_parameter/equatorial_grid_color = Color(0, 0.75, 1, 1)
 shader_parameter/equatorial_grid_rotation_offset = 0.03
-shader_parameter/moon_matrix = Basis(0, -0.79301035, -0.60920805, -0.5051785, 0.5257555, -0.68437976, 0.8630148, 0.3077588, -0.40061185)
+shader_parameter/moon_matrix = Basis(0, 0.7317611, -0.6815612, -0.9145997, -0.27559638, -0.29589522, -0.4043604, 0.6233557, 0.6692685)
 
 [sub_resource type="Sky" id="Sky_l86mf"]
 sky_material = SubResource("ShaderMaterial_aiqs8")
@@ -151,33 +152,33 @@ vase_mesh = ExtResource("8_6dc5f")
 environment = SubResource("Environment_qgmqs")
 camera_attributes = SubResource("CameraAttributesPractical_irgjg")
 script = ExtResource("14_6dc5f")
-current_time = 14.535760000034694
+current_time = 10.515800000051668
 minutes_per_day = 10.0
 wind_direction = 2.35619451204804
 
 [node name="SunLight" type="DirectionalLight3D" parent="Sky3D"]
-transform = Transform3D(0, -0.80858046, -0.5883857, 0.56633276, -0.4849338, 0.6664131, -0.8241767, -0.3332221, 0.4579256, -0.5883857, 0.6664131, 0.4579256)
+transform = Transform3D(0, -0.92560595, 0.37848857, 0.48285463, 0.33144262, 0.81055367, -0.8757005, 0.18275496, 0.44693318, 0.37848854, 0.8105536, 0.44693315)
 shadow_enabled = true
 
 [node name="MoonLight" type="DirectionalLight3D" parent="Sky3D"]
-transform = Transform3D(0, -0.5051785, 0.8630149, -0.7930104, 0.5257556, 0.3077588, -0.609208, -0.68437976, -0.40061188, 0.8630149, 0.3077588, -0.40061188)
+transform = Transform3D(0, -0.9145997, -0.4043604, 0.7317611, -0.27559638, 0.6233557, -0.68156123, -0.29589522, 0.6692685, -0.4043604, 0.6233557, 0.6692685)
 light_color = Color(0.572549, 0.776471, 0.956863, 1)
 light_energy = 0.0
 
 [node name="SkyDome" type="Node" parent="Sky3D"]
 script = ExtResource("15_f8b3d")
-sun_azimuth = -4.0510364
-sun_altitude = -0.8414088
-moon_azimuth = -1.1361963
-moon_altitude = -1.2579597
+sun_azimuth = -2.438926
+sun_altitude = -0.6256995
+moon_azimuth = -3.685082
+moon_altitude = -0.8977694
 wind_direction = 2.35619451204804
 
 [node name="TimeOfDay" type="Node" parent="Sky3D"]
 script = ExtResource("16_cktu3")
 dome_path = NodePath("../SkyDome")
 minutes_per_day = 10.0
-current_time = 14.535760000034694
-day = 10
+current_time = 10.515800000051668
+day = 19
 month = 2
 
 [node name="Player" parent="." instance=ExtResource("2_3v2uf")]
@@ -205,3 +206,7 @@ outline_size = 10
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 mesh = SubResource("QuadMesh_jp8wu")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("24_f8b3d")
+autoplay = true

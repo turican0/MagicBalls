@@ -112,6 +112,8 @@ func load_terrain(level_name: String) -> Terrain3D:
 				var vase_mesh2: Node = vase_mesh.instantiate()
 				vase_mesh2.global_position += Vector3(x-img_width_objects-0.5, 0, y-img_height_objects-0.5)
 				terrain.add_child(vase_mesh2)
+			if(red_value_255_objects==3):
+				$Player.position=Vector3(x-img_width_objects-0.5, 10, y-img_height_objects-0.5)
 	
 	$Player.terrain = terrain
 	
