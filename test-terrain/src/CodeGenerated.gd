@@ -9,6 +9,7 @@ var terrain: Terrain3D
 @export var vase_mesh: PackedScene
 
 
+
 func _ready() -> void:
 	$UI.player = $Player
 		
@@ -56,8 +57,20 @@ func load_terrain(level_name: String) -> Terrain3D:
 			var red_value_255_heightmap = round(red_value_heightmap * 255)
 			img_heightmap.set_pixel(x, y, Color(red_value_255_heightmap/(256*10), 0., 0., 1.))
 			#print("Pixel [", x, ", ", y, "] - Red (0-255): ", red_value_255, ", Red (0.0-1.0): ", red_value)
-	terrain.region_size = Terrain3D.SIZE_64
-	terrain.data.import_images([img_heightmap, null, null], Vector3(-64, 0, -64), 0.0, 150.0)
+	match img_width_heightmap:
+		64:
+			terrain.region_size = Terrain3D.SIZE_64
+		128:
+			terrain.region_size = Terrain3D.SIZE_128
+		256:
+			terrain.region_size = Terrain3D.SIZE_256
+		512:
+			terrain.region_size = Terrain3D.SIZE_512
+		1024:
+			terrain.region_size = Terrain3D.SIZE_1024
+		_:
+			push_error("Unsupported terrain resolution: %s" % img_width_heightmap)
+	terrain.data.import_images([img_heightmap, null, null], Vector3(-img_width_heightmap, 0, -img_width_heightmap), 0.0, 150.0)
 
 	var new_level_instance = grass_particle.instantiate()
 	var image_path_grass = "res://levels/"+level_name+"/grass.png"
