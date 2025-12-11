@@ -16,8 +16,7 @@ func load_spells():
 	
 	for spell in spells:
 		var slot = Panel.new()
-		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		slot.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		slot.custom_minimum_size = Vector2(64,64)
 		#slot.custom_styles["panel"] = get_slot_style()  # nastavíme styl rámečku
 		
 		var frame = TextureRect.new()
