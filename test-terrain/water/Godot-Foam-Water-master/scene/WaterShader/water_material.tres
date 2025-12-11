@@ -1,9 +1,9 @@
 [gd_resource type="ShaderMaterial" load_steps=11 format=3 uid="uid://ct4tfb0wwk3vs"]
 
-[ext_resource type="Shader" uid="uid://dvqvnq3cyyaou" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/shaders/antz_foam_water.gdshader" id="1_mpvtw"]
-[ext_resource type="Texture2D" uid="uid://tnm63yjnc81i" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/textures/water_foam.png" id="2_p3v2w"]
-[ext_resource type="Texture2D" uid="uid://bv18iejdqadjt" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/textures/n_noise_1.tres" id="4_sognf"]
-[ext_resource type="Texture2D" uid="uid://u1pdrd2gf4aj" path="res://demo/water/Godot-Foam-Water-master/scene/WaterShader/textures/n_noise_2.tres" id="5_12ghi"]
+[ext_resource type="Shader" uid="uid://dvqvnq3cyyaou" path="res://water/Godot-Foam-Water-master/scene/WaterShader/shaders/antz_foam_water.gdshader" id="1_mpvtw"]
+[ext_resource type="Texture2D" uid="uid://tnm63yjnc81i" path="res://water/Godot-Foam-Water-master/scene/WaterShader/textures/water_foam.png" id="2_p3v2w"]
+[ext_resource type="Texture2D" uid="uid://bv18iejdqadjt" path="res://water/Godot-Foam-Water-master/scene/WaterShader/textures/n_noise_1.tres" id="4_sognf"]
+[ext_resource type="Texture2D" uid="uid://u1pdrd2gf4aj" path="res://water/Godot-Foam-Water-master/scene/WaterShader/textures/n_noise_2.tres" id="5_12ghi"]
 
 [sub_resource type="Gradient" id="Gradient_v4ahr"]
 interpolation_mode = 2
