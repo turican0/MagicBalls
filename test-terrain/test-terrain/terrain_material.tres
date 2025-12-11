@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bpnnts5lr0sif"]
+
+[ext_resource type="Shader" uid="uid://dkooe1gd4jufd" path="res://test-terrain/terrain_material.gdshader" id="1_1o8ll"]
+[ext_resource type="Texture2D" uid="uid://cs4micnmlahie" path="res://test-terrain/textures.jpg" id="2_nkwjn"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_1o8ll")
+shader_parameter/atlas_texture = ExtResource("2_nkwjn")
+shader_parameter/atlas_grid_size = Vector2(100, 100)
