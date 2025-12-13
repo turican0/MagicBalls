@@ -42,7 +42,7 @@ var decode_buffer: PackedByteArray = PackedByteArray()
 # --- 2. Adaptace Inicializačních funkcí ---
 
 # Funkce, která by v Godotu volala ekvivalenty C-funkcí
-func _ready():
+func init():
 	print("--- Start Godot Initialization Adaptace ---")
 
 	# 1. Alokace paměti pro paletu (Původně malloc)
@@ -355,11 +355,160 @@ func sub_533B0_decompress_levels(level_id: int, level_data: TypeStr2FECE) -> boo
 	var output := PackedByteArray()
 	output.resize(1024 * 1024)
 	var level_tab_data_unpacked = decompress_rnc1(level_tab_data)
+	
+	var level_struct:TypeStr2FECE = TypeStr2FECE.new()
+	level_struct.decode_from(level_tab_data_unpacked)
 
-	sub_56C00_sound_proc2(level_data) # <--- NUTNÁ IMPLEMENTACE!
-	sub_53590(level_data) # <--- NUTNÁ IMPLEMENTACE!
-
+	sub_56C00_sound_proc2(level_struct) # <--- NUTNÁ IMPLEMENTACE!
+	sub_53590(level_struct) # <--- NUTNÁ IMPLEMENTACE!
+	generate_level_map_43830(level_struct)
 	return true
+
+var x_WORD_17B4E0:int
+var D41A0_0:type_D41A0_BYTESTR_0
+var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
+var mapHeightmap_11B4E0: PackedByteArray = PackedByteArray()
+var mapShading_12B4E0: PackedByteArray = PackedByteArray()
+var mapAngle_13B4E0: PackedByteArray = PackedByteArray()
+var mapEntityIndex_15B4E0: PackedInt32Array = PackedInt32Array()
+
+func generate_level_map_43830(level_struct: TypeStr2FECE) -> void:
+	D41A0_0 = type_D41A0_BYTESTR_0.new()
+	mapTerrainType_10B4E0.resize(256 * 256)
+	mapHeightmap_11B4E0.resize(256 * 256)
+	mapShading_12B4E0.resize(256 * 256)
+	mapAngle_13B4E0.resize(256 * 256)
+	mapEntityIndex_15B4E0.resize(256 * 256)
+	# ekvivalent:
+	# x_WORD_17B4E0 = a2x->seed_0x2FEE5;
+	x_WORD_17B4E0 = level_struct.word_0x2FEE5
+	D41A0_0.rand_0x8 = level_struct.word_0x2FEE5
+	# memset(mapEntityIndex_15B4E0, 0, 0x20000);
+	mapEntityIndex_15B4E0.fill(0)
+	sub_B5E70_decompress_terrain_map_level(
+		x_WORD_17B4E0,
+		level_struct.word_0x2FEE9,
+		level_struct.word_0x2FEED,
+		level_struct.word_0x2FEF1
+	)
+	# trunc + create heightmap
+	#sub_44DB0_truncTerrainHeight(
+		#mapEntityIndex_15B4E0,
+		#mapHeightmap_11B4E0
+	#)
+	## memset(mapEntityIndex_15B4E0, 0, 0x20000);
+	#mapEntityIndex_15B4E0.fill(0)
+	#sub_44E40(
+		#level_struct.word_0x2FEF5,
+		#level_struct.word_0x2FEF9
+	#)
+	#sub_45AA0_setMax4Tiles()
+	#sub_440D0(level_struct.word_0x2FF01)
+	#sub_45060(
+		#level_struct.word_0x2FF05,
+		#level_struct.word_0x2FF09
+	#)
+	#sub_44320()
+	#sub_45210(
+		#level_struct.word_0x2FF05,
+		#level_struct.word_0x2FF09
+	#)
+	#sub_454F0(
+		#level_struct.word_0x2FEFD,
+		#level_struct.word_0x2FF11
+	#)
+	#sub_45600(level_struct.word_0x2FF0D)
+	#sub_43FC0()
+	## memset(mapTerrainType_10B4E0, 0, 0x10000);
+	#mapTerrainType_10B4E0.fill(0)
+	#sub_43970() # smooth terrain
+	#sub_43EE0() # add rivers
+	#sub_44580() # set angle of terrain
+	#if isCaveLevel_D41B6:
+		#sub_43B40()
+	#else:
+		#sub_43D50()
+	#sub_44D00()
+
+var mapW: int = 256
+var mapH: int = 256
+
+func sub_B5E70_decompress_terrain_map_level(
+	a1: int,   # int16
+	a2: Vector2i,   # uint16
+	a3: int,   # int16
+	a4: int    # int32
+) -> void:
+	var sumEnt:Vector2i = Vector2i(0,0)
+	mapEntityIndex_15B4E0[a2.y%mapH * mapW + a2.x%mapW] = a3  # first seed
+	for i in range(7, -1, -1):
+		sumEnt = a2
+		var count :int = 1 << (7 - i)
+		for j in range(count):
+			for k in range(count):
+				sub_B5EFA(1 << i, sumEnt, a4, a1)
+			sumEnt.y += (2 * (1 << i))
+		for j in range(count):
+			for k in range(count):
+				sub_B5F8F(1 << i, sumEnt, a4, a1)
+			sumEnt.y += (2 * (1 << i))
+
+func sub_B5EFA(a1: int, indexx: Vector2i, a3: int, nextRand: int):
+	var sumEnt: int = mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(2 * a1,0)
+	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(0,2 * a1)
+	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(-2 * a1,0)
+	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(a1,-a1)
+	nextRand = (9377 * nextRand + 9439) % 0x10000
+	if mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] == 0:
+		mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] = (
+			(nextRand % (2 * a3 + 1)) +
+			(nextRand % ((a1 << 6) + 1)) +
+			(sumEnt >> 2) -
+			32 * a1 -
+			a3
+		)
+	indexx += Vector2i(a1,-a1)
+	
+func sub_B5F8F(a1: int, indexx: Vector2i, a3: int, nextRand: int):
+	var sumEnt: int = mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	var sumEnt2: int = sumEnt
+	indexx += Vector2i(a1,-a1)
+	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(a1,a1)
+	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(-a1,a1)
+	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	nextRand = (9377 * nextRand + 9439) % 0x10000
+	sumEnt2 += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(0,-a1)
+	if mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] == 0:
+		mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] = (
+			(nextRand % (2 * a3 + 1)) +
+			(nextRand % ((a1 << 6) + 1)) +
+			(sumEnt >> 2) -
+			32 * a1 -
+			a3
+		)
+	indexx += Vector2i(-2 * a1,a1)
+	sumEnt2 += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(a1,a1)
+	sumEnt2 += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx += Vector2i(0,-a1)
+	nextRand = (9377 * nextRand + 9439) % 0x10000
+	if mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] == 0:
+		mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] = (
+			(nextRand % (2 * a3 + 1)) +
+			(nextRand % ((a1 << 6) + 1)) +
+			(sumEnt2 >> 2) -
+			32 * a1 -
+			a3
+		)
+	indexx += Vector2i(2 * a1,-a1)
+
 
 const RNC_SIGNATURE = 0x524E4301  # "RNC\x01"
 
@@ -727,7 +876,9 @@ func decompress_rnc1(data: PackedByteArray) -> PackedByteArray:
 	#var unpacked_crc_calc = crc_block(output, 0, output.size())
 	#if unpacked_crc_calc != unpacked_crc:
 		#push_error("UNPACKED CRC CHYBA! Očekáváno 0x%04X, vypočítáno 0x%04X" % [unpacked_crc, unpacked_crc_calc])
-		#return PackedByteArray()	
+		#return PackedByteArray()
+	if (unpacked_crc != reader.unpacked_crc_real):
+		push_error("UNPACKED CRC CHYBA! Očekáváno 0x%04X, vypočítáno 0x%04X" % [unpacked_crc, reader.unpacked_crc_calc])
 	return reader.output
 	
 ## Provádí bitovou rotaci doprava (ROR) o 1 bit na 16bitovém 'enc_key'.

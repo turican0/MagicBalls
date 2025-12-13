@@ -24,6 +24,12 @@ func _ready():
 	
 	# 3. Generování a vykreslení sítě
 	recalculate_mesh()
+	get_parent().get_node("DecodeLevel").init()
+	for y in range(256):
+		for x in range(256):
+			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapEntityIndex_15B4E0[y * 256 + x]*0.005
+	recalculate_mesh()
+	
 
 ## --- FÁZE 1: Inicializace ---
 
