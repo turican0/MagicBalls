@@ -1,7 +1,7 @@
 extends Node3D
 
 ## --- PARAMETRY TERÉNU ---
-const GRID_SIZE = 64        # Počet buněk (čtverců) na jedné ose (64x64)
+const GRID_SIZE = 256        # Počet buněk (čtverců) na jedné ose (64x64)
 const VERTEX_COUNT = GRID_SIZE + 1 # Počet vrcholů na jedné ose (65x65)
 const CELL_SCALE = 1.0      # Velikost jedné buňky v herních jednotkách
 
@@ -59,7 +59,7 @@ func initialize_grid_data():
 		texture_indices[x].resize(GRID_SIZE)
 		for y in range(GRID_SIZE):
 			# Nastavení náhodného indexu textury (např. 0, 1, 2)
-			texture_indices[x][y] = randi_range(0, 2) 
+			texture_indices[x][y] = randi_range(0, 24) 
 
 ## --- FÁZE 2: Generování sítě ---
 

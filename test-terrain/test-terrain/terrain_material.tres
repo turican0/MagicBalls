@@ -7,4 +7,4 @@
 render_priority = 0
 shader = ExtResource("1_1o8ll")
 shader_parameter/atlas_texture = ExtResource("2_nkwjn")
-shader_parameter/atlas_grid_size = Vector2(100, 100)
+shader_parameter/atlas_grid_size = Vector2(8, 4)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://cofnhdcclon1w"]
+[gd_scene load_steps=36 format=3 uid="uid://cofnhdcclon1w"]
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://src/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://components/Player.tscn" id="2_3v2uf"]
@@ -26,6 +26,7 @@
 [ext_resource type="Material" uid="uid://ct4tfb0wwk3vs" path="res://water/Godot-Foam-Water-master/scene/WaterShader/water_material.tres" id="20_j6jac"]
 [ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
+[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
 
 [sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_6sg7e"]
 name = "ground037_alb_ht"
@@ -47,7 +48,7 @@ shader_parameter/atm_darkness = 0.5
 shader_parameter/atm_sun_intensity = 18.0
 shader_parameter/atm_day_tint = Color(0.807843, 0.909804, 1, 1)
 shader_parameter/atm_horizon_light_tint = Color(0.980392, 0.635294, 0.462745, 1)
-shader_parameter/atm_night_tint = Color(0, 0, 0, 0)
+shader_parameter/atm_night_tint = Color(0.120792575, 0.143266, 0.17978449, 0.71633)
 shader_parameter/atm_level_params = Vector3(1, 0, 0)
 shader_parameter/atm_thickness = 0.7
 shader_parameter/atm_beta_ray = Vector3(5.804544e-06, 1.3562913e-05, 3.311258e-05)
@@ -73,7 +74,7 @@ shader_parameter/starmap_flip_u = false
 shader_parameter/starmap_flip_v = false
 shader_parameter/starmap_alignment = Vector3(2.68288, -0.25891, 0.40101)
 shader_parameter/star_rotation_offset = 9.38899
-shader_parameter/star_rotation = -12.430306346340743
+shader_parameter/star_rotation = -4.742966570184046
 shader_parameter/star_tilt = -1.2915436464758039
 shader_parameter/star_field_color = Color(1, 1, 1, 1)
 shader_parameter/star_field_texture = ExtResource("12_jp8wu")
@@ -88,8 +89,8 @@ shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_intensity = 10.0
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.12133878, 0.12133878)
-shader_parameter/cirrus_position2 = Vector2(0.12133878, 0.12133878)
+shader_parameter/cirrus_position1 = Vector2(0.740868, 0.740868)
+shader_parameter/cirrus_position2 = Vector2(0.740868, 0.740868)
 shader_parameter/cirrus_day_color = Color(0.824, 0.875, 1, 1)
 shader_parameter/cirrus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
 shader_parameter/cirrus_night_color = Color(0.09, 0.094, 0.129, 1)
@@ -102,7 +103,7 @@ shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_intensity = 0.6
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(60.813805, 60.813805)
+shader_parameter/cumulus_position = Vector2(58.903503, 58.903503)
 shader_parameter/cumulus_texture = ExtResource("9_grerw")
 shader_parameter/cumulus_day_color = Color(0.823529, 0.87451, 1, 1)
 shader_parameter/cumulus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
@@ -115,7 +116,7 @@ shader_parameter/azimuthal_grid_rotation_offset = 0.03
 shader_parameter/show_equatorial_grid = false
 shader_parameter/equatorial_grid_color = Color(0, 0.75, 1, 1)
 shader_parameter/equatorial_grid_rotation_offset = 0.03
-shader_parameter/moon_matrix = Basis(0, 0.99723506, -0.07431106, -0.5089204, -0.063967966, -0.8584334, -0.8608135, 0.037818424, 0.50751334)
+shader_parameter/moon_matrix = Basis(0, -0.7289192, 0.6845996, -0.4834618, -0.5992748, -0.63807076, 0.8753654, -0.33097774, -0.35240462)
 
 [sub_resource type="Sky" id="Sky_l86mf"]
 sky_material = SubResource("ShaderMaterial_aiqs8")
@@ -124,7 +125,8 @@ sky_material = SubResource("ShaderMaterial_aiqs8")
 background_mode = 2
 sky = SubResource("Sky_l86mf")
 ambient_light_source = 3
-ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_color = Color(0.23515597, 0.27890673, 0.35, 1)
+ambient_light_sky_contribution = 0.7
 reflected_light_source = 2
 tonemap_mode = 3
 tonemap_white = 6.0
@@ -168,34 +170,35 @@ columns = 10
 environment = SubResource("Environment_qgmqs")
 camera_attributes = SubResource("CameraAttributesPractical_irgjg")
 script = ExtResource("14_6dc5f")
-current_time = 12.368760000120687
+current_time = 3.7165600003791393
 minutes_per_day = 10.0
 wind_direction = 2.35619451204804
 
 [node name="SunLight" type="DirectionalLight3D" parent="Sky3D"]
-transform = Transform3D(0, -0.9951235, -0.098637216, 0.37138394, -0.09158262, 0.9239516, -0.9284794, -0.036632277, 0.36957288, -0.098637216, 0.9239516, 0.36957288)
-shadow_enabled = true
+transform = Transform3D(0, -0.54744756, 0.83684, -0.6493462, -0.6364109, -0.41633, 0.7604929, -0.54339886, -0.35548297, 0.83684, -0.41633, -0.35548297)
+light_color = Color(0.98, 0.523, 0.294, 1)
+light_energy = 0.0
 
 [node name="MoonLight" type="DirectionalLight3D" parent="Sky3D"]
-transform = Transform3D(0, -0.50892055, -0.86081356, 0.9972352, -0.06396797, 0.03781843, -0.07431107, -0.85843354, 0.50751346, -0.8608135, 0.037818428, 0.5075134)
+transform = Transform3D(0, -0.4834618, 0.8753655, -0.72891927, -0.5992749, -0.3309778, 0.6845996, -0.63807076, -0.35240465, 0.87536544, -0.33097777, -0.35240462)
 light_color = Color(0.572549, 0.776471, 0.956863, 1)
 light_energy = 0.0
 
 [node name="SkyDome" type="Node" parent="Sky3D"]
 script = ExtResource("15_f8b3d")
-sun_azimuth = -3.4024084
-sun_altitude = -0.39251068
-moon_azimuth = -4.179671
-moon_altitude = -1.5329689
+sun_azimuth = -1.1691018
+sun_altitude = -2.0002015
+moon_azimuth = -1.1880678
+moon_altitude = -1.9081359
 wind_direction = 2.35619451204804
 
 [node name="TimeOfDay" type="Node" parent="Sky3D"]
 script = ExtResource("16_cktu3")
 dome_path = NodePath("../SkyDome")
 minutes_per_day = 10.0
-current_time = 12.368760000120687
-day = 5
-month = 3
+current_time = 3.7165600003791393
+day = 25
+month = 4
 
 [node name="Player" parent="." instance=ExtResource("2_3v2uf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
@@ -229,3 +232,8 @@ autoplay = true
 
 [node name="Node3D-testTerrain" type="Node3D" parent="."]
 script = ExtResource("26_dvamp")
+
+[node name="DecodeLevel" type="Node" parent="."]
+script = ExtResource("27_6qqjn")
+levels_tab_path = "res://mclevels/LEVELS.TAB"
+levels_dat_path = "res://mclevels/LEVELS.DAT"
