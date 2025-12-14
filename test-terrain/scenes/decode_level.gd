@@ -379,57 +379,53 @@ func generate_level_map_43830(level_struct: TypeStr2FECE) -> void:
 	mapShading_12B4E0.resize(256 * 256)
 	mapAngle_13B4E0.resize(256 * 256)
 	mapEntityIndex_15B4E0.resize(256 * 256)
+	mapTerrainType_10B4E0.fill(0)
+	mapHeightmap_11B4E0.fill(0)
+	mapShading_12B4E0.fill(0)
+	mapAngle_13B4E0.fill(0)
+	mapEntityIndex_15B4E0.fill(0)
 	# ekvivalent:
 	# x_WORD_17B4E0 = a2x->seed_0x2FEE5;
-	x_WORD_17B4E0 = level_struct.word_0x2FEE5
-	D41A0_0.rand_0x8 = level_struct.word_0x2FEE5
+	x_WORD_17B4E0 = level_struct.seed_0x2FEE5
+	D41A0_0.rand_0x8 = level_struct.seed_0x2FEE5
 	# memset(mapEntityIndex_15B4E0, 0, 0x20000);
-	mapEntityIndex_15B4E0.fill(0)
 	sub_B5E70_decompress_terrain_map_level(
 		x_WORD_17B4E0,
-		level_struct.word_0x2FEE9,
-		level_struct.word_0x2FEED,
-		level_struct.word_0x2FEF1
+		level_struct.offset_0x2FEE9,
+		level_struct.raise_0x2FEED,
+		level_struct.gnarl_0x2FEF1
 	)
-	initialize_and_export_map_entities("mapgd_test.txt")
-	# trunc + create heightmap
-	#sub_44DB0_truncTerrainHeight(
-		#mapEntityIndex_15B4E0,
-		#mapHeightmap_11B4E0
-	#)
-	## memset(mapEntityIndex_15B4E0, 0, 0x20000);
-	#mapEntityIndex_15B4E0.fill(0)
-	#sub_44E40(
-		#level_struct.word_0x2FEF5,
-		#level_struct.word_0x2FEF9
-	#)
-	#sub_45AA0_setMax4Tiles()
-	#sub_440D0(level_struct.word_0x2FF01)
-	#sub_45060(
-		#level_struct.word_0x2FF05,
-		#level_struct.word_0x2FF09
-	#)
-	#sub_44320()
-	#sub_45210(
-		#level_struct.word_0x2FF05,
-		#level_struct.word_0x2FF09
-	#)
-	#sub_454F0(
-		#level_struct.word_0x2FEFD,
-		#level_struct.word_0x2FF11
-	#)
-	#sub_45600(level_struct.word_0x2FF0D)
-	#sub_43FC0()
-	## memset(mapTerrainType_10B4E0, 0, 0x10000);
-	#mapTerrainType_10B4E0.fill(0)
-	#sub_43970() # smooth terrain
-	#sub_43EE0() # add rivers
-	#sub_44580() # set angle of terrain
-	#if isCaveLevel_D41B6:
-		#sub_43B40()
-	#else:
-		#sub_43D50()
-	#sub_44D00()
+	sub_44DB0_truncTerrainHeight(
+		mapEntityIndex_15B4E0,
+		mapHeightmap_11B4E0
+	)
+	mapEntityIndex_15B4E0.fill(0)
+	sub_44E40(level_struct.river_0x2FEF5,level_struct.lriver_0x2FEF9)
+	sub_45AA0_setMax4Tiles();#//226aa0
+#
+	sub_440D0(level_struct.snLin_0x2FF01)
+#
+	#sub_45060(a2x->snFlt_0x2FF05, a2x->bhLin_0x2FF09);//226060
+#
+	#sub_44320();//225320
+#
+	#sub_45210(a2x->snFlt_0x2FF05, a2x->bhLin_0x2FF09);//226210
+#
+	#sub_454F0(a2x->source_0x2FEFD, a2x->rkSte_0x2FF11);//2264f0
+#
+	#sub_45600(a2x->bhFlt_0x2FF0D);//226600
+#
+	#sub_43FC0();//224fc0
+	#memset((void*)mapTerrainType_10B4E0, 0, 0x10000);
+	#sub_43970();//224970 // smooth terrain
+	#sub_43EE0();//224ee0 // add rivers
+#
+	#sub_44580();//225580 //set angle of terrain
+	#if (isCaveLevel_D41B6)
+		#sub_43B40();//224b40 //change angle of terrain
+	#else
+		#sub_43D50();//224d50 //change angle of terrain
+	#sub_44D00();//225d00
 
 const HEX_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
 func initialize_and_export_map_entities(filename: String) -> void:
@@ -439,8 +435,7 @@ func initialize_and_export_map_entities(filename: String) -> void:
 	for y in range(256):
 		line_builder = "" # Reset pro nový řádek
 		for x in range(256):
-			var index: int = y * 256 + x
-			var value: int = mapEntityIndex_15B4E0[index]
+			var value: int = mapEntityIndex_15B4E0[y * 256 + x]
 			var output_char: String
 			if value >= 0 and value <= 15:
 				output_char = HEX_CHARS[value]
@@ -454,6 +449,290 @@ func initialize_and_export_map_entities(filename: String) -> void:
 var mapW: int = 256
 var mapH: int = 256
 
+func sub_440D0(a1:int):
+	#    X
+	#   / \
+	#  X B X
+	#   \|/
+	#    X
+	var maxHeight:int
+	var minHeight:int
+	var diffHeight:int
+	var ang3:int
+	var ang2:int
+	var ang5:int
+
+	for y in range(mapH):
+		for x in range(mapW):
+			var index:Vector2i = Vector2i(x,y)
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 5):
+				maxHeight = 0
+				minHeight = 255
+				if (mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					maxHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				if (mapHeightmap_11B4E0[index.y * mapW + index.x] < 255):
+					minHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				index += Vector2i(0,-1)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+				if (maxHeight < mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					maxHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				if (minHeight > mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					minHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				index += Vector2i(1,1)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+				if (maxHeight < mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					maxHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				if (minHeight > mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					minHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				index += Vector2i(-1,1)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+				if (maxHeight < mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					maxHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				if (minHeight > mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					minHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				index += Vector2i(-1,-1)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+				if (maxHeight < mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					maxHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				if (minHeight > mapHeightmap_11B4E0[index.y * mapW + index.x]):
+					minHeight = mapHeightmap_11B4E0[index.y * mapW + index.x]
+				diffHeight = maxHeight - minHeight
+				index += Vector2i(1,0)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+				if (diffHeight <= a1):
+					if (diffHeight == a1):
+						mapAngle_13B4E0[index.y * mapW + index.x] = 4
+					else:
+						mapAngle_13B4E0[index.y * mapW + index.x] = 3
+
+	#  X-X
+	#  | |
+	#  B-X
+
+	for y in range(mapH):
+		for x in range(mapW):
+			var index:Vector2i = Vector2i(x,y)
+			ang3 = 0;
+			ang2 = 0;
+			ang5 = 0;
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 3):
+				ang3 = 1;
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 2):
+				ang2 = 1;
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 5):
+				ang5 = 1;
+			index += Vector2i(1,0)
+			index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 3):
+				ang3+=1
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 2):
+				ang2+=1
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 5):
+				ang5+=1
+			index += Vector2i(0,1)
+			index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 3):
+				ang3+=1
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 2):
+				ang2+=1
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 5):
+				ang5+=1
+			index += Vector2i(-1,0)
+			index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 3):
+				ang3+=1
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 2):
+				ang2+=1
+			if (mapAngle_13B4E0[index.y * mapW + index.x] == 5):
+				ang5+=1
+			index += Vector2i(0,-1)
+			index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+			if (!ang2 && ang3 && ang5):
+				if (mapAngle_13B4E0[index.y * mapW + index.x] == 3):
+					mapAngle_13B4E0[index.y * mapW + index.x] = 4
+				index += Vector2i(1,0)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+				if (mapAngle_13B4E0[index.y * mapW + index.x] == 3):
+					mapAngle_13B4E0[index.y * mapW + index.x] = 4
+				index += Vector2i(0,1)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+				if (mapAngle_13B4E0[index.y * mapW + index.x] == 3):
+					mapAngle_13B4E0[index.y * mapW + index.x] = 4
+				index += Vector2i(-1,0)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+				if (mapAngle_13B4E0[index.y * mapW + index.x] == 3):
+					mapAngle_13B4E0[index.y * mapW + index.x] = 4
+				index += Vector2i(0,-1)
+				index = Vector2i(posmod(index.x, mapW),posmod(index.y, mapH))
+
+func sub_45AA0_setMax4Tiles():
+	#  X-X
+	#  | |
+	#  B-X
+	var indexx:Vector2i
+	var angleIndex:int
+	var minHeight:int
+	var maxHeight:int
+	var runAgain: bool
+	while true:
+		runAgain = false
+		for y in range(mapH):
+			for x in range(mapW):
+				indexx = Vector2i(x,y);
+				angleIndex = 0;
+				if (!mapAngle_13B4E0[indexx.y * mapW + indexx.x]):
+					angleIndex = 1;
+				minHeight = mapHeightmap_11B4E0[indexx.y * mapW + indexx.x];
+				maxHeight = minHeight;
+				indexx += Vector2i(1,0)
+				indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+				if (!mapAngle_13B4E0[indexx.y * mapW + indexx.x]):
+					angleIndex+=1
+				if (minHeight > mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]):
+					minHeight = mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]
+				if (maxHeight < mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]):
+					maxHeight = mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]
+				indexx += Vector2i(0,1)
+				indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+				if (!mapAngle_13B4E0[indexx.y * mapW + indexx.x]):
+					angleIndex+=1;
+				if (minHeight > mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]):
+					minHeight = mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]
+				if (maxHeight < mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]):
+					maxHeight = mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]
+				indexx += Vector2i(-1,0)
+				indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+				if (!mapAngle_13B4E0[indexx.y * mapW + indexx.x]):
+					angleIndex+=1;
+				if (minHeight > mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]):
+					minHeight = mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]
+				if (maxHeight < mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]):
+					maxHeight = mapHeightmap_11B4E0[indexx.y * mapW + indexx.x]
+				indexx += Vector2i(0,-1)
+				indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+				if (maxHeight != minHeight && angleIndex == 4):
+					runAgain = true;
+					mapHeightmap_11B4E0[indexx.y * mapW + indexx.x] = minHeight
+					indexx += Vector2i(1,0)
+					indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+					mapHeightmap_11B4E0[indexx.y * mapW + indexx.x] = minHeight
+					indexx += Vector2i(0,1)
+					indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+					mapHeightmap_11B4E0[indexx.y * mapW + indexx.x] = minHeight
+					indexx += Vector2i(-1,0)
+					indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+					mapHeightmap_11B4E0[indexx.y * mapW + indexx.x] = minHeight
+					indexx += Vector2i(0,-1)
+					indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+		if not runAgain:
+			break
+
+func sub_44EE0_smooth_tiles(axis: Vector2i) -> void:
+	mapTerrainType_10B4E0.fill(3)
+	var tempAxis1: Vector2i = axis
+	var tempAxis2: Vector2i
+	var temp_2d_coords: Vector2i = Vector2i(0, 0)
+	var centralHeight: int = mapHeightmap_11B4E0[axis.y * mapW + axis.x]
+	while true:
+		mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] = 0 # Označí současnou dlaždici jako navštívenou (0)
+		tempAxis1 += Vector2i(0,-1)
+		tempAxis1 = Vector2i(posmod(tempAxis1.x, mapW),posmod(tempAxis1.y, mapH))
+		var minHeight: int = 255
+		if (mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] && mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x] < 255):
+			minHeight = mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]
+			tempAxis2 = tempAxis1
+		tempAxis1 += Vector2i(1,0)
+		tempAxis1 = Vector2i(posmod(tempAxis1.x, mapW),posmod(tempAxis1.y, mapH))
+		if (mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] && minHeight > mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]):
+			minHeight = mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]
+			tempAxis2 = tempAxis1
+		tempAxis1 += Vector2i(0,1)
+		tempAxis1 = Vector2i(posmod(tempAxis1.x, mapW),posmod(tempAxis1.y, mapH))
+		if (mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] && minHeight > mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]):
+			minHeight = mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]
+			tempAxis2 = tempAxis1
+		tempAxis1 += Vector2i(0,1)
+		tempAxis1 = Vector2i(posmod(tempAxis1.x, mapW),posmod(tempAxis1.y, mapH))
+		if (mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] && minHeight > mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]):
+			minHeight = mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]
+			tempAxis2 = tempAxis1
+		tempAxis1 += Vector2i(-1,0)
+		tempAxis1 = Vector2i(posmod(tempAxis1.x, mapW),posmod(tempAxis1.y, mapH))
+		if (mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] && minHeight > mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]):
+			minHeight = mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]
+			tempAxis2 = tempAxis1
+		tempAxis1 += Vector2i(-1,0)
+		tempAxis1 = Vector2i(posmod(tempAxis1.x, mapW),posmod(tempAxis1.y, mapH))
+		if (mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] && minHeight > mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]):
+			minHeight = mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]
+			tempAxis2 = tempAxis1
+		tempAxis1 += Vector2i(0,-1)
+		tempAxis1 = Vector2i(posmod(tempAxis1.x, mapW),posmod(tempAxis1.y, mapH))
+		if (mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] && minHeight > mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]):
+			minHeight = mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]
+			tempAxis2 = tempAxis1
+		tempAxis1 += Vector2i(0,-1)
+		tempAxis1 = Vector2i(posmod(tempAxis1.x, mapW),posmod(tempAxis1.y, mapH))
+		if (mapTerrainType_10B4E0[tempAxis1.y * mapW + tempAxis1.x] && minHeight > mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]):
+			minHeight = mapHeightmap_11B4E0[tempAxis1.y * mapW + tempAxis1.x]
+			tempAxis2 = tempAxis1
+			
+		if (!mapAngle_13B4E0[tempAxis2.y * mapW + tempAxis2.x] || minHeight == 255):
+			break;
+		if (minHeight > centralHeight):
+			mapHeightmap_11B4E0[tempAxis2.y * mapW + tempAxis2.x] = centralHeight
+		centralHeight = mapHeightmap_11B4E0[tempAxis2.y * mapW + tempAxis2.x]
+		tempAxis1 = tempAxis2
+		if centralHeight == 0:
+			break
+		for i in range(mapW*mapH):
+			if (!mapTerrainType_10B4E0[i]):
+				mapAngle_13B4E0[i] = 0
+
+func sub_44E40(count: int, min_smooth: int) -> void:
+	var locCount: int = count
+	for y in range(mapH):
+		for x in range(mapW):
+			if mapHeightmap_11B4E0[y * mapW + x] != 0:
+				mapAngle_13B4E0[y * mapW + x] = 5
+			else:
+				mapAngle_13B4E0[y * mapW + x] = 0
+	while locCount > 0:
+		for i in range(1000):
+			x_WORD_17B4E0 = (9377 * x_WORD_17B4E0 + 9439) & 0xFFFF
+			var index: int = x_WORD_17B4E0 % 0xffff
+			var indexv:Vector2i = Vector2i(index%mapW,index/mapW)
+			if mapHeightmap_11B4E0[index] > min_smooth and mapAngle_13B4E0[index] != 0:
+				sub_44EE0_smooth_tiles(indexv) # Volání externí funkce
+				locCount -= 1
+				break
+		mapTerrainType_10B4E0.fill(255)
+
+func sub_44DB0_truncTerrainHeight(
+	map_entity_index: PackedInt32Array,
+	map_heightmap: PackedByteArray
+) -> void:
+	var rev_max_ent: int = 0
+	var max_ent: int = -32000
+	var min_ent: int = 32000
+	for i in range(mapW*mapH):
+		var value: int = map_entity_index[i]
+		if value > max_ent:
+			max_ent = value
+		if value < min_ent:
+			min_ent = value
+	if max_ent != 0:
+		rev_max_ent = 0xC40000 / max_ent
+	for i in range(mapW*mapH):
+		var entity_value: int = map_entity_index[i]
+		var weighted_var_32_bit: int = rev_max_ent * entity_value
+		var weighted_var: int = weighted_var_32_bit >> 16
+		if (weighted_var & 0x8000) != 0:
+			weighted_var = 0
+		if weighted_var > 196:
+			weighted_var = 196
+		map_heightmap[i] = weighted_var
+
 func sub_B5E70_decompress_terrain_map_level(
 	a1: int,   # int16
 	a2: Vector2i,   # uint16
@@ -463,20 +742,25 @@ func sub_B5E70_decompress_terrain_map_level(
 	var sumEnt:Vector2i = Vector2i(0,0)
 	mapEntityIndex_15B4E0[a2.y%mapH * mapW + a2.x%mapW] = a3  # first seed
 	for i in range(7, -1, -1):
+	#for i in range(7, 5, -1):
 		sumEnt = a2
 		var count :int = 1 << (7 - i)
 		for j in range(count):
 			for k in range(count):
-				sub_B5EFA(1 << i, sumEnt, a4, a1)
+				var result_array: Array = sub_B5EFA(1 << i, sumEnt, a4, a1)
+				sumEnt = result_array[0]
+				a1 = result_array[1]
 			sumEnt.y += (2 * (1 << i))
 			sumEnt = Vector2i(posmod(sumEnt.x, mapW),posmod(sumEnt.y, mapH))
 		for j in range(count):
 			for k in range(count):
-				sub_B5F8F(1 << i, sumEnt, a4, a1)
+				var result_array: Array = sub_B5F8F(1 << i, sumEnt, a4, a1)
+				sumEnt = result_array[0]
+				a1 = result_array[1]
 			sumEnt.y += (2 * (1 << i))
 			sumEnt = Vector2i(posmod(sumEnt.x, mapW),posmod(sumEnt.y, mapH))
 
-func sub_B5EFA(a1: int, indexx: Vector2i, a3: int, nextRand: int):
+func sub_B5EFA(a1: int, indexx: Vector2i, a3: int, nextRand: int)-> Array:
 	var sumEnt: int = mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
 	indexx += Vector2i(2 * a1,0)
 	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
@@ -500,8 +784,9 @@ func sub_B5EFA(a1: int, indexx: Vector2i, a3: int, nextRand: int):
 		)
 	indexx += Vector2i(a1,-a1)
 	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	return [indexx, nextRand]
 	
-func sub_B5F8F(a1: int, indexx: Vector2i, a3: int, nextRand: int):
+func sub_B5F8F(a1: int, indexx: Vector2i, a3: int, nextRand: int)-> Array:
 	var sumEnt: int = mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
 	var sumEnt2: int = sumEnt
 	indexx += Vector2i(a1,-a1)
@@ -544,6 +829,7 @@ func sub_B5F8F(a1: int, indexx: Vector2i, a3: int, nextRand: int):
 		)
 	indexx += Vector2i(2 * a1,-a1)
 	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	return [indexx, nextRand]
 
 
 const RNC_SIGNATURE = 0x524E4301  # "RNC\x01"

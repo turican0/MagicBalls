@@ -36,7 +36,7 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x000B (11)
 # int8_t array_0x2FED9[8];
-@export var array_0x2FED9: PackedByteArray = PackedByteArray() # Měla by mít délku 8
+@export var player_0x2FED9: PackedByteArray = PackedByteArray() # Měla by mít délku 8
 
 # Offset 0x0013 (19)
 # uint8_t stubb[4];
@@ -44,7 +44,7 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x0017 (23)
 # uint16_t word_0x2FEE5;
-@export var word_0x2FEE5: int = 0
+@export var seed_0x2FEE5: int = 0
 
 # Offset 0x0019 (25)
 # uint8_t stubb2[2];
@@ -52,7 +52,7 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x001B (27)
 # uint16_t word_0x2FEE9; // first seed position
-@export var word_0x2FEE9: Vector2i = Vector2i(0,0)
+@export var offset_0x2FEE9: Vector2i = Vector2i(0,0)
 
 # Offset 0x001D (29)
 # uint8_t stubc[2];
@@ -60,7 +60,7 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x001F (31)
 # uint16_t word_0x2FEED; // first seed height
-@export var word_0x2FEED: int = 0
+@export var raise_0x2FEED: int = 0
 
 # Offset 0x0021 (33)
 # uint8_t stubc2[2];
@@ -68,7 +68,7 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x0023 (35)
 # uint16_t word_0x2FEF1; // random seed
-@export var word_0x2FEF1: int = 0
+@export var gnarl_0x2FEF1: int = 0
 
 # Offset 0x0025 (37)
 # uint8_t stubc3[2];
@@ -76,11 +76,11 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x0027 (39)
 # uint32_t word_0x2FEF5;
-@export var word_0x2FEF5: int = 0
+@export var river_0x2FEF5: int = 0
 
 # Offset 0x002B (43)
 # uint16_t word_0x2FEF9;
-@export var word_0x2FEF9: int = 0
+@export var lriver_0x2FEF9: int = 0
 
 # Offset 0x002D (45)
 # uint8_t stube[2];
@@ -88,7 +88,7 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x002F (47)
 # uint16_t word_0x2FEFD;
-@export var word_0x2FEFD: int = 0
+@export var source_0x2FEFD: int = 0
 
 # Offset 0x0031 (49)
 # uint8_t stubf[2];
@@ -96,7 +96,7 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x0033 (51)
 # uint16_t word_0x2FF01;
-@export var word_0x2FF01: int = 0
+@export var snLin_0x2FF01: int = 0
 
 # Offset 0x0035 (53)
 # uint8_t stubg[2];
@@ -168,32 +168,32 @@ func decode_from(buffer: PackedByteArray):
 	MapType = sp.get_u8()
 	word_0x2FED5 = sp.get_u16()
 	word_0x2FED7 = sp.get_u16()
-	array_0x2FED9.resize(8)
+	player_0x2FED9.resize(8)
 	for i in 8:
-		array_0x2FED9[i] = sp.get_u8()  # 0–255
+		player_0x2FED9[i] = sp.get_u8()  # 0–255
 	for i in 4:
 		sp.get_u8()
-	word_0x2FEE5 = sp.get_u16()
+	seed_0x2FEE5 = sp.get_u16()
 	for i in 2:
 		sp.get_u8()
-	word_0x2FEE9.x = sp.get_u8()
-	word_0x2FEE9.y = sp.get_u8()
+	offset_0x2FEE9.x = sp.get_u8()
+	offset_0x2FEE9.y = sp.get_u8()
 	for i in 2:
 		sp.get_u8()
-	word_0x2FEED = sp.get_u16()
+	raise_0x2FEED = sp.get_u16()
 	for i in 2:
 		sp.get_u8()
-	word_0x2FEF1 = sp.get_u16()
+	gnarl_0x2FEF1 = sp.get_u16()
 	for i in 2:
 		sp.get_u8()
-	word_0x2FEF5 = sp.get_u32()
-	word_0x2FEF9 = sp.get_u16()
+	river_0x2FEF5 = sp.get_u32()
+	lriver_0x2FEF9 = sp.get_u16()
 	for i in 2:
 		sp.get_u8()
-	word_0x2FEFD = sp.get_u16()
+	source_0x2FEFD = sp.get_u16()
 	for i in 2:
 		sp.get_u8()
-	word_0x2FF01 = sp.get_u16()
+	snLin_0x2FF01 = sp.get_u16()
 	for i in 2:
 		sp.get_u8()
 	word_0x2FF05 = sp.get_u16()

@@ -27,7 +27,7 @@ func _ready():
 	get_parent().get_node("DecodeLevel").init()
 	for y in range(256):
 		for x in range(256):
-			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapEntityIndex_15B4E0[y * 256 + x]*0.005
+			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[y * 256 + x]*0.05
 	recalculate_mesh()
 	
 
