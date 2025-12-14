@@ -351,9 +351,9 @@ func sub_533B0_decompress_levels(level_id: int, level_data: TypeStr2FECE) -> boo
 	var level_tab_data: PackedByteArray = level_dat_file.get_buffer(compressed_size)
 	level_dat_file.close()
 	
-	var src := FileAccess.get_file_as_bytes("res://compressed.dat")
-	var output := PackedByteArray()
-	output.resize(1024 * 1024)
+	#var src := FileAccess.get_file_as_bytes("res://compressed.dat")
+	#var output := PackedByteArray()
+	#output.resize(1024 * 1024)
 	var level_tab_data_unpacked = decompress_rnc1(level_tab_data)
 	
 	var level_struct:TypeStr2FECE = TypeStr2FECE.new()
@@ -391,6 +391,7 @@ func generate_level_map_43830(level_struct: TypeStr2FECE) -> void:
 		level_struct.word_0x2FEED,
 		level_struct.word_0x2FEF1
 	)
+	initialize_and_export_map_entities("mapgd_test.txt")
 	# trunc + create heightmap
 	#sub_44DB0_truncTerrainHeight(
 		#mapEntityIndex_15B4E0,
@@ -430,6 +431,26 @@ func generate_level_map_43830(level_struct: TypeStr2FECE) -> void:
 		#sub_43D50()
 	#sub_44D00()
 
+const HEX_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+func initialize_and_export_map_entities(filename: String) -> void:
+	var file: FileAccess = FileAccess.open(filename, FileAccess.WRITE)
+	var line_builder: String = "" # Buffer pro řádek před zápisem
+
+	for y in range(256):
+		line_builder = "" # Reset pro nový řádek
+		for x in range(256):
+			var index: int = y * 256 + x
+			var value: int = mapEntityIndex_15B4E0[index]
+			var output_char: String
+			if value >= 0 and value <= 15:
+				output_char = HEX_CHARS[value]
+			else:
+				output_char = "X"
+			line_builder += output_char
+		file.store_line(line_builder)
+	file.close()
+	print("Data úspěšně exportována do souboru: " + filename)
+
 var mapW: int = 256
 var mapH: int = 256
 
@@ -448,23 +469,29 @@ func sub_B5E70_decompress_terrain_map_level(
 			for k in range(count):
 				sub_B5EFA(1 << i, sumEnt, a4, a1)
 			sumEnt.y += (2 * (1 << i))
+			sumEnt = Vector2i(posmod(sumEnt.x, mapW),posmod(sumEnt.y, mapH))
 		for j in range(count):
 			for k in range(count):
 				sub_B5F8F(1 << i, sumEnt, a4, a1)
 			sumEnt.y += (2 * (1 << i))
+			sumEnt = Vector2i(posmod(sumEnt.x, mapW),posmod(sumEnt.y, mapH))
 
 func sub_B5EFA(a1: int, indexx: Vector2i, a3: int, nextRand: int):
 	var sumEnt: int = mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
 	indexx += Vector2i(2 * a1,0)
-	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	sumEnt += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	indexx += Vector2i(0,2 * a1)
-	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	sumEnt += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	indexx += Vector2i(-2 * a1,0)
-	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	sumEnt += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	indexx += Vector2i(a1,-a1)
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
 	nextRand = (9377 * nextRand + 9439) % 0x10000
-	if mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] == 0:
-		mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] = (
+	if mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x] == 0:
+		mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x] = (
 			(nextRand % (2 * a3 + 1)) +
 			(nextRand % ((a1 << 6) + 1)) +
 			(sumEnt >> 2) -
@@ -472,21 +499,26 @@ func sub_B5EFA(a1: int, indexx: Vector2i, a3: int, nextRand: int):
 			a3
 		)
 	indexx += Vector2i(a1,-a1)
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
 	
 func sub_B5F8F(a1: int, indexx: Vector2i, a3: int, nextRand: int):
 	var sumEnt: int = mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
 	var sumEnt2: int = sumEnt
 	indexx += Vector2i(a1,-a1)
-	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	sumEnt += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	indexx += Vector2i(a1,a1)
-	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	sumEnt += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	indexx += Vector2i(-a1,a1)
-	sumEnt += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	sumEnt += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	nextRand = (9377 * nextRand + 9439) % 0x10000
-	sumEnt2 += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	sumEnt2 += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	indexx += Vector2i(0,-a1)
-	if mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] == 0:
-		mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] = (
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	if mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x] == 0:
+		mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x] = (
 			(nextRand % (2 * a3 + 1)) +
 			(nextRand % ((a1 << 6) + 1)) +
 			(sumEnt >> 2) -
@@ -494,13 +526,16 @@ func sub_B5F8F(a1: int, indexx: Vector2i, a3: int, nextRand: int):
 			a3
 		)
 	indexx += Vector2i(-2 * a1,a1)
-	sumEnt2 += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	sumEnt2 += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	indexx += Vector2i(a1,a1)
-	sumEnt2 += mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW]
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
+	sumEnt2 += mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x]
 	indexx += Vector2i(0,-a1)
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
 	nextRand = (9377 * nextRand + 9439) % 0x10000
-	if mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] == 0:
-		mapEntityIndex_15B4E0[indexx.y%mapH * mapW + indexx.x%mapW] = (
+	if mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x] == 0:
+		mapEntityIndex_15B4E0[indexx.y * mapW + indexx.x] = (
 			(nextRand % (2 * a3 + 1)) +
 			(nextRand % ((a1 << 6) + 1)) +
 			(sumEnt2 >> 2) -
@@ -508,6 +543,7 @@ func sub_B5F8F(a1: int, indexx: Vector2i, a3: int, nextRand: int):
 			a3
 		)
 	indexx += Vector2i(2 * a1,-a1)
+	indexx = Vector2i(posmod(indexx.x, mapW),posmod(indexx.y, mapH))
 
 
 const RNC_SIGNATURE = 0x524E4301  # "RNC\x01"

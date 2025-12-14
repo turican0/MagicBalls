@@ -52,7 +52,7 @@ class_name TypeStr2FECE extends RefCounted
 
 # Offset 0x001B (27)
 # uint16_t word_0x2FEE9; // first seed position
-@export var word_0x2FEE9: Vector2 = Vector2(0,0)
+@export var word_0x2FEE9: Vector2i = Vector2i(0,0)
 
 # Offset 0x001D (29)
 # uint8_t stubc[2];
