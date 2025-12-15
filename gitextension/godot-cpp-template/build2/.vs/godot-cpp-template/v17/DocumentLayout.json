@@ -6,10 +6,22 @@
       "AbsoluteMoniker": "D:0:0:{D98EB092-3507-3AF1-8E5E-4380E91B9703}|EXTENSION-NAME.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\example_class.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D98EB092-3507-3AF1-8E5E-4380E91B9703}|EXTENSION-NAME.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\example_class.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.26100.0\\ucrt\\heap\\free_base.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D98EB092-3507-3AF1-8E5E-4380E91B9703}|EXTENSION-NAME.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\register_types.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D98EB092-3507-3AF1-8E5E-4380E91B9703}|EXTENSION-NAME.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\example_class.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D98EB092-3507-3AF1-8E5E-4380E91B9703}|EXTENSION-NAME.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\register_types.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D98EB092-3507-3AF1-8E5E-4380E91B9703}|EXTENSION-NAME.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\deRNC.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D98EB092-3507-3AF1-8E5E-4380E91B9703}|EXTENSION-NAME.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\deRNC.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,7 +31,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -28,12 +40,64 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "free_base.cpp",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.26100.0\\ucrt\\heap\\free_base.cpp",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.26100.0\\ucrt\\heap\\free_base.cpp",
+              "ToolTip": "C:\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.26100.0\\ucrt\\heap\\free_base.cpp",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.26100.0\\ucrt\\heap\\free_base.cpp",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAqwGgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T09:10:44.26Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "deRNC.h",
+              "DocumentMoniker": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\deRNC.h",
+              "RelativeDocumentMoniker": "..\\src\\deRNC.h",
+              "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\deRNC.h",
+              "RelativeToolTip": "..\\src\\deRNC.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T09:03:18.502Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "deRNC.cpp",
+              "DocumentMoniker": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\deRNC.cpp",
+              "RelativeDocumentMoniker": "..\\src\\deRNC.cpp",
+              "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\deRNC.cpp",
+              "RelativeToolTip": "..\\src\\deRNC.cpp",
+              "ViewState": "AgIAAJ0BAAAAAAAAAAAAAKQBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-12-15T08:57:24.919Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "register_types.h",
+              "DocumentMoniker": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\register_types.h",
+              "RelativeDocumentMoniker": "..\\src\\register_types.h",
+              "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\register_types.h",
+              "RelativeToolTip": "..\\src\\register_types.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-12-15T08:06:25.446Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "example_class.h",
               "DocumentMoniker": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\example_class.h",
               "RelativeDocumentMoniker": "..\\src\\example_class.h",
               "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\example_class.h",
               "RelativeToolTip": "..\\src\\example_class.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-12-15T07:44:40.092Z",
               "EditorCaption": ""
@@ -46,7 +110,7 @@
               "RelativeDocumentMoniker": "..\\src\\example_class.cpp",
               "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\example_class.cpp",
               "RelativeToolTip": "..\\src\\example_class.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABwAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-12-15T07:40:04.006Z",
               "EditorCaption": ""
@@ -59,7 +123,7 @@
               "RelativeDocumentMoniker": "..\\src\\register_types.cpp",
               "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\MagicBalls\\gitextension\\godot-cpp-template\\src\\register_types.cpp",
               "RelativeToolTip": "..\\src\\register_types.cpp",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAAAcAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAAAcAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-12-15T07:39:57.447Z",
               "EditorCaption": ""

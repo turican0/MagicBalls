@@ -10,12 +10,21 @@
     <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\deRNC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\register_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\example_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\deRNC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

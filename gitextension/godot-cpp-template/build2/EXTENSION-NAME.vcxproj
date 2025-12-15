@@ -90,25 +90,33 @@
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/godot-cpp/gen/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <BufferSecurityCheck></BufferSecurityCheck>
-      <CallingConvention></CallingConvention>
+      <BufferSecurityCheck>
+      </BufferSecurityCheck>
+      <CallingConvention>
+      </CallingConvention>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <FloatingPointModel></FloatingPointModel>
-      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MinimalRebuild></MinimalRebuild>
+      <MinimalRebuild>
+      </MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <ProcessorNumber>31</ProcessorNumber>
-      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SupportJustMyCode></SupportJustMyCode>
-      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR="Debug";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -127,7 +135,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
 C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake.exe -E copy C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 if %errorlevel% neq 0 goto :cmEnd
@@ -142,15 +151,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalDependencies>bin\libgodot-cpp.windows.template_debug.x86_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
-      <DataExecutionPrevention></DataExecutionPrevention>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
       <ImportLibrary>C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/Debug/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
-      <LinkErrorReporting></LinkErrorReporting>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
       <ProgramDataBaseFile>C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
-      <RandomizedBaseAddress></RandomizedBaseAddress>
-      <SubSystem></SubSystem>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -161,24 +175,32 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/godot-cpp/gen/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <BufferSecurityCheck></BufferSecurityCheck>
-      <CallingConvention></CallingConvention>
+      <BufferSecurityCheck>
+      </BufferSecurityCheck>
+      <CallingConvention>
+      </CallingConvention>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <FloatingPointModel></FloatingPointModel>
-      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MinimalRebuild></MinimalRebuild>
+      <MinimalRebuild>
+      </MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <ProcessorNumber>31</ProcessorNumber>
-      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SupportJustMyCode></SupportJustMyCode>
-      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR="Release";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -199,7 +221,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
 C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake.exe -E copy C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 if %errorlevel% neq 0 goto :cmEnd
@@ -214,15 +237,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalDependencies>bin\libgodot-cpp.windows.template_debug.x86_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
-      <DataExecutionPrevention></DataExecutionPrevention>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
       <ImportLibrary>C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/Release/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
-      <LinkErrorReporting></LinkErrorReporting>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
       <ProgramDataBaseFile>C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
-      <RandomizedBaseAddress></RandomizedBaseAddress>
-      <SubSystem></SubSystem>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -233,24 +261,32 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/godot-cpp/gen/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <BufferSecurityCheck></BufferSecurityCheck>
-      <CallingConvention></CallingConvention>
+      <BufferSecurityCheck>
+      </BufferSecurityCheck>
+      <CallingConvention>
+      </CallingConvention>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <FloatingPointModel></FloatingPointModel>
-      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MinimalRebuild></MinimalRebuild>
+      <MinimalRebuild>
+      </MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MinSpace</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <ProcessorNumber>31</ProcessorNumber>
-      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SupportJustMyCode></SupportJustMyCode>
-      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR="MinSizeRel";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -271,7 +307,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
 C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake.exe -E copy C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 if %errorlevel% neq 0 goto :cmEnd
@@ -286,15 +323,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalDependencies>bin\libgodot-cpp.windows.template_debug.x86_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
-      <DataExecutionPrevention></DataExecutionPrevention>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
       <ImportLibrary>C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/MinSizeRel/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
-      <LinkErrorReporting></LinkErrorReporting>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
       <ProgramDataBaseFile>C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
-      <RandomizedBaseAddress></RandomizedBaseAddress>
-      <SubSystem></SubSystem>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -305,25 +347,33 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalOptions>%(AdditionalOptions) /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/godot-cpp/gen/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <BufferSecurityCheck></BufferSecurityCheck>
-      <CallingConvention></CallingConvention>
+      <BufferSecurityCheck>
+      </BufferSecurityCheck>
+      <CallingConvention>
+      </CallingConvention>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <FloatingPointModel></FloatingPointModel>
-      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MinimalRebuild></MinimalRebuild>
+      <MinimalRebuild>
+      </MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <ProcessorNumber>31</ProcessorNumber>
-      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SupportJustMyCode></SupportJustMyCode>
-      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR="RelWithDebInfo";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -342,7 +392,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
 C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake.exe -E copy C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 if %errorlevel% neq 0 goto :cmEnd
@@ -357,15 +408,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalDependencies>bin\libgodot-cpp.windows.template_debug.x86_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
-      <DataExecutionPrevention></DataExecutionPrevention>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
       <ImportLibrary>C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/RelWithDebInfo/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
-      <LinkErrorReporting></LinkErrorReporting>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
       <ProgramDataBaseFile>C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
-      <RandomizedBaseAddress></RandomizedBaseAddress>
-      <SubSystem></SubSystem>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -429,7 +485,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\deRNC.cpp" />
     <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\register_types.cpp" />
+    <ClInclude Include="..\src\defs.h" />
+    <ClInclude Include="..\src\deRNC.h" />
     <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\register_types.h" />
     <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\example_class.cpp" />
     <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\example_class.h" />

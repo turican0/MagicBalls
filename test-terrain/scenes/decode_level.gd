@@ -354,7 +354,12 @@ func sub_533B0_decompress_levels(level_id: int, level_data: TypeStr2FECE) -> boo
 	#var src := FileAccess.get_file_as_bytes("res://compressed.dat")
 	#var output := PackedByteArray()
 	#output.resize(1024 * 1024)
-	var level_tab_data_unpacked = decompress_rnc1(level_tab_data)
+	
+	#var level_tab_data_unpacked = decompress_rnc1(level_tab_data)
+	
+	var MBEX = ExampleClass.new()
+	var c = MBEX.my_add(5,4)
+	var level_tab_data_unpacked = MBEX.deRNC(level_tab_data)
 	
 	var level_struct:TypeStr2FECE = TypeStr2FECE.new()
 	level_struct.decode_from(level_tab_data_unpacked)

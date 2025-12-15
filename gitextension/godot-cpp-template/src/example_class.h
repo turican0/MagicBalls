@@ -18,4 +18,5 @@ public:
 
 	void print_type(const Variant &p_variant) const;
 	int my_add(int a, int b);
+	PackedByteArray deRNC(PackedByteArray bytearray);
 };
