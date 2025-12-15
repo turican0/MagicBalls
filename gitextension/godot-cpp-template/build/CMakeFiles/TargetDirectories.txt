@@ -1,0 +1,7 @@
+C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/EXTENSION-NAME.dir
+C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate_doc_source.dir
+C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/ALL_BUILD.dir
+C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/ZERO_CHECK.dir
+C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/CMakeFiles/generate_bindings.dir
+C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/CMakeFiles/godot-cpp.dir
+C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/CMakeFiles/ALL_BUILD.dir

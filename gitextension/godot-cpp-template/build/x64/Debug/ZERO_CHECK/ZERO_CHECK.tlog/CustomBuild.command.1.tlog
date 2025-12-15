@@ -1,0 +1,10 @@
+^C:\GAMES\GODOT\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\BUILD\CMAKEFILES\5F3695600B8791CAAA98C9635AB62735\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Games/godot/MagicBalls/gitextension/godot-cpp-template -BC:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp-template.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

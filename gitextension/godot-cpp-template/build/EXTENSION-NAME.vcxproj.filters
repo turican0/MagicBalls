@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\register_types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\example_class.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\gen\doc_source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\register_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\example_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{48087FCC-3237-3FF8-AAD9-0CB64E50D1D0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{613288DE-DAA6-331C-BF4D-E47616F125CA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{F8BDDD2B-E97D-3B29-B68F-D546F9F2EB6E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

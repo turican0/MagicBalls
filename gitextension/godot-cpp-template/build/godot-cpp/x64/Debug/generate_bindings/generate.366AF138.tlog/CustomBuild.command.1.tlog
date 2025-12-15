@@ -1,0 +1,32 @@
+^C:\GAMES\GODOT\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\GODOT-CPP\GDEXTENSION\EXTENSION_API.JSON
+setlocal
+cd C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Users\vesely\AppData\Local\Programs\Python\Python311\python.exe -c "from binding_generator import generate_bindings";"generate_bindings( api_filepath='gdextension/extension_api.json', use_template_get_node='True', bits='64', precision='', output_dir='C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp')"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\GAMES\GODOT\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\BUILD\CMAKEFILES\71A4B94412FE0F0B14ED2310CFD14F20\GENERATE_BINDINGS.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\GAMES\GODOT\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\GODOT-CPP\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Games/godot/MagicBalls/gitextension/godot-cpp-template -BC:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

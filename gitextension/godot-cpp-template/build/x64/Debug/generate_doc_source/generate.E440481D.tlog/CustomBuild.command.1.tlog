@@ -1,0 +1,32 @@
+^C:\GAMES\GODOT\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\BUILD\CMAKEFILES\B93160B3E5C045FCD8B56230B23607C1\DOC_SOURCE.CPP.RULE
+setlocal
+cd C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Users\vesely\AppData\Local\Programs\Python\Python311\python.exe -c "from doc_source_generator import generate_doc_source";"generate_doc_source( 'C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/gen/doc_source.cpp', ['C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/doc_classes/ExampleClass.xml'] )"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\GAMES\GODOT\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\BUILD\CMAKEFILES\5F3695600B8791CAAA98C9635AB62735\GENERATE_DOC_SOURCE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\GAMES\GODOT\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Games/godot/MagicBalls/gitextension/godot-cpp-template -BC:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
