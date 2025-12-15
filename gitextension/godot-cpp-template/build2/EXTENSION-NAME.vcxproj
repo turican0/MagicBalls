@@ -485,10 +485,18 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Basic.cpp" />
     <ClCompile Include="..\src\deRNC.cpp" />
+    <ClCompile Include="..\src\Terrain.cpp" />
+    <ClCompile Include="..\src\Unk_D47E0.cpp" />
+    <ClCompile Include="..\src\Unk_D4A30.cpp" />
     <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\register_types.cpp" />
+    <ClInclude Include="..\src\Basic.h" />
     <ClInclude Include="..\src\defs.h" />
     <ClInclude Include="..\src\deRNC.h" />
+    <ClInclude Include="..\src\Terrain.h" />
+    <ClInclude Include="..\src\Unk_D47E0.h" />
+    <ClInclude Include="..\src\Unk_D4A30.h" />
     <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\register_types.h" />
     <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\example_class.cpp" />
     <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\src\example_class.h" />
