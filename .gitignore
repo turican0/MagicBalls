@@ -23,3 +23,4 @@ test-terrain/addons/terrain_3d/bin/~libterrain.windows.debug.x86_64.dll
 gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 gitextension/godot-cpp-template/build2/.vs/godot-cpp-template/CopilotIndices/17.14.995.13737/CodeChunks.db
 gitextension/godot-cpp-template/build2/.vs/godot-cpp-template/CopilotIndices/17.14.995.13737/SemanticSymbols.db
+*.vsidx
