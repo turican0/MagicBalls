@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>TestCXXAcceptsFlag &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Use_wxWindows" href="Use_wxWindows.html" />
+    <link rel="prev" title="TestBigEndian" href="TestBigEndian.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Use_wxWindows.html" title="Use_wxWindows"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="TestBigEndian.html" title="TestBigEndian"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">TestCXXAcceptsFlag</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="testcxxacceptsflag">
+<span id="module:TestCXXAcceptsFlag"></span><h1>TestCXXAcceptsFlag<a class="headerlink" href="#testcxxacceptsflag" title="Link to this heading">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.0: </span>This module should no longer be used.  It has been superseded by the
+<span class="target" id="index-0-module:CheckCXXCompilerFlag"></span><a class="reference internal" href="CheckCXXCompilerFlag.html#module:CheckCXXCompilerFlag" title="CheckCXXCompilerFlag"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckCXXCompilerFlag</span></code></a> module.  As of CMake 3.19, the
+<span class="target" id="index-0-module:CheckCompilerFlag"></span><a class="reference internal" href="CheckCompilerFlag.html#module:CheckCompilerFlag" title="CheckCompilerFlag"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckCompilerFlag</span></code></a> module is also available for checking flags across
+multiple languages.</p>
+</div>
+<p>This module provides a command to test whether the C++ (CXX) compiler supports
+specific flags.</p>
+<p>Load this module in a CMake project with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">TestCXXAcceptsFlag</span><span class="nf">)</span>
+</pre></div>
+</div>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following command:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:check_cxx_accepts_flag">
+<span class="sig-name descname"><span class="pre">check_cxx_accepts_flag</span></span><a class="headerlink" href="#command:check_cxx_accepts_flag" title="Link to this definition">¶</a></dt>
+<dd><p>Checks whether the CXX compiler accepts the specified flags:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">check_cxx_accepts_flag(</span><span class="nv">&lt;flags&gt;</span><span class="w"> </span><span class="nv">&lt;result-variable&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;flags&gt;</span></code></dt><dd><p>One or more compiler flags to test.  For multiple flags, provide them as a
+space-separated string.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;result-variable&gt;</span></code></dt><dd><p>Name of an internal cache variable that stores the result.  It is set to
+boolean true if the compiler accepts the flags and false otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Checking if the C++ compiler supports specific flags:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">TestCXXAcceptsFlag</span><span class="nf">)</span>
+<span class="nf">check_cxx_accepts_flag(</span><span class="s">&quot;-fno-common -fstack-clash-protection&quot;</span><span class="w"> </span><span class="no">HAVE_FLAGS</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Migrating to the <span class="target" id="index-1-module:CheckCompilerFlag"></span><a class="reference internal" href="CheckCompilerFlag.html#module:CheckCompilerFlag" title="CheckCompilerFlag"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckCompilerFlag</span></code></a> module:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CheckCompilerFlag</span><span class="nf">)</span>
+<span class="nf">check_compiler_flag(</span><span class="no">CXX</span><span class="w"> </span><span class="s">&quot;-fno-common;-fstack-clash-protection&quot;</span><span class="w"> </span><span class="no">HAVE_FLAGS</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">TestCXXAcceptsFlag</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="TestBigEndian.html"
+                          title="previous chapter">TestBigEndian</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Use_wxWindows.html"
+                          title="next chapter">Use_wxWindows</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/TestCXXAcceptsFlag.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Use_wxWindows.html" title="Use_wxWindows"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="TestBigEndian.html" title="TestBigEndian"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">TestCXXAcceptsFlag</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

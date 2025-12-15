@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindPackageMessage &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FortranCInterface" href="FortranCInterface.html" />
+    <link rel="prev" title="FindPackageHandleStandardArgs" href="FindPackageHandleStandardArgs.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FortranCInterface.html" title="FortranCInterface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindPackageHandleStandardArgs.html" title="FindPackageHandleStandardArgs"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindPackageMessage</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findpackagemessage">
+<span id="module:FindPackageMessage"></span><h1>FindPackageMessage<a class="headerlink" href="#findpackagemessage" title="Link to this heading">¶</a></h1>
+<p>This module provides a command for printing find result messages and is
+intended for use in <a class="reference internal" href="../manual/cmake-developer.7.html#find-modules"><span class="std std-ref">Find Modules</span></a> implementing
+<span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package(&lt;packagename&gt;)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package(&lt;PackageName&gt;)</span></code></a> calls.</p>
+<p>Load this module in a CMake find module with:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindFoo.cmake</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">FindPackageMessage</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following command:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:find_package_message">
+<span class="sig-name descname"><span class="pre">find_package_message</span></span><a class="headerlink" href="#command:find_package_message" title="Link to this definition">¶</a></dt>
+<dd><p>Prints a message once for each unique find result to inform the user which
+package was found and where:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package_message(</span><span class="nv">&lt;PackageName&gt;</span><span class="w"> </span><span class="nv">&lt;message&gt;</span><span class="w"> </span><span class="nv">&lt;details&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;</span></code></dt><dd><p>The name of the package (for example, as used in the
+<code class="docutils literal notranslate"><span class="pre">Find&lt;PackageName&gt;.cmake</span></code> module filename).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;message&gt;</span></code></dt><dd><p>The message string to display.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;details&gt;</span></code></dt><dd><p>A unique identifier for tracking message display.  The <code class="docutils literal notranslate"><span class="pre">&lt;message&gt;</span></code> is
+printed only once per distinct <code class="docutils literal notranslate"><span class="pre">&lt;details&gt;</span></code> value.  If <code class="docutils literal notranslate"><span class="pre">&lt;details&gt;</span></code> string
+changes in a subsequent configuration phase, the message will be displayed
+again.</p>
+</dd>
+</dl>
+<p>If <span class="target" id="index-1-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> was called with the <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> option, the
+<code class="docutils literal notranslate"><span class="pre">&lt;message&gt;</span></code> is not printed.</p>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Printing a result message in a custom find module:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindFoo.cmake</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_library(</span><span class="nb">Foo_LIBRARY</span><span class="w"> </span><span class="nb">foo</span><span class="nf">)</span>
+<span class="nf">find_path(</span><span class="nb">Foo_INCLUDE_DIR</span><span class="w"> </span><span class="nb">foo.h</span><span class="nf">)</span>
+
+<span class="nf">include(</span><span class="nb">FindPackageMessage</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Foo_LIBRARY</span><span class="w"> </span><span class="no">AND</span><span class="w"> </span><span class="nb">Foo_INCLUDE_DIR</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">find_package_message(</span>
+<span class="w">    </span><span class="nb">Foo</span>
+<span class="w">    </span><span class="s">&quot;Found Foo: ${Foo_LIBRARY}&quot;</span>
+<span class="w">    </span><span class="s">&quot;[${Foo_LIBRARY}][${Foo_INCLUDE_DIR}]&quot;</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">else()</span>
+<span class="w">  </span><span class="nf">message(</span><span class="no">STATUS</span><span class="w"> </span><span class="s">&quot;Could NOT find Foo&quot;</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+<p>When writing standard find modules, use the
+<span class="target" id="index-0-module:FindPackageHandleStandardArgs"></span><a class="reference internal" href="FindPackageHandleStandardArgs.html#module:FindPackageHandleStandardArgs" title="FindPackageHandleStandardArgs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindPackageHandleStandardArgs</span></code></a> module and its
+<span class="target" id="index-0-command:find_package_handle_standard_args"></span><a class="reference internal" href="FindPackageHandleStandardArgs.html#command:find_package_handle_standard_args" title="find_package_handle_standard_args"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package_handle_standard_args()</span></code></a> command which automatically
+prints the find result message based on whether the package was found:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindFoo.cmake</span></code></span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># ...</span>
+
+<span class="nf">include(</span><span class="nb">FindPackageHandleStandardArgs</span><span class="nf">)</span>
+
+<span class="nf">find_package_handle_standard_args(</span>
+<span class="w">  </span><span class="nb">Foo</span>
+<span class="w">  </span><span class="no">REQUIRED_VARS</span><span class="w"> </span><span class="nb">Foo_LIBRARY</span><span class="w"> </span><span class="nb">Foo_INCLUDE_DIR</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindPackageMessage</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindPackageHandleStandardArgs.html"
+                          title="previous chapter">FindPackageHandleStandardArgs</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FortranCInterface.html"
+                          title="next chapter">FortranCInterface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindPackageMessage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FortranCInterface.html" title="FortranCInterface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindPackageHandleStandardArgs.html" title="FindPackageHandleStandardArgs"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindPackageMessage</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>SKIP_LINTING &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SOURCE_DIR" href="SOURCE_DIR.html" />
+    <link rel="prev" title="SKIP_BUILD_RPATH" href="SKIP_BUILD_RPATH.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="SOURCE_DIR.html" title="SOURCE_DIR"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SKIP_BUILD_RPATH.html" title="SKIP_BUILD_RPATH"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-properties.7.html" accesskey="U">cmake-properties(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SKIP_LINTING</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="skip-linting">
+<span id="prop_tgt:SKIP_LINTING"></span><h1>SKIP_LINTING<a class="headerlink" href="#skip-linting" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>Exclude all sources of a target from running configured linting tools.</p>
+<p>When this boolean property is enabled on a target, C/C++ linting tools enabled
+for that target (e.g. <span class="target" id="index-0-prop_tgt:&lt;LANG&gt;_CPPLINT"></span><a class="reference internal" href="LANG_CPPLINT.html#prop_tgt:&lt;LANG&gt;_CPPLINT" title="&lt;LANG&gt;_CPPLINT"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">&lt;LANG&gt;_CPPLINT</span></code></a>, <span class="target" id="index-0-prop_tgt:&lt;LANG&gt;_CLANG_TIDY"></span><a class="reference internal" href="LANG_CLANG_TIDY.html#prop_tgt:&lt;LANG&gt;_CLANG_TIDY" title="&lt;LANG&gt;_CLANG_TIDY"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">&lt;LANG&gt;_CLANG_TIDY</span></code></a>,
+<span class="target" id="index-0-prop_tgt:&lt;LANG&gt;_CPPCHECK"></span><a class="reference internal" href="LANG_CPPCHECK.html#prop_tgt:&lt;LANG&gt;_CPPCHECK" title="&lt;LANG&gt;_CPPCHECK"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">&lt;LANG&gt;_CPPCHECK</span></code></a>, <span class="target" id="index-0-prop_tgt:&lt;LANG&gt;_ICSTAT"></span><a class="reference internal" href="LANG_ICSTAT.html#prop_tgt:&lt;LANG&gt;_ICSTAT" title="&lt;LANG&gt;_ICSTAT"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">&lt;LANG&gt;_ICSTAT</span></code></a> and
+<span class="target" id="index-0-prop_tgt:&lt;LANG&gt;_INCLUDE_WHAT_YOU_USE"></span><a class="reference internal" href="LANG_INCLUDE_WHAT_YOU_USE.html#prop_tgt:&lt;LANG&gt;_INCLUDE_WHAT_YOU_USE" title="&lt;LANG&gt;_INCLUDE_WHAT_YOU_USE"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">&lt;LANG&gt;_INCLUDE_WHAT_YOU_USE</span></code></a>) will not be invoked for source files
+compiled by the target.  If the <span class="target" id="index-0-prop_sf:SKIP_LINTING"></span><a class="reference internal" href="../prop_sf/SKIP_LINTING.html#prop_sf:SKIP_LINTING" title="SKIP_LINTING"><code class="xref cmake cmake-prop_sf docutils literal notranslate"><span class="pre">SKIP_LINTING</span></code></a> source-file property
+is set on a specific source, it takes precedence over this target-wide property.</p>
+<p>This is a convenience alternative to setting the <span class="target" id="index-1-prop_sf:SKIP_LINTING"></span><a class="reference internal" href="../prop_sf/SKIP_LINTING.html#prop_sf:SKIP_LINTING" title="SKIP_LINTING"><code class="xref cmake cmake-prop_sf docutils literal notranslate"><span class="pre">SKIP_LINTING</span></code></a>
+source file property individually on each source.  If either the target's
+<span class="target" id="index-0-prop_tgt:SKIP_LINTING"></span><a class="reference internal" href="#prop_tgt:SKIP_LINTING" title="SKIP_LINTING"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">SKIP_LINTING</span></code></a> or a source’s <span class="target" id="index-2-prop_sf:SKIP_LINTING"></span><a class="reference internal" href="../prop_sf/SKIP_LINTING.html#prop_sf:SKIP_LINTING" title="SKIP_LINTING"><code class="xref cmake cmake-prop_sf docutils literal notranslate"><span class="pre">SKIP_LINTING</span></code></a> is enabled,
+that source will be excluded from linting.</p>
+<p>The property has no effect on targets that do not have sources.</p>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><span class="target" id="index-3-prop_sf:SKIP_LINTING"></span><a class="reference internal" href="../prop_sf/SKIP_LINTING.html#prop_sf:SKIP_LINTING" title="SKIP_LINTING"><code class="xref cmake cmake-prop_sf docutils literal notranslate"><span class="pre">SKIP_LINTING</span></code></a> source file property</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">SKIP_LINTING</a><ul>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="SKIP_BUILD_RPATH.html"
+                          title="previous chapter">SKIP_BUILD_RPATH</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="SOURCE_DIR.html"
+                          title="next chapter">SOURCE_DIR</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/prop_tgt/SKIP_LINTING.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="SOURCE_DIR.html" title="SOURCE_DIR"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SKIP_BUILD_RPATH.html" title="SKIP_BUILD_RPATH"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-properties.7.html" >cmake-properties(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SKIP_LINTING</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindSquish &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindSubversion" href="FindSubversion.html" />
+    <link rel="prev" title="FindSQLite3" href="FindSQLite3.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindSubversion.html" title="FindSubversion"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindSQLite3.html" title="FindSQLite3"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindSquish</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findsquish">
+<span id="module:FindSquish"></span><h1>FindSquish<a class="headerlink" href="#findsquish" title="Link to this heading">¶</a></h1>
+<p>Finds Squish, a cross-platform automated GUI testing framework for
+applications built on various GUI technologies:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Squish</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Squish supports testing of both native and cross-platform toolkits, such as
+Qt, Java, and Tk.</p>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Squish_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3.</span></p>
+</div>
+<p>Boolean indicating whether (the requested version of) Squish was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Squish_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>The full version of the Squish found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_INSTALL_DIR_FOUND</span></code></dt><dd><p>Boolean indicating whether the Squish installation directory was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_SERVER_EXECUTABLE_FOUND</span></code></dt><dd><p>Boolean indicating whether the Squish server executable was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_CLIENT_EXECUTABLE_FOUND</span></code></dt><dd><p>Boolean indicating whether the Squish client executable was found.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_INSTALL_DIR</span></code></dt><dd><p>The Squish installation directory containing <code class="docutils literal notranslate"><span class="pre">bin</span></code>, <code class="docutils literal notranslate"><span class="pre">lib</span></code>, etc.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_SERVER_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">squishserver</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_CLIENT_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">squishrunner</span></code> executable.</p>
+</dd>
+</dl>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following commands, if Squish is found:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:squish_add_test">
+<span class="sig-name descname"><span class="pre">squish_add_test</span></span><a class="headerlink" href="#command:squish_add_test" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a Squish test to the project:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">squish_add_test(</span>
+<span class="w">  </span><span class="nv">&lt;name&gt;</span>
+<span class="w">  </span><span class="no">AUT</span><span class="w"> </span><span class="nv">&lt;target&gt;</span>
+<span class="w">  </span><span class="no">SUITE</span><span class="w"> </span><span class="nv">&lt;suite-name&gt;</span>
+<span class="w">  </span><span class="no">TEST</span><span class="w"> </span><span class="nv">&lt;squish-test-case-name&gt;</span>
+<span class="w">  </span><span class="p">[</span><span class="no">PRE_COMMAND</span><span class="w"> </span><span class="nv">&lt;command&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">POST_COMMAND</span><span class="w"> </span><span class="nv">&lt;command&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">SETTINGSGROUP</span><span class="w"> </span><span class="nv">&lt;group&gt;</span><span class="p">]</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command is built on top of the <span class="target" id="index-0-command:add_test"></span><a class="reference internal" href="../command/add_test.html#command:add_test" title="add_test"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_test()</span></code></a> command and adds a
+Squish test called <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> to the CMake project.  It supports Squish
+versions 4 and newer.</p>
+<p>During the CMake testing phase, the Squish server is started, the test is
+executed on the client, and the server is stopped once the test completes.  If
+any of these steps fail (including if the test itself fails), a fatal error is
+raised indicating the test did not pass.</p>
+<p>The arguments are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code></dt><dd><p>The name of the test.  This is passed as the first argument to the
+<span class="target" id="index-1-command:add_test"></span><a class="reference internal" href="../command/add_test.html#command:add_test" title="add_test"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_test()</span></code></a> command.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AUT</span> <span class="pre">&lt;target&gt;</span></code></dt><dd><p>The name of the CMake target to be used as the AUT (Application Under Test),
+i.e., the executable that will be tested.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SUITE</span> <span class="pre">&lt;suite-name&gt;</span></code></dt><dd><p>Either the full path to the Squish test suite or just the suite name (i.e.,
+the last directory name of the suite).  In the latter case, the
+<code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> invoking <code class="docutils literal notranslate"><span class="pre">squish_add_test()</span></code> must reside in the parent
+directory of the suite.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TEST</span> <span class="pre">&lt;squish-test-case-name&gt;</span></code></dt><dd><p>The name of the Squish test, corresponding to the subdirectory of the test
+within the suite directory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PRE_COMMAND</span> <span class="pre">&lt;command&gt;</span></code></dt><dd><p>An optional command to execute before starting the Squish test.  Pass it as
+a string.  This may be a single command, or a <a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated list</span></a> of command and arguments.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">POST_COMMAND</span> <span class="pre">&lt;command&gt;</span></code></dt><dd><p>An optional command to execute after the Squish test has completed.  Pass it
+as a string.  This may be a single command, or a <a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated
+list</span></a> of command and arguments.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SETTINGSGROUP</span> <span class="pre">&lt;group&gt;</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.18: </span>This argument is now ignored.  It was previously used to specify a
+settings group name for executing the test instead of the default value
+<code class="docutils literal notranslate"><span class="pre">CTest_&lt;username&gt;</span></code>.</p>
+</div>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.18: </span>In previous CMake versions, this command was named <code class="docutils literal notranslate"><span class="pre">squish_v4_add_test()</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:squish_v3_add_test">
+<span class="sig-name descname"><span class="pre">squish_v3_add_test</span></span><a class="headerlink" href="#command:squish_v3_add_test" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a Squish test to the project, when using Squish version 3.x:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">squish_v3_add_test(</span>
+<span class="w">  </span><span class="nv">&lt;test-name&gt;</span>
+<span class="w">  </span><span class="nv">&lt;application-under-test&gt;</span>
+<span class="w">  </span><span class="nv">&lt;squish-test-case-name&gt;</span>
+<span class="w">  </span><span class="nv">&lt;environment-variables&gt;</span>
+<span class="w">  </span><span class="nv">&lt;test-wrapper&gt;</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command is for Squish version 3, which is not maintained anymore.  Use
+a newer Squish version, and <code class="docutils literal notranslate"><span class="pre">squish_add_test()</span></code> command.</p>
+</div>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code></dt><dd><p>The name of the test.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;application-under-test&gt;</span></code></dt><dd><p>The path to the executable used as the AUT (Application Under Test), i.e.,
+the executable that will be tested.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;squish-test-case-name&gt;</span></code></dt><dd><p>The name of the Squish test, corresponding to the subdirectory of the test
+within the suite directory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;environment-variables&gt;</span></code></dt><dd><p>A semicolon-separated list of environment variables and their values
+(VAR=VALUE).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;test-wrapper&gt;</span></code></dt><dd><p>A string of one or more (semicolon-separated list) test wrappers needed by
+the test case.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_FOUND</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Use <code class="docutils literal notranslate"><span class="pre">Squish_FOUND</span></code>, which has the same value.</p>
+</div>
+<p>Boolean indicating whether (the requested version of) Squish was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_VERSION</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Superseded by the <code class="docutils literal notranslate"><span class="pre">Squish_VERSION</span></code>.</p>
+</div>
+<p>The full version of the Squish found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_VERSION_MAJOR</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Superseded by the <code class="docutils literal notranslate"><span class="pre">Squish_VERSION</span></code>.</p>
+</div>
+<p>The major version of the Squish found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_VERSION_MINOR</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Superseded by the <code class="docutils literal notranslate"><span class="pre">Squish_VERSION</span></code>.</p>
+</div>
+<p>The minor version of the Squish found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SQUISH_VERSION_PATCH</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Superseded by the <code class="docutils literal notranslate"><span class="pre">Squish_VERSION</span></code>.</p>
+</div>
+<p>The patch version of the Squish found.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Finding Squish and specifying a minimum required version:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Squish</span><span class="w"> </span><span class="m">6.5</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Adding a Squish test:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">enable_testing()</span>
+
+<span class="nf">find_package(</span><span class="nb">Squish</span><span class="w"> </span><span class="m">6.5</span><span class="nf">)</span>
+<span class="nf">if(</span><span class="nb">Squish_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">squish_add_test(</span>
+<span class="w">    </span><span class="nb">projectTestName</span>
+<span class="w">    </span><span class="no">AUT</span><span class="w"> </span><span class="nb">projectApp</span>
+<span class="w">    </span><span class="no">SUITE</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="na">/tests/projectSuite</span>
+<span class="w">    </span><span class="no">TEST</span><span class="w"> </span><span class="nb">someSquishTest</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+<p>Example, how to use the <code class="docutils literal notranslate"><span class="pre">squish_v3_add_test()</span></code> command:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">enable_testing()</span>
+
+<span class="nf">find_package(</span><span class="nb">Squish</span><span class="w"> </span><span class="m">3.0</span><span class="nf">)</span>
+<span class="nf">if(</span><span class="nb">Squish_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">squish_v3_add_test(</span>
+<span class="w">    </span><span class="nb">projectTestName</span>
+<span class="w">    </span><span class="o">$&lt;</span><span class="no">TARGET_FILE</span><span class="o">:</span><span class="nb">projectApp</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="nb">someSquishTest</span>
+<span class="w">    </span><span class="s">&quot;FOO=1;BAR=2&quot;</span>
+<span class="w">    </span><span class="nb">testWrapper</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindSquish</a><ul>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindSQLite3.html"
+                          title="previous chapter">FindSQLite3</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindSubversion.html"
+                          title="next chapter">FindSubversion</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindSquish.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindSubversion.html" title="FindSubversion"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindSQLite3.html" title="FindSQLite3"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindSquish</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

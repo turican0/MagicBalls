@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMP0186 &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMP0185" href="CMP0185.html" />
+    <link rel="prev" title="CMP0187" href="CMP0187.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMP0185.html" title="CMP0185"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMP0187.html" title="CMP0187"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" accesskey="U">cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0186</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmp0186">
+<span id="policy:CMP0186"></span><h1>CMP0186<a class="headerlink" href="#cmp0186" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>Regular expressions match <code class="docutils literal notranslate"><span class="pre">^</span></code> at most once in repeated searches.</p>
+<p>This policy affects commands that perform multiple regular expression
+searches:</p>
+<ul class="simple">
+<li><p><span class="target" id="index-0-command:string"></span><a class="reference internal" href="../command/string.html#regex-matchall" title="string(regex matchall)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">string(REGEX</span> <span class="pre">MATCHALL)</span></code></a></p></li>
+<li><p><span class="target" id="index-1-command:string"></span><a class="reference internal" href="../command/string.html#regex-replace" title="string(regex replace)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">string(REGEX</span> <span class="pre">REPLACE)</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:list"></span><a class="reference internal" href="../command/list.html#command:list" title="list(transform replace)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list(TRANSFORM</span> <span class="pre">REPLACE)</span></code></a></p></li>
+</ul>
+<p>and the generator expression <span class="target" id="index-0-genex:LIST"></span><a class="reference internal" href="../manual/cmake-generator-expressions.7.html#genex:LIST" title="LIST"><code class="xref cmake cmake-genex docutils literal notranslate"><span class="pre">$&lt;LIST:TRANSFORM,list,REPLACE&gt;</span></code></a>.</p>
+<p>CMake 4.0 and below match the <code class="docutils literal notranslate"><span class="pre">^</span></code> anchor at the start of every
+successive search, leading to multiple matches:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">string(</span><span class="no">REGEX</span><span class="w"> </span><span class="no">REPLACE</span><span class="w"> </span><span class="s">&quot;^a&quot;</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="w"> </span><span class="nb">result</span><span class="w"> </span><span class="s">&quot;aaaa&quot;</span><span class="nf">)</span><span class="w"> </span><span class="c"># result=&quot;bbbb&quot;</span>
+<span class="nf">string(</span><span class="no">REGEX</span><span class="w"> </span><span class="no">MATCHALL</span><span class="w"> </span><span class="s">&quot;^a&quot;</span><span class="w"> </span><span class="nb">result</span><span class="w"> </span><span class="s">&quot;aaaa&quot;</span><span class="nf">)</span><span class="w">    </span><span class="c"># result=&quot;a;a;a;a&quot;</span>
+</pre></div>
+</div>
+<p>CMake 4.1 and above prefer to match the <code class="docutils literal notranslate"><span class="pre">^</span></code> anchor at most once,
+at the start of the input string:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">string(</span><span class="no">REGEX</span><span class="w"> </span><span class="no">REPLACE</span><span class="w"> </span><span class="s">&quot;^a&quot;</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="w"> </span><span class="nb">result</span><span class="w"> </span><span class="s">&quot;aaaa&quot;</span><span class="nf">)</span><span class="w"> </span><span class="c"># result=&quot;abbb&quot;</span>
+<span class="nf">string(</span><span class="no">REGEX</span><span class="w"> </span><span class="no">MATCHALL</span><span class="w"> </span><span class="s">&quot;^a&quot;</span><span class="w"> </span><span class="nb">result</span><span class="w"> </span><span class="s">&quot;aaaa&quot;</span><span class="nf">)</span><span class="w">    </span><span class="c"># result=&quot;a&quot;</span>
+</pre></div>
+</div>
+<p>This policy provides compatibility for projects that have not been updated.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior for this policy is to match <code class="docutils literal notranslate"><span class="pre">^</span></code> multiple times,
+at the start of each search.  The <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior for this policy is
+to match <code class="docutils literal notranslate"><span class="pre">^</span></code> at most once, at the start of the input string.</p>
+<p>This policy was introduced in CMake version 4.1.
+It may be set by <span class="target" id="index-0-command:cmake_policy"></span><a class="reference internal" href="../command/cmake_policy.html#command:cmake_policy" title="cmake_policy"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_policy()</span></code></a> or <span class="target" id="index-0-command:cmake_minimum_required"></span><a class="reference internal" href="../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>.
+If it is not set, CMake does <em>not</em> warn, and uses <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior of a policy is
+<span class="target" id="index-0-manual:cmake-policies(7)"></span><a class="reference internal" href="../manual/cmake-policies.7.html#manual:cmake-policies(7)" title="cmake-policies(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">deprecated</span> <span class="pre">by</span> <span class="pre">definition</span></code></a>
+and may be removed in a future version of CMake.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMP0187.html"
+                          title="previous chapter">CMP0187</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMP0185.html"
+                          title="next chapter">CMP0185</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/policy/CMP0186.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMP0185.html" title="CMP0185"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMP0187.html" title="CMP0187"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" >cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0186</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

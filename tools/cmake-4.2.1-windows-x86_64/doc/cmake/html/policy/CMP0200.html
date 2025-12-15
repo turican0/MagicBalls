@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMP0200 &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMP0199" href="CMP0199.html" />
+    <link rel="prev" title="CMP0201" href="CMP0201.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMP0199.html" title="CMP0199"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMP0201.html" title="CMP0201"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" accesskey="U">cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0200</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmp0200">
+<span id="policy:CMP0200"></span><h1>CMP0200<a class="headerlink" href="#cmp0200" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>Location and configuration selection for imported targets is more consistent.</p>
+<p>The way CMake historically selected the configuration to use for imported
+targets prioritized selection based on location properties for a candidate
+configuration and only considered <span class="target" id="index-0-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a> as a
+fallback.  This could result in incorrect configuration selection especially
+for <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> libraries.</p>
+<p>CMake 4.2 and above consider <span class="target" id="index-1-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a> to be a
+definitive list of available configurations, regardless of whether a
+configuration specific location is provided for the library.  Additionally,
+CMake will respect non-configuration-specific locations when a configuration
+specific location is not specified.</p>
+<p>This policy provides compatibility with projects that rely on the historical
+behavior.  The policy setting applies to targets and is recorded at the point
+an imported target is created.  Accordingly, imported packages may override the
+policy set by the consumer for targets they create.  In particular, targets
+imported from Common Package Specification packages always use the <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior for this policy is to retain the historic behavior.
+The <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior prioritizes selection based on the advertised list of
+available configurations.  Both behaviors are described in detail below.</p>
+<p>This policy was introduced in CMake version 4.2.
+It may be set by <span class="target" id="index-0-command:cmake_policy"></span><a class="reference internal" href="../command/cmake_policy.html#command:cmake_policy" title="cmake_policy"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_policy()</span></code></a> or <span class="target" id="index-0-command:cmake_minimum_required"></span><a class="reference internal" href="../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>.
+If it is not set, CMake warns, and uses <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior of a policy is
+<span class="target" id="index-0-manual:cmake-policies(7)"></span><a class="reference internal" href="../manual/cmake-policies.7.html#manual:cmake-policies(7)" title="cmake-policies(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">deprecated</span> <span class="pre">by</span> <span class="pre">definition</span></code></a>
+and may be removed in a future version of CMake.</p>
+</div>
+<section id="mapped-configuration-selection">
+<h2>Mapped configuration selection<a class="headerlink" href="#mapped-configuration-selection" title="Link to this heading">¶</a></h2>
+<p>If <span class="target" id="index-0-prop_tgt:MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;"></span><a class="reference internal" href="../prop_tgt/MAP_IMPORTED_CONFIG_CONFIG.html#prop_tgt:MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;" title="MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;</span></code></a> (where <code class="docutils literal notranslate"><span class="pre">&lt;CONFIG&gt;</span></code> is the
+configuration of the consuming target) is set on an imported target, CMake
+would historically select from that list the first configuration which provides
+a configuration-specific location.  If no such configuration exists, CMake
+would selects the consuming target's configuration, if the imported target is
+an <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> library.  Otherwise, CMake considers the target as not having
+a suitable configuration.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> libraries which do not provide a location, this results in
+CMake always selecting the consuming target's configuration and effectively
+ignoring <span class="target" id="index-1-prop_tgt:MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;"></span><a class="reference internal" href="../prop_tgt/MAP_IMPORTED_CONFIG_CONFIG.html#prop_tgt:MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;" title="MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;</span></code></a>.  This behavior is not
+consistent with configuration selection for imported targets which provide a
+location.</p>
+<p>Under the <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior, CMake selects the first configuration from the
+mapping which appears in <span class="target" id="index-2-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a>.  If
+<span class="target" id="index-3-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a> is not set, CMake selects the first
+configuration from the mapping which is &quot;usable&quot;.  For non-<code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code>
+libraries, &quot;usable&quot; means that a location (either configuration-specific or
+configuration-agnostic) is available.  <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> libraries are always
+considered &quot;usable&quot;.</p>
+<p>If no match is found, CMake considers the target as not having a suitable
+configuration.</p>
+</section>
+<section id="non-mapped-configuration-selection">
+<h2>Non-mapped configuration selection<a class="headerlink" href="#non-mapped-configuration-selection" title="Link to this heading">¶</a></h2>
+<p>If <span class="target" id="index-2-prop_tgt:MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;"></span><a class="reference internal" href="../prop_tgt/MAP_IMPORTED_CONFIG_CONFIG.html#prop_tgt:MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;" title="MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;</span></code></a> is <em>not</em> set, CMake would
+historically select the first configuration which provides a location out of
+the following:</p>
+<ul class="simple">
+<li><p>The consuming target's configuration, or</p></li>
+<li><p>The empty configuration, or</p></li>
+<li><p>The list of configurations in <span class="target" id="index-4-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a>.</p></li>
+</ul>
+<p>As an implementation artifact, this results in CMake selecting the <em>last</em>
+configuration in <span class="target" id="index-5-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a> for <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code>
+libraries which do not provide a location.  Again, this behavior is not
+consistent with configuration selection for imported targets which provide a
+location.</p>
+<p>Under the <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior, if <span class="target" id="index-6-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a> is set,
+CMake will select the consuming target's configuration if present therein,
+otherwise CMake will select the first imported configuration.  If
+<span class="target" id="index-7-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a> is <em>not</em> set, CMake will select the
+consuming target's configuration if it is &quot;usable&quot; (as defined in the previous
+section); otherwise, CMake considers the target as not having a suitable
+configuration.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Consider the following imported library:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">test</span><span class="w"> </span><span class="no">INTERFACE</span><span class="w"> </span><span class="no">IMPORTED</span><span class="nf">)</span>
+<span class="nf">set_target_properties(</span><span class="nb">test</span><span class="w"> </span><span class="no">PROPERTIES</span>
+<span class="w">  </span><span class="no">IMPORTED_CONFIGURATIONS</span><span class="w"> </span><span class="s">&quot;RELEASE;DEBUG&quot;</span>
+<span class="w">  </span><span class="no">INTERFACE_COMPILE_DEFINITIONS</span><span class="w"> </span><span class="s">&quot;$&lt;$&lt;CONFIG:debug&gt;:DEBUG&gt;&quot;</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>Under the <code class="docutils literal notranslate"><span class="pre">OLD</span></code> policy, CMake will select the <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> configuration of
+<code class="docutils literal notranslate"><span class="pre">test</span></code> (and thus define the symbol <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>) for any target linking to
+<code class="docutils literal notranslate"><span class="pre">test</span></code>, because CMake does not consider any configuration &quot;valid&quot;, and, as
+an implementation artifact, the last configuration considered is accepted.</p>
+<p>Under the <code class="docutils literal notranslate"><span class="pre">NEW</span></code> policy, the <code class="docutils literal notranslate"><span class="pre">RELEASE</span></code> configuration will be selected
+if the consuming project is built in any configuration other than <code class="docutils literal notranslate"><span class="pre">Debug</span></code>
+(keeping in mind that configuration matching is case-insensitive).  This is
+because <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> will be preferred if the consumer's configuration is also
+<code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>, but <code class="docutils literal notranslate"><span class="pre">RELEASE</span></code> will be preferred otherwise because it appears
+first in <span class="target" id="index-8-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a>, and its appearance therein makes
+it a &quot;valid&quot; configuration for an <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> library.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">CMP0200</a><ul>
+<li><a class="reference internal" href="#mapped-configuration-selection">Mapped configuration selection</a></li>
+<li><a class="reference internal" href="#non-mapped-configuration-selection">Non-mapped configuration selection</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMP0201.html"
+                          title="previous chapter">CMP0201</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMP0199.html"
+                          title="next chapter">CMP0199</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/policy/CMP0200.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMP0199.html" title="CMP0199"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMP0201.html" title="CMP0201"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" >cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0200</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

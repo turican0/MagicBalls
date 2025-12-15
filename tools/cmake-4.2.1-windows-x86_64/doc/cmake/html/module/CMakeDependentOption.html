@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMakeDependentOption &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMakeFindDependencyMacro" href="CMakeFindDependencyMacro.html" />
+    <link rel="prev" title="CMakeBackwardCompatibilityCXX" href="CMakeBackwardCompatibilityCXX.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMakeFindDependencyMacro.html" title="CMakeFindDependencyMacro"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMakeBackwardCompatibilityCXX.html" title="CMakeBackwardCompatibilityCXX"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMakeDependentOption</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmakedependentoption">
+<span id="module:CMakeDependentOption"></span><h1>CMakeDependentOption<a class="headerlink" href="#cmakedependentoption" title="Link to this heading">¶</a></h1>
+<p>This module provides a command to define boolean options whose availability and
+default values depend on specified conditions or other options.  This helps
+maintain a clean configuration interface by only displaying options that are
+relevant to the current settings.</p>
+<p>Load this module in CMake with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeDependentOption</span><span class="nf">)</span>
+</pre></div>
+</div>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following command:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:cmake_dependent_option">
+<span class="sig-name descname"><span class="pre">cmake_dependent_option</span></span><a class="headerlink" href="#command:cmake_dependent_option" title="Link to this definition">¶</a></dt>
+<dd><p>Provides a boolean option that depends on a set of conditions:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_dependent_option(</span><span class="nv">&lt;variable&gt;</span><span class="w"> </span><span class="nv">&lt;help&gt;</span><span class="w"> </span><span class="nv">&lt;value&gt;</span><span class="w"> </span><span class="nv">&lt;condition&gt;</span><span class="w"> </span><span class="nv">&lt;else-value&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command creates a boolean <code class="docutils literal notranslate"><span class="pre">&lt;variable&gt;</span></code> and makes it available to the
+user in the GUI (such as <span class="target" id="index-0-manual:cmake-gui(1)"></span><a class="reference internal" href="../manual/cmake-gui.1.html#manual:cmake-gui(1)" title="cmake-gui(1)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake-gui(1)</span></code></a> or <span class="target" id="index-0-manual:ccmake(1)"></span><a class="reference internal" href="../manual/ccmake.1.html#manual:ccmake(1)" title="ccmake(1)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">ccmake(1)</span></code></a>), if
+a set of conditions evaluates to boolean true.</p>
+<p>The arguments are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;variable&gt;</span></code></dt><dd><p>The name of a variable that stores the option value.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;help&gt;</span></code></dt><dd><p>A brief description of the option.  This string is typically a short line of
+text and is displayed in the GUI.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code></dt><dd><p>Boolean value for the <code class="docutils literal notranslate"><span class="pre">&lt;variable&gt;</span></code>, when <code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code> evaluates to
+boolean true.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code></dt><dd><p>Specifies the conditions that determine whether <code class="docutils literal notranslate"><span class="pre">&lt;variable&gt;</span></code> is set and
+visible in the GUI.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code> evaluates to boolean false, option is hidden from the
+user in the GUI, and a local variable <code class="docutils literal notranslate"><span class="pre">&lt;variable&gt;</span></code> is set to
+<code class="docutils literal notranslate"><span class="pre">&lt;else-value&gt;</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code> evaluates to boolean true, a boolean cache variable
+named <code class="docutils literal notranslate"><span class="pre">&lt;variable&gt;</span></code> is created with default <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>, and option is
+shown in the GUI, allowing the user to enable or disable it.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code> later evaluates to boolean false (on consecutive
+configuration run),  option is hidden from the user in the GUI and the
+<code class="docutils literal notranslate"><span class="pre">&lt;variable&gt;</span></code> type is changed to an internal cache variable.  In that
+case a local variable of the same name is set to <code class="docutils literal notranslate"><span class="pre">&lt;else-value&gt;</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code> becomes true again in consecutive configuration runs,
+the user's previously set value is preserved.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code> argument can be:</p>
+<ul>
+<li><p>A single condition (such as a variable name).</p></li>
+<li><p>A <a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated list</span></a> of multiple
+conditions.</p></li>
+<li><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.22: </span>A full <a class="reference internal" href="../command/if.html#condition-syntax"><span class="std std-ref">Condition Syntax</span></a> as used in an <code class="docutils literal notranslate"><span class="pre">if(&lt;condition&gt;)</span></code> clause.
+See policy <span class="target" id="index-0-policy:CMP0127"></span><a class="reference internal" href="../policy/CMP0127.html#policy:CMP0127" title="CMP0127"><code class="xref cmake cmake-policy docutils literal notranslate"><span class="pre">CMP0127</span></code></a>.  This enables using entire condition
+syntax (such as grouping conditions with parens and similar).</p>
+</div>
+</li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;else-value&gt;</span></code></dt><dd><p>The value assigned to a local variable named <code class="docutils literal notranslate"><span class="pre">&lt;variable&gt;</span></code>, when
+<code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code> evaluates to boolean false.</p>
+</dd>
+</dl>
+<p>In CMake project mode, boolean cache variables are created as explained
+above.  In CMake script mode, boolean variables are set instead.</p>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="example-basic-usage">
+<h3>Example: Basic Usage<a class="headerlink" href="#example-basic-usage" title="Link to this heading">¶</a></h3>
+<p>Using this module in a project to conditionally set an option:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeDependentOption</span><span class="nf">)</span>
+
+<span class="nf">cmake_dependent_option(</span><span class="no">USE_SSL_GNUTLS</span><span class="w"> </span><span class="s">&quot;Use GnuTLS for SSL&quot;</span><span class="w"> </span><span class="no">ON</span><span class="w"> </span><span class="no">USE_SSL</span><span class="w"> </span><span class="no">OFF</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="example-enabling-disabling-dependent-option">
+<h3>Example: Enabling/Disabling Dependent Option<a class="headerlink" href="#example-enabling-disabling-dependent-option" title="Link to this heading">¶</a></h3>
+<p>Extending the previous example, this demonstrates how the module allows
+user-configurable options based on a condition during the configuration phase:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeDependentOption</span><span class="nf">)</span>
+
+<span class="nf">option(</span><span class="no">USE_SSL</span><span class="w"> </span><span class="s">&quot;Enable SSL in the project&quot;</span><span class="w"> </span><span class="no">OFF</span><span class="nf">)</span>
+
+<span class="nf">cmake_dependent_option(</span><span class="no">USE_SSL_GNUTLS</span><span class="w"> </span><span class="s">&quot;Use GnuTLS for SSL&quot;</span><span class="w"> </span><span class="no">ON</span><span class="w"> </span><span class="no">USE_SSL</span><span class="w"> </span><span class="no">OFF</span><span class="nf">)</span>
+
+<span class="nf">message(</span><span class="no">STATUS</span><span class="w"> </span><span class="s">&quot;USE_SSL: ${USE_SSL}&quot;</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="no">STATUS</span><span class="w"> </span><span class="s">&quot;USE_SSL_GNUTLS: ${USE_SSL_GNUTLS}&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>On the first configuration run, a boolean cache variable <code class="docutils literal notranslate"><span class="pre">USE_SSL</span></code> is set to
+OFF, and a local variable <code class="docutils literal notranslate"><span class="pre">USE_SSL_GNUTLS</span></code> is set to OFF:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-B<span class="w"> </span>build-dir
+
+<span class="go">-- USE_SSL: OFF</span>
+<span class="go">-- USE_SSL_GNUTLS: OFF</span>
+</pre></div>
+</div>
+<p>Running CMake with <code class="docutils literal notranslate"><span class="pre">USE_SSL=ON</span></code> sets both <code class="docutils literal notranslate"><span class="pre">USE_SSL</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_SSL_GNUTLS</span></code>
+boolean cache variables to ON:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-B<span class="w"> </span>build-dir<span class="w"> </span>-D<span class="w"> </span><span class="nv">USE_SSL</span><span class="o">=</span>ON
+
+<span class="go">-- USE_SSL: ON</span>
+<span class="go">-- USE_SSL_GNUTLS: ON</span>
+</pre></div>
+</div>
+<p>On a subsequent configuration run with <code class="docutils literal notranslate"><span class="pre">USE_SSL=OFF</span></code>, <code class="docutils literal notranslate"><span class="pre">USE_SSL_GNUTLS</span></code>
+follows suit.  However, its value is preserved in the internal cache while being
+overridden locally:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-B<span class="w"> </span>build-dir<span class="w"> </span>-D<span class="w"> </span><span class="nv">USE_SSL</span><span class="o">=</span>OFF
+
+<span class="go">-- USE_SSL: OFF</span>
+<span class="go">-- USE_SSL_GNUTLS: OFF</span>
+</pre></div>
+</div>
+</section>
+<section id="example-semicolon-separated-list-of-conditions">
+<h3>Example: Semicolon-separated List of Conditions<a class="headerlink" href="#example-semicolon-separated-list-of-conditions" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;condition&gt;</span></code> argument can also be a semicolon-separated list of
+conditions.  In the following example, if the variable <code class="docutils literal notranslate"><span class="pre">USE_BAR</span></code> is ON and
+variable <code class="docutils literal notranslate"><span class="pre">USE_ZOT</span></code> is OFF, the option <code class="docutils literal notranslate"><span class="pre">USE_FOO</span></code> is available and defaults to
+ON.  Otherwise, <code class="docutils literal notranslate"><span class="pre">USE_FOO</span></code> is set to OFF and hidden from the user.</p>
+<p>If the values of <code class="docutils literal notranslate"><span class="pre">USE_BAR</span></code> or <code class="docutils literal notranslate"><span class="pre">USE_ZOT</span></code> change in the future configuration
+runs, the previous value of <code class="docutils literal notranslate"><span class="pre">USE_FOO</span></code> is preserved so that when it becomes
+available again, it retains its last set value.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeDependentOption</span><span class="nf">)</span>
+
+<span class="nf">cmake_dependent_option(</span><span class="no">USE_FOO</span><span class="w"> </span><span class="s">&quot;Use Foo&quot;</span><span class="w"> </span><span class="no">ON</span><span class="w"> </span><span class="s">&quot;USE_BAR;NOT USE_ZOT&quot;</span><span class="w"> </span><span class="no">OFF</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="example-full-condition-syntax">
+<h3>Example: Full Condition Syntax<a class="headerlink" href="#example-full-condition-syntax" title="Link to this heading">¶</a></h3>
+<p>As of CMake 3.22, <code class="docutils literal notranslate"><span class="pre">cmake_dependent_option()</span></code> supports full condition syntax.</p>
+<p>In fhe following example, if the condition evaluates to true, the option
+<code class="docutils literal notranslate"><span class="pre">USE_FOO</span></code> is available and set to ON.  Otherwise, it is set to OFF and hidden
+in the GUI.  The value of <code class="docutils literal notranslate"><span class="pre">USE_FOO</span></code> is preserved across configuration runs,
+similar to the previous example.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeDependentOption</span><span class="nf">)</span>
+
+<span class="nf">cmake_dependent_option(</span><span class="no">USE_FOO</span><span class="w"> </span><span class="s">&quot;Use Foo&quot;</span><span class="w"> </span><span class="no">ON</span><span class="w"> </span><span class="s">&quot;USE_A AND (USE_B OR USE_C)&quot;</span><span class="w"> </span><span class="no">OFF</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>Another example demonstrates how an option can be conditionally available based
+on the target system:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeDependentOption</span><span class="nf">)</span>
+
+<span class="nf">cmake_dependent_option(</span>
+<span class="w">  </span><span class="no">ENABLE_FOO</span>
+<span class="w">  </span><span class="s">&quot;Enable feature Foo (this option is available when building for Windows)&quot;</span>
+<span class="w">  </span><span class="no">ON</span>
+<span class="w">  </span><span class="p">[[</span><span class="no">CMAKE_SYSTEM_NAME</span><span class="w"> </span><span class="no">STREQUAL</span><span class="w"> </span><span class="s">&quot;Windows&quot;</span><span class="p">]]</span>
+<span class="w">  </span><span class="no">OFF</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The <span class="target" id="index-0-command:option"></span><a class="reference internal" href="../command/option.html#command:option" title="option"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">option()</span></code></a> command to provide a boolean option that the user can
+optionally select.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">CMakeDependentOption</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-basic-usage">Example: Basic Usage</a></li>
+<li><a class="reference internal" href="#example-enabling-disabling-dependent-option">Example: Enabling/Disabling Dependent Option</a></li>
+<li><a class="reference internal" href="#example-semicolon-separated-list-of-conditions">Example: Semicolon-separated List of Conditions</a></li>
+<li><a class="reference internal" href="#example-full-condition-syntax">Example: Full Condition Syntax</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMakeBackwardCompatibilityCXX.html"
+                          title="previous chapter">CMakeBackwardCompatibilityCXX</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMakeFindDependencyMacro.html"
+                          title="next chapter">CMakeFindDependencyMacro</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/CMakeDependentOption.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMakeFindDependencyMacro.html" title="CMakeFindDependencyMacro"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMakeBackwardCompatibilityCXX.html" title="CMakeBackwardCompatibilityCXX"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMakeDependentOption</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CTEST_USE_VERBOSE_INSTRUMENTATION &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DASHBOARD_TEST_FROM_CTEST" href="DASHBOARD_TEST_FROM_CTEST.html" />
+    <link rel="prev" title="CTEST_USE_LAUNCHERS_DEFAULT" href="CTEST_USE_LAUNCHERS_DEFAULT.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="DASHBOARD_TEST_FROM_CTEST.html" title="DASHBOARD_TEST_FROM_CTEST"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CTEST_USE_LAUNCHERS_DEFAULT.html" title="CTEST_USE_LAUNCHERS_DEFAULT"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-env-variables.7.html" accesskey="U">cmake-env-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CTEST_USE_VERBOSE_INSTRUMENTATION</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="ctest-use-verbose-instrumentation">
+<span id="envvar:CTEST_USE_VERBOSE_INSTRUMENTATION"></span><h1>CTEST_USE_VERBOSE_INSTRUMENTATION<a class="headerlink" href="#ctest-use-verbose-instrumentation" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.0.</span></p>
+</div>
+<p>This is a CMake <a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-environment-variables"><span class="std std-ref">Environment Variable</span></a>. Its initial value is taken from
+the calling process environment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This feature is only available when experimental support for instrumentation
+has been enabled by the <code class="docutils literal notranslate"><span class="pre">CMAKE_EXPERIMENTAL_INSTRUMENTATION</span></code> gate.</p>
+</div>
+<p>Setting this environment variable to <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">True</span></code>, or <code class="docutils literal notranslate"><span class="pre">ON</span></code> causes CTest to
+report the full command line (including arguments) to CDash for each
+instrumented command. By default, CTest truncates the command line at the first
+space.</p>
+<p>See also <span class="target" id="index-0-envvar:CTEST_USE_INSTRUMENTATION"></span><a class="reference internal" href="CTEST_USE_INSTRUMENTATION.html#envvar:CTEST_USE_INSTRUMENTATION" title="CTEST_USE_INSTRUMENTATION"><code class="xref cmake cmake-envvar docutils literal notranslate"><span class="pre">CTEST_USE_INSTRUMENTATION</span></code></a></p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CTEST_USE_LAUNCHERS_DEFAULT.html"
+                          title="previous chapter">CTEST_USE_LAUNCHERS_DEFAULT</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="DASHBOARD_TEST_FROM_CTEST.html"
+                          title="next chapter">DASHBOARD_TEST_FROM_CTEST</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/envvar/CTEST_USE_VERBOSE_INSTRUMENTATION.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="DASHBOARD_TEST_FROM_CTEST.html" title="DASHBOARD_TEST_FROM_CTEST"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CTEST_USE_LAUNCHERS_DEFAULT.html" title="CTEST_USE_LAUNCHERS_DEFAULT"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-env-variables.7.html" >cmake-env-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CTEST_USE_VERBOSE_INSTRUMENTATION</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

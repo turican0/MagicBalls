@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>SelectLibraryConfigurations &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="TestForANSIForScope" href="TestForANSIForScope.html" />
+    <link rel="prev" title="ProcessorCount" href="ProcessorCount.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="TestForANSIForScope.html" title="TestForANSIForScope"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ProcessorCount.html" title="ProcessorCount"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SelectLibraryConfigurations</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="selectlibraryconfigurations">
+<span id="module:SelectLibraryConfigurations"></span><h1>SelectLibraryConfigurations<a class="headerlink" href="#selectlibraryconfigurations" title="Link to this heading">¶</a></h1>
+<p>This module provides a command to automatically set library variables when
+package is available with multiple <a class="reference internal" href="../manual/cmake-buildsystem.7.html#build-configurations"><span class="std std-ref">Build Configurations</span></a>.  It is
+intended for use in <a class="reference internal" href="../manual/cmake-developer.7.html#find-modules"><span class="std std-ref">Find Modules</span></a> implementing
+<span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package(&lt;packagename&gt;)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package(&lt;PackageName&gt;)</span></code></a> calls.</p>
+<p>Load this module in a CMake find module with:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindFoo.cmake</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">SelectLibraryConfigurations</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>Supported build configurations are <code class="docutils literal notranslate"><span class="pre">Release</span></code> and <code class="docutils literal notranslate"><span class="pre">Debug</span></code> as these are
+the most common ones in such packages.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module has been available since early versions of CMake, when the
+<code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;_LIBRARIES</span></code> result variable was used for linking found
+packages.  When writing standard find modules, <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a> should
+be preferred.  In addition to or as an alternative to this module, imported
+targets provide finer control over linking through the
+<span class="target" id="index-0-prop_tgt:IMPORTED_CONFIGURATIONS"></span><a class="reference internal" href="../prop_tgt/IMPORTED_CONFIGURATIONS.html#prop_tgt:IMPORTED_CONFIGURATIONS" title="IMPORTED_CONFIGURATIONS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED_CONFIGURATIONS</span></code></a> property.</p>
+</div>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following command:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:select_library_configurations">
+<span class="sig-name descname"><span class="pre">select_library_configurations</span></span><a class="headerlink" href="#command:select_library_configurations" title="Link to this definition">¶</a></dt>
+<dd><p>Sets and adjusts library variables based on debug and release build
+configurations:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">select_library_configurations(</span><span class="nv">&lt;basename&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command is a helper for setting the <code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARIES</span></code> result variables when a library might be provided
+with multiple build configurations.</p>
+<p>The argument is:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;</span></code></dt><dd><p>The base name of the library, used as a prefix for variable names.  This is
+the name of the package as used in the <code class="docutils literal notranslate"><span class="pre">Find&lt;PackageName&gt;.cmake</span></code> module
+filename, or the component name, when find module provides them.</p>
+</dd>
+</dl>
+<p>Prior to calling this command the following cache variables should be set
+in the find module (for example, by the <span class="target" id="index-0-command:find_library"></span><a class="reference internal" href="../command/find_library.html#command:find_library" title="find_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_library()</span></code></a> command):</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY_RELEASE</span></code></dt><dd><p>A cache variable storing the full path to the <code class="docutils literal notranslate"><span class="pre">Release</span></code> build of the
+library.  If not set or found, this command will set its value to
+<code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY_RELEASE-NOTFOUND</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY_DEBUG</span></code></dt><dd><p>A cache variable storing the full path to the <code class="docutils literal notranslate"><span class="pre">Debug</span></code> build of the
+library.  If not set or found, this command will set its value to
+<code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY_DEBUG-NOTFOUND</span></code>.</p>
+</dd>
+</dl>
+<p>This command then sets the following local result variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY</span></code></dt><dd><p>A result variable that is set to the value of
+<code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY_RELEASE</span></code> variable if found, otherwise it is set to the
+value of <code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY_DEBUG</span></code> variable if found.  If both are found,
+the release library value takes precedence. If both are not found, it is set
+to value <code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY-NOTFOUND</span></code>.</p>
+<p>If the <span class="target" id="index-0-manual:cmake-generators(7)"></span><a class="reference internal" href="../manual/cmake-generators.7.html#manual:cmake-generators(7)" title="cmake-generators(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">Generator</span></code></a> in use supports
+build configurations, then this variable will be a list of found libraries
+each prepended with the <code class="docutils literal notranslate"><span class="pre">optimized</span></code> or <code class="docutils literal notranslate"><span class="pre">debug</span></code> keywords specifying which
+library should be linked for the given configuration.  These keywords are
+used by the <span class="target" id="index-0-command:target_link_libraries"></span><a class="reference internal" href="../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a> command.  If a build
+configuration has not been set or the generator in use does not support
+build configurations, then this variable value will not contain these
+keywords.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARIES</span></code></dt><dd><p>A result variable that is set to the same value as the
+<code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY</span></code> variable.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">select_library_configurations()</span></code> command should be called before
+handling standard find module arguments with
+<span class="target" id="index-0-command:find_package_handle_standard_args"></span><a class="reference internal" href="FindPackageHandleStandardArgs.html#command:find_package_handle_standard_args" title="find_package_handle_standard_args"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package_handle_standard_args()</span></code></a> to ensure that the
+<code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;_FOUND</span></code> result variable is correctly set based on
+<code class="docutils literal notranslate"><span class="pre">&lt;basename&gt;_LIBRARY</span></code> or other related variables.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Setting library variables based on the build configuration inside a find module
+file:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindFoo.cmake</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Find release and debug build of the library</span>
+<span class="nf">find_library(</span><span class="nb">Foo_LIBRARY_RELEASE</span><span class="w"> </span><span class="p">...</span><span class="nf">)</span>
+<span class="nf">find_library(</span><span class="nb">Foo_LIBRARY_DEBUG</span><span class="w"> </span><span class="p">...</span><span class="nf">)</span>
+
+<span class="c"># Set Foo_LIBRARY and Foo_LIBRARIES result variables</span>
+<span class="nf">include(</span><span class="nb">SelectLibraryConfigurations</span><span class="nf">)</span>
+<span class="nf">select_library_configurations(</span><span class="nb">Foo</span><span class="nf">)</span>
+
+<span class="c"># Set Foo_FOUND variable and print result message.</span>
+<span class="nf">include(</span><span class="nb">FindPackageHandleStandardArgs</span><span class="nf">)</span>
+<span class="nf">find_package_handle_standard_args(</span>
+<span class="w">  </span><span class="nb">Foo</span>
+<span class="w">  </span><span class="no">REQUIRED_VARS</span><span class="w"> </span><span class="nb">Foo_LIBRARY</span><span class="w"> </span><span class="p">...</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>When find module provides components with multiple build configurations:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindFoo.cmake</span></code></span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">SelectLibraryConfigurations</span><span class="nf">)</span>
+<span class="nf">foreach(</span><span class="nb">component</span><span class="w"> </span><span class="no">IN</span><span class="w"> </span><span class="no">LISTS</span><span class="w"> </span><span class="nb">Foo_FIND_COMPONENTS</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># ...</span>
+<span class="w">  </span><span class="nf">select_library_configurations(</span><span class="nb">Foo_</span><span class="o">${</span><span class="nt">component</span><span class="o">}</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># ...</span>
+<span class="nf">endforeach()</span>
+</pre></div>
+</div>
+</div>
+<p>A project can then use this find module as follows:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Foo</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">project_target</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nt">Foo_LIBRARIES</span><span class="o">}</span><span class="nf">)</span>
+<span class="c"># ...</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">SelectLibraryConfigurations</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="ProcessorCount.html"
+                          title="previous chapter">ProcessorCount</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="TestForANSIForScope.html"
+                          title="next chapter">TestForANSIForScope</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/SelectLibraryConfigurations.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="TestForANSIForScope.html" title="TestForANSIForScope"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ProcessorCount.html" title="ProcessorCount"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SelectLibraryConfigurations</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

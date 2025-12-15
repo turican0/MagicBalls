@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\x64\Debug\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\x64\Debug\generate_doc_source</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\x64\Debug\generate_bindings</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\bin\windows\EXTENSION-NAME.windows.template_debug.x86_64.dll</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

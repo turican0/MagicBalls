@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindLATEX &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindLibArchive" href="FindLibArchive.html" />
+    <link rel="prev" title="FindLAPACK" href="FindLAPACK.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindLibArchive.html" title="FindLibArchive"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindLAPACK.html" title="FindLAPACK"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindLATEX</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findlatex">
+<span id="module:FindLATEX"></span><h1>FindLATEX<a class="headerlink" href="#findlatex" title="Link to this heading">¶</a></h1>
+<p>Finds LaTeX compiler and Latex-related software like BibTeX:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">LATEX</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>LaTeX is a typesetting system for the production of technical and scientific
+documentation.</p>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<p>Components can be optionally specified using a standard CMake syntax:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">LATEX</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;component&gt;...</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Supported components are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">PDFLATEX</span></code></dt><dd><p>Finds the PdfLaTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">XELATEX</span></code></dt><dd><p>Finds the XeLaTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LUALATEX</span></code></dt><dd><p>Finds the LuaLaTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BIBTEX</span></code></dt><dd><p>Finds the BibTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BIBER</span></code></dt><dd><p>Finds the Biber compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MAKEINDEX</span></code></dt><dd><p>Finds the MakeIndex compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">XINDY</span></code></dt><dd><p>Finds the xindy compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DVIPS</span></code></dt><dd><p>Finds the DVI-to-PostScript (DVIPS) converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DVIPDF</span></code></dt><dd><p>Finds the DVIPDF converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PS2PDF</span></code></dt><dd><p>Finds the the PS2PDF converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PDFTOPS</span></code></dt><dd><p>Finds the PDF-to-PostScript converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LATEX2HTML</span></code></dt><dd><p>Finds the converter for converting LaTeX documents to HTML.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HTLATEX</span></code></dt><dd><p>Finds htlatex compiler.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">LATEX_FOUND</span></code></dt><dd><p>Boolean indicating whether the LaTex compiler and all its required components
+were found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LATEX_&lt;component&gt;_FOUND</span></code></dt><dd><p>Boolean indicating whether the LaTeX <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;</span></code> was found.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">LATEX_COMPILER</span></code></dt><dd><p>The path to the LaTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PDFLATEX_COMPILER</span></code></dt><dd><p>The path to the PdfLaTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">XELATEX_COMPILER</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<p>The path to the XeLaTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LUALATEX_COMPILER</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<p>The path to the LuaLaTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BIBTEX_COMPILER</span></code></dt><dd><p>The path to the BibTeX compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BIBER_COMPILER</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<p>The path to the Biber compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MAKEINDEX_COMPILER</span></code></dt><dd><p>The path to the MakeIndex compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">XINDY_COMPILER</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<p>The path to the xindy compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DVIPS_CONVERTER</span></code></dt><dd><p>The path to the DVIPS converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DVIPDF_CONVERTER</span></code></dt><dd><p>The path to the DVIPDF converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PS2PDF_CONVERTER</span></code></dt><dd><p>The path to the PS2PDF converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PDFTOPS_CONVERTER</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<p>The path to the pdftops converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LATEX2HTML_CONVERTER</span></code></dt><dd><p>The path to the LaTeX2Html converter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HTLATEX_COMPILER</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<p>The path to the htlatex compiler.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Finding LaTeX in a project:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">LATEX</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Finding LaTeX compiler and specifying which additional LaTeX components are
+required for LaTeX to be considered found:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">LATEX</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="no">PDFLATEX</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="no">LATEX_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">execute_process(</span><span class="no">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nt">LATEX_COMPILER</span><span class="o">}</span><span class="w"> </span><span class="p">...</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">execute_process(</span><span class="no">COMMAND</span><span class="w"> </span><span class="o">${</span><span class="nt">PDFLATEX_COMPILER</span><span class="o">}</span><span class="w"> </span><span class="p">...</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+<p>Or finding LaTeX compiler and specifying multiple components:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">LATEX</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="no">BIBTEX</span><span class="w"> </span><span class="no">PS2PDF</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="no">LATEXT_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># ...</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindLATEX</a><ul>
+<li><a class="reference internal" href="#components">Components</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindLAPACK.html"
+                          title="previous chapter">FindLAPACK</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindLibArchive.html"
+                          title="next chapter">FindLibArchive</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindLATEX.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindLibArchive.html" title="FindLibArchive"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindLAPACK.html" title="FindLAPACK"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindLATEX</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

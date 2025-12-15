@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>GetPrerequisites &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MacroAddFileDependencies" href="MacroAddFileDependencies.html" />
+    <link rel="prev" title="Documentation" href="Documentation.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="MacroAddFileDependencies.html" title="MacroAddFileDependencies"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Documentation.html" title="Documentation"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">GetPrerequisites</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="getprerequisites">
+<span id="module:GetPrerequisites"></span><h1>GetPrerequisites<a class="headerlink" href="#getprerequisites" title="Link to this heading">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.16: </span>Use <span class="target" id="index-0-command:file"></span><a class="reference internal" href="../command/file.html#get-runtime-dependencies" title="file(get_runtime_dependencies)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">file(GET_RUNTIME_DEPENDENCIES)</span></code></a> instead.</p>
+</div>
+<p>This module provides commands to analyze and list the dependencies
+(prerequisites) of executable or shared library files.  These commands list
+the shared libraries (<code class="docutils literal notranslate"><span class="pre">.dll</span></code>, <code class="docutils literal notranslate"><span class="pre">.dylib</span></code>, or <code class="docutils literal notranslate"><span class="pre">.so</span></code> files) required by an
+executable or shared library.</p>
+<p>Load this module in CMake with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">GetPrerequisites</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This module determines dependencies using the following platform-specific
+tools:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dumpbin</span></code> (Windows)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">objdump</span></code> (MinGW on Windows)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ldd</span></code> (Linux/Unix)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">otool</span></code> (Apple operating systems)</p></li>
+</ul>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.16: </span>The tool specified by the <span class="target" id="index-0-variable:CMAKE_OBJDUMP"></span><a class="reference internal" href="../variable/CMAKE_OBJDUMP.html#variable:CMAKE_OBJDUMP" title="CMAKE_OBJDUMP"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_OBJDUMP</span></code></a> variable will be used, if
+set.</p>
+</div>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following commands:</p>
+<ul class="simple">
+<li><p><span class="target" id="index-0-command:get_prerequisites"></span><a class="reference internal" href="#command:get_prerequisites" title="get_prerequisites"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">get_prerequisites()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:list_prerequisites"></span><a class="reference internal" href="#command:list_prerequisites" title="list_prerequisites"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list_prerequisites()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:list_prerequisites_by_glob"></span><a class="reference internal" href="#command:list_prerequisites_by_glob" title="list_prerequisites_by_glob"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list_prerequisites_by_glob()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:gp_append_unique"></span><a class="reference internal" href="#command:gp_append_unique" title="gp_append_unique"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gp_append_unique()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:is_file_executable"></span><a class="reference internal" href="#command:is_file_executable" title="is_file_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">is_file_executable()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:gp_item_default_embedded_path"></span><a class="reference internal" href="#command:gp_item_default_embedded_path" title="gp_item_default_embedded_path"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gp_item_default_embedded_path()</span></code></a>
+(projects can override it with <code class="docutils literal notranslate"><span class="pre">gp_item_default_embedded_path_override()</span></code>)</p></li>
+<li><p><span class="target" id="index-0-command:gp_resolve_item"></span><a class="reference internal" href="#command:gp_resolve_item" title="gp_resolve_item"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gp_resolve_item()</span></code></a>
+(projects can override it with <code class="docutils literal notranslate"><span class="pre">gp_resolve_item_override()</span></code>)</p></li>
+<li><p><span class="target" id="index-0-command:gp_resolved_file_type"></span><a class="reference internal" href="#command:gp_resolved_file_type" title="gp_resolved_file_type"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gp_resolved_file_type()</span></code></a>
+(projects can override it with <code class="docutils literal notranslate"><span class="pre">gp_resolved_file_type_override()</span></code>)</p></li>
+<li><p><span class="target" id="index-0-command:gp_file_type"></span><a class="reference internal" href="#command:gp_file_type" title="gp_file_type"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gp_file_type()</span></code></a></p></li>
+</ul>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:get_prerequisites">
+<span class="sig-name descname"><span class="pre">get_prerequisites</span></span><a class="headerlink" href="#command:get_prerequisites" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the list of shared library files required by specified target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">get_prerequisites(</span><span class="nv">&lt;target&gt;</span><span class="w"> </span><span class="nv">&lt;prerequisites-var&gt;</span><span class="w"> </span><span class="nv">&lt;exclude-system&gt;</span><span class="w"> </span><span class="nv">&lt;recurse&gt;</span>
+<span class="w">                  </span><span class="nv">&lt;exepath&gt;</span><span class="w"> </span><span class="nv">&lt;dirs&gt;</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;rpaths&gt;</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The list in the variable named <code class="docutils literal notranslate"><span class="pre">&lt;prerequisites-var&gt;</span></code> should be empty on
+first entry to this command.  On exit, <code class="docutils literal notranslate"><span class="pre">&lt;prerequisites-var&gt;</span></code> will contain
+the list of required shared library files.</p>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;target&gt;</span></code></dt><dd><p>The full path to an executable or shared library file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;prerequisites-var&gt;</span></code></dt><dd><p>The name of a CMake variable to contain the results.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;exclude-system&gt;</span></code></dt><dd><p>If set to 1 system prerequisites will be excluded, if set to 0 they will be
+included.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;recurse&gt;</span></code></dt><dd><p>If set to 1 all prerequisites will be found recursively, if set to 0 only
+direct prerequisites are listed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;exepath&gt;</span></code></dt><dd><p>The path to the top level executable used for <code class="docutils literal notranslate"><span class="pre">&#64;executable_path</span></code>
+replacement on Apple operating systems.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;dirs&gt;</span></code></dt><dd><p>A list of paths where libraries might be found: these paths are searched
+first when a target without any path info is given.  Then standard system
+locations are also searched: PATH, Framework locations, /usr/lib...</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;rpaths&gt;</span></code></dt><dd><p>Optional run-time search paths for an executable file or library to help
+find files.</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14: </span>The variable <code class="docutils literal notranslate"><span class="pre">GET_PREREQUISITES_VERBOSE</span></code> can be set to true before calling
+this command to enable verbose output.</p>
+</div>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:list_prerequisites">
+<span class="sig-name descname"><span class="pre">list_prerequisites</span></span><a class="headerlink" href="#command:list_prerequisites" title="Link to this definition">¶</a></dt>
+<dd><p>Prints a message listing the prerequisites of the specified target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">list_prerequisites(</span><span class="nv">&lt;target&gt;</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;recurse&gt;</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;exclude-system&gt;</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;verbose&gt;</span><span class="p">]]]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;target&gt;</span></code></dt><dd><p>The name of a shared library or executable target or the full path to a
+shared library or executable file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;recurse&gt;</span></code></dt><dd><p>If set to 1 all prerequisites will be found recursively, if set to 0 only
+direct prerequisites are listed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;exclude-system&gt;</span></code></dt><dd><p>If set to 1 system prerequisites will be excluded, if set to 0 they will be
+included.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;verbose&gt;</span></code></dt><dd><p>If set to 0 only the full path names of the prerequisites are printed. If
+set to 1 extra information will be displayed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:list_prerequisites_by_glob">
+<span class="sig-name descname"><span class="pre">list_prerequisites_by_glob</span></span><a class="headerlink" href="#command:list_prerequisites_by_glob" title="Link to this definition">¶</a></dt>
+<dd><p>Prints the prerequisites of shared library and executable files matching a
+globbing pattern:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">list_prerequisites_by_glob(</span><span class="o">&lt;</span><span class="no">GLOB</span><span class="p">|</span><span class="no">GLOB_RECURSE</span><span class="o">&gt;</span>
+<span class="w">                           </span><span class="nv">&lt;glob-exp&gt;</span>
+<span class="w">                           </span><span class="p">[</span><span class="nv">&lt;optional-args&gt;...</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">GLOB</span></code> or <code class="docutils literal notranslate"><span class="pre">GLOB_RECURSE</span></code></dt><dd><p>The globbing mode, whether to traverse only the match or also its
+subdirectories recursively.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;glob-exp&gt;</span></code></dt><dd><p>A globbing expression used with <span class="target" id="index-1-command:file"></span><a class="reference internal" href="../command/file.html#glob" title="file(glob)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">file(GLOB)</span></code></a> or
+<span class="target" id="index-2-command:file"></span><a class="reference internal" href="../command/file.html#glob-recurse" title="file(glob_recurse)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">file(GLOB_RECURSE)</span></code></a> to retrieve a list of matching files.  If a
+matching file is executable, its prerequisites are listed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;optional-args&gt;...</span></code></dt><dd><p>Any additional (optional) arguments provided are passed along as the
+optional arguments to the <code class="docutils literal notranslate"><span class="pre">list_prerequisite()</span></code> calls.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:gp_append_unique">
+<span class="sig-name descname"><span class="pre">gp_append_unique</span></span><a class="headerlink" href="#command:gp_append_unique" title="Link to this definition">¶</a></dt>
+<dd><p>Appends the value to the list only if it is not already in the list:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">gp_append_unique(</span><span class="nv">&lt;list-var&gt;</span><span class="w"> </span><span class="nv">&lt;value&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code></dt><dd><p>The value to be appended to the list.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;list-var&gt;</span></code></dt><dd><p>The list variable name that will have the value appended only if it is
+not already in the list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:is_file_executable">
+<span class="sig-name descname"><span class="pre">is_file_executable</span></span><a class="headerlink" href="#command:is_file_executable" title="Link to this definition">¶</a></dt>
+<dd><p>Checks if given file is a binary executable:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">is_file_executable(</span><span class="nv">&lt;file&gt;</span><span class="w"> </span><span class="nv">&lt;result-var&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command sets the <code class="docutils literal notranslate"><span class="pre">&lt;result-var&gt;</span></code> to 1 if <code class="docutils literal notranslate"><span class="pre">&lt;file&gt;</span></code> is a binary
+executable; otherwise it sets it to 0.</p>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:gp_item_default_embedded_path">
+<span class="sig-name descname"><span class="pre">gp_item_default_embedded_path</span></span><a class="headerlink" href="#command:gp_item_default_embedded_path" title="Link to this definition">¶</a></dt>
+<dd><p>Determines the reference path for the specified item:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">gp_item_default_embedded_path(</span><span class="nv">&lt;item&gt;</span><span class="w"> </span><span class="nv">&lt;default-embedded-path-var&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command determines the reference path for <code class="docutils literal notranslate"><span class="pre">&lt;item&gt;</span></code> when it is
+embedded inside a bundle and stores it to a variable
+<code class="docutils literal notranslate"><span class="pre">&lt;default-embedded-path-var&gt;</span></code>.</p>
+<p>Projects can override this command by defining a custom
+<code class="docutils literal notranslate"><span class="pre">gp_item_default_embedded_path_override()</span></code> command.</p>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:gp_resolve_item">
+<span class="sig-name descname"><span class="pre">gp_resolve_item</span></span><a class="headerlink" href="#command:gp_resolve_item" title="Link to this definition">¶</a></dt>
+<dd><p>Resolves a given item into an existing full path file and stores it to a
+variable:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">gp_resolve_item(</span><span class="nv">&lt;context&gt;</span><span class="w"> </span><span class="nv">&lt;item&gt;</span><span class="w"> </span><span class="nv">&lt;exepath&gt;</span><span class="w"> </span><span class="nv">&lt;dirs&gt;</span><span class="w"> </span><span class="nv">&lt;resolved-item-var&gt;</span>
+<span class="w">                </span><span class="p">[</span><span class="nv">&lt;rpaths&gt;</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;context&gt;</span></code></dt><dd><p>The path to the top level loading path used for <code class="docutils literal notranslate"><span class="pre">&#64;loader_path</span></code> replacement
+on Apple operating systems.  When resolving item, <code class="docutils literal notranslate"><span class="pre">&#64;loader_path</span></code>
+references will be resolved relative to the directory of the given context
+value (presumably another library).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;item&gt;</span></code></dt><dd><p>The item to resolve.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;exepath&gt;</span></code></dt><dd><p>See the argument description in <span class="target" id="index-1-command:get_prerequisites"></span><a class="reference internal" href="#command:get_prerequisites" title="get_prerequisites"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">get_prerequisites()</span></code></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;dirs&gt;</span></code></dt><dd><p>See the argument description in <span class="target" id="index-2-command:get_prerequisites"></span><a class="reference internal" href="#command:get_prerequisites" title="get_prerequisites"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">get_prerequisites()</span></code></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;resolved-item-var&gt;</span></code></dt><dd><p>The result variable where the resolved item is stored into.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;rpaths&gt;</span></code></dt><dd><p>See the argument description in <span class="target" id="index-3-command:get_prerequisites"></span><a class="reference internal" href="#command:get_prerequisites" title="get_prerequisites"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">get_prerequisites()</span></code></a>.</p>
+</dd>
+</dl>
+<p>Projects can override this command by defining a custom
+<code class="docutils literal notranslate"><span class="pre">gp_resolve_item_override()</span></code> command.</p>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:gp_resolved_file_type">
+<span class="sig-name descname"><span class="pre">gp_resolved_file_type</span></span><a class="headerlink" href="#command:gp_resolved_file_type" title="Link to this definition">¶</a></dt>
+<dd><p>Determines the type of a given file:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">gp_resolved_file_type(</span><span class="nv">&lt;original-file&gt;</span><span class="w"> </span><span class="nv">&lt;file&gt;</span><span class="w"> </span><span class="nv">&lt;exepath&gt;</span><span class="w"> </span><span class="nv">&lt;dirs&gt;</span><span class="w"> </span><span class="nv">&lt;type-var&gt;</span>
+<span class="w">                      </span><span class="p">[</span><span class="nv">&lt;rpaths&gt;</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command determines the type of <code class="docutils literal notranslate"><span class="pre">&lt;file&gt;</span></code> with respect to the
+<code class="docutils literal notranslate"><span class="pre">&lt;original-file&gt;</span></code>.  The resulting type of prerequisite is stored in the
+<code class="docutils literal notranslate"><span class="pre">&lt;type-var&gt;</span></code> variable.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">&lt;exepath&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;dirs&gt;</span></code> if necessary to resolve non-absolute
+<code class="docutils literal notranslate"><span class="pre">&lt;file&gt;</span></code> values -- but only for non-embedded items.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;rpaths&gt;</span></code></dt><dd><p>See the argument description in <span class="target" id="index-4-command:get_prerequisites"></span><a class="reference internal" href="#command:get_prerequisites" title="get_prerequisites"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">get_prerequisites()</span></code></a>.</p>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;type-var&gt;</span></code> variable will be set to one of the following values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">system</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">local</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">embedded</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code></p></li>
+</ul>
+<p>Projects can override this command by defining a custom
+<code class="docutils literal notranslate"><span class="pre">gp_resolved_file_type_override()</span></code> command.</p>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:gp_file_type">
+<span class="sig-name descname"><span class="pre">gp_file_type</span></span><a class="headerlink" href="#command:gp_file_type" title="Link to this definition">¶</a></dt>
+<dd><p>Determines the type of a given file:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">gp_file_type(</span><span class="nv">&lt;original-file&gt;</span><span class="w"> </span><span class="nv">&lt;file&gt;</span><span class="w"> </span><span class="nv">&lt;type-var&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command determines the type of <code class="docutils literal notranslate"><span class="pre">&lt;file&gt;</span></code> with respect to the
+<code class="docutils literal notranslate"><span class="pre">&lt;original-file&gt;</span></code>.  The resulting type of prerequisite is stored in the
+<code class="docutils literal notranslate"><span class="pre">&lt;type-var&gt;</span></code> variable.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;type-var&gt;</span></code> variable will be set to one of the following values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">system</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">local</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">embedded</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code></p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="example-basic-usage">
+<h3>Example: Basic Usage<a class="headerlink" href="#example-basic-usage" title="Link to this heading">¶</a></h3>
+<p>Printing all dependencies of a shared library, including system libraries, with
+verbose output:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">GetPrerequisites</span><span class="nf">)</span>
+<span class="nf">list_prerequisites(</span><span class="s">&quot;path/to/libfoo.dylib&quot;</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-upgrading-code">
+<h3>Example: Upgrading Code<a class="headerlink" href="#example-upgrading-code" title="Link to this heading">¶</a></h3>
+<p>For example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">GetPrerequisites</span><span class="nf">)</span>
+<span class="c"># ...</span>
+<span class="nf">gp_append_unique(</span><span class="nb">keys</span><span class="w"> </span><span class="s">&quot;${key}&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>the <code class="docutils literal notranslate"><span class="pre">gp_append_unique()</span></code> can be in new code replaced with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">NOT</span><span class="w"> </span><span class="nb">key</span><span class="w"> </span><span class="no">IN_LIST</span><span class="w"> </span><span class="nb">keys</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">list(</span><span class="no">APPEND</span><span class="w"> </span><span class="nb">keys</span><span class="w"> </span><span class="s">&quot;${key}&quot;</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">GetPrerequisites</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-basic-usage">Example: Basic Usage</a></li>
+<li><a class="reference internal" href="#example-upgrading-code">Example: Upgrading Code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Documentation.html"
+                          title="previous chapter">Documentation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="MacroAddFileDependencies.html"
+                          title="next chapter">MacroAddFileDependencies</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/GetPrerequisites.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="MacroAddFileDependencies.html" title="MacroAddFileDependencies"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Documentation.html" title="Documentation"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">GetPrerequisites</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 7: Custom Commands and Generated Files &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 8: Testing and CTest" href="Testing%20and%20CTest.html" />
+    <link rel="prev" title="Step 6: In-Depth System Introspection" href="In-Depth%20System%20Introspection.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Testing%20and%20CTest.html" title="Step 8: Testing and CTest"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="In-Depth%20System%20Introspection.html" title="Step 6: In-Depth System Introspection"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 7: Custom Commands and Generated Files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-7-custom-commands-and-generated-files">
+<span id="guide:tutorial/Custom Commands and Generated Files"></span><h1>Step 7: Custom Commands and Generated Files<a class="headerlink" href="#step-7-custom-commands-and-generated-files" title="Link to this heading">¶</a></h1>
+<p>Code generation is a ubiquitous mechanism for extending programming languages
+beyond the bounds of their language model. CMake has first-class support for
+Qt's Meta-Object Compiler, but very few other code generators are notable
+enough to warrant that kind of effort.</p>
+<p>Instead, code generators tend to be bespoke and usage specific. CMake provides
+facilities for describing the usage of a code generator, so projects can
+add support for their individual needs.</p>
+<p>In this step, we will use <span class="target" id="index-0-command:add_custom_command"></span><a class="reference internal" href="../../command/add_custom_command.html#command:add_custom_command" title="add_custom_command"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_command()</span></code></a> to add support for a
+code generator within the tutorial project.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>Any step in the build process can generally be described in terms of its inputs
+and outputs. CMake assumes that code generators and other custom processes
+operate on the same principle. In this way, the code generator acts identically
+to compilers, linkers, and other elements of the toolchain; when the inputs are
+newer than the outputs (or the outputs don't exist), a user-specified command
+will be run to update the outputs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This model assumes the outputs of a process are known before it is run. CMake
+lacks the ability to describe code generators where the name and location of
+the outputs depends on the <em>content</em> of the input. Various hacks exist to
+shim this functionality into CMake, but they are outside the scope of this
+tutorial.</p>
+</div>
+<p>Describing a code generator (or any custom process) is usually performed in
+two parts. First, the inputs and outputs are described independently of the
+CMake target model, concerned only with the generation process itself. Second,
+the outputs are associated with a CMake target to insert them into the CMake
+target model.</p>
+<p>For sources, this is as simple as adding the generated files to the source list
+of a <code class="docutils literal notranslate"><span class="pre">STATIC</span></code>, <code class="docutils literal notranslate"><span class="pre">SHARED</span></code>, or <code class="docutils literal notranslate"><span class="pre">OBJECT</span></code> library. For header-only generators,
+it's often necessary to use an intermediary target created via
+<span class="target" id="index-0-command:add_custom_target"></span><a class="reference internal" href="../../command/add_custom_target.html#command:add_custom_target" title="add_custom_target"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_target()</span></code></a> to add the header file generation to the
+build stage (because <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> libraries have no build step).</p>
+</section>
+<section id="exercise-1-using-a-code-generator">
+<h2>Exercise 1 - Using a Code Generator<a class="headerlink" href="#exercise-1-using-a-code-generator" title="Link to this heading">¶</a></h2>
+<p>The primary mechanism for describing a code generator is the
+<span class="target" id="index-1-command:add_custom_command"></span><a class="reference internal" href="../../command/add_custom_command.html#command:add_custom_command" title="add_custom_command"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_command()</span></code></a> command. A &quot;command&quot;, for the purpose of
+<span class="target" id="index-2-command:add_custom_command"></span><a class="reference internal" href="../../command/add_custom_command.html#command:add_custom_command" title="add_custom_command"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_command()</span></code></a> is either an executable available in the build
+environment or a CMake executable target name.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_executable(</span><span class="nb">Tool</span><span class="nf">)</span>
+<span class="c"># ...</span>
+<span class="nf">add_custom_command(</span>
+<span class="w">  </span><span class="no">OUTPUT</span><span class="w"> </span><span class="nb">Generated.cxx</span>
+<span class="w">  </span><span class="no">COMMAND</span><span class="w"> </span><span class="nb">Tool</span><span class="w"> </span><span class="p">-</span><span class="nb">i</span><span class="w"> </span><span class="nb">input.txt</span><span class="w"> </span><span class="p">-</span><span class="nb">o</span><span class="w"> </span><span class="nb">Generated.cxx</span>
+<span class="w">  </span><span class="no">DEPENDS</span><span class="w"> </span><span class="nb">Tool</span><span class="w"> </span><span class="nb">input.txt</span>
+<span class="w">  </span><span class="no">VERBATIM</span>
+<span class="nf">)</span>
+<span class="c"># ...</span>
+<span class="nf">add_library(</span><span class="nb">GeneratedObject</span><span class="w"> </span><span class="no">OBJECT</span><span class="nf">)</span>
+<span class="nf">target_sources(</span><span class="nb">GeneratedObject</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">Generated.cxx</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>Most of the keywords are self-explanatory, with the exception of <code class="docutils literal notranslate"><span class="pre">VERBATIM</span></code>.
+This argument is effectively mandatory for legacy reasons that are uninteresting
+to explain in a modern context. The curious should consult the
+<span class="target" id="index-3-command:add_custom_command"></span><a class="reference internal" href="../../command/add_custom_command.html#command:add_custom_command" title="add_custom_command"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_command()</span></code></a> documentation for additional details.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Tool</span></code> executable target appears both in the <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code> and <code class="docutils literal notranslate"><span class="pre">DEPENDS</span></code>
+parameters. While <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code> is sufficient for the code to build correctly,
+adding the <code class="docutils literal notranslate"><span class="pre">Tool</span></code> itself as a dependency of the custom command ensure that
+if <code class="docutils literal notranslate"><span class="pre">Tool</span></code> is updated, the custom command will be rerun.</p>
+<p>For header-only file generation, additional commands are necessary because the
+library itself has no build step. We can use <span class="target" id="index-1-command:add_custom_target"></span><a class="reference internal" href="../../command/add_custom_target.html#command:add_custom_target" title="add_custom_target"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_target()</span></code></a> to
+create an &quot;artificial&quot; build step for the library. We then force the custom
+target to be run before any targets which link the library with the command
+<span class="target" id="index-0-command:add_dependencies"></span><a class="reference internal" href="../../command/add_dependencies.html#command:add_dependencies" title="add_dependencies"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_dependencies()</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_custom_target(</span><span class="nb">RunGenerator</span><span class="w"> </span><span class="no">DEPENDS</span><span class="w"> </span><span class="nb">Generated.h</span><span class="nf">)</span>
+
+<span class="nf">add_library(</span><span class="nb">GeneratedLib</span><span class="w"> </span><span class="no">INTERFACE</span><span class="nf">)</span>
+<span class="nf">target_sources(</span><span class="nb">GeneratedLib</span>
+<span class="w">  </span><span class="no">INTERFACE</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">BASE_DIRS</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="na">/Generated.h</span>
+<span class="nf">)</span>
+
+<span class="nf">add_dependencies(</span><span class="nb">GeneratedLib</span><span class="w"> </span><span class="nb">RunGenerator</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We add the <span class="target" id="index-0-variable:CMAKE_CURRENT_BINARY_DIR"></span><a class="reference internal" href="../../variable/CMAKE_CURRENT_BINARY_DIR.html#variable:CMAKE_CURRENT_BINARY_DIR" title="CMAKE_CURRENT_BINARY_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_BINARY_DIR</span></code></a>, a variable which names the
+current location in the build tree where our artifacts are being placed, to
+the base directories because that's the working directory our code generator
+will be run inside of. Listing the <code class="docutils literal notranslate"><span class="pre">FILES</span></code> is unnecessary for the build and
+done so here only for clarity.</p>
+</div>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Add a generated table of pre-computed square roots to the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>
+library.</p>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-0-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a></p></li>
+<li><p><span class="target" id="index-4-command:add_custom_command"></span><a class="reference internal" href="../../command/add_custom_command.html#command:add_custom_command" title="add_custom_command"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_command()</span></code></a></p></li>
+<li><p><span class="target" id="index-2-command:add_custom_target"></span><a class="reference internal" href="../../command/add_custom_target.html#command:add_custom_target" title="add_custom_target"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_target()</span></code></a></p></li>
+<li><p><span class="target" id="index-1-command:add_dependencies"></span><a class="reference internal" href="../../command/add_dependencies.html#command:add_dependencies" title="add_dependencies"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_dependencies()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/MakeTable/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/MathFunctions.cxx</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library has been edited to use a pre-computed table when
+given a number less than 10. However, the hardcoded table is not particularly
+accurate, containing only the nearest truncated integer value.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">MakeTable.cxx</span></code> source file describes a program which will generate a
+better table. It takes a single argument as input, the file name of the table
+to be generated.</p>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">10</span></code>.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>No special configuration is needed, configure and build as usual. Note that
+the <code class="docutils literal notranslate"><span class="pre">MakeTable</span></code> executable is sequenced before <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Verify the output of <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> now uses the pre-computed table for values
+less than 10.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>First we add a new executable to generate the tables, adding the
+<code class="docutils literal notranslate"><span class="pre">MakeTable.cxx</span></code> file as a source.</p>
+<details><summary>TODO 1-2: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-maketable-cmakelists-txt-add-executable">
+<div class="code-block-caption"><span class="caption-text">TODO 1-2: MathFunctions/MakeTable/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-maketable-cmakelists-txt-add-executable" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_executable(</span><span class="nb">MakeTable</span><span class="nf">)</span>
+
+<span class="nf">target_sources(</span><span class="nb">MakeTable</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MakeTable.cxx</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Then we add a custom command which produces the table, and custom target which
+depends on the table.</p>
+<details><summary>TODO 3-4: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-maketable-cmakelists-txt-add-custom-command">
+<div class="code-block-caption"><span class="caption-text">TODO 3-4: MathFunctions/MakeTable/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-maketable-cmakelists-txt-add-custom-command" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_custom_command(</span>
+<span class="w">  </span><span class="no">OUTPUT</span><span class="w"> </span><span class="nb">SqrtTable.h</span>
+<span class="w">  </span><span class="no">COMMAND</span><span class="w"> </span><span class="nb">MakeTable</span><span class="w"> </span><span class="nb">SqrtTable.h</span>
+<span class="w">  </span><span class="no">DEPENDS</span><span class="w"> </span><span class="nb">MakeTable</span>
+<span class="w">  </span><span class="no">VERBATIM</span>
+<span class="nf">)</span>
+
+<span class="nf">add_custom_target(</span><span class="nb">RunMakeTable</span><span class="w"> </span><span class="no">DEPENDS</span><span class="w"> </span><span class="nb">SqrtTable.h</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>We need to add an interface library which describes the output which will
+appear in <span class="target" id="index-1-variable:CMAKE_CURRENT_BINARY_DIR"></span><a class="reference internal" href="../../variable/CMAKE_CURRENT_BINARY_DIR.html#variable:CMAKE_CURRENT_BINARY_DIR" title="CMAKE_CURRENT_BINARY_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_BINARY_DIR</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">FILES</span></code> parameter is
+optional.</p>
+<details><summary>TODO 5-6: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-maketable-cmakelists-txt-add-library">
+<div class="code-block-caption"><span class="caption-text">TODO 5-6: MathFunctions/MakeTable/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-maketable-cmakelists-txt-add-library" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">SqrtTable</span><span class="w"> </span><span class="no">INTERFACE</span><span class="nf">)</span>
+
+<span class="nf">target_sources(</span><span class="nb">SqrtTable</span>
+<span class="w">  </span><span class="no">INTERFACE</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">BASE_DIRS</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="na">/SqrtTable.h</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now that all the targets are described, we can force the custom target to run
+before any dependents of the interface library by associating them with
+<span class="target" id="index-2-command:add_dependencies"></span><a class="reference internal" href="../../command/add_dependencies.html#command:add_dependencies" title="add_dependencies"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_dependencies()</span></code></a>.</p>
+<details><summary>TODO 7: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-maketable-cmakelists-txt-add-dependencies">
+<div class="code-block-caption"><span class="caption-text">TODO 7: MathFunctions/MakeTable/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-maketable-cmakelists-txt-add-dependencies" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_dependencies(</span><span class="nb">SqrtTable</span><span class="w"> </span><span class="nb">RunMakeTable</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>We are ready to add the interface library to the linked libraries of
+<code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>, and add the entire <code class="docutils literal notranslate"><span class="pre">MakeTable</span></code> folder to the project.</p>
+<details><summary>TODO 8-9: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-link-sqrttable">
+<div class="code-block-caption"><span class="caption-text">TODO 8: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-link-sqrttable" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">MathFunctions</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathLogger</span>
+<span class="w">    </span><span class="nb">SqrtTable</span>
+
+<span class="w">  </span><span class="no">PUBLIC</span>
+<span class="w">    </span><span class="nb">OpAdd</span>
+<span class="w">    </span><span class="nb">OpMul</span>
+<span class="w">    </span><span class="nb">OpSub</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-add-maketable">
+<div class="code-block-caption"><span class="caption-text">TODO 9: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-add-maketable" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_subdirectory(</span><span class="nb">MakeTable</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally, we update the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library itself to take advantage of
+the generated table.</p>
+<details><summary>TODO 10: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-include-sqrttable">
+<div class="code-block-caption"><span class="caption-text">TODO 10: MathFunctions/MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-include-sqrttable" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;SqrtTable.h&gt;</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">table_sqrt</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 7: Custom Commands and Generated Files</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-using-a-code-generator">Exercise 1 - Using a Code Generator</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="In-Depth%20System%20Introspection.html"
+                          title="previous chapter">Step 6: In-Depth System Introspection</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Testing%20and%20CTest.html"
+                          title="next chapter">Step 8: Testing and CTest</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/Custom Commands and Generated Files.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Testing%20and%20CTest.html" title="Step 8: Testing and CTest"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="In-Depth%20System%20Introspection.html" title="Step 6: In-Depth System Introspection"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 7: Custom Commands and Generated Files</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

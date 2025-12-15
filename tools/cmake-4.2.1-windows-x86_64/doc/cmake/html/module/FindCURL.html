@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindCURL &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindCurses" href="FindCurses.html" />
+    <link rel="prev" title="FindCups" href="FindCups.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindCurses.html" title="FindCurses"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindCups.html" title="FindCups"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindCURL</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findcurl">
+<span id="module:FindCURL"></span><h1>FindCURL<a class="headerlink" href="#findcurl" title="Link to this heading">¶</a></h1>
+<p>Finds the native curl installation (include directories and libraries) for
+transferring data with URLS:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">CURL</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.17: </span>If curl is built using its CMake-based build system, it will provide its own
+CMake Package Configuration file (<code class="docutils literal notranslate"><span class="pre">CURLConfig.cmake</span></code>) for use with the
+<span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command in <em>config mode</em>.  By default, this module
+searches for this file and, if found, returns the results without further
+action.  If the upstream configuration file is not found, this module falls
+back to <em>module mode</em> and searches standard locations.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13: </span>Debug and Release library variants are found separately.</p>
+</div>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+<p>This module supports optional components to detect the protocols and features
+available in the installed curl (these can vary based on the curl version):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Protocols: DICT FILE FTP FTPS GOPHER GOPHERS HTTP HTTPS IMAP IMAPS IPFS IPNS
+           LDAP LDAPS MQTT POP3 POP3S RTMP RTMPS RTSP SCP SFTP SMB SMBS SMTP
+           SMTPS TELNET TFTP WS WSS
+Features:  alt-svc asyn-rr AsynchDNS brotli CAcert Debug ECH gsasl GSS-API
+           HSTS HTTP2 HTTP3 HTTPS-proxy HTTPSRR IDN IPv6 Kerberos Largefile
+           libz MultiSSL NTLM NTLM_WB PSL SPNEGO SSL SSLS-EXPORT SSPI
+           threadsafe TLS-SRP TrackMemory Unicode UnixSockets zstd
+</pre></div>
+</div>
+<p>Components can be specified with the <span class="target" id="index-1-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command as required
+for curl to be considered found:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">CURL</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;protocols&gt;...</span><span class="w"> </span><span class="nv">&lt;features&gt;...</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Or to check for them optionally, allowing conditional handling in the code:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">CURL</span><span class="w"> </span><span class="p">[</span><span class="no">OPTIONAL_COMPONENTS</span><span class="w"> </span><span class="nv">&lt;protocols&gt;...</span><span class="w"> </span><span class="nv">&lt;features&gt;...</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Refer to the curl documentation for more information on supported protocols and
+features.  Component names are case-sensitive and follow the upstream curl
+naming conventions.</p>
+</section>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL::libcurl</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+<p>Target encapsulating the curl usage requirements, available if curl is found.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL_FOUND</span></code></dt><dd><p>Boolean indicating whether (the requested version of) curl and all required
+components were found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.0.</span></p>
+</div>
+<p>The version of curl found.  This supersedes <code class="docutils literal notranslate"><span class="pre">CURL_VERSION_STRING</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL_&lt;component&gt;_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+<p>Boolean indicating whether the specified component (curl protocol or feature)
+was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL_INCLUDE_DIRS</span></code></dt><dd><p>Include directories containing the <code class="docutils literal notranslate"><span class="pre">curl/curl.h</span></code> and other headers needed to
+use curl.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When curl is found via <em>config mode</em>, this variable is available only with
+curl version 8.9 or newer.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL_LIBRARIES</span></code></dt><dd><p>List of libraries needed to link against to use curl.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When curl is found via <em>module mode</em>, this is a list of library file paths.
+In <em>config mode</em>, this variable is available only with curl version 8.9 or
+newer and contains a list of imported targets.</p>
+</div>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL_NO_CURL_CMAKE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.17.</span></p>
+</div>
+<p>Set this variable to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> to disable searching for curl via <em>config mode</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL_USE_STATIC_LIBS</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.28.</span></p>
+</div>
+<p>Set this variable to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> to use static libraries.  This is meaningful
+only when curl is not found via <em>config mode</em>.</p>
+</dd>
+</dl>
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">CURL_VERSION_STRING</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.0: </span>Superseded by <code class="docutils literal notranslate"><span class="pre">CURL_VERSION</span></code>.</p>
+</div>
+<p>The version of curl found.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Finding the curl library and specifying the required minimum version:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">CURL</span><span class="w"> </span><span class="m">7.61.0</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Finding the curl library and linking it to a project target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">CURL</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">project_target</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="no">CURL</span><span class="o">::</span><span class="nb">libcurl</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Using components to check if the found curl supports specific protocols or
+features:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">CURL</span><span class="w"> </span><span class="no">OPTIONAL_COMPONENTS</span><span class="w"> </span><span class="no">HTTPS</span><span class="w"> </span><span class="no">SSL</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="no">CURL_HTTPS_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># curl supports the HTTPS protocol</span>
+<span class="nf">endif()</span>
+
+<span class="nf">if(</span><span class="no">CURL_SSL_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># curl has SSL feature enabled</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindCURL</a><ul>
+<li><a class="reference internal" href="#components">Components</a></li>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindCups.html"
+                          title="previous chapter">FindCups</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindCurses.html"
+                          title="next chapter">FindCurses</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindCURL.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindCurses.html" title="FindCurses"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindCups.html" title="FindCups"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindCURL</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

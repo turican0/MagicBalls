@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindwxWindows &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CPackArchive" href="CPackArchive.html" />
+    <link rel="prev" title="FindVTK" href="FindVTK.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CPackArchive.html" title="CPackArchive"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindVTK.html" title="FindVTK"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindwxWindows</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findwxwindows">
+<span id="module:FindwxWindows"></span><h1>FindwxWindows<a class="headerlink" href="#findwxwindows" title="Link to this heading">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.0: </span>Replaced by <span class="target" id="index-0-module:FindwxWidgets"></span><a class="reference internal" href="FindwxWidgets.html#module:FindwxWidgets" title="FindwxWidgets"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindwxWidgets</span></code></a>.</p>
+</div>
+<p>Finds the wxWidgets (formerly known as wxWindows) installation and determines
+the locations of its include directories and libraries, as well as the name of
+the library:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWindows</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>wxWidgets 2.6.x is supported for monolithic builds, such as those compiled in
+the <code class="docutils literal notranslate"><span class="pre">wx/build/msw</span></code> directory using:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>nmake<span class="w"> </span>-f<span class="w"> </span>makefile.vc<span class="w"> </span><span class="nv">BUILD</span><span class="o">=</span>debug<span class="w"> </span><span class="nv">SHARED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">USE_OPENGL</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">MONOLITHIC</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">WXWINDOWS_FOUND</span></code></dt><dd><p>Boolean indicating whether the wxWidgets was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WXWINDOWS_LIBRARIES</span></code></dt><dd><p>Libraries needed to link against to use wxWidgets.  This includes paths to
+the wxWidgets libraries and any additional linker flags, typically derived
+from the output of <code class="docutils literal notranslate"><span class="pre">wx-config</span> <span class="pre">--libs</span></code> on Unix/Linux systems.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CMAKE_WXWINDOWS_CXX_FLAGS</span></code></dt><dd><p>Compiler options needed to use wxWidgets (if any).  On Linux, this corresponds
+to the output of <code class="docutils literal notranslate"><span class="pre">wx-config</span> <span class="pre">--cxxflags</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WXWINDOWS_INCLUDE_DIR</span></code></dt><dd><p>The directory containing the <code class="docutils literal notranslate"><span class="pre">wx/wx.h</span></code> and <code class="docutils literal notranslate"><span class="pre">wx/setup.h</span></code> header files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WXWINDOWS_LINK_DIRECTORIES</span></code></dt><dd><p>Link directories, useful for setting <code class="docutils literal notranslate"><span class="pre">rpath</span></code> on Unix-like platforms.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WXWINDOWS_DEFINITIONS</span></code></dt><dd><p>Extra compile definitions needed to use wxWidgets (if any).</p>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables before calling the
+<code class="docutils literal notranslate"><span class="pre">find_package(wxWindows)</span></code>:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">WXWINDOWS_USE_GL</span></code></dt><dd><p>Set this variable to boolean true to require OpenGL support.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HAVE_ISYSTEM</span></code></dt><dd><p>Set this variable to boolean true to replace <code class="docutils literal notranslate"><span class="pre">-I</span></code> compiler options with
+<code class="docutils literal notranslate"><span class="pre">-isystem</span></code> when the C++ compiler is GNU (<code class="docutils literal notranslate"><span class="pre">g++</span></code>).</p>
+</dd>
+</dl>
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">CMAKE_WX_CAN_COMPILE</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.8: </span>Replaced by the <code class="docutils literal notranslate"><span class="pre">WXWINDOWS_FOUND</span></code> variable with the same value.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WXWINDOWS_LIBRARY</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.8: </span>Replaced by the <code class="docutils literal notranslate"><span class="pre">WXWINDOWS_LIBRARIES</span></code> variable with the same value.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CMAKE_WX_CXX_FLAGS</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.8: </span>Replaced by the <code class="docutils literal notranslate"><span class="pre">CMAKE_WXWINDOWS_CXX_FLAGS</span></code> variable with the same value.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WXWINDOWS_INCLUDE_PATH</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.8: </span>Replaced by the <code class="docutils literal notranslate"><span class="pre">WXWINDOWS_INCLUDE_DIR</span></code> variable with the same value.</p>
+</div>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="example-finding-wxwidgets-in-earlier-cmake-versions">
+<h3>Example: Finding wxWidgets in Earlier CMake Versions<a class="headerlink" href="#example-finding-wxwidgets-in-earlier-cmake-versions" title="Link to this heading">¶</a></h3>
+<p>In earlier versions of CMake, wxWidgets (wxWindows) could be found using:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWindows</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>To request OpenGL support, the <code class="docutils literal notranslate"><span class="pre">WXWINDOWS_USE_GL</span></code> variable could be set before
+calling <code class="docutils literal notranslate"><span class="pre">find_package()</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">WXWINDOWS_USE_GL</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+<span class="nf">find_package(</span><span class="nb">wxWindows</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Using wxWidgets (wxWindows) in CMake was commonly done by including the
+<span class="target" id="index-0-module:Use_wxWindows"></span><a class="reference internal" href="Use_wxWindows.html#module:Use_wxWindows" title="Use_wxWindows"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">Use_wxWindows</span></code></a> module, which would find wxWidgets and set the
+appropriate libraries, include directories, and compiler flags:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">Use_wxWindows</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-finding-wxwidgets-as-of-cmake-3-0">
+<h3>Example: Finding wxWidgets as of CMake 3.0<a class="headerlink" href="#example-finding-wxwidgets-as-of-cmake-3-0" title="Link to this heading">¶</a></h3>
+<p>Starting with CMake 3.0, wxWidgets can be found using the
+<span class="target" id="index-1-module:FindwxWidgets"></span><a class="reference internal" href="FindwxWidgets.html#module:FindwxWidgets" title="FindwxWidgets"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindwxWidgets</span></code></a> module:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWidgets</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindwxWindows</a><ul>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-finding-wxwidgets-in-earlier-cmake-versions">Example: Finding wxWidgets in Earlier CMake Versions</a></li>
+<li><a class="reference internal" href="#example-finding-wxwidgets-as-of-cmake-3-0">Example: Finding wxWidgets as of CMake 3.0</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindVTK.html"
+                          title="previous chapter">FindVTK</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CPackArchive.html"
+                          title="next chapter">CPackArchive</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindwxWindows.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CPackArchive.html" title="CPackArchive"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindVTK.html" title="FindVTK"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindwxWindows</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

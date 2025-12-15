@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>UsePkgConfig &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="WriteBasicConfigVersionFile" href="WriteBasicConfigVersionFile.html" />
+    <link rel="prev" title="UseJavaSymlinks" href="UseJavaSymlinks.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="WriteBasicConfigVersionFile.html" title="WriteBasicConfigVersionFile"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="UseJavaSymlinks.html" title="UseJavaSymlinks"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">UsePkgConfig</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="usepkgconfig">
+<span id="module:UsePkgConfig"></span><h1>UsePkgConfig<a class="headerlink" href="#usepkgconfig" title="Link to this heading">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.0: </span>This module should no longer be used.  Instead, use the
+<span class="target" id="index-0-module:FindPkgConfig"></span><a class="reference internal" href="FindPkgConfig.html#module:FindPkgConfig" title="FindPkgConfig"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindPkgConfig</span></code></a> module or the <span class="target" id="index-0-command:cmake_pkg_config"></span><a class="reference internal" href="../command/cmake_pkg_config.html#command:cmake_pkg_config" title="cmake_pkg_config"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_pkg_config()</span></code></a> command.</p>
+<p>This module provided a command for finding external packages using
+<code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> command-line utility.  It has been replaced by the more
+convenient <code class="docutils literal notranslate"><span class="pre">FindPkgConfig</span></code> module, which is commonly used in
+<a class="reference internal" href="../manual/cmake-developer.7.html#find-modules"><span class="std std-ref">Find Modules</span></a>.</p>
+<p>As of CMake 3.31, the built-in <span class="target" id="index-1-command:cmake_pkg_config"></span><a class="reference internal" href="../command/cmake_pkg_config.html#command:cmake_pkg_config" title="cmake_pkg_config"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_pkg_config()</span></code></a> command provides
+even more features to extract package information.</p>
+</div>
+<p>Load this module in a CMake project with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">UsePkgConfig</span><span class="nf">)</span>
+</pre></div>
+</div>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following command:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:pkgconfig">
+<span class="sig-name descname"><span class="pre">pkgconfig</span></span><a class="headerlink" href="#command:pkgconfig" title="Link to this definition">¶</a></dt>
+<dd><p>Finds external package using <code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> and sets result variables:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">pkgconfig(</span><span class="nv">&lt;package&gt;</span><span class="w"> </span><span class="nv">&lt;includedir&gt;</span><span class="w"> </span><span class="nv">&lt;libdir&gt;</span><span class="w"> </span><span class="nv">&lt;linkflags&gt;</span><span class="w"> </span><span class="nv">&lt;cflags&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command invokes <code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> command-line utility to retrieve the
+package information into specified variables.  If <code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> or the
+specified package <code class="docutils literal notranslate"><span class="pre">&lt;package&gt;</span></code> is NOT found, the result variables remain
+empty.</p>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;package&gt;</span></code></dt><dd><p>Name of the package as defined in its PC metadata file (<code class="docutils literal notranslate"><span class="pre">&lt;package&gt;.pc</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;includedir&gt;</span></code></dt><dd><p>Variable name to store the package's include directory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;libdir&gt;</span></code></dt><dd><p>Variable name to store the directory containing the package library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;linkflags&gt;</span></code></dt><dd><p>Variable name to store the linker flags for the package.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;cflags&gt;</span></code></dt><dd><p>Variable name to store the compiler flags for the package.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Using this module fills the desired information into the four given variables:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">UsePkgConfig</span><span class="nf">)</span>
+<span class="nf">pkgconfig(</span>
+<span class="w">  </span><span class="nb">libart-2.0</span>
+<span class="w">  </span><span class="no">LIBART_INCLUDEDIR</span>
+<span class="w">  </span><span class="no">LIBART_LIBDIR</span>
+<span class="w">  </span><span class="no">LIBART_LDFLAGS</span>
+<span class="w">  </span><span class="no">LIBART_CFLAGS</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>Migrating to the <span class="target" id="index-1-module:FindPkgConfig"></span><a class="reference internal" href="FindPkgConfig.html#module:FindPkgConfig" title="FindPkgConfig"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindPkgConfig</span></code></a>  would look something like this:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">PkgConfig</span><span class="w"> </span><span class="no">QUIET</span><span class="nf">)</span>
+<span class="nf">if(</span><span class="nb">PkgConfig_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">pkg_check_modules(</span><span class="no">LIBART</span><span class="w"> </span><span class="no">QUIET</span><span class="w"> </span><span class="nb">libart-2.0</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">message(</span><span class="no">STATUS</span><span class="w"> </span><span class="s">&quot;LIBART_INCLUDEDIR=${LIBART_INCLUDEDIR}&quot;</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="no">STATUS</span><span class="w"> </span><span class="s">&quot;LIBART_LIBDIR=${LIBART_LIBDIR}&quot;</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="no">STATUS</span><span class="w"> </span><span class="s">&quot;LIBART_LDFLAGS=${LIBART_LDFLAGS}&quot;</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="no">STATUS</span><span class="w"> </span><span class="s">&quot;LIBART_CFLAGS=${LIBART_CFLAGS}&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">UsePkgConfig</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="UseJavaSymlinks.html"
+                          title="previous chapter">UseJavaSymlinks</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="WriteBasicConfigVersionFile.html"
+                          title="next chapter">WriteBasicConfigVersionFile</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/UsePkgConfig.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="WriteBasicConfigVersionFile.html" title="WriteBasicConfigVersionFile"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="UseJavaSymlinks.html" title="UseJavaSymlinks"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">UsePkgConfig</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>cmake_instrumentation &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="create_test_sourcelist" href="create_test_sourcelist.html" />
+    <link rel="prev" title="cmake_file_api" href="cmake_file_api.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="create_test_sourcelist.html" title="create_test_sourcelist"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cmake_file_api.html" title="cmake_file_api"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-commands.7.html" accesskey="U">cmake-commands(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">cmake_instrumentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmake-instrumentation">
+<span id="command:cmake_instrumentation"></span><h1>cmake_instrumentation<a class="headerlink" href="#cmake-instrumentation" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.0.</span></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command is only available when experimental support for instrumentation
+has been enabled by the <code class="docutils literal notranslate"><span class="pre">CMAKE_EXPERIMENTAL_INSTRUMENTATION</span></code> gate.</p>
+</div>
+<p>Enables interacting with the
+<span class="target" id="index-0-manual:cmake-instrumentation(7)"></span><a class="reference internal" href="../manual/cmake-instrumentation.7.html#manual:cmake-instrumentation(7)" title="cmake-instrumentation(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">Instrumentation</span> <span class="pre">API</span></code></a>.</p>
+<p>This allows for configuring instrumentation at the project-level.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_instrumentation(</span>
+<span class="w">  </span><span class="no">API_VERSION</span><span class="w"> </span><span class="nv">&lt;version&gt;</span>
+<span class="w">  </span><span class="no">DATA_VERSION</span><span class="w"> </span><span class="nv">&lt;version&gt;</span>
+<span class="w">  </span><span class="p">[</span><span class="no">HOOKS</span><span class="w"> </span><span class="nv">&lt;hooks&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">OPTIONS</span><span class="w"> </span><span class="nv">&lt;options&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">CALLBACK</span><span class="w"> </span><span class="nv">&lt;callback&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">CUSTOM_CONTENT</span><span class="w"> </span><span class="nv">&lt;name&gt;</span><span class="w"> </span><span class="nv">&lt;type&gt;</span><span class="w"> </span><span class="nv">&lt;content&gt;</span><span class="p">]</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">API_VERSION</span></code> and <code class="docutils literal notranslate"><span class="pre">DATA_VERSION</span></code> must always be given.  Currently, the
+only supported value for both fields is 1.  See <a class="reference internal" href="../manual/cmake-instrumentation.7.html#cmake-instrumentation-api-v1"><span class="std std-ref">API v1</span></a>
+for details of the <code class="docutils literal notranslate"><span class="pre">API_VERSION</span></code> and <a class="reference internal" href="../manual/cmake-instrumentation.7.html#cmake-instrumentation-data-v1"><span class="std std-ref">Data v1</span></a> for details
+of the <code class="docutils literal notranslate"><span class="pre">DATA_VERSION</span></code>.</p>
+<p>Each of the optional keywords <code class="docutils literal notranslate"><span class="pre">HOOKS</span></code>, <code class="docutils literal notranslate"><span class="pre">OPTIONS</span></code>, and <code class="docutils literal notranslate"><span class="pre">CALLBACK</span></code>
+correspond to one of the parameters to the <a class="reference internal" href="../manual/cmake-instrumentation.7.html#cmake-instrumentation-v1-query-files"><span class="std std-ref">v1 Query Files</span></a>.
+The <code class="docutils literal notranslate"><span class="pre">CALLBACK</span></code> keyword can be provided multiple times to create multiple callbacks.</p>
+<p>Whenever <code class="docutils literal notranslate"><span class="pre">cmake_instrumentation</span></code> is invoked, a query file is generated in
+<code class="docutils literal notranslate"><span class="pre">&lt;build&gt;/.cmake/instrumentation/v1/query/generated</span></code> to enable instrumentation
+with the provided arguments.</p>
+<section id="custom-cmake-content">
+<span id="cmake-instrumentation-custom-content"></span><h2>Custom CMake Content<a class="headerlink" href="#custom-cmake-content" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">CUSTOM_CONTENT</span></code> argument specifies certain data from configure time to
+include in each <a class="reference internal" href="../manual/cmake-instrumentation.7.html#cmake-instrumentation-v1-cmake-content-file"><span class="std std-ref">v1 CMake Content File</span></a>. This
+may be used to associate instrumentation data with certain information about its
+configuration, such as the optimization level or whether it is part of a
+coverage build.</p>
+<p><code class="docutils literal notranslate"><span class="pre">CUSTOM_CONTENT</span></code> expects <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">content</span></code> arguments.</p>
+<p><code class="docutils literal notranslate"><span class="pre">name</span></code> is a specifier to identify the content being reported.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">type</span></code> specifies how the content should be interpreted. Supported values are:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">STRING</span></code> the content is a string.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BOOL</span></code> the content should be interpreted as a boolean. It will be <code class="docutils literal notranslate"><span class="pre">true</span></code>
+under the same conditions that <code class="docutils literal notranslate"><span class="pre">if()</span></code> would be true for the given value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LIST</span></code> the content is a CMake <code class="docutils literal notranslate"><span class="pre">;</span></code> separated list that should be parsed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">JSON</span></code> the content should be parsed as a JSON string. This can be a
+number such as <code class="docutils literal notranslate"><span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">5.0</span></code>, a quoted string such as <code class="docutils literal notranslate"><span class="pre">\&quot;string\&quot;</span></code>,
+a boolean value <code class="docutils literal notranslate"><span class="pre">true</span></code>/<code class="docutils literal notranslate"><span class="pre">false</span></code>, or a JSON object such as
+<code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">\&quot;key\&quot;</span> <span class="pre">:</span> <span class="pre">\&quot;value\&quot;</span> <span class="pre">}</span></code> that may be constructed using
+<code class="docutils literal notranslate"><span class="pre">string(JSON</span> <span class="pre">...)</span></code> commands.</p></li>
+</ul>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">content</span></code> is the actual content to report.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
+<p>The following example shows an invocation of the command and its
+equivalent JSON query file.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_instrumentation(</span>
+<span class="w">  </span><span class="no">API_VERSION</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="no">DATA_VERSION</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="no">HOOKS</span><span class="w"> </span><span class="nb">postGenerate</span><span class="w"> </span><span class="nb">preCMakeBuild</span><span class="w"> </span><span class="nb">postCMakeBuild</span>
+<span class="w">  </span><span class="no">OPTIONS</span><span class="w"> </span><span class="nb">staticSystemInformation</span><span class="w"> </span><span class="nb">dynamicSystemInformation</span><span class="w"> </span><span class="nb">trace</span>
+<span class="w">  </span><span class="no">CALLBACK</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="p">-</span><span class="no">P</span><span class="w"> </span><span class="na">/path/to/handle_data.cmake</span>
+<span class="w">  </span><span class="no">CALLBACK</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_COMMAND</span><span class="o">}</span><span class="w"> </span><span class="p">-</span><span class="no">P</span><span class="w"> </span><span class="na">/path/to/handle_data_2.cmake</span>
+<span class="w">  </span><span class="no">CUSTOM_CONTENT</span><span class="w"> </span><span class="nb">myString</span><span class="w"> </span><span class="no">STRING</span><span class="w"> </span><span class="nb">string</span>
+<span class="w">  </span><span class="no">CUSTOM_CONTENT</span><span class="w"> </span><span class="nb">myList</span><span class="w">   </span><span class="no">LIST</span><span class="w">   </span><span class="s">&quot;item1;item2&quot;</span>
+<span class="w">  </span><span class="no">CUSTOM_CONTENT</span><span class="w"> </span><span class="nb">myObject</span><span class="w"> </span><span class="no">JSON</span><span class="w">   </span><span class="s">&quot;{ \&quot;key\&quot; : \&quot;value\&quot; }&quot;</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;postGenerate&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;preCMakeBuild&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;postCMakeBuild&quot;</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;options&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;staticSystemInformation&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;dynamicSystemInformation&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;trace&quot;</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;callbacks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;/path/to/cmake -P /path/to/handle_data.cmake&quot;</span>
+<span class="w">    </span><span class="s2">&quot;/path/to/cmake -P /path/to/handle_data_2.cmake&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This will also result in the following content included in each
+<a class="reference internal" href="../manual/cmake-instrumentation.7.html#cmake-instrumentation-v1-cmake-content-file"><span class="std std-ref">v1 CMake Content File</span></a>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;custom&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;myString&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;myList&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;item1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;item2&quot;</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;myObject&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;value&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">cmake_instrumentation</a><ul>
+<li><a class="reference internal" href="#custom-cmake-content">Custom CMake Content</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cmake_file_api.html"
+                          title="previous chapter">cmake_file_api</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="create_test_sourcelist.html"
+                          title="next chapter">create_test_sourcelist</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/command/cmake_instrumentation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="create_test_sourcelist.html" title="create_test_sourcelist"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cmake_file_api.html" title="cmake_file_api"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-commands.7.html" >cmake-commands(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">cmake_instrumentation</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

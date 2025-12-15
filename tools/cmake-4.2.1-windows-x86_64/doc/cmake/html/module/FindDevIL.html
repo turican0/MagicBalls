@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindDevIL &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindDoxygen" href="FindDoxygen.html" />
+    <link rel="prev" title="FindDCMTK" href="FindDCMTK.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindDoxygen.html" title="FindDoxygen"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindDCMTK.html" title="FindDCMTK"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindDevIL</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="finddevil">
+<span id="module:FindDevIL"></span><h1>FindDevIL<a class="headerlink" href="#finddevil" title="Link to this heading">¶</a></h1>
+<p>Finds the Developer's Image Library, <a class="reference external" href="https://openil.sourceforge.net/">DevIL</a>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">DevIL</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2: </span>Support for the <code class="docutils literal notranslate"><span class="pre">&lt;version&gt;</span></code> argument in the <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a>
+call.  Version can be also specified as a range.</p>
+</div>
+<p>The DevIL package internally consists of the following libraries, all
+distributed as part of the same release:</p>
+<ul>
+<li><p>The core Image Library (IL)</p>
+<p>This library is always required when working with DevIL, as it provides the
+main image loading and manipulation functionality.</p>
+</li>
+<li><p>The Image Library Utilities (ILU)</p>
+<p>This library depends on IL and provides image filters and effects. It is only
+required if the application uses this extended functionality.</p>
+</li>
+<li><p>The Image Library Utility Toolkit (ILUT)</p>
+<p>This library depends on both IL and ILU, and additionally provides an
+interface to OpenGL.  It is only needed if the application uses DevIL together
+with OpenGL.</p>
+</li>
+</ul>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">DevIL::IL</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.21.</span></p>
+</div>
+<p>Target encapsulating the core Image Library (IL) usage requirements, available
+if the DevIL package is found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DevIL::ILU</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.21.</span></p>
+</div>
+<p>Target encapsulating the Image Library Utilities (ILU) usage requirements,
+available if the DevIL package is found.  This target also links to
+<code class="docutils literal notranslate"><span class="pre">DevIL::IL</span></code> for convenience, as ILU depends on the core IL library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DevIL::ILUT</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.21.</span></p>
+</div>
+<p>Target encapsulating the Image Library Utility Toolkit (ILUT) usage
+requirements, available if the DevIL package and its ILUT library are found.
+This target also links to <code class="docutils literal notranslate"><span class="pre">DevIL::ILU</span></code>, and transitively to <code class="docutils literal notranslate"><span class="pre">DevIL::IL</span></code>,
+since ILUT depends on both.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">DevIL_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.8.</span></p>
+</div>
+<p>Boolean indicating whether the (requested version of) DevIL package was
+found, including the IL and ILU libraries.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DevIL_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>The version of the DevIL found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DevIL_ILUT_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.21.</span></p>
+</div>
+<p>Boolean indicating whether the ILUT library was found.  On most systems,
+ILUT is found when both IL and ILU are available.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">IL_INCLUDE_DIR</span></code></dt><dd><p>The directory containing the <code class="docutils literal notranslate"><span class="pre">il.h</span></code>, <code class="docutils literal notranslate"><span class="pre">ilu.h</span></code> and <code class="docutils literal notranslate"><span class="pre">ilut.h</span></code> header files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IL_LIBRARIES</span></code></dt><dd><p>The full path to the core Image Library (IL).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ILU_LIBRARIES</span></code></dt><dd><p>The full path to the ILU library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ILUT_LIBRARIES</span></code></dt><dd><p>The full path to the ILUT library.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Finding the DevIL package and linking against the core Image Library (IL):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">DevIL</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">app</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">DevIL</span><span class="o">::</span><span class="no">IL</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Linking against the Image Library Utilities (ILU):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">DevIL</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">app</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">DevIL</span><span class="o">::</span><span class="no">ILU</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Linking against the Image Library Utility Toolkit (ILUT):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">DevIL</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">app</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">DevIL</span><span class="o">::</span><span class="no">ILUT</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindDevIL</a><ul>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindDCMTK.html"
+                          title="previous chapter">FindDCMTK</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindDoxygen.html"
+                          title="next chapter">FindDoxygen</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindDevIL.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindDoxygen.html" title="FindDoxygen"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindDCMTK.html" title="FindDCMTK"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindDevIL</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

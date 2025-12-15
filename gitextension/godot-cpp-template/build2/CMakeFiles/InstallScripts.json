@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/cmake_install.cmake",
+		"C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/godot-cpp/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

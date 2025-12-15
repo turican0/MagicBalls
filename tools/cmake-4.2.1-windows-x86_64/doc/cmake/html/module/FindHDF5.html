@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindHDF5 &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindHg" href="FindHg.html" />
+    <link rel="prev" title="FindGTK2" href="FindGTK2.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindHg.html" title="FindHg"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindGTK2.html" title="FindGTK2"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindHDF5</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findhdf5">
+<span id="module:FindHDF5"></span><h1>FindHDF5<a class="headerlink" href="#findhdf5" title="Link to this heading">¶</a></h1>
+<p>Finds Hierarchical Data Format (HDF5), a library for reading and writing
+self-describing array data:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">HDF5</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>If the HDF5 library is built using its CMake-based build system, it will as
+of HDF5 version 1.8.15 provide its own CMake Package Configuration file
+(<code class="docutils literal notranslate"><span class="pre">hdf5-config.cmake</span></code>) for use with the <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command in
+<em>config mode</em>.  By default, this module searches for this file and, if found,
+returns the results based on the found configuration.</p>
+<p>If the upstream configuration file is not found, this module falls back to
+<em>module mode</em> and invokes the HDF5 wrapper compiler typically installed
+with the HDF5 library.  Depending on the configuration, this wrapper
+compiler is named either <code class="docutils literal notranslate"><span class="pre">h5cc</span></code> (serial) or <code class="docutils literal notranslate"><span class="pre">h5pcc</span></code> (parallel).  If
+found, the wrapper is queried with the <code class="docutils literal notranslate"><span class="pre">-show</span></code> argument to determine the
+compiler and linker flags required for building an HDF5 client application.
+Both serial and parallel versions of the HDF5 wrapper are considered.  The
+first directory containing either is used.  If both versions are found in the
+same directory, the serial version is preferred by default.  To change this
+behavior, set the variable <code class="docutils literal notranslate"><span class="pre">HDF5_PREFER_PARALLEL</span></code> to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>.</p>
+<p>In addition to finding the include directories and libraries needed to compile
+an HDF5 application, this module also attempts to find additional tools
+provided by the HDF5 distribution, which can be useful for regression testing
+or development workflows.</p>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
+<p>This module supports optional components, which can be specified with the
+<span class="target" id="index-1-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">HDF5</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Supported components include:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">C</span></code></dt><dd><p>Finds the <code class="docutils literal notranslate"><span class="pre">HDF5</span></code> C library (C bindings).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CXX</span></code></dt><dd><p>Finds the <code class="docutils literal notranslate"><span class="pre">HDF5</span></code> C++ library (C++ bindings).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Fortran</span></code></dt><dd><p>Finds the <code class="docutils literal notranslate"><span class="pre">HDF5</span></code> Fortran library (Fortran bindings).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HL</span></code></dt><dd><p>This component can be used in combination with other components to find the
+high-level (HL) HDF5 library variants for C, CXX, and/or Fortran, which
+provide high-level functions.</p>
+</dd>
+</dl>
+<p>If no components are specified, then this module will by default search for the
+<code class="docutils literal notranslate"><span class="pre">C</span></code> component.</p>
+</section>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5::HDF5</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Target encapsulating the usage requirements for all found HDF5 binding
+libraries (<code class="docutils literal notranslate"><span class="pre">HDF5_LIBRARIES</span></code>), available if HDF5 and all required components
+are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hdf5::hdf5</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Target encapsulating the usage requirements for the HDF5 C library, available
+if HDF5 library and its <code class="docutils literal notranslate"><span class="pre">C</span></code> component are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hdf5::hdf5_cpp</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Target encapsulating the usage requirements for the HDF5 C and C++ libraries,
+available if HDF5 library, and its <code class="docutils literal notranslate"><span class="pre">C</span></code> and <code class="docutils literal notranslate"><span class="pre">CXX</span></code> components are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hdf5::hdf5_fortran</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Target encapsulating the usage requirements for the HDF5 Fortran library,
+available if HDF5 library and its <code class="docutils literal notranslate"><span class="pre">Fortran</span></code> component are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hdf5::hdf5_hl</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Target encapsulating the usage requirements for the HDF5 high-level C library,
+available if HDF5 library and its <code class="docutils literal notranslate"><span class="pre">C</span></code>, and <code class="docutils literal notranslate"><span class="pre">HL</span></code> components are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hdf5::hdf5_hl_cpp</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>High-level C++ library.</p>
+<p>Target encapsulating the usage requirements for the HDF5 high-level C and
+high-level C++ libraries, available if HDF5 library and its <code class="docutils literal notranslate"><span class="pre">C</span></code>, <code class="docutils literal notranslate"><span class="pre">CXX</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">HL</span></code> components are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hdf5::hdf5_hl_fortran</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Target encapsulating the usage requirements for the HDF5 high-level Fortran
+library, available if HDF5 library and its <code class="docutils literal notranslate"><span class="pre">Fortran</span></code>, and <code class="docutils literal notranslate"><span class="pre">HL</span></code> components
+are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">hdf5::h5diff</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Imported executable target encapsulating the usage requirements for the
+<code class="docutils literal notranslate"><span class="pre">h5diff</span></code> executable, available if <code class="docutils literal notranslate"><span class="pre">h5diff</span></code> is found.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_FOUND</span></code></dt><dd><p>Boolean indicating whether (the requested version of) HDF5 was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3.</span></p>
+</div>
+<p>The version of HDF5 library found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_INCLUDE_DIRS</span></code></dt><dd><p>Include directories containing header files needed to use HDF5.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_DEFINITIONS</span></code></dt><dd><p>Required compiler definitions for using HDF5.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_LIBRARIES</span></code></dt><dd><p>Libraries of all requested bindings needed to link against to use HDF5.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_HL_LIBRARIES</span></code></dt><dd><p>Required libraries for the HDF5 high-level API for all bindings,
+if the <code class="docutils literal notranslate"><span class="pre">HL</span></code> component is enabled.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_IS_PARALLEL</span></code></dt><dd><p>Boolean indicating whether the HDF5 library has parallel IO support.</p>
+</dd>
+</dl>
+<p>For each enabled language binding component, a corresponding
+<code class="docutils literal notranslate"><span class="pre">HDF5_&lt;LANG&gt;_LIBRARIES</span></code> variable, and potentially
+<code class="docutils literal notranslate"><span class="pre">HDF5_&lt;LANG&gt;_DEFINITIONS</span></code>, will be defined.  If the <code class="docutils literal notranslate"><span class="pre">HL</span></code> component is
+enabled, then <code class="docutils literal notranslate"><span class="pre">HDF5_&lt;LANG&gt;_HL_LIBRARIES</span></code> variables will also be defined:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_C_DEFINITIONS</span></code></dt><dd><p>Required compiler definitions for HDF5 C bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_CXX_DEFINITIONS</span></code></dt><dd><p>Required compiler definitions for HDF5 C++ bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_Fortran_DEFINITIONS</span></code></dt><dd><p>Required compiler definitions for HDF5 Fortran bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_C_INCLUDE_DIRS</span></code></dt><dd><p>Required include directories for HDF5 C bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_CXX_INCLUDE_DIRS</span></code></dt><dd><p>Required include directories for HDF5 C++ bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_Fortran_INCLUDE_DIRS</span></code></dt><dd><p>Required include directories for HDF5 Fortran bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_C_LIBRARIES</span></code></dt><dd><p>Required libraries for the HDF5 C bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_CXX_LIBRARIES</span></code></dt><dd><p>Required libraries for the HDF5 C++ bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_Fortran_LIBRARIES</span></code></dt><dd><p>Required libraries for the HDF5 Fortran bindings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_C_HL_LIBRARIES</span></code></dt><dd><p>Required libraries for the high-level C bindings, if the <code class="docutils literal notranslate"><span class="pre">HL</span></code> component
+is enabled.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_CXX_HL_LIBRARIES</span></code></dt><dd><p>Required libraries for the high-level C++ bindings, if the <code class="docutils literal notranslate"><span class="pre">HL</span></code>
+component is enabled.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_Fortran_HL_LIBRARIES</span></code></dt><dd><p>Required libraries for the high-level Fortran bindings, if the <code class="docutils literal notranslate"><span class="pre">HL</span></code>
+component is enabled.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_C_COMPILER_EXECUTABLE</span></code></dt><dd><p>The path to the HDF5 C wrapper compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_CXX_COMPILER_EXECUTABLE</span></code></dt><dd><p>The path to the HDF5 C++ wrapper compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_Fortran_COMPILER_EXECUTABLE</span></code></dt><dd><p>The path to the HDF5 Fortran wrapper compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_C_COMPILER_EXECUTABLE_NO_INTERROGATE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+<p>The path to the primary C compiler which is also the HDF5 wrapper.
+This variable is used only in <em>module mode</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_CXX_COMPILER_EXECUTABLE_NO_INTERROGATE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+<p>The path to the primary C++ compiler which is also the HDF5 wrapper.
+This variable is used only in <em>module mode</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_Fortran_COMPILER_EXECUTABLE_NO_INTERROGATE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+<p>The path to the primary Fortran compiler which is also the HDF5 wrapper.
+This variable is used only in <em>module mode</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_DIFF_EXECUTABLE</span></code></dt><dd><p>The path to the HDF5 dataset comparison tool (<code class="docutils literal notranslate"><span class="pre">h5diff</span></code>).</p>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>The following variables can be set before calling the <code class="docutils literal notranslate"><span class="pre">find_package(HDF5)</span></code>
+to guide the search for HDF5 library:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_PREFER_PARALLEL</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>Set this to boolean true to prefer parallel HDF5 (by default, serial is
+preferred).  This variable is used only in <em>module mode</em>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_FIND_DEBUG</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<p>Set this to boolean true to get extra debugging output by this module.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_NO_FIND_PACKAGE_CONFIG_FILE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.8.</span></p>
+</div>
+<p>Set this to boolean true to skip finding and using CMake package configuration
+file (<code class="docutils literal notranslate"><span class="pre">hdf5-config.cmake</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HDF5_USE_STATIC_LIBRARIES</span></code></dt><dd><p>Set this to boolean value to determine whether or not to prefer a
+static link to a dynamic link for <code class="docutils literal notranslate"><span class="pre">HDF5</span></code> and all of its dependencies.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10: </span>Support for <code class="docutils literal notranslate"><span class="pre">HDF5_USE_STATIC_LIBRARIES</span></code> on Windows.</p>
+</div>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="examples-finding-hdf5">
+<h3>Examples: Finding HDF5<a class="headerlink" href="#examples-finding-hdf5" title="Link to this heading">¶</a></h3>
+<p>Finding HDF5:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">HDF5</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Specifying a minimum required version of HDF5 to find:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">HDF5</span><span class="w"> </span><span class="m">1.8.15</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Finding HDF5 and making it required (if HDF5 is not found, processing stops with
+an error message):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">HDF5</span><span class="w"> </span><span class="m">1.8.15</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Searching for static HDF5 libraries:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">HDF5_USE_STATIC_LIBRARIES</span><span class="w"> </span><span class="no">TRUE</span><span class="nf">)</span>
+<span class="nf">find_package(</span><span class="no">HDF5</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Specifying components to find high-level C and C++ functions:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">HDF5</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="no">C</span><span class="w"> </span><span class="no">CXX</span><span class="w"> </span><span class="no">HL</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="examples-using-hdf5">
+<h3>Examples: Using HDF5<a class="headerlink" href="#examples-using-hdf5" title="Link to this heading">¶</a></h3>
+<p>Finding HDF5 and linking it to a project target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">HDF5</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">project_target</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="no">HDF5</span><span class="o">::</span><span class="no">HDF5</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Using Fortran HDF5 and HDF5-HL functions:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">HDF5</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">Fortran</span><span class="w"> </span><span class="no">HL</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">project_target</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="no">HDF5</span><span class="o">::</span><span class="no">HDF5</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindHDF5</a><ul>
+<li><a class="reference internal" href="#components">Components</a></li>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#examples-finding-hdf5">Examples: Finding HDF5</a></li>
+<li><a class="reference internal" href="#examples-using-hdf5">Examples: Using HDF5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindGTK2.html"
+                          title="previous chapter">FindGTK2</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindHg.html"
+                          title="next chapter">FindHg</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindHDF5.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindHg.html" title="FindHg"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindGTK2.html" title="FindGTK2"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindHDF5</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A218D956-9F15-35A8-BD0D-DDC1C509DA71}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>generate_doc_source</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\0c6c6b5e97a81d863a92b5953e310923\doc_source.cpp.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating: C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/gen/doc_source.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+cd C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Users\t.vesely\Documents\ai\axolotl\Python311\python.exe -c "from doc_source_generator import generate_doc_source";"generate_doc_source( 'C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/gen/doc_source.cpp', ['C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/doc_classes/ExampleClass.xml'] )"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp\doc_source_generator.py;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\doc_classes\ExampleClass.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating: C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/gen/doc_source.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Users\t.vesely\Documents\ai\axolotl\Python311\python.exe -c "from doc_source_generator import generate_doc_source";"generate_doc_source( 'C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/gen/doc_source.cpp', ['C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/doc_classes/ExampleClass.xml'] )"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp\doc_source_generator.py;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\doc_classes\ExampleClass.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Generating: C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/gen/doc_source.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+cd C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Users\t.vesely\Documents\ai\axolotl\Python311\python.exe -c "from doc_source_generator import generate_doc_source";"generate_doc_source( 'C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/gen/doc_source.cpp', ['C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/doc_classes/ExampleClass.xml'] )"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp\doc_source_generator.py;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\doc_classes\ExampleClass.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Generating: C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/gen/doc_source.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+cd C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Users\t.vesely\Documents\ai\axolotl\Python311\python.exe -c "from doc_source_generator import generate_doc_source";"generate_doc_source( 'C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/gen/doc_source.cpp', ['C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/doc_classes/ExampleClass.xml'] )"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp\doc_source_generator.py;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\doc_classes\ExampleClass.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\f8e17f57814cc2aaf40090fcf6775da2\generate_doc_source.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate_doc_source</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate_doc_source</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate_doc_source</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\gen\doc_source.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate_doc_source</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</VerifyInputsAndOutputsExist>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake.exe -SC:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2 --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\cmake.verify_globs;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPython3.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake.exe -SC:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2 --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\cmake.verify_globs;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPython3.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake.exe -SC:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2 --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\cmake.verify_globs;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPython3.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake.exe -SC:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2 --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\cmake.verify_globs;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\FindPython3.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\prenos\godot-zyllan\MagicBalls\MagicBalls\tools\cmake-4.2.1-windows-x86_64\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\CMakeFiles\generate_doc_source">
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\prenos\godot-zyllan\MagicBalls\MagicBalls\gitextension\godot-cpp-template\build2\ZERO_CHECK.vcxproj">
+      <Project>{1F363A6D-6047-3793-87B8-1E53DA558EA8}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

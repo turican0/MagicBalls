@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 6: In-Depth System Introspection &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 7: Custom Commands and Generated Files" href="Custom%20Commands%20and%20Generated%20Files.html" />
+    <link rel="prev" title="Step 5: In-Depth CMake Library Concepts" href="In-Depth%20CMake%20Library%20Concepts.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Custom%20Commands%20and%20Generated%20Files.html" title="Step 7: Custom Commands and Generated Files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="In-Depth%20CMake%20Library%20Concepts.html" title="Step 5: In-Depth CMake Library Concepts"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 6: In-Depth System Introspection</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-6-in-depth-system-introspection">
+<span id="guide:tutorial/In-Depth System Introspection"></span><h1>Step 6: In-Depth System Introspection<a class="headerlink" href="#step-6-in-depth-system-introspection" title="Link to this heading">¶</a></h1>
+<p>In order to discover information about the system environment and the toolchain,
+CMake will often compile small test programs to verify the availability of
+compiler flags, headers, and builtins or other language constructs.</p>
+<p>In this step, we will take advantage of the same test program mechanisms that
+CMake uses in our own project code.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>An old trick going back to the oldest days of configuration and build systems
+is to verify the availability of some feature by compiling a small program
+which uses that feature.</p>
+<p>CMake makes this unnecessary for many contexts. As we will address in later
+steps, if CMake can find a library dependency, we can rely on it having all
+the facilities (headers, code generators, test utilities, etc) we expect it to
+have. Conversely, if CMake can't find a dependency, attempting to use the
+dependency anyway will almost certainly fail.</p>
+<p>However, there are other kinds of information about the toolchain which CMake
+doesn't communicate readily. For these advanced cases, we can write our own
+test programs and compile commands to check for availability.</p>
+<p>CMake provides modules to simplify these checks. These are documented at
+<span class="target" id="index-0-manual:cmake-modules(7)"></span><a class="reference internal" href="../../manual/cmake-modules.7.html#manual:cmake-modules(7)" title="cmake-modules(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake-modules(7)</span></code></a>. Any module that begins with <code class="docutils literal notranslate"><span class="pre">Check</span></code> is a system
+introspection module we can use to interrogate the toolchain and system
+environment. Some notable ones include:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">CheckIncludeFiles</span></code></dt><dd><p>Check one or more C/C++ header files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CheckCompilerFlag</span></code></dt><dd><p>Check whether the compiler supports a given flag.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CheckSourceCompiles</span></code></dt><dd><p>Checks whether source code can be built for a given language.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CheckIPOSupported</span></code></dt><dd><p>Check whether the compiler supports interprocedural optimization (IPO/LTO).</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="exercise-1-check-include-file">
+<h2>Exercise 1 - Check Include File<a class="headerlink" href="#exercise-1-check-include-file" title="Link to this heading">¶</a></h2>
+<p>A fast and easy check to perform is if a given header file is available on
+a certain platform, for which CMake provides <span class="target" id="index-0-module:CheckIncludeFiles"></span><a class="reference internal" href="../../module/CheckIncludeFiles.html#module:CheckIncludeFiles" title="CheckIncludeFiles"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckIncludeFiles</span></code></a>. This
+is most appropriate for system and intrinsic headers, which may not be provided
+by a specific package by are expected to be available in many build environments.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CheckIncludeFiles</span><span class="nf">)</span>
+<span class="nf">check_include_files(</span><span class="na">sys/socket.h</span><span class="w"> </span><span class="no">HAVE_SYS_SOCKET_H</span><span class="w"> </span><span class="no">LANGUAGE</span><span class="w"> </span><span class="no">CXX</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These functions are not immediately available in CMake, they must be added via
+<span class="target" id="index-0-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a>'ing their associated module (aka, a CMakeLang file). Many
+modules live inside CMake's own <code class="docutils literal notranslate"><span class="pre">Modules</span></code> folder. This built-in <code class="docutils literal notranslate"><span class="pre">Modules</span></code>
+folder is one of the places CMake searches when evaluating an <span class="target" id="index-1-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a>
+command. You can think of these modules like standard library headers, they're
+expected to be available.</p>
+</div>
+<p>Once a header file is known to exist, we can communicate that to our code using
+the same mechanisms of conditionals and target commands already covered.</p>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Check if the x86 SSE2 intrinsic header is available, and if so use it to
+improve <code class="docutils literal notranslate"><span class="pre">mathfunctions::sqrt</span></code>.</p>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-1-module:CheckIncludeFiles"></span><a class="reference internal" href="../../module/CheckIncludeFiles.html#module:CheckIncludeFiles" title="CheckIncludeFiles"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckIncludeFiles</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:target_compile_definitions"></span><a class="reference internal" href="../../command/target_compile_definitions.html#command:target_compile_definitions" title="target_compile_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_definitions()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/MathFunctions.cxx</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step6</span></code> directory contains the complete, recommended
+solution to <code class="docutils literal notranslate"><span class="pre">Step5</span></code> and relevant <code class="docutils literal notranslate"><span class="pre">TODOs</span></code> for this step. It also contains
+specialized implementations of the <code class="docutils literal notranslate"><span class="pre">sqrt</span></code> function for various conditions,
+which you will find in <code class="docutils literal notranslate"><span class="pre">MathFunctions/MathFunctions.cxx</span></code>.</p>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">3</span></code>. Note that some <code class="docutils literal notranslate"><span class="pre">#ifdef</span></code> directives
+have already been added to the library, which will change its operation as we
+work through the step.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>We can use our usual commands to configure.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>In the output of the configuration step we should observe CMake checking for
+the <code class="docutils literal notranslate"><span class="pre">emmintrin.h</span></code> header.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">-- Looking for include file emmintrin.h</span>
+<span class="go">-- Looking for include file emmintrin.h - found</span>
+</pre></div>
+</div>
+<p>If the header is available on your system, verify the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> output
+contains the message about using SSE2. Conversely, if the header is not
+available you should see the usual behavior from <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>First we include and use the <code class="docutils literal notranslate"><span class="pre">CheckIncludeFiles</span></code> module, verifying the
+<code class="docutils literal notranslate"><span class="pre">emmintrin.h</span></code> header is available.</p>
+<details><summary>TODO 1: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-check-include-files">
+<div class="code-block-caption"><span class="caption-text">TODO 1: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-check-include-files" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CheckIncludeFiles</span><span class="nf">)</span>
+<span class="nf">check_include_files(</span><span class="nb">emmintrin.h</span><span class="w"> </span><span class="no">HAS_EMMINTRIN</span><span class="w"> </span><span class="no">LANGUAGE</span><span class="w"> </span><span class="no">CXX</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Then we use the result of the check to conditionally set a compile definition
+on <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>.</p>
+<details><summary>TODO 2: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-define-use-sse2">
+<div class="code-block-caption"><span class="caption-text">TODO 2: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-define-use-sse2" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">HAS_EMMINTRIN</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">target_compile_definitions(</span><span class="nb">MathFunctions</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="no">TUTORIAL_USE_SSE2</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally we can conditionally include the header in the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library.</p>
+<details><summary>TODO 3: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-include-sse2">
+<div class="code-block-caption"><span class="caption-text">TODO 3: MathFunctions/MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-include-sse2" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifdef TUTORIAL_USE_SSE2</span>
+<span class="cp">#</span><span class="w">  </span><span class="cp">include</span><span class="w"> </span><span class="cpf">&lt;emmintrin.h&gt;</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-2-check-source-compiles">
+<h2>Exercise 2 - Check Source Compiles<a class="headerlink" href="#exercise-2-check-source-compiles" title="Link to this heading">¶</a></h2>
+<p>Sometimes it is insufficient to merely check for a header. This is especially
+true when no header is available to check, such is the case with
+compiler-builtins. For these scenarios we have <span class="target" id="index-0-module:CheckSourceCompiles"></span><a class="reference internal" href="../../module/CheckSourceCompiles.html#module:CheckSourceCompiles" title="CheckSourceCompiles"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckSourceCompiles</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CheckSourceCompiles</span><span class="nf">)</span>
+<span class="nf">check_source_compiles(</span><span class="no">CXX</span>
+<span class="w">  </span><span class="s">&quot;</span>
+<span class="s">    int main() {</span>
+<span class="s">      int a, b, c;</span>
+<span class="s">      __builtin_add_overflow(a, b, &amp;c);</span>
+<span class="s">    }</span>
+<span class="s">  &quot;</span>
+<span class="w">  </span><span class="no">HAS_CHECKED_ADDITION</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default <span class="target" id="index-1-module:CheckSourceCompiles"></span><a class="reference internal" href="../../module/CheckSourceCompiles.html#module:CheckSourceCompiles" title="CheckSourceCompiles"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckSourceCompiles</span></code></a> builds and links an executable. The
+code to be check must provide a valid <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">main()</span></code> in order to succeed.</p>
+</div>
+<p>After performing the check, this system introspection can be applied identically
+to how we discussed with header files.</p>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Check if the GNU SSE2 builtins are available, and if so use them to improve
+<code class="docutils literal notranslate"><span class="pre">mathfunctions::sqrt</span></code>.</p>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-2-module:CheckSourceCompiles"></span><a class="reference internal" href="../../module/CheckSourceCompiles.html#module:CheckSourceCompiles" title="CheckSourceCompiles"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckSourceCompiles</span></code></a></p></li>
+<li><p><span class="target" id="index-1-command:target_compile_definitions"></span><a class="reference internal" href="../../command/target_compile_definitions.html#command:target_compile_definitions" title="target_compile_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_definitions()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">4</span></code> and <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">5</span></code>. No code changes to the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>
+implementation are necessary, as these have already been provided.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>We need only rebuild the tutorial.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a check fails and you think it should succeed, you will need to clear the
+CMake Cache by deleting the <code class="docutils literal notranslate"><span class="pre">CMakeCache.txt</span></code> file. CMake will not rerun
+compile checks on subsequent runs if it has a cached result.</p>
+</div>
+<p>In the output of the configuration step we should observe CMake checking if the
+provided source code compiles, which will be reported under the variable name
+we provided to <code class="docutils literal notranslate"><span class="pre">check_source_compiles()</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">-- Performing Test HAS_GNU_BUILTIN</span>
+<span class="go">-- Performing Test HAS_GNU_BUILTIN - Success</span>
+</pre></div>
+</div>
+<p>If the builtins are available on your compiler, verify the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> output
+contains the message about using GNU-builting. Conversely, if the builtins are
+not available you should see the previous behavior from <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>.</p>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>First we include and use the <code class="docutils literal notranslate"><span class="pre">CheckSourceCompiles</span></code> module, verifying the
+provided source code can be built.</p>
+<details><summary>TODO 4: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-check-source-compiles">
+<div class="code-block-caption"><span class="caption-text">TODO 4: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-check-source-compiles" title="Link to this code">¶</a></div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>include(CheckSourceCompiles)
+check_source_compiles(CXX
+  [=[
+    typedef double v2df __attribute__((vector_size(16)));
+    int main() {
+      __builtin_ia32_sqrtsd(v2df{});
+    }
+  ]=]
+  HAS_GNU_BUILTIN
+)
+</pre></div>
+</div>
+</div>
+</details><p>Then we use the result of the check to conditionally set a compile definition
+on <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>.</p>
+<details><summary>TODO 5: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-define-use-gnu-builtin">
+<div class="code-block-caption"><span class="caption-text">TODO 5: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-define-use-gnu-builtin" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">HAS_GNU_BUILTIN</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">target_compile_definitions(</span><span class="nb">MathFunctions</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="no">TUTORIAL_USE_GNU_BUILTIN</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-3-check-interprocedural-optimization">
+<h2>Exercise 3 - Check Interprocedural Optimization<a class="headerlink" href="#exercise-3-check-interprocedural-optimization" title="Link to this heading">¶</a></h2>
+<p>Interprocedural and link time optimizations can provide significant performance
+improvements to some software. CMake has the capacity to check for the
+availability of IPO flags via <span class="target" id="index-0-module:CheckIPOSupported"></span><a class="reference internal" href="../../module/CheckIPOSupported.html#module:CheckIPOSupported" title="CheckIPOSupported"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckIPOSupported</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CheckIPOSupported</span><span class="nf">)</span>
+<span class="nf">check_ipo_supported()</span><span class="w"> </span><span class="c"># fatal error if IPO is not supported</span>
+<span class="nf">set_target_properties(</span><span class="nb">MyApp</span>
+<span class="w">  </span><span class="no">PROPERTIES</span>
+<span class="w">    </span><span class="no">INTERPROCEDURAL_OPTIMIZATION</span><span class="w"> </span><span class="no">TRUE</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There a couple important caveats with regard to in-project IPO configuration:</p>
+<ul class="simple">
+<li><p>CMake does not know about every IPO/LTO flag on every compiler, better
+results can often be achieved with individual tuning for a known toolchain.</p></li>
+<li><p>Setting the <span class="target" id="index-0-prop_tgt:INTERPROCEDURAL_OPTIMIZATION"></span><a class="reference internal" href="../../prop_tgt/INTERPROCEDURAL_OPTIMIZATION.html#prop_tgt:INTERPROCEDURAL_OPTIMIZATION" title="INTERPROCEDURAL_OPTIMIZATION"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">INTERPROCEDURAL_OPTIMIZATION</span></code></a> property on a target
+does not alter any of the targets it links to, or dependencies from other
+projects. IPO can only &quot;see&quot; into other targets which are also compiled
+appropriately.</p></li>
+</ul>
+<p>For these reasons, serious consideration should be given to manually setting
+up IPO/LTO flags across all projects in the dependency tree via external
+mechanisms (presets, <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a> flags,
+<span class="target" id="index-0-manual:cmake-toolchains(7)"></span><a class="reference internal" href="../../manual/cmake-toolchains.7.html#manual:cmake-toolchains(7)" title="cmake-toolchains(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">toolchain</span> <span class="pre">files</span></code></a>, etc) instead of in-project
+control.</p>
+</div>
+<p>However, especially for extremely large projects, it can be useful to have
+an in-project mechanism to use IPO whenever it is available.</p>
+<section id="id7">
+<h3>Goal<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>Enable IPO for the entire tutorial project when it is available from the
+toolchain.</p>
+</section>
+<section id="id8">
+<h3>Helpful Resources<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-1-module:CheckIPOSupported"></span><a class="reference internal" href="../../module/CheckIPOSupported.html#module:CheckIPOSupported" title="CheckIPOSupported"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckIPOSupported</span></code></a></p></li>
+<li><p><span class="target" id="index-0-variable:CMAKE_INTERPROCEDURAL_OPTIMIZATION"></span><a class="reference internal" href="../../variable/CMAKE_INTERPROCEDURAL_OPTIMIZATION.html#variable:CMAKE_INTERPROCEDURAL_OPTIMIZATION" title="CMAKE_INTERPROCEDURAL_OPTIMIZATION"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_INTERPROCEDURAL_OPTIMIZATION</span></code></a></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Files to Edit<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Getting Started<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>Continue editing the files in <code class="docutils literal notranslate"><span class="pre">Step6</span></code>. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">6</span></code> and <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">7</span></code>.</p>
+</section>
+<section id="id11">
+<h3>Build and Run<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>We need only rebuild the tutorial.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>If IPO is unavailable, we will see an error message during configuration.
+Otherwise nothing will change.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Regardless of the result of the IPO check, we shouldn't expect any change
+in behavior from <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> or <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>.</p>
+</div>
+</section>
+<section id="id12">
+<h3>Solution<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>The first <code class="docutils literal notranslate"><span class="pre">TODO</span></code> is easy, we add another option to our project.</p>
+<details><summary>TODO 6: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-enable-ipo">
+<div class="code-block-caption"><span class="caption-text">TODO 6: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-enable-ipo" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">option(</span><span class="no">TUTORIAL_ENABLE_IPO</span><span class="w"> </span><span class="s">&quot;Check for and use IPO support&quot;</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>The next step is involved, however the documentation for <span class="target" id="index-2-module:CheckIPOSupported"></span><a class="reference internal" href="../../module/CheckIPOSupported.html#module:CheckIPOSupported" title="CheckIPOSupported"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckIPOSupported</span></code></a>
+has an almost complete example of what we need to do. The only difference is
+we are going to enable IPO project-wide instead of for a single target.</p>
+<details><summary>TODO 7: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-check-ipo">
+<div class="code-block-caption"><span class="caption-text">TODO 7: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-check-ipo" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">TUTORIAL_ENABLE_IPO</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">include(</span><span class="nb">CheckIPOSupported</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">check_ipo_supported(</span><span class="no">RESULT</span><span class="w"> </span><span class="nb">result</span><span class="w"> </span><span class="no">OUTPUT</span><span class="w"> </span><span class="nb">output</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">if(</span><span class="nb">result</span><span class="nf">)</span>
+<span class="w">    </span><span class="nf">message(</span><span class="s">&quot;IPO is supported, enabling IPO&quot;</span><span class="nf">)</span>
+<span class="w">    </span><span class="nf">set(</span><span class="no">CMAKE_INTERPROCEDURAL_OPTIMIZATION</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">else()</span>
+<span class="w">    </span><span class="nf">message(</span><span class="no">WARNING</span><span class="w"> </span><span class="s">&quot;IPO is not supported: ${output}&quot;</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">endif()</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</details><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Normally we have discouraged setting <code class="docutils literal notranslate"><span class="pre">CMAKE_</span></code> variables inside the project.
+Here, we are controlling that behavior with an <span class="target" id="index-0-command:option"></span><a class="reference internal" href="../../command/option.html#command:option" title="option"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">option()</span></code></a>. This
+allows packagers to opt-out of our override. This is an imperfect, but
+acceptable solution to situations where we want to provide options to control
+project-wide behavior controlled by <code class="docutils literal notranslate"><span class="pre">CMAKE_</span></code> variables.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 6: In-Depth System Introspection</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-check-include-file">Exercise 1 - Check Include File</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-check-source-compiles">Exercise 2 - Check Source Compiles</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-3-check-interprocedural-optimization">Exercise 3 - Check Interprocedural Optimization</a><ul>
+<li><a class="reference internal" href="#id7">Goal</a></li>
+<li><a class="reference internal" href="#id8">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id9">Files to Edit</a></li>
+<li><a class="reference internal" href="#id10">Getting Started</a></li>
+<li><a class="reference internal" href="#id11">Build and Run</a></li>
+<li><a class="reference internal" href="#id12">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="In-Depth%20CMake%20Library%20Concepts.html"
+                          title="previous chapter">Step 5: In-Depth CMake Library Concepts</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Custom%20Commands%20and%20Generated%20Files.html"
+                          title="next chapter">Step 7: Custom Commands and Generated Files</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/In-Depth System Introspection.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Custom%20Commands%20and%20Generated%20Files.html" title="Step 7: Custom Commands and Generated Files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="In-Depth%20CMake%20Library%20Concepts.html" title="Step 5: In-Depth CMake Library Concepts"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 6: In-Depth System Introspection</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

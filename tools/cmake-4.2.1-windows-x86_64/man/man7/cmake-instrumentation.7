@@ -1,0 +1,744 @@
+'\" t
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "CMAKE-INSTRUMENTATION" "7" "Dec 08, 2025" "4.2.1" "CMake"
+.SH NAME
+cmake-instrumentation \- CMake Instrumentation
+.sp
+Added in version 4.0.
+
+.SH INTRODUCTION
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+This feature is only available when experimental support for instrumentation
+has been enabled by the \fBCMAKE_EXPERIMENTAL_INSTRUMENTATION\fP gate.
+.UNINDENT
+.UNINDENT
+.sp
+The CMake Instrumentation API allows for the collection of timing data, target
+information and system diagnostic information during the configure, generate,
+build, test and install steps for a CMake project.
+.sp
+This feature is only available for projects using the
+\fI\%Makefile Generators\fP, \fI\%Ninja Generators\fP or \fI\%FASTBuild\fP\&.
+.sp
+All interactions with the CMake instrumentation API must specify both an API
+version and a Data version. At this time, there is only one version for each of
+these: the \fI\%API v1\fP and \fI\%Data v1\fP\&.
+.SS Data Collection
+.sp
+Whenever a command is executed with
+instrumentation enabled, a \fI\%v1 Snippet File\fP is created in the project build
+tree with data specific to that command. These files remain until after
+\fI\%Indexing\fP occurs.
+.sp
+CMake sets the \fI\%RULE_LAUNCH_COMPILE\fP, \fI\%RULE_LAUNCH_LINK\fP
+and \fI\%RULE_LAUNCH_CUSTOM\fP global properties to use the
+\fBctest \-\-instrument\fP launcher in order to capture details of each compile,
+link, and custom command respectively. If the project has been configured with
+\fI\%CTestUseLaunchers\fP, \fBctest \-\-instrument\fP will also include the
+behavior usually performed by \fBctest \-\-launch\fP\&.
+.SS Indexing
+.sp
+Indexing is the process of collating generated instrumentation data. Indexing
+occurs at specific intervals called hooks, such as after every build. These
+hooks are configured as part of the \fI\%v1 Query Files\fP\&. Whenever a hook is
+triggered, an index file is generated containing a list of snippet files newer
+than the previous indexing.
+.sp
+Indexing and can also be performed by manually invoking
+\fBctest \-\-collect\-instrumentation <build>\fP\&.
+.SS Callbacks
+.sp
+As part of the \fI\%v1 Query Files\fP, users can provide a list of callbacks
+intended to handle data collected by this feature.
+.sp
+Whenever \fI\%Indexing\fP occurs, each provided callback is executed, passing the
+path to the generated index file as an argument.
+.sp
+These callbacks, defined either at the user\-level or project\-level should read
+the instrumentation data and perform any desired handling of it. The index file
+and its listed snippets are automatically deleted by CMake once all callbacks
+have completed. Note that a callback should never move or delete these data
+files manually as they may be needed by other callbacks.
+.SH ENABLING INSTRUMENTATION
+.sp
+Instrumentation can be enabled either for an individual CMake project, or
+for all CMake projects configured and built by a user. For both cases,
+see the \fI\%v1 Query Files\fP for details on configuring this feature.
+.SS Enabling Instrumentation at the Project\-Level
+.sp
+Project code can contain instrumentation queries with the
+\fI\%cmake_instrumentation()\fP command.
+.sp
+In addition, query files can be placed manually under
+\fB<build>/.cmake/instrumentation/<version>/query/\fP at the top of a build tree.
+This version of CMake supports only one version schema, \fI\%API v1\fP\&.
+.SS Enabling Instrumentation at the User\-Level
+.sp
+Instrumentation can be configured at the user\-level by placing query files in
+the \fI\%CMAKE_CONFIG_DIR\fP under
+\fB<config_dir>/instrumentation/<version>/query/\fP\&.
+.SS Enabling Instrumentation for CDash Submissions
+.sp
+You can enable instrumentation when using CTest in \fI\%Dashboard Client\fP
+mode by setting the \fI\%CTEST_USE_INSTRUMENTATION\fP environment variable.
+Doing so automatically enables the \fBdynamicSystemInformation\fP option.
+.sp
+The following table shows how each type of instrumented command gets mapped
+to a corresponding type of CTest XML file.
+.TS
+box center;
+l|l.
+T{
+\fI\%Snippet Role\fP
+T}	T{
+CTest XML File
+T}
+_
+T{
+\fBconfigure\fP
+T}	T{
+\fBConfigure.xml\fP
+T}
+_
+T{
+\fBgenerate\fP
+T}	T{
+\fBConfigure.xml\fP
+T}
+_
+T{
+\fBcompile\fP
+T}	T{
+\fBBuild.xml\fP
+T}
+_
+T{
+\fBlink\fP
+T}	T{
+\fBBuild.xml\fP
+T}
+_
+T{
+\fBcustom\fP
+T}	T{
+\fBBuild.xml\fP
+T}
+_
+T{
+\fBbuild\fP
+T}	T{
+unused!
+T}
+_
+T{
+\fBcmakeBuild\fP
+T}	T{
+\fBBuild.xml\fP
+T}
+_
+T{
+\fBcmakeInstall\fP
+T}	T{
+\fBBuild.xml\fP
+T}
+_
+T{
+\fBinstall\fP
+T}	T{
+\fBBuild.xml\fP
+T}
+_
+T{
+\fBctest\fP
+T}	T{
+\fBBuild.xml\fP
+T}
+_
+T{
+\fBtest\fP
+T}	T{
+\fBTest.xml\fP
+T}
+.TE
+.sp
+By default the command line reported to CDash is truncated at the first space.
+You can instead choose to report the full command line (including arguments)
+by setting \fI\%CTEST_USE_VERBOSE_INSTRUMENTATION\fP to 1.
+.sp
+Alternatively, you can use the \fI\%v1 Query Files\fP to enable instrumentation for
+CDash using the \fBcdashSubmit\fP and \fBcdashVerbose\fP options.
+.sp
+In order for the submitted \fBBuild.xml\fP file to group the snippet files
+correctly, all configure and build commands should be executed with CTest in
+Dashboard Client mode.
+.SH API V1
+.sp
+The API version specifies the layout of the instrumentation directory, as well
+as the general format of the query files and \fI\%cmake_instrumentation()\fP
+command arguments.
+.sp
+The Instrumentation API v1 is housed  in the \fBinstrumentation/v1/\fP directory
+under either \fB<build>/.cmake/\fP for output data and project\-level queries, or
+\fB<config_dir>/\fP for user\-level queries. The \fBv1\fP component of this
+directory is what signifies the API version. It has the following
+subdirectories:
+.INDENT 0.0
+.TP
+.B \fBquery/\fP
+Holds query files written by users or clients. Any file with the \fB\&.json\fP
+file extension will be recognized as a query file. These files are owned by
+whichever client or user creates them.
+.TP
+.B \fBquery/generated/\fP
+Holds query files generated by a CMake project with the
+\fI\%cmake_instrumentation()\fP command or the
+\fI\%CTEST_USE_INSTRUMENTATION\fP variable. These files are owned by CMake
+and are deleted and regenerated automatically during the CMake configure step.
+.TP
+.B \fBdata/\fP
+Holds instrumentation data collected on the project. CMake owns all data
+files, they should never be removed by other processes. Data collected here
+remains until after \fI\%Indexing\fP occurs and all \fI\%Callbacks\fP are executed.
+.TP
+.B \fBdata/index/\fP
+A subset of the collected data, containing any
+\fI\%v1 Index Files\fP\&.
+.TP
+.B \fBdata/content/\fP
+A subset of the collected data, containing any
+\fI\%v1 CMake Content Files\fP\&.
+.TP
+.B \fBdata/trace/\fP
+A subset of the collected data, containing the \fI\%Google Trace File\fP created
+from the most recent \fI\%Indexing\fP\&. Unlike other data files, the most recent
+trace file remains even after \fI\%Indexing\fP occurs and all \fI\%Callbacks\fP are
+executed, until the next time \fI\%Indexing\fP occurs.
+.TP
+.B \fBcdash/\fP
+Holds temporary files used internally to generate XML content to be submitted
+to CDash.
+.UNINDENT
+.SS v1 Query Files
+.sp
+Any file with the \fB\&.json\fP extension under the \fBinstrumentation/v1/query/\fP
+directory is recognized as a query for instrumentation data.
+.sp
+These files must contain a JSON object with the following keys. The \fBversion\fP
+key is required, but all other fields are optional.
+.INDENT 0.0
+.TP
+.B \fBversion\fP
+The Data version of snippet file to generate, an integer. Currently the only
+supported version is \fB1\fP\&.
+.TP
+.B \fBcallbacks\fP
+A list of command\-line strings for \fI\%Callbacks\fP to handle collected
+instrumentation data. Whenever these callbacks are executed, the full path to
+a \fI\%v1 Index File\fP is appended to the arguments included in the string.
+.TP
+.B \fBhooks\fP
+A list of strings specifying when \fI\%Indexing\fP should occur automatically.
+These are the intervals when instrumentation data should be collated and user
+\fI\%Callbacks\fP should be invoked to handle the data. Elements in this list
+should be one of the following:
+.INDENT 7.0
+.IP \(bu 2
+\fBpostGenerate\fP
+.IP \(bu 2
+\fBpreBuild\fP (called when \fBninja\fP  or \fBmake\fP is invoked)
+.IP \(bu 2
+\fBpostBuild\fP (called when \fBninja\fP or \fBmake\fP completes)
+.IP \(bu 2
+\fBpreCMakeBuild\fP (called when \fBcmake \-\-build\fP is invoked)
+.IP \(bu 2
+\fBpostCMakeBuild\fP (called when \fBcmake \-\-build\fP completes)
+.IP \(bu 2
+\fBpostCMakeInstall\fP
+.IP \(bu 2
+\fBpostCTest\fP
+.UNINDENT
+.sp
+\fBpreBuild\fP and \fBpostBuild\fP are not supported when using the
+\fI\%MSYS Makefiles\fP or \fI\%FASTBuild\fP generators.
+Additionally, they will not be triggered when the build tool is invoked by
+\fBcmake \-\-build\fP\&.
+.TP
+.B \fBoptions\fP
+A list of strings used to enable certain optional behavior, including the
+collection of certain additional data. Elements in this list should be one of
+the following:
+.INDENT 7.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBstaticSystemInformation\fP
+Enables collection of the static information about the host machine CMake
+is being run from. This data is collected during \fI\%Indexing\fP and is
+included in the generated \fI\%v1 Index File\fP\&.
+.TP
+.B \fBdynamicSystemInformation\fP
+Enables collection of the dynamic information about the host machine
+CMake is being run from. Data is collected for every \fI\%v1 Snippet File\fP
+generated by CMake, and includes information from immediately before and
+after the command is executed.
+.TP
+.B \fBcdashSubmit\fP
+Enables including instrumentation data in CDash. This does not
+automatically enable \fBdynamicSystemInformation\fP, but is otherwise
+equivalent to having the \fI\%CTEST_USE_INSTRUMENTATION\fP environment
+variable enabled.
+.TP
+.B \fBcdashVerbose\fP
+Enables including the full untruncated commands in data submitted to
+CDash. Equivalent to having the
+\fI\%CTEST_USE_VERBOSE_INSTRUMENTATION\fP environment variable enabled.
+.TP
+.B \fBtrace\fP
+Enables generation of a \fI\%Google Trace File\fP during \fI\%Indexing\fP to
+visualize data from the \fI\%v1 Snippet Files\fP collected.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+The \fBcallbacks\fP listed will be invoked during the specified hooks
+\fIat a minimum\fP\&. When there are multiple query files, the \fBcallbacks\fP,
+\fBhooks\fP and \fBoptions\fP between them will be merged. Therefore, if any query
+file includes any \fBhooks\fP, every \fBcallback\fP across all query files will be
+executed at every \fBhook\fP across all query files. Additionally, if any query
+file requests optional data using the \fBoptions\fP field, any related data will
+be present in all snippet files. User written \fBcallbacks\fP should be able to
+handle the presence of this optional data, since it may be requested by an
+unrelated query.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+{
+  \(dqversion\(dq: 1,
+  \(dqcallbacks\(dq: [
+    \(dq/usr/bin/python callback.py\(dq,
+    \(dq/usr/bin/cmake \-P callback.cmake arg\(dq,
+  ],
+  \(dqhooks\(dq: [
+    \(dqpostCMakeBuild\(dq,
+    \(dqpostCMakeInstall\(dq
+  ],
+  \(dqoptions\(dq: [
+    \(dqstaticSystemInformation\(dq,
+    \(dqdynamicSystemInformation\(dq,
+    \(dqcdashSubmit\(dq,
+    \(dqtrace\(dq
+  ]
+}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+In this example, after every \fBcmake \-\-build\fP or \fBcmake \-\-install\fP
+invocation, an index file \fBindex\-<timestamp>.json\fP will be generated in
+\fB<build>/.cmake/instrumentation/v1/data/index\fP containing a list of data
+snippet files created since the previous indexing. The commands
+\fB/usr/bin/python callback.py index\-<timestamp>.json\fP and
+\fB/usr/bin/cmake \-P callback.cmake arg index\-<timestamp>.json\fP will be executed
+in that order. The index file will contain the \fBstaticSystemInformation\fP data
+and each snippet file listed in the index will contain the
+\fBdynamicSystemInformation\fP data. Additionally, the index file will contain
+the path to the generated \fI\%Google Trace File\fP\&. Once both callbacks have completed,
+the index file and data files listed by it (including snippet files, but not
+the trace file) will be deleted from the project build tree. The instrumentation
+data will be present in the XML files submitted to CDash, but with truncated
+command strings because \fBcdashVerbose\fP was not enabled.
+.SH DATA V1
+.sp
+Data version specifies the contents of the output files generated by the CMake
+instrumentation API as part of the \fI\%Data Collection\fP and \fI\%Indexing\fP\&. A new
+version number will be created whenever previously included data is removed or
+reformatted such that scripts written to parse this data may become
+incompatible with the new format. There are four types of data files generated:
+the \fI\%v1 Snippet File\fP, \fI\%v1 Index File\fP, \fI\%v1 CMake Content File\fP, and the
+\fI\%Google Trace File\fP\&. When using the \fI\%API v1\fP, these files live in
+\fB<build>/.cmake/instrumentation/v1/data/\fP under the project build tree.
+.SS v1 Snippet File
+.sp
+Snippet files are generated for every compile, link and custom command invoked
+as part of the CMake build or install step and contain instrumentation data about
+the command executed. Additionally, snippet files are created for the following:
+.INDENT 0.0
+.IP \(bu 2
+The CMake configure step
+.IP \(bu 2
+The CMake generate step
+.IP \(bu 2
+Entire build step (executed with \fBcmake \-\-build\fP)
+.IP \(bu 2
+Entire install step (executed with \fBcmake \-\-install\fP)
+.IP \(bu 2
+Each \fBctest\fP invocation
+.IP \(bu 2
+Each individual test executed by \fBctest\fP\&.
+.UNINDENT
+.sp
+These files remain in the build tree until after \fI\%Indexing\fP occurs and any
+user\-specified \fI\%Callbacks\fP are executed.
+.sp
+Snippet files have a filename with the syntax \fB<role>\-<hash>\-<timestamp>.json\fP
+and contain the following data:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBversion\fP
+The Data version of the snippet file, an integer. Currently the version is
+always \fB1\fP\&.
+.TP
+.B \fBcommand\fP
+The full command executed. Excluded when \fBrole\fP is \fBbuild\fP\&.
+.TP
+.B \fBworkingDir\fP
+The working directory in which the \fBcommand\fP was executed.
+.TP
+.B \fBresult\fP
+The exit code of the command, an integer. This will be \fBnull\fP when
+\fBrole\fP is \fBbuild\fP\&.
+.TP
+.B \fBrole\fP
+The type of command executed, which will be one of the following values:
+.INDENT 7.0
+.IP \(bu 2
+\fBconfigure\fP: the CMake configure step
+.IP \(bu 2
+\fBgenerate\fP: the CMake generate step
+.IP \(bu 2
+\fBcompile\fP: an individual compile step invoked during the build
+.IP \(bu 2
+\fBlink\fP: an individual link step invoked during the build
+.IP \(bu 2
+\fBcustom\fP: an individual custom command invoked during the build
+.IP \(bu 2
+\fBbuild\fP: a complete \fBmake\fP or \fBninja\fP invocation
+(not through \fBcmake \-\-build\fP).
+.IP \(bu 2
+\fBcmakeBuild\fP: a complete \fBcmake \-\-build\fP invocation
+.IP \(bu 2
+\fBcmakeInstall\fP: a complete \fBcmake \-\-install\fP invocation
+.IP \(bu 2
+\fBinstall\fP: an individual \fBcmake \-P cmake_install.cmake\fP invocation
+.IP \(bu 2
+\fBctest\fP: a complete \fBctest\fP invocation
+.IP \(bu 2
+\fBtest\fP: a single test executed by CTest
+.UNINDENT
+.TP
+.B \fBtarget\fP
+The CMake target associated with the command. Only included when \fBrole\fP is
+\fBcompile\fP or \fBlink\fP\&. In conjunction with \fBcmakeContent\fP, this can
+be used to look up the target type and labels.
+.TP
+.B \fBtimeStart\fP
+Time at which the command started, expressed as the number of milliseconds
+since the system epoch.
+.TP
+.B \fBduration\fP
+The duration that the command ran for, expressed in milliseconds.
+.TP
+.B \fBoutputs\fP
+The command\(aqs output file(s), an array. Only included when \fBrole\fP is one
+of: \fBcompile\fP, \fBlink\fP, \fBcustom\fP\&.
+.TP
+.B \fBoutputSizes\fP
+The size(s) in bytes of the \fBoutputs\fP, an array. For files which do not
+exist, the size is 0. Included under the same conditions as the \fBoutputs\fP
+field.
+.TP
+.B \fBsource\fP
+The source file being compiled. Only included when \fBrole\fP is \fBcompile\fP\&.
+.TP
+.B \fBlanguage\fP
+The language of the source file being compiled. Only included when \fBrole\fP is
+\fBcompile\fP or \fBlink\fP\&.
+.TP
+.B \fBtestName\fP
+The name of the test being executed. Only included when \fBrole\fP is \fBtest\fP\&.
+.TP
+.B \fBconfig\fP
+The type of build, such as \fBRelease\fP or \fBDebug\fP\&. Only included when
+\fBrole\fP is one of: \fBcompile\fP, \fBlink\fP, \fBcustom\fP, \fBinstall\fP,
+\fBtest\fP\&.
+.TP
+.B \fBdynamicSystemInformation\fP
+Specifies the dynamic information collected about the host machine
+CMake is being run from. Data is collected for every snippet file
+generated by CMake, with data immediately before and after the command is
+executed. Only included when enabled by the \fI\%v1 Query Files\fP\&.
+.INDENT 7.0
+.TP
+.B \fBbeforeHostMemoryUsed\fP
+The Host Memory Used in KiB at \fBtimeStart\fP\&.
+.TP
+.B \fBafterHostMemoryUsed\fP
+The Host Memory Used in KiB at \fBtimeStart + duration\fP\&.
+.TP
+.B \fBbeforeCPULoadAverage\fP
+The Average CPU Load at \fBtimeStart\fP, or \fBnull\fP if it cannot be
+determined.
+.TP
+.B \fBafterCPULoadAverage\fP
+The Average CPU Load at \fBtimeStart + duration\fP, or \fBnull\fP if it cannot
+be determined.
+.UNINDENT
+.TP
+.B \fBcmakeContent\fP
+The path to a \fI\%v1 CMake Content File\fP located under \fBdata\fP, which
+contains information about the CMake configure and generate steps
+responsible for generating the \fBcommand\fP in this snippet.
+.TP
+.B \fBshowOnly\fP
+A boolean representing whether the \fB\-\-show\-only\fP option was passed to
+\fBctest\fP\&. Only included when \fBrole\fP is \fBctest\fP\&.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+{
+  \(dqversion\(dq: 1,
+  \(dqcommand\(dq : \(dq\e\(dq/usr/bin/c++\e\(dq \e\(dq\-MD\e\(dq \e\(dq\-MT\e\(dq \e\(dqCMakeFiles/main.dir/main.cxx.o\e\(dq \e\(dq\-MF\e\(dq \e\(dqCMakeFiles/main.dir/main.cxx.o.d\e\(dq \e\(dq\-o\e\(dq \e\(dqCMakeFiles/main.dir/main.cxx.o\e\(dq \e\(dq\-c\e\(dq \e\(dq<src>/main.cxx\e\(dq\(dq,
+  \(dqrole\(dq : \(dqcompile\(dq,
+  \(dqreturn\(dq : 1,
+  \(dqtarget\(dq: \(dqmain\(dq,
+  \(dqlanguage\(dq : \(dqC++\(dq,
+  \(dqoutputs\(dq : [ \(dqCMakeFiles/main.dir/main.cxx.o\(dq ],
+  \(dqoutputSizes\(dq : [ 0 ],
+  \(dqsource\(dq : \(dq<src>/main.cxx\(dq,
+  \(dqconfig\(dq : \(dqDebug\(dq,
+  \(dqdynamicSystemInformation\(dq :
+  {
+    \(dqafterCPULoadAverage\(dq : 2.3500000000000001,
+    \(dqafterHostMemoryUsed\(dq : 6635680.0
+    \(dqbeforeCPULoadAverage\(dq : 2.3500000000000001,
+    \(dqbeforeHostMemoryUsed\(dq : 6635832.0
+  },
+  \(dqtimeStart\(dq : 1737053448177,
+  \(dqduration\(dq : 31,
+  \(dqcmakeContent\(dq : \(dqcontent/cmake\-2025\-07\-11T12\-46\-32\-0572.json\(dq
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS v1 Index File
+.sp
+Index files contain a list of \fI\%v1 Snippet Files\fP\&. It
+serves as an entry point for navigating the instrumentation data. They are
+generated whenever \fI\%Indexing\fP occurs and deleted after any user\-specified
+\fI\%Callbacks\fP are executed.
+.INDENT 0.0
+.TP
+.B \fBversion\fP
+The Data version of the index file, an integer. Currently the version is
+always \fB1\fP\&.
+.TP
+.B \fBbuildDir\fP
+The build directory of the CMake project.
+.TP
+.B \fBdataDir\fP
+The full path to the \fB<build>/.cmake/instrumentation/v1/data/\fP directory.
+.TP
+.B \fBhook\fP
+The name of the hook responsible for generating the index file. In addition
+to the hooks that can be specified by one of the \fI\%v1 Query Files\fP, this value may
+be set to \fBmanual\fP if indexing is performed by invoking
+\fBctest \-\-collect\-instrumentation <build>\fP\&.
+.TP
+.B \fBsnippets\fP
+Contains a list of \fI\%v1 Snippet Files\fP\&. This includes all
+snippet files generated since the previous index file was created. The file
+paths are relative to \fBdataDir\fP\&.
+.TP
+.B \fBtrace\fP:
+Contains the path to the \fI\%Google Trace File\fP\&. This includes data from all
+corresponding \fBsnippets\fP in the index file. The file path is relative to
+\fBdataDir\fP\&. Only included when enabled by the \fI\%v1 Query Files\fP\&.
+.TP
+.B \fBstaticSystemInformation\fP
+Specifies the static information collected about the host machine
+CMake is being run from. Only included when enabled by the \fI\%v1 Query Files\fP\&.
+.INDENT 7.0
+.IP \(bu 2
+\fBOSName\fP
+.IP \(bu 2
+\fBOSPlatform\fP
+.IP \(bu 2
+\fBOSRelease\fP
+.IP \(bu 2
+\fBOSVersion\fP
+.IP \(bu 2
+\fBfamilyId\fP
+.IP \(bu 2
+\fBhostname\fP
+.IP \(bu 2
+\fBis64Bits\fP
+.IP \(bu 2
+\fBmodelId\fP
+.IP \(bu 2
+\fBnumberOfLogicalCPU\fP
+.IP \(bu 2
+\fBnumberOfPhysicalCPU\fP
+.IP \(bu 2
+\fBprocessorAPICID\fP
+.IP \(bu 2
+\fBprocessorCacheSize\fP
+.IP \(bu 2
+\fBprocessorClockFrequency\fP
+.IP \(bu 2
+\fBprocessorName\fP
+.IP \(bu 2
+\fBtotalPhysicalMemory\fP
+.IP \(bu 2
+\fBtotalVirtualMemory\fP
+.IP \(bu 2
+\fBvendorID\fP
+.IP \(bu 2
+\fBvendorString\fP
+.UNINDENT
+.UNINDENT
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+{
+  \(dqversion\(dq: 1,
+  \(dqhook\(dq: \(dqmanual\(dq,
+  \(dqbuildDir\(dq: \(dq<build>\(dq,
+  \(dqdataDir\(dq: \(dq<build>/.cmake/instrumentation/v1/data\(dq,
+  \(dqsnippets\(dq: [
+    \(dqconfigure\-<hash>\-<timestamp>.json\(dq,
+    \(dqgenerate\-<hash>\-<timestamp>.json\(dq,
+    \(dqcompile\-<hash>\-<timestamp>.json\(dq,
+    \(dqcompile\-<hash>\-<timestamp>.json\(dq,
+    \(dqlink\-<hash>\-<timestamp>.json\(dq,
+    \(dqinstall\-<hash>\-<timestamp>.json\(dq,
+    \(dqctest\-<hash>\-<timestamp>.json\(dq,
+    \(dqtest\-<hash>\-<timestamp>.json\(dq,
+    \(dqtest\-<hash>\-<timestamp>.json\(dq,
+  ],
+  \(dqtrace\(dq: \(dqtrace/trace\-<timestamp>.json\(dq
+}
+.EE
+.UNINDENT
+.UNINDENT
+.SS v1 CMake Content File
+.sp
+CMake content files contain information about the CMake configure and generate
+steps. Each \fI\%v1 Snippet File\fP provides the path to one of these files
+corresponding to the CMake invocation responsible for generating its command.
+.sp
+Each CMake content file contains the following:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBcustom\fP
+An object containing arbitrary JSON data specified by the user with the
+\fI\%Custom CMake Content\fP functionality of the
+\fI\%cmake_instrumentation()\fP command.
+.TP
+.B \fBtargets\fP
+An object containing CMake targets, indexed by name, that have corresponding
+instrumentation data. Each target contains the following:
+.INDENT 7.0
+.TP
+.B \fBtype\fP
+The target type. One of \fBEXECUTABLE\fP, \fBSTATIC_LIBRARY\fP,
+\fBSHARED_LIBRARY\fP or \fBOBJECT_LIBRARY\fP\&.
+.TP
+.B \fBlabels\fP
+The \fI\%LABELS\fP property of the target.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Google Trace File
+.sp
+Trace files follow the \X'tty: link https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview'\fI\%Google Trace Event Format\fP\X'tty: link'\&. They include data from
+all \fI\%v1 Snippet Files\fP listed in the current index file.
+These files remain in the build tree even after \fI\%Indexing\fP occurs and all
+\fI\%Callbacks\fP are executed, until the next time \fI\%Indexing\fP occurs.
+.sp
+Trace files are stored in the \fBJSON Array Format\fP, where each
+\fI\%v1 Snippet File\fP corresponds to a single trace event object. Each trace
+event contains the following data:
+.INDENT 0.0
+.TP
+.B \fBname\fP
+A descriptive name generated by CMake based on the given snippet data.
+.TP
+.B \fBcat\fP
+The \fBrole\fP from the \fI\%v1 Snippet File\fP\&.
+.TP
+.B \fBph\fP
+Currently, always \fB\(dqX\(dq\fP to represent \fBComplete Events\fP\&.
+.TP
+.B \fBts\fP
+The \fBtimeStart\fP from the \fI\%v1 Snippet File\fP, converted from milliseconds to
+microseconds.
+.TP
+.B \fBdur\fP
+The \fBduration\fP from the \fI\%v1 Snippet File\fP, converted from milliseconds to
+microseconds.
+.TP
+.B \fBpid\fP
+Unused (always zero).
+.TP
+.B \fBtid\fP
+An integer ranging from zero to the number of concurrent jobs with which the
+processes being indexed ran. This is a synthetic ID calculated by CMake
+based on the \fBts\fP and \fBdur\fP of all snippet files being indexed in
+order to produce a more useful visualization of the process concurrency.
+.TP
+.B \fBargs\fP
+Contains all data from the \fI\%v1 Snippet File\fP corresponding to this trace event.
+.UNINDENT
+.SH COPYRIGHT
+2000-2025 Kitware, Inc. and Contributors
+.\" Generated by docutils manpage writer.
+.

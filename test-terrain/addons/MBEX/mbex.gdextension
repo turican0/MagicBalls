@@ -20,10 +20,10 @@ windows.x86_32.double.debug = "../../../gitextension/godot-cpp-template/bin/wind
 windows.x86_32.single.release = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_release.x86_32.dll"
 windows.x86_32.double.release = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_release.x86_32.double.dll"
 
-windows.x86_64.single.debug = "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
-windows.x86_64.double.debug = "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
-windows.x86_64.single.release = "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
-windows.x86_64.double.release = "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
+windows.x86_64.single.debug = "c:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
+windows.x86_64.double.debug = "c:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
+windows.x86_64.single.release = "c:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
+windows.x86_64.double.release = "c:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
 
 linux.x86_64.single.debug = "./linux/libEXTENSION-NAME.linux.template_debug.x86_64.so"
 linux.x86_64.double.debug = "./linux/libEXTENSION-NAME.linux.template_debug.x86_64.double.so"

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindCxxTest &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindCygwin" href="FindCygwin.html" />
+    <link rel="prev" title="FindCVS" href="FindCVS.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindCygwin.html" title="FindCygwin"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindCVS.html" title="FindCVS"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindCxxTest</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findcxxtest">
+<span id="module:FindCxxTest"></span><h1>FindCxxTest<a class="headerlink" href="#findcxxtest" title="Link to this heading">¶</a></h1>
+<p>Finds <a class="reference external" href="https://github.com/CxxTest/cxxtest">CxxTest</a>, a C++ unit testing framework suite, and provides a helper
+command to create test runners and integrate them with CTest:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">CxxTest</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">CxxTest_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>Boolean indicating whether the CxxTest framework was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CXXTEST_INCLUDE_DIRS</span></code></dt><dd><p>Include directories containing headers needed to use CxxTest.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CXXTEST_TESTGEN_EXECUTABLE</span></code></dt><dd><p>The path to the found CxxTest test generator script (Perl- or Python-based),
+selected based on the found interpreter or user-specified preference.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CXXTEST_TESTGEN_INTERPRETER</span></code></dt><dd><p>The path to the found Perl or Python interpreter used to run the test
+generator script, if needed (e.g., on platforms where script shebang lines are
+not supported).</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">CXXTEST_PYTHON_TESTGEN_EXECUTABLE</span></code></dt><dd><p>The path to the Python-based CxxTest test generator script.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CXXTEST_PERL_TESTGEN_EXECUTABLE</span></code></dt><dd><p>The path to the Perl-based CxxTest test generator script.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Perl-based test generator script has been removed in CxxTest version
+4.0 in favor of Python-based script.</p>
+</div>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables before calling
+<code class="docutils literal notranslate"><span class="pre">find_package(CxxTest)</span></code>:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">CXXTEST_TESTGEN_ARGS</span></code></dt><dd><p>This variable can be set to specify a semicolon-separated list of command-line
+options to pass to the CxxTest code generator.  If not set, the default value
+is <code class="docutils literal notranslate"><span class="pre">--error-printer</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following command if CxxTest is found:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:cxxtest_add_test">
+<span class="sig-name descname"><span class="pre">cxxtest_add_test</span></span><a class="headerlink" href="#command:cxxtest_add_test" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a CxxTest runner and adds it to the CTest testing suite:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cxxtest_add_test(</span><span class="nv">&lt;test-name&gt;</span><span class="w"> </span><span class="nv">&lt;gen-source-file&gt;</span><span class="w"> </span><span class="nv">&lt;input-files-to-testgen&gt;...</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Parameters:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;test-name&gt;</span></code></dt><dd><p>The name of the test executable target to be created and registered as a
+test in the CTest suite.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;gen-source-file&gt;</span></code></dt><dd><p>The name of the source file to be generated by the CxxTest code generator.
+This must be a relative path.  It is interpreted relative to the
+current binary directory (<span class="target" id="index-0-variable:CMAKE_CURRENT_BINARY_DIR"></span><a class="reference internal" href="../variable/CMAKE_CURRENT_BINARY_DIR.html#variable:CMAKE_CURRENT_BINARY_DIR" title="CMAKE_CURRENT_BINARY_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_BINARY_DIR</span></code></a>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;input-files-to-testgen&gt;...</span></code></dt><dd><p>A list of header files containing test suite classes derived from the C++
+class <code class="docutils literal notranslate"><span class="pre">CxxTest::TestSuite</span></code>, to be included in the test runner.  These must
+be given as absolute paths.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">CXXTEST_FOUND</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Use <code class="docutils literal notranslate"><span class="pre">CxxTest_FOUND</span></code>, which has the same value.</p>
+</div>
+<p>Boolean indicating whether the CxxTest framework was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CXXTEST_USE_PYTHON</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.8.3: </span>In earlier versions of CMake, this hint variable was used to force the use
+of the Python-based test generator instead of the Perl one, regardless of
+which scripting language was installed.  It is now only considered when both
+Perl and Python interpreters are found.</p>
+</div>
+<p>A boolean hint variable that, when set to true, prefers the Python code
+generator over the Perl one if both interpreters are found.  This variable is
+only relevant when using CxxTest version 3.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>The following example demonstrates how CxxTest can be used in CMake with this
+module.  If CxxTest is found:</p>
+<ul class="simple">
+<li><p>Additional interface <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">imported target</span></a> is created
+manually in the project to encapsulate the CxxTest usage requirements and
+link it to specified tests.  Such target is useful, for example, when dealing
+with multiple tests.</p></li>
+<li><p>Test generator is invoked to create <code class="docutils literal notranslate"><span class="pre">foo_test.cc</span></code> in the current binary
+directory from the input header <code class="docutils literal notranslate"><span class="pre">foo_test.h</span></code> located in the current source
+directory.</p></li>
+<li><p>An executable named <code class="docutils literal notranslate"><span class="pre">unit_test_foo</span></code> is built and registered as a test in
+CTest.</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">CxxTest</span><span class="nf">)</span>
+
+<span class="c"># Create interface imported target:</span>
+<span class="nf">if(</span><span class="nb">CxxTest_FOUND</span><span class="w"> </span><span class="no">AND</span><span class="w"> </span><span class="no">NOT</span><span class="w"> </span><span class="no">TARGET</span><span class="w"> </span><span class="nb">CxxTest</span><span class="o">::</span><span class="nb">CxxTest</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">add_library(</span><span class="nb">CxxTest</span><span class="o">::</span><span class="nb">CxxTest</span><span class="w"> </span><span class="no">INTERFACE</span><span class="w"> </span><span class="no">IMPORTED</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">set_target_properties(</span>
+<span class="w">    </span><span class="nb">CxxTest</span><span class="o">::</span><span class="nb">CxxTest</span>
+<span class="w">    </span><span class="no">PROPERTIES</span><span class="w"> </span><span class="no">INTERFACE_INCLUDE_DIRECTORIES</span><span class="w"> </span><span class="s">&quot;${CXXTEST_INCLUDE_DIRS}&quot;</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="c"># Add test:</span>
+<span class="nf">if(</span><span class="nb">CxxTest_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">enable_testing()</span>
+
+<span class="w">  </span><span class="nf">cxxtest_add_test(</span>
+<span class="w">    </span><span class="nb">unit_test_foo</span>
+<span class="w">    </span><span class="nb">foo_test.cc</span>
+<span class="w">    </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="na">/foo_test.h</span>
+<span class="w">  </span><span class="nf">)</span>
+
+<span class="w">  </span><span class="nf">target_link_libraries(</span>
+<span class="w">    </span><span class="nb">unit_test_foo</span>
+<span class="w">    </span><span class="no">PRIVATE</span>
+<span class="w">      </span><span class="nb">CxxTest</span><span class="o">::</span><span class="nb">CxxTest</span>
+<span class="w">      </span><span class="c"># Link any project targets as needed, if test depends on them:</span>
+<span class="w">      </span><span class="nb">foo</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">foo_test.h</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cxxtest/TestSuite.h&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyTestSuite</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">CxxTest</span><span class="o">::</span><span class="n">TestSuite</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">testAddition</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TS_ASSERT</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">TS_ASSERT_EQUALS</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindCxxTest</a><ul>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindCVS.html"
+                          title="previous chapter">FindCVS</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindCygwin.html"
+                          title="next chapter">FindCygwin</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindCxxTest.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindCygwin.html" title="FindCygwin"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindCVS.html" title="FindCVS"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindCxxTest</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

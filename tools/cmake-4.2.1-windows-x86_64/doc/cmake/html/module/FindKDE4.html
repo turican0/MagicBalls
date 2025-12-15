@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindKDE4 &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindLAPACK" href="FindLAPACK.html" />
+    <link rel="prev" title="FindKDE3" href="FindKDE3.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindLAPACK.html" title="FindLAPACK"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindKDE3.html" title="FindKDE3"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindKDE4</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findkde4">
+<span id="module:FindKDE4"></span><h1>FindKDE4<a class="headerlink" href="#findkde4" title="Link to this heading">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is specifically intended for KDE version 4, which is obsolete
+and no longer maintained.  For modern application development using KDE
+technologies with CMake, use a newer version of KDE, and refer to the
+<a class="reference external" href="https://develop.kde.org/docs/getting-started/building/cmake-build/">KDE documentation</a>.</p>
+</div>
+<p>Finds the KDE 4 installation:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">KDE4</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This module is a wrapper around the following upstream KDE 4 modules:</p>
+<p><code class="docutils literal notranslate"><span class="pre">FindKDE4Internal.cmake</span></code></p>
+<blockquote>
+<div><p>Upstream internal module, which finds the KDE 4 include directories,
+libraries, and KDE-specific preprocessor tools.  It provides usage
+requirements for building KDE 4 software and defines several helper
+commands to simplify working with KDE 4 in CMake.</p>
+</div></blockquote>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">KDE4Macros.cmake</span></code></dt><dd><p>Upstream utility module that defines all additional KDE4-specific
+commands to use KDE 4 in CMake.  For example:
+<code class="docutils literal notranslate"><span class="pre">kde4_automoc()</span></code>, <code class="docutils literal notranslate"><span class="pre">kde4_add_executable()</span></code>, <code class="docutils literal notranslate"><span class="pre">kde4_add_library()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">kde4_add_ui_files()</span></code>, <code class="docutils literal notranslate"><span class="pre">kde4_add_ui3_files()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">kde4_add_kcfg_files()</span></code>, <code class="docutils literal notranslate"><span class="pre">kde4_add_kdeinit_executable()</span></code>, etc.</p>
+</dd>
+</dl>
+<p>Upstream KDE 4 modules are installed by the KDE 4 distribution package in
+<code class="docutils literal notranslate"><span class="pre">$KDEDIRS/share/apps/cmake/modules/</span></code>.  This path is automatically
+appended to the <span class="target" id="index-0-variable:CMAKE_MODULE_PATH"></span><a class="reference internal" href="../variable/CMAKE_MODULE_PATH.html#variable:CMAKE_MODULE_PATH" title="CMAKE_MODULE_PATH"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_MODULE_PATH</span></code></a> variable when calling
+<code class="docutils literal notranslate"><span class="pre">find_package(KDE4)</span></code>, so any additional KDE 4 modules can be included in
+the project with <span class="target" id="index-0-command:include"></span><a class="reference internal" href="../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a>.  For example:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">KDE4Defaults.cmake</span></code></dt><dd><p>Upstream internal module that sets some CMake options which are useful,
+but not required for building KDE 4 software.  If these settings should
+be used, include this module after finding KDE 4:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">KDE4</span><span class="nf">)</span>
+<span class="nf">include(</span><span class="nb">KDE4Defaults</span><span class="nf">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>For usage details, refer to the upstream KDE 4 documentation.  For example,
+at the top of the <code class="docutils literal notranslate"><span class="pre">FindKDE4Internal</span></code> module a complete documentation is
+available for all variables and commands these modules provide.</p>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">KDE4_FOUND</span></code></dt><dd><p>Boolean indicating whether KDE 4 was found.  This variable is set by the
+upstream <code class="docutils literal notranslate"><span class="pre">FindKDE4Internal</span></code> module.</p>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables before calling the
+<code class="docutils literal notranslate"><span class="pre">find_package(KDE4)</span></code>:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ENV{KDEDIRS}</span></code></dt><dd><p>Environment variable containing the path to the KDE 4 installation.</p>
+</dd>
+</dl>
+<p>KDE 4 is searched in the following directories in the given order:</p>
+<ul class="simple">
+<li><p><span class="target" id="index-0-variable:CMAKE_INSTALL_PREFIX"></span><a class="reference internal" href="../variable/CMAKE_INSTALL_PREFIX.html#variable:CMAKE_INSTALL_PREFIX" title="CMAKE_INSTALL_PREFIX"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code></a> variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KDEDIRS</span></code> environment variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/opt/kde4</span></code> path</p></li>
+</ul>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="example-basic-usage">
+<h3>Example: Basic Usage<a class="headerlink" href="#example-basic-usage" title="Link to this heading">¶</a></h3>
+<p>Finding KDE 4 as required and using it in CMake:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">KDE4</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+
+<span class="nf">set(</span><span class="nb">sources</span><span class="w"> </span><span class="nb">main.cpp</span><span class="w"> </span><span class="nb">mywidget.cpp</span><span class="w"> </span><span class="nb">mypart.cpp</span><span class="nf">)</span>
+
+<span class="c"># The kde4_*() commands are provided by the KDE4Macros module, which is</span>
+<span class="c"># included automatically by FindKDE4, if KDE4 is found:</span>
+<span class="nf">kde4_automoc(</span><span class="o">${</span><span class="nt">sources</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">kde4_add_executable(</span><span class="nb">example</span><span class="w"> </span><span class="o">${</span><span class="nt">sources</span><span class="o">}</span><span class="nf">)</span>
+
+<span class="nf">target_include_directories(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nt">KDE4_INCLUDES</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nt">KDE4_KDEUI_LIBS</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nt">KDE4_KPARTS_LIBS</span><span class="o">}</span><span class="nf">)</span>
+
+<span class="nf">install(</span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">example</span><span class="w"> </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_BINDIR</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">install(</span><span class="no">FILES</span><span class="w"> </span><span class="nb">kfoo.desktop</span><span class="w"> </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">XDG_APPS_DIR</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-full-featured-example">
+<h3>Example: Full Featured Example<a class="headerlink" href="#example-full-featured-example" title="Link to this heading">¶</a></h3>
+<p>In the following example this module is used to find KDE 4 installation.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">project(</span><span class="nb">kfoo</span><span class="nf">)</span>
+
+<span class="nf">find_package(</span><span class="no">KDE4</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+
+<span class="c"># Append path from where to include local project modules if any:</span>
+<span class="nf">list(</span><span class="no">APPEND</span><span class="w"> </span><span class="no">CMAKE_MODULE_PATH</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="na">/cmake</span><span class="nf">)</span>
+
+<span class="nf">include_directories(</span><span class="o">${</span><span class="nt">KDE4_INCLUDE_DIRS</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">add_definitions(</span><span class="o">${</span><span class="nt">KDE4_DEFINITIONS</span><span class="o">}</span><span class="nf">)</span>
+
+<span class="nf">set(</span><span class="nb">sources</span><span class="w"> </span><span class="nb">main.cpp</span><span class="w"> </span><span class="nb">myappl.cpp</span><span class="w"> </span><span class="nb">view.cpp</span><span class="nf">)</span>
+
+<span class="c"># If Qt designer UI files version 3 or 4 are available add them to the</span>
+<span class="c"># sources variable:</span>
+<span class="nf">kde4_add_ui_files(</span><span class="nb">sources</span><span class="w"> </span><span class="nb">maindialog.ui</span><span class="w"> </span><span class="nb">logindialog.ui</span><span class="nf">)</span>
+<span class="nf">kde4_add_ui3_files(</span><span class="nb">sources</span><span class="w"> </span><span class="nb">printerdlg.ui</span><span class="w"> </span><span class="nb">previewdlg.ui</span><span class="nf">)</span>
+
+<span class="c"># If there are files for the kconfig_compiler add them this way:</span>
+<span class="nf">kde4_add_kcfg_files(</span><span class="nb">sources</span><span class="w"> </span><span class="nb">settings.kcfg</span><span class="nf">)</span>
+
+<span class="c"># When everything is listed, probably automoc is wanted:</span>
+<span class="nf">kde4_automoc(</span><span class="o">${</span><span class="nt">sources</span><span class="o">}</span><span class="nf">)</span>
+
+<span class="c"># Finally, specify what to build:</span>
+<span class="nf">kde4_add_executable(</span><span class="nb">kfoo</span><span class="w"> </span><span class="o">${</span><span class="nt">sources</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">kde4_add_executable()</span></code> command is a slightly extended version of the
+CMake command <span class="target" id="index-0-command:add_executable"></span><a class="reference internal" href="../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a>.  Additionally, it does some more
+<code class="docutils literal notranslate"><span class="pre">RPATH</span></code> handling and supports the <code class="docutils literal notranslate"><span class="pre">KDE4_ENABLE_FINAL</span></code> variable.  The
+first argument is the name of the executable followed by a list of source
+files.  If a library needs to be created instead of an executable, the
+<code class="docutils literal notranslate"><span class="pre">kde4_add_library()</span></code> can be used.  It is an extended version of the
+<span class="target" id="index-0-command:add_library"></span><a class="reference internal" href="../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> command.  It adds support for the
+<code class="docutils literal notranslate"><span class="pre">KDE4_ENABLE_FINAL</span></code> variable and under Windows it adds the
+<code class="docutils literal notranslate"><span class="pre">-DMAKE_KFOO_LIB</span></code> to the compile flags.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">KDE4</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+
+<span class="c"># ...</span>
+
+<span class="nf">kde4_add_library(</span><span class="nb">kfoo</span><span class="w"> </span><span class="o">${</span><span class="nt">sources</span><span class="o">}</span><span class="nf">)</span>
+
+<span class="c"># Optionally, set the library version number if needed:</span>
+<span class="nf">set_target_properties(</span><span class="nb">kfoo</span><span class="w"> </span><span class="no">PROPERTIES</span><span class="w"> </span><span class="no">VERSION</span><span class="w"> </span><span class="m">5.0.0</span><span class="w"> </span><span class="no">SOVERSION</span><span class="w"> </span><span class="m">5</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>KDE is very modular, so if a KPart, a control center module, or an ioslave
+needs to be created, here's how to do it:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">KDE4</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+<span class="c"># ...</span>
+<span class="nf">kde4_add_plugin(</span><span class="nb">kfoo</span><span class="w"> </span><span class="o">${</span><span class="nt">sources</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Now, the application/library/plugin probably needs to link to some
+libraries.  For this use the standard <span class="target" id="index-0-command:target_link_libraries"></span><a class="reference internal" href="../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>
+command.  For every KDE library there are variables available in the form
+of <code class="docutils literal notranslate"><span class="pre">KDE4_FOO_LIBS</span></code>.  Use them to get also all depending libraries:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">kfoo</span><span class="w"> </span><span class="o">${</span><span class="nt">KDE4_KDEUI_LIBS</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nt">KDE4_KIO_LIBS</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-the-kdeinit-executable">
+<h3>Example: The kdeinit Executable<a class="headerlink" href="#example-the-kdeinit-executable" title="Link to this heading">¶</a></h3>
+<p>In the following example, the so called kdeinit executable is created.
+The <code class="docutils literal notranslate"><span class="pre">kde4_add_kdeinit_executable()</span></code> command creates both an executable
+with the given name and a library with the given name prefixed with
+<code class="docutils literal notranslate"><span class="pre">kdeinit_</span></code>.  The <span class="target" id="index-1-command:target_link_libraries"></span><a class="reference internal" href="../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a> command adds all
+required libraries to the <code class="docutils literal notranslate"><span class="pre">kdeinit_kbar</span></code> library, and then links the
+<code class="docutils literal notranslate"><span class="pre">kbar</span></code> against the <code class="docutils literal notranslate"><span class="pre">kdeinit_kbar</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">KDE4</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+
+<span class="c"># ...</span>
+
+<span class="nf">kde4_add_kdeinit_executable(</span><span class="nb">kbar</span><span class="w"> </span><span class="o">${</span><span class="nt">kbarSources</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">kdeinit_kbar</span><span class="w"> </span><span class="o">${</span><span class="nt">KDE4_KIO_LIBS</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">kbar</span><span class="w"> </span><span class="nb">kdeinit_kbar</span><span class="nf">)</span>
+
+<span class="nf">install(</span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">kbar</span><span class="w"> </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_BINDIR</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">install(</span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">kdeinit_kbar</span><span class="w"> </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-removing-compile-definitions">
+<h3>Example: Removing Compile Definitions<a class="headerlink" href="#example-removing-compile-definitions" title="Link to this heading">¶</a></h3>
+<p>Sometimes, a default compile definition passed to the compiler needs to be
+removed.  The <span class="target" id="index-0-command:remove_definitions"></span><a class="reference internal" href="../command/remove_definitions.html#command:remove_definitions" title="remove_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">remove_definitions()</span></code></a> command can be used.  For
+example, by default, the KDE4 build system sets the <code class="docutils literal notranslate"><span class="pre">-DQT_NO_STL</span></code> flag.
+If the project code uses some of the Qt STL compatibility layer, this flag
+should be removed:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">KDE4</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+
+<span class="nf">add_definitions(</span><span class="o">${</span><span class="nt">KDE4_DEFINITIONS</span><span class="o">}</span><span class="nf">)</span>
+
+<span class="c"># ...</span>
+
+<span class="nf">remove_definitions(</span><span class="p">-</span><span class="no">DQT_NO_STL</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindKDE4</a><ul>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-basic-usage">Example: Basic Usage</a></li>
+<li><a class="reference internal" href="#example-full-featured-example">Example: Full Featured Example</a></li>
+<li><a class="reference internal" href="#example-the-kdeinit-executable">Example: The kdeinit Executable</a></li>
+<li><a class="reference internal" href="#example-removing-compile-definitions">Example: Removing Compile Definitions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindKDE3.html"
+                          title="previous chapter">FindKDE3</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindLAPACK.html"
+                          title="next chapter">FindLAPACK</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindKDE4.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindLAPACK.html" title="FindLAPACK"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindKDE3.html" title="FindKDE3"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindKDE4</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

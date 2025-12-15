@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMAKE_&lt;LANG&gt;_COMPILER_ARCHITECTURE_ID &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT" href="CMAKE_LANG_COMPILER_FRONTEND_VARIANT.html" />
+    <link rel="prev" title="CMAKE_&lt;LANG&gt;_COMPILER_AR" href="CMAKE_LANG_COMPILER_AR.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMAKE_LANG_COMPILER_FRONTEND_VARIANT.html" title="CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_LANG_COMPILER_AR.html" title="CMAKE_&lt;LANG&gt;_COMPILER_AR"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" accesskey="U">cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_&lt;LANG&gt;_COMPILER_ARCHITECTURE_ID</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmake-lang-compiler-architecture-id">
+<span id="variable:CMAKE_<LANG>_COMPILER_ARCHITECTURE_ID"></span><h1>CMAKE_&lt;LANG&gt;_COMPILER_ARCHITECTURE_ID<a class="headerlink" href="#cmake-lang-compiler-architecture-id" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p><a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">List</span></a> of identifiers indicating the
+target architecture(s) of the compiler for language <code class="docutils literal notranslate"><span class="pre">&lt;LANG&gt;</span></code>.</p>
+<p>Typically the list has one entry unless <span class="target" id="index-0-variable:CMAKE_OSX_ARCHITECTURES"></span><a class="reference internal" href="CMAKE_OSX_ARCHITECTURES.html#variable:CMAKE_OSX_ARCHITECTURES" title="CMAKE_OSX_ARCHITECTURES"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_OSX_ARCHITECTURES</span></code></a>
+lists multiple architectures.</p>
+<p>Possible values for each platform are documented in the following sections.</p>
+<section id="apple-platforms">
+<h2>Apple Platforms<a class="headerlink" href="#apple-platforms" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>These identifiers are used when the <span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_COMPILER"></span><a class="reference internal" href="CMAKE_LANG_COMPILER.html#variable:CMAKE_&lt;LANG&gt;_COMPILER" title="CMAKE_&lt;LANG&gt;_COMPILER"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER</span></code></a>
+targets an Apple platform (<code class="docutils literal notranslate"><span class="pre">__APPLE__</span></code> is defined).</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">arm64</span></code></dt><dd><p>ARM 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">arm64e</span></code></dt><dd><p>ARM 64-bit with Pointer Authentication (PACs)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">arm64_32</span></code></dt><dd><p>ARM 64-bit with 32-bit pointers (watchOS)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">armv5</span></code>, <code class="docutils literal notranslate"><span class="pre">armv6</span></code>, <code class="docutils literal notranslate"><span class="pre">armv7</span></code>, <code class="docutils literal notranslate"><span class="pre">armv7k</span></code>, <code class="docutils literal notranslate"><span class="pre">armv7s</span></code></dt><dd><p>ARM 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">i386</span></code>, <code class="docutils literal notranslate"><span class="pre">i486</span></code>, <code class="docutils literal notranslate"><span class="pre">i586</span></code>, <code class="docutils literal notranslate"><span class="pre">i686</span></code></dt><dd><p>Intel 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ppc</span></code></dt><dd><p>PowerPC 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x86_64</span></code></dt><dd><p>Intel 64-bit</p>
+</dd>
+</dl>
+</section>
+<section id="unix-platforms">
+<h2>UNIX Platforms<a class="headerlink" href="#unix-platforms" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>These identifiers are used when the <span class="target" id="index-1-variable:CMAKE_&lt;LANG&gt;_COMPILER"></span><a class="reference internal" href="CMAKE_LANG_COMPILER.html#variable:CMAKE_&lt;LANG&gt;_COMPILER" title="CMAKE_&lt;LANG&gt;_COMPILER"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER</span></code></a>
+targets a UNIX platform.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">aarch64</span></code></dt><dd><p>ARM 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">alpha</span></code></dt><dd><p>DEC Alpha</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">armv5</span></code>, <code class="docutils literal notranslate"><span class="pre">armv6</span></code>, <code class="docutils literal notranslate"><span class="pre">armv7</span></code></dt><dd><p>ARM 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">i386</span></code>, <code class="docutils literal notranslate"><span class="pre">i486</span></code>, <code class="docutils literal notranslate"><span class="pre">i586</span></code>, <code class="docutils literal notranslate"><span class="pre">i686</span></code></dt><dd><p>Intel 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ia64</span></code></dt><dd><p>Itanium 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">loongarch32</span></code></dt><dd><p>LoongArch 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">loongarch64</span></code></dt><dd><p>LoongArch 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">m68k</span></code></dt><dd><p>Motorola 68000</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mips</span></code></dt><dd><p>MIPS 32-bit big-endian</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mipsel</span></code></dt><dd><p>MIPS 32-bit little-endian</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mips64</span></code></dt><dd><p>MIPS 64-bit big-endian</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mips64el</span></code></dt><dd><p>MIPS 64-bit little-endian</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">parisc</span></code></dt><dd><p>PA-RISC 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">parisc64</span></code></dt><dd><p>PA-RISC 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ppc</span></code></dt><dd><p>PowerPC 32-bit big-endian</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ppcle</span></code></dt><dd><p>PowerPC 32-bit little-endian</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ppc64</span></code></dt><dd><p>PowerPC 64-bit big-endian</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ppc64le</span></code></dt><dd><p>PowerPC 64-bit little-endian</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">riscv32</span></code></dt><dd><p>RISC-V 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">riscv64</span></code></dt><dd><p>RISC-V 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">s390</span></code>, <code class="docutils literal notranslate"><span class="pre">s390x</span></code></dt><dd><p>IBM Z</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sparc</span></code></dt><dd><p>SPARC 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sparcv9</span></code></dt><dd><p>SPARC 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sw_64</span></code></dt><dd><p>Sunway</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wasm32</span></code></dt><dd><p>WebAssembly (Emscripten) 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wasm64</span></code></dt><dd><p>WebAssembly (Emscripten) 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x86_64</span></code></dt><dd><p>Intel 64-bit</p>
+</dd>
+</dl>
+</section>
+<section id="windows-platforms-with-gnu-abi-mingw">
+<h2>Windows Platforms with GNU ABI (MinGW)<a class="headerlink" href="#windows-platforms-with-gnu-abi-mingw" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>These identifiers are used when the <span class="target" id="index-2-variable:CMAKE_&lt;LANG&gt;_COMPILER"></span><a class="reference internal" href="CMAKE_LANG_COMPILER.html#variable:CMAKE_&lt;LANG&gt;_COMPILER" title="CMAKE_&lt;LANG&gt;_COMPILER"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER</span></code></a>
+targets Windows with a GNU ABI (<code class="docutils literal notranslate"><span class="pre">_WIN32</span></code> and <code class="docutils literal notranslate"><span class="pre">__MINGW32__</span></code> are defined).</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">aarch64</span></code></dt><dd><p>ARM 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">armv7</span></code></dt><dd><p>ARM 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">i386</span></code>, <code class="docutils literal notranslate"><span class="pre">i486</span></code>, <code class="docutils literal notranslate"><span class="pre">i586</span></code>, <code class="docutils literal notranslate"><span class="pre">i686</span></code></dt><dd><p>Intel 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x86_64</span></code></dt><dd><p>Intel 64-bit</p>
+</dd>
+</dl>
+</section>
+<section id="windows-platforms-with-msvc-abi">
+<h2>Windows Platforms with MSVC ABI<a class="headerlink" href="#windows-platforms-with-msvc-abi" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>These identifiers are used when the <span class="target" id="index-3-variable:CMAKE_&lt;LANG&gt;_COMPILER"></span><a class="reference internal" href="CMAKE_LANG_COMPILER.html#variable:CMAKE_&lt;LANG&gt;_COMPILER" title="CMAKE_&lt;LANG&gt;_COMPILER"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER</span></code></a>
+targets Windows with a MSVC ABI (<code class="docutils literal notranslate"><span class="pre">_WIN32</span></code> and <code class="docutils literal notranslate"><span class="pre">_MSC_VER</span></code> are defined).</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ARM64</span></code></dt><dd><p>ARM 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ARM64EC</span></code></dt><dd><p>ARM 64-bit Emulation-Compatible</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ARMV4I</span></code>, <code class="docutils literal notranslate"><span class="pre">ARMV5I</span></code>, <code class="docutils literal notranslate"><span class="pre">ARMV7</span></code></dt><dd><p>ARM 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IA64</span></code></dt><dd><p>Itanium 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MIPS</span></code></dt><dd><p>MIPS</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHx</span></code>, <code class="docutils literal notranslate"><span class="pre">SH3</span></code>, <code class="docutils literal notranslate"><span class="pre">SH3DSP</span></code>, <code class="docutils literal notranslate"><span class="pre">SH4</span></code>, <code class="docutils literal notranslate"><span class="pre">SH5</span></code></dt><dd><p>SuperH</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x64</span></code></dt><dd><p>Intel 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">X86</span></code></dt><dd><p>Intel 32-bit</p>
+</dd>
+</dl>
+</section>
+<section id="windows-platforms-with-watcom-abi">
+<h2>Windows Platforms with Watcom ABI<a class="headerlink" href="#windows-platforms-with-watcom-abi" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>These identifiers are used when <span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_COMPILER_ID"></span><a class="reference internal" href="CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_&lt;LANG&gt;_COMPILER_ID" title="CMAKE_&lt;LANG&gt;_COMPILER_ID"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER_ID</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">OpenWatcom</span></code> or <code class="docutils literal notranslate"><span class="pre">Watcom</span></code>.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">I86</span></code></dt><dd><p>Intel 16-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">X86</span></code></dt><dd><p>Intel 32-bit</p>
+</dd>
+</dl>
+</section>
+<section id="green-hills-multi-platforms">
+<h2>Green Hills MULTI Platforms<a class="headerlink" href="#green-hills-multi-platforms" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+<p>These identifiers are used when <span class="target" id="index-1-variable:CMAKE_&lt;LANG&gt;_COMPILER_ID"></span><a class="reference internal" href="CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_&lt;LANG&gt;_COMPILER_ID" title="CMAKE_&lt;LANG&gt;_COMPILER_ID"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER_ID</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">GHS</span></code>.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ARM</span></code></dt><dd><p>ARM 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PPC</span></code></dt><dd><p>PowerPC 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PPC64</span></code></dt><dd><p>PowerPC 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">x64</span></code></dt><dd><p>Intel 64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">X86</span></code></dt><dd><p>Intel 32-bit</p>
+</dd>
+</dl>
+</section>
+<section id="iar-platforms">
+<h2>IAR Platforms<a class="headerlink" href="#iar-platforms" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>These identifiers are used when <span class="target" id="index-2-variable:CMAKE_&lt;LANG&gt;_COMPILER_ID"></span><a class="reference internal" href="CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_&lt;LANG&gt;_COMPILER_ID" title="CMAKE_&lt;LANG&gt;_COMPILER_ID"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER_ID</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">IAR</span></code>.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">8051</span></code></dt><dd><p>Intel 8051-compatible 8-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ARM</span></code></dt><dd><p>ARM 32-/64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AVR</span></code></dt><dd><p>Microchip AVR 8-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MSP430</span></code></dt><dd><p>Texas Instruments MSP430 16-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RH850</span></code></dt><dd><p>Renesas Electronics RH850 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RISCV</span></code></dt><dd><p>RISC-V 32-/64-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RL78</span></code></dt><dd><p>Renesas Electronics RL78 16-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RX</span></code></dt><dd><p>Renesas Electronics RX 32-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STM8</span></code></dt><dd><p>STMicroelectronics STM8 8-bit</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">V850</span></code></dt><dd><p>Renesas Electronics V850 32-bit</p>
+</dd>
+</dl>
+</section>
+<section id="renesas-compiler-platforms">
+<h2>Renesas Compiler Platforms<a class="headerlink" href="#renesas-compiler-platforms" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>These identifiers are used when <span class="target" id="index-3-variable:CMAKE_&lt;LANG&gt;_COMPILER_ID"></span><a class="reference internal" href="CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_&lt;LANG&gt;_COMPILER_ID" title="CMAKE_&lt;LANG&gt;_COMPILER_ID"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER_ID</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">Renesas</span></code>.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">RH850</span></code></dt><dd><p>Renesas Electronics RH850</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RL78</span></code></dt><dd><p>Renesas Electronics RL78</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RX</span></code></dt><dd><p>Renesas Electronics RX</p>
+</dd>
+</dl>
+</section>
+<section id="tasking-platforms">
+<h2>TASKING Platforms<a class="headerlink" href="#tasking-platforms" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.25.</span></p>
+</div>
+<p>These identifiers are used when <span class="target" id="index-4-variable:CMAKE_&lt;LANG&gt;_COMPILER_ID"></span><a class="reference internal" href="CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_&lt;LANG&gt;_COMPILER_ID" title="CMAKE_&lt;LANG&gt;_COMPILER_ID"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER_ID</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">Tasking</span></code>.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">8051</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ARC</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ARM</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MCS</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PCP</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TriCore</span></code></dt><dd></dd>
+</dl>
+</section>
+<section id="texas-instruments-platforms">
+<h2>Texas Instruments Platforms<a class="headerlink" href="#texas-instruments-platforms" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>These identifiers are used when <span class="target" id="index-5-variable:CMAKE_&lt;LANG&gt;_COMPILER_ID"></span><a class="reference internal" href="CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_&lt;LANG&gt;_COMPILER_ID" title="CMAKE_&lt;LANG&gt;_COMPILER_ID"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER_ID</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">TI</span></code>.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ARM</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Blackfin</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MSP430</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHARC</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TMS320C28x</span></code></dt><dd></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TMS320C6x</span></code></dt><dd></dd>
+</dl>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">CMAKE_&lt;LANG&gt;_COMPILER_ARCHITECTURE_ID</a><ul>
+<li><a class="reference internal" href="#apple-platforms">Apple Platforms</a></li>
+<li><a class="reference internal" href="#unix-platforms">UNIX Platforms</a></li>
+<li><a class="reference internal" href="#windows-platforms-with-gnu-abi-mingw">Windows Platforms with GNU ABI (MinGW)</a></li>
+<li><a class="reference internal" href="#windows-platforms-with-msvc-abi">Windows Platforms with MSVC ABI</a></li>
+<li><a class="reference internal" href="#windows-platforms-with-watcom-abi">Windows Platforms with Watcom ABI</a></li>
+<li><a class="reference internal" href="#green-hills-multi-platforms">Green Hills MULTI Platforms</a></li>
+<li><a class="reference internal" href="#iar-platforms">IAR Platforms</a></li>
+<li><a class="reference internal" href="#renesas-compiler-platforms">Renesas Compiler Platforms</a></li>
+<li><a class="reference internal" href="#tasking-platforms">TASKING Platforms</a></li>
+<li><a class="reference internal" href="#texas-instruments-platforms">Texas Instruments Platforms</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMAKE_LANG_COMPILER_AR.html"
+                          title="previous chapter">CMAKE_&lt;LANG&gt;_COMPILER_AR</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMAKE_LANG_COMPILER_FRONTEND_VARIANT.html"
+                          title="next chapter">CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/variable/CMAKE_LANG_COMPILER_ARCHITECTURE_ID.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMAKE_LANG_COMPILER_FRONTEND_VARIANT.html" title="CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_LANG_COMPILER_AR.html" title="CMAKE_&lt;LANG&gt;_COMPILER_AR"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" >cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_&lt;LANG&gt;_COMPILER_ARCHITECTURE_ID</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

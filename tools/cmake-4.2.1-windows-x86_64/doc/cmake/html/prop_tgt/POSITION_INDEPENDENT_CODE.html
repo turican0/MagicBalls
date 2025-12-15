@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>POSITION_INDEPENDENT_CODE &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PRECOMPILE_HEADERS" href="PRECOMPILE_HEADERS.html" />
+    <link rel="prev" title="PDB_OUTPUT_DIRECTORY_&lt;CONFIG&gt;" href="PDB_OUTPUT_DIRECTORY_CONFIG.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="PRECOMPILE_HEADERS.html" title="PRECOMPILE_HEADERS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PDB_OUTPUT_DIRECTORY_CONFIG.html" title="PDB_OUTPUT_DIRECTORY_&lt;CONFIG&gt;"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-properties.7.html" accesskey="U">cmake-properties(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">POSITION_INDEPENDENT_CODE</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="position-independent-code">
+<span id="prop_tgt:POSITION_INDEPENDENT_CODE"></span><h1>POSITION_INDEPENDENT_CODE<a class="headerlink" href="#position-independent-code" title="Link to this heading">¶</a></h1>
+<p>A target property that specifies whether to create a target that has
+position-independent code enabled.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">POSITION_INDEPENDENT_CODE</span></code> target property determines whether
+position-independent executables or libraries will be created.  This
+property is <code class="docutils literal notranslate"><span class="pre">True</span></code> by default for <code class="docutils literal notranslate"><span class="pre">SHARED</span></code> and <code class="docutils literal notranslate"><span class="pre">MODULE</span></code> library
+targets.  For other targets, this property is initialized by the value
+of the <span class="target" id="index-0-variable:CMAKE_POSITION_INDEPENDENT_CODE"></span><a class="reference internal" href="../variable/CMAKE_POSITION_INDEPENDENT_CODE.html#variable:CMAKE_POSITION_INDEPENDENT_CODE" title="CMAKE_POSITION_INDEPENDENT_CODE"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_POSITION_INDEPENDENT_CODE</span></code></a> variable if it is set
+when the target is created, or <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For executable targets, the link step is controlled by the <span class="target" id="index-0-policy:CMP0083"></span><a class="reference internal" href="../policy/CMP0083.html#policy:CMP0083" title="CMP0083"><code class="xref cmake cmake-policy docutils literal notranslate"><span class="pre">CMP0083</span></code></a>
+policy and the <span class="target" id="index-0-module:CheckPIESupported"></span><a class="reference internal" href="../module/CheckPIESupported.html#module:CheckPIESupported" title="CheckPIESupported"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckPIESupported</span></code></a> module.</p>
+</div>
+<p>Position-independent code (PIC) refers to machine code that executes
+properly regardless of its absolute memory address.  This is particularly
+important for shared libraries, which are often loaded at different memory
+addresses by different programs.  Generating position-independent code
+ensures that these libraries can be safely and efficiently shared among
+multiple processes without causing address conflicts.  On some platforms
+(notably UNIX-like systems), generating PIC is also a requirement for
+creating shared libraries.</p>
+<p>Use of position-independent code is recommended or required in the following
+cases:</p>
+<ul class="simple">
+<li><p>When building shared or module libraries (e.g., with
+<code class="docutils literal notranslate"><span class="pre">add_library(...</span> <span class="pre">SHARED)</span></code>, or <code class="docutils literal notranslate"><span class="pre">add_library(...</span> <span class="pre">MODULE)</span></code>), where PIC
+allows dynamic relocation at runtime.</p></li>
+<li><p>When building executables as position-independent executables (PIE), which
+can enhance security by enabling Address Space Layout Randomization (ASLR).</p></li>
+<li><p>On platforms or toolchains that require PIC for certain types of linking
+or sandboxed environments.</p></li>
+</ul>
+<p>Enabling PIC can result in slightly larger or slower code on some
+architectures, but this is often outweighed by the benefits of flexibility
+and security.</p>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Enabling PIC for a static library target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">foo</span><span class="w"> </span><span class="no">STATIC</span><span class="w"> </span><span class="nb">foo.c</span><span class="nf">)</span>
+<span class="nf">set_target_properties(</span><span class="nb">foo</span><span class="w"> </span><span class="no">PROPERTIES</span><span class="w"> </span><span class="no">POSITION_INDEPENDENT_CODE</span><span class="w"> </span><span class="no">TRUE</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Enabling PIC for an executable target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_executable(</span><span class="nb">app</span><span class="w"> </span><span class="nb">app.c</span><span class="nf">)</span>
+
+<span class="nf">set_target_properties(</span><span class="nb">app</span><span class="w"> </span><span class="no">PROPERTIES</span><span class="w"> </span><span class="no">POSITION_INDEPENDENT_CODE</span><span class="w"> </span><span class="no">TRUE</span><span class="nf">)</span>
+
+<span class="c"># Additionally, pass PIE-related link-time options to executable(s).</span>
+<span class="nf">include(</span><span class="nb">CheckPIESupported</span><span class="nf">)</span>
+<span class="nf">check_pie_supported()</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The <span class="target" id="index-1-module:CheckPIESupported"></span><a class="reference internal" href="../module/CheckPIESupported.html#module:CheckPIESupported" title="CheckPIESupported"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CheckPIESupported</span></code></a> module to pass PIE-related options to the
+linker for executables.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">POSITION_INDEPENDENT_CODE</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="PDB_OUTPUT_DIRECTORY_CONFIG.html"
+                          title="previous chapter">PDB_OUTPUT_DIRECTORY_&lt;CONFIG&gt;</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="PRECOMPILE_HEADERS.html"
+                          title="next chapter">PRECOMPILE_HEADERS</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/prop_tgt/POSITION_INDEPENDENT_CODE.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="PRECOMPILE_HEADERS.html" title="PRECOMPILE_HEADERS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PDB_OUTPUT_DIRECTORY_CONFIG.html" title="PDB_OUTPUT_DIRECTORY_&lt;CONFIG&gt;"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-properties.7.html" >cmake-properties(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">POSITION_INDEPENDENT_CODE</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

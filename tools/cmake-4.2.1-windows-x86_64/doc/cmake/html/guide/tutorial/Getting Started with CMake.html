@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 1: Getting Started with CMake &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 2: CMake Language Fundamentals" href="CMake%20Language%20Fundamentals.html" />
+    <link rel="prev" title="Step 0: Before You Begin" href="Before%20You%20Begin.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMake%20Language%20Fundamentals.html" title="Step 2: CMake Language Fundamentals"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Before%20You%20Begin.html" title="Step 0: Before You Begin"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 1: Getting Started with CMake</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-1-getting-started-with-cmake">
+<span id="guide:tutorial/Getting Started with CMake"></span><h1>Step 1: Getting Started with CMake<a class="headerlink" href="#step-1-getting-started-with-cmake" title="Link to this heading">¶</a></h1>
+<p>This first step in the CMake tutorial is intended as a quick-start into writing
+useful builds for small projects with CMake. By the end, you will be able to
+describe executables, libraries, source and header files, and the linkage
+relationships between them using CMake.</p>
+<p>Each exercise in this step will start with a discussion of the concepts and
+commands needed for the exercise. Then, a goal and list of helpful resources are
+provided. Each file in the <code class="docutils literal notranslate"><span class="pre">Files</span> <span class="pre">to</span> <span class="pre">Edit</span></code> section is in the <code class="docutils literal notranslate"><span class="pre">Step1</span></code>
+directory and contains one or more <code class="docutils literal notranslate"><span class="pre">TODO</span></code> comments. Each <code class="docutils literal notranslate"><span class="pre">TODO</span></code> represents
+a line or two of code to change or add. The <code class="docutils literal notranslate"><span class="pre">TODOs</span></code> are intended to be
+completed in numerical order, first complete  <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> then <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">2</span></code>, etc.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each step in the tutorial builds on the previous, but the steps are not
+strictly contiguous. Code not relevant to learning CMake, such as C++
+function implementations or CMake code outside the scope of the tutorial,
+will sometimes be added between steps.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Getting</span> <span class="pre">Started</span></code> section will give some helpful hints and guide you
+through the exercise. Then the <code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">and</span> <span class="pre">Run</span></code> section will walk step-by-step
+through how to build and test the exercise. Finally, at the end of each exercise
+the intended solution is reviewed.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>Typical usage of CMake revolves around one or more files named
+<code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>. This file is sometimes referred to as a &quot;lists file&quot; or
+&quot;CML&quot;. Within a given software project, a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> will exist within
+any directory where we want to provide instructions to CMake on how to handle
+files and operations local to that directory or subdirectories. Each consists of
+a set of commands which describe some information or actions relevant to
+building the software project.</p>
+<p>Not every directory in a software project needs a CML, but it's strongly
+recommended that the project root contains one. This will serve as the entry
+point for CMake for its initial setup during configuration. This <em>root</em> CML
+should always contain the same two commands at or near the top the file.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_minimum_required(</span><span class="no">VERSION</span><span class="w"> </span><span class="m">3.23</span><span class="nf">)</span>
+
+<span class="nf">project(</span><span class="nb">MyProjectName</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The <span class="target" id="index-0-command:cmake_minimum_required"></span><a class="reference internal" href="../../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a> is a compatibility guarantee provided by
+CMake to the project developer. When called, it ensures that CMake will adopt
+the behavior of the listed version. If a later version of CMake is invoked on a
+CML containing the above code, it will act exactly as if it were CMake 3.23.</p>
+<p>The <span class="target" id="index-0-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a> command is a conceptually simple command which provides a
+complex function. It informs CMake that what follows is the description of a
+distinct software project of a given name (as opposed to a shell-like script).
+When CMake sees the <span class="target" id="index-1-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a> command it performs various checks to
+ensure the environment is suitable for building software; such as checking for
+compilers and other build tooling, and discovering properties like the
+endianness of the host and target machines.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While links to complete documentation are provided for every command, it is
+not intended the reader understand the full semantics of each CMake command
+they use. Effectively learning CMake, like any piece of software, is an
+incremental process.</p>
+</div>
+<p>The rest of this tutorial step will be chiefly concerned with the usage of four
+more commands. The <span class="target" id="index-0-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a> and <span class="target" id="index-0-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> commands
+for describing output artifacts the software project wants to produce, the
+<span class="target" id="index-0-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a> command for associating input files with their
+respective output artifacts, and the <span class="target" id="index-0-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a> command
+for associating output artifacts with one another.</p>
+<p>These four commands are the backbone of most CMake usage. As we'll learn, they
+are sufficient for describing the majority of a typical project's requirements.</p>
+</section>
+<section id="exercise-1-building-an-executable">
+<h2>Exercise 1 - Building an Executable<a class="headerlink" href="#exercise-1-building-an-executable" title="Link to this heading">¶</a></h2>
+<p>The most basic CMake project is an executable built from a single source code
+file. For simple projects like this, a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file with only
+four commands is needed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although upper, lower and mixed case commands are supported by CMake,
+lower case commands are preferred and will be used throughout the tutorial.</p>
+</div>
+<p>The first two commands we have already introduced, <span class="target" id="index-1-command:cmake_minimum_required"></span><a class="reference internal" href="../../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>
+and <span class="target" id="index-2-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a>. There is no usage of CMake where the first command in a
+root CML will be anything other than <span class="target" id="index-2-command:cmake_minimum_required"></span><a class="reference internal" href="../../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>. There
+are some advanced usages where <span class="target" id="index-3-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a> might not be the second
+command in a CML, but for our purposes it always will be.</p>
+<p>The next command we need is <span class="target" id="index-1-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a>.
+This command creates a <em>target</em>. In CMake lingo, a target is a name the
+developer gives to a collection of properties.</p>
+<dl class="simple">
+<dt>Some examples of properties a target might want to keep track of are:</dt><dd><ul class="simple">
+<li><p>The artifact kind (executable, library, header collection, etc)</p></li>
+<li><p>Source files</p></li>
+<li><p>Include directories</p></li>
+<li><p>Output name of an executable or library</p></li>
+<li><p>Dependencies</p></li>
+<li><p>Compiler and linker flags</p></li>
+</ul>
+</dd>
+</dl>
+<p>The mechanisms of CMake are often best understood as describing and manipulating
+targets and their properties. There are many more properties than those listed
+here. Documentation of CMake commands will often discuss their function in terms
+of the target properties they operate on.</p>
+<p>Targets themselves are simply names, a handle to this collection of properties.
+Using the <span class="target" id="index-2-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a> command is as easy as specifying the name
+we want to use for the target.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_executable(</span><span class="nb">MyProgram</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Now that we have a name for our target, we can start associating properties
+with it like source files we want to build and link. The primary command for
+this is <span class="target" id="index-1-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a>, which takes as arguments a target name
+followed by one or more collections of files.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_sources(</span><span class="nb">MyProgram</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">main.cxx</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Paths in CMake are generally either absolute, or relative to the
+<span class="target" id="index-0-variable:CMAKE_CURRENT_SOURCE_DIR"></span><a class="reference internal" href="../../variable/CMAKE_CURRENT_SOURCE_DIR.html#variable:CMAKE_CURRENT_SOURCE_DIR" title="CMAKE_CURRENT_SOURCE_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_SOURCE_DIR</span></code></a>. We haven't talked about variables like
+that yet, so you can read this as &quot;relative to the location of the current
+CML&quot;.</p>
+</div>
+<p>Each collection of files is prefixed by a <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#target-command-scope"><span class="std std-ref">scope keyword</span></a>.
+We'll discuss the complete semantics of these keywords when we talk about
+linking targets together, but the quick explanation is these describe how a
+property should be inherited by dependents of our target.</p>
+<p>Typically, nothing depends on an executable. Other programs and libraries don't
+need to link to an executable, or inherit headers, or anything of that nature.
+So the appropriate scope to use here is <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code>, which informs CMake that
+this property only belongs to <code class="docutils literal notranslate"><span class="pre">MyProgram</span></code> and is not inheritable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This rule is true almost everywhere. Outside advanced and esoteric usages,
+the scope keyword for executables should <em>always</em> be <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code>. The same
+holds for implementation files generally, regardless of whether the target
+is an executable or a library. The only target which needs to &quot;see&quot; the
+<code class="docutils literal notranslate"><span class="pre">.cxx</span></code> files is the target building them.</p>
+</div>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Understand how to create a simple CMake project with a single executable.</p>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-4-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a></p></li>
+<li><p><span class="target" id="index-3-command:cmake_minimum_required"></span><a class="reference internal" href="../../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a></p></li>
+<li><p><span class="target" id="index-3-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a></p></li>
+<li><p><span class="target" id="index-2-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The source code for <code class="docutils literal notranslate"><span class="pre">Tutorial.cxx</span></code> is provided in the
+<code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step1/Tutorial</span></code> directory and can be used to compute the
+square root of a number. This file does not need to be edited in this exercise.</p>
+<p>In the parent directory, <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step1</span></code>, is a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>
+file which you will complete. Start with <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> and work through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">4</span></code>.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>Once <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">4</span></code> have been completed, we are ready to build
+and run our project! First, run the <span class="target" id="index-0-manual:cmake(1)"></span><a class="reference internal" href="../../manual/cmake.1.html#manual:cmake(1)" title="cmake(1)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake</span></code></a> executable or the
+<span class="target" id="index-0-manual:cmake-gui(1)"></span><a class="reference internal" href="../../manual/cmake-gui.1.html#manual:cmake-gui(1)" title="cmake-gui(1)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake-gui</span></code></a> to configure the project and then build it
+with your chosen build tool.</p>
+<p>For example, from the command line we could navigate to the
+<code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step1</span></code> directory and invoke CMake for configuration
+as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -B build</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-B"><code class="xref std std-option docutils literal notranslate"><span class="pre">-B</span></code></a> flag tells CMake to use the given relative
+path as the location to generate files and store artifacts during the build
+process. If it is omitted, the current working directory is used. It is
+generally considered bad practice to do &quot;in-source&quot; builds, placing these
+generated files in the source tree itself.</p>
+<p>Next, tell CMake to build the project with
+<a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-build"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span></code></a>, passing it the same relative path
+we did with the <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-B"><code class="xref std std-option docutils literal notranslate"><span class="pre">-B</span></code></a> flag.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable will be built into the <code class="docutils literal notranslate"><span class="pre">build</span></code> directory. For
+multi-config generators (e.g. Visual Studio), it might be placed in a
+subdirectory such as <code class="docutils literal notranslate"><span class="pre">build/Debug</span></code>.</p>
+<p>Finally, try to use the newly built <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Tutorial 4294967296</span>
+<span class="go">Tutorial 10</span>
+<span class="go">Tutorial</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on the shell, the correct syntax may be <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>,
+<code class="docutils literal notranslate"><span class="pre">./Tutorial</span></code>, <code class="docutils literal notranslate"><span class="pre">.\Tutorial</span></code>, or even <code class="docutils literal notranslate"><span class="pre">.\Tutorial.exe</span></code>. For simplicity,
+the exercises will use <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> throughout.</p>
+</div>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>As mentioned above, a four command <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> is all that we need to get
+up and running. The first line should be <span class="target" id="index-4-command:cmake_minimum_required"></span><a class="reference internal" href="../../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>, to
+set the CMake version as follows:</p>
+<details><summary>TODO 1: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-cmake-minimum-required">
+<div class="code-block-caption"><span class="caption-text">TODO 1: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-cmake-minimum-required" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_minimum_required(</span><span class="no">VERSION</span><span class="w"> </span><span class="m">3.23</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>The next step to make a basic project is to use the <span class="target" id="index-5-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a>
+command as follows to set the project name and inform CMake we intend to build
+software with this <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>.</p>
+<details><summary>TODO 2: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-project">
+<div class="code-block-caption"><span class="caption-text">TODO 2: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-project" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">project(</span><span class="nb">Tutorial</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now we can setup our executable target for the Tutorial with <span class="target" id="index-4-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a>.</p>
+<details><summary>TODO 3: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-add-executable">
+<div class="code-block-caption"><span class="caption-text">TODO 3: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-add-executable" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_executable(</span><span class="nb">Tutorial</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally, we can associate our source file with the Tutorial executable target
+using <span class="target" id="index-3-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a>.</p>
+<details><summary>TODO 4: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-target-sources">
+<div class="code-block-caption"><span class="caption-text">TODO 4: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-target-sources" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_sources(</span><span class="nb">Tutorial</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="na">Tutorial/Tutorial.cxx</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-2-building-a-library">
+<h2>Exercise 2 - Building a Library<a class="headerlink" href="#exercise-2-building-a-library" title="Link to this heading">¶</a></h2>
+<p>We only need to introduce one more command to build a library,
+<span class="target" id="index-1-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a>. This works exactly like <span class="target" id="index-5-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a>, but
+for libraries.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">MyLibrary</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>However, now is a good time to introduce header files. Header files are not
+directly built as translation units, which is to say they are not a <em>build</em>
+requirement. They are a <em>usage</em> requirement. We need to know about header files
+in order to build other parts of a given target.</p>
+<p>As such, header files are described slightly differently than implementation
+files like <code class="docutils literal notranslate"><span class="pre">tutorial.cxx</span></code>. They're also going to need different
+<a class="reference internal" href="../../manual/cmake-buildsystem.7.html#target-command-scope"><span class="std std-ref">scope keywords</span></a> than the <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> keyword we
+have used so far.</p>
+<p>To describe a collection of header files, we're going to use what's known as a
+<code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_sources(</span><span class="nb">MyLibrary</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">library_implementation.cxx</span>
+
+<span class="w">  </span><span class="no">PUBLIC</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="nb">myHeaders</span>
+<span class="w">    </span><span class="no">TYPE</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">BASE_DIRS</span>
+<span class="w">      </span><span class="nb">include</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="na">include/library_header.h</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>This is a lot of complexity, but we'll go through it point by point. First,
+note that we have our implementation file as a <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> source, same as
+with the executable previously. However, we now use <code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code> for our
+header file. This allows consumers of our library to &quot;see&quot; the library's
+header files.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We're not quite ready to discuss the full semantics of scope keywords. We'll
+cover them more completely in Exercise 3.</p>
+</div>
+<p>Following the scope keyword is a <code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code>, a collection of files to be
+described as a single unit. A <code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code> consists of the following parts:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FILE_SET</span> <span class="pre">&lt;name&gt;</span></code> is the name of the <code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code>. This is a handle which
+we can use to describe the collection in other contexts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TYPE</span> <span class="pre">&lt;type&gt;</span></code> is the kind of files we are describing. Most commonly this
+will be headers, but newer versions of CMake support other types like C++20
+modules.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> is the &quot;base&quot; locations for the files. This can be most easily
+understood as the locations that will be described to compilers for header
+discovery via <code class="docutils literal notranslate"><span class="pre">-I</span></code> flags.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FILES</span></code> is the list of files, same as with the implementation sources list
+earlier.</p></li>
+</ul>
+<p>This is a lot of information to describe, so there are some useful shortcuts
+we can take. Notably, if the <code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code> name is the same as the type, we
+don't need to provide the <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> field.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_sources(</span><span class="nb">MyLibrary</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">library_implementation.cxx</span>
+
+<span class="w">  </span><span class="no">PUBLIC</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">BASE_DIRS</span>
+<span class="w">      </span><span class="nb">include</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="na">include/library_header.h</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>There are other shortcuts we can take, but we'll discuss those more in later
+steps.</p>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Build a library.</p>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-2-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a></p></li>
+<li><p><span class="target" id="index-4-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>Continue editing files in the <code class="docutils literal notranslate"><span class="pre">Step1</span></code> directory. Start with <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">5</span></code> and
+complete through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">6</span></code>.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>Let's build our project again. Since we already created a build directory and
+ran CMake for Exercise 1, we can skip to the build step:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>We should be able to see our library created alongside the Tutorial executable.</p>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>We start by adding the library target in the same manner as the the Tutorial
+executable.</p>
+<details><summary>TODO 5: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-add-library">
+<div class="code-block-caption"><span class="caption-text">TODO 5: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-add-library" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">MathFunctions</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Next we need to describe the source files. For the implementation file,
+<code class="docutils literal notranslate"><span class="pre">MathFunctions.cxx</span></code>, this is straight-forward; for the header file
+<code class="docutils literal notranslate"><span class="pre">MathFunctions.h</span></code> we will need to use a <code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code>.</p>
+<p>We can either give this <code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code> its own name, or use the shortcut of naming
+it <code class="docutils literal notranslate"><span class="pre">HEADERS</span></code>. For this tutorial, we'll be using the shortcut, but either
+solution is valid.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> we need to determine the directory which will allow for the
+desired <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;MathFunctions.h&gt;</span></code> directive. To achieve this, the
+<code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> folder itself will be a base directory. We would make a
+different choice if the desired include directive were
+<code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&lt;MathFunctions/MathFunctions.h&gt;</span></code> or similar.</p>
+<details><summary>TODO 6: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-library-sources">
+<div class="code-block-caption"><span class="caption-text">TODO 6: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-library-sources" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_sources(</span><span class="nb">MathFunctions</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="na">MathFunctions/MathFunctions.cxx</span>
+
+<span class="w">  </span><span class="no">PUBLIC</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">BASE_DIRS</span>
+<span class="w">      </span><span class="nb">MathFunctions</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="na">MathFunctions/MathFunctions.h</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-3-linking-together-libraries-and-executables">
+<h2>Exercise 3 - Linking Together Libraries and Executables<a class="headerlink" href="#exercise-3-linking-together-libraries-and-executables" title="Link to this heading">¶</a></h2>
+<p>We're ready to combine our library with our executable, for this we must
+introduce a new command, <span class="target" id="index-1-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>. The name of this
+command can be somewhat misleading, as it does a great deal more than just
+invoke linkers. It describes relationships between targets generally.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">MyProgram</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MyLibrary</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>We're finally ready to discuss the <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#target-command-scope"><span class="std std-ref">scope keywords</span></a>.
+There are three of them, <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code>, <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code>, and <code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code>. These
+describe how properties are made available to targets.</p>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> property (also called a &quot;non-interface&quot; property) is only
+available to the target which owns it, for example <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> headers will
+only be visible to the target they're attached to.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> property is only available to targets <em>which link</em> the
+owning target. The owning target does not have access to these properties. A
+header-only library is an example of a collection of <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> properties,
+as header-only libraries do not build anything themselves and do not need to
+access their own files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code> is not a distinct kind of property, but rather is the union of the
+<code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> and <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> properties. Thus requirements described with
+<code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code> are available to both the owning target and consuming targets.</p></li>
+</ul>
+<p>Consider the following concrete example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_sources(</span><span class="nb">MyLibrary</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="nb">internalOnlyHeaders</span>
+<span class="w">    </span><span class="no">TYPE</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="nb">InternalOnlyHeader.h</span>
+
+<span class="w">  </span><span class="no">INTERFACE</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="nb">consumerOnlyHeaders</span>
+<span class="w">    </span><span class="no">TYPE</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="nb">ConsumerOnlyHeader.h</span>
+
+<span class="w">  </span><span class="no">PUBLIC</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="nb">publicHeaders</span>
+<span class="w">    </span><span class="no">TYPE</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="nb">PublicHeader.h</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We excluded <code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> for each file set here, that's another shortcut.
+When excluded, <code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> defaults to the current source directory.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">MyLibrary</span></code> target has several properties which will be modified by this
+call to <span class="target" id="index-5-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a>. Until now we've used the term &quot;properties&quot;
+generically, but properties are themselves named values we can reason about.
+Two specific properties which will be modified here are <span class="target" id="index-0-prop_tgt:HEADER_SETS"></span><a class="reference internal" href="../../prop_tgt/HEADER_SETS.html#prop_tgt:HEADER_SETS" title="HEADER_SETS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">HEADER_SETS</span></code></a>
+and <span class="target" id="index-0-prop_tgt:INTERFACE_HEADER_SETS"></span><a class="reference internal" href="../../prop_tgt/INTERFACE_HEADER_SETS.html#prop_tgt:INTERFACE_HEADER_SETS" title="INTERFACE_HEADER_SETS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">INTERFACE_HEADER_SETS</span></code></a>, which both contain lists of header file
+sets added via <span class="target" id="index-6-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a>.</p>
+<p>The value <code class="docutils literal notranslate"><span class="pre">internalOnlyHeaders</span></code> will be added to <span class="target" id="index-1-prop_tgt:HEADER_SETS"></span><a class="reference internal" href="../../prop_tgt/HEADER_SETS.html#prop_tgt:HEADER_SETS" title="HEADER_SETS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">HEADER_SETS</span></code></a>,
+<code class="docutils literal notranslate"><span class="pre">consumerOnlyHeaders</span></code> to <span class="target" id="index-1-prop_tgt:INTERFACE_HEADER_SETS"></span><a class="reference internal" href="../../prop_tgt/INTERFACE_HEADER_SETS.html#prop_tgt:INTERFACE_HEADER_SETS" title="INTERFACE_HEADER_SETS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">INTERFACE_HEADER_SETS</span></code></a>, and
+<code class="docutils literal notranslate"><span class="pre">publicHeaders</span></code> will be added to both.</p>
+<p>When a given target is being built, it will use its own <em>non-interface</em>
+properties (eg, <span class="target" id="index-2-prop_tgt:HEADER_SETS"></span><a class="reference internal" href="../../prop_tgt/HEADER_SETS.html#prop_tgt:HEADER_SETS" title="HEADER_SETS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">HEADER_SETS</span></code></a>), combined with the <em>interface</em>
+properties of any targets it links to (eg, <span class="target" id="index-2-prop_tgt:INTERFACE_HEADER_SETS"></span><a class="reference internal" href="../../prop_tgt/INTERFACE_HEADER_SETS.html#prop_tgt:INTERFACE_HEADER_SETS" title="INTERFACE_HEADER_SETS"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">INTERFACE_HEADER_SETS</span></code></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>It is not necessary to reason about CMake properties at this level of
+detail.</strong> The above is described for completeness. Most of the time you don't
+need to be concerned with the specific properties a command is modifying.</p>
+<p>Scope keywords have a simple intuition associated with them, when considering
+a command from the point of view of the target it is being applied to:
+<strong>PRIVATE</strong> is for me, <strong>INTERFACE</strong> is for others, <strong>PUBLIC</strong> is for all of
+us.</p>
+</div>
+<section id="id7">
+<h3>Goal<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>In the Tutorial executable, use the <code class="docutils literal notranslate"><span class="pre">sqrt()</span></code> function provided by the
+<code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library.</p>
+</section>
+<section id="id8">
+<h3>Helpful Resources<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-2-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Files to Edit<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Tutorial/Tutorial.cxx</span></code></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Getting Started<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>Continue to edit files from <code class="docutils literal notranslate"><span class="pre">Step1</span></code>. Start on <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">7</span></code> and complete through
+<code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">9</span></code>. In this exercise, we need to add the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> target to
+the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> target's linked libraries using <span class="target" id="index-3-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>.</p>
+<p>After modifying the CML, update <code class="docutils literal notranslate"><span class="pre">tutorial.cxx</span></code> to use the
+<code class="docutils literal notranslate"><span class="pre">mathfunctions::sqrt()</span></code> function instead of <code class="docutils literal notranslate"><span class="pre">std::sqrt</span></code>.</p>
+</section>
+<section id="id11">
+<h3>Build and Run<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>Let's build our project again. As before, we already created a build directory
+and ran CMake so we can skip to the build step:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Verify that the output matches what you would expect from the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>
+library.</p>
+</section>
+<section id="id12">
+<h3>Solution<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>In this exercise, we are describing the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable as a consumer
+of the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> target by adding <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> to the linked
+libraries of the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>.</p>
+<p>To achieve this, we modify <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file to use the
+<span class="target" id="index-4-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a> command, using <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> as the target to
+be modified and <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> as the library we want to add.</p>
+<details><summary>TODO 7: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-target-link-libraries">
+<div class="code-block-caption"><span class="caption-text">TODO 7: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-target-link-libraries" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">Tutorial</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathFunctions</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The order here is only loosely relevant. That we call
+<span class="target" id="index-5-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a> prior to defining <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> with
+<span class="target" id="index-3-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> doesn't matter to CMake. We are recording that
+<code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> has a dependency on something named <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>, but what
+<code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> means isn't resolved at this stage.</p>
+<p>The only target which needs to be defined when calling a CMake command like
+<span class="target" id="index-7-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a> or <span class="target" id="index-6-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a> is the target
+being modified.</p>
+</div>
+<p>Finally, all that's left to do is modify <code class="docutils literal notranslate"><span class="pre">Tutorial.cxx</span></code> to use the newly
+provided <code class="docutils literal notranslate"><span class="pre">mathfunctions::sqrt</span></code> function. That means adding the appropriate
+header file and modifying our <code class="docutils literal notranslate"><span class="pre">sqrt()</span></code> call.</p>
+<details><summary>TODO 8-9: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorial-tutorial-cxx-mathfunctions-headers">
+<div class="code-block-caption"><span class="caption-text">TODO 8: Tutorial/Tutorial.cxx</span><a class="headerlink" href="#tutorial-tutorial-cxx-mathfunctions-headers" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;MathFunctions.h&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="tutorial-tutorial-cxx-mathfunctions-code">
+<div class="code-block-caption"><span class="caption-text">TODO 9: Tutorial/Tutorial.cxx</span><a class="headerlink" href="#tutorial-tutorial-cxx-mathfunctions-code" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// calculate square root</span>
+<span class="kt">double</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">outputValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mathfunctions</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">inputValue</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-4-subdirectories">
+<h2>Exercise 4 - Subdirectories<a class="headerlink" href="#exercise-4-subdirectories" title="Link to this heading">¶</a></h2>
+<p>As we move through the tutorial, we will be adding more commands to manipulate
+the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable and the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library. We want to make
+sure we keep commands local to the files they are dealing with. While not a
+major concern for a small project like this, it can be very useful for large
+projects with many targets and thousands of files.</p>
+<p>The <span class="target" id="index-0-command:add_subdirectory"></span><a class="reference internal" href="../../command/add_subdirectory.html#command:add_subdirectory" title="add_subdirectory"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_subdirectory()</span></code></a> command allows us to incorporate CMLs located
+in subdirectories of the project.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_subdirectory(</span><span class="nb">SubdirectoryName</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>When a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> in a subdirectory is being processed by CMake all
+relative paths described in the subdirectory CML are relative to that
+subdirectory, not the top-level CML.</p>
+<section id="id13">
+<h3>Goal<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p>Use <span class="target" id="index-1-command:add_subdirectory"></span><a class="reference internal" href="../../command/add_subdirectory.html#command:add_subdirectory" title="add_subdirectory"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_subdirectory()</span></code></a> to organize the project.</p>
+</section>
+<section id="id14">
+<h3>Helpful Resources<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-2-command:add_subdirectory"></span><a class="reference internal" href="../../command/add_subdirectory.html#command:add_subdirectory" title="add_subdirectory"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_subdirectory()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id15">
+<h3>Files to Edit<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Tutorial/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id16">
+<h3>Getting Started<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">TODOs</span></code> for this step are spread across three <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> files.
+Be sure to pay attention to the path changes necessary when moving the
+<span class="target" id="index-8-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a> commands into subdirectories.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Previously we said that <code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> defaults to the current source
+directory. As the desired include directory for <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> will now be
+the same directory as the CML calling <span class="target" id="index-9-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a>, we should
+remove the <code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> keyword and argument entirely.</p>
+</div>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">10</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">13</span></code>.</p>
+</section>
+<section id="id17">
+<h3>Build and Run<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<p>Because of the reorganization, we'll need to clean the original build
+directory prior to rebuilding (otherwise our new <code class="docutils literal notranslate"><span class="pre">Target</span></code> build folder would
+conflict with our previously created <code class="docutils literal notranslate"><span class="pre">Target</span></code> executable). We can achieve
+this with the <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-build-clean-first"><code class="xref std std-option docutils literal notranslate"><span class="pre">--clean-first</span></code></a> flag.</p>
+<p>There's no need for a reconfiguration. CMake will automatically
+re-configure itself due to the changes in the CMLs.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build --clean-first</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Our executable and library will be output to a new location in the build tree.
+A subdirectory which mirrors where <span class="target" id="index-6-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#command:add_executable" title="add_executable"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable()</span></code></a> and
+<span class="target" id="index-4-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> were called in the source tree. You will need to
+navigate to this subdirectory in the build tree to run the tutorial
+executable in future steps.</p>
+<p>You can verify this behavior by deleting the old <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable,
+and observing that the new one is produced at <code class="docutils literal notranslate"><span class="pre">Tutorial/Tutorial</span></code>.</p>
+</div>
+</section>
+<section id="id18">
+<h3>Solution<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<p>We need to move all the commands concerning the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable into
+<code class="docutils literal notranslate"><span class="pre">Tutorial/CMakeLists.txt</span></code>, and replace them with an
+<span class="target" id="index-3-command:add_subdirectory"></span><a class="reference internal" href="../../command/add_subdirectory.html#command:add_subdirectory" title="add_subdirectory"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_subdirectory()</span></code></a> command. We also need to update the path for
+<code class="docutils literal notranslate"><span class="pre">Tutorial.cxx</span></code>.</p>
+<details><summary>TODO 10-11: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorial-cmakelists-txt-moved">
+<div class="code-block-caption"><span class="caption-text">TODO 10: Tutorial/CMakeLists.txt</span><a class="headerlink" href="#tutorial-cmakelists-txt-moved" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_executable(</span><span class="nb">Tutorial</span><span class="nf">)</span>
+
+<span class="nf">target_sources(</span><span class="nb">Tutorial</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">Tutorial.cxx</span>
+<span class="nf">)</span>
+
+<span class="nf">target_link_libraries(</span><span class="nb">Tutorial</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathFunctions</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="cmakelists-txt-add-subdirectory-tutorial">
+<div class="code-block-caption"><span class="caption-text">TODO 11: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-add-subdirectory-tutorial" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_subdirectory(</span><span class="nb">Tutorial</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>We need to do the same with the commands for <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>, changing the
+relative paths as appropriate and removing <code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> as it is no longer
+necessary, the default value will work.</p>
+<details><summary>TODO 12-13: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-moved">
+<div class="code-block-caption"><span class="caption-text">TODO 12: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-moved" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">MathFunctions</span><span class="nf">)</span>
+
+<span class="nf">target_sources(</span><span class="nb">MathFunctions</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathFunctions.cxx</span>
+
+<span class="w">  </span><span class="no">PUBLIC</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">    </span><span class="no">FILES</span>
+<span class="w">      </span><span class="nb">MathFunctions.h</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="cmakelists-txt-add-subdirectory-mathfunctions">
+<div class="code-block-caption"><span class="caption-text">TODO 13: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-add-subdirectory-mathfunctions" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_subdirectory(</span><span class="nb">MathFunctions</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 1: Getting Started with CMake</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-building-an-executable">Exercise 1 - Building an Executable</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-building-a-library">Exercise 2 - Building a Library</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-3-linking-together-libraries-and-executables">Exercise 3 - Linking Together Libraries and Executables</a><ul>
+<li><a class="reference internal" href="#id7">Goal</a></li>
+<li><a class="reference internal" href="#id8">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id9">Files to Edit</a></li>
+<li><a class="reference internal" href="#id10">Getting Started</a></li>
+<li><a class="reference internal" href="#id11">Build and Run</a></li>
+<li><a class="reference internal" href="#id12">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-4-subdirectories">Exercise 4 - Subdirectories</a><ul>
+<li><a class="reference internal" href="#id13">Goal</a></li>
+<li><a class="reference internal" href="#id14">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id15">Files to Edit</a></li>
+<li><a class="reference internal" href="#id16">Getting Started</a></li>
+<li><a class="reference internal" href="#id17">Build and Run</a></li>
+<li><a class="reference internal" href="#id18">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Before%20You%20Begin.html"
+                          title="previous chapter">Step 0: Before You Begin</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMake%20Language%20Fundamentals.html"
+                          title="next chapter">Step 2: CMake Language Fundamentals</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/Getting Started with CMake.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMake%20Language%20Fundamentals.html" title="Step 2: CMake Language Fundamentals"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Before%20You%20Begin.html" title="Step 0: Before You Begin"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 1: Getting Started with CMake</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

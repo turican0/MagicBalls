@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindProtobuf &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindPython" href="FindPython.html" />
+    <link rel="prev" title="FindProducer" href="FindProducer.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindPython.html" title="FindPython"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindProducer.html" title="FindProducer"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindProtobuf</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findprotobuf">
+<span id="module:FindProtobuf"></span><h1>FindProtobuf<a class="headerlink" href="#findprotobuf" title="Link to this heading">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the Protobuf library is built and installed using its CMake-based
+build system, it provides a <a class="reference internal" href="../manual/cmake-packages.7.html#config-file-packages"><span class="std std-ref">package configuration file</span></a> for use with the <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command
+in <em>config mode</em>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="w"> </span><span class="no">CONFIG</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>In this case, imported targets and CMake commands such as
+<span class="target" id="index-0-command:protobuf_generate"></span><a class="reference internal" href="#command:protobuf_generate" title="protobuf_generate"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">protobuf_generate()</span></code></a> are provided by the upstream package rather
+than this module.  Additionally, some variables documented here are not
+available in <em>config mode</em>, as imported targets are preferred.  For usage
+details, refer to the upstream documentation, which is the recommended
+way to use Protobuf with CMake.</p>
+<p>This module works only in <em>module mode</em>.</p>
+</div>
+<p>This module finds the Protocol Buffers library (Protobuf) in <em>module mode</em>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Protobuf is an open-source, language-neutral, and platform-neutral mechanism
+for serializing structured data, developed by Google.  It is commonly used
+for data exchange between programs or across networks.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6: </span>Support for the <code class="docutils literal notranslate"><span class="pre">&lt;version&gt;</span></code> argument in
+<span class="target" id="index-1-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package(protobuf &lt;version&gt;)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package(Protobuf</span> <span class="pre">&lt;version&gt;)</span></code></a>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.6: </span>All input and output variables use the <code class="docutils literal notranslate"><span class="pre">Protobuf_</span></code> prefix.  Variables
+with <code class="docutils literal notranslate"><span class="pre">PROTOBUF_</span></code> prefix are supported for backward compatibility.</p>
+</div>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">protobuf::libprotobuf</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<p>Target encapsulating the Protobuf library usage requirements, available if
+Protobuf library is found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">protobuf::libprotobuf-lite</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<p>Target encapsulating the <code class="docutils literal notranslate"><span class="pre">protobuf-lite</span></code> library usage requirements,
+available if Protobuf and its lite library are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">protobuf::libprotoc</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<p>Target encapsulating the <code class="docutils literal notranslate"><span class="pre">protoc</span></code> library usage requirements, available
+if Protobuf and its <code class="docutils literal notranslate"><span class="pre">protoc</span></code> library are found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">protobuf::protoc</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>Imported executable target encapsulating the <code class="docutils literal notranslate"><span class="pre">protoc</span></code> compiler usage
+requirements, available if Protobuf and <code class="docutils literal notranslate"><span class="pre">protoc</span></code> are found.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3.</span></p>
+</div>
+<p>Boolean indicating whether the (requested version of) Protobuf library
+was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+<p>The version of Protobuf found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_INCLUDE_DIRS</span></code></dt><dd><p>Include directories needed to use Protobuf.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_LIBRARIES</span></code></dt><dd><p>Libraries needed to link against to use Protobuf.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_PROTOC_LIBRARIES</span></code></dt><dd><p>Libraries needed to link against to use the <code class="docutils literal notranslate"><span class="pre">protoc</span></code> library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_LITE_LIBRARIES</span></code></dt><dd><p>Libraries needed to link against to use the <code class="docutils literal notranslate"><span class="pre">protobuf-lite</span></code> library.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_INCLUDE_DIR</span></code></dt><dd><p>The include directory containing Protobuf headers.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_LIBRARY</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">protobuf</span></code> library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_PROTOC_LIBRARY</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">protoc</span></code> library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_PROTOC_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">protoc</span></code> compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_LIBRARY_DEBUG</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">protobuf</span></code> debug library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_PROTOC_LIBRARY_DEBUG</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">protoc</span></code> debug library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_LITE_LIBRARY</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">protobuf-lite</span></code> library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_LITE_LIBRARY_DEBUG</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">protobuf-lite</span></code> debug library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_SRC_ROOT_FOLDER</span></code></dt><dd><p>When compiling with MSVC, if this cache variable is set, the
+protobuf-default Visual Studio project build locations will be searched for
+libraries and binaries:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Protobuf_SRC_ROOT_FOLDER&gt;/vsprojects/{Debug,Release}</span></code>, or</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Protobuf_SRC_ROOT_FOLDER&gt;/vsprojects/x64/{Debug,Release}</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following optional variables before calling the
+<code class="docutils literal notranslate"><span class="pre">find_package(Protobuf)</span></code>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_DEBUG</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+<p>Boolean variable that enables debug messages of this module to be printed
+for debugging purposes.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_USE_STATIC_LIBS</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<p>Set to ON to force the use of the static libraries.  Default is OFF.</p>
+</dd>
+</dl>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following commands if Protobuf is found:</p>
+<section id="generating-source-files">
+<h3>Generating Source Files<a class="headerlink" href="#generating-source-files" title="Link to this heading">¶</a></h3>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:protobuf_generate">
+<span class="sig-name descname"><span class="pre">protobuf_generate</span></span><a class="headerlink" href="#command:protobuf_generate" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+<p>Automatically generates source files from <code class="docutils literal notranslate"><span class="pre">.proto</span></code> schema files at build
+time:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">protobuf_generate(</span>
+<span class="w">  </span><span class="p">[</span><span class="no">TARGET</span><span class="w"> </span><span class="nv">&lt;target&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">LANGUAGE</span><span class="w"> </span><span class="nv">&lt;lang&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">OUT_VAR</span><span class="w"> </span><span class="nv">&lt;variable&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">EXPORT_MACRO</span><span class="w"> </span><span class="nv">&lt;macro&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">PROTOC_OUT_DIR</span><span class="w"> </span><span class="nv">&lt;out-dir&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">PLUGIN</span><span class="w"> </span><span class="nv">&lt;plugin&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">PLUGIN_OPTIONS</span><span class="w"> </span><span class="nv">&lt;plugin-options&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">DEPENDENCIES</span><span class="w"> </span><span class="nv">&lt;dependencies&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">PROTOS</span><span class="w"> </span><span class="nv">&lt;proto-files&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">IMPORT_DIRS</span><span class="w"> </span><span class="nv">&lt;dirs&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">APPEND_PATH</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">GENERATE_EXTENSIONS</span><span class="w"> </span><span class="nv">&lt;extensions&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">PROTOC_OPTIONS</span><span class="w"> </span><span class="nv">&lt;options&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">PROTOC_EXE</span><span class="w"> </span><span class="nv">&lt;executable&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">DESCRIPTORS</span><span class="p">]</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">TARGET</span> <span class="pre">&lt;target&gt;</span></code></dt><dd><p>The CMake target to which the generated files are added as sources.  This
+option is required when <code class="docutils literal notranslate"><span class="pre">OUT_VAR</span> <span class="pre">&lt;variable&gt;</span></code> is not used.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LANGUAGE</span> <span class="pre">&lt;lang&gt;</span></code></dt><dd><p>A single value: <code class="docutils literal notranslate"><span class="pre">cpp</span></code> or <code class="docutils literal notranslate"><span class="pre">python</span></code>.  Determines the kind of source
+files to generate.  Defaults to <code class="docutils literal notranslate"><span class="pre">cpp</span></code>.  For other languages, use the
+<code class="docutils literal notranslate"><span class="pre">GENERATE_EXTENSIONS</span></code> option.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OUT_VAR</span> <span class="pre">&lt;variable&gt;</span></code></dt><dd><p>The name of a CMake variable that will be populated with the paths to
+the generated source files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EXPORT_MACRO</span> <span class="pre">&lt;macro&gt;</span></code></dt><dd><p>The name of a preprocessor macro applied to all generated Protobuf message
+classes and extern variables.  This can be used, for example, to declare
+DLL exports.  The macro should expand to <code class="docutils literal notranslate"><span class="pre">__declspec(dllexport)</span></code> or
+<code class="docutils literal notranslate"><span class="pre">__declspec(dllimport)</span></code>, depending on what is being compiled.</p>
+<p>This option is only used when <code class="docutils literal notranslate"><span class="pre">LANGUAGE</span></code> is <code class="docutils literal notranslate"><span class="pre">cpp</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PROTOC_OUT_DIR</span> <span class="pre">&lt;out-dir&gt;</span></code></dt><dd><p>The output directory for generated source files.  Defaults to:
+<span class="target" id="index-0-variable:CMAKE_CURRENT_BINARY_DIR"></span><a class="reference internal" href="../variable/CMAKE_CURRENT_BINARY_DIR.html#variable:CMAKE_CURRENT_BINARY_DIR" title="CMAKE_CURRENT_BINARY_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_BINARY_DIR</span></code></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PLUGIN</span> <span class="pre">&lt;plugin&gt;</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.21.</span></p>
+</div>
+<p>An optional plugin executable.  This could be, for example, the path to
+<code class="docutils literal notranslate"><span class="pre">grpc_cpp_plugin</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PLUGIN_OPTIONS</span> <span class="pre">&lt;plugin-options&gt;</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.28.</span></p>
+</div>
+<p>Additional options passed to the plugin, such as <code class="docutils literal notranslate"><span class="pre">generate_mock_code=true</span></code>
+for the gRPC C++ plugin.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DEPENDENCIES</span> <span class="pre">&lt;dependencies&gt;...</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.28.</span></p>
+</div>
+<p>Dependencies on which the generation of files depends on.  These are
+forwarded to the underlying <span class="target" id="index-0-command:add_custom_command"></span><a class="reference internal" href="../command/add_custom_command.html#command:add_custom_command" title="add_custom_command(depends)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_command(DEPENDS)</span></code></a>
+invocation.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 4.1: </span>This argument now accepts multiple values (<code class="docutils literal notranslate"><span class="pre">DEPENDENCIES</span> <span class="pre">a</span> <span class="pre">b</span> <span class="pre">c...</span></code>).
+Previously, only a single value could be specified
+(<code class="docutils literal notranslate"><span class="pre">DEPENDENCIES</span> <span class="pre">&quot;a;b;c;...&quot;</span></code>).</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PROTOS</span> <span class="pre">&lt;proto-files&gt;...</span></code></dt><dd><p>A list of <code class="docutils literal notranslate"><span class="pre">.proto</span></code> schema files to process.  If <code class="docutils literal notranslate"><span class="pre">&lt;target&gt;</span></code> is also
+specified, these will be combined with all <code class="docutils literal notranslate"><span class="pre">.proto</span></code> source files from
+that target.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IMPORT_DIRS</span> <span class="pre">&lt;dirs&gt;...</span></code></dt><dd><p>A list of one or more common parent directories for the schema files.
+For example, if the schema file is <code class="docutils literal notranslate"><span class="pre">proto/helloworld/helloworld.proto</span></code>
+and the import directory is <code class="docutils literal notranslate"><span class="pre">proto/</span></code>, then the generated files will be
+<code class="docutils literal notranslate"><span class="pre">&lt;out-dir&gt;/helloworld/helloworld.pb.h</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&lt;out-dir&gt;/helloworld/helloworld.pb.cc</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">APPEND_PATH</span></code></dt><dd><p>If specified, the base paths of all proto schema files are appended to
+<code class="docutils literal notranslate"><span class="pre">IMPORT_DIRS</span></code> (it causes <code class="docutils literal notranslate"><span class="pre">protoc</span></code> to be invoked with <code class="docutils literal notranslate"><span class="pre">-I</span></code> argument
+for each directory containing a <code class="docutils literal notranslate"><span class="pre">.proto</span></code> file).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GENERATE_EXTENSIONS</span> <span class="pre">&lt;extensions&gt;...</span></code></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">LANGUAGE</span></code> is omitted, this must be set to specify the extensions
+generated by <code class="docutils literal notranslate"><span class="pre">protoc</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PROTOC_OPTIONS</span> <span class="pre">&lt;options&gt;...</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.28.</span></p>
+</div>
+<p>A list of additional command-line options passed directly to the
+<code class="docutils literal notranslate"><span class="pre">protoc</span></code> compiler.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PROTOC_EXE</span> <span class="pre">&lt;executable&gt;</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.0.</span></p>
+</div>
+<p>The command-line program, path, or CMake executable used to generate
+Protobuf bindings.  If omitted, <code class="docutils literal notranslate"><span class="pre">protobuf::protoc</span></code> imported target is
+used by default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DESCRIPTORS</span></code></dt><dd><p>If specified, a command-line option <code class="docutils literal notranslate"><span class="pre">--descriptor_set_out=&lt;proto-file&gt;</span></code>
+is appended to <code class="docutils literal notranslate"><span class="pre">protoc</span></code> compiler for each <code class="docutils literal notranslate"><span class="pre">.proto</span></code> source file,
+enabling the creation of self-describing messages.  This option can only
+be used when <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code> is <code class="docutils literal notranslate"><span class="pre">cpp</span></code> and Protobuf is found in <em>module mode</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This option is not available when Protobuf is found in <em>config mode</em>.</p>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="deprecated-commands">
+<h3>Deprecated Commands<a class="headerlink" href="#deprecated-commands" title="Link to this heading">¶</a></h3>
+<p>The following commands are provided for backward compatibility.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">protobuf_generate_cpp()</span></code> and <code class="docutils literal notranslate"><span class="pre">protobuf_generate_python()</span></code>
+commands work correctly only within the same directory scope, where
+<code class="docutils literal notranslate"><span class="pre">find_package(Protobuf</span> <span class="pre">...)</span></code> is called.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If Protobuf is found in <em>config mode</em>, the <code class="docutils literal notranslate"><span class="pre">protobuf_generate_cpp()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">protobuf_generate_python()</span></code> commands are <strong>not available</strong> as of
+Protobuf version 3.0.0, unless the upstream package configuration hint
+variable <code class="docutils literal notranslate"><span class="pre">protobuf_MODULE_COMPATIBLE</span></code> is set to boolean true before
+calling <code class="docutils literal notranslate"><span class="pre">find_package(Protobuf</span> <span class="pre">...)</span></code>.</p>
+</div>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:protobuf_generate_cpp">
+<span class="sig-name descname"><span class="pre">protobuf_generate_cpp</span></span><a class="headerlink" href="#command:protobuf_generate_cpp" title="Link to this definition">¶</a></dt>
+<dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.1: </span>Use <span class="target" id="index-1-command:protobuf_generate"></span><a class="reference internal" href="#command:protobuf_generate" title="protobuf_generate"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">protobuf_generate()</span></code></a>.</p>
+</div>
+<p>Automatically generates C++ source files from <code class="docutils literal notranslate"><span class="pre">.proto</span></code> schema files at
+build time:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">protobuf_generate_cpp(</span>
+<span class="w">  </span><span class="nv">&lt;sources-variable&gt;</span>
+<span class="w">  </span><span class="nv">&lt;headers-variable&gt;</span>
+<span class="w">  </span><span class="p">[</span><span class="no">DESCRIPTORS</span><span class="w"> </span><span class="nv">&lt;variable&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">EXPORT_MACRO</span><span class="w"> </span><span class="nv">&lt;macro&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="nv">&lt;proto-files&gt;...</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;sources-variable&gt;</span></code></dt><dd><p>Name of the variable to define, which will contain a list of generated
+C++ source files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;headers-variable&gt;</span></code></dt><dd><p>Name of the variable to define, which will contain a list of generated
+header files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DESCRIPTORS</span> <span class="pre">&lt;variable&gt;</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>Name of the variable to define, which will contain a list of generated
+descriptor files if requested.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This option is not available when Protobuf is found in <em>config mode</em>.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EXPORT_MACRO</span> <span class="pre">&lt;macro&gt;</span></code></dt><dd><p>Name of a macro that should expand to <code class="docutils literal notranslate"><span class="pre">__declspec(dllexport)</span></code> or
+<code class="docutils literal notranslate"><span class="pre">__declspec(dllimport)</span></code>, depending on what is being compiled.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;proto-files&gt;...</span></code></dt><dd><p>One of more <code class="docutils literal notranslate"><span class="pre">.proto</span></code> files to be processed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:protobuf_generate_python">
+<span class="sig-name descname"><span class="pre">protobuf_generate_python</span></span><a class="headerlink" href="#command:protobuf_generate_python" title="Link to this definition">¶</a></dt>
+<dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.1: </span>Use <span class="target" id="index-2-command:protobuf_generate"></span><a class="reference internal" href="#command:protobuf_generate" title="protobuf_generate"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">protobuf_generate()</span></code></a>.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>Automatically generates Python source files from <code class="docutils literal notranslate"><span class="pre">.proto</span></code> schema files at
+build time:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">protobuf_generate_python(</span><span class="nv">&lt;python-sources-variable&gt;</span><span class="w"> </span><span class="nv">&lt;proto-files&gt;...</span><span class="nf">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;python-sources-variable&gt;</span></code></dt><dd><p>Name of the variable to define, which will contain a list of generated
+Python source files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;proto-files&gt;...</span></code></dt><dd><p>One or more <code class="docutils literal notranslate"><span class="pre">.proto</span></code> files to be processed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<p>The <code class="docutils literal notranslate"><span class="pre">protobuf_generate_cpp()</span></code> and <code class="docutils literal notranslate"><span class="pre">protobuf_generate_python()</span></code> commands
+accept the following optional variables before being invoked:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Protobuf_IMPORT_DIRS</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.1.</span></p>
+</div>
+<p>A list of additional directories to search for imported <code class="docutils literal notranslate"><span class="pre">.proto</span></code> files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PROTOBUF_GENERATE_CPP_APPEND_PATH</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.1: </span>Use <span class="target" id="index-3-command:protobuf_generate"></span><a class="reference internal" href="#command:protobuf_generate" title="protobuf_generate(append_path)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">protobuf_generate(APPEND_PATH)</span></code></a> command option.</p>
+</div>
+<p>A boolean variable that, if set to boolean true, causes <code class="docutils literal notranslate"><span class="pre">protoc</span></code> to be
+invoked with <code class="docutils literal notranslate"><span class="pre">-I</span></code> argument for each directory containing a <code class="docutils literal notranslate"><span class="pre">.proto</span></code>
+file.  By default, it is set to boolean true.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="examples-finding-protobuf">
+<h3>Examples: Finding Protobuf<a class="headerlink" href="#examples-finding-protobuf" title="Link to this heading">¶</a></h3>
+<p>Finding Protobuf library:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Or, finding Protobuf and specifying a minimum required version:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="w"> </span><span class="m">30</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Or, finding Protobuf and making it required (if not found, processing stops
+with an error message):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-finding-protobuf-in-config-mode">
+<h3>Example: Finding Protobuf in Config Mode<a class="headerlink" href="#example-finding-protobuf-in-config-mode" title="Link to this heading">¶</a></h3>
+<p>When Protobuf library is built and installed using its CMake-based build
+system, it can be found in <em>config mode</em>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="w"> </span><span class="no">CONFIG</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>However, some Protobuf installations might still not provide package
+configuration file.  The following example shows, how to use the
+<span class="target" id="index-0-variable:CMAKE_FIND_PACKAGE_PREFER_CONFIG"></span><a class="reference internal" href="../variable/CMAKE_FIND_PACKAGE_PREFER_CONFIG.html#variable:CMAKE_FIND_PACKAGE_PREFER_CONFIG" title="CMAKE_FIND_PACKAGE_PREFER_CONFIG"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_FIND_PACKAGE_PREFER_CONFIG</span></code></a> variable to find Protobuf in
+<em>config mode</em> and falling back to <em>module mode</em> if config file is not found:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">CMAKE_FIND_PACKAGE_PREFER_CONFIG</span><span class="w"> </span><span class="no">TRUE</span><span class="nf">)</span>
+<span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="nf">)</span>
+<span class="nf">unset(</span><span class="no">CMAKE_FIND_PACKAGE_PREFER_CONFIG</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-using-protobuf">
+<h3>Example: Using Protobuf<a class="headerlink" href="#example-using-protobuf" title="Link to this heading">¶</a></h3>
+<p>Finding Protobuf and linking its imported library target to a project target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">protobuf</span><span class="o">::</span><span class="nb">libprotobuf</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-processing-proto-schema-files">
+<h3>Example: Processing Proto Schema Files<a class="headerlink" href="#example-processing-proto-schema-files" title="Link to this heading">¶</a></h3>
+<p>The following example demonstrates how to process all <code class="docutils literal notranslate"><span class="pre">*.proto</span></code> schema
+source files added to a target into C++ source files:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_minimum_required(</span><span class="no">VERSION</span><span class="w"> </span><span class="m">3.24</span><span class="nf">)</span>
+<span class="nf">project(</span><span class="nb">ProtobufExample</span><span class="nf">)</span>
+
+<span class="nf">add_executable(</span><span class="nb">example</span><span class="w"> </span><span class="nb">main.cxx</span><span class="w"> </span><span class="nb">person.proto</span><span class="nf">)</span>
+
+<span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Protobuf_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">protobuf_generate(</span><span class="no">TARGET</span><span class="w"> </span><span class="nb">example</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">protobuf</span><span class="o">::</span><span class="nb">libprotobuf</span><span class="nf">)</span>
+<span class="nf">target_include_directories(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">person.proto</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-proto notranslate"><div class="highlight"><pre><span></span><span class="k">syntax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;proto3&quot;</span><span class="p">;</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">Person</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">main.cxx</span></code></span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;person.pb.h&quot;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">Person</span><span class="w"> </span><span class="n">person</span><span class="p">;</span>
+<span class="w">  </span><span class="n">person</span><span class="p">.</span><span class="n">set_name</span><span class="p">(</span><span class="s">&quot;Alice&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">person</span><span class="p">.</span><span class="n">set_id</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Name: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">person</span><span class="p">.</span><span class="n">name</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;ID: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">person</span><span class="p">.</span><span class="n">id</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="example-using-protobuf-and-grpc">
+<h3>Example: Using Protobuf and gRPC<a class="headerlink" href="#example-using-protobuf-and-grpc" title="Link to this heading">¶</a></h3>
+<p>The following example shows how to use Protobuf and gRPC:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+<span class="nf">find_package(</span><span class="nb">gRPC</span><span class="w"> </span><span class="no">CONFIG</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+
+<span class="nf">add_library(</span><span class="nb">ProtoExample</span><span class="w"> </span><span class="nb">Example.proto</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">ProtoExample</span><span class="w"> </span><span class="no">PUBLIC</span><span class="w"> </span><span class="nb">gRPC</span><span class="o">::</span><span class="nb">grpc++</span><span class="nf">)</span>
+
+<span class="nf">protobuf_generate(</span><span class="no">TARGET</span><span class="w"> </span><span class="nb">ProtoExample</span><span class="nf">)</span>
+<span class="nf">protobuf_generate(</span>
+<span class="w">  </span><span class="no">TARGET</span><span class="w"> </span><span class="nb">ProtoExample</span>
+<span class="w">  </span><span class="no">LANGUAGE</span><span class="w"> </span><span class="nb">grpc</span>
+<span class="w">  </span><span class="no">PLUGIN</span><span class="w"> </span><span class="nb">protoc-gen-grpc</span><span class="p">=</span><span class="o">$&lt;</span><span class="no">TARGET_FILE</span><span class="o">:</span><span class="nb">gRPC</span><span class="o">::</span><span class="nb">grpc_cpp_plugin</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="no">PLUGIN_OPTIONS</span><span class="w"> </span><span class="nb">generate_mock_code</span><span class="p">=</span><span class="nb">true</span>
+<span class="w">  </span><span class="no">GENERATE_EXTENSIONS</span><span class="w"> </span><span class="p">.</span><span class="nb">grpc.pb.h</span><span class="w"> </span><span class="p">.</span><span class="nb">grpc.pb.cc</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="examples-upgrading-deprecated-commands">
+<h3>Examples: Upgrading Deprecated Commands<a class="headerlink" href="#examples-upgrading-deprecated-commands" title="Link to this heading">¶</a></h3>
+<p>The following example shows how to process <code class="docutils literal notranslate"><span class="pre">.proto</span></code> files to C++ code,
+using a deprecated command and its modern replacement:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> with deprecated command</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Protobuf_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">protobuf_generate_cpp(</span>
+<span class="w">    </span><span class="nb">proto_sources</span>
+<span class="w">    </span><span class="nb">proto_headers</span>
+<span class="w">    </span><span class="no">EXPORT_MACRO</span><span class="w"> </span><span class="no">DLL_EXPORT</span>
+<span class="w">    </span><span class="no">DESCRIPTORS</span><span class="w"> </span><span class="nb">proto_descriptors</span>
+<span class="w">    </span><span class="na">src/protocol/Proto1.proto</span>
+<span class="w">    </span><span class="na">src/protocol/Proto2.proto</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">target_sources(</span>
+<span class="w">  </span><span class="nb">example</span>
+<span class="w">  </span><span class="no">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nt">proto_sources</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nt">proto_headers</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nt">proto_descriptors</span><span class="o">}</span>
+<span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">protobuf</span><span class="o">::</span><span class="nb">libprotobuf</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> with upgraded code</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Protobuf_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">protobuf_generate(</span>
+<span class="w">    </span><span class="no">TARGET</span><span class="w"> </span><span class="nb">example</span>
+<span class="w">    </span><span class="no">EXPORT_MACRO</span><span class="w"> </span><span class="no">DLL_EXPORT</span>
+<span class="w">    </span><span class="no">IMPORT_DIRS</span><span class="w"> </span><span class="na">src/protocol</span>
+<span class="w">    </span><span class="no">DESCRIPTORS</span>
+<span class="w">    </span><span class="no">PROTOS</span>
+<span class="w">      </span><span class="na">src/protocol/Proto1.proto</span>
+<span class="w">      </span><span class="na">src/protocol/Proto2.proto</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">protobuf</span><span class="o">::</span><span class="nb">libprotobuf</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>The following example shows how to process <code class="docutils literal notranslate"><span class="pre">.proto</span></code> files to Python code,
+using a deprecated command and its modern replacement:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> with deprecated command</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Protobuf_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">protobuf_generate_python(</span><span class="nb">python_sources</span><span class="w"> </span><span class="nb">foo.proto</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">add_custom_target(</span><span class="nb">proto_files</span><span class="w"> </span><span class="no">DEPENDS</span><span class="w"> </span><span class="o">${</span><span class="nt">python_sources</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> with upgraded code</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Protobuf</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Protobuf_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">protobuf_generate(</span>
+<span class="w">    </span><span class="no">LANGUAGE</span><span class="w"> </span><span class="nb">python</span>
+<span class="w">    </span><span class="no">PROTOS</span><span class="w"> </span><span class="nb">foo.proto</span>
+<span class="w">    </span><span class="no">OUT_VAR</span><span class="w"> </span><span class="nb">python_sources</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">add_custom_target(</span><span class="nb">proto_files</span><span class="w"> </span><span class="no">DEPENDS</span><span class="w"> </span><span class="o">${</span><span class="nt">python_sources</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindProtobuf</a><ul>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#commands">Commands</a><ul>
+<li><a class="reference internal" href="#generating-source-files">Generating Source Files</a></li>
+<li><a class="reference internal" href="#deprecated-commands">Deprecated Commands</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#examples-finding-protobuf">Examples: Finding Protobuf</a></li>
+<li><a class="reference internal" href="#example-finding-protobuf-in-config-mode">Example: Finding Protobuf in Config Mode</a></li>
+<li><a class="reference internal" href="#example-using-protobuf">Example: Using Protobuf</a></li>
+<li><a class="reference internal" href="#example-processing-proto-schema-files">Example: Processing Proto Schema Files</a></li>
+<li><a class="reference internal" href="#example-using-protobuf-and-grpc">Example: Using Protobuf and gRPC</a></li>
+<li><a class="reference internal" href="#examples-upgrading-deprecated-commands">Examples: Upgrading Deprecated Commands</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindProducer.html"
+                          title="previous chapter">FindProducer</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindPython.html"
+                          title="next chapter">FindPython</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindProtobuf.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindPython.html" title="FindPython"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindProducer.html" title="FindProducer"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindProtobuf</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

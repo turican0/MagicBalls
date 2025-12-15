@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 11: Miscellaneous Features &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 1: A Basic Starting Point" href="A%20Basic%20Starting%20Point.html" />
+    <link rel="prev" title="Step 10: Finding Dependencies" href="Finding%20Dependencies.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="A%20Basic%20Starting%20Point.html" title="Step 1: A Basic Starting Point"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Finding%20Dependencies.html" title="Step 10: Finding Dependencies"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 11: Miscellaneous Features</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-11-miscellaneous-features">
+<span id="guide:tutorial/Miscellaneous Features"></span><h1>Step 11: Miscellaneous Features<a class="headerlink" href="#step-11-miscellaneous-features" title="Link to this heading">¶</a></h1>
+<p>Some features don't fit well or aren't important enough to receive attention
+in the main tutorial, but deserve mention. These exercises collect some of those
+features. They should be considered &quot;bonuses&quot;.</p>
+<p>There are many CMake features that are not covered by the tutorial, some of
+which are considered essential to the projects which use them. Others are
+in common use by packagers but see little discussion among software developers
+producing local builds.</p>
+<p>This list is not an exhaustive discussion of what remains of CMake's
+capabilities. It may grow or shrink with time and relevance.</p>
+<section id="exercise-1-target-aliases">
+<h2>Exercise 1: Target Aliases<a class="headerlink" href="#exercise-1-target-aliases" title="Link to this heading">¶</a></h2>
+<p>This tutorial focuses on installing dependencies and consuming them from an
+install tree. It also recommends the use of package managers to facilitate
+this process. However, for a variety of reasons both historical and
+contemporary this is not always how CMake projects are consumed.</p>
+<p>It is possible to vendor a dependency's source code entirely in a parent project
+and consume it with <span class="target" id="index-0-command:add_subdirectory"></span><a class="reference internal" href="../../command/add_subdirectory.html#command:add_subdirectory" title="add_subdirectory"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_subdirectory()</span></code></a>. When performed, the target
+names exposed are those used within the project, not those exported via
+<span class="target" id="index-0-command:install"></span><a class="reference internal" href="../../command/install.html#export" title="install(export)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(EXPORT)</span></code></a>. The target names will not have the namespace string
+that command prefixes to targets.</p>
+<p>Some projects wish to support this workflow with an interface consistent with
+the one presented to <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> consumers. CMake supports this via
+<span class="target" id="index-0-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#alias" title="add_library(alias)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library(ALIAS)</span></code></a> and <span class="target" id="index-0-command:add_executable"></span><a class="reference internal" href="../../command/add_executable.html#alias" title="add_executable(alias)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_executable(ALIAS)</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">MyLib</span><span class="w"> </span><span class="no">INTERFACE</span><span class="nf">)</span>
+<span class="nf">add_library(</span><span class="nb">MyProject</span><span class="o">::</span><span class="nb">MyLib</span><span class="w"> </span><span class="no">ALIAS</span><span class="w"> </span><span class="nb">MyLib</span><span class="nf">)</span>
+</pre></div>
+</div>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Add a library alias for the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library.</p>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-1-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TutorialProject/MathFunctions/CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>For this step we will only be editing the <code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code> project in the
+<code class="docutils literal notranslate"><span class="pre">Step11</span></code> folder. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code>.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>To build the project we first need configure and install <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>.
+Navigate to <code class="docutils literal notranslate"><span class="pre">Help/guide/Step11/SimpleTest</span></code> and run the appropriate commands.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --install build</span>
+</pre></div>
+</div>
+<p>Then navigate to <code class="docutils literal notranslate"><span class="pre">Help/guide/Step11/TutorialProject</span></code> and perform the usual build.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>There should be no observable change in behavior from adding the alias.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>We add a single line to the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> CML.</p>
+<details><summary>TODO 1 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-mathfunctions-cmakelists-txt-alias">
+<div class="code-block-caption"><span class="caption-text">TODO 1: TutorialProject/MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#tutorialproject-mathfunctions-cmakelists-txt-alias" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">Tutorial</span><span class="o">::</span><span class="nb">MathFunctions</span><span class="w"> </span><span class="no">ALIAS</span><span class="w"> </span><span class="nb">MathFunctions</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-2-generator-expressions">
+<h2>Exercise 2: Generator Expressions<a class="headerlink" href="#exercise-2-generator-expressions" title="Link to this heading">¶</a></h2>
+<p><span class="target" id="index-0-manual:cmake-generator-expressions(7)"></span><a class="reference internal" href="../../manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)" title="cmake-generator-expressions(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">Generator</span> <span class="pre">expressions</span></code></a> are a
+complicated domain-specific language supported in some contexts within CMake.
+They are most easily understood as deferred-evaluation conditionals, they
+express requirements where the inputs to determine the correct behavior are not
+known during the CMake configuration stage.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is where generator expressions get their name, they are evaluated when
+the underlying build system is being generated.</p>
+</div>
+<p>Generator expressions were commonly used in combination with
+<span class="target" id="index-0-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a> to express include directory requirements
+across the build and install tree, but file sets have superseded this use case.
+Their most common applications now are in multi-config generators and
+intricate dependency injection systems.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_compile_definitions(</span><span class="nb">MyApp</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="s">&quot;MYAPP_BUILD_CONFIG=$&lt;CONFIG&gt;&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Add a generator expression to <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> that checks the build configuration
+inside a compile definition.</p>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-0-command:target_compile_definitions"></span><a class="reference internal" href="../../command/target_compile_definitions.html#command:target_compile_definitions" title="target_compile_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_definitions()</span></code></a></p></li>
+<li><p><span class="target" id="index-1-manual:cmake-generator-expressions(7)"></span><a class="reference internal" href="../../manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)" title="cmake-generator-expressions(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake-generator-expressions(7)</span></code></a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SimpleTest/CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>For this step we will only be editing the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> project in the
+<code class="docutils literal notranslate"><span class="pre">Step11</span></code> folder. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">2</span></code>.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>To build the project we first need configure and install <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>.
+Navigate to <code class="docutils literal notranslate"><span class="pre">Help/guide/Step11/SimpleTest</span></code> and run the appropriate commands.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --install build</span>
+</pre></div>
+</div>
+<p>Then navigate to <code class="docutils literal notranslate"><span class="pre">Help/guide/Step11/TutorialProject</span></code> and perform the usual build.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>When running the <code class="docutils literal notranslate"><span class="pre">TestMathFunctions</span></code> binary directly, we should a message
+naming the build configuration used to build the executable (not necessarily the
+same as configuration used to configure <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>). On single configuration
+generators, the build configuration can be changed by setting
+<span class="target" id="index-0-variable:CMAKE_BUILD_TYPE"></span><a class="reference internal" href="../../variable/CMAKE_BUILD_TYPE.html#variable:CMAKE_BUILD_TYPE" title="CMAKE_BUILD_TYPE"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code></a>.</p>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>We add a single line to the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> CML.</p>
+<details><summary>TODO 2 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="simpletest-cmakelists-txt-target-compile-definitions">
+<div class="code-block-caption"><span class="caption-text">TODO 2: SimpleTest/CMakeLists.txt</span><a class="headerlink" href="#simpletest-cmakelists-txt-target-compile-definitions" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_compile_definitions(</span><span class="nb">SimpleTest</span><span class="w"> </span><span class="no">INTERFACE</span><span class="w"> </span><span class="s">&quot;SIMPLETEST_CONFIG=$&lt;CONFIG&gt;&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 11: Miscellaneous Features</a><ul>
+<li><a class="reference internal" href="#exercise-1-target-aliases">Exercise 1: Target Aliases</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-generator-expressions">Exercise 2: Generator Expressions</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Finding%20Dependencies.html"
+                          title="previous chapter">Step 10: Finding Dependencies</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="A%20Basic%20Starting%20Point.html"
+                          title="next chapter">Step 1: A Basic Starting Point</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/Miscellaneous Features.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="A%20Basic%20Starting%20Point.html" title="Step 1: A Basic Starting Point"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Finding%20Dependencies.html" title="Step 10: Finding Dependencies"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 11: Miscellaneous Features</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

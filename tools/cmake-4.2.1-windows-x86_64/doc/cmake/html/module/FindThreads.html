@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindThreads &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindTIFF" href="FindTIFF.html" />
+    <link rel="prev" title="FindTclStub" href="FindTclStub.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindTIFF.html" title="FindTIFF"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindTclStub.html" title="FindTclStub"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindThreads</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findthreads">
+<span id="module:FindThreads"></span><h1>FindThreads<a class="headerlink" href="#findthreads" title="Link to this heading">¶</a></h1>
+<p>Finds and determines the thread library of the system for multithreading
+support:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Threads</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Multithreading enables concurrent execution within a single program,
+typically by creating multiple threads of execution.  Most commonly, this
+is done using libraries such as POSIX Threads (<code class="docutils literal notranslate"><span class="pre">pthreads</span></code>) on Unix-like
+systems or Windows threads on Windows.</p>
+<p>This module abstracts the platform-specific differences and detects how to
+enable thread support - whether it requires linking to a specific library,
+adding compiler flags (like <code class="docutils literal notranslate"><span class="pre">-pthread</span></code>), or both.  On some platforms,
+threading is also implicitly available in default libraries without the
+need to use additional flags or libraries.</p>
+<p>This module is suitable for use in both C and C++ projects (and occasionally
+other compiled languages) that rely on system-level threading APIs.</p>
+<p>Using this module ensures that project builds correctly across different
+platforms by handling the detection and setup of thread support in a
+portable way.</p>
+<section id="c-and-c-language-standards">
+<h2>C and C++ Language Standards<a class="headerlink" href="#c-and-c-language-standards" title="Link to this heading">¶</a></h2>
+<p>The C11 standard introduced a minimal cross-platform thread API via
+<code class="docutils literal notranslate"><span class="pre">&lt;threads.h&gt;</span></code> header file, and C++11 added <code class="docutils literal notranslate"><span class="pre">&lt;thread&gt;</span></code> header to the
+standard library, offering high-level multithreading support.  These standard
+headers allow writing portable threaded code at the language level, without
+directly using platform-specific APIs like <code class="docutils literal notranslate"><span class="pre">pthreads</span></code> or Windows threads.</p>
+<p>However, even with standard C11 or C++11 threads support available, there
+may still be a need for platform-specific compiler or linker flags (e.g.,
+<code class="docutils literal notranslate"><span class="pre">-pthread</span></code> on Unix-like systems) for some applications.  This is where
+FindThreads remains relevant - it ensures these flags and any required
+libraries are correctly set up, even if not explicitly using system APIs.</p>
+<p>In short:</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">&lt;thread&gt;</span></code> (C++11 and later) or <code class="docutils literal notranslate"><span class="pre">&lt;threads.h&gt;</span></code> (C11) in source code
+for portability and simpler syntax.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">find_package(Threads)</span></code> in CMake project when application needs the
+traditional threading support and to ensure code compiles and links
+correctly across different platforms.</p></li>
+</ul>
+</section>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Threads::Threads</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.1.</span></p>
+</div>
+<p>Target encapsulating the usage requirements to enable threading through
+flags or a threading library, if found.  This target is available if
+threads are detected as supported.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Threads_FOUND</span></code></dt><dd><p>Boolean indicating whether Threads is supported, either through a separate
+library or a standard library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CMAKE_THREAD_LIBS_INIT</span></code></dt><dd><p>The thread library to use.  This may be empty if the thread functions
+are provided by the system libraries and no special flags are needed
+to use them.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CMAKE_USE_WIN32_THREADS_INIT</span></code></dt><dd><p>If the found thread library is the win32 one.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CMAKE_USE_PTHREADS_INIT</span></code></dt><dd><p>If the found thread library is pthread compatible.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CMAKE_HP_PTHREADS_INIT</span></code></dt><dd><p>If the found thread library is the HP thread library.</p>
+</dd>
+</dl>
+</section>
+<section id="variables-affecting-behavior">
+<h2>Variables Affecting Behavior<a class="headerlink" href="#variables-affecting-behavior" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables before calling
+<code class="docutils literal notranslate"><span class="pre">find_package(Threads)</span></code>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">THREADS_PREFER_PTHREAD_FLAG</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.1.</span></p>
+</div>
+<p>If the use of the <code class="docutils literal notranslate"><span class="pre">-pthread</span></code> compiler and linker flag is preferred then
+the caller can set this variable to boolean true.  The compiler flag can
+only be used with the imported target.  Use of both the imported target
+as well as this switch is highly recommended for new code.</p>
+<p>This variable has no effect if the system libraries provide the
+thread functions, i.e. when <code class="docutils literal notranslate"><span class="pre">CMAKE_THREAD_LIBS_INIT</span></code> will be empty.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Finding Threads and linking the imported target to a project target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">THREADS_PREFER_PTHREAD_FLAG</span><span class="w"> </span><span class="no">TRUE</span><span class="nf">)</span>
+<span class="nf">find_package(</span><span class="nb">Threads</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">Threads</span><span class="o">::</span><span class="nb">Threads</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindThreads</a><ul>
+<li><a class="reference internal" href="#c-and-c-language-standards">C and C++ Language Standards</a></li>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#variables-affecting-behavior">Variables Affecting Behavior</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindTclStub.html"
+                          title="previous chapter">FindTclStub</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindTIFF.html"
+                          title="next chapter">FindTIFF</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindThreads.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindTIFF.html" title="FindTIFF"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindTclStub.html" title="FindTclStub"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindThreads</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

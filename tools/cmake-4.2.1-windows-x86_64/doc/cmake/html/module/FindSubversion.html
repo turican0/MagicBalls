@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindSubversion &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindSWIG" href="FindSWIG.html" />
+    <link rel="prev" title="FindSquish" href="FindSquish.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindSWIG.html" title="FindSWIG"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindSquish.html" title="FindSquish"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindSubversion</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findsubversion">
+<span id="module:FindSubversion"></span><h1>FindSubversion<a class="headerlink" href="#findsubversion" title="Link to this heading">¶</a></h1>
+<p>Finds a Subversion command-line client executable (<code class="docutils literal notranslate"><span class="pre">svn</span></code>) and provides
+commands for extracting information from a Subversion working copy:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Subversion</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Subversion_FOUND</span></code></dt><dd><p>Boolean indicating whether the (requested version of) Subversion
+command-line client was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Subversion_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>Version of the <code class="docutils literal notranslate"><span class="pre">svn</span></code> command-line client found.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Subversion_SVN_EXECUTABLE</span></code></dt><dd><p>Path to the <code class="docutils literal notranslate"><span class="pre">svn</span></code> command-line client.</p>
+</dd>
+</dl>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following commands if the Subversion command-line
+client is found:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:subversion_wc_info">
+<span class="sig-name descname"><span class="pre">Subversion_WC_INFO</span></span><a class="headerlink" href="#command:subversion_wc_info" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts information from a Subversion working copy located at a specified
+directory:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">Subversion_WC_INFO(</span><span class="nv">&lt;dir&gt;</span><span class="w"> </span><span class="nv">&lt;var-prefix&gt;</span><span class="w"> </span><span class="p">[</span><span class="no">IGNORE_SVN_FAILURE</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command defines the following variables if running Subversion's <code class="docutils literal notranslate"><span class="pre">info</span></code>
+subcommand on <code class="docutils literal notranslate"><span class="pre">&lt;dir&gt;</span></code> succeeds; otherwise a <code class="docutils literal notranslate"><span class="pre">SEND_ERROR</span></code> message is
+generated:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_WC_URL</span></code></dt><dd><p>URL of the repository (at <code class="docutils literal notranslate"><span class="pre">&lt;dir&gt;</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_WC_ROOT</span></code></dt><dd><p>Root URL of the repository.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_WC_REVISION</span></code></dt><dd><p>Current revision.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_WC_LAST_CHANGED_AUTHOR</span></code></dt><dd><p>Author of last commit.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_WC_LAST_CHANGED_DATE</span></code></dt><dd><p>Date of last commit.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_WC_LAST_CHANGED_REV</span></code></dt><dd><p>Revision of last commit.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_WC_INFO</span></code></dt><dd><p>Output of the command <code class="docutils literal notranslate"><span class="pre">svn</span> <span class="pre">info</span> <span class="pre">&lt;dir&gt;</span></code></p>
+</dd>
+</dl>
+<p>The options are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">IGNORE_SVN_FAILURE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+<p>When specified, errors from Subversion operation will not trigger a
+<code class="docutils literal notranslate"><span class="pre">SEND_ERROR</span></code> message.  In case of an error, the <code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_*</span></code>
+variables remain undefined.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:subversion_wc_log">
+<span class="sig-name descname"><span class="pre">Subversion_WC_LOG</span></span><a class="headerlink" href="#command:subversion_wc_log" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieves the log message of the base revision of a Subversion working copy at
+a given location:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">Subversion_WC_LOG(</span><span class="nv">&lt;dir&gt;</span><span class="w"> </span><span class="nv">&lt;var-prefix&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command defines the following variable if running Subversion's <code class="docutils literal notranslate"><span class="pre">log</span></code>
+subcommand on <code class="docutils literal notranslate"><span class="pre">&lt;dir&gt;</span></code> succeeds; otherwise a <code class="docutils literal notranslate"><span class="pre">SEND_ERROR</span></code> message is
+generated:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;var-prefix&gt;_LAST_CHANGED_LOG</span></code></dt><dd><p>Last log of the base revision of a Subversion working copy located at
+<code class="docutils literal notranslate"><span class="pre">&lt;dir&gt;</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SUBVERSION_FOUND</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Use <code class="docutils literal notranslate"><span class="pre">Subversion_FOUND</span></code>, which has the same value.</p>
+</div>
+<p>Boolean indicating whether the (requested version of) Subversion
+command-line client was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Subversion_VERSION_SVN</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Use the <code class="docutils literal notranslate"><span class="pre">Subversion_VERSION</span></code>.</p>
+</div>
+<p>Version of the <code class="docutils literal notranslate"><span class="pre">svn</span></code> command-line client found.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="examples-finding-subversion">
+<h3>Examples: Finding Subversion<a class="headerlink" href="#examples-finding-subversion" title="Link to this heading">¶</a></h3>
+<p>Finding Subversion:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Subversion</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Or, finding Subversion and specifying a minimum required version:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Subversion</span><span class="w"> </span><span class="m">1.4</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Or, finding Subversion and making it required (if not found, processing stops
+with an error message):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Subversion</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-using-subversion">
+<h3>Example: Using Subversion<a class="headerlink" href="#example-using-subversion" title="Link to this heading">¶</a></h3>
+<p>Finding Subversion and retrieving information about the current project's
+working copy:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Subversion</span><span class="nf">)</span>
+<span class="nf">if(</span><span class="nb">Subversion_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">Subversion_WC_INFO(</span><span class="o">${</span><span class="nt">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="w"> </span><span class="nb">Project</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Current revision is ${Project_WC_REVISION}&quot;</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">Subversion_WC_LOG(</span><span class="o">${</span><span class="nt">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="w"> </span><span class="nb">Project</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Last changed log is ${Project_LAST_CHANGED_LOG}&quot;</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindSubversion</a><ul>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#examples-finding-subversion">Examples: Finding Subversion</a></li>
+<li><a class="reference internal" href="#example-using-subversion">Example: Using Subversion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindSquish.html"
+                          title="previous chapter">FindSquish</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindSWIG.html"
+                          title="next chapter">FindSWIG</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindSubversion.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindSWIG.html" title="FindSWIG"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindSquish.html" title="FindSquish"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindSubversion</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

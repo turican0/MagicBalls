@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMakePrintHelpers &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMakePrintSystemInformation" href="CMakePrintSystemInformation.html" />
+    <link rel="prev" title="CMakePackageConfigHelpers" href="CMakePackageConfigHelpers.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMakePrintSystemInformation.html" title="CMakePrintSystemInformation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMakePackageConfigHelpers.html" title="CMakePackageConfigHelpers"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMakePrintHelpers</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmakeprinthelpers">
+<span id="module:CMakePrintHelpers"></span><h1>CMakePrintHelpers<a class="headerlink" href="#cmakeprinthelpers" title="Link to this heading">¶</a></h1>
+<p>This module provides convenience commands, primarily intended for debugging,
+to print the values of properties and variables.</p>
+<p>Load this module in CMake with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakePrintHelpers</span><span class="nf">)</span>
+</pre></div>
+</div>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following commands:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:cmake_print_properties">
+<span class="sig-name descname"><span class="pre">cmake_print_properties</span></span><a class="headerlink" href="#command:cmake_print_properties" title="Link to this definition">¶</a></dt>
+<dd><p>Prints the values of properties for the specified targets, source files,
+directories, tests, or cache entries:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_print_properties(</span>
+<span class="w">  </span><span class="o">&lt;</span><span class="no">TARGETS</span><span class="w">       </span><span class="p">[</span><span class="nv">&lt;targets&gt;...</span><span class="p">]</span><span class="w"> </span><span class="p">|</span>
+<span class="w">   </span><span class="no">SOURCES</span><span class="w">       </span><span class="p">[</span><span class="nv">&lt;sources&gt;...</span><span class="p">]</span><span class="w"> </span><span class="p">|</span>
+<span class="w">   </span><span class="no">DIRECTORIES</span><span class="w">   </span><span class="p">[</span><span class="nv">&lt;dirs&gt;...</span><span class="p">]</span><span class="w">    </span><span class="p">|</span>
+<span class="w">   </span><span class="no">TESTS</span><span class="w">         </span><span class="p">[</span><span class="nv">&lt;tests&gt;...</span><span class="p">]</span><span class="w">   </span><span class="p">|</span>
+<span class="w">   </span><span class="no">CACHE_ENTRIES</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;entries&gt;...</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span>
+<span class="w">  </span><span class="no">PROPERTIES</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;properties&gt;...</span><span class="p">]</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>Exactly one of the scope keywords must be specified.  The scope keyword
+and its arguments must appear before the <code class="docutils literal notranslate"><span class="pre">PROPERTIES</span></code> keyword in the
+argument list.</p>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:cmake_print_variables">
+<span class="sig-name descname"><span class="pre">cmake_print_variables</span></span><a class="headerlink" href="#command:cmake_print_variables" title="Link to this definition">¶</a></dt>
+<dd><p>Prints each variable name followed by its value:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_print_variables(</span><span class="p">[</span><span class="nv">&lt;vars&gt;...</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Printing the <code class="docutils literal notranslate"><span class="pre">LOCATION</span></code> and <code class="docutils literal notranslate"><span class="pre">INTERFACE_INCLUDE_DIRECTORIES</span></code> properties for
+both targets <code class="docutils literal notranslate"><span class="pre">foo</span></code> and <code class="docutils literal notranslate"><span class="pre">bar</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakePrintHelpers</span><span class="nf">)</span>
+
+<span class="nf">cmake_print_properties(</span>
+<span class="w">  </span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">foo</span><span class="w"> </span><span class="nb">bar</span>
+<span class="w">  </span><span class="no">PROPERTIES</span><span class="w"> </span><span class="no">LOCATION</span><span class="w"> </span><span class="no">INTERFACE_INCLUDE_DIRECTORIES</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>Gives:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>--
+ Properties for TARGET foo:
+   foo.LOCATION = &quot;/usr/lib/libfoo.so&quot;
+   foo.INTERFACE_INCLUDE_DIRECTORIES = &quot;/usr/include;/usr/include/foo&quot;
+ Properties for TARGET bar:
+   bar.LOCATION = &quot;/usr/lib/libbar.so&quot;
+   bar.INTERFACE_INCLUDE_DIRECTORIES = &quot;/usr/include;/usr/include/bar&quot;
+</pre></div>
+</div>
+<p>Printing given variables:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakePrintHelpers</span><span class="nf">)</span>
+
+<span class="nf">cmake_print_variables(</span><span class="no">CMAKE_C_COMPILER</span><span class="w"> </span><span class="no">CMAKE_MAJOR_VERSION</span><span class="w"> </span><span class="no">NOT_EXISTS</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Gives:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-- CMAKE_C_COMPILER=&quot;/usr/bin/cc&quot; ; CMAKE_MAJOR_VERSION=&quot;3&quot; ; NOT_EXISTS=&quot;&quot;
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">CMakePrintHelpers</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMakePackageConfigHelpers.html"
+                          title="previous chapter">CMakePackageConfigHelpers</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMakePrintSystemInformation.html"
+                          title="next chapter">CMakePrintSystemInformation</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/CMakePrintHelpers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMakePrintSystemInformation.html" title="CMakePrintSystemInformation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMakePackageConfigHelpers.html" title="CMakePackageConfigHelpers"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMakePrintHelpers</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

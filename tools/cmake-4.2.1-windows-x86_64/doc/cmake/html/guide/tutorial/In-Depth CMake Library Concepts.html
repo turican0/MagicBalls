@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 5: In-Depth CMake Library Concepts &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 6: In-Depth System Introspection" href="In-Depth%20System%20Introspection.html" />
+    <link rel="prev" title="Step 4: In-Depth CMake Target Commands" href="In-Depth%20CMake%20Target%20Commands.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="In-Depth%20System%20Introspection.html" title="Step 6: In-Depth System Introspection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="In-Depth%20CMake%20Target%20Commands.html" title="Step 4: In-Depth CMake Target Commands"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 5: In-Depth CMake Library Concepts</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-5-in-depth-cmake-library-concepts">
+<span id="guide:tutorial/In-Depth CMake Library Concepts"></span><h1>Step 5: In-Depth CMake Library Concepts<a class="headerlink" href="#step-5-in-depth-cmake-library-concepts" title="Link to this heading">¶</a></h1>
+<p>While executables are mostly one-size-fits-all, libraries come in many
+different forms. There are static archives, shared objects, modules,
+object libraries, header-only libraries, and libraries which describe advanced
+CMake properties to be inherited by other targets, just to name a few.</p>
+<p>In this step you will learn about some of the most common kinds of libraries
+that CMake can describe. This will cover most of the in-project uses of
+<span class="target" id="index-0-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a>. Libraries which are imported from dependencies (or
+exported by the project to be consumed as a dependency) will be covered in
+later steps.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>As we learned in <code class="docutils literal notranslate"><span class="pre">Step1</span></code>, the <span class="target" id="index-1-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> command accepts the name
+of the library target to be created as its first argument. The second
+argument is an optional <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code> for which the following values are valid:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">STATIC</span></code></dt><dd><p>A <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#static-libraries"><span class="std std-ref">Static Library</span></a>:
+an archive of object files for use when linking other targets.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHARED</span></code></dt><dd><p>A <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#shared-libraries"><span class="std std-ref">Shared Library</span></a>:
+a dynamic library that may be linked by other targets and loaded
+at runtime.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MODULE</span></code></dt><dd><p>A <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#module-libraries"><span class="std std-ref">Module Library</span></a>:
+a plugin that may not be linked by other targets, but may be
+dynamically loaded at runtime using dlopen-like functionality.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OBJECT</span></code></dt><dd><p>An <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#object-libraries"><span class="std std-ref">Object Library</span></a>:
+a collection of object files which have not been archived or linked
+into a library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code></dt><dd><p>An <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#interface-libraries"><span class="std std-ref">Interface Library</span></a>:
+a library target which specifies usage requirements for dependents but
+does not compile sources and does not produce a library artifact on disk.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>In addition, there are <code class="docutils literal notranslate"><span class="pre">IMPORTED</span></code> libraries which describe library targets
+from foreign projects or modules, imported into the current project. We will
+cover these briefly in later steps.</p>
+<p><code class="docutils literal notranslate"><span class="pre">MODULE</span></code> libraries are most commonly found in plugin systems, or as extensions
+to runtime-loading languages like Python or Javascript. They act very similar to
+normal shared libraries, except they cannot be directly linked by other targets.
+They are sufficiently similar that we won't cover them in further depth here.</p>
+</section>
+<section id="exercise-1-static-and-shared">
+<h2>Exercise 1 - Static and Shared<a class="headerlink" href="#exercise-1-static-and-shared" title="Link to this heading">¶</a></h2>
+<p>While the <span class="target" id="index-2-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> command supports explicitly setting <code class="docutils literal notranslate"><span class="pre">STATIC</span></code>
+or <code class="docutils literal notranslate"><span class="pre">SHARED</span></code>, and this is sometimes necessary, it is best to leave the second
+argument empty for most &quot;normal&quot; libraries which can operate as either.</p>
+<p>When not given a type, <span class="target" id="index-3-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> will create either a <code class="docutils literal notranslate"><span class="pre">STATIC</span></code>
+or <code class="docutils literal notranslate"><span class="pre">SHARED</span></code> library depending on the value of <span class="target" id="index-0-variable:BUILD_SHARED_LIBS"></span><a class="reference internal" href="../../variable/BUILD_SHARED_LIBS.html#variable:BUILD_SHARED_LIBS" title="BUILD_SHARED_LIBS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></a>.
+If <span class="target" id="index-1-variable:BUILD_SHARED_LIBS"></span><a class="reference internal" href="../../variable/BUILD_SHARED_LIBS.html#variable:BUILD_SHARED_LIBS" title="BUILD_SHARED_LIBS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></a> is true, a <code class="docutils literal notranslate"><span class="pre">SHARED</span></code> library will be created,
+otherwise it will be <code class="docutils literal notranslate"><span class="pre">STATIC</span></code>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">MyLib-static</span><span class="w"> </span><span class="no">STATIC</span><span class="nf">)</span>
+<span class="nf">add_library(</span><span class="nb">MyLib-shared</span><span class="w"> </span><span class="no">SHARED</span><span class="nf">)</span>
+
+<span class="c"># Depends on BUILD_SHARED_LIBS</span>
+<span class="nf">add_library(</span><span class="nb">MyLib</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This is desirable behavior, as it allows packagers to determine what kind of
+library will be produced, and ensure dependents link to that version of the
+library without needing to modify their source code. In some contexts, fully
+static builds are appropriate, and in others shared libraries are desirable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CMake does not define the <span class="target" id="index-2-variable:BUILD_SHARED_LIBS"></span><a class="reference internal" href="../../variable/BUILD_SHARED_LIBS.html#variable:BUILD_SHARED_LIBS" title="BUILD_SHARED_LIBS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></a> variable by default,
+meaning without project or user intervention <span class="target" id="index-4-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> will
+produce <code class="docutils literal notranslate"><span class="pre">STATIC</span></code> libraries.</p>
+</div>
+<p>By leaving the second argument to <span class="target" id="index-5-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a> blank, projects
+provide additional flexibility to their packagers and downstream dependents.</p>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Build <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> as a shared library.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On Windows, you might see warnings about an empty DLL, as <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>
+doesn't export any symbols.</p>
+</div>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-3-variable:BUILD_SHARED_LIBS"></span><a class="reference internal" href="../../variable/BUILD_SHARED_LIBS.html#variable:BUILD_SHARED_LIBS" title="BUILD_SHARED_LIBS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<p>There are no files to edit.</p>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step5</span></code> directory contains the complete, recommended
+solution to <code class="docutils literal notranslate"><span class="pre">Step4</span></code>. This step is about building the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>
+library, there are no <code class="docutils literal notranslate"><span class="pre">TODOs</span></code> necessary. You can proceed directly to the
+build step.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>We can configure using our preset, turning on <span class="target" id="index-4-variable:BUILD_SHARED_LIBS"></span><a class="reference internal" href="../../variable/BUILD_SHARED_LIBS.html#variable:BUILD_SHARED_LIBS" title="BUILD_SHARED_LIBS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></a> with
+a <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a> flag.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial -DBUILD_SHARED_LIBS=ON</span>
+</pre></div>
+</div>
+<p>Then we can build only the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library with
+<a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-build-t"><code class="xref std std-option docutils literal notranslate"><span class="pre">-t</span></code></a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build -t MathFunctions</span>
+</pre></div>
+</div>
+<p>Verify a shared library is produced for <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> then reset
+<span class="target" id="index-5-variable:BUILD_SHARED_LIBS"></span><a class="reference internal" href="../../variable/BUILD_SHARED_LIBS.html#variable:BUILD_SHARED_LIBS" title="BUILD_SHARED_LIBS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></a>, either by reconfiguring with
+<code class="docutils literal notranslate"><span class="pre">-DBUILD_SHARED_LIBS=OFF</span></code> or deleting the <code class="docutils literal notranslate"><span class="pre">CMakeCache.txt</span></code>.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>There are no changes to the project for this exercise.</p>
+</section>
+</section>
+<section id="exercise-2-interface-libraries">
+<h2>Exercise 2 - Interface Libraries<a class="headerlink" href="#exercise-2-interface-libraries" title="Link to this heading">¶</a></h2>
+<p>Interface libraries are those which only communicate usage requirements for
+other targets, they do not build or produce any artifacts of their own. As such
+all the properties of an interface library must themselves be interface
+properties, specified with the <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#target-command-scope"><span class="std std-ref">scope keywords</span></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">MyInterface</span><span class="w"> </span><span class="no">INTERFACE</span><span class="nf">)</span>
+<span class="nf">target_compile_definitions(</span><span class="nb">MyInterface</span><span class="w"> </span><span class="no">INTERFACE</span><span class="w"> </span><span class="no">MYINTERFACE_COMPILE_DEF</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The most common kind of interface library in C++ development is a header-only
+library. Such libraries do not build anything, only providing the flags
+necessary to discover their headers.</p>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Add a header-only library to the tutorial project, and use it inside the
+<code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable.</p>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-6-command:add_library"></span><a class="reference internal" href="../../command/add_library.html#command:add_library" title="add_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_library()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/MathLogger/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/MathFunctions.cxx</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>In our previous discussions of <span class="target" id="index-1-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources(file_set)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources(FILE_SET)</span></code></a>, we noted
+we can omit the <code class="docutils literal notranslate"><span class="pre">TYPE</span></code> parameter if the file set's name is the same as the
+file set's type. We also said we can omit the <code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> parameter if
+we want to use the current source directory as the only base directory.</p>
+<p>We're ready to introduce a third shortcut, we only need to include the <code class="docutils literal notranslate"><span class="pre">FILES</span></code>
+parameter if the headers are intended to be installed, such as public headers
+of a library.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">MathLogger</span></code> headers in this exercise are only used internally by the
+<code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> implementation. They will not be installed. This should
+make for a very abbreviated call to <span class="target" id="index-2-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources(file_set)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources(FILE_SET)</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The headers will be discovered by the compiler's dependency scanner to ensure
+correct incremental builds. It can be useful to list header files in these
+contexts anyway, as the list can be used to generate metadata some IDEs
+rely on.</p>
+</div>
+<p>You can begin editing the <code class="docutils literal notranslate"><span class="pre">Step5</span></code> directory. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> through
+<code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">7</span></code>.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>The preset has already been updated to use <code class="docutils literal notranslate"><span class="pre">mathfunctions::sqrt</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">std::sqrt</span></code>. We can build and configure as usual.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Verify that the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> output now uses the logging framework.</p>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>First we add a new <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> library named <code class="docutils literal notranslate"><span class="pre">MathLogger</span></code>.</p>
+<details><summary>TODO 1: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-mathlogger-cmakelists-txt-add-library">
+<div class="code-block-caption"><span class="caption-text">TODO 1: MathFunctions/MathLogger/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-mathlogger-cmakelists-txt-add-library" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">MathLogger</span><span class="w"> </span><span class="no">INTERFACE</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Then we add the appropriate <span class="target" id="index-3-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a> call to capture the
+header information. We give this file set the name <code class="docutils literal notranslate"><span class="pre">HEADERS</span></code> so we can
+omit the <code class="docutils literal notranslate"><span class="pre">TYPE</span></code>, we don't need <code class="docutils literal notranslate"><span class="pre">BASE_DIRS</span></code> as we will use the default
+of the current source directory, and we can exclude the <code class="docutils literal notranslate"><span class="pre">FILES</span></code> list because
+we don't intend to install the library.</p>
+<details><summary>TODO 2: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-mathlogger-cmakelists-txt-target-sources">
+<div class="code-block-caption"><span class="caption-text">TODO 2: MathFunctions/MathLogger/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-mathlogger-cmakelists-txt-target-sources" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_sources(</span><span class="nb">MathLogger</span>
+<span class="w">  </span><span class="no">INTERFACE</span>
+<span class="w">    </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now we can add the <code class="docutils literal notranslate"><span class="pre">MathLogger</span></code> library to the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> linked
+libraries, and at the <code class="docutils literal notranslate"><span class="pre">MathLogger</span></code> folder to the project.</p>
+<details><summary>TODO 3-4: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-link-mathlogger">
+<div class="code-block-caption"><span class="caption-text">TODO 3: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-link-mathlogger" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">MathFunctions</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathLogger</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-add-mathlogger">
+<div class="code-block-caption"><span class="caption-text">TODO 4: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-add-mathlogger" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_subdirectory(</span><span class="nb">MathLogger</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally we can update <code class="docutils literal notranslate"><span class="pre">MathFunctions.cxx</span></code> to take advantage of the new logger.</p>
+<details><summary>TODO 5-7: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-mathlogger-header">
+<div class="code-block-caption"><span class="caption-text">TODO 5: MathFunctions/MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-mathlogger-header" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cmath&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;format&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;MathLogger.h&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-mathlogger-logger">
+<div class="code-block-caption"><span class="caption-text">TODO 6: MathFunctions/MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-mathlogger-logger" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">mathlogger</span><span class="o">::</span><span class="n">Logger</span><span class="w"> </span><span class="n">Logger</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-mathlogger-code">
+<div class="code-block-caption"><span class="caption-text">TODO 7: MathFunctions/MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-mathlogger-code" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">Logger</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;Computing sqrt of {} to be {}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-3-object-libraries">
+<h2>Exercise 3 - Object Libraries<a class="headerlink" href="#exercise-3-object-libraries" title="Link to this heading">¶</a></h2>
+<p>Object libraries have several advanced uses, but also tricky nuances which
+are difficult to fully enumerate in the scope of this tutorial.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">MyObjects</span><span class="w"> </span><span class="no">OBJECT</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The most obvious drawback to object libraries is the objects themselves cannot
+be transitively linked. If an object library appears in the
+<span class="target" id="index-0-prop_tgt:INTERFACE_LINK_LIBRARIES"></span><a class="reference internal" href="../../prop_tgt/INTERFACE_LINK_LIBRARIES.html#prop_tgt:INTERFACE_LINK_LIBRARIES" title="INTERFACE_LINK_LIBRARIES"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">INTERFACE_LINK_LIBRARIES</span></code></a> of a target, the dependents which link that
+target will not &quot;see&quot; the objects. The object library will act like an
+<code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> library in such contexts. In the general case, object libraries
+are only suitable for <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> or <code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code> consumption via
+<span class="target" id="index-0-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>.</p>
+<p>A common use case for object libraries is coalescing several library targets
+into a single archive or shared library object. Even within a single project
+libraries may be maintained as different targets for a variety of reasons, such
+as belonging to different teams within an organization. However, it may be
+desirable to distribute these as a single consumer-facing binary. Object
+libraries make this possible.</p>
+<section id="id7">
+<h3>Goal<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>Add several object libraries to the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library.</p>
+</section>
+<section id="id8">
+<h3>Helpful Resources<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-1-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:add_subdirectory"></span><a class="reference internal" href="../../command/add_subdirectory.html#command:add_subdirectory" title="add_subdirectory"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_subdirectory()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Files to Edit<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/MathFunctions.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Tutorial/Tutorial.cxx</span></code></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Getting Started<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>Several extensions for our <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library have been made available
+(we can imagine these coming from other teams in our organization). Take
+a minute to look at the targets made available in <code class="docutils literal notranslate"><span class="pre">MathFunctions/MathExtensions</span></code>.
+Then complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">8</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">11</span></code>.</p>
+</section>
+<section id="id11">
+<h3>Build and Run<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>There's no reconfiguration needed, we can build as usual.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Verify the output of <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> now includes the verification message. Also
+take a minute to inspect the build directory under
+<code class="docutils literal notranslate"><span class="pre">build/MathFunctions/MathExtensions</span></code>. You should find that, unlike
+<code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>, no archives are produced for any of the object libraries.</p>
+</section>
+<section id="id12">
+<h3>Solution<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>First we will add links for all the object libraries to <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>.
+These are <code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code>, because we want the objects to be added to the
+<code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library as part of its own build step, and we want the
+headers to be available to consumers of the library.</p>
+<p>Then we add the <code class="docutils literal notranslate"><span class="pre">MathExtensions</span></code> subdirectoy to the project.</p>
+<details><summary>TODO 8-9: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-link-objects">
+<div class="code-block-caption"><span class="caption-text">TODO 8: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-link-objects" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">MathFunctions</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathLogger</span>
+
+<span class="w">  </span><span class="no">PUBLIC</span>
+<span class="w">    </span><span class="nb">OpAdd</span>
+<span class="w">    </span><span class="nb">OpMul</span>
+<span class="w">    </span><span class="nb">OpSub</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-add-objs">
+<div class="code-block-caption"><span class="caption-text">TODO 9: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-add-objs" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_subdirectory(</span><span class="nb">MathExtensions</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>To make the extensions available to consumers, we include their headers in the
+<code class="docutils literal notranslate"><span class="pre">MathFunctions.h</span></code> header.</p>
+<details><summary>TODO 10: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-h-include-objects">
+<div class="code-block-caption"><span class="caption-text">TODO 10: MathFunctions/MathFunctions.h</span><a class="headerlink" href="#mathfunctions-mathfunctions-h-include-objects" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpAdd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpMul.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;OpSub.h&gt;</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally we can take advantage of the extensions in the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> program.</p>
+<details><summary>TODO 11: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorial-tutorial-cxx-use-objects">
+<div class="code-block-caption"><span class="caption-text">TODO 11: Tutorial/Tutorial.cxx</span><a class="headerlink" href="#tutorial-tutorial-cxx-use-objects" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">checkValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mathfunctions</span><span class="o">::</span><span class="n">OpMul</span><span class="p">(</span><span class="n">outputValue</span><span class="p">,</span><span class="w"> </span><span class="n">outputValue</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;The square of {} is {}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">outputValue</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">checkValue</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 5: In-Depth CMake Library Concepts</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-static-and-shared">Exercise 1 - Static and Shared</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-interface-libraries">Exercise 2 - Interface Libraries</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-3-object-libraries">Exercise 3 - Object Libraries</a><ul>
+<li><a class="reference internal" href="#id7">Goal</a></li>
+<li><a class="reference internal" href="#id8">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id9">Files to Edit</a></li>
+<li><a class="reference internal" href="#id10">Getting Started</a></li>
+<li><a class="reference internal" href="#id11">Build and Run</a></li>
+<li><a class="reference internal" href="#id12">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="In-Depth%20CMake%20Target%20Commands.html"
+                          title="previous chapter">Step 4: In-Depth CMake Target Commands</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="In-Depth%20System%20Introspection.html"
+                          title="next chapter">Step 6: In-Depth System Introspection</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/In-Depth CMake Library Concepts.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="In-Depth%20System%20Introspection.html" title="Step 6: In-Depth System Introspection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="In-Depth%20CMake%20Target%20Commands.html" title="Step 4: In-Depth CMake Target Commands"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 5: In-Depth CMake Library Concepts</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

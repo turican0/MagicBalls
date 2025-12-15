@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CTestUseLaunchers &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DeployQt4" href="DeployQt4.html" />
+    <link rel="prev" title="CTestCoverageCollectGCOV" href="CTestCoverageCollectGCOV.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="DeployQt4.html" title="DeployQt4"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CTestCoverageCollectGCOV.html" title="CTestCoverageCollectGCOV"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CTestUseLaunchers</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="ctestuselaunchers">
+<span id="module:CTestUseLaunchers"></span><h1>CTestUseLaunchers<a class="headerlink" href="#ctestuselaunchers" title="Link to this heading">¶</a></h1>
+<p>This module sets the <code class="docutils literal notranslate"><span class="pre">RULE_LAUNCH_*</span></code> global properties when the
+<span class="target" id="index-0-variable:CTEST_USE_LAUNCHERS"></span><a class="reference internal" href="../variable/CTEST_USE_LAUNCHERS.html#variable:CTEST_USE_LAUNCHERS" title="CTEST_USE_LAUNCHERS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS</span></code></a> variable is set to a true-like value (e.g.,
+<code class="docutils literal notranslate"><span class="pre">ON</span></code>):</p>
+<ul class="simple">
+<li><p><span class="target" id="index-0-prop_gbl:RULE_LAUNCH_COMPILE"></span><a class="reference internal" href="../prop_gbl/RULE_LAUNCH_COMPILE.html#prop_gbl:RULE_LAUNCH_COMPILE" title="RULE_LAUNCH_COMPILE"><code class="xref cmake cmake-prop_gbl docutils literal notranslate"><span class="pre">RULE_LAUNCH_COMPILE</span></code></a></p></li>
+<li><p><span class="target" id="index-0-prop_gbl:RULE_LAUNCH_CUSTOM"></span><a class="reference internal" href="../prop_gbl/RULE_LAUNCH_CUSTOM.html#prop_gbl:RULE_LAUNCH_CUSTOM" title="RULE_LAUNCH_CUSTOM"><code class="xref cmake cmake-prop_gbl docutils literal notranslate"><span class="pre">RULE_LAUNCH_CUSTOM</span></code></a></p></li>
+<li><p><span class="target" id="index-0-prop_gbl:RULE_LAUNCH_LINK"></span><a class="reference internal" href="../prop_gbl/RULE_LAUNCH_LINK.html#prop_gbl:RULE_LAUNCH_LINK" title="RULE_LAUNCH_LINK"><code class="xref cmake cmake-prop_gbl docutils literal notranslate"><span class="pre">RULE_LAUNCH_LINK</span></code></a></p></li>
+</ul>
+<p>Load this module in a CMake project with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CTestUseLaunchers</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">CTestUseLaunchers</span></code> module is automatically included by the
+<span class="target" id="index-0-module:CTest"></span><a class="reference internal" href="CTest.html#module:CTest" title="CTest"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CTest</span></code></a> module when <code class="docutils literal notranslate"><span class="pre">include(CTest)</span></code> is called.  However, it is
+provided as a separate module so that projects can use the
+<code class="docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS</span></code> functionality independently.</p>
+<p>To use launchers, set the <code class="docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS</span></code> variable to a true-like value
+in a <a class="reference internal" href="../manual/ctest.1.html#cmdoption-ctest-S"><code class="xref std std-option docutils literal notranslate"><span class="pre">ctest</span> <span class="pre">-S</span></code></a> dashboard script, and then also set the
+<code class="docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS</span></code> cache variable in the configured project.  Both
+<code class="docutils literal notranslate"><span class="pre">cmake</span></code> and <code class="docutils literal notranslate"><span class="pre">ctest</span></code> must be aware of its value for the launchers to function
+correctly:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cmake</span></code> needs it to generate the appropriate build rules</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ctest</span></code> requires it for accurate error and warning analysis</p></li>
+</ul>
+<p>For convenience, the environment variable <span class="target" id="index-0-envvar:CTEST_USE_LAUNCHERS_DEFAULT"></span><a class="reference internal" href="../envvar/CTEST_USE_LAUNCHERS_DEFAULT.html#envvar:CTEST_USE_LAUNCHERS_DEFAULT" title="CTEST_USE_LAUNCHERS_DEFAULT"><code class="xref cmake cmake-envvar docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS_DEFAULT</span></code></a>
+may be set in the <a class="reference internal" href="../manual/ctest.1.html#cmdoption-ctest-S"><code class="xref std std-option docutils literal notranslate"><span class="pre">ctest</span> <span class="pre">-S</span></code></a> script.  Then, as long as the
+<code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> includes the <code class="docutils literal notranslate"><span class="pre">CTest</span></code> or <code class="docutils literal notranslate"><span class="pre">CTestUseLaunchers</span></code> module, it
+will use the value of the environment variable to initialize a
+<code class="docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS</span></code> cache variable.  This cache variable initialization only
+occurs if <code class="docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS</span></code> is not already defined.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.8: </span>If <code class="docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS</span></code> is set to a true-like value in a
+<a class="reference internal" href="../manual/ctest.1.html#cmdoption-ctest-S"><code class="xref std std-option docutils literal notranslate"><span class="pre">ctest</span> <span class="pre">-S</span></code></a> script, the <span class="target" id="index-0-command:ctest_configure"></span><a class="reference internal" href="../command/ctest_configure.html#command:ctest_configure" title="ctest_configure"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">ctest_configure()</span></code></a> command will add
+<code class="docutils literal notranslate"><span class="pre">-DCTEST_USE_LAUNCHERS:BOOL=TRUE</span></code> to the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> command when configuring
+the project.</p>
+</div>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">CTEST_USE_LAUNCHERS</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+<span class="nf">include(</span><span class="nb">CTestUseLaunchers</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">CTestUseLaunchers</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CTestCoverageCollectGCOV.html"
+                          title="previous chapter">CTestCoverageCollectGCOV</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="DeployQt4.html"
+                          title="next chapter">DeployQt4</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/CTestUseLaunchers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="DeployQt4.html" title="DeployQt4"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CTestCoverageCollectGCOV.html" title="CTestCoverageCollectGCOV"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CTestUseLaunchers</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

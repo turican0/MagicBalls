@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMP0192 &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMP0191" href="CMP0191.html" />
+    <link rel="prev" title="CMP0193" href="CMP0193.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMP0191.html" title="CMP0191"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMP0193.html" title="CMP0193"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" accesskey="U">cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0192</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmp0192">
+<span id="policy:CMP0192"></span><h1>CMP0192<a class="headerlink" href="#cmp0192" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p><span class="target" id="index-0-module:GNUInstallDirs"></span><a class="reference internal" href="../module/GNUInstallDirs.html#module:GNUInstallDirs" title="GNUInstallDirs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">GNUInstallDirs</span></code></a> uses absolute <code class="docutils literal notranslate"><span class="pre">SYSCONFDIR</span></code>, <code class="docutils literal notranslate"><span class="pre">LOCALSTATEDIR</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">RUNSTATEDIR</span></code> in special prefixes.</p>
+<p>The <span class="target" id="index-1-module:GNUInstallDirs"></span><a class="reference internal" href="../module/GNUInstallDirs.html#module:GNUInstallDirs" title="GNUInstallDirs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">GNUInstallDirs</span></code></a> module documents
+<a class="reference internal" href="../module/GNUInstallDirs.html#gnuinstalldirs-special-cases"><span class="std std-ref">special cases</span></a>
+for <code class="docutils literal notranslate"><span class="pre">SYSCONFDIR</span></code>, <code class="docutils literal notranslate"><span class="pre">LOCALSTATEDIR</span></code>, and <code class="docutils literal notranslate"><span class="pre">RUNSTATEDIR</span></code>.
+When <span class="target" id="index-0-variable:CMAKE_INSTALL_PREFIX"></span><a class="reference internal" href="../variable/CMAKE_INSTALL_PREFIX.html#variable:CMAKE_INSTALL_PREFIX" title="CMAKE_INSTALL_PREFIX"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code></a> is a special prefix, e.g., <code class="docutils literal notranslate"><span class="pre">/usr</span></code>,
+the absolute paths for these directories may be outside the prefix, e.g.,
+<code class="docutils literal notranslate"><span class="pre">/etc</span></code>, <code class="docutils literal notranslate"><span class="pre">/var</span></code>, and <code class="docutils literal notranslate"><span class="pre">/var/run</span></code>.</p>
+<p>In CMake 4.0 and below, the default values for the <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_&lt;dir&gt;</span></code>
+variables, for <code class="docutils literal notranslate"><span class="pre">&lt;dir&gt;</span></code> equal to <code class="docutils literal notranslate"><span class="pre">SYSCONFDIR</span></code>, <code class="docutils literal notranslate"><span class="pre">LOCALSTATEDIR</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">RUNSTATEDIR</span></code>, always used relative paths (<code class="docutils literal notranslate"><span class="pre">etc</span></code>, <code class="docutils literal notranslate"><span class="pre">var</span></code>, <code class="docutils literal notranslate"><span class="pre">var/run</span></code>),
+and the special cases were implemented only when computing absolute paths
+for the <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_FULL_&lt;dir&gt;</span></code> variables.
+CMake 4.1 and above prefer to default <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_&lt;dir&gt;</span></code> variables to
+absolute paths, for <code class="docutils literal notranslate"><span class="pre">&lt;dir&gt;</span></code> equal to <code class="docutils literal notranslate"><span class="pre">SYSCONFDIR</span></code>, <code class="docutils literal notranslate"><span class="pre">LOCALSTATEDIR</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">RUNSTATEDIR</span></code>, when <span class="target" id="index-1-variable:CMAKE_INSTALL_PREFIX"></span><a class="reference internal" href="../variable/CMAKE_INSTALL_PREFIX.html#variable:CMAKE_INSTALL_PREFIX" title="CMAKE_INSTALL_PREFIX"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code></a> is a special
+prefix.  This policy provides compatibility for projects that have not
+been updated to expect this behavior.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior for this policy is to default <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_&lt;dir&gt;</span></code>
+variables to relative paths.  The <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior for this policy is to
+default <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_&lt;dir&gt;</span></code> variables to absolute paths, for <code class="docutils literal notranslate"><span class="pre">&lt;dir&gt;</span></code>
+equal to <code class="docutils literal notranslate"><span class="pre">SYSCONFDIR</span></code>, <code class="docutils literal notranslate"><span class="pre">LOCALSTATEDIR</span></code>, and <code class="docutils literal notranslate"><span class="pre">RUNSTATEDIR</span></code>, when
+<span class="target" id="index-2-variable:CMAKE_INSTALL_PREFIX"></span><a class="reference internal" href="../variable/CMAKE_INSTALL_PREFIX.html#variable:CMAKE_INSTALL_PREFIX" title="CMAKE_INSTALL_PREFIX"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code></a> is a special prefix.</p>
+<p>This policy takes effect at the first call of <code class="docutils literal notranslate"><span class="pre">include(GNUInstallDirs)</span></code>.
+Subsequent calls of <code class="docutils literal notranslate"><span class="pre">include(GNUInstallDirs)</span></code> reuse cached
+<code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_&lt;dir&gt;</span></code> values from the first call.</p>
+<p>This policy was introduced in CMake version 4.1.
+It may be set by <span class="target" id="index-0-command:cmake_policy"></span><a class="reference internal" href="../command/cmake_policy.html#command:cmake_policy" title="cmake_policy"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_policy()</span></code></a> or <span class="target" id="index-0-command:cmake_minimum_required"></span><a class="reference internal" href="../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>.
+If it is not set, CMake does <em>not</em> warn, and uses <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior of a policy is
+<span class="target" id="index-0-manual:cmake-policies(7)"></span><a class="reference internal" href="../manual/cmake-policies.7.html#manual:cmake-policies(7)" title="cmake-policies(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">deprecated</span> <span class="pre">by</span> <span class="pre">definition</span></code></a>
+and may be removed in a future version of CMake.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMP0193.html"
+                          title="previous chapter">CMP0193</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMP0191.html"
+                          title="next chapter">CMP0191</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/policy/CMP0192.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMP0191.html" title="CMP0191"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMP0193.html" title="CMP0193"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" >cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0192</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

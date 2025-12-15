@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>cmake_pkg_config &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cmake_policy" href="cmake_policy.html" />
+    <link rel="prev" title="cmake_path" href="cmake_path.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cmake_policy.html" title="cmake_policy"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cmake_path.html" title="cmake_path"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-commands.7.html" accesskey="U">cmake-commands(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">cmake_pkg_config</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmake-pkg-config">
+<span id="command:cmake_pkg_config"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">cmake_pkg_config</a><a class="headerlink" href="#cmake-pkg-config" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.31.</span></p>
+</div>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cmake-pkg-config" id="id1">cmake_pkg_config</a></p>
+<ul>
+<li><p><a class="reference internal" href="#synopsis" id="id2">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#introduction" id="id3">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#pkgconfig-targets" id="id4">PkgConfig Targets</a></p></li>
+<li><p><a class="reference internal" href="#common-options" id="id5">Common Options</a></p></li>
+<li><p><a class="reference internal" href="#signatures" id="id6">Signatures</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>Process pkg-config format package files.</p>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading">¶</a></h2>
+<pre class="literal-block">cmake_pkg_config(<a class="reference internal" href="#extract">EXTRACT</a> &lt;package&gt; [&lt;version&gt;] [...])
+cmake_pkg_config(<a class="reference internal" href="#populate">POPULATE</a> &lt;package&gt; [&lt;version&gt;] [...])
+cmake_pkg_config(<a class="reference internal" href="#import">IMPORT</a> &lt;package&gt; [&lt;version&gt;] [...])</pre>
+</section>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>This command generates CMake variables and targets from pkg-config format
+package files natively, without needing to invoke or even require the presence
+of a pkg-config implementation. A <code class="docutils literal notranslate"><span class="pre">&lt;package&gt;</span></code> is either an absolute path to a
+package file, or a package name to be searched for using the typical pkg-config
+search patterns. The optional <code class="docutils literal notranslate"><span class="pre">&lt;version&gt;</span></code> string has the same format and
+semantics as a pkg-config style version specifier, with the exception that if
+no comparison operator is specified <code class="docutils literal notranslate"><span class="pre">=</span></code> is assumed.</p>
+</section>
+<section id="pkgconfig-targets">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">PkgConfig Targets</a><a class="headerlink" href="#pkgconfig-targets" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">cmake_pkg_config</span></code> may recursively generate target-like names in the global
+scope in order to resolve a package <code class="docutils literal notranslate"><span class="pre">IMPORT</span></code> or <code class="docutils literal notranslate"><span class="pre">POPULATE</span></code> command. These
+names take the form of <code class="docutils literal notranslate"><span class="pre">&#64;foreign_pkgcfg::[&lt;prefix&gt;_]&lt;package&gt;</span></code> and are exposed
+via the <span class="target" id="index-0-prop_tgt:INTERFACE_LINK_LIBRARIES"></span><a class="reference internal" href="../prop_tgt/INTERFACE_LINK_LIBRARIES.html#prop_tgt:INTERFACE_LINK_LIBRARIES" title="INTERFACE_LINK_LIBRARIES"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">INTERFACE_LINK_LIBRARIES</span></code></a> target property of an
+<code class="docutils literal notranslate"><span class="pre">IMPORT</span></code>-generated target.</p>
+<p>It is not possible to modify or address these pkg-config native targets via
+normal target-based commands. Limited control over their generation is possible
+via the <code class="docutils literal notranslate"><span class="pre">POPULATE</span></code> command, but modification should generally be performed
+inside the corresponding package file, not downstream in CMake.</p>
+<p>Pkg-config targets are reused across commands. Once a given package name has
+been resolved via <code class="docutils literal notranslate"><span class="pre">POPULATE</span></code> or <code class="docutils literal notranslate"><span class="pre">IMPORT</span></code> (but not <code class="docutils literal notranslate"><span class="pre">EXTRACT</span></code>), all future
+requests for the corresponding package name by those commands will resolve to
+the previously generated pkg-config target.</p>
+<p><code class="docutils literal notranslate"><span class="pre">EXTRACT</span></code> always performs the complete package name lookup in order to allow
+searches for multiple installations of the same package in custom dependency
+management schemes.</p>
+</section>
+<section id="common-options">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Common Options</a><a class="headerlink" href="#common-options" title="Link to this heading">¶</a></h2>
+<p>There are multiple signatures for this command, and some of the options are
+common between them. They are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">EXACT</span></code> / <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> / <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">EXACT</span></code> option requests that the version string be matched exactly
+(including empty string, if no version is provided), overriding the typical
+pkg-config version comparison algorithm. This will ignore any comparison
+operator attached to the version string.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> option disables informational messages, including those
+indicating that the package cannot be found if it is not <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code>. The
+<code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code> option stops processing with an error message if the package
+cannot be found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STRICTNESS</span> <span class="pre">&lt;mode&gt;</span></code></dt><dd><p>Specify how strictly the contents of the package files will be verified during
+parsing and resolution. An invalid file, under the provided strictness mode,
+will cause the command to fail. Possible modes are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">STRICT</span></code>: Closely mirrors the behavior of the original FDO pkg-config.
+Variables and keywords must be unique. Variables must be defined before
+they are used. The Name, Description, and Version keywords must be present.
+The overall structure of the file must be valid and parsable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PERMISSIVE</span></code>: Closely mirrors the behavior of the pkgconf implementation.
+Duplicate variables are overridden. Duplicate keywords are appended.
+Undefined variables resolve to empty strings. The Name, Description, and
+Version keywords must be present. The overall structure of the file must be
+valid and parsable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BEST_EFFORT</span></code>: Same behavior as <code class="docutils literal notranslate"><span class="pre">PERMISSIVE</span></code> with regards to duplicate
+or uninitialized variables and keywords, but will not fail under any
+conditions. Package files which require BEST_EFFORT will fail validation
+under all other major implementations and should be fixed.</p></li>
+</ul>
+<p>The default strictness is <code class="docutils literal notranslate"><span class="pre">PERMISSIVE</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ENV_MODE</span></code></dt><dd><p>Specifies which environment variables will be queried when running a given
+command. Possible modes are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">FDO</span></code>: Queries only the original set of <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_*</span></code> environment
+variables used by the freedesktop.org <code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> implementation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PKGCONF</span></code>: Queries the more extensive set of environment variables used
+by the <code class="docutils literal notranslate"><span class="pre">pkgconf</span></code> implementation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IGNORE</span></code>: Ignores the presence, absence, and value of environment
+variables entirely. In all cases an environment variable would be queried
+its treated as defined, but with a value of empty string for the purpose
+of the operation. This does not modify the current environment. For boolean
+environment variables, such as <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_ALLOW_*</span></code>, this means they are
+evaluated as truthy.</p>
+<p><code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_SYSROOT_PATH</span></code> is a minor exception. When <code class="docutils literal notranslate"><span class="pre">ENV_MODE</span> <span class="pre">IGNORE</span></code>
+is used, no root path prepending will occur by default and <code class="docutils literal notranslate"><span class="pre">pc_sysrootdir</span></code>
+remains defaulted to <code class="docutils literal notranslate"><span class="pre">/</span></code>.</p>
+</li>
+</ul>
+<p>Target-generating subcommands always ignore flag-filtering environment
+variables. The default environment mode is <code class="docutils literal notranslate"><span class="pre">PKGCONF</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PC_LIBDIR</span> <span class="pre">&lt;path&gt;...</span></code></dt><dd><p>Overrides the default search location for package files; also used to derive
+the <code class="docutils literal notranslate"><span class="pre">pc_path</span></code> package variable.</p>
+<p>When this option is not provided, the default library directory is the first
+available of the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_PC_LIB_DIRS</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_LIBDIR</span></code> environment variable</p></li>
+<li><p>The output of <code class="docutils literal notranslate"><span class="pre">pkg-config</span> <span class="pre">--variable</span> <span class="pre">pc_path</span> <span class="pre">pkg-config</span></code></p></li>
+<li><p>A platform-dependent default value</p></li>
+</ol>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PC_PATH</span> <span class="pre">&lt;path&gt;...</span></code></dt><dd><p>Overrides the supplemental package file directories which will be prepended
+to the search path; also used to derive the <code class="docutils literal notranslate"><span class="pre">pc_path</span></code> package variable.</p>
+<p>When this option is not provided, the default paths are the first available of
+the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_PC_PATH</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_PATH</span></code> environment variable</p></li>
+<li><p>Empty list</p></li>
+</ol>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DISABLE_UNINSTALLED</span> <span class="pre">&lt;bool&gt;</span></code></dt><dd><p>Overrides the search behavior for &quot;uninstalled&quot; package files. These are
+package files with an &quot;-uninstalled&quot; suffix which describe packages integrated
+directly from a build tree.</p>
+<p>Normally such package files have higher priority than &quot;installed&quot; packages.
+When <code class="docutils literal notranslate"><span class="pre">DISABLE_UNINSTALLED</span></code> is true, searching for &quot;uninstalled&quot; packages
+is disabled.</p>
+<p>When this option is not provided, the default search behavior is determined
+by the first available of the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED</span></code></p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_DISABLE_UNINSTALLED</span></code> environment variable is defined
+the search is disabled, otherwise it is enabled.</p></li>
+</ol>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PC_SYSROOT_DIR</span> <span class="pre">&lt;path&gt;</span></code></dt><dd><p>Overrides the root path which will be prepended to paths specified by <code class="docutils literal notranslate"><span class="pre">-I</span></code>
+compile flags and <code class="docutils literal notranslate"><span class="pre">-L</span></code> library search locations; also used to derive the
+<code class="docutils literal notranslate"><span class="pre">pc_sysrootdir</span></code> package variable.</p>
+<p>When this option is not provided, the default root path is provided by the
+first available of the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_SYSROOT_DIR</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_SYSROOT_DIR</span></code> environment variable</p></li>
+<li><p>If no root path is available, nothing will be prepended to include or
+library directory paths and <code class="docutils literal notranslate"><span class="pre">pc_sysrootdir</span></code> will be set to <code class="docutils literal notranslate"><span class="pre">/</span></code></p></li>
+</ol>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TOP_BUILD_DIR</span> <span class="pre">&lt;path&gt;</span></code></dt><dd><p>Overrides the top build directory path used to derive the <code class="docutils literal notranslate"><span class="pre">pc_top_builddir</span></code>
+package variable.</p>
+<p>When this option is not provided, the default top build directory path is
+the first available of the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_TOP_BUILD_DIR</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_TOP_BUILD_DIR</span></code> environment variable</p></li>
+<li><p>If no top build directory path is available, the <code class="docutils literal notranslate"><span class="pre">pc_top_builddir</span></code>
+package variable is not set</p></li>
+</ol>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PREFIX</span> <span class="pre">&lt;name&gt;</span></code></dt><dd><p>Specifying a prefix creates an independent collection of pkg-config targets
+separate from previously populated targets. This enables multiple version of
+a given package to co-exist, for example packages from different sysroots.</p>
+<p>The default prefix is an empty string.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BIND_PC_REQUIRES</span> <span class="pre">&lt;&lt;name&gt;=&lt;target&gt;&gt;...</span></code></dt><dd><p>A list of <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;=&lt;target&gt;</span></code> pairs, the <code class="docutils literal notranslate"><span class="pre">name</span></code> is a package name as it
+appears in the <code class="docutils literal notranslate"><span class="pre">Requires</span></code> list of a pkg-config file and the <code class="docutils literal notranslate"><span class="pre">target</span></code> is a
+CMake-native target name (not a pkg-config target).</p>
+<p>When a given package name appears in the <code class="docutils literal notranslate"><span class="pre">Requires</span></code> list of a package, it
+will be fulfilled with the associated CMake target. This behavior applies to
+all dependencies in the pkg-config graph that have not been previously
+populated.</p>
+</dd>
+</dl>
+</section>
+<section id="signatures">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Signatures</a><a class="headerlink" href="#signatures" title="Link to this heading">¶</a></h2>
+<dl class="cmake signature">
+<dt class="sig sig-object cmake" id="extract">
+<span class="code cmake highlight sig-name descname"><span class="nf"><span class="pre">cmake_pkg_config(</span></span><span class="no"><span class="pre">EXTRACT</span></span><span class="w"> </span><span class="nv"><span class="pre">&lt;package&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">[</span></span><span class="nv"><span class="pre">&lt;version&gt;</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">[...]</span></span><span class="nf"><span class="pre">)</span></span></span><a class="headerlink" href="#extract" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.31.</span></p>
+</div>
+<p>Extract the contents of the package into variables.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_pkg_config(</span><span class="no">EXTRACT</span><span class="w"> </span><span class="nv">&lt;package&gt;</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">REQUIRED</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">EXACT</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">QUIET</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">SYSTEM_INCLUDE_DIRS</span><span class="w"> </span><span class="nv">&lt;path&gt;...</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">SYSTEM_LIBRARY_DIRS</span><span class="w"> </span><span class="nv">&lt;path&gt;...</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">ALLOW_SYSTEM_INCLUDES</span><span class="w"> </span><span class="nv">&lt;bool&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">ALLOW_SYSTEM_LIBS</span><span class="w"> </span><span class="nv">&lt;bool&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">STRICTNESS</span><span class="w"> </span><span class="nv">&lt;mode&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">ENV_MODE</span><span class="w"> </span><span class="nv">&lt;mode&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_LIBDIR</span><span class="w"> </span><span class="nv">&lt;path&gt;...</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_PATH</span><span class="w"> </span><span class="nv">&lt;path&gt;...</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">DISABLE_UNINSTALLED</span><span class="w"> </span><span class="nv">&lt;bool&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_SYSROOT_DIR</span><span class="w"> </span><span class="nv">&lt;path&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">TOP_BUILD_DIR</span><span class="w"> </span><span class="nv">&lt;path&gt;</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>The following variables will be populated from the contents of package file:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Definition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_NAME</span></code></p></td>
+<td><p>String</p></td>
+<td><p>Value of the <code class="docutils literal notranslate"><span class="pre">Name</span></code> keyword</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_DESCRIPTION</span></code></p></td>
+<td><p>String</p></td>
+<td><p>Value of the <code class="docutils literal notranslate"><span class="pre">Description</span></code> keyword</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_VERSION</span></code></p></td>
+<td><p>String</p></td>
+<td><p>Value of the <code class="docutils literal notranslate"><span class="pre">Version</span></code> keyword</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_PROVIDES</span></code></p></td>
+<td><p>List</p></td>
+<td><p>Value of the <code class="docutils literal notranslate"><span class="pre">Provides</span></code> keyword</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_REQUIRES</span></code></p></td>
+<td><p>List</p></td>
+<td><p>Value of the <code class="docutils literal notranslate"><span class="pre">Requires</span></code> keyword</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_CONFLICTS</span></code></p></td>
+<td><p>List</p></td>
+<td><p>Value of the <code class="docutils literal notranslate"><span class="pre">Conflicts</span></code> keyword</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_CFLAGS</span></code></p></td>
+<td><p>String</p></td>
+<td><p>Value of the <code class="docutils literal notranslate"><span class="pre">CFlags</span></code> / <code class="docutils literal notranslate"><span class="pre">Cflags</span></code> keyword</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_INCLUDES</span></code></p></td>
+<td><p>List</p></td>
+<td><p>All <code class="docutils literal notranslate"><span class="pre">-I</span></code> prefixed flags from <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_CFLAGS</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_COMPILE_OPTIONS</span></code></p></td>
+<td><p>List</p></td>
+<td><p>All flags not prefixed with <code class="docutils literal notranslate"><span class="pre">-I</span></code> from <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_CFLAGS</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LIBS</span></code></p></td>
+<td><p>String</p></td>
+<td><p>Value of the <code class="docutils literal notranslate"><span class="pre">Libs</span></code> keyword</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LIBDIRS</span></code></p></td>
+<td><p>List</p></td>
+<td><p>All <code class="docutils literal notranslate"><span class="pre">-L</span></code> prefixed flags from <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LIBS</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LIBNAMES</span></code></p></td>
+<td><p>List</p></td>
+<td><p>All <code class="docutils literal notranslate"><span class="pre">-l</span></code> prefixed flags from <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LIBS</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LINK_OPTIONS</span></code></p></td>
+<td><p>List</p></td>
+<td><p>All flags not prefixed with <code class="docutils literal notranslate"><span class="pre">-L</span></code> or <code class="docutils literal notranslate"><span class="pre">-l</span></code> from <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LIBS</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_*_PRIVATE</span></code></p></td>
+<td><p>*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CFLAGS</span></code> / <code class="docutils literal notranslate"><span class="pre">LIBS</span></code> / <code class="docutils literal notranslate"><span class="pre">REQUIRES</span></code> and derived, but in their <code class="docutils literal notranslate"><span class="pre">.private</span></code> suffix forms</p></td>
+</tr>
+</tbody>
+</table>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SYSTEM_INCLUDE_DIRS</span></code></dt><dd><p>Overrides the &quot;system&quot; directories for the purpose of flag mangling include
+directories in <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_CFLAGS</span></code> and derived variables.</p>
+<p>When this option is not provided, the default directories are provided by the
+first available of the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_SYS_INCLUDE_DIRS</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_SYSTEM_INCLUDE_PATH</span></code> environment variable</p></li>
+<li><p>The output of <code class="docutils literal notranslate"><span class="pre">pkgconf</span> <span class="pre">--variable</span> <span class="pre">pc_system_includedirs</span> <span class="pre">pkg-config</span></code></p></li>
+<li><p>A platform-dependent default value</p></li>
+</ol>
+<p>Additionally, when the <code class="docutils literal notranslate"><span class="pre">ENV_MODE</span></code> is <code class="docutils literal notranslate"><span class="pre">PKGCONF</span></code> the
+<code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_PKGCONF_INCLUDES</span></code> variable will be concatenated to the
+list if available. If it is not available, the following environment variables
+will be queried and concatenated:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CPATH</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C_INCLUDE_PATH</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CPLUS_INCLUDE_PATH</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OBJC_INCLUDE_PATH</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">INCLUDE</span></code> (Windows Only)</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SYSTEM_LIBRARY_DIRS</span></code></dt><dd><p>Overrides the &quot;system&quot; directories for the purpose of flag mangling library
+directories in <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LIBS</span></code> and derived variables.</p>
+<p>When this option is not provided, the default directories are provided by the
+first available of the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_SYS_LIB_DIRS</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_SYSTEM_LIBRARY_PATH</span></code> environment variable</p></li>
+<li><p>The output of <code class="docutils literal notranslate"><span class="pre">pkgconf</span> <span class="pre">--variable</span> <span class="pre">pc_system_libdirs</span> <span class="pre">pkg-config</span></code></p></li>
+<li><p>A platform-dependent default value</p></li>
+</ol>
+<p>Additionally, when the <code class="docutils literal notranslate"><span class="pre">ENV_MODE</span></code> is <code class="docutils literal notranslate"><span class="pre">PKGCONF</span></code> the
+<code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_PKGCONF_LIB_DIRS</span></code> variable will be concatenated to the
+list if available. If it is not available, the <code class="docutils literal notranslate"><span class="pre">LIBRARY_PATH</span></code> environment
+variable will be queried and concatenated.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ALLOW_SYSTEM_INCLUDES</span></code></dt><dd><p>Preserves &quot;system&quot; directories during flag mangling of include directories
+in <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_CFLAGS</span></code> and derived variables.</p>
+<p>When this option is not provided, the default value is determined by the first
+available of the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_ALLOW_SYS_INCLUDES</span></code></p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_ALLOW_SYSTEM_CFLAGS</span></code> environment variable is defined
+the flags are preserved, otherwise they are filtered during flag mangling.</p></li>
+</ol>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ALLOW_SYSTEM_LIBS</span></code></dt><dd><p>Preserves &quot;system&quot; directories during flag mangling of library directories
+in <code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_LIBS</span></code> and derived variables.</p>
+<p>When this option is not provided, the default value is determined by the first
+available of the following values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMAKE_PKG_CONFIG_ALLOW_SYS_LIBS</span></code></p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">PKG_CONFIG_ALLOW_SYSTEM_LIBS</span></code> environment variable is defined
+the flags are preserved, otherwise they are filtered during flag mangling.</p></li>
+</ol>
+</dd>
+</dl>
+<dl class="cmake signature">
+<dt class="sig sig-object cmake" id="populate">
+<span class="code cmake highlight sig-name descname"><span class="nf"><span class="pre">cmake_pkg_config(</span></span><span class="no"><span class="pre">POPULATE</span></span><span class="w"> </span><span class="nv"><span class="pre">&lt;package&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">[</span></span><span class="nv"><span class="pre">&lt;version&gt;</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">[...]</span></span><span class="nf"><span class="pre">)</span></span></span><a class="headerlink" href="#populate" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>Populate a package in the pkg-config target namespace</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_pkg_config(</span><span class="no">POPULATE</span><span class="w"> </span><span class="nv">&lt;package&gt;</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">REQUIRED</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">EXACT</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">QUIET</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PREFIX</span><span class="w"> </span><span class="nv">&lt;prefix&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">BIND_PC_REQUIRES</span><span class="w"> </span><span class="o">&lt;</span><span class="nv">&lt;name&gt;</span><span class="p">=</span><span class="nv">&lt;target&gt;</span><span class="o">&gt;</span><span class="p">...]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">STRICTNESS</span><span class="w"> </span><span class="nv">&lt;mode&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">ENV_MODE</span><span class="w"> </span><span class="nv">&lt;mode&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_LIBDIR</span><span class="w"> </span><span class="nv">&lt;path&gt;...</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_PATH</span><span class="w"> </span><span class="nv">&lt;path&gt;...</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">DISABLE_UNINSTALLED</span><span class="w"> </span><span class="nv">&lt;bool&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_SYSROOT_DIR</span><span class="w"> </span><span class="nv">&lt;path&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">TOP_BUILD_DIR</span><span class="w"> </span><span class="nv">&lt;path&gt;</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><code class="docutils literal notranslate"><span class="pre">POPULATE</span></code> enables manual control of resolution of a given package's
+<code class="docutils literal notranslate"><span class="pre">Requires</span></code> list without importing onto a native CMake target. Once populated,
+a package and its dependencies will be used for resolution of all future
+<code class="docutils literal notranslate"><span class="pre">POPULATE</span></code> and <code class="docutils literal notranslate"><span class="pre">IMPORT</span></code> commands.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">PKGCONFIG_&lt;package&gt;_FOUND</span></code> variable will be set to indicate whether the
+package was found.</p>
+<dl class="cmake signature">
+<dt class="sig sig-object cmake" id="import">
+<span class="code cmake highlight sig-name descname"><span class="nf"><span class="pre">cmake_pkg_config(</span></span><span class="no"><span class="pre">IMPORT</span></span><span class="w"> </span><span class="nv"><span class="pre">&lt;package&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">[</span></span><span class="nv"><span class="pre">&lt;version&gt;</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">[...]</span></span><span class="nf"><span class="pre">)</span></span></span><a class="headerlink" href="#import" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>Import a pkg-config target as a CMake <span class="target" id="index-0-prop_tgt:IMPORTED"></span><a class="reference internal" href="../prop_tgt/IMPORTED.html#prop_tgt:IMPORTED" title="IMPORTED"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">IMPORTED</span></code></a> target</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_pkg_config(</span><span class="no">IMPORT</span><span class="w"> </span><span class="nv">&lt;package&gt;</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">REQUIRED</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">EXACT</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">QUIET</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">NAME</span><span class="w"> </span><span class="nv">&lt;name&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PREFIX</span><span class="w"> </span><span class="nv">&lt;prefix&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">BIND_PC_REQUIRES</span><span class="w"> </span><span class="o">&lt;</span><span class="nv">&lt;name&gt;</span><span class="p">=</span><span class="nv">&lt;target&gt;</span><span class="o">&gt;</span><span class="p">...]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">STRICTNESS</span><span class="w"> </span><span class="nv">&lt;mode&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">ENV_MODE</span><span class="w"> </span><span class="nv">&lt;mode&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_LIBDIR</span><span class="w"> </span><span class="nv">&lt;path&gt;...</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_PATH</span><span class="w"> </span><span class="nv">&lt;path&gt;...</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">DISABLE_UNINSTALLED</span><span class="w"> </span><span class="nv">&lt;bool&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">PC_SYSROOT_DIR</span><span class="w"> </span><span class="nv">&lt;path&gt;</span><span class="p">]</span>
+<span class="w">                </span><span class="p">[</span><span class="no">TOP_BUILD_DIR</span><span class="w"> </span><span class="nv">&lt;path&gt;</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Creates a native CMake <code class="docutils literal notranslate"><span class="pre">IMPORTED</span></code> target that can be linked to via
+<span class="target" id="index-0-command:target_link_libraries"></span><a class="reference internal" href="target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>. This new target is named
+<code class="docutils literal notranslate"><span class="pre">PkgConfig::&lt;package&gt;</span></code> by default.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">PKGCONFIG_&lt;package&gt;_FOUND</span></code> variable will be set to indicate whether the
+package was found.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">NAME</span></code></dt><dd><p>Overrides the name of the created CMake target to <code class="docutils literal notranslate"><span class="pre">PkgConfig::&lt;name&gt;</span></code>. This
+<em>does not</em> affect the <code class="docutils literal notranslate"><span class="pre">PKGCONFIG_&lt;package&gt;_FOUND</span></code> variable.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">cmake_pkg_config</a><ul>
+<li><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#pkgconfig-targets">PkgConfig Targets</a></li>
+<li><a class="reference internal" href="#common-options">Common Options</a></li>
+<li><a class="reference internal" href="#signatures">Signatures</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="cmake_path.html"
+                          title="previous chapter">cmake_path</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="cmake_policy.html"
+                          title="next chapter">cmake_policy</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/command/cmake_pkg_config.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cmake_policy.html" title="cmake_policy"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cmake_path.html" title="cmake_path"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-commands.7.html" >cmake-commands(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">cmake_pkg_config</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

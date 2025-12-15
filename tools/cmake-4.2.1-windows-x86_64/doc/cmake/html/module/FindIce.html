@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindIce &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindIconv" href="FindIconv.html" />
+    <link rel="prev" title="FindHTMLHelp" href="FindHTMLHelp.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindIconv.html" title="FindIconv"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindHTMLHelp.html" title="FindHTMLHelp"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindIce</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findice">
+<span id="module:FindIce"></span><h1>FindIce<a class="headerlink" href="#findice" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.1.</span></p>
+</div>
+<p>Finds the Internet Communication Engine (Ice) programs, libraries and datafiles:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Ice</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Ice is an open-source remote procedure call (RPC) framework developed by ZeroC
+and provides SDKs for various languages to develop network applications.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4: </span>Imported targets for components and many new <code class="docutils literal notranslate"><span class="pre">*_EXECUTABLE</span></code> variables.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.7: </span>Debug and Release library variants are found separately.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10: </span>Ice 3.7 support, including new components, programs and the Nuget package.</p>
+</div>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
+<p>Ice consists of several libraries and programs (executables).  This find module
+supports components, which can be specified using the <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a>
+command, to select specific Ice libraries for use in a CMake project.
+Executables provided by Ice installation are always searched automatically,
+regardless of the specified components.</p>
+<p>The list of available components depends on the Ice version in use.  To
+successfully find Ice, at least one component must be specified:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Ice</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Supported components include:</p>
+<table class="hlist"><tr><td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Freeze</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Glacier2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ice</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceBox</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceDB</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceDiscovery</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceGrid</span></code></p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IceLocatorDiscovery</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IcePatch</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceSSL</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceStorm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceUtil</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceXML</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Slice</span></code></p></li>
+</ul>
+</td></tr></table>
+<p>Ice 3.7 and later also include C++11-specific components:</p>
+<table class="hlist"><tr><td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Glacier2++11</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ice++11</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceBox++11</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceDiscovery++11</span></code></p></li>
+</ul>
+</td><td><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IceGrid++11</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceLocatorDiscovery++11</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceSSL++11</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IceStorm++11</span></code></p></li>
+</ul>
+</td></tr></table>
+</section>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice::&lt;component&gt;</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>Target encapsulating the usage requirements for the specified Ice component
+(library), available if that component is found.  The <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;</span></code> should
+be written in the same case, as listed above.  For example, use
+<code class="docutils literal notranslate"><span class="pre">Ice::Glacier2</span></code> for the Ice Glacier2 library, or <code class="docutils literal notranslate"><span class="pre">Ice::Ice++11</span></code> for the
+Ice++11 library, etc.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_FOUND</span></code></dt><dd><p>Boolean indicating whether the (requested version of) main programs,
+libraries and all requested components for using Ice were found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_VERSION</span></code></dt><dd><p>The version of Ice release found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_INCLUDE_DIRS</span></code></dt><dd><p>The include directories containing headers needed to use Ice.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_LIBRARIES</span></code></dt><dd><p>Component libraries needed to link against to use Ice.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE_DIRS</span></code></dt><dd><p>The data directories containing interface definitions (<code class="docutils literal notranslate"><span class="pre">*.ice</span></code> files) for
+Slice (Specification Language for Ice).</p>
+</dd>
+</dl>
+<p>Ice component libraries are stored in:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_&lt;COMPONENT&gt;_FOUND</span></code></dt><dd><p>Boolean indicating whether the specified Ice component was found.  The
+<code class="docutils literal notranslate"><span class="pre">&lt;COMPONENT&gt;</span></code> should be written in uppercase.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_&lt;COMPONENT&gt;_LIBRARIES</span></code></dt><dd><p>Libraries provided by the specified Ice component.  The <code class="docutils literal notranslate"><span class="pre">&lt;COMPONENT&gt;</span></code> should
+be written in uppercase.</p>
+</dd>
+</dl>
+<p>Slice programs are stored in:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2CONFLUENCE_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2confluence</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2CPP_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2cpp</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2CS_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2cs</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2FREEZEJ_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2freezej</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2FREEZE_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2freeze</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2HTML_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2html</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2JAVA_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2java</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2JS_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2js</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2MATLAB_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2matlab</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2OBJC_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2objc</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2PHP_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2php</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2PY_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2py</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE2RB_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">slice2rb</span></code> executable.</p>
+</dd>
+</dl>
+<p>Ice programs are stored in:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_GLACIER2ROUTER_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">glacier2router</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEBOX_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icebox</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEBOX++11_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icebox++11</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEBOXADMIN_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">iceboxadmin</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEBOXD_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">iceboxd</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEBOXNET_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">iceboxnet</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEBRIDGE_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icebridge</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEGRIDADMIN_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icegridadmin</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEGRIDDB_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icegriddb</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEGRIDNODE_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icegridnode</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEGRIDNODED_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icegridnoded</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEGRIDREGISTRY_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icegridregistry</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEGRIDREGISTRYD_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icegridregistryd</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEPATCH2CALC_EXECUTABLE</span></code></dt><dd><p>The path to the <code class="docutils literal notranslate"><span class="pre">icepatch2calc</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEPATCH2CLIENT_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icepatch2client</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICEPATCH2SERVER_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icepatch2server</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICESERVICEINSTALL_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">iceserviceinstall</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICESTORMADMIN_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icestormadmin</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICESTORMDB_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icestormdb</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_ICESTORMMIGRATE_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">icestormmigrate</span></code> executable.</p>
+</dd>
+</dl>
+<p>Ice database programs are stored in the following variables (on Windows, they
+are included with the Ice installation; on other platforms, they are usually
+available through standard Berkeley DB packages):</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_ARCHIVE_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_archive</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_CHECKPOINT_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_checkpoint</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_DEADLOCK_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_deadlock</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_DUMP_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_dump</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_HOTBACKUP_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_hotbackup</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_LOAD_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_load</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_LOG_VERIFY_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_log_verify</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_PRINTLOG_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_printlog</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_RECOVER_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_recover</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_STAT_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_stat</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_TUNER_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_tuner</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_UPGRADE_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_upgrade</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DB_VERIFY_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">db_verify</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DUMPDB_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">dumpdb</span></code> executable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_TRANSFORMDB_EXECUTABLE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The path to the <code class="docutils literal notranslate"><span class="pre">transformdb</span></code> executable.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_&lt;PROGRAM&gt;_EXECUTABLE</span></code></dt><dd><p>The path to the specified <code class="docutils literal notranslate"><span class="pre">&lt;PROGRAM&gt;</span></code> executable;  The <code class="docutils literal notranslate"><span class="pre">&lt;PROGRAM&gt;</span></code> is the
+uppercase name of the Ice program as listed in above result variables of
+executables.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_INCLUDE_DIR</span></code></dt><dd><p>The directory containing Ice headers.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_SLICE_DIR</span></code></dt><dd><p>The data directory containing interface definitions for Slice.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_&lt;COMPONENT&gt;_LIBRARY</span></code></dt><dd><p>The path to the library for the specified component.  The <code class="docutils literal notranslate"><span class="pre">&lt;COMPONENT&gt;</span></code>
+should be written in uppercase.</p>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_HOME</span></code></dt><dd><p>Set this CMake variable to the root of the Ice installation in order to
+search for Ice in a custom location.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On Windows, Ice 3.7.0 and later provide libraries via the NuGet
+package manager.  Appropriate NuGet packages will be searched for
+using <span class="target" id="index-0-variable:CMAKE_PREFIX_PATH"></span><a class="reference internal" href="../variable/CMAKE_PREFIX_PATH.html#variable:CMAKE_PREFIX_PATH" title="CMAKE_PREFIX_PATH"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code></a>, or alternatively <code class="docutils literal notranslate"><span class="pre">Ice_HOME</span></code> may be
+set to the location of a specific NuGet package to restrict the search.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ICE_HOME</span></code></dt><dd><p>Environment variable (uppercased) may also be set to the root of the Ice
+installation;  The <code class="docutils literal notranslate"><span class="pre">Ice_HOME</span></code> CMake variable takes precedence.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Ice_DEBUG</span></code></dt><dd><p>Set this variable to boolean true to enable debug output from this module.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In most cases, none of the above variables need to be set unless multiple Ice
+versions are installed and a specific one is required.  On Windows, the most
+recent version is typically found using the registry.  On Unix-like systems,
+programs, headers, and libraries are usually found in standard locations,
+although <code class="docutils literal notranslate"><span class="pre">Ice_SLICE_DIRS</span></code> might not be detected automatically (commonly
+known locations are searched).  All other variables default based on the value
+of <code class="docutils literal notranslate"><span class="pre">Ice_HOME</span></code>, if set.</p>
+<p>It's also possible to set <code class="docutils literal notranslate"><span class="pre">Ice_HOME</span></code> while selectively overriding specific
+locations for individual components;  This might be required, for example, in
+newer versions of Visual Studio if the heuristics are not sufficient to
+identify the correct programs and libraries for the specific Visual Studio
+version.</p>
+</div>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Finding the Ice core library and linking it to a project target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Ice</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">Ice</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">project_target</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">Ice</span><span class="o">::</span><span class="nb">Ice</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Finding Ice core library and IceSSL library, and linking them to a project
+target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Ice</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">Ice</span><span class="w"> </span><span class="nb">IceSSL</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">project_target</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">Ice</span><span class="o">::</span><span class="nb">Ice</span><span class="w"> </span><span class="nb">Ice</span><span class="o">::</span><span class="nb">IceSSL</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Finding Ice core library as required component and Ice Freeze library as
+optional:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Ice</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">Ice</span><span class="w"> </span><span class="no">OPTIONAL_COMPONENTS</span><span class="w"> </span><span class="nb">Freeze</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindIce</a><ul>
+<li><a class="reference internal" href="#components">Components</a></li>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindHTMLHelp.html"
+                          title="previous chapter">FindHTMLHelp</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindIconv.html"
+                          title="next chapter">FindIconv</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindIce.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindIconv.html" title="FindIconv"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindHTMLHelp.html" title="FindHTMLHelp"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindIce</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

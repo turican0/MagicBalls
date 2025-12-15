@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMake Tutorial &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 0: Before You Begin" href="Before%20You%20Begin.html" />
+    <link rel="prev" title="CPack WIX Generator" href="../../cpack_gen/wix.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Before%20You%20Begin.html" title="Step 0: Before You Begin"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../../cpack_gen/wix.html" title="CPack WIX Generator"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+        <li class="nav-item nav-item-this"><a href="">CMake Tutorial</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmake-tutorial">
+<span id="guide:CMake Tutorial"></span><h1>CMake Tutorial<a class="headerlink" href="#cmake-tutorial" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>The CMake tutorial provides a step-by-step guide that covers common build
+system issues that CMake helps address. Seeing how various topics all
+work together in an example project can be very helpful.</p>
+</section>
+<section id="steps">
+<h2>Steps<a class="headerlink" href="#steps" title="Link to this heading">¶</a></h2>
+<p>The tutorial documentation and source code examples can be found in
+the <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial</span></code> directory of the CMake source code tree.
+Each step has its own subdirectory containing code that may be used as a
+starting point. The tutorial examples are progressive so that each step
+provides the complete solution for the previous step.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Before%20You%20Begin.html">Step 0: Before You Begin</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Before%20You%20Begin.html#getting-the-tutorial-exercises">Getting the Tutorial Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Before%20You%20Begin.html#getting-cmake">Getting CMake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Before%20You%20Begin.html#cmake-generators">CMake Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Before%20You%20Begin.html#single-and-multi-configuration-generators">Single and Multi-Configuration Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Before%20You%20Begin.html#other-usage-basics">Other Usage Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Before%20You%20Begin.html#try-it-out">Try It Out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Before%20You%20Begin.html#getting-help-and-additional-resources">Getting Help and Additional Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Getting%20Started%20with%20CMake.html">Step 1: Getting Started with CMake</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Getting%20Started%20with%20CMake.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting%20Started%20with%20CMake.html#exercise-1-building-an-executable">Exercise 1 - Building an Executable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting%20Started%20with%20CMake.html#exercise-2-building-a-library">Exercise 2 - Building a Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting%20Started%20with%20CMake.html#exercise-3-linking-together-libraries-and-executables">Exercise 3 - Linking Together Libraries and Executables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting%20Started%20with%20CMake.html#exercise-4-subdirectories">Exercise 4 - Subdirectories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CMake%20Language%20Fundamentals.html">Step 2: CMake Language Fundamentals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CMake%20Language%20Fundamentals.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CMake%20Language%20Fundamentals.html#exercise-1-macros-functions-and-lists">Exercise 1 - Macros, Functions, and Lists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CMake%20Language%20Fundamentals.html#exercise-2-conditionals-and-loops">Exercise 2 - Conditionals and Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CMake%20Language%20Fundamentals.html#exercise-3-organizing-with-include">Exercise 3 - Organizing with Include</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Configuration%20and%20Cache%20Variables.html">Step 3: Configuration and Cache Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Configuration%20and%20Cache%20Variables.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Configuration%20and%20Cache%20Variables.html#exercise-1-using-options">Exercise 1 - Using Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Configuration%20and%20Cache%20Variables.html#exercise-2-cmake-variables">Exercise 2 - <code class="docutils literal notranslate"><span class="pre">CMAKE</span></code> Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Configuration%20and%20Cache%20Variables.html#exercise-3-cmakepresets-json">Exercise 3 - CMakePresets.json</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="In-Depth%20CMake%20Target%20Commands.html">Step 4: In-Depth CMake Target Commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20CMake%20Target%20Commands.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20CMake%20Target%20Commands.html#exercise-1-features-and-definitions">Exercise 1 - Features and Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20CMake%20Target%20Commands.html#exercise-2-compile-and-link-options">Exercise 2 - Compile and Link Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20CMake%20Target%20Commands.html#exercise-3-include-and-link-directories">Exercise 3 - Include and Link Directories</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="In-Depth%20CMake%20Library%20Concepts.html">Step 5: In-Depth CMake Library Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20CMake%20Library%20Concepts.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20CMake%20Library%20Concepts.html#exercise-1-static-and-shared">Exercise 1 - Static and Shared</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20CMake%20Library%20Concepts.html#exercise-2-interface-libraries">Exercise 2 - Interface Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20CMake%20Library%20Concepts.html#exercise-3-object-libraries">Exercise 3 - Object Libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="In-Depth%20System%20Introspection.html">Step 6: In-Depth System Introspection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20System%20Introspection.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20System%20Introspection.html#exercise-1-check-include-file">Exercise 1 - Check Include File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20System%20Introspection.html#exercise-2-check-source-compiles">Exercise 2 - Check Source Compiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="In-Depth%20System%20Introspection.html#exercise-3-check-interprocedural-optimization">Exercise 3 - Check Interprocedural Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Custom%20Commands%20and%20Generated%20Files.html">Step 7: Custom Commands and Generated Files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Custom%20Commands%20and%20Generated%20Files.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Custom%20Commands%20and%20Generated%20Files.html#exercise-1-using-a-code-generator">Exercise 1 - Using a Code Generator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Testing%20and%20CTest.html">Step 8: Testing and CTest</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Testing%20and%20CTest.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Testing%20and%20CTest.html#exercise-1-adding-tests">Exercise 1 - Adding Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Installation%20Commands%20and%20Concepts.html">Step 9: Installation Commands and Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Installation%20Commands%20and%20Concepts.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Installation%20Commands%20and%20Concepts.html#exercise-1-installing-artifacts">Exercise 1 - Installing Artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Installation%20Commands%20and%20Concepts.html#exercise-2-exporting-targets">Exercise 2 - Exporting Targets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Installation%20Commands%20and%20Concepts.html#exercise-3-exporting-a-version-file">Exercise 3 - Exporting a Version File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Finding%20Dependencies.html">Step 10: Finding Dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Finding%20Dependencies.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finding%20Dependencies.html#exercise-1-using-find-package">Exercise 1 - Using <code class="docutils literal notranslate"><span class="pre">find_package()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finding%20Dependencies.html#exercise-2-transitive-dependencies">Exercise 2 - Transitive Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Finding%20Dependencies.html#exercise-3-finding-other-kinds-of-files">Exercise 3 - Finding Other Kinds of Files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Miscellaneous%20Features.html">Step 11: Miscellaneous Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Miscellaneous%20Features.html#exercise-1-target-aliases">Exercise 1: Target Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Miscellaneous%20Features.html#exercise-2-generator-expressions">Exercise 2: Generator Expressions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">CMake Tutorial</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#steps">Steps</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../../cpack_gen/wix.html"
+                          title="previous chapter">CPack WIX Generator</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Before%20You%20Begin.html"
+                          title="next chapter">Step 0: Before You Begin</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Before%20You%20Begin.html" title="Step 0: Before You Begin"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../../cpack_gen/wix.html" title="CPack WIX Generator"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+        <li class="nav-item nav-item-this"><a href="">CMake Tutorial</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

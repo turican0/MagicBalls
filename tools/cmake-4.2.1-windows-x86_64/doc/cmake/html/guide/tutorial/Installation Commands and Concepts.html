@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 9: Installation Commands and Concepts &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 10: Finding Dependencies" href="Finding%20Dependencies.html" />
+    <link rel="prev" title="Step 8: Testing and CTest" href="Testing%20and%20CTest.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Finding%20Dependencies.html" title="Step 10: Finding Dependencies"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Testing%20and%20CTest.html" title="Step 8: Testing and CTest"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 9: Installation Commands and Concepts</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-9-installation-commands-and-concepts">
+<span id="guide:tutorial/Installation Commands and Concepts"></span><h1>Step 9: Installation Commands and Concepts<a class="headerlink" href="#step-9-installation-commands-and-concepts" title="Link to this heading">¶</a></h1>
+<p>Projects need to do more than build and test their code, they need to make it
+available to consumers. The layout of files in the build tree is unsuitable
+for consumption by other projects, binaries are in unexpected places, header
+files are located far away in the source tree, and there's no clear way
+to discover what targets are provided or how to use them.</p>
+<p>This translation, moving artifacts from the source and build trees into a final
+layout suitable for consumption, is known as installation. CMake supports a
+complete installation workflow as part of the project description, controlling
+both the layout of artifacts in the install tree, and reconstructing targets
+for other CMake projects which want to consume the libraries provided by the
+install tree.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>All CMake installation goes through a single command, <span class="target" id="index-0-command:install"></span><a class="reference internal" href="../../command/install.html#command:install" title="install"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install()</span></code></a>, which
+is split into many subcommands responsible for various aspects of the
+installation process. For target-based CMake workflows, it is mostly sufficient
+to rely on installing targets themselves with <span class="target" id="index-1-command:install"></span><a class="reference internal" href="../../command/install.html#targets" title="install(targets)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(TARGETS)</span></code></a>
+instead of resorting to manually moving files with <span class="target" id="index-2-command:install"></span><a class="reference internal" href="../../command/install.html#files" title="install(files)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(FILES)</span></code></a>
+or <span class="target" id="index-3-command:install"></span><a class="reference internal" href="../../command/install.html#directory" title="install(directory)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(DIRECTORY)</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is why we need to add <code class="docutils literal notranslate"><span class="pre">FILES</span></code> to header sets which are intended to be
+installed. CMake needs to be able to locate the files when their associated
+target is installed.</p>
+</div>
+<p>CMake divides target-based installation into various artifact kinds. The
+available artifact kinds (in CMake 3.23) are:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ARCHIVE</span></code></dt><dd><p>Static libraries (<code class="docutils literal notranslate"><span class="pre">.a</span></code> / <code class="docutils literal notranslate"><span class="pre">.lib</span></code>), DLL import libraries (<code class="docutils literal notranslate"><span class="pre">.lib</span></code>), and
+a handful of other &quot;archive-like&quot; objects.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LIBRARY</span></code></dt><dd><p>Shared libraries (<code class="docutils literal notranslate"><span class="pre">.so</span></code>), modules, and other dynamically loadable
+objects. <strong>Not</strong> Window's DLL files (<code class="docutils literal notranslate"><span class="pre">.dll</span></code>) or MacOS frameworks.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RUNTIME</span></code></dt><dd><p>Executables of all kinds except MacOS bundles; and Window's DLLs (<code class="docutils literal notranslate"><span class="pre">.dll</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OBJECT</span></code></dt><dd><p>Objects from <code class="docutils literal notranslate"><span class="pre">OBJECT</span></code> libraries.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FRAMEWORK</span></code></dt><dd><p>Both static and shared MacOS frameworks</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BUNDLE</span></code></dt><dd><p>MacOS bundle executables</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PUBLIC_HEADER</span></code> / <code class="docutils literal notranslate"><span class="pre">PRIVATE_HEADER</span></code> / <code class="docutils literal notranslate"><span class="pre">RESOURCE</span></code></dt><dd><p>Files described by the <span class="target" id="index-0-prop_tgt:PUBLIC_HEADER"></span><a class="reference internal" href="../../prop_tgt/PUBLIC_HEADER.html#prop_tgt:PUBLIC_HEADER" title="PUBLIC_HEADER"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">PUBLIC_HEADER</span></code></a>, <span class="target" id="index-0-prop_tgt:PRIVATE_HEADER"></span><a class="reference internal" href="../../prop_tgt/PRIVATE_HEADER.html#prop_tgt:PRIVATE_HEADER" title="PRIVATE_HEADER"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">PRIVATE_HEADER</span></code></a>
+and <span class="target" id="index-0-prop_tgt:RESOURCE"></span><a class="reference internal" href="../../prop_tgt/RESOURCE.html#prop_tgt:RESOURCE" title="RESOURCE"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">RESOURCE</span></code></a> target properties, typically used with MacOS
+frameworks</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FILE_SET</span> <span class="pre">&lt;set-name&gt;</span></code></dt><dd><p>A file set associated with the target. This is how headers are typically
+installed.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Most important artifact kinds have known destinations which CMake will default
+to unless instructed to do otherwise. For example, <code class="docutils literal notranslate"><span class="pre">RUNTIME</span></code> will be installed
+to the location named by <span class="target" id="index-0-module:GNUInstallDirs"></span><a class="reference internal" href="../../module/GNUInstallDirs.html#module:GNUInstallDirs" title="GNUInstallDirs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CMAKE_INSTALL_BINDIR</span></code></a>, if
+the variable is available, otherwise they default to <code class="docutils literal notranslate"><span class="pre">bin</span></code>.</p>
+<p>The full list of artifact kind default destinations is described in the
+following table.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Target Type</p></th>
+<th class="head"><p>Variable</p></th>
+<th class="head"><p>Built-In Default</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RUNTIME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${CMAKE_INSTALL_BINDIR}</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bin</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LIBRARY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${CMAKE_INSTALL_LIBDIR}</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lib</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ARCHIVE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${CMAKE_INSTALL_LIBDIR}</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lib</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PRIVATE_HEADER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${CMAKE_INSTALL_INCLUDEDIR}</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">include</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PUBLIC_HEADER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${CMAKE_INSTALL_INCLUDEDIR}</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">include</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code> (type <code class="docutils literal notranslate"><span class="pre">HEADERS</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">${CMAKE_INSTALL_INCLUDEDIR}</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">include</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>For the most part, projects should leave the defaults alone unless they need to
+install to a specific subdirectory of a default location.</p>
+<p>CMake does not define the <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_&lt;dir&gt;</span></code> variables by default. If a
+project wishes to dictate installing to a subdirectory of one of these
+locations, it is necessary to include the <span class="target" id="index-1-module:GNUInstallDirs"></span><a class="reference internal" href="../../module/GNUInstallDirs.html#module:GNUInstallDirs" title="GNUInstallDirs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">GNUInstallDirs</span></code></a> module, which
+will provide values for all <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_&lt;dir&gt;</span></code> variables that have not
+already been defined.</p>
+</section>
+<section id="exercise-1-installing-artifacts">
+<h2>Exercise 1 - Installing Artifacts<a class="headerlink" href="#exercise-1-installing-artifacts" title="Link to this heading">¶</a></h2>
+<p>For modern, target-based CMake projects installation of artifacts is trivial
+and consists of a single call to <span class="target" id="index-4-command:install"></span><a class="reference internal" href="../../command/install.html#targets" title="install(targets)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(targets)</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">install(</span>
+<span class="w">  </span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">MyApp</span><span class="w"> </span><span class="nb">MyLib</span>
+
+<span class="w">  </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="w">  </span><span class="no">FILE_SET</span><span class="w"> </span><span class="nb">anotherHeaderFileSet</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>Most artifact kinds are installed by default and do not need to be listed in
+the <span class="target" id="index-5-command:install"></span><a class="reference internal" href="../../command/install.html#command:install" title="install"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install()</span></code></a> command. However, <code class="docutils literal notranslate"><span class="pre">FILE_SET</span></code>s must be named to let
+CMake know you want to install. In the above example we install two file
+sets, one named <code class="docutils literal notranslate"><span class="pre">HEADERS</span></code> and another named <code class="docutils literal notranslate"><span class="pre">anotherHeaderFileSet</span></code>.</p>
+<p>When named, an artifact kind can be given various options, such as a destination.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">GNUInstallDirs</span><span class="nf">)</span>
+
+<span class="nf">install(</span>
+<span class="w">  </span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">MyApp</span><span class="w"> </span><span class="nb">MyLib</span>
+
+<span class="w">  </span><span class="no">RUNTIME</span>
+<span class="w">    </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_BINDIR</span><span class="o">}</span><span class="na">/Subfolder</span>
+
+<span class="w">  </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>This will install the <code class="docutils literal notranslate"><span class="pre">MyApp</span></code> target to <code class="docutils literal notranslate"><span class="pre">bin/Subfolder</span></code> (if the packager
+hasn't changed <span class="target" id="index-2-module:GNUInstallDirs"></span><a class="reference internal" href="../../module/GNUInstallDirs.html#module:GNUInstallDirs" title="GNUInstallDirs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CMAKE_INSTALL_BINDIR</span></code></a>).</p>
+<p>Importantly, if the <code class="docutils literal notranslate"><span class="pre">OBJECT</span></code> artifact kind is never given a destination, it
+will act like an <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> library, only installing its headers.</p>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Install the artifacts for the libraries and executables (except tests) described
+in the tutorial project.</p>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-6-command:install"></span><a class="reference internal" href="../../command/install.html#command:install" title="install"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step9</span></code> directory contains the complete, recommended
+solution to <code class="docutils literal notranslate"><span class="pre">Step8</span></code>. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">2</span></code>.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>No special configuration is needed, configure and build as usual.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>We can verify the installation is correct with <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-install"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span></code></a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --install build --prefix install</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">install</span></code> folder should be populated correctly for our artifacts.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>First we add an <span class="target" id="index-7-command:install"></span><a class="reference internal" href="../../command/install.html#targets" title="install(targets)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(TARGETS)</span></code></a> for the conditionally built,
+thus conditionally installed, <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable.</p>
+<details><summary>TODO 1 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-install-tutorial">
+<div class="code-block-caption"><span class="caption-text">TODO 1: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-install-tutorial" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">TUTORIAL_BUILD_UTILITIES</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">add_subdirectory(</span><span class="nb">Tutorial</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">install(</span>
+<span class="w">    </span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">Tutorial</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</details><p>Then we can install the rest of the targets.</p>
+<details><summary>TODO 2 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-install-libs">
+<div class="code-block-caption"><span class="caption-text">TODO 2: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-install-libs" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">install(</span>
+<span class="w">  </span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">MathFunctions</span><span class="w"> </span><span class="nb">OpAdd</span><span class="w"> </span><span class="nb">OpMul</span><span class="w"> </span><span class="nb">OpSub</span><span class="w"> </span><span class="nb">MathLogger</span><span class="w"> </span><span class="nb">SqrtTable</span>
+<span class="w">  </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We could add <span class="target" id="index-8-command:install"></span><a class="reference internal" href="../../command/install.html#targets" title="install(targets)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(TARGETS)</span></code></a> commands locally to each subfolder
+where the targets are defined. This would be typical in very large projects
+where keeping track of all the installable targets is difficult.</p>
+</div>
+<p>It might seem unnecessary to install the <code class="docutils literal notranslate"><span class="pre">SqrtTable</span></code> and <code class="docutils literal notranslate"><span class="pre">MathLogger</span></code>,
+and it is at this stage. Due to how CMake models target relationships, when we
+reconstruct the target model in the next exercise we will need these targets to
+be available.</p>
+</section>
+</section>
+<section id="exercise-2-exporting-targets">
+<h2>Exercise 2 - Exporting Targets<a class="headerlink" href="#exercise-2-exporting-targets" title="Link to this heading">¶</a></h2>
+<p>This raw collection of installed files is a good start, but we lose the CMake
+target model. These are effectively no better than the pre-compiled vendored
+libraries we discussed in <code class="docutils literal notranslate"><span class="pre">Step</span> <span class="pre">4</span></code>. We need some way for other projects to
+reconstruct our targets from what we have provided in the install tree.</p>
+<p>The mechanism CMake provides to solve this is a CMakeLang file known as a
+&quot;target export file&quot;. It is created by the <span class="target" id="index-9-command:install"></span><a class="reference internal" href="../../command/install.html#export" title="install(export)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(EXPORT)</span></code></a>
+command.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">install(</span>
+<span class="w">  </span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">MyApp</span><span class="w"> </span><span class="nb">MyLib</span>
+<span class="w">  </span><span class="no">EXPORT</span><span class="w"> </span><span class="nb">MyProjectTargets</span>
+<span class="nf">)</span>
+
+<span class="nf">include(</span><span class="nb">GNUInstallDirs</span><span class="nf">)</span>
+
+<span class="nf">install(</span>
+<span class="w">  </span><span class="no">EXPORT</span><span class="w"> </span><span class="nb">MyProjectTargets</span>
+<span class="w">  </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="na">/cmake/MyProject</span>
+<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">MyProject</span><span class="o">::</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>There are several parts to the above example. Firstly the
+<span class="target" id="index-10-command:install"></span><a class="reference internal" href="../../command/install.html#targets" title="install(targets)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(TARGETS)</span></code></a> command takes an export name, basically a list to
+add the installed targets to.</p>
+<p>Later, the <span class="target" id="index-11-command:install"></span><a class="reference internal" href="../../command/install.html#export" title="install(export)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(EXPORT)</span></code></a> command consumes this list of targets
+to generate the target export file. This will be a file named
+<code class="docutils literal notranslate"><span class="pre">&lt;ExportName&gt;.cmake</span></code> located in the provided <code class="docutils literal notranslate"><span class="pre">DESTINATION</span></code>. The
+<code class="docutils literal notranslate"><span class="pre">DESTINATION</span></code> provided in this example is the conventional one, but any
+location searched by the <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command is valid.</p>
+<p>Finally, the targets created by the target export file will be prefixed with the
+<code class="docutils literal notranslate"><span class="pre">NAMESPACE</span></code> string, ie they will be of the form <code class="docutils literal notranslate"><span class="pre">&lt;NAMESPACE&gt;&lt;TargetName&gt;</span></code>.
+It is conventional for this to be the project name followed by two colons.</p>
+<p>For reasons that will become more obvious in future steps, we typically don't
+consume this file directly. Instead we have a file named
+<code class="docutils literal notranslate"><span class="pre">&lt;ProjectName&gt;Config.cmake</span></code> consume it via <span class="target" id="index-0-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="o">${</span><span class="nt">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="na">/MyProjectTargets.cmake</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <span class="target" id="index-0-variable:CMAKE_CURRENT_LIST_DIR"></span><a class="reference internal" href="../../variable/CMAKE_CURRENT_LIST_DIR.html#variable:CMAKE_CURRENT_LIST_DIR" title="CMAKE_CURRENT_LIST_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_LIST_DIR</span></code></a> variable names the directory that the
+currently running CMake Language file is inside of, regardless of how that
+file was included or launched.</p>
+</div>
+<p>Then this file is installed alongside the target export with
+<span class="target" id="index-12-command:install"></span><a class="reference internal" href="../../command/install.html#files" title="install(files)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install(FILES)</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">install(</span>
+<span class="w">  </span><span class="no">FILES</span>
+<span class="w">    </span><span class="na">cmake/MyProjectConfig.cmake</span>
+<span class="w">  </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="na">/cmake/MyProject</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The name of this file and its location are dictated by the discovery
+semantics of the <span class="target" id="index-1-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command, which we will discuss more
+in the next step.</p>
+</div>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Export the Tutorial project targets so other projects may consume them.</p>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-13-command:install"></span><a class="reference internal" href="../../command/install.html#command:install" title="install"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install()</span></code></a></p></li>
+<li><p><span class="target" id="index-3-module:GNUInstallDirs"></span><a class="reference internal" href="../../module/GNUInstallDirs.html#module:GNUInstallDirs" title="GNUInstallDirs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">GNUInstallDirs</span></code></a></p></li>
+<li><p><span class="target" id="index-1-variable:CMAKE_CURRENT_LIST_DIR"></span><a class="reference internal" href="../../variable/CMAKE_CURRENT_LIST_DIR.html#variable:CMAKE_CURRENT_LIST_DIR" title="CMAKE_CURRENT_LIST_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_LIST_DIR</span></code></a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmake/TutorialConfig.cmake</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>Continue editing the files in the <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step9</span></code> directory.
+Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">3</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">8</span></code>.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>The build command is sufficient to reconfigure the project.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>We can verify the installation is correct with <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-install"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As with CTest, when using multi-config generator, eg Visual Studio, it will be
+necessary to specify a configuration with
+<code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span> <span class="pre">--config</span> <span class="pre">&lt;config&gt;</span> <span class="pre">&lt;remaining</span> <span class="pre">flags&gt;</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">&lt;config&gt;</span></code> is a value like <code class="docutils literal notranslate"><span class="pre">Debug</span></code> or <code class="docutils literal notranslate"><span class="pre">Release</span></code>. This is true whenever
+using a multi-config generator, and won't be called out specifically in
+future commands.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --install build --prefix install</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CMake won't update files which have not changed, only installing new or
+updated files from the build and source trees.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">install</span></code> folder should be populated correctly for our artifacts and
+export files. We'll demonstrate how to use these files in the next step.</p>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>First we add the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> target to the <code class="docutils literal notranslate"><span class="pre">TutorialTargets</span></code> export.</p>
+<details><summary>TODO 3 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-install-tutorial-export">
+<div class="code-block-caption"><span class="caption-text">TODO 3: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-install-tutorial-export" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nf">install(</span>
+<span class="w">    </span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">Tutorial</span>
+<span class="w">    </span><span class="no">EXPORT</span><span class="w"> </span><span class="nb">TutorialTargets</span>
+<span class="w">  </span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Soon we will need access to the <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_&lt;dir&gt;</span></code> variables, so next
+we include the <span class="target" id="index-4-module:GNUInstallDirs"></span><a class="reference internal" href="../../module/GNUInstallDirs.html#module:GNUInstallDirs" title="GNUInstallDirs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">GNUInstallDirs</span></code></a> module.</p>
+<details><summary>TODO 4 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-gnuinstalldirss">
+<div class="code-block-caption"><span class="caption-text">TODO 4: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-gnuinstalldirss" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">GNUInstallDirs</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now we add the rest of our targets to the <code class="docutils literal notranslate"><span class="pre">TutorialTargets</span></code> export.</p>
+<details><summary>TODO 5 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-install-libs-export">
+<div class="code-block-caption"><span class="caption-text">TODO 5: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-install-libs-export" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">install(</span>
+<span class="w">  </span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">MathFunctions</span><span class="w"> </span><span class="nb">OpAdd</span><span class="w"> </span><span class="nb">OpMul</span><span class="w"> </span><span class="nb">OpSub</span><span class="w"> </span><span class="nb">MathLogger</span><span class="w"> </span><span class="nb">SqrtTable</span>
+<span class="w">  </span><span class="no">EXPORT</span><span class="w"> </span><span class="nb">TutorialTargets</span>
+<span class="w">  </span><span class="no">FILE_SET</span><span class="w"> </span><span class="no">HEADERS</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Next we install the export itself, to generate our target export file.</p>
+<details><summary>TODO 6 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-install-export">
+<div class="code-block-caption"><span class="caption-text">TODO 6: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-install-export" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">install(</span>
+<span class="w">  </span><span class="no">EXPORT</span><span class="w"> </span><span class="nb">TutorialTargets</span>
+<span class="w">  </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="na">/cmake/Tutorial</span>
+<span class="w">  </span><span class="no">NAMESPACE</span><span class="w"> </span><span class="nb">Tutorial</span><span class="o">::</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>And then we install our &quot;config&quot; file, which we will use to include our target
+export file.</p>
+<details><summary>TODO 7 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-install-config">
+<div class="code-block-caption"><span class="caption-text">TODO 7: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-install-config" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">install(</span>
+<span class="w">  </span><span class="no">FILES</span>
+<span class="w">    </span><span class="na">cmake/TutorialConfig.cmake</span>
+<span class="w">  </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="na">/cmake/Tutorial</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally we can add the necessary <span class="target" id="index-1-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a> command to the config file.</p>
+<details><summary>TODO 8 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmake-tutorialconfig-cmake">
+<div class="code-block-caption"><span class="caption-text">TODO 8: cmake/TutorialConfig.cmake</span><a class="headerlink" href="#cmake-tutorialconfig-cmake" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="o">${</span><span class="nt">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="na">/TutorialTargets.cmake</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-3-exporting-a-version-file">
+<h2>Exercise 3 - Exporting a Version File<a class="headerlink" href="#exercise-3-exporting-a-version-file" title="Link to this heading">¶</a></h2>
+<p>When importing CMake targets from a target export file, there is no way to
+&quot;bail out&quot; or &quot;undo&quot; the operation. If it turns out a package is a wrong or
+incompatible version for the one we requested, we'll be stuck with any
+side-effects incurred while we learned that version information.</p>
+<p>The answer CMake provides for this problem is a light-weight version file which
+only describes this version compatibility information, which can be checked
+before CMake commits to fully importing the file.</p>
+<p>CMake provides helper modules and scripts for generating these version files,
+namely the <span class="target" id="index-0-module:CMakePackageConfigHelpers"></span><a class="reference internal" href="../../module/CMakePackageConfigHelpers.html#module:CMakePackageConfigHelpers" title="CMakePackageConfigHelpers"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CMakePackageConfigHelpers</span></code></a> module.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakePackageConfigHelpers</span><span class="nf">)</span>
+
+<span class="nf">write_basic_package_version_file(</span>
+<span class="w">  </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="na">/MyProjectConfigVersion.cmake</span>
+<span class="w">  </span><span class="no">COMPATIBILITY</span><span class="w"> </span><span class="nb">ExactVersion</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>The available versions are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AnyNewerVersion</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SameMajorVersion</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SameMinorVersion</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExactVersion</span></code></p></li>
+</ul>
+<p>Additionally packages can mark themselves as <code class="docutils literal notranslate"><span class="pre">ARCH_INDEPENDENT</span></code>, intended for
+packages which ship no binaries which would tie them to a specific machine
+architecture.</p>
+<p>By default, the <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> used by <code class="docutils literal notranslate"><span class="pre">write_basic_package_version_file()</span></code> is
+the <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> number given to the <span class="target" id="index-0-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a> command.</p>
+<section id="id7">
+<h3>Goal<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>Export a version file for the Tutorial project.</p>
+</section>
+<section id="id8">
+<h3>Helpful Resources<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-1-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a></p></li>
+<li><p><span class="target" id="index-14-command:install"></span><a class="reference internal" href="../../command/install.html#command:install" title="install"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install()</span></code></a></p></li>
+<li><p><span class="target" id="index-1-module:CMakePackageConfigHelpers"></span><a class="reference internal" href="../../module/CMakePackageConfigHelpers.html#module:CMakePackageConfigHelpers" title="CMakePackageConfigHelpers"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CMakePackageConfigHelpers</span></code></a></p></li>
+<li><p><span class="target" id="index-0-variable:PROJECT_VERSION"></span><a class="reference internal" href="../../variable/PROJECT_VERSION.html#variable:PROJECT_VERSION" title="PROJECT_VERSION"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">PROJECT_VERSION</span></code></a></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Files to Edit<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Getting Started<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>Continue editing the files in the <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step9</span></code> directory.
+Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">9</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">12</span></code>.</p>
+</section>
+<section id="id11">
+<h3>Build and Run<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>Rebuild and install as done previously.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+<span class="go">cmake --install build --prefix install</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">install</span></code> folder should be populated correctly with our newly generated
+and installed version file.</p>
+</section>
+<section id="id12">
+<h3>Solution<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>First we add a <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> parameter to the <span class="target" id="index-2-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a> command.</p>
+<details><summary>TODO 9 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-project-version">
+<div class="code-block-caption"><span class="caption-text">TODO 9: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-project-version" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">project(</span><span class="nb">Tutorial</span>
+<span class="w">  </span><span class="no">VERSION</span><span class="w"> </span><span class="m">1.0.0</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Next we include the <span class="target" id="index-2-module:CMakePackageConfigHelpers"></span><a class="reference internal" href="../../module/CMakePackageConfigHelpers.html#module:CMakePackageConfigHelpers" title="CMakePackageConfigHelpers"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CMakePackageConfigHelpers</span></code></a> modules and use it
+to generate the config version file.</p>
+<details><summary>TODO 10-11 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-write-basic-package-version-file">
+<div class="code-block-caption"><span class="caption-text">TODO 10-11: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-write-basic-package-version-file" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakePackageConfigHelpers</span><span class="nf">)</span>
+
+<span class="nf">write_basic_package_version_file(</span>
+<span class="w">  </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="na">/TutorialConfigVersion.cmake</span>
+<span class="w">  </span><span class="no">COMPATIBILITY</span><span class="w"> </span><span class="nb">ExactVersion</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally we add the config version file to the list of files to be installed.</p>
+<details><summary>TODO 12 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-install-version-config">
+<div class="code-block-caption"><span class="caption-text">TODO 12: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-install-version-config" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">install(</span>
+<span class="w">  </span><span class="no">FILES</span>
+<span class="w">    </span><span class="na">cmake/TutorialConfig.cmake</span>
+<span class="w">    </span><span class="o">${</span><span class="nt">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span><span class="na">/TutorialConfigVersion.cmake</span>
+<span class="w">  </span><span class="no">DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="na">/cmake/Tutorial</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 9: Installation Commands and Concepts</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-installing-artifacts">Exercise 1 - Installing Artifacts</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-exporting-targets">Exercise 2 - Exporting Targets</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-3-exporting-a-version-file">Exercise 3 - Exporting a Version File</a><ul>
+<li><a class="reference internal" href="#id7">Goal</a></li>
+<li><a class="reference internal" href="#id8">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id9">Files to Edit</a></li>
+<li><a class="reference internal" href="#id10">Getting Started</a></li>
+<li><a class="reference internal" href="#id11">Build and Run</a></li>
+<li><a class="reference internal" href="#id12">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Testing%20and%20CTest.html"
+                          title="previous chapter">Step 8: Testing and CTest</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Finding%20Dependencies.html"
+                          title="next chapter">Step 10: Finding Dependencies</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/Installation Commands and Concepts.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Finding%20Dependencies.html" title="Step 10: Finding Dependencies"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Testing%20and%20CTest.html" title="Step 8: Testing and CTest"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 9: Installation Commands and Concepts</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

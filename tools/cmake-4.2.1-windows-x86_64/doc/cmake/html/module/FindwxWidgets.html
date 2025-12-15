@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindwxWidgets &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindX11" href="FindX11.html" />
+    <link rel="prev" title="FindWish" href="FindWish.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindX11.html" title="FindX11"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindWish.html" title="FindWish"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindwxWidgets</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findwxwidgets">
+<span id="module:FindwxWidgets"></span><h1>FindwxWidgets<a class="headerlink" href="#findwxwidgets" title="Link to this heading">¶</a></h1>
+<p>Finds a wxWidgets installation and provides usage requirements for usage in
+projects:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWidgets</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>wxWidgets (formerly known as wxWindows) is a widget toolkit and tools
+library for creating graphical user interfaces (GUIs) for cross-platform
+applications.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4: </span>Support for <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> version argument.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14: </span><code class="docutils literal notranslate"><span class="pre">OPTIONAL_COMPONENTS</span></code> support.</p>
+</div>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
+<p>wxWidgets is a modular library.  This module supports components to specify
+the modules to use.  Components can be specified with the
+<span class="target" id="index-1-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span>
+<span class="w">  </span><span class="nb">wxWidgets</span>
+<span class="w">  </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">OPTIONAL_COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="p">]</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>Supported components include:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">base</span></code></dt><dd><p>Finds the library that provides mandatory classes that any wxWidgets code
+depends on.  This component is always required for applications
+implementing wxWidgets.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">core</span></code></dt><dd><p>Finds the library that provides basic GUI classes such as GDI classes or
+controls.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">gl</span></code></dt><dd><p>Finds the OpenGL support.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mono</span></code></dt><dd><p>Finds the wxWidgets monolithic library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">aui</span></code></dt><dd><p>Finds the Advanced User Interface docking library.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">net</span></code></dt><dd><p>Finds the library that provides network access.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">webview</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>Finds the library that provides rendering of web documents
+(HTML/CSS/JavaScript).</p>
+</dd>
+</dl>
+<p>For a full list of supported wxWidgets components, refer to the upstream
+documentation.</p>
+<p>If no components are specified, this module by default searches for <code class="docutils literal notranslate"><span class="pre">core</span></code>
+and <code class="docutils literal notranslate"><span class="pre">base</span></code> components.</p>
+</section>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets::wxWidgets</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.27.</span></p>
+</div>
+<p>An interface imported target encapsulating the wxWidgets usage requirements
+for the found components, available if wxWidgets is found.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_FOUND</span></code></dt><dd><p>Boolean indicating whether (the requested version of) wxWidgets and all
+its requested components were found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>The version of the wxWidgets found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_INCLUDE_DIRS</span></code></dt><dd><p>Include directories for WIN32, i.e., where to find <code class="docutils literal notranslate"><span class="pre">&lt;wx/wx.h&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&lt;wx/setup.h&gt;</span></code>; possibly empty for Unix-like systems.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_LIBRARIES</span></code></dt><dd><p>Path to the wxWidgets libraries.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_LIBRARY_DIRS</span></code></dt><dd><p>Compile time link dirs, useful for setting <code class="docutils literal notranslate"><span class="pre">rpath</span></code> on Unix-like systems.
+Typically an empty string in WIN32 environment.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_DEFINITIONS</span></code></dt><dd><p>Contains compile definitions required to compile/link against WX, e.g.
+<code class="docutils literal notranslate"><span class="pre">WXUSINGDLL</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_DEFINITIONS_DEBUG</span></code></dt><dd><p>Contains compile definitions required to compile/link against WX debug builds,
+e.g. <code class="docutils literal notranslate"><span class="pre">__WXDEBUG__</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_CXX_FLAGS</span></code></dt><dd><p>Include directories and compiler flags for Unix-like systems, empty on
+Windows. Essentially the output of <code class="docutils literal notranslate"><span class="pre">wx-config</span> <span class="pre">--cxxflags</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables before calling
+<code class="docutils literal notranslate"><span class="pre">find_package(wxWidgets)</span></code>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">WX_CONFIG</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.11.</span></p>
+</div>
+<p>Environment variable to manually specify the name of the wxWidgets library
+configuration provider executable that will be searched besides the default
+name <code class="docutils literal notranslate"><span class="pre">wx-config</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">WXRC_CMD</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.11.</span></p>
+</div>
+<p>Environment variable to manually specify the name of the wxWidgets resource
+file compiler executable that will be searched besides the default name
+<code class="docutils literal notranslate"><span class="pre">wxrc</span></code>.</p>
+</dd>
+</dl>
+<p>There are two search branches: a Windows style and a Unix style.  For
+Windows, the following variables are searched for and set to defaults
+in case of multiple choices.  Change them if the defaults are not
+desired (i.e., these are the only variables that should be changed to
+select a configuration):</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_ROOT_DIR</span></code></dt><dd><p>Base wxWidgets directory (e.g., <code class="docutils literal notranslate"><span class="pre">C:/wxWidgets-3.2.0</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_LIB_DIR</span></code></dt><dd><p>Path to wxWidgets libraries (e.g., <code class="docutils literal notranslate"><span class="pre">C:/wxWidgets-3.2.0/lib/vc_x64_lib</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_CONFIGURATION</span></code></dt><dd><p>Configuration to use (e.g., msw, mswd, mswu, mswunivud, etc.)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_EXCLUDE_COMMON_LIBRARIES</span></code></dt><dd><p>Set to TRUE to exclude linking of commonly required libs (e.g., png, tiff,
+jpeg, zlib, webp, regex, expat, scintilla, lexilla, etc.).</p>
+</dd>
+</dl>
+<p>For Unix style this module uses the <code class="docutils literal notranslate"><span class="pre">wx-config</span></code> utility.  Selecting
+between debug/release, unicode/ansi, universal/non-universal, and
+static/shared is possible in the QtDialog or ccmake interfaces by turning
+ON/OFF the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_USE_DEBUG</span></code></dt><dd><p>If enabled, the wxWidgets debug build will be searched.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_USE_UNICODE</span></code></dt><dd><p>If enabled, the wxWidgets unicode build will be searched.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_USE_UNIVERSAL</span></code></dt><dd><p>If enabled, the wxWidgets universal build will be searched.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_USE_STATIC</span></code></dt><dd><p>If enabled, static wxWidgets libraries will be linked.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_CONFIG_OPTIONS</span></code></dt><dd><p>This variable can be used for all other options that need to be passed to
+the wx-config utility.  For example, to use the base toolkit found on the
+system at <code class="docutils literal notranslate"><span class="pre">/usr</span></code> install prefix, set the variable (before calling the
+<span class="target" id="index-2-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command) as such:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">wxWidgets_CONFIG_OPTIONS</span><span class="w"> </span><span class="p">--</span><span class="nb">toolkit</span><span class="p">=</span><span class="nb">base</span><span class="w"> </span><span class="p">--</span><span class="nb">prefix</span><span class="p">=</span><span class="na">/usr</span><span class="nf">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_VERSION_STRING</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Use <code class="docutils literal notranslate"><span class="pre">wxWidgets_VERSION</span></code>, which has the same value.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<p>The version of the wxWidgets found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wxWidgets_USE_FILE</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Instead of using this variable, include the <span class="target" id="index-0-module:UsewxWidgets"></span><a class="reference internal" href="UsewxWidgets.html#module:UsewxWidgets" title="UsewxWidgets"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">UsewxWidgets</span></code></a>
+module directly:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">UsewxWidgets</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>The path to the <span class="target" id="index-1-module:UsewxWidgets"></span><a class="reference internal" href="UsewxWidgets.html#module:UsewxWidgets" title="UsewxWidgets"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">UsewxWidgets</span></code></a> module for using wxWidgets in the
+current directory.  For example:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWidgets</span><span class="nf">)</span>
+<span class="nf">if(</span><span class="nb">wxWidgets_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">include(</span><span class="o">${</span><span class="nt">wxWidgets_USE_FILE</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="example-finding-wxwidgets">
+<h3>Example: Finding wxWidgets<a class="headerlink" href="#example-finding-wxwidgets" title="Link to this heading">¶</a></h3>
+<p>Finding wxWidgets and making it required (if wxWidgets is not found,
+processing stops with an error message):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWidgets</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-using-imported-target">
+<h3>Example: Using Imported Target<a class="headerlink" href="#example-using-imported-target" title="Link to this heading">¶</a></h3>
+<p>Finding wxWidgets and using imported target in a project:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWidgets</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">wxWidgets</span><span class="o">::</span><span class="nb">wxWidgets</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-using-components">
+<h3>Example: Using Components<a class="headerlink" href="#example-using-components" title="Link to this heading">¶</a></h3>
+<p>Finding wxWidgets and specifying components:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWidgets</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">gl</span><span class="w"> </span><span class="nb">core</span><span class="w"> </span><span class="nb">base</span><span class="w"> </span><span class="no">OPTIONAL_COMPONENTS</span><span class="w"> </span><span class="nb">net</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">wxWidgets</span><span class="o">::</span><span class="nb">wxWidgets</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-monolithic-wxwidgets-build">
+<h3>Example: Monolithic wxWidgets Build<a class="headerlink" href="#example-monolithic-wxwidgets-build" title="Link to this heading">¶</a></h3>
+<p>Sample usage with monolithic wxWidgets build:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">wxWidgets</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">mono</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">wxWidgets</span><span class="o">::</span><span class="nb">wxWidgets</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-using-variables">
+<h3>Example: Using Variables<a class="headerlink" href="#example-using-variables" title="Link to this heading">¶</a></h3>
+<p>Finding and using wxWidgets in CMake versions prior to 3.27, when the
+imported target wasn't yet available:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Note that for MinGW users the order of libs is important.</span>
+<span class="nf">find_package(</span><span class="nb">wxWidgets</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">gl</span><span class="w"> </span><span class="nb">core</span><span class="w"> </span><span class="nb">base</span><span class="w"> </span><span class="no">OPTIONAL_COMPONENTS</span><span class="w"> </span><span class="nb">net</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">wxWidgets_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">include(</span><span class="nb">UsewxWidgets</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># and for each of the project dependent executable/library targets:</span>
+<span class="w">  </span><span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="o">${</span><span class="nt">wxWidgets_LIBRARIES</span><span class="o">}</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindwxWidgets</a><ul>
+<li><a class="reference internal" href="#components">Components</a></li>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-finding-wxwidgets">Example: Finding wxWidgets</a></li>
+<li><a class="reference internal" href="#example-using-imported-target">Example: Using Imported Target</a></li>
+<li><a class="reference internal" href="#example-using-components">Example: Using Components</a></li>
+<li><a class="reference internal" href="#example-monolithic-wxwidgets-build">Example: Monolithic wxWidgets Build</a></li>
+<li><a class="reference internal" href="#example-using-variables">Example: Using Variables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindWish.html"
+                          title="previous chapter">FindWish</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindX11.html"
+                          title="next chapter">FindX11</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindwxWidgets.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindX11.html" title="FindX11"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindWish.html" title="FindWish"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindwxWidgets</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

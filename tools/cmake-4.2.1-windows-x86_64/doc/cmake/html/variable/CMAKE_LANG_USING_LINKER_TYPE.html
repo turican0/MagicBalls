@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMAKE_&lt;LANG&gt;_USING_LINKER_&lt;TYPE&gt; &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMAKE_&lt;LANG&gt;_VISIBILITY_PRESET" href="CMAKE_LANG_VISIBILITY_PRESET.html" />
+    <link rel="prev" title="CMAKE_&lt;LANG&gt;_LINKER_LAUNCHER" href="CMAKE_LANG_LINKER_LAUNCHER.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMAKE_LANG_VISIBILITY_PRESET.html" title="CMAKE_&lt;LANG&gt;_VISIBILITY_PRESET"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_LANG_LINKER_LAUNCHER.html" title="CMAKE_&lt;LANG&gt;_LINKER_LAUNCHER"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" accesskey="U">cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_&lt;LANG&gt;_USING_LINKER_&lt;TYPE&gt;</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmake-lang-using-linker-type">
+<span id="variable:CMAKE_<LANG>_USING_LINKER_<TYPE>"></span><h1>CMAKE_&lt;LANG&gt;_USING_LINKER_&lt;TYPE&gt;<a class="headerlink" href="#cmake-lang-using-linker-type" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.29.</span></p>
+</div>
+<p>This variable defines how to specify the <code class="docutils literal notranslate"><span class="pre">&lt;TYPE&gt;</span></code> linker for the link step,
+as controlled by the <span class="target" id="index-0-variable:CMAKE_LINKER_TYPE"></span><a class="reference internal" href="CMAKE_LINKER_TYPE.html#variable:CMAKE_LINKER_TYPE" title="CMAKE_LINKER_TYPE"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_LINKER_TYPE</span></code></a> variable or the
+<span class="target" id="index-0-prop_tgt:LINKER_TYPE"></span><a class="reference internal" href="../prop_tgt/LINKER_TYPE.html#prop_tgt:LINKER_TYPE" title="LINKER_TYPE"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">LINKER_TYPE</span></code></a> target property. Depending on the value of the
+<span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_LINK_MODE"></span><a class="reference internal" href="CMAKE_LANG_LINK_MODE.html#variable:CMAKE_&lt;LANG&gt;_LINK_MODE" title="CMAKE_&lt;LANG&gt;_LINK_MODE"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_LINK_MODE</span></code></a> variable,
+<code class="docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_USING_LINKER_&lt;TYPE&gt;</span></code> can hold compiler flags for the link step,
+or the path to the linker tool.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 4.0.</span></p>
+</div>
+<p>The type of information stored in this variable is now determined by the
+<span class="target" id="index-1-variable:CMAKE_&lt;LANG&gt;_LINK_MODE"></span><a class="reference internal" href="CMAKE_LANG_LINK_MODE.html#variable:CMAKE_&lt;LANG&gt;_LINK_MODE" title="CMAKE_&lt;LANG&gt;_LINK_MODE"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_LINK_MODE</span></code></a> variable instead of the
+<span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_USING_LINKER_MODE"></span><a class="reference internal" href="CMAKE_LANG_USING_LINKER_MODE.html#variable:CMAKE_&lt;LANG&gt;_USING_LINKER_MODE" title="CMAKE_&lt;LANG&gt;_USING_LINKER_MODE"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_USING_LINKER_MODE</span></code></a> variable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The specified linker tool is generally expected to be accessible through
+the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable.</p>
+</div>
+<p>For example, the <code class="docutils literal notranslate"><span class="pre">LLD</span></code> linker for <code class="docutils literal notranslate"><span class="pre">GNU</span></code> compilers is defined like so:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># CMAKE_C_LINK_MODE holds value &quot;DRIVER&quot;</span>
+<span class="nf">set(</span><span class="no">CMAKE_C_USING_LINKER_LLD</span><span class="w"> </span><span class="s">&quot;-fuse-ld=lld&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>On the <code class="docutils literal notranslate"><span class="pre">Windows</span></code> platform with <code class="docutils literal notranslate"><span class="pre">Clang</span></code> compilers simulating <code class="docutils literal notranslate"><span class="pre">MSVC</span></code> with
+<code class="docutils literal notranslate"><span class="pre">GNU</span></code> front-end:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># CMAKE_C_LINK_MODE holds value &quot;DRIVER&quot;</span>
+<span class="nf">set(</span><span class="no">CMAKE_C_USING_LINKER_LLD</span><span class="w"> </span><span class="s">&quot;-fuse-ld=lld-link&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>And for the <code class="docutils literal notranslate"><span class="pre">MSVC</span></code> compiler or <code class="docutils literal notranslate"><span class="pre">Clang</span></code> compilers simulating <code class="docutils literal notranslate"><span class="pre">MSVC</span></code> with
+<code class="docutils literal notranslate"><span class="pre">MSVC</span></code> front-end, the linker is invoked directly, not via the compiler
+front-end:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># CMAKE_C_LINK_MODE holds value &quot;LINKER&quot;</span>
+<span class="nf">set(</span><span class="no">CMAKE_C_USING_LINKER_LLD</span><span class="w"> </span><span class="s">&quot;/path/to/lld-link.exe&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>A custom linker type can also be defined, usually in a toolchain file:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">CMAKE_LINKER_TYPE</span><span class="w"> </span><span class="nb">lld_launcher</span><span class="nf">)</span>
+<span class="nf">set(</span><span class="nb">CMAKE_C_USING_LINKER_lld_launcher</span><span class="w"> </span><span class="s">&quot;-fuse-ld=/path/to/lld-launcher.sh&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMAKE_LANG_LINKER_LAUNCHER.html"
+                          title="previous chapter">CMAKE_&lt;LANG&gt;_LINKER_LAUNCHER</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMAKE_LANG_VISIBILITY_PRESET.html"
+                          title="next chapter">CMAKE_&lt;LANG&gt;_VISIBILITY_PRESET</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/variable/CMAKE_LANG_USING_LINKER_TYPE.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMAKE_LANG_VISIBILITY_PRESET.html" title="CMAKE_&lt;LANG&gt;_VISIBILITY_PRESET"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_LANG_LINKER_LAUNCHER.html" title="CMAKE_&lt;LANG&gt;_LINKER_LAUNCHER"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" >cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_&lt;LANG&gt;_USING_LINKER_&lt;TYPE&gt;</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

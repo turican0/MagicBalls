@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 8: Testing and CTest &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 9: Installation Commands and Concepts" href="Installation%20Commands%20and%20Concepts.html" />
+    <link rel="prev" title="Step 7: Custom Commands and Generated Files" href="Custom%20Commands%20and%20Generated%20Files.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Installation%20Commands%20and%20Concepts.html" title="Step 9: Installation Commands and Concepts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Custom%20Commands%20and%20Generated%20Files.html" title="Step 7: Custom Commands and Generated Files"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 8: Testing and CTest</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-8-testing-and-ctest">
+<span id="guide:tutorial/Testing and CTest"></span><h1>Step 8: Testing and CTest<a class="headerlink" href="#step-8-testing-and-ctest" title="Link to this heading">¶</a></h1>
+<p>Testing is, historically, not the role of the build system. At best it might
+have a specific target which maps to building and running the project's tests.</p>
+<p>In the CMake ecosystem, the opposite is true. CMake's testing ecosystem is
+known as CTest. This ecosystem is both deceivingly simple and incredibly
+powerful. In fact it is so powerful it deserves its own full tutorial to
+describe everything we could achieve with it.</p>
+<p>This is not that tutorial. In this step, we will scratch the surface of some
+of the facilities that CTest provides.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>At its core, CTest is a task launcher which runs commands and reports if they
+have returned zero or non-zero values. This is the level we will be dealing
+with CTest at.</p>
+<p>CMake provides direct integration with CTest via the <span class="target" id="index-0-command:enable_testing"></span><a class="reference internal" href="../../command/enable_testing.html#command:enable_testing" title="enable_testing"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">enable_testing()</span></code></a>
+and <span class="target" id="index-0-command:add_test"></span><a class="reference internal" href="../../command/add_test.html#command:add_test" title="add_test"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_test()</span></code></a> commands. These allow CMake to setup the necessary
+infrastructure in the build folder for CTest to discover, run, and report
+on various tests we might be interested in.</p>
+<p>After setting up and building tests, the easiest way to invoke CTest is to run
+it directly on the build directory with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ctest --test-dir build</span>
+</pre></div>
+</div>
+<p>Which will run all available tests. Specific tests can be run with regular
+expressions.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ctest --test-dir build -R SpecificTest</span>
+</pre></div>
+</div>
+<p>CTest also has advanced mechanisms for scripting, fixtures, sanitizers,
+job servers, metric reportings, and much more. See the <span class="target" id="index-0-manual:ctest(1)"></span><a class="reference internal" href="../../manual/ctest.1.html#manual:ctest(1)" title="ctest(1)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">ctest(1)</span></code></a>
+manual for more information.</p>
+</section>
+<section id="exercise-1-adding-tests">
+<h2>Exercise 1 - Adding Tests<a class="headerlink" href="#exercise-1-adding-tests" title="Link to this heading">¶</a></h2>
+<p>CTest convention dictates the building and running of tests be based on a
+default-<code class="docutils literal notranslate"><span class="pre">ON</span></code> variable named <span class="target" id="index-0-variable:BUILD_TESTING"></span><a class="reference internal" href="../../variable/BUILD_TESTING.html#variable:BUILD_TESTING" title="BUILD_TESTING"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code></a>. When using the full
+suite of CTest capabilities via the <span class="target" id="index-0-module:CTest"></span><a class="reference internal" href="../../module/CTest.html#module:CTest" title="CTest"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CTest</span></code></a> module, this
+<span class="target" id="index-0-command:option"></span><a class="reference internal" href="../../command/option.html#command:option" title="option"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">option()</span></code></a> is setup for us. When using a more stripped-down approach to
+testing, it's expected the project will setup the option (or at least one of a
+similar name) on its own.</p>
+<p>When <span class="target" id="index-1-variable:BUILD_TESTING"></span><a class="reference internal" href="../../variable/BUILD_TESTING.html#variable:BUILD_TESTING" title="BUILD_TESTING"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code></a> is true, the <span class="target" id="index-1-command:enable_testing"></span><a class="reference internal" href="../../command/enable_testing.html#command:enable_testing" title="enable_testing"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">enable_testing()</span></code></a> command
+should be called in the root CML.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">enable_testing()</span>
+</pre></div>
+</div>
+<p>This will generate all the necessary metadata into the build tree for CTest to
+find and run tests.</p>
+<p>Once that has been done, the <span class="target" id="index-1-command:add_test"></span><a class="reference internal" href="../../command/add_test.html#command:add_test" title="add_test"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_test()</span></code></a> command can be used to create
+a test anywhere in the project. The semantics of this command are similar to
+<span class="target" id="index-0-command:add_custom_command"></span><a class="reference internal" href="../../command/add_custom_command.html#command:add_custom_command" title="add_custom_command"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_command()</span></code></a>; we can name an executable target as the &quot;command&quot;.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_test(</span>
+<span class="w">  </span><span class="no">NAME</span><span class="w"> </span><span class="nb">MyAppWithTestFlag</span>
+<span class="w">  </span><span class="no">COMMAND</span><span class="w"> </span><span class="nb">MyApp</span><span class="w"> </span><span class="p">--</span><span class="nb">test</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Add tests for the MathFunctions library to the project and run them with CTest.</p>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-2-variable:BUILD_TESTING"></span><a class="reference internal" href="../../variable/BUILD_TESTING.html#variable:BUILD_TESTING" title="BUILD_TESTING"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code></a></p></li>
+<li><p><span class="target" id="index-2-command:enable_testing"></span><a class="reference internal" href="../../command/enable_testing.html#command:enable_testing" title="enable_testing"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">enable_testing()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a></p></li>
+<li><p><span class="target" id="index-2-command:add_test"></span><a class="reference internal" href="../../command/add_test.html#command:add_test" title="add_test"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_test()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Tests/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>A testing program has been written in the file <code class="docutils literal notranslate"><span class="pre">Tests/TestMathFunctions.cxx</span></code>.
+This program takes a single command line argument, the math function to be
+tested, with valid values of <code class="docutils literal notranslate"><span class="pre">add</span></code>, <code class="docutils literal notranslate"><span class="pre">mul</span></code>, <code class="docutils literal notranslate"><span class="pre">sqrt</span></code>, and <code class="docutils literal notranslate"><span class="pre">sub</span></code>. The return
+code is zero if the operation is recognized and the calculated value is valid,
+otherwise it is non-zero.</p>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">7</span></code>.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>No special configuration is needed, configure and build as usual.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Verify all the tests pass with CTest.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If using a multi-config generator, eg Visual Studio, it will be necessary to
+specify a configuration with <code class="docutils literal notranslate"><span class="pre">ctest</span> <span class="pre">-C</span> <span class="pre">&lt;config&gt;</span> <span class="pre">&lt;remaining</span> <span class="pre">flags&gt;</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">&lt;config&gt;</span></code> is a value like <code class="docutils literal notranslate"><span class="pre">Debug</span></code> or <code class="docutils literal notranslate"><span class="pre">Release</span></code>. This is true whenever
+using a multi-config generator, and won't be called out specifically in
+future commands.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ctest --test-dir build</span>
+</pre></div>
+</div>
+<p>You can run individual tests with the <a class="reference internal" href="../../manual/ctest.1.html#cmdoption-ctest-R"><code class="xref std std-option docutils literal notranslate"><span class="pre">-R</span></code></a> flag.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ctest --test-dir build -R sqrt</span>
+</pre></div>
+</div>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>First we add a new executable for the tests.</p>
+<details><summary>TODO 1-2: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tests-cmakelists-txt-add-executable">
+<div class="code-block-caption"><span class="caption-text">TODO 1-2: Tests/CMakeLists.txt</span><a class="headerlink" href="#tests-cmakelists-txt-add-executable" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_executable(</span><span class="nb">TestMathFunctions</span><span class="nf">)</span>
+
+<span class="nf">target_sources(</span><span class="nb">TestMathFunctions</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">TestMathFunctions.cxx</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Then we link in the library we are testing.</p>
+<details><summary>TODO 3: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tests-cmakelists-txt-target-link-libraries">
+<div class="code-block-caption"><span class="caption-text">TODO 3: Tests/CMakeLists.txt</span><a class="headerlink" href="#tests-cmakelists-txt-target-link-libraries" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">TestMathFunctions</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathFunctions</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>We need to call <span class="target" id="index-3-command:add_test"></span><a class="reference internal" href="../../command/add_test.html#command:add_test" title="add_test"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_test()</span></code></a> for each of the valid operations, but this
+would get repetitive, so we write a <span class="target" id="index-1-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a> to do it for us.</p>
+<details><summary>TODO 4: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tests-cmakelists-txt-function">
+<div class="code-block-caption"><span class="caption-text">TODO 4: Tests/CMakeLists.txt</span><a class="headerlink" href="#tests-cmakelists-txt-function" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">function(</span><span class="nb">MathFunctionTest</span><span class="w"> </span><span class="nb">op</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">add_test(</span>
+<span class="w">    </span><span class="no">NAME</span><span class="w"> </span><span class="o">${</span><span class="nt">op</span><span class="o">}</span>
+<span class="w">    </span><span class="no">COMMAND</span><span class="w"> </span><span class="nb">TestMathFunctions</span><span class="w"> </span><span class="o">${</span><span class="nt">op</span><span class="o">}</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endfunction()</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now we can use our <span class="target" id="index-2-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a> to add all the tests.</p>
+<details><summary>TODO 5: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tests-cmakelists-txt-add-test">
+<div class="code-block-caption"><span class="caption-text">TODO 5: Tests/CMakeLists.txt</span><a class="headerlink" href="#tests-cmakelists-txt-add-test" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">MathFunctionTest(</span><span class="nb">add</span><span class="nf">)</span>
+<span class="nf">MathFunctionTest(</span><span class="nb">mul</span><span class="nf">)</span>
+<span class="nf">MathFunctionTest(</span><span class="nb">sqrt</span><span class="nf">)</span>
+<span class="nf">MathFunctionTest(</span><span class="nb">sub</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally, we can add the <span class="target" id="index-3-variable:BUILD_TESTING"></span><a class="reference internal" href="../../variable/BUILD_TESTING.html#variable:BUILD_TESTING" title="BUILD_TESTING"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code></a> option and conditionally
+enable building and running tests in the top-level CML.</p>
+<details><summary>TODO 6-7: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-build-testing">
+<div class="code-block-caption"><span class="caption-text">TODO 6: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-build-testing" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">option(</span><span class="no">BUILD_TESTING</span><span class="w"> </span><span class="s">&quot;Enable testing and build tests&quot;</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="cmakelists-txt-enable-testing">
+<div class="code-block-caption"><span class="caption-text">TODO 7: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-enable-testing" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">BUILD_TESTING</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">enable_testing()</span>
+<span class="w">  </span><span class="nf">add_subdirectory(</span><span class="nb">Tests</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 8: Testing and CTest</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-adding-tests">Exercise 1 - Adding Tests</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Custom%20Commands%20and%20Generated%20Files.html"
+                          title="previous chapter">Step 7: Custom Commands and Generated Files</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Installation%20Commands%20and%20Concepts.html"
+                          title="next chapter">Step 9: Installation Commands and Concepts</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/Testing and CTest.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Installation%20Commands%20and%20Concepts.html" title="Step 9: Installation Commands and Concepts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Custom%20Commands%20and%20Generated%20Files.html" title="Step 7: Custom Commands and Generated Files"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 8: Testing and CTest</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

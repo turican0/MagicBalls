@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 10: Finding Dependencies &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 11: Miscellaneous Features" href="Miscellaneous%20Features.html" />
+    <link rel="prev" title="Step 9: Installation Commands and Concepts" href="Installation%20Commands%20and%20Concepts.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Miscellaneous%20Features.html" title="Step 11: Miscellaneous Features"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Installation%20Commands%20and%20Concepts.html" title="Step 9: Installation Commands and Concepts"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 10: Finding Dependencies</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-10-finding-dependencies">
+<span id="guide:tutorial/Finding Dependencies"></span><h1>Step 10: Finding Dependencies<a class="headerlink" href="#step-10-finding-dependencies" title="Link to this heading">¶</a></h1>
+<p>In C/C++ software development, managing build dependencies is consistently
+one of the highest ranked challenges facing modern developers. CMake provides
+an extensive toolset for discovering and validating dependencies of different
+kinds.</p>
+<p>However, for correctly packaged projects there is no need to use these advanced
+tools. Many popular library and utility projects today produce correct install
+trees, like the one we set up in <code class="docutils literal notranslate"><span class="pre">Step</span> <span class="pre">9</span></code>, which are easy is to integrate
+into CMake.</p>
+<p>In this best-case scenario, we only need the <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> to
+import dependencies into our project.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>There are five principle commands used for discovering dependencies with
+CMake, the first four are:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><span class="target" id="index-0-command:find_file"></span><a class="reference internal" href="../../command/find_file.html#command:find_file" title="find_file"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_file()</span></code></a></dt><dd><p>Finds and reports the full path to a named file, this tends to be the
+most flexible of the <code class="docutils literal notranslate"><span class="pre">find</span></code> commands.</p>
+</dd>
+<dt><span class="target" id="index-0-command:find_library"></span><a class="reference internal" href="../../command/find_library.html#command:find_library" title="find_library"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_library()</span></code></a></dt><dd><p>Finds and reports the full path to a static archive or shared object
+suitable for use with <span class="target" id="index-0-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>.</p>
+</dd>
+<dt><span class="target" id="index-0-command:find_path"></span><a class="reference internal" href="../../command/find_path.html#command:find_path" title="find_path"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_path()</span></code></a></dt><dd><p>Finds and reports the full path to a directory <em>containing</em> a file. This
+is most commonly used for headers in combination with
+<span class="target" id="index-0-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a>.</p>
+</dd>
+<dt><span class="target" id="index-0-command:find_program"></span><a class="reference internal" href="../../command/find_program.html#command:find_program" title="find_program"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_program()</span></code></a></dt><dd><p>Finds and reports and invocable name or path for a program. Often used in
+combination with <span class="target" id="index-0-command:execute_process"></span><a class="reference internal" href="../../command/execute_process.html#command:execute_process" title="execute_process"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">execute_process()</span></code></a> or <span class="target" id="index-0-command:add_custom_command"></span><a class="reference internal" href="../../command/add_custom_command.html#command:add_custom_command" title="add_custom_command"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_command()</span></code></a>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>These commands should be considered &quot;backup&quot;, used when the primary find command
+is unsuitable. The primary find command is <span class="target" id="index-1-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a>. It uses
+comprehensive built-in heuristics and upstream-provided packaging files to
+provide the best interface to the requested dependency.</p>
+</section>
+<section id="exercise-1-using-find-package">
+<h2>Exercise 1 - Using <code class="docutils literal notranslate"><span class="pre">find_package()</span></code><a class="headerlink" href="#exercise-1-using-find-package" title="Link to this heading">¶</a></h2>
+<p>The search paths and behaviors used by <span class="target" id="index-2-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> are fully
+described in its documentation, but much too verbose to replicate here. Suffice
+to say it searches well known, lesser known, obscure, and user-provided
+locations attempting to find a package which meets the requirements given to it.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">ForeignLibrary</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The best way to use <span class="target" id="index-3-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> is to ensure all dependencies have
+been installed to a single install tree prior to the build, and then make the
+location of that install tree known to <span class="target" id="index-4-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> via the
+<span class="target" id="index-0-variable:CMAKE_PREFIX_PATH"></span><a class="reference internal" href="../../variable/CMAKE_PREFIX_PATH.html#variable:CMAKE_PREFIX_PATH" title="CMAKE_PREFIX_PATH"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code></a> variable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Building and installing dependencies can itself be an immense amount of labor.
+While this tutorial will do so for illustration purposes, it is <strong>extremely</strong>
+recommended that a package manager be used for project-local dependency
+management.</p>
+</div>
+<p><span class="target" id="index-5-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> accepts several parameters besides the package to be
+found. The most notable are:</p>
+<ul>
+<li><p>A positional <code class="docutils literal notranslate"><span class="pre">&lt;version&gt;</span></code> argument, for describing a version to be checked
+against the package's config version file. This should be used sparingly,
+it is better to control the version of the dependency being installed via
+a package manager than possibly break the build on otherwise innocuous
+version updates.</p>
+<p>If the package is known to rely on an older version of a dependency, it
+may be appropriate to use a version requirement.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code> for non-optional dependencies which should abort the build
+if not found.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QUIET</span></code> for optional dependencies which should not report anything to
+users when not found.</p></li>
+</ul>
+<p><span class="target" id="index-6-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> reports its results via <code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;_FOUND</span></code>
+variables, which will be set to a true or false value for found and not found
+packages respectively.</p>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Integrate an externally installed test framework into the Tutorial project.</p>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-7-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a></p></li>
+<li><p><span class="target" id="index-1-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TutorialProject/CMakePresets.json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TutorialProject/Tests/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TutorialProject/Tests/TestMathFunctions.cxx</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Step10</span></code> folder is organized differently than previous steps. The tutorial
+project we need to edit is under <code class="docutils literal notranslate"><span class="pre">Step10/TutorialProject</span></code>. Another project
+is now present, <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>, as well as a partially populated install tree
+which we will use in later exercises. You do not need to edit anything in these
+other directories for this exercise, all <code class="docutils literal notranslate"><span class="pre">TODOs</span></code> and solution steps are for
+<code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> package provides two useful constructs, the
+<code class="docutils literal notranslate"><span class="pre">SimpleTest::SimpleTest</span></code> target to be linked into a test binary, and the
+<code class="docutils literal notranslate"><span class="pre">simpletest_discover_tests</span></code> function for automatically adding tests to
+CTest.</p>
+<p>Similar to other test frameworks, <code class="docutils literal notranslate"><span class="pre">simpletest_discover_tests</span></code> only needs
+to be passed the name of the executable target containing the tests.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">simpletest_discover_tests(</span><span class="nb">MyTestExe</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">TestMathFunctions.cxx</span></code> file has been updated to use the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>
+framework in the vein of GoogleTest or Catch2. Perform <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> through
+<code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">5</span></code> in order to use the new test framework.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It may go without saying, but <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> is a very poor test framework
+which only facially resembles a functional testing library. While much of
+the CMake code in this tutorial could be used unaltered in other projects,
+you should not use <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> outside this tutorial, or try to learn from
+the CMake code it provides.</p>
+</div>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>First we must install the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> framework. Navigate to the
+<code class="docutils literal notranslate"><span class="pre">Help/guide/Step10/SimpleTest</span></code> directory and run the following commands</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --install build</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> preset sets up everything needed to install <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>
+for the tutorial. For reasons that are beyond the scope of this tutorial,
+there is no need to build or provide any other configuration for
+<code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>.</p>
+</div>
+<p>We can observe that the <code class="docutils literal notranslate"><span class="pre">Step10/install</span></code> directory has now been populated by
+the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> header and package files.</p>
+<p>Now we can configure and build the Tutorial project as per usual, navigating to
+the <code class="docutils literal notranslate"><span class="pre">Help/guide/Step10/TutorialProject</span></code> and running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Verify that the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> framework has been consumed correctly by running
+the tests with CTest.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>First we call <span class="target" id="index-8-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> to discover the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> package.
+We do this with <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code> because the tests cannot build without
+<code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>.</p>
+<details><summary>TODO 1 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-tests-cmakelists-txt-find-package">
+<div class="code-block-caption"><span class="caption-text">TODO 1: TutorialProject/Tests/CMakeLists.txt</span><a class="headerlink" href="#tutorialproject-tests-cmakelists-txt-find-package" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">SimpleTest</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Next we add the <code class="docutils literal notranslate"><span class="pre">SimpleTest::SimpleTest</span></code> target to <code class="docutils literal notranslate"><span class="pre">TestMathFunctions</span></code></p>
+<details><summary>TODO 2 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-tests-cmakelists-txt-link-simple-test">
+<div class="code-block-caption"><span class="caption-text">TODO 2: TutorialProject/Tests/CMakeLists.txt</span><a class="headerlink" href="#tutorialproject-tests-cmakelists-txt-link-simple-test" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">TestMathFunctions</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathFunctions</span>
+<span class="w">    </span><span class="nb">SimpleTest</span><span class="o">::</span><span class="nb">SimpleTest</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now we can replace our test description code with a call to
+<code class="docutils literal notranslate"><span class="pre">simpletest_discover_tests</span></code>.</p>
+<details><summary>TODO 3 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-tests-cmakelists-txt-simpletest-discover-tests">
+<div class="code-block-caption"><span class="caption-text">TODO 3: TutorialProject/Tests/CMakeLists.txt</span><a class="headerlink" href="#tutorialproject-tests-cmakelists-txt-simpletest-discover-tests" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">simpletest_discover_tests(</span><span class="nb">TestMathFunctions</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>We ensure <span class="target" id="index-9-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> can discover <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> by
+adding the install tree to <span class="target" id="index-1-variable:CMAKE_PREFIX_PATH"></span><a class="reference internal" href="../../variable/CMAKE_PREFIX_PATH.html#variable:CMAKE_PREFIX_PATH" title="CMAKE_PREFIX_PATH"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code></a>.</p>
+<details><summary>TODO 4 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-cmakepresets-json-cmake-prefix-path">
+<div class="code-block-caption"><span class="caption-text">TODO 4: TutorialProject/CMakePresets.json</span><a class="headerlink" href="#tutorialproject-cmakepresets-json-cmake-prefix-path" title="Link to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;cacheVariables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;CMAKE_PREFIX_PATH&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${sourceParentDir}/install&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;TUTORIAL_USE_STD_SQRT&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OFF&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;TUTORIAL_ENABLE_IPO&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OFF&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally, we update the tests to use the macros provided by <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> by
+removing the placeholders and including the appropriate header.</p>
+<details><summary>TODO 5 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-tests-testmathfunctions-cxx-simpletest">
+<div class="code-block-caption"><span class="caption-text">TODO 5: TutorialProject/Tests/TestMathFunctions.cxx</span><a class="headerlink" href="#tutorialproject-tests-testmathfunctions-cxx-simpletest" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;MathFunctions.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;SimpleTest.h&gt;</span>
+
+<span class="n">TEST</span><span class="p">(</span><span class="s">&quot;add&quot;</span><span class="p">)</span>
+<span class="p">{</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-2-transitive-dependencies">
+<h2>Exercise 2 - Transitive Dependencies<a class="headerlink" href="#exercise-2-transitive-dependencies" title="Link to this heading">¶</a></h2>
+<p>Libraries often build on one another. A multimedia application may depend on a
+library which provides support for various container formats, which may in turn
+rely on one or more other libraries for compression algorithms.</p>
+<p>We need to express these transitive requirements inside the package config
+files we place in the install tree. We do so with the
+<span class="target" id="index-0-module:CMakeFindDependencyMacro"></span><a class="reference internal" href="../../module/CMakeFindDependencyMacro.html#module:CMakeFindDependencyMacro" title="CMakeFindDependencyMacro"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CMakeFindDependencyMacro</span></code></a> module, which provides a safe mechanism for
+installed packages to recursively discover one another.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeFindDependencyMacro</span><span class="nf">)</span>
+<span class="nf">find_dependency(</span><span class="nb">zlib</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p><span class="target" id="index-1-module:CMakeFindDependencyMacro"></span><a class="reference internal" href="../../module/CMakeFindDependencyMacro.html#module:CMakeFindDependencyMacro" title="CMakeFindDependencyMacro"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">find_dependency()</span></code></a> also forwards arguments
+from the top-level <span class="target" id="index-10-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> call. If <span class="target" id="index-11-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> is
+called with <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> or <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code>,
+<span class="target" id="index-2-module:CMakeFindDependencyMacro"></span><a class="reference internal" href="../../module/CMakeFindDependencyMacro.html#module:CMakeFindDependencyMacro" title="CMakeFindDependencyMacro"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">find_dependency()</span></code></a> will also use <code class="docutils literal notranslate"><span class="pre">QUIET</span></code>
+and/or <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code>.</p>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Add a dependency to <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> and ensure that packages which rely on
+<code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> also discover this transitive dependency.</p>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-3-module:CMakeFindDependencyMacro"></span><a class="reference internal" href="../../module/CMakeFindDependencyMacro.html#module:CMakeFindDependencyMacro" title="CMakeFindDependencyMacro"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CMakeFindDependencyMacro</span></code></a></p></li>
+<li><p><span class="target" id="index-12-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a></p></li>
+<li><p><span class="target" id="index-2-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SimpleTest/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SimpleTest/cmake/SimpleTestConfig.cmake</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>For this step we will only be editing the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code> project. The transitive
+dependency, <code class="docutils literal notranslate"><span class="pre">TransitiveDep</span></code>, is a dummy dependency which provides no behavior.
+However CMake doesn't know this and the <code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code> tests will fail to
+configure and build if CMake cannot find all required dependencies.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TransitiveDep</span></code> package has already been installed to the
+<code class="docutils literal notranslate"><span class="pre">Step10/install</span></code> tree. We do not need to install it as we did with
+<code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>.</p>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">6</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">8</span></code>.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>We need to reinstall the SimpleTest framework. Navigate to the
+<code class="docutils literal notranslate"><span class="pre">Help/guide/Step10/SimpleTest</span></code> directory and run the same commands as before.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --install build</span>
+</pre></div>
+</div>
+<p>Now we can reconfigure and rebuild the <code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code>, navigate to
+<code class="docutils literal notranslate"><span class="pre">Help/guide/Step10/TutorialProject</span></code> and perform the usual steps to do so.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>If the build passed we have likely successfully propagated the transitive
+dependency. Verify this by searching the <code class="docutils literal notranslate"><span class="pre">CMakeCache.txt</span></code> of
+<code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code> for an entry named <code class="docutils literal notranslate"><span class="pre">TransitiveDep_DIR</span></code>. This demonstrates
+the <code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code> searched for an found <code class="docutils literal notranslate"><span class="pre">TransitiveDep</span></code> even though it
+has no direct requirement for it.</p>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>First we call <span class="target" id="index-13-command:find_package"></span><a class="reference internal" href="../../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> to discover the <code class="docutils literal notranslate"><span class="pre">TransitiveDep</span></code> package.
+We use <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code> to verify we have found <code class="docutils literal notranslate"><span class="pre">TransitiveDep</span></code>.</p>
+<details><summary>TODO 6 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="simpletest-cmakelists-txt-find-package">
+<div class="code-block-caption"><span class="caption-text">TODO 6: SimpleTest/CMakeLists.txt</span><a class="headerlink" href="#simpletest-cmakelists-txt-find-package" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">TransitiveDep</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Next we add the <code class="docutils literal notranslate"><span class="pre">TransitiveDep::TransitiveDep</span></code> target to <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>.</p>
+<details><summary>TODO 7 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="simpletest-cmakelists-txt-link-transitive-dep">
+<div class="code-block-caption"><span class="caption-text">TODO 7: SimpleTest/CMakeLists.txt</span><a class="headerlink" href="#simpletest-cmakelists-txt-link-transitive-dep" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">SimpleTest</span>
+<span class="w">  </span><span class="no">INTERFACE</span>
+<span class="w">    </span><span class="nb">TransitiveDep</span><span class="o">::</span><span class="nb">TransitiveDep</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If we built <code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code> at this point, we would expect the
+configuration to fail due to the <code class="docutils literal notranslate"><span class="pre">TransitiveDep::TransitiveDep</span></code> target
+being unavailable inside that project.</p>
+</div>
+<p>Finally, we include the <span class="target" id="index-4-module:CMakeFindDependencyMacro"></span><a class="reference internal" href="../../module/CMakeFindDependencyMacro.html#module:CMakeFindDependencyMacro" title="CMakeFindDependencyMacro"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">CMakeFindDependencyMacro</span></code></a> and call
+<span class="target" id="index-5-module:CMakeFindDependencyMacro"></span><a class="reference internal" href="../../module/CMakeFindDependencyMacro.html#module:CMakeFindDependencyMacro" title="CMakeFindDependencyMacro"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">find_dependency()</span></code></a> inside the <code class="docutils literal notranslate"><span class="pre">SimpleTest</span></code>
+package config file to propagate the transitive dependency.</p>
+<details><summary>TODO 8 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="simpletest-cmake-simpletestconfig-cmake-find-dependency">
+<div class="code-block-caption"><span class="caption-text">TODO 8: SimpleTest/cmake/SimpleTestConfig.cmake</span><a class="headerlink" href="#simpletest-cmake-simpletestconfig-cmake-find-dependency" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeFindDependencyMacro</span><span class="nf">)</span>
+<span class="nf">find_dependency(</span><span class="nb">TransitiveDep</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+
+</details></section>
+</section>
+<section id="exercise-3-finding-other-kinds-of-files">
+<h2>Exercise 3 - Finding Other Kinds of Files<a class="headerlink" href="#exercise-3-finding-other-kinds-of-files" title="Link to this heading">¶</a></h2>
+<p>In a perfect world every dependency we care about would be packaged correctly,
+or at least some other developer would have written a module that discovers it
+for us. We do not live in a perfect world, and sometimes we will have to get
+our hands dirty and discover build requirements manually.</p>
+<p>For this we have the other find commands enumerated earlier in the step, such
+as <span class="target" id="index-1-command:find_path"></span><a class="reference internal" href="../../command/find_path.html#command:find_path" title="find_path"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_path()</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_path(</span><span class="nb">PackageIncludeFolder</span><span class="w"> </span><span class="nb">Package.h</span><span class="w"> </span><span class="no">REQUIRED</span>
+<span class="w">  </span><span class="no">PATH_SUFFIXES</span>
+<span class="w">    </span><span class="nb">Package</span>
+<span class="nf">)</span>
+<span class="nf">target_include_directories(</span><span class="nb">MyApp</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="o">${</span><span class="nt">PackageIncludeFolder</span><span class="o">}</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<section id="id7">
+<h3>Goal<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>Add an unpackaged header to the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable of the
+<code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code>.</p>
+</section>
+<section id="id8">
+<h3>Helpful Resources<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-2-command:find_path"></span><a class="reference internal" href="../../command/find_path.html#command:find_path" title="find_path"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_path()</span></code></a></p></li>
+<li><p><span class="target" id="index-1-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Files to Edit<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TutorialProject/Tutorial/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TutorialProject/Tutorial/Tutorial.cxx</span></code></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Getting Started<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>For this step we will only be editing the <code class="docutils literal notranslate"><span class="pre">TutorialProject</span></code> project. The
+unpackaged header, <code class="docutils literal notranslate"><span class="pre">Unpackaged/Unpackaged.h</span></code> has already been installed to the
+<code class="docutils literal notranslate"><span class="pre">Step10/install</span></code> tree.</p>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">9</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">11</span></code>.</p>
+</section>
+<section id="id11">
+<h3>Build and Run<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>There are no special build steps for this exercise, navigate to
+<code class="docutils literal notranslate"><span class="pre">Help/guide/Step10/TutorialProject</span></code> and perform the usual build.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>If the build passed we have successfully added the <code class="docutils literal notranslate"><span class="pre">Unpackaged</span></code> include
+directory to the project.</p>
+</section>
+<section id="id12">
+<h3>Solution<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>First we call <span class="target" id="index-3-command:find_path"></span><a class="reference internal" href="../../command/find_path.html#command:find_path" title="find_path"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_path()</span></code></a> to discover the <code class="docutils literal notranslate"><span class="pre">Unpackaged</span></code> include
+directory. We use <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code> because building <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> will fail if
+we cannot locate the <code class="docutils literal notranslate"><span class="pre">Unpackaged.h</span></code> header.</p>
+<details><summary>TODO 9 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-tutorial-cmakelists-txt-find-path">
+<div class="code-block-caption"><span class="caption-text">TODO 9: TutorialProject/Tutorial/CMakeLists.txt</span><a class="headerlink" href="#tutorialproject-tutorial-cmakelists-txt-find-path" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_path(</span><span class="nb">UnpackagedIncludeFolder</span><span class="w"> </span><span class="nb">Unpackaged.h</span><span class="w"> </span><span class="no">REQUIRED</span>
+<span class="w">  </span><span class="no">PATH_SUFFIXES</span>
+<span class="w">    </span><span class="nb">Unpackaged</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Next we add the discovered path to <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> using
+<span class="target" id="index-2-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a>.</p>
+<details><summary>TODO 10 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-tutorial-cmakelists-txt-target-include-directories">
+<div class="code-block-caption"><span class="caption-text">TODO 10: TutorialProject/Tutorial/CMakeLists.txt</span><a class="headerlink" href="#tutorialproject-tutorial-cmakelists-txt-target-include-directories" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_include_directories(</span><span class="nb">Tutorial</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="o">${</span><span class="nt">UnpackagedIncludeFolder</span><span class="o">}</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally, we edit <code class="docutils literal notranslate"><span class="pre">Tutorial.cxx</span></code> to include the discovered header.</p>
+<details><summary>TODO 11 Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorialproject-tutorial-tutorial-cxx-include-unpackaged">
+<div class="code-block-caption"><span class="caption-text">TODO 11: TutorialProject/Tutorial/Tutorial.cxx</span><a class="headerlink" href="#tutorialproject-tutorial-tutorial-cxx-include-unpackaged" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;MathFunctions.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Unpackaged.h&gt;</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 10: Finding Dependencies</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-using-find-package">Exercise 1 - Using <code class="docutils literal notranslate"><span class="pre">find_package()</span></code></a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-transitive-dependencies">Exercise 2 - Transitive Dependencies</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-3-finding-other-kinds-of-files">Exercise 3 - Finding Other Kinds of Files</a><ul>
+<li><a class="reference internal" href="#id7">Goal</a></li>
+<li><a class="reference internal" href="#id8">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id9">Files to Edit</a></li>
+<li><a class="reference internal" href="#id10">Getting Started</a></li>
+<li><a class="reference internal" href="#id11">Build and Run</a></li>
+<li><a class="reference internal" href="#id12">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Installation%20Commands%20and%20Concepts.html"
+                          title="previous chapter">Step 9: Installation Commands and Concepts</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Miscellaneous%20Features.html"
+                          title="next chapter">Step 11: Miscellaneous Features</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/Finding Dependencies.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Miscellaneous%20Features.html" title="Step 11: Miscellaneous Features"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Installation%20Commands%20and%20Concepts.html" title="Step 9: Installation Commands and Concepts"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 10: Finding Dependencies</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

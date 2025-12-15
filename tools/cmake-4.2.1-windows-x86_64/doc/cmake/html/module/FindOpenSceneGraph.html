@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindOpenSceneGraph &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindOpenSP" href="FindOpenSP.html" />
+    <link rel="prev" title="FindOpenMP" href="FindOpenMP.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindOpenSP.html" title="FindOpenSP"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindOpenMP.html" title="FindOpenMP"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindOpenSceneGraph</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findopenscenegraph">
+<span id="module:FindOpenSceneGraph"></span><h1>FindOpenSceneGraph<a class="headerlink" href="#findopenscenegraph" title="Link to this heading">¶</a></h1>
+<p>Finds <a class="reference external" href="https://openscenegraph.github.io/openscenegraph.io/">OpenSceneGraph</a> (OSG), a 3D graphics application programming interface:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">OpenSceneGraph</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>OpenSceneGraph development has largely transitioned to its successor project,
+VulkanSceneGraph, which should be preferred for new code.  Refer to the
+upstream documentation for guidance on using VulkanSceneGraph with CMake.</p>
+</div>
+<p>This module searches for the OpenSceneGraph core osg library, its dependency
+OpenThreads, and additional OpenSceneGraph libraries, some of which are also
+known as <em>NodeKits</em>, if specified.</p>
+<p>When working with OpenSceneGraph, its core library headers are intended to be
+included in C++ project source code as:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">example.cxx</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;osg/PositionAttitudeTransform&gt;</span>
+</pre></div>
+</div>
+</div>
+<p>Headers for the OpenSceneGraph libraries and NodeKits follow a similar inclusion
+structure, for example:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">example.cxx</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;osgAnimation/Animation&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;osgDB/DatabasePager&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;osgFX/BumpMapping&gt;</span>
+<span class="c1">// ...</span>
+</pre></div>
+</div>
+</div>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
+<p>OpenSceneGraph toolkit consists of the core library osg, and additional
+libraries, which can be optionally specified as components with the
+<span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">OpenSceneGraph</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;components&gt;...</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Supported components include:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">osg</span></code></dt><dd><p>Finds the core osg library (<code class="docutils literal notranslate"><span class="pre">libosg</span></code>), required to use OpenSceneGraph.
+This component is always automatically implied.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OpenThreads</span></code></dt><dd><p>Finds the dependent OpenThreads library (<code class="docutils literal notranslate"><span class="pre">libOpenThreads</span></code>) via the
+<span class="target" id="index-0-module:FindOpenThreads"></span><a class="reference internal" href="FindOpenThreads.html#module:FindOpenThreads" title="FindOpenThreads"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindOpenThreads</span></code></a> module.  This component is always automatically
+implied as it is required to use OpenSceneGraph.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgAnimation</span></code></dt><dd><p>Finds the osgAnimation library, which provides general purpose utility classes
+for animation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgDB</span></code></dt><dd><p>Finds the osgDB library for reading and writing scene graphs support.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgFX</span></code></dt><dd><p>Finds the osgFX NodeKit, which provides a framework for implementing special
+effects.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgGA</span></code></dt><dd><p>Finds the osgGA (GUI Abstraction) library, which provides facilities to work
+with varying window systems.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgIntrospection</span></code></dt><dd><p>Finds the osgIntrospection library, which provides a reflection framework for
+accessing and invoking class properties and methods at runtime without
+modifying the classes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The osgIntrospection library has been removed from the OpenSceneGraph
+toolkit as of OpenSceneGraph version 3.0.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgManipulator</span></code></dt><dd><p>Finds the osgManipulator NodeKit, which provides support for 3D interactive
+manipulators.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgParticle</span></code></dt><dd><p>Finds the osgParticle NodeKit, which provides support for particle effects.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgPresentation</span></code></dt><dd><p>Finds the osgPresentation NodeKit, which provides support for 3D scene graph
+based presentations.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This NodeKit has been added in OpenSceneGraph 3.0.0.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgProducer</span></code></dt><dd><p>Finds the osgProducer utility library, which provides functionality for window
+management and event handling.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The osgProducer has been removed from early versions of OpenSceneGraph
+toolkit 1.x, and has been superseded by the osgViewer library.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgQt</span></code></dt><dd><p>Finds the osgQt utility library, which provides various classes to aid the
+integration of Qt.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of OpenSceneGraph version 3.6, this library has been moved to its own
+repository.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgShadow</span></code></dt><dd><p>Finds the osgShadow NodeKit, which provides support for a range of shadow
+techniques.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgSim</span></code></dt><dd><p>Finds the osgSim NodeKit, which adds support for simulation features like
+navigation lights and OpenFlight-style movement controls.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgTerrain</span></code></dt><dd><p>Finds the osgTerrain NodeKit, which provides geospecifc terrain rendering
+support.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgText</span></code></dt><dd><p>Finds the osgText NodeKit, which provides high quality text support.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgUtil</span></code></dt><dd><p>Finds the osgUtil library, which provides general-purpose utilities like
+update, cull, and draw traversals, as well as scene graph tools such as
+optimization, triangle stripping, and tessellation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgViewer</span></code></dt><dd><p>Finds the osgViewer library, which provides high level viewer functionality.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgVolume</span></code></dt><dd><p>Finds the osgVolume NodeKit, which provides volume rendering support.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">osgWidget</span></code></dt><dd><p>Finds the osgWidget NodeKit, which provides support for 2D and 3D GUI widget
+sets.</p>
+</dd>
+</dl>
+<p>If no components are specified, this module searches for the <code class="docutils literal notranslate"><span class="pre">osg</span></code> and
+<code class="docutils literal notranslate"><span class="pre">OpenThreads</span></code> components by default.</p>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">OpenSceneGraph_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3.</span></p>
+</div>
+<p>Boolean indicating whether (the requested version of) OpenSceneGraph with
+all specified components was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OpenSceneGraph_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>The version of OpenSceneGraph found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OPENSCENEGRAPH_INCLUDE_DIRS</span></code></dt><dd><p>Include directories containing headers needed to use OpenSceneGraph.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OPENSCENEGRAPH_LIBRARIES</span></code></dt><dd><p>Libraries needed to link against to use OpenSceneGraph.</p>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">OpenSceneGraph_DEBUG</span></code></dt><dd><p>Set this variable to boolean true to enable debugging output by this module.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OpenSceneGraph_MARK_AS_ADVANCED</span></code></dt><dd><p>Set this variable to boolean true to mark cache variables of this module as
+advanced automatically.</p>
+</dd>
+</dl>
+<p>To help this module find OpenSceneGraph and its various components installed in
+custom location, <span class="target" id="index-0-variable:CMAKE_PREFIX_PATH"></span><a class="reference internal" href="../variable/CMAKE_PREFIX_PATH.html#variable:CMAKE_PREFIX_PATH" title="CMAKE_PREFIX_PATH"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code></a> variable can be used.
+Additionally, the following variables are also respected:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;COMPONENT&gt;_DIR</span></code></dt><dd><p>Environment or CMake variable that can be set to the root of the OSG common
+installation, where <code class="docutils literal notranslate"><span class="pre">&lt;COMPONENT&gt;</span></code> is the uppercase form of component listed
+above.  For example, <code class="docutils literal notranslate"><span class="pre">OSGVOLUME_DIR</span></code> to find the <code class="docutils literal notranslate"><span class="pre">osgVolume</span></code> component.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OSG_DIR</span></code></dt><dd><p>Environment or CMake variable that can be set to influence detection of
+OpenSceneGraph installation root location as a whole.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OSGDIR</span></code></dt><dd><p>Environment variable treated the same as <code class="docutils literal notranslate"><span class="pre">OSG_DIR</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OSG_ROOT</span></code></dt><dd><p>Environment variable treated the same as <code class="docutils literal notranslate"><span class="pre">OSG_DIR</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">OPENSCENEGRAPH_FOUND</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Use <code class="docutils literal notranslate"><span class="pre">OpenSceneGraph_FOUND</span></code>, which has the same value.</p>
+</div>
+<p>Boolean indicating whether (the requested version of) OpenSceneGraph with
+all specified components was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OPENSCENEGRAPH_VERSION</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Superseded by the <code class="docutils literal notranslate"><span class="pre">OpenSceneGraph_VERSION</span></code>.</p>
+</div>
+<p>The version of OpenSceneGraph found.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Finding the OpenSceneGraph with <code class="docutils literal notranslate"><span class="pre">osgDB</span></code> and <code class="docutils literal notranslate"><span class="pre">osgUtil</span></code> libraries specified as
+components and creating an interface <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">imported target</span></a>
+that encapsulates its usage requirements for linking to a project target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">OpenSceneGraph</span><span class="w"> </span><span class="m">2.0.0</span><span class="w"> </span><span class="no">REQUIRED</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">osgDB</span><span class="w"> </span><span class="nb">osgUtil</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">OpenSceneGraph_FOUND</span><span class="w"> </span><span class="no">AND</span><span class="w"> </span><span class="no">NOT</span><span class="w"> </span><span class="no">TARGET</span><span class="w"> </span><span class="nb">OpenSceneGraph</span><span class="o">::</span><span class="nb">OpenSceneGraph</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">add_library(</span><span class="nb">OpenSceneGraph</span><span class="o">::</span><span class="nb">OpenSceneGraph</span><span class="w"> </span><span class="no">INTERFACE</span><span class="w"> </span><span class="no">IMPORTED</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">set_target_properties(</span>
+<span class="w">    </span><span class="nb">OpenSceneGraph</span><span class="o">::</span><span class="nb">OpenSceneGraph</span>
+<span class="w">    </span><span class="no">PROPERTIES</span>
+<span class="w">      </span><span class="no">INTERFACE_INCLUDE_DIRECTORIES</span><span class="w"> </span><span class="s">&quot;${OPENSCENEGRAPH_INCLUDE_DIRS}&quot;</span>
+<span class="w">      </span><span class="no">INTERFACE_LINK_LIBRARIES</span><span class="w"> </span><span class="s">&quot;${OPENSCENEGRAPH_LIBRARIES}&quot;</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">add_executable(</span><span class="nb">example</span><span class="w"> </span><span class="nb">example.cxx</span><span class="nf">)</span>
+
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">OpenSceneGraph</span><span class="o">::</span><span class="nb">OpenSceneGraph</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<p>The following OpenSceneGraph-related helper find modules are used internally by
+this module when finding specific OpenSceneGraph components.  These modules are
+not intended to be included or invoked directly by project code during typical
+use of <code class="docutils literal notranslate"><span class="pre">find_package(OpenSceneGraph)</span></code>.  However, they can be useful for
+advanced scenarios where finer control over component detection is needed.  For
+example, to find them explicitly and override or bypass detection of specific
+OpenSceneGraph components:</p>
+<ul class="simple">
+<li><p>The <span class="target" id="index-0-module:Findosg"></span><a class="reference internal" href="Findosg.html#module:Findosg" title="Findosg"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">Findosg</span></code></a> module to find the core osg library.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgAnimation"></span><a class="reference internal" href="FindosgAnimation.html#module:FindosgAnimation" title="FindosgAnimation"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgAnimation</span></code></a> module to find osgAnimation.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgDB"></span><a class="reference internal" href="FindosgDB.html#module:FindosgDB" title="FindosgDB"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgDB</span></code></a> module to find osgDB.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgFX"></span><a class="reference internal" href="FindosgFX.html#module:FindosgFX" title="FindosgFX"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgFX</span></code></a> module to find osgDB.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgGA"></span><a class="reference internal" href="FindosgGA.html#module:FindosgGA" title="FindosgGA"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgGA</span></code></a> module to find osgGA.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgIntrospection"></span><a class="reference internal" href="FindosgIntrospection.html#module:FindosgIntrospection" title="FindosgIntrospection"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgIntrospection</span></code></a> module to find osgIntrospection.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgManipulator"></span><a class="reference internal" href="FindosgManipulator.html#module:FindosgManipulator" title="FindosgManipulator"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgManipulator</span></code></a> module to find osgManipulator.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgParticle"></span><a class="reference internal" href="FindosgParticle.html#module:FindosgParticle" title="FindosgParticle"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgParticle</span></code></a> module to find osgParticle.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgPresentation"></span><a class="reference internal" href="FindosgPresentation.html#module:FindosgPresentation" title="FindosgPresentation"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgPresentation</span></code></a> module to find osgPresentation.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgProducer"></span><a class="reference internal" href="FindosgProducer.html#module:FindosgProducer" title="FindosgProducer"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgProducer</span></code></a> module to find osgProducer.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgQt"></span><a class="reference internal" href="FindosgQt.html#module:FindosgQt" title="FindosgQt"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgQt</span></code></a> module to find osgQt.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgShadow"></span><a class="reference internal" href="FindosgShadow.html#module:FindosgShadow" title="FindosgShadow"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgShadow</span></code></a> module to find osgShadow.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgSim"></span><a class="reference internal" href="FindosgSim.html#module:FindosgSim" title="FindosgSim"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgSim</span></code></a> module to find osgSim.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgTerrain"></span><a class="reference internal" href="FindosgTerrain.html#module:FindosgTerrain" title="FindosgTerrain"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgTerrain</span></code></a> module to find osgTerrain.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgText"></span><a class="reference internal" href="FindosgText.html#module:FindosgText" title="FindosgText"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgText</span></code></a> module to find osgText.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgUtil"></span><a class="reference internal" href="FindosgUtil.html#module:FindosgUtil" title="FindosgUtil"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgUtil</span></code></a> module to find osgUtil.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgViewer"></span><a class="reference internal" href="FindosgViewer.html#module:FindosgViewer" title="FindosgViewer"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgViewer</span></code></a> module to find osgViewer.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgVolume"></span><a class="reference internal" href="FindosgVolume.html#module:FindosgVolume" title="FindosgVolume"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgVolume</span></code></a> module to find osgVolume.</p></li>
+<li><p>The <span class="target" id="index-0-module:FindosgWidget"></span><a class="reference internal" href="FindosgWidget.html#module:FindosgWidget" title="FindosgWidget"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindosgWidget</span></code></a> module to find osgWidget.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindOpenSceneGraph</a><ul>
+<li><a class="reference internal" href="#components">Components</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindOpenMP.html"
+                          title="previous chapter">FindOpenMP</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindOpenSP.html"
+                          title="next chapter">FindOpenSP</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindOpenSceneGraph.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindOpenSP.html" title="FindOpenSP"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindOpenMP.html" title="FindOpenMP"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindOpenSceneGraph</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

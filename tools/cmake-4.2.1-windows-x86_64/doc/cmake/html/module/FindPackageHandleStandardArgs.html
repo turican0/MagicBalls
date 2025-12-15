@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindPackageHandleStandardArgs &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindPackageMessage" href="FindPackageMessage.html" />
+    <link rel="prev" title="FetchContent" href="FetchContent.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindPackageMessage.html" title="FindPackageMessage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FetchContent.html" title="FetchContent"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindPackageHandleStandardArgs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findpackagehandlestandardargs">
+<span id="module:FindPackageHandleStandardArgs"></span><h1>FindPackageHandleStandardArgs<a class="headerlink" href="#findpackagehandlestandardargs" title="Link to this heading">¶</a></h1>
+<p>This module provides commands intended for use in <a class="reference internal" href="../manual/cmake-developer.7.html#find-modules"><span class="std std-ref">Find Modules</span></a>
+implementing <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package(&lt;packagename&gt;)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package(&lt;PackageName&gt;)</span></code></a> calls.</p>
+<p>Load this module in a CMake find module with:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindFoo.cmake</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">FindPackageHandleStandardArgs</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following commands:</p>
+<ul class="simple">
+<li><p><span class="target" id="index-0-command:find_package_handle_standard_args"></span><a class="reference internal" href="#command:find_package_handle_standard_args" title="find_package_handle_standard_args"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package_handle_standard_args()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:find_package_check_version"></span><a class="reference internal" href="#command:find_package_check_version" title="find_package_check_version"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package_check_version()</span></code></a></p></li>
+</ul>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:find_package_handle_standard_args">
+<span class="sig-name descname"><span class="pre">find_package_handle_standard_args</span></span><a class="headerlink" href="#command:find_package_handle_standard_args" title="Link to this definition">¶</a></dt>
+<dd><p>Handles the <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code>, <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> and version-related arguments of
+<span class="target" id="index-1-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a>.</p>
+<p>There are two signatures:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package_handle_standard_args(</span>
+<span class="w">  </span><span class="nv">&lt;PackageName&gt;</span>
+<span class="w">  </span><span class="nf">(</span><span class="no">DEFAULT_MSG</span><span class="p">|</span><span class="nv">&lt;custom-failure-message&gt;</span><span class="nf">)</span>
+<span class="w">  </span><span class="nv">&lt;required-vars&gt;...</span>
+<span class="nf">)</span>
+
+<span class="nf">find_package_handle_standard_args(</span>
+<span class="w">  </span><span class="nv">&lt;PackageName&gt;</span>
+<span class="w">  </span><span class="p">[</span><span class="no">REQUIRED_VARS</span><span class="w"> </span><span class="nv">&lt;required-vars&gt;...</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">VERSION_VAR</span><span class="w"> </span><span class="nv">&lt;version-var&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">HANDLE_VERSION_RANGE</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">HANDLE_COMPONENTS</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">CONFIG_MODE</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">NAME_MISMATCHED</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">REASON_FAILURE_MESSAGE</span><span class="w"> </span><span class="nv">&lt;reason-failure-message&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">FAIL_MESSAGE</span><span class="w"> </span><span class="nv">&lt;custom-failure-message&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">FOUND_VAR</span><span class="w"> </span><span class="nv">&lt;result-var&gt;</span><span class="p">]</span><span class="w"> </span><span class="c"># Deprecated</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command sets the <code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;_FOUND</span></code> variable to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> if all
+the variables listed in <code class="docutils literal notranslate"><span class="pre">&lt;required-vars&gt;...</span></code> contain valid results
+(e.g., valid filepaths) and any optional constraints are satisfied, and
+<code class="docutils literal notranslate"><span class="pre">FALSE</span></code> otherwise.  A success or failure message may be displayed based
+on the results and on whether the <code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code> and/or <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> option
+was given to the <span class="target" id="index-2-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> call.</p>
+<p>The arguments are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;</span></code></dt><dd><p>The name of the package.  For example, as written in the
+<code class="docutils literal notranslate"><span class="pre">Find&lt;PackageName&gt;.cmake</span></code> find module filename.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">(DEFAULT_MSG|&lt;custom-failure-message&gt;)</span></code></dt><dd><p>In the simple signature this specifies the failure message.
+Use <code class="docutils literal notranslate"><span class="pre">DEFAULT_MSG</span></code> to ask for a default message to be computed
+(recommended).  Not valid in the full signature.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">REQUIRED_VARS</span> <span class="pre">&lt;required-vars&gt;...</span></code></dt><dd><p>Specify the variables which are required for this package.
+These may be named in the generated failure message asking the
+user to set the missing variable values.  Therefore these should
+typically be cache entries such as <code class="docutils literal notranslate"><span class="pre">Foo_LIBRARY</span></code> and not output
+variables like <code class="docutils literal notranslate"><span class="pre">Foo_LIBRARIES</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.18: </span>If <code class="docutils literal notranslate"><span class="pre">HANDLE_COMPONENTS</span></code> is specified, this option can be omitted.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">VERSION_VAR</span> <span class="pre">&lt;version-var&gt;</span></code></dt><dd><p>Specify the name of a variable that holds the version of the package
+that has been found.  This version will be checked against the
+(potentially) specified required version given to the
+<span class="target" id="index-3-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> call, including its <code class="docutils literal notranslate"><span class="pre">EXACT</span></code> option.
+The default messages include information about the required
+version and the version which has been actually found, both
+if the version is ok or not.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HANDLE_VERSION_RANGE</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Enable handling of a version range, if one is specified. Without this
+option, a developer warning will be displayed if a version range is
+specified.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HANDLE_COMPONENTS</span></code></dt><dd><p>Enable handling of package components.  In this case, the command
+will report which components have been found and which are missing,
+and the <code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;_FOUND</span></code> variable will be set to <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>
+if any of the required components (i.e. not the ones listed after
+the <code class="docutils literal notranslate"><span class="pre">OPTIONAL_COMPONENTS</span></code> option of <span class="target" id="index-4-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a>) are
+missing.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CONFIG_MODE</span></code></dt><dd><p>Specify that the calling find module is a wrapper around a
+call to <code class="docutils literal notranslate"><span class="pre">find_package(&lt;PackageName&gt;</span> <span class="pre">NO_MODULE)</span></code>.  This implies
+a <code class="docutils literal notranslate"><span class="pre">VERSION_VAR</span></code> value of <code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;_VERSION</span></code>.  The command
+will automatically check whether the package configuration file
+was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NAME_MISMATCHED</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.17.</span></p>
+</div>
+<p>Indicate that the <code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;</span></code> does not match the value of
+<span class="target" id="index-0-variable:CMAKE_FIND_PACKAGE_NAME"></span><a class="reference internal" href="../variable/CMAKE_FIND_PACKAGE_NAME.html#variable:CMAKE_FIND_PACKAGE_NAME" title="CMAKE_FIND_PACKAGE_NAME"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_FIND_PACKAGE_NAME</span></code></a> variable. This is usually a mistake
+and raises a warning, but it may be intentional for usage of the
+command for components of a larger package.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">REASON_FAILURE_MESSAGE</span> <span class="pre">&lt;reason-failure-message&gt;</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.16.</span></p>
+</div>
+<p>Specify a custom message of the reason for the failure which will be
+appended to the default generated message.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FAIL_MESSAGE</span> <span class="pre">&lt;custom-failure-message&gt;</span></code></dt><dd><p>Specify a custom failure message instead of using the default
+generated message.  Not recommended.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FOUND_VAR</span> <span class="pre">&lt;result-var&gt;</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.3: </span>This option should no longer be used.</p>
+</div>
+<p>Specifies either <code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;_FOUND</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;PACKAGENAME&gt;_FOUND</span></code> as the
+result variable.  This exists only for backward compatibility with older
+versions of CMake and is now ignored.  Result variables of both names are
+now always set for compatibility also with or without this option.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">&lt;PackageName&gt;</span></code> does not match <span class="target" id="index-1-variable:CMAKE_FIND_PACKAGE_NAME"></span><a class="reference internal" href="../variable/CMAKE_FIND_PACKAGE_NAME.html#variable:CMAKE_FIND_PACKAGE_NAME" title="CMAKE_FIND_PACKAGE_NAME"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_FIND_PACKAGE_NAME</span></code></a>
+for the calling module, a warning that there is a mismatch is given.  The
+<code class="docutils literal notranslate"><span class="pre">FPHSA_NAME_MISMATCHED</span></code> variable may be set to bypass the warning if using
+the old signature and the <code class="docutils literal notranslate"><span class="pre">NAME_MISMATCHED</span></code> argument using the new
+signature.  To avoid forcing the caller to require newer versions of CMake
+for usage, the variable's value will be used if defined when the
+<code class="docutils literal notranslate"><span class="pre">NAME_MISMATCHED</span></code> argument is not passed for the new signature (but using
+both is an error).</p>
+</div>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:find_package_check_version">
+<span class="sig-name descname"><span class="pre">find_package_check_version</span></span><a class="headerlink" href="#command:find_package_check_version" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.19.</span></p>
+</div>
+<p>Checks if a given version is valid against the version-related arguments
+of <span class="target" id="index-5-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package_check_version(</span>
+<span class="w">  </span><span class="nv">&lt;version&gt;</span>
+<span class="w">  </span><span class="nv">&lt;result-var&gt;</span>
+<span class="w">  </span><span class="p">[</span><span class="no">HANDLE_VERSION_RANGE</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">RESULT_MESSAGE_VARIABLE</span><span class="w"> </span><span class="nv">&lt;message-var&gt;</span><span class="p">]</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;version&gt;</span></code></dt><dd><p>The version string to check.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;result-var&gt;</span></code></dt><dd><p>Name of the result variable that will hold a boolean value giving the
+result of the check.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HANDLE_VERSION_RANGE</span></code></dt><dd><p>Enable handling of a version range, if one is specified.  Without this
+option, a developer warning will be displayed if a version range is
+specified.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RESULT_MESSAGE_VARIABLE</span> <span class="pre">&lt;message-var&gt;</span></code></dt><dd><p>Specify a variable to get back a message describing the result of the check.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="examples-full-signature">
+<h3>Examples: Full Signature<a class="headerlink" href="#examples-full-signature" title="Link to this heading">¶</a></h3>
+<p>Example for using a full signature of <code class="docutils literal notranslate"><span class="pre">find_package_handle_standard_args()</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindLibArchive.cmake</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">FindPackageHandleStandardArgs</span><span class="nf">)</span>
+<span class="nf">find_package_handle_standard_args(</span>
+<span class="w">  </span><span class="nb">LibArchive</span>
+<span class="w">  </span><span class="no">REQUIRED_VARS</span><span class="w"> </span><span class="nb">LibArchive_LIBRARY</span><span class="w"> </span><span class="nb">LibArchive_INCLUDE_DIR</span>
+<span class="w">  </span><span class="no">VERSION_VAR</span><span class="w"> </span><span class="nb">LibArchive_VERSION</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>In this case, the <code class="docutils literal notranslate"><span class="pre">LibArchive</span></code> package is considered to be found if
+both <code class="docutils literal notranslate"><span class="pre">LibArchive_LIBRARY</span></code> and <code class="docutils literal notranslate"><span class="pre">LibArchive_INCLUDE_DIR</span></code> are valid.
+Also the version of <code class="docutils literal notranslate"><span class="pre">LibArchive</span></code> will be checked by using the version
+contained in <code class="docutils literal notranslate"><span class="pre">LibArchive_VERSION</span></code>.  Since no <code class="docutils literal notranslate"><span class="pre">FAIL_MESSAGE</span></code> is given,
+the default messages will be printed.</p>
+<p>Another example for the full signature of
+<code class="docutils literal notranslate"><span class="pre">find_package_handle_standard_args()</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindAutomoc4.cmake</span></code></span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Automoc4</span><span class="w"> </span><span class="no">QUIET</span><span class="w"> </span><span class="no">NO_MODULE</span><span class="w"> </span><span class="no">HINTS</span><span class="w"> </span><span class="na">/opt/automoc4</span><span class="nf">)</span>
+
+<span class="nf">include(</span><span class="nb">FindPackageHandleStandardArgs</span><span class="nf">)</span>
+<span class="nf">find_package_handle_standard_args(</span><span class="nb">Automoc4</span><span class="w"> </span><span class="no">CONFIG_MODE</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>In this case, a <code class="docutils literal notranslate"><span class="pre">FindAutomoc4.cmake</span></code> module wraps a call to
+<code class="docutils literal notranslate"><span class="pre">find_package(Automoc4</span> <span class="pre">NO_MODULE)</span></code> and adds an additional search
+directory for <code class="docutils literal notranslate"><span class="pre">automoc4</span></code>.  Then the call to
+<code class="docutils literal notranslate"><span class="pre">find_package_handle_standard_args()</span></code> produces a proper success/failure
+message.</p>
+</section>
+<section id="example-simple-signature">
+<h3>Example: Simple Signature<a class="headerlink" href="#example-simple-signature" title="Link to this heading">¶</a></h3>
+<p>Example for using a simple signature of <code class="docutils literal notranslate"><span class="pre">find_package_handle_standard_args()</span></code>:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindLibXml2.cmake</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">FindPackageHandleStandardArgs</span><span class="nf">)</span>
+<span class="nf">find_package_handle_standard_args(</span>
+<span class="w">  </span><span class="nb">LibXml2</span>
+<span class="w">  </span><span class="no">DEFAULT_MSG</span>
+<span class="w">  </span><span class="no">LIBXML2_LIBRARY</span><span class="w"> </span><span class="no">LIBXML2_INCLUDE_DIR</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">LibXml2</span></code> package is considered to be found if both
+<code class="docutils literal notranslate"><span class="pre">LIBXML2_LIBRARY</span></code> and <code class="docutils literal notranslate"><span class="pre">LIBXML2_INCLUDE_DIR</span></code> variables are valid.  Then
+also <code class="docutils literal notranslate"><span class="pre">LibXml2_FOUND</span></code> is set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>.  If it is not found and
+<code class="docutils literal notranslate"><span class="pre">REQUIRED</span></code> was used, it fails with a <span class="target" id="index-0-command:message"></span><a class="reference internal" href="../command/message.html#command:message" title="message(fatal_error)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">message(FATAL_ERROR)</span></code></a>,
+independent whether <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> was used or not.  If it is found, success will
+be reported, including the content of the first required variable specified
+in <code class="docutils literal notranslate"><span class="pre">&lt;required-vars&gt;...</span></code>.  On repeated CMake runs, the same message will
+not be printed again.</p>
+</section>
+<section id="example-checking-version">
+<h3>Example: Checking Version<a class="headerlink" href="#example-checking-version" title="Link to this heading">¶</a></h3>
+<p>Example for the <code class="docutils literal notranslate"><span class="pre">find_package_check_version()</span></code> usage:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">FindFoo.cmake</span></code></span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">FindPackageHandleStandardArgs</span><span class="nf">)</span>
+<span class="nf">find_package_check_version(</span>
+<span class="w">  </span><span class="m">1.2.3</span>
+<span class="w">  </span><span class="nb">result</span>
+<span class="w">  </span><span class="no">HANDLE_VERSION_RANGE</span>
+<span class="w">  </span><span class="no">RESULT_MESSAGE_VARIABLE</span><span class="w"> </span><span class="nb">reason</span>
+<span class="nf">)</span>
+<span class="nf">if(</span><span class="nb">result</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="no">STATUS</span><span class="w"> </span><span class="s">&quot;${reason}&quot;</span><span class="nf">)</span>
+<span class="nf">else()</span>
+<span class="w">  </span><span class="c"># Logic when version check is not successful.</span>
+<span class="w">  </span><span class="nf">message(</span><span class="no">WARNING</span><span class="w"> </span><span class="s">&quot;${reason}&quot;</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../manual/cmake-developer.7.html#find-modules"><span class="std std-ref">Find Modules</span></a> for details how to write a find module.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindPackageHandleStandardArgs</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#examples-full-signature">Examples: Full Signature</a></li>
+<li><a class="reference internal" href="#example-simple-signature">Example: Simple Signature</a></li>
+<li><a class="reference internal" href="#example-checking-version">Example: Checking Version</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FetchContent.html"
+                          title="previous chapter">FetchContent</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindPackageMessage.html"
+                          title="next chapter">FindPackageMessage</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindPackageHandleStandardArgs.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindPackageMessage.html" title="FindPackageMessage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FetchContent.html" title="FetchContent"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindPackageHandleStandardArgs</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

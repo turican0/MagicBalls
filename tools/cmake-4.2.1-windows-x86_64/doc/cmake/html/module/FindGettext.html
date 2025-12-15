@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindGettext &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindGIF" href="FindGIF.html" />
+    <link rel="prev" title="FindFreetype" href="FindFreetype.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindGIF.html" title="FindGIF"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindFreetype.html" title="FindFreetype"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindGettext</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findgettext">
+<span id="module:FindGettext"></span><h1>FindGettext<a class="headerlink" href="#findgettext" title="Link to this heading">¶</a></h1>
+<p>Finds the GNU gettext tools and provides commands for producing multi-lingual
+messages:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Gettext</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>GNU gettext is a system for internationalization (i18n) and localization
+(l10n), consisting of command-line tools and a runtime library (<code class="docutils literal notranslate"><span class="pre">libintl</span></code>).
+This module finds the gettext tools (such as <code class="docutils literal notranslate"><span class="pre">msgmerge</span></code> and <code class="docutils literal notranslate"><span class="pre">msgfmt</span></code>),
+while the runtime library can be found using the separate <span class="target" id="index-0-module:FindIntl"></span><a class="reference internal" href="FindIntl.html#module:FindIntl" title="FindIntl"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindIntl</span></code></a>
+module, which abstracts <code class="docutils literal notranslate"><span class="pre">libintl</span></code> handling across various implementations.</p>
+<p>Common file types used with gettext:</p>
+<dl class="simple">
+<dt>POT files</dt><dd><p>Portable Object Template (<code class="docutils literal notranslate"><span class="pre">.pot</span></code>) files used as the source template for
+translations.</p>
+</dd>
+<dt>PO files</dt><dd><p>Portable Object (<code class="docutils literal notranslate"><span class="pre">.po</span></code>) files containing human-readable translations.</p>
+</dd>
+<dt>MO files</dt><dd><p>Machine Object (<code class="docutils literal notranslate"><span class="pre">.mo</span></code>) files compiled from <code class="docutils literal notranslate"><span class="pre">.po</span></code> files for runtime use.</p>
+</dd>
+</dl>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">Gettext_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3.</span></p>
+</div>
+<p>Boolean indicating whether (the requested version of) gettext was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Gettext_VERSION</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p>The version of gettext found.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">GETTEXT_MSGMERGE_EXECUTABLE</span></code></dt><dd><p>The full path to the <code class="docutils literal notranslate"><span class="pre">msgmerge</span></code> tool for merging message catalog and
+template.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GETTEXT_MSGFMT_EXECUTABLE</span></code></dt><dd><p>The full path to the <code class="docutils literal notranslate"><span class="pre">msgfmt</span></code> tool for compiling message catalog to a binary
+format.</p>
+</dd>
+</dl>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following commands to work with gettext in CMake, if
+gettext is found:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:gettext_process_po_files">
+<span class="sig-name descname"><span class="pre">gettext_process_po_files</span></span><a class="headerlink" href="#command:gettext_process_po_files" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a build rule that processes one or more <code class="docutils literal notranslate"><span class="pre">.po</span></code> translation files
+into binary <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files for a specified translatable language locale:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">gettext_process_po_files(</span>
+<span class="w">  </span><span class="nv">&lt;language&gt;</span>
+<span class="w">  </span><span class="p">[</span><span class="no">ALL</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">INSTALL_DESTINATION</span><span class="w"> </span><span class="nv">&lt;destdir&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="no">PO_FILES</span><span class="w"> </span><span class="nv">&lt;po-files&gt;...</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command defines a custom target that compiles the given <code class="docutils literal notranslate"><span class="pre">&lt;po-files&gt;</span></code>
+into <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files for the specified <code class="docutils literal notranslate"><span class="pre">&lt;language&gt;</span></code>.  On first invocation,
+it also creates a global custom target named <code class="docutils literal notranslate"><span class="pre">pofiles</span></code>, to which all
+subsequent invocations contribute.  This target can be used to build all
+translation files collectively or referenced in other CMake commands.</p>
+<p>This command should be invoked separately for each language locale to
+generate the appropriate <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files per locale.</p>
+<p>The arguments are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;language&gt;</span></code></dt><dd><p>The target translatable language locale of the PO files.</p>
+<p>This string is typically formatted as a locale identifier (e.g., <code class="docutils literal notranslate"><span class="pre">de_DE</span></code>
+for German as used in Germany, or <code class="docutils literal notranslate"><span class="pre">de_AT</span></code> for German as used in Austria,
+etc.).  The part before the underscore specifies the language, and the
+part after specifies the country or regional variant.  In some cases, a
+shorter form using only the language code (e.g., <code class="docutils literal notranslate"><span class="pre">de</span></code>) may also be used.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ALL</span></code></dt><dd><p>This option adds the generated target to the default CMake build target so
+that translations are built by default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">INSTALL_DESTINATION</span> <span class="pre">&lt;destdir&gt;</span></code></dt><dd><p>Specifies the installation directory for the generated <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files at
+the install phase.  If specified, files are installed to:
+<code class="docutils literal notranslate"><span class="pre">&lt;destdir&gt;/&lt;language&gt;/LC_MESSAGES/*.mo</span></code>.  If not specified, files are
+not installed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PO_FILES</span> <span class="pre">&lt;po-files&gt;...</span></code></dt><dd><p>A list of one or more <code class="docutils literal notranslate"><span class="pre">.po</span></code> translation files to be compiled into
+<code class="docutils literal notranslate"><span class="pre">.mo</span></code> files at build phase for the specified <code class="docutils literal notranslate"><span class="pre">&lt;language&gt;</span></code>.  Relative
+paths will be interpreted relative to the current source directory
+(<span class="target" id="index-0-variable:CMAKE_CURRENT_SOURCE_DIR"></span><a class="reference internal" href="../variable/CMAKE_CURRENT_SOURCE_DIR.html#variable:CMAKE_CURRENT_SOURCE_DIR" title="CMAKE_CURRENT_SOURCE_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_SOURCE_DIR</span></code></a>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:gettext_process_pot_file">
+<span class="sig-name descname"><span class="pre">gettext_process_pot_file</span></span><a class="headerlink" href="#command:gettext_process_pot_file" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a build rule that processes a gettext Portable Object Template
+(<code class="docutils literal notranslate"><span class="pre">.pot</span></code>) file and associated <code class="docutils literal notranslate"><span class="pre">.po</span></code> files into compiled gettext Machine
+Object (<code class="docutils literal notranslate"><span class="pre">.mo</span></code>) files:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">gettext_process_pot_file(</span>
+<span class="w">  </span><span class="nv">&lt;pot-file&gt;</span>
+<span class="w">  </span><span class="p">[</span><span class="no">ALL</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">INSTALL_DESTINATION</span><span class="w"> </span><span class="nv">&lt;destdir&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="no">LANGUAGES</span><span class="w"> </span><span class="nv">&lt;languages&gt;...</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command defines a custom target named <code class="docutils literal notranslate"><span class="pre">potfiles</span></code> that compiles the
+given <code class="docutils literal notranslate"><span class="pre">&lt;pot-file&gt;</span></code> and language-specific <code class="docutils literal notranslate"><span class="pre">.po</span></code> files into binary <code class="docutils literal notranslate"><span class="pre">.mo</span></code>
+files for each specified language.  The corresponding <code class="docutils literal notranslate"><span class="pre">&lt;language&gt;.po</span></code>
+files must exist in the current binary directory
+(<span class="target" id="index-0-variable:CMAKE_CURRENT_BINARY_DIR"></span><a class="reference internal" href="../variable/CMAKE_CURRENT_BINARY_DIR.html#variable:CMAKE_CURRENT_BINARY_DIR" title="CMAKE_CURRENT_BINARY_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_BINARY_DIR</span></code></a>) before this command is invoked.</p>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;pot-file&gt;</span></code></dt><dd><p>The path to the gettext Portable Object Template file (<code class="docutils literal notranslate"><span class="pre">.pot</span></code>) serving
+as the source for translations.  If given as a relative path, it will be
+interpreted relative to the current source directory
+(<span class="target" id="index-1-variable:CMAKE_CURRENT_SOURCE_DIR"></span><a class="reference internal" href="../variable/CMAKE_CURRENT_SOURCE_DIR.html#variable:CMAKE_CURRENT_SOURCE_DIR" title="CMAKE_CURRENT_SOURCE_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_SOURCE_DIR</span></code></a>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ALL</span></code></dt><dd><p>Adds the generated target to the default CMake build target so that the
+files are built by default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">INSTALL_DESTINATION</span> <span class="pre">&lt;destdir&gt;</span></code></dt><dd><p>Specifies the installation directory for the generated <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files at
+the install phase.  If specified, files are installed to:
+<code class="docutils literal notranslate"><span class="pre">&lt;destdir&gt;/&lt;language&gt;/LC_MESSAGES/&lt;pot-base-filename&gt;.mo</span></code>.  If not
+specified, files are not installed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LANGUAGES</span> <span class="pre">&lt;languages&gt;...</span></code></dt><dd><p>A list of one or more translatable language locales (e.g., <code class="docutils literal notranslate"><span class="pre">en_US</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fr</span></code>, <code class="docutils literal notranslate"><span class="pre">de_DE</span></code>, <code class="docutils literal notranslate"><span class="pre">zh_CN</span></code>, etc.).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:gettext_create_translations">
+<span class="sig-name descname"><span class="pre">gettext_create_translations</span></span><a class="headerlink" href="#command:gettext_create_translations" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a build rule that processes a given <code class="docutils literal notranslate"><span class="pre">.pot</span></code> template file and
+associated <code class="docutils literal notranslate"><span class="pre">.po</span></code> translation files into compiled Machine Object (<code class="docutils literal notranslate"><span class="pre">.mo</span></code>)
+files:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">gettext_create_translations(</span><span class="nv">&lt;pot-file&gt;</span><span class="w"> </span><span class="p">[</span><span class="no">ALL</span><span class="p">]</span><span class="w"> </span><span class="nv">&lt;po-files&gt;...</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command defines a custom target named <code class="docutils literal notranslate"><span class="pre">translations</span></code> that compiles
+the specified <code class="docutils literal notranslate"><span class="pre">&lt;pot-file&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;po-files&gt;</span></code> into binary <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files.
+It also automatically adds an install rule for the generated <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files,
+installing them into the default
+<code class="docutils literal notranslate"><span class="pre">share/locale/&lt;language&gt;/LC_MESSAGES/&lt;pot-base-filename&gt;.mo</span></code> path during
+the install phase.</p>
+<p>The arguments are:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;pot-file&gt;</span></code></dt><dd><p>The path to the gettext Portable Object Template file (<code class="docutils literal notranslate"><span class="pre">.pot</span></code>) serving
+as the source for translations.  If given as a relative path, it will be
+interpreted relative to the current source directory
+(<span class="target" id="index-2-variable:CMAKE_CURRENT_SOURCE_DIR"></span><a class="reference internal" href="../variable/CMAKE_CURRENT_SOURCE_DIR.html#variable:CMAKE_CURRENT_SOURCE_DIR" title="CMAKE_CURRENT_SOURCE_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_SOURCE_DIR</span></code></a>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ALL</span></code></dt><dd><p>Adds the generated target to the default CMake build target so that
+translations are created by default during the build.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;po-files&gt;...</span></code></dt><dd><p>A list of one or more translation source files in <code class="docutils literal notranslate"><span class="pre">.po</span></code> format, whose
+filenames must follow the format <code class="docutils literal notranslate"><span class="pre">&lt;language&gt;.po</span></code>.  Relative paths will
+be interpreted relative to the current source directory
+(<span class="target" id="index-3-variable:CMAKE_CURRENT_SOURCE_DIR"></span><a class="reference internal" href="../variable/CMAKE_CURRENT_SOURCE_DIR.html#variable:CMAKE_CURRENT_SOURCE_DIR" title="CMAKE_CURRENT_SOURCE_DIR"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CURRENT_SOURCE_DIR</span></code></a>).</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For better control over build and installation behavior, use
+<span class="target" id="index-0-command:gettext_process_po_files"></span><a class="reference internal" href="#command:gettext_process_po_files" title="gettext_process_po_files"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gettext_process_po_files()</span></code></a> instead.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">GETTEXT_FOUND</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Use <code class="docutils literal notranslate"><span class="pre">Gettext_FOUND</span></code>, which has the same value.</p>
+</div>
+<p>Boolean indicating whether (the requested version of) gettext was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GETTEXT_VERSION_STRING</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Superseded by the <code class="docutils literal notranslate"><span class="pre">Gettext_VERSION</span></code>.</p>
+</div>
+<p>The version of gettext found.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="examples-finding-gettext">
+<h3>Examples: Finding gettext<a class="headerlink" href="#examples-finding-gettext" title="Link to this heading">¶</a></h3>
+<p>Finding the GNU gettext tools:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Gettext</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Or, finding gettext and specifying a minimum required version:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Gettext</span><span class="w"> </span><span class="m">0.21</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Or, finding gettext and making it required (if not found, processing stops
+with an error message):</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Gettext</span><span class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-working-with-gettext-in-cmake">
+<h3>Example: Working With gettext in CMake<a class="headerlink" href="#example-working-with-gettext-in-cmake" title="Link to this heading">¶</a></h3>
+<p>When starting with gettext, <code class="docutils literal notranslate"><span class="pre">.pot</span></code> file is considered to be created manually.
+For example, using a <code class="docutils literal notranslate"><span class="pre">xgettext</span></code> tool on the provided <code class="docutils literal notranslate"><span class="pre">main.cxx</span></code> source
+code file:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">main.cxx</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;libintl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;locale.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="c1">// Set locale from environment</span>
+<span class="w">  </span><span class="n">setlocale</span><span class="p">(</span><span class="n">LC_ALL</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Bind the text domain</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;TEXTDOMAINDIR&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">dir</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/usr/local/share/locale&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">bindtextdomain</span><span class="p">(</span><span class="s">&quot;MyApp&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dir</span><span class="p">);</span>
+<span class="w">  </span><span class="n">textdomain</span><span class="p">(</span><span class="s">&quot;MyApp&quot;</span><span class="p">);</span>
+
+<span class="hll"><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">gettext</span><span class="p">(</span><span class="s">&quot;Hello, World&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">xgettext</span></code> tool extracts all strings from <code class="docutils literal notranslate"><span class="pre">gettext()</span></code> calls in provided
+source code and creates translatable strings:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>xgettext<span class="w"> </span>-o<span class="w"> </span>MyApp.pot<span class="w"> </span>main.cxx
+</pre></div>
+</div>
+<p>Translatable files can be initialized by the project manually using
+<code class="docutils literal notranslate"><span class="pre">msginit</span></code> tool:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>locale/de_DE
+<span class="gp">$ </span>msginit<span class="w"> </span>-l<span class="w"> </span>de_DE.UTF8<span class="w"> </span>-o<span class="w"> </span>locale/de_DE/MyApp.po<span class="w"> </span>-i<span class="w"> </span>MyApp.pot<span class="w"> </span>--no-translator
+</pre></div>
+</div>
+<p>which creates a human-readable file that can be translated into a desired
+language (adjust as needed):</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">locale/de_DE/MyApp.po</span></code></span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-po notranslate"><div class="highlight"><pre><span></span><span class="nv">msgid</span> <span class="s">&quot;&quot;</span>
+<span class="nv">msgstr</span> <span class="s">&quot;&quot;</span>
+<span class="s">&quot;</span><span class="py">Language:</span><span class="s"> de\n&quot;</span>
+<span class="s">&quot;</span><span class="py">Content-Type:</span><span class="s"> text/plain; charset=UTF-8\n&quot;</span>
+<span class="s">&quot;</span><span class="py">Content-Transfer-Encoding:</span><span class="s"> 8bit\n&quot;</span>
+<span class="s">&quot;</span><span class="py">Plural-Forms:</span><span class="s"> nplurals=2; plural=(n != 1);\n&quot;</span>
+
+<span class="nv">msgid</span> <span class="s">&quot;Hello, World&quot;</span>
+<span class="hll"><span class="nv">msgstr</span> <span class="s">&quot;Hallo, Welt&quot;</span>
+</span></pre></div>
+</div>
+</div>
+<p>In CMake, the <span class="target" id="index-1-command:gettext_process_po_files"></span><a class="reference internal" href="#command:gettext_process_po_files" title="gettext_process_po_files"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gettext_process_po_files()</span></code></a> command provided by this
+module automatically creates the needed <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files that application loads
+at runtime depending on the system environment variables such as <code class="docutils literal notranslate"><span class="pre">LANG</span></code>.
+In the following example, also the <span class="target" id="index-0-module:GNUInstallDirs"></span><a class="reference internal" href="GNUInstallDirs.html#module:GNUInstallDirs" title="GNUInstallDirs"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">GNUInstallDirs</span></code></a> module is used
+to provide the <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_LOCALEDIR</span></code> variable:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">cmake_minimum_required(</span><span class="no">VERSION</span><span class="w"> </span><span class="m">3.24</span><span class="nf">)</span>
+<span class="nf">project(</span><span class="nb">GettextExample</span><span class="nf">)</span>
+<span class="nf">include(</span><span class="nb">GNUInstallDirs</span><span class="nf">)</span>
+
+<span class="nf">find_package(</span><span class="nb">Gettext</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Gettext_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">foreach(</span><span class="nb">language</span><span class="w"> </span><span class="no">IN</span><span class="w"> </span><span class="no">ITEMS</span><span class="w"> </span><span class="nb">de_DE</span><span class="nf">)</span>
+<span class="hll"><span class="w">    </span><span class="nf">gettext_process_po_files(</span>
+</span><span class="hll"><span class="w">      </span><span class="o">${</span><span class="nt">language</span><span class="o">}</span>
+</span><span class="hll"><span class="w">      </span><span class="no">ALL</span>
+</span><span class="hll"><span class="w">      </span><span class="no">PO_FILES</span><span class="w"> </span><span class="na">locale/</span><span class="o">${</span><span class="nt">language</span><span class="o">}</span><span class="na">/MyApp.po</span>
+</span><span class="hll"><span class="w">      </span><span class="no">INSTALL_DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_LOCALEDIR</span><span class="o">}</span>
+</span><span class="hll"><span class="w">    </span><span class="nf">)</span>
+</span><span class="w">  </span><span class="nf">endforeach()</span>
+<span class="nf">endif()</span>
+
+<span class="nf">add_executable(</span><span class="nb">example</span><span class="w"> </span><span class="nb">main.cxx</span><span class="nf">)</span>
+
+<span class="c"># Find and link Intl library to use gettext() from libintl.h</span>
+<span class="nf">find_package(</span><span class="nb">Intl</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">Intl</span><span class="o">::</span><span class="nb">Intl</span><span class="nf">)</span>
+
+<span class="nf">install(</span><span class="no">TARGETS</span><span class="w"> </span><span class="nb">example</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-B<span class="w"> </span>build
+<span class="gp">$ </span>cmake<span class="w"> </span>--build<span class="w"> </span>build
+<span class="gp">$ </span><span class="nv">DESTDIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/stage<span class="w"> </span>cmake<span class="w"> </span>--install<span class="w"> </span>build
+</pre></div>
+</div>
+<p>To utilize the translations, the <code class="docutils literal notranslate"><span class="pre">de_DE</span></code> locale needs to be enabled on the
+system (see <code class="docutils literal notranslate"><span class="pre">locale</span> <span class="pre">-a</span></code>).  And then the localized output can be run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">LANG</span><span class="o">=</span>de_DE.UTF-8<span class="w"> </span><span class="nv">TEXTDOMAINDIR</span><span class="o">=</span>./stage/usr/local/share/locale<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>./stage/usr/local/bin/example
+</pre></div>
+</div>
+</section>
+<section id="example-processing-pot-file">
+<h3>Example: Processing POT File<a class="headerlink" href="#example-processing-pot-file" title="Link to this heading">¶</a></h3>
+<p>The <span class="target" id="index-0-command:gettext_process_pot_file"></span><a class="reference internal" href="#command:gettext_process_pot_file" title="gettext_process_pot_file"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gettext_process_pot_file()</span></code></a> command processes <code class="docutils literal notranslate"><span class="pre">.po</span></code> translation
+files located in the current binary directory into <code class="docutils literal notranslate"><span class="pre">.mo</span></code> files:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Gettext</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Gettext_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">set(</span><span class="nb">languages</span><span class="w"> </span><span class="nb">de_DE</span><span class="w"> </span><span class="nb">fr</span><span class="w"> </span><span class="nb">zh_CN</span><span class="nf">)</span>
+
+<span class="w">  </span><span class="nf">foreach(</span><span class="nb">language</span><span class="w"> </span><span class="no">IN</span><span class="w"> </span><span class="no">LISTS</span><span class="w"> </span><span class="nb">languages</span><span class="nf">)</span>
+<span class="w">    </span><span class="nf">configure_file(</span><span class="na">locale/</span><span class="o">${</span><span class="nt">language</span><span class="o">}</span><span class="p">.</span><span class="nb">po</span><span class="w"> </span><span class="o">${</span><span class="nt">language</span><span class="o">}</span><span class="p">.</span><span class="nb">po</span><span class="w"> </span><span class="no">COPYONLY</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">endforeach()</span>
+
+<span class="w">  </span><span class="nf">gettext_process_pot_file(</span>
+<span class="w">    </span><span class="nb">MyApp.pot</span>
+<span class="w">    </span><span class="no">ALL</span>
+<span class="w">    </span><span class="no">INSTALL_DESTINATION</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_INSTALL_LOCALEDIR</span><span class="o">}</span>
+<span class="w">    </span><span class="no">LANGUAGES</span><span class="w"> </span><span class="o">${</span><span class="nt">languages</span><span class="o">}</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="example-creating-translations">
+<h3>Example: Creating Translations<a class="headerlink" href="#example-creating-translations" title="Link to this heading">¶</a></h3>
+<p>Using a simplified <span class="target" id="index-0-command:gettext_create_translations"></span><a class="reference internal" href="#command:gettext_create_translations" title="gettext_create_translations"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">gettext_create_translations()</span></code></a> command to create
+<code class="docutils literal notranslate"><span class="pre">.mo</span></code> files:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">Gettext</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">Gettext_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">gettext_create_translations(</span>
+<span class="w">    </span><span class="nb">MyApp.pot</span>
+<span class="w">    </span><span class="no">ALL</span>
+<span class="w">    </span><span class="na">locale/de_DE.po</span>
+<span class="w">    </span><span class="na">locale/fr.po</span>
+<span class="w">    </span><span class="na">locale/zh_CN.po</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The <span class="target" id="index-1-module:FindIntl"></span><a class="reference internal" href="FindIntl.html#module:FindIntl" title="FindIntl"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindIntl</span></code></a> module to find the Gettext runtime library (libintl).</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindGettext</a><ul>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#examples-finding-gettext">Examples: Finding gettext</a></li>
+<li><a class="reference internal" href="#example-working-with-gettext-in-cmake">Example: Working With gettext in CMake</a></li>
+<li><a class="reference internal" href="#example-processing-pot-file">Example: Processing POT File</a></li>
+<li><a class="reference internal" href="#example-creating-translations">Example: Creating Translations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindFreetype.html"
+                          title="previous chapter">FindFreetype</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindGIF.html"
+                          title="next chapter">FindGIF</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindGettext.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindGIF.html" title="FindGIF"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindFreetype.html" title="FindFreetype"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindGettext</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

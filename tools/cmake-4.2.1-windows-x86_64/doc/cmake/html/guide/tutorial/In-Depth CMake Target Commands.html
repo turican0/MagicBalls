@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 4: In-Depth CMake Target Commands &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 5: In-Depth CMake Library Concepts" href="In-Depth%20CMake%20Library%20Concepts.html" />
+    <link rel="prev" title="Step 3: Configuration and Cache Variables" href="Configuration%20and%20Cache%20Variables.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="In-Depth%20CMake%20Library%20Concepts.html" title="Step 5: In-Depth CMake Library Concepts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Configuration%20and%20Cache%20Variables.html" title="Step 3: Configuration and Cache Variables"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 4: In-Depth CMake Target Commands</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-4-in-depth-cmake-target-commands">
+<span id="guide:tutorial/In-Depth CMake Target Commands"></span><h1>Step 4: In-Depth CMake Target Commands<a class="headerlink" href="#step-4-in-depth-cmake-target-commands" title="Link to this heading">¶</a></h1>
+<p>There are several target commands within CMake we can use to describe
+requirements. As a reminder, a target command is one which modifies the
+properties of the target it is applied to. These properties describe
+requirements needed to build the software, such as sources, compile flags,
+and output names; or properties necessary to consume the target, such as header
+includes, library directories, and linkage rules.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As discussed in <code class="docutils literal notranslate"><span class="pre">Step1</span></code>, properties required to build a target should be
+described with the <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code> <a class="reference internal" href="../../manual/cmake-buildsystem.7.html#target-command-scope"><span class="std std-ref">scope keyword</span></a>,
+those required to consume the target with <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code>, and properties needed
+for both are described with <code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code>.</p>
+</div>
+<p>In this step we will go over all the available target commands in CMake. Not all
+target commands are created equal. We have already discussed the two most
+important target commands, <span class="target" id="index-0-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a> and
+<span class="target" id="index-0-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>. Of the remaining commands, some are almost
+as common as these two, others have more advanced applications, and a couple
+should only be used as a last resort when other options are not available.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>Before going any further, let's name all of the CMake target commands. We'll
+split these into three groups: the recommended and generally useful commands,
+the advanced and cautionary commands, and the &quot;footgun&quot; commands which should
+be avoided unless necessary.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Common/Recommended</p></th>
+<th class="head"><p>Advanced/Caution</p></th>
+<th class="head"><p>Esoteric/Footguns</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="target" id="index-0-command:target_compile_definitions"></span><a class="reference internal" href="../../command/target_compile_definitions.html#command:target_compile_definitions" title="target_compile_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_definitions()</span></code></a>
+<span class="target" id="index-0-command:target_compile_features"></span><a class="reference internal" href="../../command/target_compile_features.html#command:target_compile_features" title="target_compile_features"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_features()</span></code></a>
+<span class="target" id="index-1-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>
+<span class="target" id="index-1-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a></p></td>
+<td><p><span class="target" id="index-0-command:get_target_property"></span><a class="reference internal" href="../../command/get_target_property.html#command:get_target_property" title="get_target_property"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">get_target_property()</span></code></a>
+<span class="target" id="index-0-command:set_target_properties"></span><a class="reference internal" href="../../command/set_target_properties.html#command:set_target_properties" title="set_target_properties"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set_target_properties()</span></code></a>
+<span class="target" id="index-0-command:target_compile_options"></span><a class="reference internal" href="../../command/target_compile_options.html#command:target_compile_options" title="target_compile_options"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_options()</span></code></a>
+<span class="target" id="index-0-command:target_link_options"></span><a class="reference internal" href="../../command/target_link_options.html#command:target_link_options" title="target_link_options"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_options()</span></code></a>
+<span class="target" id="index-0-command:target_precompile_headers"></span><a class="reference internal" href="../../command/target_precompile_headers.html#command:target_precompile_headers" title="target_precompile_headers"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_precompile_headers()</span></code></a></p></td>
+<td><p><span class="target" id="index-0-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a>
+<span class="target" id="index-0-command:target_link_directories"></span><a class="reference internal" href="../../command/target_link_directories.html#command:target_link_directories" title="target_link_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_directories()</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There's no such thing as a &quot;bad&quot; CMake target command. They all have valid
+use cases. This categorization is provided to give newcomers a simple
+intuition about which commands they should consider first when tackling
+a problem.</p>
+</div>
+<p>We'll demonstrate most of these in the following exercises. The three we won't
+be using are <span class="target" id="index-1-command:get_target_property"></span><a class="reference internal" href="../../command/get_target_property.html#command:get_target_property" title="get_target_property"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">get_target_property()</span></code></a>, <span class="target" id="index-1-command:set_target_properties"></span><a class="reference internal" href="../../command/set_target_properties.html#command:set_target_properties" title="set_target_properties"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set_target_properties()</span></code></a>
+and <span class="target" id="index-1-command:target_precompile_headers"></span><a class="reference internal" href="../../command/target_precompile_headers.html#command:target_precompile_headers" title="target_precompile_headers"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_precompile_headers()</span></code></a>, so we will briefly discuss their
+purpose here.</p>
+<p>The <span class="target" id="index-2-command:get_target_property"></span><a class="reference internal" href="../../command/get_target_property.html#command:get_target_property" title="get_target_property"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">get_target_property()</span></code></a> and <span class="target" id="index-2-command:set_target_properties"></span><a class="reference internal" href="../../command/set_target_properties.html#command:set_target_properties" title="set_target_properties"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set_target_properties()</span></code></a> commands
+give direct access to a target's properties by name. They can even be used
+to attach arbitrary property names to a target.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">Example</span><span class="nf">)</span>
+<span class="nf">set_target_properties(</span><span class="nb">Example</span>
+<span class="w">  </span><span class="no">PROPERTIES</span>
+<span class="w">    </span><span class="nb">Key</span><span class="w"> </span><span class="nb">Value</span>
+<span class="w">    </span><span class="nb">Hello</span><span class="w"> </span><span class="nb">World</span>
+<span class="nf">)</span>
+
+<span class="nf">get_target_property(</span><span class="nb">KeyVar</span><span class="w"> </span><span class="nb">Example</span><span class="w"> </span><span class="nb">Key</span><span class="nf">)</span>
+<span class="nf">get_target_property(</span><span class="nb">HelloVar</span><span class="w"> </span><span class="nb">Example</span><span class="w"> </span><span class="nb">Hello</span><span class="nf">)</span>
+
+<span class="nf">message(</span><span class="s">&quot;Key: ${KeyVar}&quot;</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="s">&quot;Hello: ${HelloVar}&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-B<span class="w"> </span>build
+<span class="go">...</span>
+<span class="go">Key: Value</span>
+<span class="go">Hello: World</span>
+</pre></div>
+</div>
+<p>The full list of target properties which are semantically meaningful to CMake
+are documented at <span class="target" id="index-0-manual:cmake-properties(7)"></span><a class="reference internal" href="../../manual/cmake-properties.7.html#manual:cmake-properties(7)" title="cmake-properties(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake-properties(7)</span></code></a>, however most of these should
+be modified with their dedicated commands. For example, it is unnecessary to
+directly manipulate <code class="docutils literal notranslate"><span class="pre">LINK_LIBRARIES</span></code> and <code class="docutils literal notranslate"><span class="pre">INTERFACE_LINK_LIBRARIES</span></code>, as
+these are handled by <span class="target" id="index-2-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>.</p>
+<p>Conversely, some lesser-used properties are only accessible via these commands.
+The <span class="target" id="index-0-prop_tgt:DEPRECATION"></span><a class="reference internal" href="../../prop_tgt/DEPRECATION.html#prop_tgt:DEPRECATION" title="DEPRECATION"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">DEPRECATION</span></code></a> property, used to attach deprecation notices to
+targets, can only be set via <span class="target" id="index-3-command:set_target_properties"></span><a class="reference internal" href="../../command/set_target_properties.html#command:set_target_properties" title="set_target_properties"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set_target_properties()</span></code></a>; as can the
+<span class="target" id="index-0-prop_tgt:ADDITIONAL_CLEAN_FILES"></span><a class="reference internal" href="../../prop_tgt/ADDITIONAL_CLEAN_FILES.html#prop_tgt:ADDITIONAL_CLEAN_FILES" title="ADDITIONAL_CLEAN_FILES"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">ADDITIONAL_CLEAN_FILES</span></code></a>, for describing additional files to be
+removed by CMake's <code class="docutils literal notranslate"><span class="pre">clean</span></code> target; and other properties of this sort.</p>
+<p>The <span class="target" id="index-2-command:target_precompile_headers"></span><a class="reference internal" href="../../command/target_precompile_headers.html#command:target_precompile_headers" title="target_precompile_headers"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_precompile_headers()</span></code></a> command takes a list of header files,
+similar to <span class="target" id="index-2-command:target_sources"></span><a class="reference internal" href="../../command/target_sources.html#command:target_sources" title="target_sources"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_sources()</span></code></a>, and creates a precompiled header from
+them. This precompiled header is then force included into all translation
+units in the target. This can be useful for build performance.</p>
+</section>
+<section id="exercise-1-features-and-definitions">
+<h2>Exercise 1 - Features and Definitions<a class="headerlink" href="#exercise-1-features-and-definitions" title="Link to this heading">¶</a></h2>
+<p>In earlier steps we cautioned against globally setting
+<span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_STANDARD"></span><a class="reference internal" href="../../variable/CMAKE_LANG_STANDARD.html#variable:CMAKE_&lt;LANG&gt;_STANDARD" title="CMAKE_&lt;LANG&gt;_STANDARD"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_STANDARD</span></code></a> and overriding packagers' decision concerning
+which language standard to use. On the other hand, many libraries have a
+minimum required feature set they need in order to build, and for these it
+is appropriate to use the <span class="target" id="index-1-command:target_compile_features"></span><a class="reference internal" href="../../command/target_compile_features.html#command:target_compile_features" title="target_compile_features"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_features()</span></code></a> command to
+communicate those requirements.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_compile_features(</span><span class="nb">MyApp</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">cxx_std_20</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The <span class="target" id="index-2-command:target_compile_features"></span><a class="reference internal" href="../../command/target_compile_features.html#command:target_compile_features" title="target_compile_features"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_features()</span></code></a> command describes a minimum language
+standard as a target property. If the <span class="target" id="index-1-variable:CMAKE_&lt;LANG&gt;_STANDARD"></span><a class="reference internal" href="../../variable/CMAKE_LANG_STANDARD.html#variable:CMAKE_&lt;LANG&gt;_STANDARD" title="CMAKE_&lt;LANG&gt;_STANDARD"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_STANDARD</span></code></a> is above
+this version, or the compiler default already provides this language standard,
+no action is taken. If additional flags are necessary to enable the standard,
+these will be added by CMake.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><span class="target" id="index-3-command:target_compile_features"></span><a class="reference internal" href="../../command/target_compile_features.html#command:target_compile_features" title="target_compile_features"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_features()</span></code></a> manipulates the same style of interface and
+non-interface properties as the other target commands. This means it is
+possible to <em>inherit</em> a language standard requirement specified with
+<code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> or <code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code> scope keywords.</p>
+<p>If language features are used only in implementation files, then the
+respective compile features should be <code class="docutils literal notranslate"><span class="pre">PRIVATE</span></code>. If the target's headers
+use the features, then <code class="docutils literal notranslate"><span class="pre">PUBLIC</span></code> or <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> should be used.</p>
+</div>
+<p>For C++, the compile features are of the form <code class="docutils literal notranslate"><span class="pre">cxx_std_YY</span></code> where <code class="docutils literal notranslate"><span class="pre">YY</span></code> is
+the standardization year, e.g. <code class="docutils literal notranslate"><span class="pre">14</span></code>, <code class="docutils literal notranslate"><span class="pre">17</span></code>, <code class="docutils literal notranslate"><span class="pre">20</span></code>, etc.</p>
+<p>The <span class="target" id="index-1-command:target_compile_definitions"></span><a class="reference internal" href="../../command/target_compile_definitions.html#command:target_compile_definitions" title="target_compile_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_definitions()</span></code></a> command describes compile definitions
+as target properties. It is the most common mechanism for communicating build
+configuration information to the source code itself. As with all properties,
+the scope keywords apply as we have discussed.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_compile_definitions(</span><span class="nb">MyLibrary</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="no">MYLIBRARY_USE_EXPERIMENTAL_IMPLEMENTATION</span>
+
+<span class="w">  </span><span class="no">PUBLIC</span>
+<span class="w">    </span><span class="no">MYLIBRARY_EXCLUDE_DEPRECATED_FUNCTIONS</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>It is neither required nor desired that we attach <code class="docutils literal notranslate"><span class="pre">-D</span></code> prefixes to compile
+definitions described with <span class="target" id="index-2-command:target_compile_definitions"></span><a class="reference internal" href="../../command/target_compile_definitions.html#command:target_compile_definitions" title="target_compile_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_definitions()</span></code></a>. CMake will
+determine the correct flag for the current compiler.</p>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Use <span class="target" id="index-4-command:target_compile_features"></span><a class="reference internal" href="../../command/target_compile_features.html#command:target_compile_features" title="target_compile_features"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_features()</span></code></a> and <span class="target" id="index-3-command:target_compile_definitions"></span><a class="reference internal" href="../../command/target_compile_definitions.html#command:target_compile_definitions" title="target_compile_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_definitions()</span></code></a>
+to communicate language standard and compile definition requirements.</p>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-5-command:target_compile_features"></span><a class="reference internal" href="../../command/target_compile_features.html#command:target_compile_features" title="target_compile_features"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_features()</span></code></a></p></li>
+<li><p><span class="target" id="index-4-command:target_compile_definitions"></span><a class="reference internal" href="../../command/target_compile_definitions.html#command:target_compile_definitions" title="target_compile_definitions"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_definitions()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:option"></span><a class="reference internal" href="../../command/option.html#command:option" title="option"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">option()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Tutorial/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/MathFunctions.cxx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakePresets.json</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step4</span></code> directory contains the complete, recommended
+solution to <code class="docutils literal notranslate"><span class="pre">Step3</span></code> and relevant <code class="docutils literal notranslate"><span class="pre">TODOs</span></code> for this step. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code>
+through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">8</span></code>.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>We can run CMake using our <code class="docutils literal notranslate"><span class="pre">tutorial</span></code> preset, and then build as usual.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Verify that the output of <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> is what we would expect for <code class="docutils literal notranslate"><span class="pre">std::sqrt</span></code>.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>First we add a new option to the top-level CML.</p>
+<details><summary>TODO 1: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-tutorial-use-std-sqrt">
+<div class="code-block-caption"><span class="caption-text">TODO 1: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-tutorial-use-std-sqrt" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">option(</span><span class="no">TUTORIAL_BUILD_UTILITIES</span><span class="w"> </span><span class="s">&quot;Build the Tutorial executable&quot;</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+<span class="nf">option(</span><span class="no">TUTORIAL_USE_STD_SQRT</span><span class="w"> </span><span class="s">&quot;Use std::sqrt&quot;</span><span class="w"> </span><span class="no">OFF</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Then we add the compile feature and definitions to <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>.</p>
+<details><summary>TODO 2-3: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-cmakelists-txt-target-compile-features">
+<div class="code-block-caption"><span class="caption-text">TODO 2-3: MathFunctions/CMakeLists.txt</span><a class="headerlink" href="#mathfunctions-cmakelists-txt-target-compile-features" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_compile_features(</span><span class="nb">MathFunctions</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">cxx_std_20</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="no">TUTORIAL_USE_STD_SQRT</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">target_compile_definitions(</span><span class="nb">MathFunctions</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="no">TUTORIAL_USE_STD_SQRT</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</details><p>And the compile feature for <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>.</p>
+<details><summary>TODO 4: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorial-cmakelists-txt-target-compile-features">
+<div class="code-block-caption"><span class="caption-text">TODO 4: Tutorial/CMakeLists.txt</span><a class="headerlink" href="#tutorial-cmakelists-txt-target-compile-features" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_compile_features(</span><span class="nb">Tutorial</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">cxx_std_20</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now we can modify <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> to take advantage of the new definition.</p>
+<details><summary>TODO 5-6: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-cmath">
+<div class="code-block-caption"><span class="caption-text">TODO 5: MathFunctions/MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-cmath" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cmath&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;format&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-std-sqrt">
+<div class="code-block-caption"><span class="caption-text">TODO 6: MathFunctions/MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-std-sqrt" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="cp">#ifdef TUTORIAL_USE_STD_SQRT</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="cp">#else</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">mysqrt</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="cp">#endif</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally we can update our <code class="docutils literal notranslate"><span class="pre">CMakePresets.json</span></code>. We don't need to set
+<code class="docutils literal notranslate"><span class="pre">CMAKE_CXX_STANDARD</span></code> anymore, but we do want to try out our new
+compile definition.</p>
+<details><summary>TODO 7-8: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakepresets-json-std-sqrt">
+<div class="code-block-caption"><span class="caption-text">TODO 7-8: CMakePresets.json</span><a class="headerlink" href="#cmakepresets-json-std-sqrt" title="Link to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;cacheVariables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;TUTORIAL_USE_STD_SQRT&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ON&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-2-compile-and-link-options">
+<h2>Exercise 2 - Compile and Link Options<a class="headerlink" href="#exercise-2-compile-and-link-options" title="Link to this heading">¶</a></h2>
+<p>Sometimes, we need to exercise specific control over the exact options being
+passed on the compile and link line. These situations are addressed by
+<span class="target" id="index-1-command:target_compile_options"></span><a class="reference internal" href="../../command/target_compile_options.html#command:target_compile_options" title="target_compile_options"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_options()</span></code></a> and <span class="target" id="index-1-command:target_link_options"></span><a class="reference internal" href="../../command/target_link_options.html#command:target_link_options" title="target_link_options"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_options()</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_compile_options(</span><span class="nb">MyApp</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="p">-</span><span class="nb">Wall</span><span class="w"> </span><span class="p">-</span><span class="nb">Werror</span><span class="nf">)</span>
+<span class="nf">target_link_options(</span><span class="nb">MyApp</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="p">-</span><span class="no">T</span><span class="w"> </span><span class="nb">LinksScript.ld</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>There are several problems with unconditionally calling
+<span class="target" id="index-2-command:target_compile_options"></span><a class="reference internal" href="../../command/target_compile_options.html#command:target_compile_options" title="target_compile_options"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_options()</span></code></a> or <span class="target" id="index-2-command:target_link_options"></span><a class="reference internal" href="../../command/target_link_options.html#command:target_link_options" title="target_link_options"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_options()</span></code></a>. The primary
+problem is compiler flags are specific to the compiler frontend being used. In
+order to ensure that our project supports multiple compiler frontends, we must
+only pass compatible flags to the compiler.</p>
+<p>We can achieve this by checking the <span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT"></span><a class="reference internal" href="../../variable/CMAKE_LANG_COMPILER_FRONTEND_VARIANT.html#variable:CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT" title="CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT</span></code></a>
+variable which tells us the style of flags supported by the compiler frontend.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Prior to CMake 3.26, <span class="target" id="index-1-variable:CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT"></span><a class="reference internal" href="../../variable/CMAKE_LANG_COMPILER_FRONTEND_VARIANT.html#variable:CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT" title="CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER_FRONTEND_VARIANT</span></code></a> was
+only set for compilers with multiple frontend variants. In versions after
+CMake 3.26 checking this variable alone is sufficient.</p>
+<p>However this tutorial targets CMake 3.23. As such, the logic is more
+complicated than we have time for here. This tutorial step already includes
+correct logic for checking the compiler variant for MSVC, GCC, Clang, and
+AppleClang on CMake 3.23.</p>
+</div>
+<p>Even if a compiler accepts the flags we pass, the semantics of compiler flags
+change over time. This is especially true with regards to warnings. Projects
+should not turn warnings-as-error flags by default, as this can break their
+build on otherwise innocuous compiler warnings included in later releases.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For errors and warnings, consider placing flags in <span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_FLAGS"></span><a class="reference internal" href="../../variable/CMAKE_LANG_FLAGS.html#variable:CMAKE_&lt;LANG&gt;_FLAGS" title="CMAKE_&lt;LANG&gt;_FLAGS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_FLAGS</span></code></a>
+for local development builds and during CI runs (via preset or
+<a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a> flags). We know exactly which compiler and
+toolchain are being used in these contexts, so we can customize the behavior
+precisely without risking build breakages on other platforms.</p>
+</div>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Add appropriate warning flags to the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable for MSVC-style and
+GNU-style compiler frontends.</p>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-3-command:target_compile_options"></span><a class="reference internal" href="../../command/target_compile_options.html#command:target_compile_options" title="target_compile_options"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_compile_options()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Tutorial/CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>Continue editing files in the <code class="docutils literal notranslate"><span class="pre">Step4</span></code> directory. The conditional for checking
+the frontend variant has already been written. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">9</span></code> and
+<code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">10</span></code> to add warning flags to <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>Since we have already configured for this step, we can build with the usual
+command.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake</span><span class="w"> </span><span class="p">--</span><span class="nb">build</span><span class="w"> </span><span class="nb">build</span>
+</pre></div>
+</div>
+<p>This should reveal a simple warning in the build. You can go ahead and fix it.</p>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>We need to add two compile options to <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>, one MSVC-style flag and
+one GNU-style flag.</p>
+<details><summary>TODO 9-10: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorial-cmakelists-txt-target-compile-options">
+<div class="code-block-caption"><span class="caption-text">TODO 9-10: Tutorial/CMakeLists.txt</span><a class="headerlink" href="#tutorial-cmakelists-txt-target-compile-options" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span>
+<span class="w">  </span><span class="nf">(</span><span class="no">CMAKE_CXX_COMPILER_ID</span><span class="w"> </span><span class="no">STREQUAL</span><span class="w"> </span><span class="s">&quot;MSVC&quot;</span><span class="nf">)</span><span class="w"> </span><span class="no">OR</span>
+<span class="w">  </span><span class="nf">(</span><span class="no">CMAKE_CXX_COMPILER_FRONTEND_VARIANT</span><span class="w"> </span><span class="no">STREQUAL</span><span class="w"> </span><span class="s">&quot;MSVC&quot;</span><span class="nf">)</span>
+<span class="nf">)</span>
+
+<span class="w">  </span><span class="nf">target_compile_options(</span><span class="nb">Tutorial</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="na">/W3</span><span class="nf">)</span>
+
+<span class="nf">elseif(</span>
+<span class="w">  </span><span class="nf">(</span><span class="no">CMAKE_CXX_COMPILER_ID</span><span class="w"> </span><span class="no">STREQUAL</span><span class="w"> </span><span class="s">&quot;GNU&quot;</span><span class="nf">)</span><span class="w"> </span><span class="no">OR</span>
+<span class="w">  </span><span class="nf">(</span><span class="no">CMAKE_CXX_COMPILER_ID</span><span class="w"> </span><span class="no">MATCHES</span><span class="w"> </span><span class="s">&quot;Clang&quot;</span><span class="nf">)</span>
+<span class="nf">)</span>
+
+<span class="w">  </span><span class="nf">target_compile_options(</span><span class="nb">Tutorial</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="p">-</span><span class="nb">Wall</span><span class="nf">)</span>
+
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-3-include-and-link-directories">
+<h2>Exercise 3 - Include and Link Directories<a class="headerlink" href="#exercise-3-include-and-link-directories" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This exercise requires building an archive using a compiler directly on the
+command line. It is not used in later steps. It is included only to
+demonstrate a use case for <span class="target" id="index-1-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a> and
+<span class="target" id="index-1-command:target_link_directories"></span><a class="reference internal" href="../../command/target_link_directories.html#command:target_link_directories" title="target_link_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_directories()</span></code></a>.</p>
+<p>If you cannot complete this exercise for whatever reason feel free to treat
+it as informational-only, or skip it entirely.</p>
+</div>
+<p>It is generally unnecessary to directly describe include and link directories,
+as these requirements are inherited when linking together targets generated
+within CMake, or from external dependencies imported into CMake with commands
+we will cover in later steps.</p>
+<p>If we happen to have some libraries or header files which are not described
+by a CMake target which we need to bring into the build, perhaps pre-compiled
+binaries provided by a vendor, we can incorporate with the
+<span class="target" id="index-2-command:target_link_directories"></span><a class="reference internal" href="../../command/target_link_directories.html#command:target_link_directories" title="target_link_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_directories()</span></code></a> and <span class="target" id="index-2-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a>
+commands.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_directories(</span><span class="nb">MyApp</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="na">Vendor/lib</span><span class="nf">)</span>
+<span class="nf">target_include_directories(</span><span class="nb">MyApp</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="na">Vendor/include</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>These commands use properties which map to the <code class="docutils literal notranslate"><span class="pre">-L</span></code> and <code class="docutils literal notranslate"><span class="pre">-I</span></code> compiler flags
+(or whatever flags the compiler uses for link and include directories).</p>
+<p>Of course, passing a link directory doesn't tell the compiler to link anything
+into the build. For that we need <span class="target" id="index-3-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a>. When
+<span class="target" id="index-4-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a> is given an argument which does not map to
+a target name, it will add the string directly to the link line as a library
+to be linked into the build (prepending any appropriate flags, such a <code class="docutils literal notranslate"><span class="pre">-l</span></code>).</p>
+<section id="id7">
+<h3>Goal<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>Describe a pre-compiled, vendored, static library and its headers inside a
+project using <span class="target" id="index-3-command:target_link_directories"></span><a class="reference internal" href="../../command/target_link_directories.html#command:target_link_directories" title="target_link_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_directories()</span></code></a> and
+<span class="target" id="index-3-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a>.</p>
+</section>
+<section id="id8">
+<h3>Helpful Resources<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-4-command:target_link_directories"></span><a class="reference internal" href="../../command/target_link_directories.html#command:target_link_directories" title="target_link_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_directories()</span></code></a></p></li>
+<li><p><span class="target" id="index-4-command:target_include_directories"></span><a class="reference internal" href="../../command/target_include_directories.html#command:target_include_directories" title="target_include_directories"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_include_directories()</span></code></a></p></li>
+<li><p><span class="target" id="index-5-command:target_link_libraries"></span><a class="reference internal" href="../../command/target_link_libraries.html#command:target_link_libraries" title="target_link_libraries"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">target_link_libraries()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Files to Edit<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Vendor/CMakeLists.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Tutorial/CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Getting Started<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>You will need to build the vendor library into a static archive to complete this
+exercise. Navigate to the <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step4/Vendor/lib</span></code> directory
+and build the code as appropriate for your platform. On Unix-like operating
+systems the appropriate commands are usually:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">g++ -c Vendors.cxx</span>
+<span class="go">ar rvs libVendor.a Vendor.o</span>
+</pre></div>
+</div>
+<p>Then complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">11</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">14</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">VendorLib</span></code> is an <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> library, meaning it has no build requirements
+(because it has already been built). All of its properties should also be
+interface properties.</p>
+<p>We'll discuss <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> libraries in greater depth during the next step.</p>
+</div>
+</section>
+<section id="id11">
+<h3>Build and Run<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>If you have successfully built <code class="docutils literal notranslate"><span class="pre">libVendor</span></code>, you can rebuild <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>
+using the normal command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Running <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> should now output a message about the acceptability of the
+result to the vendor.</p>
+</section>
+<section id="id12">
+<h3>Solution<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>We need to use the target link and include commands to describe the archive
+and its headers as <code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code> requirements of <code class="docutils literal notranslate"><span class="pre">VendorLib</span></code>.</p>
+<details><summary>TODO 11-13: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="vendor-cmakelists-txt">
+<div class="code-block-caption"><span class="caption-text">TODO 11-13: Vendor/CMakeLists.txt</span><a class="headerlink" href="#vendor-cmakelists-txt" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_include_directories(</span><span class="nb">VendorLib</span>
+<span class="w">  </span><span class="no">INTERFACE</span>
+<span class="w">    </span><span class="nb">include</span>
+<span class="nf">)</span>
+
+<span class="nf">target_link_directories(</span><span class="nb">VendorLib</span>
+<span class="w">  </span><span class="no">INTERFACE</span>
+<span class="w">    </span><span class="nb">lib</span>
+<span class="nf">)</span>
+
+<span class="nf">target_link_libraries(</span><span class="nb">VendorLib</span>
+<span class="w">  </span><span class="no">INTERFACE</span>
+<span class="w">    </span><span class="nb">Vendor</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Then we can add <code class="docutils literal notranslate"><span class="pre">VendorLib</span></code> to <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>'s linked libraries.</p>
+<details><summary>TODO 14: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorial-cmakelists-txt-vendorlib">
+<div class="code-block-caption"><span class="caption-text">TODO 14: Tutorial/CMakeLists.txt</span><a class="headerlink" href="#tutorial-cmakelists-txt-vendorlib" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">target_link_libraries(</span><span class="nb">Tutorial</span>
+<span class="w">  </span><span class="no">PRIVATE</span>
+<span class="w">    </span><span class="nb">MathFunctions</span>
+<span class="w">    </span><span class="nb">VendorLib</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 4: In-Depth CMake Target Commands</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-features-and-definitions">Exercise 1 - Features and Definitions</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-compile-and-link-options">Exercise 2 - Compile and Link Options</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-3-include-and-link-directories">Exercise 3 - Include and Link Directories</a><ul>
+<li><a class="reference internal" href="#id7">Goal</a></li>
+<li><a class="reference internal" href="#id8">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id9">Files to Edit</a></li>
+<li><a class="reference internal" href="#id10">Getting Started</a></li>
+<li><a class="reference internal" href="#id11">Build and Run</a></li>
+<li><a class="reference internal" href="#id12">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Configuration%20and%20Cache%20Variables.html"
+                          title="previous chapter">Step 3: Configuration and Cache Variables</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="In-Depth%20CMake%20Library%20Concepts.html"
+                          title="next chapter">Step 5: In-Depth CMake Library Concepts</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/In-Depth CMake Target Commands.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="In-Depth%20CMake%20Library%20Concepts.html" title="Step 5: In-Depth CMake Library Concepts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Configuration%20and%20Cache%20Variables.html" title="Step 3: Configuration and Cache Variables"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 4: In-Depth CMake Target Commands</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

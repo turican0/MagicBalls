@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CTest &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CTestCoverageCollectGCOV" href="CTestCoverageCollectGCOV.html" />
+    <link rel="prev" title="CSharpUtilities" href="CSharpUtilities.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CTestCoverageCollectGCOV.html" title="CTestCoverageCollectGCOV"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CSharpUtilities.html" title="CSharpUtilities"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CTest</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="ctest">
+<span id="module:CTest"></span><h1>CTest<a class="headerlink" href="#ctest" title="Link to this heading">¶</a></h1>
+<p>Configure a project for testing with CTest/CDash</p>
+<p>Include this module in the top CMakeLists.txt file of a project to
+enable testing with CTest and dashboard submissions to CDash:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">project(</span><span class="nb">MyProject</span><span class="nf">)</span>
+<span class="p">...</span>
+<span class="nf">include(</span><span class="nb">CTest</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The module automatically creates the following variables:</p>
+<p><span class="target" id="index-0-variable:BUILD_TESTING"></span><a class="reference internal" href="../variable/BUILD_TESTING.html#variable:BUILD_TESTING" title="BUILD_TESTING"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">BUILD_TESTING</span></code></a></p>
+<blockquote>
+<div><p>Option selecting whether <code class="docutils literal notranslate"><span class="pre">include(CTest)</span></code> calls <span class="target" id="index-0-command:enable_testing"></span><a class="reference internal" href="../command/enable_testing.html#command:enable_testing" title="enable_testing"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">enable_testing()</span></code></a>.
+The option is <code class="docutils literal notranslate"><span class="pre">ON</span></code> by default when created by the module.</p>
+</div></blockquote>
+<p>After including the module, use code like:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">BUILD_TESTING</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># ... CMake code to create tests ...</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+<p>to creating tests when testing is enabled.</p>
+<p>To enable submissions to a CDash server, create a <code class="docutils literal notranslate"><span class="pre">CTestConfig.cmake</span></code>
+file at the top of the project with content such as:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">CTEST_NIGHTLY_START_TIME</span><span class="w"> </span><span class="s">&quot;01:00:00 UTC&quot;</span><span class="nf">)</span>
+<span class="nf">set(</span><span class="no">CTEST_SUBMIT_URL</span><span class="w"> </span><span class="s">&quot;http://my.cdash.org/submit.php?project=MyProject&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>(the CDash server can provide the file to a project administrator who
+configures <code class="docutils literal notranslate"><span class="pre">MyProject</span></code>).  Settings in the config file are shared by
+both this <code class="docutils literal notranslate"><span class="pre">CTest</span></code> module and the <span class="target" id="index-0-manual:ctest(1)"></span><a class="reference internal" href="../manual/ctest.1.html#manual:ctest(1)" title="ctest(1)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">ctest(1)</span></code></a> command-line
+<a class="reference internal" href="../manual/ctest.1.html#dashboard-client"><span class="std std-ref">Dashboard Client</span></a> mode (<a class="reference internal" href="../manual/ctest.1.html#cmdoption-ctest-S"><code class="xref std std-option docutils literal notranslate"><span class="pre">ctest</span> <span class="pre">-S</span></code></a>).</p>
+<p>While building a project for submission to CDash, CTest scans the
+build output for errors and warnings and reports them with surrounding
+context from the build log.  This generic approach works for all build
+tools, but does not give details about the command invocation that
+produced a given problem.  One may get more detailed reports by setting
+the <span class="target" id="index-0-variable:CTEST_USE_LAUNCHERS"></span><a class="reference internal" href="../variable/CTEST_USE_LAUNCHERS.html#variable:CTEST_USE_LAUNCHERS" title="CTEST_USE_LAUNCHERS"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CTEST_USE_LAUNCHERS</span></code></a> variable:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">CTEST_USE_LAUNCHERS</span><span class="w"> </span><span class="m">1</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>in the <code class="docutils literal notranslate"><span class="pre">CTestConfig.cmake</span></code> file.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CSharpUtilities.html"
+                          title="previous chapter">CSharpUtilities</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CTestCoverageCollectGCOV.html"
+                          title="next chapter">CTestCoverageCollectGCOV</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/CTest.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CTestCoverageCollectGCOV.html" title="CTestCoverageCollectGCOV"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CSharpUtilities.html" title="CSharpUtilities"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CTest</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

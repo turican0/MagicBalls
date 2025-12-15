@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMP0199 &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMP0198" href="CMP0198.html" />
+    <link rel="prev" title="CMP0200" href="CMP0200.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMP0198.html" title="CMP0198"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMP0200.html" title="CMP0200"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" accesskey="U">cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0199</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmp0199">
+<span id="policy:CMP0199"></span><h1>CMP0199<a class="headerlink" href="#cmp0199" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p><span class="target" id="index-0-genex:CONFIG"></span><a class="reference internal" href="../manual/cmake-generator-expressions.7.html#genex:CONFIG" title="CONFIG"><code class="xref cmake cmake-genex docutils literal notranslate"><span class="pre">$&lt;CONFIG:cfgs&gt;</span></code></a> only matches the configuration of the consumed target.</p>
+<p>Historically, when a <span class="target" id="index-1-genex:CONFIG"></span><a class="reference internal" href="../manual/cmake-generator-expressions.7.html#genex:CONFIG" title="CONFIG"><code class="xref cmake cmake-genex docutils literal notranslate"><span class="pre">$&lt;CONFIG:cfgs&gt;</span></code></a> generator expression appeared in
+the properties of an imported target, it would match (that is, evaluate to
+<code class="docutils literal notranslate"><span class="pre">1</span></code>) if any of the <code class="docutils literal notranslate"><span class="pre">cfgs</span></code> matched <em>any</em> of the following:</p>
+<ol class="arabic simple">
+<li><p>The selected configuration of the imported target being consumed.</p></li>
+<li><p>The configuration of the consuming target.</p></li>
+<li><p><em>Any</em> of the configurations in the <span class="target" id="index-0-prop_tgt:MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;"></span><a class="reference internal" href="../prop_tgt/MAP_IMPORTED_CONFIG_CONFIG.html#prop_tgt:MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;" title="MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">MAP_IMPORTED_CONFIG_&lt;CONFIG&gt;</span></code></a>
+of the imported target being consumed
+(where <code class="docutils literal notranslate"><span class="pre">&lt;CONFIG&gt;</span></code> is the configuration of the consuming target),
+<em>whether or not such configurations are valid for the imported target</em>.</p></li>
+</ol>
+<p>This could result in expressions which are intended to be mutually exclusive
+being concurrently evaluated.  This would be especially problematic if the
+value of a compile definition is intended to be determined by the
+configuration, as this lack of exclusivity could result in redefinition.</p>
+<p>CMake 4.2 and above prefer to consider <em>only</em> the configuration of the imported
+target being consumed; that is, (1) in the above list.</p>
+<p>This policy provides compatibility with projects that rely on the historical
+behavior.  The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior for this policy is to retain the historic
+behavior as described above.  The <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior is to consider only the
+configuration of the imported target being consumed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This policy only applies to generator expressions being evaluated as part of
+the usage requirements of imported targets which are not imported from Common Package Specification
+packages.</p>
+<p>For non-imported targets, both the historic and ongoing behavior is to
+consider only the configuration of the consuming target.  (The selected
+configuration of a non-imported target is always the active build
+configuration, which is necessarily the same as the consuming target's
+configuration.)</p>
+<p>For targets imported from Common Package Specification packages, the <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior is used,
+regardless of the policy setting.</p>
+</div>
+<p>This policy was introduced in CMake version 4.2.
+It may be set by <span class="target" id="index-0-command:cmake_policy"></span><a class="reference internal" href="../command/cmake_policy.html#command:cmake_policy" title="cmake_policy"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_policy()</span></code></a> or <span class="target" id="index-0-command:cmake_minimum_required"></span><a class="reference internal" href="../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>.
+If it is not set, CMake warns, and uses <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior of a policy is
+<span class="target" id="index-0-manual:cmake-policies(7)"></span><a class="reference internal" href="../manual/cmake-policies.7.html#manual:cmake-policies(7)" title="cmake-policies(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">deprecated</span> <span class="pre">by</span> <span class="pre">definition</span></code></a>
+and may be removed in a future version of CMake.</p>
+</div>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Consider the following imported libraries:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="nb">test1</span><span class="w"> </span><span class="no">INTERFACE</span><span class="w"> </span><span class="no">IMPORTED</span><span class="nf">)</span>
+<span class="nf">set_target_properties(</span><span class="nb">test1</span><span class="w"> </span><span class="no">PROPERTIES</span>
+<span class="w">  </span><span class="no">IMPORTED_CONFIGURATIONS</span><span class="w"> </span><span class="s">&quot;DEBUG&quot;</span>
+<span class="w">  </span><span class="no">INTERFACE_COMPILE_DEFINITIONS</span>
+<span class="w">    </span><span class="s">&quot;$&lt;$&lt;CONFIG:debug&gt;:DEBUG&gt;;$&lt;$&lt;CONFIG:release&gt;:RELEASE&gt;&quot;</span>
+<span class="nf">)</span>
+
+<span class="nf">add_library(</span><span class="nb">test2</span><span class="w"> </span><span class="no">INTERFACE</span><span class="w"> </span><span class="no">IMPORTED</span><span class="nf">)</span>
+<span class="nf">set_target_properties(</span><span class="nb">test2</span><span class="w"> </span><span class="no">PROPERTIES</span>
+<span class="w">  </span><span class="no">IMPORTED_CONFIGURATIONS</span><span class="w"> </span><span class="s">&quot;TEST&quot;</span>
+<span class="w">  </span><span class="no">INTERFACE_COMPILE_DEFINITIONS</span>
+<span class="w">    </span><span class="s">&quot;$&lt;$&lt;CONFIG:debug&gt;:DEBUG&gt;;$&lt;$&lt;CONFIG:example&gt;:EXAMPLE&gt;;$&lt;$&lt;CONFIG:test&gt;:TEST&gt;&quot;</span>
+<span class="w">  </span><span class="no">MAP_IMPORTED_CONFIG_RELEASE</span><span class="w"> </span><span class="s">&quot;DEBUG;EXAMPLE;TEST&quot;</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>Assume that the consuming project is built in the <code class="docutils literal notranslate"><span class="pre">Release</span></code> configuration.
+Under the <code class="docutils literal notranslate"><span class="pre">OLD</span></code> policy, a consumer of <code class="docutils literal notranslate"><span class="pre">test1</span></code> would see both <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>
+and <code class="docutils literal notranslate"><span class="pre">RELEASE</span></code> defined; <code class="docutils literal notranslate"><span class="pre">$&lt;CONFIG:debug&gt;</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">1</span></code> because the
+selected configuration of <code class="docutils literal notranslate"><span class="pre">test1</span></code> is <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>, and <code class="docutils literal notranslate"><span class="pre">$&lt;CONFIG:release&gt;</span></code>
+evaluates to <code class="docutils literal notranslate"><span class="pre">1</span></code> because the consumer's configuration is <code class="docutils literal notranslate"><span class="pre">Release</span></code>
+(keeping in mind that configuration matching is case-insensitive). Likewise,
+a consumer of <code class="docutils literal notranslate"><span class="pre">test2</span></code> would see all of <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>, <code class="docutils literal notranslate"><span class="pre">RELEASE</span></code> and <code class="docutils literal notranslate"><span class="pre">TEST</span></code>
+defined; <code class="docutils literal notranslate"><span class="pre">$&lt;CONFIG:debug&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">$&lt;CONFIG:example&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">$&lt;CONFIG:test&gt;</span></code> all
+evaluate to <code class="docutils literal notranslate"><span class="pre">1</span></code> because all of these configurations appear in
+<code class="docutils literal notranslate"><span class="pre">MAP_IMPORTED_CONFIG_RELEASE</span></code>.</p>
+<p>Under the <code class="docutils literal notranslate"><span class="pre">NEW</span></code> policy, when <code class="docutils literal notranslate"><span class="pre">test1</span></code> is consumed, only <code class="docutils literal notranslate"><span class="pre">$&lt;CONFIG:debug&gt;</span></code>
+will evaluate to <code class="docutils literal notranslate"><span class="pre">1</span></code>. Similarly, when <code class="docutils literal notranslate"><span class="pre">test2</span></code> is consumed, only
+<code class="docutils literal notranslate"><span class="pre">$&lt;CONFIG:test&gt;</span></code> will evaluate to <code class="docutils literal notranslate"><span class="pre">1</span></code>. Both of these correspond to the
+configuration of the consumed library that is actually selected by CMake.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">CMP0199</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMP0200.html"
+                          title="previous chapter">CMP0200</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMP0198.html"
+                          title="next chapter">CMP0198</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/policy/CMP0199.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMP0198.html" title="CMP0198"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMP0200.html" title="CMP0200"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" >cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0199</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindODBC &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindOpenACC" href="FindOpenACC.html" />
+    <link rel="prev" title="FindMsys" href="FindMsys.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindOpenACC.html" title="FindOpenACC"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindMsys.html" title="FindMsys"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindODBC</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findodbc">
+<span id="module:FindODBC"></span><h1>FindODBC<a class="headerlink" href="#findodbc" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+<p>Finds the Open Database Connectivity (ODBC) library, which implements a
+standard API for accessing database systems:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">ODBC</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>ODBC enables applications to communicate with different database management
+systems (DBMS) using a common set of functions.  Communication with a specific
+database is handled through ODBC drivers, which the library loads at runtime.</p>
+<p>On Windows, when building with Visual Studio, this module assumes the ODBC
+library is provided by the available Windows SDK.</p>
+<p>On Unix-like systems, this module searches for ODBC library provided by unixODBC
+or iODBC implementations of ODBC API.  By default, this module looks for the
+ODBC config program to determine the ODBC library and include directory, first
+from unixODBC, then from iODBC.  If no config program is found, it searches for
+ODBC header and library in standard locations.</p>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ODBC::ODBC</span></code></dt><dd><p>Target encapsulating the ODBC usage requirements, available if ODBC is found.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ODBC_FOUND</span></code></dt><dd><p>Boolean indicating whether ODBC was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ODBC_INCLUDE_DIRS</span></code></dt><dd><p>Include directories containing headers needed to use ODBC.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ODBC_LIBRARIES</span></code></dt><dd><p>Libraries needed to link against to use ODBC.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ODBC_INCLUDE_DIR</span></code></dt><dd><p>The path to the directory containing <code class="docutils literal notranslate"><span class="pre">sql.h</span></code> and other ODBC headers.  May be
+empty on Windows, where the include directory corresponding to the expected
+Windows SDK is already available in the compilation environment.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ODBC_LIBRARY</span></code></dt><dd><p>The path to the ODBC library or a library name.  On Windows, this may be only
+a library name, because the library directory corresponding to the expected
+Windows SDK is already available in the compilation environment.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ODBC_CONFIG</span></code></dt><dd><p>The path to the ODBC config program if found or specified.  For example,
+<code class="docutils literal notranslate"><span class="pre">odbc_config</span></code> for unixODBC, or <code class="docutils literal notranslate"><span class="pre">iodbc-config</span></code> for iODBC.</p>
+</dd>
+</dl>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>On Windows, this module does not search for iODBC.</p></li>
+<li><p>On Unix-like systems, there is no built-in mechanism to prefer unixODBC over
+iODBC, or vice versa.  To bypass this limitation, explicitly set the
+<code class="docutils literal notranslate"><span class="pre">ODBC_CONFIG</span></code> variable to the path of the desired ODBC config program.</p></li>
+<li><p>This module does not support searching for or selecting a specific ODBC
+driver.</p></li>
+</ul>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="example-finding-and-using-odbc">
+<h3>Example: Finding and Using ODBC<a class="headerlink" href="#example-finding-and-using-odbc" title="Link to this heading">¶</a></h3>
+<p>Finding ODBC and linking it to a project target:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">ODBC</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">project_target</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="no">ODBC</span><span class="o">::</span><span class="no">ODBC</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="example-finding-a-custom-odbc-installation">
+<h3>Example: Finding a Custom ODBC Installation<a class="headerlink" href="#example-finding-a-custom-odbc-installation" title="Link to this heading">¶</a></h3>
+<p>The following examples are for Unix-like systems and demonstrate how to set hint
+and cache variables during the CMake configuration phase to help this module
+find a custom ODBC implementation (e.g. one not supported by default).</p>
+<p>To specify the installation prefix using <span class="target" id="index-0-variable:CMAKE_PREFIX_PATH"></span><a class="reference internal" href="../variable/CMAKE_PREFIX_PATH.html#variable:CMAKE_PREFIX_PATH" title="CMAKE_PREFIX_PATH"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code></a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-D<span class="w"> </span><span class="nv">CMAKE_PREFIX_PATH</span><span class="o">=</span>/path/to/odbc-installation<span class="w"> </span>-B<span class="w"> </span>build
+</pre></div>
+</div>
+<p>Or using the dedicated <span class="target" id="index-0-variable:&lt;PackageName&gt;_ROOT"></span><a class="reference internal" href="../variable/PackageName_ROOT.html#variable:&lt;PackageName&gt;_ROOT" title="&lt;PackageName&gt;_ROOT"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">ODBC_ROOT</span></code></a> variable:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-D<span class="w"> </span><span class="nv">ODBC_ROOT</span><span class="o">=</span>/path/to/odbc-installation<span class="w"> </span>-B<span class="w"> </span>build
+</pre></div>
+</div>
+<p>To manually specify the ODBC config program, if available, so that the ODBC
+installation can be automatically determined based on the config tool:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-D<span class="w"> </span><span class="nv">ODBC_CONFIG</span><span class="o">=</span>/path/to/odbc/bin/odbc-config<span class="w"> </span>-B<span class="w"> </span>build
+</pre></div>
+</div>
+<p>To manually specify the ODBC library and include directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-D<span class="w"> </span><span class="nv">ODBC_LIBRARY</span><span class="o">=</span>/path/to/odbc/lib/libodbc.so<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-D<span class="w"> </span><span class="nv">ODBC_INCLUDE_DIR</span><span class="o">=</span>/path/to/odbc/include<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-B<span class="w"> </span>build
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindODBC</a><ul>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-finding-and-using-odbc">Example: Finding and Using ODBC</a></li>
+<li><a class="reference internal" href="#example-finding-a-custom-odbc-installation">Example: Finding a Custom ODBC Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindMsys.html"
+                          title="previous chapter">FindMsys</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindOpenACC.html"
+                          title="next chapter">FindOpenACC</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindODBC.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindOpenACC.html" title="FindOpenACC"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindMsys.html" title="FindMsys"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindODBC</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 2: CMake Language Fundamentals &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 3: Configuration and Cache Variables" href="Configuration%20and%20Cache%20Variables.html" />
+    <link rel="prev" title="Step 1: Getting Started with CMake" href="Getting%20Started%20with%20CMake.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Configuration%20and%20Cache%20Variables.html" title="Step 3: Configuration and Cache Variables"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Getting%20Started%20with%20CMake.html" title="Step 1: Getting Started with CMake"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 2: CMake Language Fundamentals</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-2-cmake-language-fundamentals">
+<span id="guide:tutorial/CMake Language Fundamentals"></span><h1>Step 2: CMake Language Fundamentals<a class="headerlink" href="#step-2-cmake-language-fundamentals" title="Link to this heading">¶</a></h1>
+<p>In the previous step we rushed through and handwaved several aspects of the
+CMake language which is used within <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> in order to get useful,
+building programs as soon as possible. However, in the wild we encounter
+a great deal more complexity than simply describing lists of source and
+header files.</p>
+<p>To deal with this complexity CMake provides a Turing-complete domain-specific
+language for describing the process of building software. Understanding the
+fundamentals of this language will be necessary as we write more complex
+CMLs and other CMake files. The language is formally known as
+&quot;<span class="target" id="index-0-manual:cmake-language(7)"></span><a class="reference internal" href="../../manual/cmake-language.7.html#manual:cmake-language(7)" title="cmake-language(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">Language</span></code></a>&quot;, or more colloquially as CMakeLang.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The CMake Language is not well suited to describing things which are not
+related to building software. While it has some features for general purpose
+use, developers should use caution when solving problems not directly related
+to their build in CMake Language.</p>
+<p>Oftentimes the correct answer is to write a tool in a general purpose
+programming language which solves the problem, and teach CMake how to invoke
+that tool as part of the build process. Code generation, cryptographic
+signature utilities, and even ray-tracers have been written in CMake Language,
+but this is not a recommended practice.</p>
+</div>
+<p>Because we want to fully explore the language features, this step is an
+exception to the tutorial sequencing. It neither builds on <code class="docutils literal notranslate"><span class="pre">Step1</span></code>, nor is the
+starting point for <code class="docutils literal notranslate"><span class="pre">Step3</span></code>. This will be a sandbox to explore language
+features without building any software. We'll pick back up with the Tutorial
+program in <code class="docutils literal notranslate"><span class="pre">Step3</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This tutorial endeavors to demonstrate best practices and solutions to real
+problems. However, for this one step we're going to be re-implementing some
+built-in CMake functions. In &quot;real life&quot;, do not write your own
+<span class="target" id="index-0-command:list"></span><a class="reference internal" href="../../command/list.html#append" title="list(append)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list(APPEND)</span></code></a>.</p>
+</div>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>The only fundamental types in CMakeLang are strings and lists. Every object in
+CMake is a string, and lists are themselves strings which contain semicolons
+as separators. Any command which appears to operate on something other than a
+string, whether they be booleans, numbers, JSON objects, or otherwise, is in
+fact consuming a string, doing some internal conversion logic (in a language
+other than CMakeLang), and then converting back to a string for any potential
+output.</p>
+<p>We can create a variable, which is to say a name for a string, using the
+<span class="target" id="index-0-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set()</span></code></a> command.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">var</span><span class="w"> </span><span class="s">&quot;World!&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>A variable's value can be accessed using brace expansion, for example if we want
+to use the <span class="target" id="index-0-command:message"></span><a class="reference internal" href="../../command/message.html#command:message" title="message"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">message()</span></code></a> command to print the string named by <code class="docutils literal notranslate"><span class="pre">var</span></code>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">var</span><span class="w"> </span><span class="s">&quot;World!&quot;</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="s">&quot;Hello ${var}&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-P<span class="w"> </span>CMakeLists.txt
+<span class="go">Hello World!</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-P"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">-P</span></code></a> is called &quot;script mode&quot;, it informs CMake this file is not
+intended to have a <span class="target" id="index-0-command:project"></span><a class="reference internal" href="../../command/project.html#command:project" title="project"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">project()</span></code></a> command. We're not building any
+software, instead using CMake only as a command interpreter.</p>
+</div>
+<p>Because CMakeLang has only strings, conditionals are entirely by convention of
+which strings are considered true and which are considered false. These are
+<em>supposed</em> to be intuitive, &quot;True&quot;, &quot;On&quot;, &quot;Yes&quot;, and (strings representing)
+non-zero numbers are truthy, while &quot;False&quot; &quot;Off&quot;, &quot;No&quot;, &quot;0&quot;, &quot;Ignore&quot;,
+&quot;NotFound&quot;, and the empty string are all considered false.</p>
+<p>However, some of the rules are more complex than that, so taking some time
+to consult the <span class="target" id="index-0-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a> documentation on expressions is worthwhile. It's
+recommended to stick to a single pair for a given context, such as
+&quot;True&quot;/&quot;False&quot; or &quot;On&quot;/&quot;Off&quot;.</p>
+<p>As mentioned, lists are strings containing semicolons. The <span class="target" id="index-1-command:list"></span><a class="reference internal" href="../../command/list.html#command:list" title="list"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list()</span></code></a>
+command is useful for manipulating these, and many structures within CMake
+expect to operate with this convention. As an example, we can use the
+<span class="target" id="index-0-command:foreach"></span><a class="reference internal" href="../../command/foreach.html#command:foreach" title="foreach"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">foreach()</span></code></a> command to iterate over a list.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">stooges</span><span class="w"> </span><span class="s">&quot;Moe;Larry&quot;</span><span class="nf">)</span>
+<span class="nf">list(</span><span class="no">APPEND</span><span class="w"> </span><span class="nb">stooges</span><span class="w"> </span><span class="s">&quot;Curly&quot;</span><span class="nf">)</span>
+
+<span class="nf">message(</span><span class="s">&quot;Stooges contains: ${stooges}&quot;</span><span class="nf">)</span>
+
+<span class="nf">foreach(</span><span class="nb">stooge</span><span class="w"> </span><span class="no">IN</span><span class="w"> </span><span class="no">LISTS</span><span class="w"> </span><span class="nb">stooges</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Hello, ${stooge}&quot;</span><span class="nf">)</span>
+<span class="nf">endforeach()</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-P<span class="w"> </span>CMakeLists.txt
+<span class="go">Stooges contains: Moe;Larry;Curly</span>
+<span class="go">Hello, Moe</span>
+<span class="go">Hello, Larry</span>
+<span class="go">Hello, Curly</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-1-macros-functions-and-lists">
+<h2>Exercise 1 - Macros, Functions, and Lists<a class="headerlink" href="#exercise-1-macros-functions-and-lists" title="Link to this heading">¶</a></h2>
+<p>CMake allows us to craft our own functions and macros. This can be very helpful
+when constructing lots of similar targets, like tests, for which we will want
+to call similar sets of commands over and over again. We do so with
+<span class="target" id="index-0-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a> and <span class="target" id="index-0-command:macro"></span><a class="reference internal" href="../../command/macro.html#command:macro" title="macro"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">macro()</span></code></a>.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">macro(</span><span class="nb">MyMacro</span><span class="w"> </span><span class="nb">MacroArgument</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;${MacroArgument}\n\t\tFrom Macro&quot;</span><span class="nf">)</span>
+<span class="nf">endmacro()</span>
+
+<span class="nf">function(</span><span class="nb">MyFunc</span><span class="w"> </span><span class="nb">FuncArgument</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">MyMacro(</span><span class="s">&quot;${FuncArgument}\n\tFrom Function&quot;</span><span class="nf">)</span>
+<span class="nf">endfunction()</span>
+
+<span class="nf">MyFunc(</span><span class="s">&quot;From TopLevel&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-P<span class="w"> </span>CMakeLists.txt
+<span class="go">From TopLevel</span>
+<span class="go">      From Function</span>
+<span class="go">              From Macro</span>
+</pre></div>
+</div>
+<p>Like with many languages, the difference between functions and macros is one
+of scope. In CMakeLang, both <span class="target" id="index-1-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a> and <span class="target" id="index-1-command:macro"></span><a class="reference internal" href="../../command/macro.html#command:macro" title="macro"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">macro()</span></code></a> can &quot;see&quot;
+all the variables created in all the frames above them. However, a
+<span class="target" id="index-2-command:macro"></span><a class="reference internal" href="../../command/macro.html#command:macro" title="macro"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">macro()</span></code></a> acts semantically like a text replacement, similar to C/C++
+macros, so any side effects the macro creates are visible in their calling
+context. If we create or change a variable in a macro, the caller will see the
+change.</p>
+<p><span class="target" id="index-2-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a> creates its own variable scope, so side effects are not
+visible to the caller. In order to propagate changes to the parent which called
+the function, we must use <code class="docutils literal notranslate"><span class="pre">set(&lt;var&gt;</span> <span class="pre">&lt;value&gt;</span> <span class="pre">PARENT_SCOPE)</span></code>, which works the
+same as <span class="target" id="index-1-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set()</span></code></a> but for variables belonging to the caller's context.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In CMake 3.25, the <span class="target" id="index-0-command:return"></span><a class="reference internal" href="../../command/return.html#command:return" title="return(propagate)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">return(PROPAGATE)</span></code></a> option was added, which
+works the same as <span class="target" id="index-2-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set(parent_scope)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set(PARENT_SCOPE)</span></code></a> but provides slightly better
+ergonomics.</p>
+</div>
+<p>While not necessary for this exercise, it bears mentioning that <span class="target" id="index-3-command:macro"></span><a class="reference internal" href="../../command/macro.html#command:macro" title="macro"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">macro()</span></code></a>
+and <span class="target" id="index-3-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a> both support variadic arguments via the <code class="docutils literal notranslate"><span class="pre">ARGV</span></code>
+variable, a list containing all arguments passed to the command, and the
+<code class="docutils literal notranslate"><span class="pre">ARGN</span></code> variable, containing all arguments past the last expected argument.</p>
+<p>We're not going to build any targets in this exercise, so instead we'll
+construct our own version of <span class="target" id="index-2-command:list"></span><a class="reference internal" href="../../command/list.html#append" title="list(append)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list(APPEND)</span></code></a>, which adds a value to a
+list.</p>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Implement a macro and a function which append a value to a list, without using
+the <span class="target" id="index-3-command:list"></span><a class="reference internal" href="../../command/list.html#append" title="list(append)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list(APPEND)</span></code></a> command.</p>
+<p>The desired usage of these commands is as follows:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">Letters</span><span class="w"> </span><span class="s">&quot;Alpha;Beta&quot;</span><span class="nf">)</span>
+<span class="nf">MacroAppend(</span><span class="nb">Letters</span><span class="w"> </span><span class="s">&quot;Gamma&quot;</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="s">&quot;Letters contains: ${Letters}&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-P<span class="w"> </span>Exercise1.cmake
+<span class="go">Letters contains: Alpha;Beta;Gamma</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The extension for these exercises is <code class="docutils literal notranslate"><span class="pre">.cmake</span></code>, that's the standard extension
+for CMakeLang files when not contained in a <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p>
+</div>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-4-command:macro"></span><a class="reference internal" href="../../command/macro.html#command:macro" title="macro"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">macro()</span></code></a></p></li>
+<li><p><span class="target" id="index-4-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a></p></li>
+<li><p><span class="target" id="index-3-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set()</span></code></a></p></li>
+<li><p><span class="target" id="index-1-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Exercise1.cmake</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The source code for <code class="docutils literal notranslate"><span class="pre">Exercise1.cmake</span></code> is provided in the
+<code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step2</span></code> directory. It contains tests to verify the
+append behavior described above.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You're not expected to handle the case of an empty or undefined list to
+append to. However, as a bonus, the case is tested if you want to try out
+your understanding of CMakeLang conditionals.</p>
+</div>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">2</span></code>.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>We're going to use script mode to run these exercises. First navigate to the
+<code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step2</span></code> folder then you can run the code with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -P Exercise1.cmake</span>
+</pre></div>
+</div>
+<p>The script will report if the commands were implemented correctly.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>This problem relies on an understanding of the mechanisms of CMake variables.
+CMake variables are names for strings; or put another way, a CMake variable
+is itself a string which can brace expand into a different string.</p>
+<p>This leads to a common pattern in CMake code where functions and macros aren't
+passed values, but rather, they are passed the names of variables which contain
+those values. Thus <code class="docutils literal notranslate"><span class="pre">ListVar</span></code> does not contain the <em>value</em> of the list we need
+to append to, it contains the <em>name</em> of a list, which contains the value we
+need to append to.</p>
+<p>When expanding the variable with <code class="docutils literal notranslate"><span class="pre">${ListVar}</span></code>, we will get the name of the
+list. If we expand that name with <code class="docutils literal notranslate"><span class="pre">${${ListVar}}</span></code>, we will get the values
+the list contains.</p>
+<p>To implement <code class="docutils literal notranslate"><span class="pre">MacroAppend</span></code>, we need only combine this understanding of
+<code class="docutils literal notranslate"><span class="pre">ListVar</span></code> with our knowledge of the <span class="target" id="index-4-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set()</span></code></a> command.</p>
+<details><summary>TODO 1: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="exercise1-cmake-macroappend">
+<div class="code-block-caption"><span class="caption-text">TODO 1: Exercise1.cmake</span><a class="headerlink" href="#exercise1-cmake-macroappend" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">macro(</span><span class="nb">MacroAppend</span><span class="w"> </span><span class="nb">ListVar</span><span class="w"> </span><span class="nb">Value</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">set(</span><span class="o">${</span><span class="nt">ListVar</span><span class="o">}</span><span class="w"> </span><span class="s">&quot;${${ListVar}};${Value}&quot;</span><span class="nf">)</span>
+<span class="nf">endmacro()</span>
+</pre></div>
+</div>
+</div>
+</details><p>We don't need to worry about scope here, because a macro operates in the same
+scope as its parent.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FuncAppend</span></code> is almost identical, in fact it could be implemented in the
+same one liner but with an added <code class="docutils literal notranslate"><span class="pre">PARENT_SCOPE</span></code>, but the instructions ask
+us to implement it in terms of <code class="docutils literal notranslate"><span class="pre">MacroAppend</span></code>.</p>
+<details><summary>TODO 2: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="exercise1-cmake-funcappend">
+<div class="code-block-caption"><span class="caption-text">TODO 2: Exercise1.cmake</span><a class="headerlink" href="#exercise1-cmake-funcappend" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">function(</span><span class="nb">FuncAppend</span><span class="w"> </span><span class="nb">ListVar</span><span class="w"> </span><span class="nb">Value</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">MacroAppend(</span><span class="o">${</span><span class="nt">ListVar</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nt">Value</span><span class="o">}</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">set(</span><span class="o">${</span><span class="nt">ListVar</span><span class="o">}</span><span class="w"> </span><span class="s">&quot;${${ListVar}}&quot;</span><span class="w"> </span><span class="no">PARENT_SCOPE</span><span class="nf">)</span>
+<span class="nf">endfunction()</span>
+</pre></div>
+</div>
+</div>
+</details><p><code class="docutils literal notranslate"><span class="pre">MacroAppend</span></code> transforms <code class="docutils literal notranslate"><span class="pre">ListVar</span></code> for us, but it won't propagate the result
+to the parent scope. Because this is a function, we need to do so ourselves
+with <span class="target" id="index-5-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set(parent_scope)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set(PARENT_SCOPE)</span></code></a>.</p>
+</section>
+</section>
+<section id="exercise-2-conditionals-and-loops">
+<h2>Exercise 2 - Conditionals and Loops<a class="headerlink" href="#exercise-2-conditionals-and-loops" title="Link to this heading">¶</a></h2>
+<p>The two most common flow control elements in any structured programming
+language are conditionals and their close sibling loops. CMakeLang is no
+different. As previously mentioned, the truthiness of a given CMake string is a
+convention established by the <span class="target" id="index-2-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a> command.</p>
+<p>When given a string, <span class="target" id="index-3-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a> will first check if it is one of the known
+constant values previously discussed. If the string isn't one of those values
+the command assumes it is a variable, and checks the brace-expanded contents of
+that variable to determine the result of the conditional.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="nb">True</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Constant Value: True&quot;</span><span class="nf">)</span>
+<span class="nf">else()</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Constant Value: False&quot;</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">if(</span><span class="nb">ConditionalValue</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Undefined Variable: True&quot;</span><span class="nf">)</span>
+<span class="nf">else()</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Undefined Variable: False&quot;</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">set(</span><span class="nb">ConditionalValue</span><span class="w"> </span><span class="nb">True</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">ConditionalValue</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Defined Variable: True&quot;</span><span class="nf">)</span>
+<span class="nf">else()</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;Defined Variable: False&quot;</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-P<span class="w"> </span>ConditionalValue.cmake
+<span class="go">Constant Value: True</span>
+<span class="go">Undefined Variable: False</span>
+<span class="go">Defined Variable: True</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a good a time as any to discuss quoting in CMake. All objects in
+CMake are strings, thus the double quote, <code class="docutils literal notranslate"><span class="pre">&quot;</span></code>, is often unnecessary.
+CMake knows the object is a string, everything is a string.</p>
+<p>However, it is needed in some contexts. Strings containing whitespace require
+double quotes, else they are treated like lists; CMake will concatenate the
+elements together with semicolons. The reverse is also true, when
+brace-expanding lists it is necessary to do so inside quotes if we want to
+<em>preserve</em> the semicolons. Otherwise CMake will expand the list items into
+space-separate strings.</p>
+<p>A handful of commands, such as <span class="target" id="index-4-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a>, recognize the difference
+between quoted and unquoted strings. <span class="target" id="index-5-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a> will only check that the
+given string represents a variable when the string is unquoted.</p>
+</div>
+<p>Finally, <span class="target" id="index-6-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a> provides several useful comparison modes such as
+<code class="docutils literal notranslate"><span class="pre">STREQUAL</span></code> for string matching, <code class="docutils literal notranslate"><span class="pre">DEFINED</span></code> for checking the existence of
+a variable, and <code class="docutils literal notranslate"><span class="pre">MATCHES</span></code> for regular expression checks. It also supports the
+typical logical operators, <code class="docutils literal notranslate"><span class="pre">NOT</span></code>, <code class="docutils literal notranslate"><span class="pre">AND</span></code>, and <code class="docutils literal notranslate"><span class="pre">OR</span></code>.</p>
+<p>In addition to conditionals CMake provides two loop structures,
+<span class="target" id="index-0-command:while"></span><a class="reference internal" href="../../command/while.html#command:while" title="while"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">while()</span></code></a>, which follows the same rules as <span class="target" id="index-7-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a> for checking a
+loop variable, and the more useful <span class="target" id="index-1-command:foreach"></span><a class="reference internal" href="../../command/foreach.html#command:foreach" title="foreach"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">foreach()</span></code></a>, which iterates over lists
+of strings and was demonstrated in the <a class="reference internal" href="#background">Background</a> section.</p>
+<p>For this exercise, we're going to use loops and conditionals to solve some
+simple problems. We'll be using the aforementioned <code class="docutils literal notranslate"><span class="pre">ARGN</span></code> variable from
+<span class="target" id="index-5-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a> as the list to operate on.</p>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Loop over a list, and return all the strings containing the string <code class="docutils literal notranslate"><span class="pre">Foo</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Those who read the command documentation will be aware that this is
+<span class="target" id="index-4-command:list"></span><a class="reference internal" href="../../command/list.html#filter" title="list(filter)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list(FILTER)</span></code></a>, resist the temptation to use it.</p>
+</div>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-6-command:function"></span><a class="reference internal" href="../../command/function.html#command:function" title="function"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">function()</span></code></a></p></li>
+<li><p><span class="target" id="index-2-command:foreach"></span><a class="reference internal" href="../../command/foreach.html#command:foreach" title="foreach"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">foreach()</span></code></a></p></li>
+<li><p><span class="target" id="index-8-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a></p></li>
+<li><p><span class="target" id="index-5-command:list"></span><a class="reference internal" href="../../command/list.html#command:list" title="list"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Exercise2.cmake</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>The source code for <code class="docutils literal notranslate"><span class="pre">Exercise2.cmake</span></code> is provided in the <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step2</span></code>
+directory. It contains tests to verify the append behavior described above.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You should use the <span class="target" id="index-6-command:list"></span><a class="reference internal" href="../../command/list.html#append" title="list(append)"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">list(APPEND)</span></code></a> command this time to collect your
+final result into a list. The input can be consumed from the <code class="docutils literal notranslate"><span class="pre">ARGN</span></code> variable
+of the provided function.</p>
+</div>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">3</span></code>.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>Navigate to the <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step2</span></code> folder then you can run the code with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -P Exercise2.cmake</span>
+</pre></div>
+</div>
+<p>The script will report if the <code class="docutils literal notranslate"><span class="pre">FilterFoo</span></code> function was implemented correctly.</p>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>We need to do three things, loop over the <code class="docutils literal notranslate"><span class="pre">ARGN</span></code> list, check if a given
+item in that list matches <code class="docutils literal notranslate"><span class="pre">&quot;Foo&quot;</span></code>, and if so append it to the <code class="docutils literal notranslate"><span class="pre">OutVar</span></code>
+list.</p>
+<p>While there are a couple ways we could invoke <span class="target" id="index-3-command:foreach"></span><a class="reference internal" href="../../command/foreach.html#command:foreach" title="foreach"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">foreach()</span></code></a>, the
+recommended way is to allow the command to do the variable expansion for us
+via <code class="docutils literal notranslate"><span class="pre">IN</span> <span class="pre">LISTS</span></code> to access the <code class="docutils literal notranslate"><span class="pre">ARGN</span></code> list items.</p>
+<p>The <span class="target" id="index-9-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a> comparison we need is <code class="docutils literal notranslate"><span class="pre">MATCHES</span></code> which will check if
+<code class="docutils literal notranslate"><span class="pre">&quot;FOO&quot;</span></code> exists in the item. All that remains is to append the item to the
+<code class="docutils literal notranslate"><span class="pre">OutVar</span></code> list.  The trickiest part is remembering that <code class="docutils literal notranslate"><span class="pre">OutVar</span></code> <em>names</em> a
+list, it is not the list itself, so we need to access it via <code class="docutils literal notranslate"><span class="pre">${OutVar}</span></code>.</p>
+<details><summary>TODO 3: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="exercise2-cmake-filterfoo">
+<div class="code-block-caption"><span class="caption-text">TODO 3: Exercise2.cmake</span><a class="headerlink" href="#exercise2-cmake-filterfoo" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">function(</span><span class="nb">FilterFoo</span><span class="w"> </span><span class="nb">OutVar</span><span class="nf">)</span>
+
+<span class="w">  </span><span class="nf">foreach(</span><span class="nb">item</span><span class="w"> </span><span class="no">IN</span><span class="w"> </span><span class="no">LISTS</span><span class="w"> </span><span class="no">ARGN</span><span class="nf">)</span>
+<span class="w">    </span><span class="nf">if(</span><span class="nb">item</span><span class="w"> </span><span class="no">MATCHES</span><span class="w"> </span><span class="nb">Foo</span><span class="nf">)</span>
+<span class="w">      </span><span class="nf">list(</span><span class="no">APPEND</span><span class="w"> </span><span class="o">${</span><span class="nt">OutVar</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nt">item</span><span class="o">}</span><span class="nf">)</span>
+<span class="w">    </span><span class="nf">endif()</span>
+<span class="w">  </span><span class="nf">endforeach()</span>
+
+<span class="w">  </span><span class="nf">set(</span><span class="o">${</span><span class="nt">OutVar</span><span class="o">}</span><span class="w"> </span><span class="o">${${</span><span class="nt">OutVar</span><span class="o">}}</span><span class="w"> </span><span class="no">PARENT_SCOPE</span><span class="nf">)</span>
+<span class="nf">endfunction()</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-3-organizing-with-include">
+<h2>Exercise 3 - Organizing with Include<a class="headerlink" href="#exercise-3-organizing-with-include" title="Link to this heading">¶</a></h2>
+<p>We have already discussed how to incorporate subdirectories containing their
+own CMLs with <span class="target" id="index-0-command:add_subdirectory"></span><a class="reference internal" href="../../command/add_subdirectory.html#command:add_subdirectory" title="add_subdirectory"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_subdirectory()</span></code></a>. In later steps we will explore
+the various way CMake code can be packaged and shared across projects.</p>
+<p>However for small CMake functions and utilities, it is often beneficial for them
+to live in their own <code class="docutils literal notranslate"><span class="pre">.cmake</span></code> files outside the project CMLs and separate
+from the rest of the build system. This allows for separation of concerns,
+removing the project-specific elements from the utilities we are using to
+describe them.</p>
+<p>To incorporate these separate <code class="docutils literal notranslate"><span class="pre">.cmake</span></code> files into our project, we use the
+<span class="target" id="index-0-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a> command. This command immediately begins interpreting the
+contents of the <span class="target" id="index-1-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a>'d file in the scope of the parent CML. It
+is as if the entire file were being called as a macro.</p>
+<p>Traditionally, these kinds of <code class="docutils literal notranslate"><span class="pre">.cmake</span></code> files live in a folder named &quot;cmake&quot;
+inside the project root. For this exercise, we'll use the <code class="docutils literal notranslate"><span class="pre">Step2</span></code> folder instead.</p>
+<section id="id7">
+<h3>Goal<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>Use the functions from Exercises 1 and 2 to build and filter our own list of items.</p>
+</section>
+<section id="id8">
+<h3>Helpful Resources<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-2-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Files to Edit<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Exercise3.cmake</span></code></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Getting Started<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>The source code for <code class="docutils literal notranslate"><span class="pre">Exercise3.cmake</span></code> is provided in the <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step2</span></code>
+directory. It contains tests to verify the correct usage of our functions
+from the previous two exercises.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Actually it reuses tests from Exercise2.cmake, reusable code is good for
+everyone.</p>
+</div>
+<p>Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">4</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">7</span></code>.</p>
+</section>
+<section id="id11">
+<h3>Build and Run<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>Navigate to the <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step2</span></code> folder then you can run the code with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -P Exercise3.cmake</span>
+</pre></div>
+</div>
+<p>The script will report if the functions were invoked and composed correctly.</p>
+</section>
+<section id="id12">
+<h3>Solution<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>The <span class="target" id="index-3-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a> command will interpret the included file completely,
+including the tests from the first two exercises. We don't want to run these
+tests again. Thanks to some forethought, these files check a variable called
+<code class="docutils literal notranslate"><span class="pre">SKIP_TESTS</span></code> prior to running their tests, setting this to <code class="docutils literal notranslate"><span class="pre">True</span></code> will
+get us the behavior we want.</p>
+<details><summary>TODO 4: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="exercise3-cmake-skip-tests">
+<div class="code-block-caption"><span class="caption-text">TODO 4: Exercise3.cmake</span><a class="headerlink" href="#exercise3-cmake-skip-tests" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">SKIP_TESTS</span><span class="w"> </span><span class="nb">True</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now we're ready to <span class="target" id="index-4-command:include"></span><a class="reference internal" href="../../command/include.html#command:include" title="include"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">include()</span></code></a> the previous exercises to grab their
+functions.</p>
+<details><summary>TODO 5: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="exercise3-cmake-include">
+<div class="code-block-caption"><span class="caption-text">TODO 5: Exercise3.cmake</span><a class="headerlink" href="#exercise3-cmake-include" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">Exercise1.cmake</span><span class="nf">)</span>
+<span class="nf">include(</span><span class="nb">Exercise2.cmake</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Now that <code class="docutils literal notranslate"><span class="pre">FuncAppend</span></code> is available to us, we can use it to append new elements
+to the <code class="docutils literal notranslate"><span class="pre">InList</span></code>.</p>
+<details><summary>TODO 6: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="exercise3-cmake-funcappend">
+<div class="code-block-caption"><span class="caption-text">TODO 6: Exercise3.cmake</span><a class="headerlink" href="#exercise3-cmake-funcappend" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">FuncAppend(</span><span class="nb">InList</span><span class="w"> </span><span class="nb">FooBaz</span><span class="nf">)</span>
+<span class="nf">FuncAppend(</span><span class="nb">InList</span><span class="w"> </span><span class="nb">QuxBaz</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Finally, we can use <code class="docutils literal notranslate"><span class="pre">FilterFoo</span></code> to filter the full list. The tricky part to
+remember here is that our <code class="docutils literal notranslate"><span class="pre">FilterFoo</span></code> wants to operate on list values via
+<code class="docutils literal notranslate"><span class="pre">ARGN</span></code>, so we need to expand the <code class="docutils literal notranslate"><span class="pre">InList</span></code> when we call <code class="docutils literal notranslate"><span class="pre">FilterFoo</span></code>.</p>
+<details><summary>TODO 7: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="exercise3-cmake-filterfoo">
+<div class="code-block-caption"><span class="caption-text">TODO 7: Exercise3.cmake</span><a class="headerlink" href="#exercise3-cmake-filterfoo" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">FilterFoo(</span><span class="nb">OutList</span><span class="w"> </span><span class="o">${</span><span class="nt">InList</span><span class="o">}</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 2: CMake Language Fundamentals</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-macros-functions-and-lists">Exercise 1 - Macros, Functions, and Lists</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-conditionals-and-loops">Exercise 2 - Conditionals and Loops</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-3-organizing-with-include">Exercise 3 - Organizing with Include</a><ul>
+<li><a class="reference internal" href="#id7">Goal</a></li>
+<li><a class="reference internal" href="#id8">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id9">Files to Edit</a></li>
+<li><a class="reference internal" href="#id10">Getting Started</a></li>
+<li><a class="reference internal" href="#id11">Build and Run</a></li>
+<li><a class="reference internal" href="#id12">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Getting%20Started%20with%20CMake.html"
+                          title="previous chapter">Step 1: Getting Started with CMake</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Configuration%20and%20Cache%20Variables.html"
+                          title="next chapter">Step 3: Configuration and Cache Variables</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/CMake Language Fundamentals.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Configuration%20and%20Cache%20Variables.html" title="Step 3: Configuration and Cache Variables"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Getting%20Started%20with%20CMake.html" title="Step 1: Getting Started with CMake"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 2: CMake Language Fundamentals</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

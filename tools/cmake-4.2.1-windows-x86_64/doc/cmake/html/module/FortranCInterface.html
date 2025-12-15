@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FortranCInterface &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GenerateExportHeader" href="GenerateExportHeader.html" />
+    <link rel="prev" title="FindPackageMessage" href="FindPackageMessage.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="GenerateExportHeader.html" title="GenerateExportHeader"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindPackageMessage.html" title="FindPackageMessage"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FortranCInterface</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="fortrancinterface">
+<span id="module:FortranCInterface"></span><h1>FortranCInterface<a class="headerlink" href="#fortrancinterface" title="Link to this heading">¶</a></h1>
+<p>This module provides variables and commands to detect Fortran/C Interface.</p>
+<p>Load this module in a CMake project with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">FortranCInterface</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This module automatically detects the API by which C and Fortran languages
+interact.</p>
+<section id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Link to this heading">¶</a></h2>
+<section id="result-variables">
+<h3>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h3>
+<p>Including this module defines the following variables that indicate if the
+mangling is found:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_GLOBAL_FOUND</span></code></dt><dd><p>Boolean indicating whether global subroutines and functions are available.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE_FOUND</span></code></dt><dd><p>Boolean indicating whether module subroutines and functions (declared by
+<code class="docutils literal notranslate"><span class="pre">MODULE</span> <span class="pre">PROCEDURE</span></code>) are available.</p>
+</dd>
+</dl>
+</section>
+<section id="input-variables">
+<h3>Input Variables<a class="headerlink" href="#input-variables" title="Link to this heading">¶</a></h3>
+<p>This module also provides the following variables to specify
+the detected mangling, though a typical use case does not need
+to reference them and can use the <a class="reference internal" href="#commands">Commands</a> below.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_GLOBAL_PREFIX</span></code></dt><dd><p>Prefix for a global symbol without an underscore.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_GLOBAL_SUFFIX</span></code></dt><dd><p>Suffix for a global symbol without an underscore.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_GLOBAL_CASE</span></code></dt><dd><p>The case for a global symbol without an underscore,
+either <code class="docutils literal notranslate"><span class="pre">UPPER</span></code> or <code class="docutils literal notranslate"><span class="pre">LOWER</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_GLOBAL__PREFIX</span></code></dt><dd><p>Prefix for a global symbol with an underscore.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_GLOBAL__SUFFIX</span></code></dt><dd><p>Suffix for a global symbol with an underscore.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_GLOBAL__CASE</span></code></dt><dd><p>The case for a global symbol with an underscore,
+either <code class="docutils literal notranslate"><span class="pre">UPPER</span></code> or <code class="docutils literal notranslate"><span class="pre">LOWER</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE_PREFIX</span></code></dt><dd><p>Prefix for a module symbol without an underscore.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE_MIDDLE</span></code></dt><dd><p>Middle of a module symbol without an underscore that appears
+between the name of the module and the name of the symbol.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE_SUFFIX</span></code></dt><dd><p>Suffix for a module symbol without an underscore.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE_CASE</span></code></dt><dd><p>The case for a module symbol without an underscore,
+either <code class="docutils literal notranslate"><span class="pre">UPPER</span></code> or <code class="docutils literal notranslate"><span class="pre">LOWER</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE_ORDER</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>Order of components for module symbols without an underscore:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MODULE_THEN_SYMBOL</span></code></dt><dd><p>The module name appears <em>before</em> the symbol name, i.e.,
+<code class="docutils literal notranslate"><span class="pre">&lt;PREFIX&gt;&lt;module&gt;&lt;MIDDLE&gt;&lt;symbol&gt;&lt;SUFFIX&gt;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SYMBOL_THEN_MODULE</span></code></dt><dd><p>The module name appears <em>after</em> the symbol name, i.e.,
+<code class="docutils literal notranslate"><span class="pre">&lt;PREFIX&gt;&lt;symbol&gt;&lt;MIDDLE&gt;&lt;module&gt;&lt;SUFFIX&gt;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE__PREFIX</span></code></dt><dd><p>Prefix for a module symbol with an underscore.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE__MIDDLE</span></code></dt><dd><p>Middle of a module symbol with an underscore that appears
+between the name of the module and the name of the symbol.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE__SUFFIX</span></code></dt><dd><p>Suffix for a module symbol with an underscore.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE__CASE</span></code></dt><dd><p>The case for a module symbol with an underscore,
+either <code class="docutils literal notranslate"><span class="pre">UPPER</span></code> or <code class="docutils literal notranslate"><span class="pre">LOWER</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE__ORDER</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.1.</span></p>
+</div>
+<p>Order of components for module symbols with an underscore:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MODULE_THEN_SYMBOL</span></code></dt><dd><p>The module name appears <em>before</em> the symbol name, i.e.,
+<code class="docutils literal notranslate"><span class="pre">&lt;PREFIX&gt;&lt;module&gt;&lt;MIDDLE&gt;&lt;symbol&gt;&lt;SUFFIX&gt;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SYMBOL_THEN_MODULE</span></code></dt><dd><p>The module name appears <em>after</em> the symbol name, i.e.,
+<code class="docutils literal notranslate"><span class="pre">&lt;PREFIX&gt;&lt;symbol&gt;&lt;MIDDLE&gt;&lt;module&gt;&lt;SUFFIX&gt;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="variables-for-additional-manglings">
+<h3>Variables For Additional Manglings<a class="headerlink" href="#variables-for-additional-manglings" title="Link to this heading">¶</a></h3>
+<p>This module is aware of possible <code class="docutils literal notranslate"><span class="pre">GLOBAL</span></code> and <code class="docutils literal notranslate"><span class="pre">MODULE</span></code> manglings for
+many Fortran compilers, but it also provides an interface to specify
+new possible manglings.  The following variables can be set before including
+this module to specify additional manglings:</p>
+<p><code class="docutils literal notranslate"><span class="pre">FortranCInterface_GLOBAL_SYMBOLS</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">FortranCInterface_MODULE_SYMBOLS</span></code></p>
+<p>before including this module to specify manglings of the symbols
+<code class="docutils literal notranslate"><span class="pre">MySub</span></code>, <code class="docutils literal notranslate"><span class="pre">My_Sub</span></code>, <code class="docutils literal notranslate"><span class="pre">MyModule:MySub</span></code>, and <code class="docutils literal notranslate"><span class="pre">My_Module:My_Sub</span></code>.</p>
+</section>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading">¶</a></h2>
+<p>This module provides the following commands:</p>
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:fortrancinterface_header">
+<span class="sig-name descname"><span class="pre">FortranCInterface_HEADER</span></span><a class="headerlink" href="#command:fortrancinterface_header" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a C header file containing macros to mangle symbol names:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">FortranCInterface_HEADER(</span>
+<span class="w">  </span><span class="nv">&lt;file&gt;</span>
+<span class="w">  </span><span class="p">[</span><span class="no">MACRO_NAMESPACE</span><span class="w"> </span><span class="nv">&lt;macro-ns&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">SYMBOL_NAMESPACE</span><span class="w"> </span><span class="nv">&lt;ns&gt;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">[</span><span class="no">SYMBOLS</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;module&gt;</span><span class="o">:</span><span class="p">]</span><span class="nv">&lt;function&gt;</span><span class="w"> </span><span class="p">...]</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command generates a <code class="docutils literal notranslate"><span class="pre">&lt;file&gt;</span></code> with definitions of the following
+macros:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define FortranCInterface_GLOBAL (name,NAME) ...</span>
+<span class="cp">#define FortranCInterface_GLOBAL_(name,NAME) ...</span>
+<span class="cp">#define FortranCInterface_MODULE (mod,name, MOD,NAME) ...</span>
+<span class="cp">#define FortranCInterface_MODULE_(mod,name, MOD,NAME) ...</span>
+</pre></div>
+</div>
+<p>These macros mangle four categories of Fortran symbols, respectively:</p>
+<ul class="simple">
+<li><p>Global symbols without '_': <code class="docutils literal notranslate"><span class="pre">call</span> <span class="pre">mysub()</span></code></p></li>
+<li><p>Global symbols with '_'   : <code class="docutils literal notranslate"><span class="pre">call</span> <span class="pre">my_sub()</span></code></p></li>
+<li><p>Module symbols without '_': <code class="docutils literal notranslate"><span class="pre">use</span> <span class="pre">mymod;</span> <span class="pre">call</span> <span class="pre">mysub()</span></code></p></li>
+<li><p>Module symbols with '_'   : <code class="docutils literal notranslate"><span class="pre">use</span> <span class="pre">mymod;</span> <span class="pre">call</span> <span class="pre">my_sub()</span></code></p></li>
+</ul>
+<p>If mangling for a category is not known, its macro is left undefined.
+All macros require raw names in both lower case and upper case.</p>
+<p>The options are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">MACRO_NAMESPACE</span></code></dt><dd><p>Replace the default <code class="docutils literal notranslate"><span class="pre">FortranCInterface_</span></code> prefix with a given
+namespace <code class="docutils literal notranslate"><span class="pre">&lt;macro-ns&gt;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SYMBOL_NAMESPACE</span></code></dt><dd><p>Prefix all preprocessor definitions generated by the <code class="docutils literal notranslate"><span class="pre">SYMBOLS</span></code>
+option with a given namespace <code class="docutils literal notranslate"><span class="pre">&lt;ns&gt;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SYMBOLS</span></code></dt><dd><p>List symbols to mangle automatically with C preprocessor definitions:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;function&gt;          ==&gt; #define &lt;ns&gt;&lt;function&gt; ...
+&lt;module&gt;:&lt;function&gt; ==&gt; #define &lt;ns&gt;&lt;module&gt;_&lt;function&gt; ...
+</pre></div>
+</div>
+<p>If the mangling for some symbol is not known then no preprocessor
+definition is created, and a warning is displayed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cmake command">
+<dt class="sig sig-object cmake" id="command:fortrancinterface_verify">
+<span class="sig-name descname"><span class="pre">FortranCInterface_VERIFY</span></span><a class="headerlink" href="#command:fortrancinterface_verify" title="Link to this definition">¶</a></dt>
+<dd><p>Verifies that the Fortran and C/C++ compilers work together:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">FortranCInterface_VERIFY(</span><span class="p">[</span><span class="no">CXX</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">QUIET</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>This command tests whether a simple test executable using Fortran and C
+(and C++ when the <code class="docutils literal notranslate"><span class="pre">CXX</span></code> option is given) compiles and links successfully.
+The result is stored in the cache entry <code class="docutils literal notranslate"><span class="pre">FortranCInterface_VERIFIED_C</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">FortranCInterface_VERIFIED_CXX</span></code> if <code class="docutils literal notranslate"><span class="pre">CXX</span></code> is given) as a boolean.
+If the check fails and <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> is not given the command terminates with a
+fatal error message describing the problem.  The purpose of this check
+is to stop a build early for incompatible compiler combinations.  The
+test is built in the <code class="docutils literal notranslate"><span class="pre">Release</span></code> configuration.</p>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="examples-basic-usage">
+<h3>Examples: Basic Usage<a class="headerlink" href="#examples-basic-usage" title="Link to this heading">¶</a></h3>
+<p>The following example creates a <code class="docutils literal notranslate"><span class="pre">FC.h</span></code> header that defines mangling macros
+<code class="docutils literal notranslate"><span class="pre">FC_GLOBAL()</span></code>, <code class="docutils literal notranslate"><span class="pre">FC_GLOBAL_()</span></code>, <code class="docutils literal notranslate"><span class="pre">FC_MODULE()</span></code>, and <code class="docutils literal notranslate"><span class="pre">FC_MODULE_()</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">FortranCInterface</span><span class="nf">)</span>
+<span class="nf">FortranCInterface_HEADER(</span><span class="nb">FC.h</span><span class="w"> </span><span class="no">MACRO_NAMESPACE</span><span class="w"> </span><span class="s">&quot;FC_&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The next example creates a <code class="docutils literal notranslate"><span class="pre">FCMangle.h</span></code> header that defines the same
+<code class="docutils literal notranslate"><span class="pre">FC_*()</span></code> mangling macros as the previous example plus preprocessor symbols
+<code class="docutils literal notranslate"><span class="pre">FC_mysub</span></code> and <code class="docutils literal notranslate"><span class="pre">FC_mymod_my_sub</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">FortranCInterface</span><span class="nf">)</span>
+<span class="nf">FortranCInterface_HEADER(</span>
+<span class="w">  </span><span class="nb">FCMangle.h</span>
+<span class="w">  </span><span class="no">MACRO_NAMESPACE</span><span class="w"> </span><span class="s">&quot;FC_&quot;</span>
+<span class="w">  </span><span class="no">SYMBOL_NAMESPACE</span><span class="w"> </span><span class="s">&quot;FC_&quot;</span>
+<span class="w">  </span><span class="no">SYMBOLS</span><span class="w"> </span><span class="nb">mysub</span><span class="w"> </span><span class="nb">mymod</span><span class="o">:</span><span class="nb">my_sub</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-additional-manglings">
+<h3>Example: Additional Manglings<a class="headerlink" href="#example-additional-manglings" title="Link to this heading">¶</a></h3>
+<p>The following example shows how to specify manglings of the symbols
+<code class="docutils literal notranslate"><span class="pre">MySub</span></code>, <code class="docutils literal notranslate"><span class="pre">My_Sub</span></code>, <code class="docutils literal notranslate"><span class="pre">MyModule:MySub</span></code>, and <code class="docutils literal notranslate"><span class="pre">My_Module:My_Sub</span></code>.
+The following code tells this module to try given <code class="docutils literal notranslate"><span class="pre">GLOBAL</span></code> and <code class="docutils literal notranslate"><span class="pre">MODULE</span></code>
+manglings.  (The carets point at raw symbol names for clarity in this
+example but are not needed.)</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">FortranCInterface_GLOBAL_SYMBOLS</span><span class="w"> </span><span class="nb">mysub_</span><span class="w"> </span><span class="nb">my_sub__</span><span class="w"> </span><span class="no">MYSUB_</span><span class="nf">)</span>
+<span class="w">  </span><span class="c">#                                  ^^^^^  ^^^^^^   ^^^^^</span>
+<span class="nf">set(</span><span class="nb">FortranCInterface_MODULE_SYMBOLS</span>
+<span class="w">    </span><span class="nb">__mymodule_MOD_mysub</span><span class="w"> </span><span class="nb">__my_module_MOD_my_sub</span><span class="nf">)</span>
+<span class="w">  </span><span class="c">#   ^^^^^^^^     ^^^^^   ^^^^^^^^^     ^^^^^^</span>
+
+<span class="nf">include(</span><span class="nb">FortranCInterface</span><span class="nf">)</span>
+
+<span class="c"># ...</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FortranCInterface</a><ul>
+<li><a class="reference internal" href="#variables">Variables</a><ul>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#input-variables">Input Variables</a></li>
+<li><a class="reference internal" href="#variables-for-additional-manglings">Variables For Additional Manglings</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#examples-basic-usage">Examples: Basic Usage</a></li>
+<li><a class="reference internal" href="#example-additional-manglings">Example: Additional Manglings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindPackageMessage.html"
+                          title="previous chapter">FindPackageMessage</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="GenerateExportHeader.html"
+                          title="next chapter">GenerateExportHeader</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FortranCInterface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="GenerateExportHeader.html" title="GenerateExportHeader"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindPackageMessage.html" title="FindPackageMessage"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FortranCInterface</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

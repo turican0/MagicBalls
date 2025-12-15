@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Step 3: Configuration and Cache Variables &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Step 4: In-Depth CMake Target Commands" href="In-Depth%20CMake%20Target%20Commands.html" />
+    <link rel="prev" title="Step 2: CMake Language Fundamentals" href="CMake%20Language%20Fundamentals.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="In-Depth%20CMake%20Target%20Commands.html" title="Step 4: In-Depth CMake Target Commands"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMake%20Language%20Fundamentals.html" title="Step 2: CMake Language Fundamentals"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 3: Configuration and Cache Variables</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-3-configuration-and-cache-variables">
+<span id="guide:tutorial/Configuration and Cache Variables"></span><h1>Step 3: Configuration and Cache Variables<a class="headerlink" href="#step-3-configuration-and-cache-variables" title="Link to this heading">¶</a></h1>
+<p>CMake projects often have some project-specific configuration variables which
+users and packagers are interested in. CMake has many ways that an invoking
+user or process can communicate these configuration choices, but the most
+fundamental of them are <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a> flags.</p>
+<p>In this step we'll explore the ins and out of how to provide project
+configuration options from within a CML, and how to invoke CMake to take
+advantage of configuration options provided by both CMake and individual
+projects.</p>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h2>
+<p>If we had a CMake project for compression software which supported multiple
+compression algorithms, we might want to let the packager of the project decide
+which algorithms to enable when they build our software. We can do so by
+consuming variables set via <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a> flags.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">COMPRESSION_SOFTWARE_USE_ZLIB</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;I will use Zlib!&quot;</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># ...</span>
+<span class="nf">endif()</span>
+
+<span class="nf">if(</span><span class="no">COMPRESSION_SOFTWARE_USE_ZSTD</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">message(</span><span class="s">&quot;I will use Zstd!&quot;</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># ...</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCOMPRESSION_SOFTWARE_USE_ZLIB<span class="o">=</span>ON<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCOMPRESSION_SOFTWARE_USE_ZSTD<span class="o">=</span>OFF
+<span class="go">...</span>
+<span class="go">I will use Zlib!</span>
+</pre></div>
+</div>
+<p>Of course, we will want to provide reasonable defaults for these configuration
+choices, and a way to communicate the purpose of a given option. This function
+is provided by the <span class="target" id="index-0-command:option"></span><a class="reference internal" href="../../command/option.html#command:option" title="option"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">option()</span></code></a> command.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">option(</span><span class="no">COMPRESSION_SOFTWARE_USE_ZLIB</span><span class="w"> </span><span class="s">&quot;Support Zlib compression&quot;</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+<span class="nf">option(</span><span class="no">COMPRESSION_SOFTWARE_USE_ZSTD</span><span class="w"> </span><span class="s">&quot;Support Zstd compression&quot;</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="no">COMPRESSION_SOFTWARE_USE_ZLIB</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># Same as before</span>
+<span class="c"># ...</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-DCOMPRESSION_SOFTWARE_USE_ZLIB<span class="o">=</span>OFF
+<span class="go">...</span>
+<span class="go">I will use Zstd!</span>
+</pre></div>
+</div>
+<p>The names created by <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a> flags and <span class="target" id="index-1-command:option"></span><a class="reference internal" href="../../command/option.html#command:option" title="option"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">option()</span></code></a> are
+not normal variables, they are <strong>cache</strong> variables. Cache variables are globally
+visible variables which are <em>sticky</em>, their value is difficult to change after
+it is initially set. In fact they are so sticky that, in project mode, CMake
+will save and restore cache variables across multiple configurations. If a
+cache variable is set once, it will remain until another <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a>
+flag preempts the saved variable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CMake itself has dozens of normal and cache variables used for configuration.
+These are documented at <span class="target" id="index-0-manual:cmake-variables(7)"></span><a class="reference internal" href="../../manual/cmake-variables.7.html#manual:cmake-variables(7)" title="cmake-variables(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake-variables(7)</span></code></a> and operate in the same
+manner as project-provided variables for configuration.</p>
+</div>
+<p><span class="target" id="index-0-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set()</span></code></a> can also be used to manipulate cache variables, but will not
+change a variable which has already been created.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">StickyCacheVariable</span><span class="w"> </span><span class="s">&quot;I will not change&quot;</span><span class="w"> </span><span class="no">CACHE</span><span class="w"> </span><span class="no">STRING</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="nf">)</span>
+<span class="nf">set(</span><span class="nb">StickyCacheVariable</span><span class="w"> </span><span class="s">&quot;Overwrite StickyCache&quot;</span><span class="w"> </span><span class="no">CACHE</span><span class="w"> </span><span class="no">STRING</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="nf">)</span>
+
+<span class="nf">message(</span><span class="s">&quot;StickyCacheVariable: ${StickyCacheVariable}&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-P<span class="w"> </span>StickyCacheVariable.cmake
+<span class="go">StickyCacheVariable: I will not change</span>
+</pre></div>
+</div>
+<p>Because <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a> flags are processed before any other commands,
+they take precedence for setting the value of a cache variable.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-DStickyCacheVariable<span class="o">=</span><span class="s2">&quot;Commandline always wins&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-P<span class="w"> </span>StickyCacheVariable.cmake
+<span class="go">StickyCacheVariable: Commandline always wins</span>
+</pre></div>
+</div>
+<p>While cache variables cannot ordinarily be changed, they can be <em>shadowed</em> by
+normal variables. We can observe this by <span class="target" id="index-1-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set()</span></code></a>'ing a variable to have
+the same name as a cache variable, and then using <span class="target" id="index-0-command:unset"></span><a class="reference internal" href="../../command/unset.html#command:unset" title="unset"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">unset()</span></code></a> to remove
+the normal variable.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="nb">ShadowVariable</span><span class="w"> </span><span class="s">&quot;In the shadows&quot;</span><span class="w"> </span><span class="no">CACHE</span><span class="w"> </span><span class="no">STRING</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="nf">)</span>
+<span class="nf">set(</span><span class="nb">ShadowVariable</span><span class="w"> </span><span class="s">&quot;Hiding the cache variable&quot;</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="s">&quot;ShadowVariable: ${ShadowVariable}&quot;</span><span class="nf">)</span>
+
+<span class="nf">unset(</span><span class="nb">ShadowVariable</span><span class="nf">)</span>
+<span class="nf">message(</span><span class="s">&quot;ShadowVariable: ${ShadowVariable}&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cmake<span class="w"> </span>-P<span class="w"> </span>ShadowVariable.cmake
+<span class="go">ShadowVariable: Hiding the cache variable</span>
+<span class="go">ShadowVariable: In the shadows</span>
+</pre></div>
+</div>
+</section>
+<section id="exercise-1-using-options">
+<h2>Exercise 1 - Using Options<a class="headerlink" href="#exercise-1-using-options" title="Link to this heading">¶</a></h2>
+<p>We can imagine a scenario where consumers really want our <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code>
+library, and the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> utility is a &quot;take it or leave it&quot; add-on. In
+that case, we might want to add an option to allow consumers to disable
+building our <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> binary, building only the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library.</p>
+<p>With our knowledge of options, conditionals, and cache variables we have all
+the pieces we need to make this configuration available.</p>
+<section id="goal">
+<h3>Goal<a class="headerlink" href="#goal" title="Link to this heading">¶</a></h3>
+<p>Add an option named <code class="docutils literal notranslate"><span class="pre">TUTORIAL_BUILD_UTILITIES</span></code> to control if the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>
+binary is configured and built.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>CMake allows us to determine which targets are built after configuration. Our
+users could ask for the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library alone without <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>.
+CMake also has mechanisms to exclude targets from <code class="docutils literal notranslate"><span class="pre">ALL</span></code>, the default target
+which builds all the other available targets.</p>
+<p>However, options which completely exclude targets from the configuration are
+convenient and popular, especially if configuring those targets involves
+heavy-weight steps which might take some time.</p>
+<p>It also simplifies <span class="target" id="index-0-command:install"></span><a class="reference internal" href="../../command/install.html#command:install" title="install"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">install()</span></code></a> logic, which we'll discuss in later
+steps, if targets the packager is uninterested in are completely excluded.</p>
+</div>
+</section>
+<section id="helpful-resources">
+<h3>Helpful Resources<a class="headerlink" href="#helpful-resources" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-2-command:option"></span><a class="reference internal" href="../../command/option.html#command:option" title="option"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">option()</span></code></a></p></li>
+<li><p><span class="target" id="index-0-command:if"></span><a class="reference internal" href="../../command/if.html#command:if" title="if"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">if()</span></code></a></p></li>
+</ul>
+</section>
+<section id="files-to-edit">
+<h3>Files to Edit<a class="headerlink" href="#files-to-edit" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step3</span></code> folder contains the complete, recommended
+solution to <code class="docutils literal notranslate"><span class="pre">Step1</span></code> and the relevant <code class="docutils literal notranslate"><span class="pre">TODOs</span></code> for this step. Take a minute
+to review and refamiliarize yourself with the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> project.</p>
+<p>When you feel you have an understanding of the current code, start with
+<code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">1</span></code> and complete through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">2</span></code>.</p>
+</section>
+<section id="build-and-run">
+<h3>Build and Run<a class="headerlink" href="#build-and-run" title="Link to this heading">¶</a></h3>
+<p>We can now reconfigure our project. However, this time we want to control the
+configuration via <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">-D</span></code></a> flags. We again start by navigating
+to <code class="docutils literal notranslate"><span class="pre">Help/guide/tutorial/Step3</span></code> and invoking CMake, but this time with our
+configuration options.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -B build -DTUTORIAL_BUILD_UTILITIES=OFF</span>
+</pre></div>
+</div>
+<p>We can now build as usual.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>After the build we should observe no Tutorial executable is produced. Because
+cache variables are sticky even a reconfigure shouldn't change this, despite
+the default-<code class="docutils literal notranslate"><span class="pre">ON</span></code> option.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -B build</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Will not produce the Tutorial executable, the cache variables are &quot;locked in&quot;.
+To change this we have two options. First, we can edit the file which stores
+the cache variables between CMake configuration runs, the &quot;CMake Cache&quot;. This
+file is <code class="docutils literal notranslate"><span class="pre">build/CMakeCache.txt</span></code>, in it we can find the option cache variable.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>//Build the Tutorial executable
+TUTORIAL_BUILD_UTILITIES:BOOL=OFF
+</pre></div>
+</div>
+<p>We can change this from <code class="docutils literal notranslate"><span class="pre">OFF</span></code> to <code class="docutils literal notranslate"><span class="pre">ON</span></code>, rerun the build, and we will get
+our <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">CMakeCache.txt</span></code> entries are of the form <code class="docutils literal notranslate"><span class="pre">&lt;Name&gt;:&lt;Type&gt;=&lt;Value&gt;</span></code>, however
+the &quot;type&quot; is only a hint. All objects in CMake are strings, regardless of
+what the cache says.</p>
+</div>
+<p>Alternatively, we can change the value of the cache variable on the command
+line, because the command line runs before <code class="docutils literal notranslate"><span class="pre">CMakeCache.txt</span></code> is loaded its
+value take precedence over those in the cache file.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -B build -DTUTORIAL_BUILD_UTILITIES=ON</span>
+<span class="go">cmake --build build</span>
+</pre></div>
+</div>
+<p>Doing so we observe the value in <code class="docutils literal notranslate"><span class="pre">CMakeCache.txt</span></code> has flipped from <code class="docutils literal notranslate"><span class="pre">OFF</span></code>
+to <code class="docutils literal notranslate"><span class="pre">ON</span></code>, and that the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code> executable is built.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">¶</a></h3>
+<p>First we create our <span class="target" id="index-3-command:option"></span><a class="reference internal" href="../../command/option.html#command:option" title="option"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">option()</span></code></a> to provide our cache variable with a
+reasonable default value.</p>
+<details><summary>TODO 1: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-option-tutorial-build-utilities">
+<div class="code-block-caption"><span class="caption-text">TODO 1: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-option-tutorial-build-utilities" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">option(</span><span class="no">TUTORIAL_BUILD_UTILITIES</span><span class="w"> </span><span class="s">&quot;Build the Tutorial executable&quot;</span><span class="w"> </span><span class="no">ON</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</details><p>Then we can check the cache variable to conditionally enable the <code class="docutils literal notranslate"><span class="pre">Tutorial</span></code>
+executable (by way of adding its subdirectory).</p>
+<details><summary>TODO 2: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakelists-txt-if-tutorial-build-utilities">
+<div class="code-block-caption"><span class="caption-text">TODO 2: CMakeLists.txt</span><a class="headerlink" href="#cmakelists-txt-if-tutorial-build-utilities" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">if(</span><span class="no">TUTORIAL_BUILD_UTILITIES</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">add_subdirectory(</span><span class="nb">Tutorial</span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-2-cmake-variables">
+<h2>Exercise 2 - <code class="docutils literal notranslate"><span class="pre">CMAKE</span></code> Variables<a class="headerlink" href="#exercise-2-cmake-variables" title="Link to this heading">¶</a></h2>
+<p>CMake has several important normal and cache variables provided to allow
+packagers to control the build. Decisions such as compilers, default flags,
+search locations for packages, and much more are all controlled by CMake's
+own configuration variables.</p>
+<p>Among the most important are language standards. As the language standard can
+have significant impact on the ABI presented by a given package. For example,
+it's quite common for libraries to use standard C++ templates on later
+standards, and provide polyfills on earlier standards. If a library is consumed
+under different standards then ABI incompatibilities between the standard
+templates and the polyfills can result in incomprehensible errors and runtime
+crashes.</p>
+<p>Ensuring all of our targets are built under the same language standard is
+achieved with the <span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_STANDARD"></span><a class="reference internal" href="../../variable/CMAKE_LANG_STANDARD.html#variable:CMAKE_&lt;LANG&gt;_STANDARD" title="CMAKE_&lt;LANG&gt;_STANDARD"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_STANDARD</span></code></a> cache variables. For C++,
+this is <code class="docutils literal notranslate"><span class="pre">CMAKE_CXX_STANDARD</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because these variables are so important, it is equally important that
+developers not override or shadow them in their CMLs. Shadowing
+<span class="target" id="index-1-variable:CMAKE_&lt;LANG&gt;_STANDARD"></span><a class="reference internal" href="../../variable/CMAKE_LANG_STANDARD.html#variable:CMAKE_&lt;LANG&gt;_STANDARD" title="CMAKE_&lt;LANG&gt;_STANDARD"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_STANDARD</span></code></a> in a CML because the library wants C++20,
+when the packager has decided to build the rest of their libraries and
+applications with C++23, can lead to the aforementioned terrible,
+incomprehensible errors.</p>
+<p>Do not <span class="target" id="index-2-command:set"></span><a class="reference internal" href="../../command/set.html#command:set" title="set"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">set()</span></code></a> <code class="docutils literal notranslate"><span class="pre">CMAKE_</span></code> globals without very strong reasons for
+doing so. We'll discuss better methods for targets to communicate
+requirements like definitions and minimum standards in later steps.</p>
+</div>
+<p>In this exercise, we'll introduce some C++20 code into our library and
+executable and build them with C++20 by setting the appropriate cache variable.</p>
+<section id="id1">
+<h3>Goal<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Use <code class="docutils literal notranslate"><span class="pre">std::format</span></code> to format printed strings instead of stream operators. To
+ensure availability of <code class="docutils literal notranslate"><span class="pre">std::format</span></code>, configure CMake to use the C++20
+standard for C++ targets.</p>
+</section>
+<section id="id2">
+<h3>Helpful Resources<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-D"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">-D</span></code></a></p></li>
+<li><p><span class="target" id="index-2-variable:CMAKE_&lt;LANG&gt;_STANDARD"></span><a class="reference internal" href="../../variable/CMAKE_LANG_STANDARD.html#variable:CMAKE_&lt;LANG&gt;_STANDARD" title="CMAKE_&lt;LANG&gt;_STANDARD"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_STANDARD</span></code></a></p></li>
+<li><p><span class="target" id="index-0-variable:CMAKE_CXX_STANDARD"></span><a class="reference internal" href="../../variable/CMAKE_CXX_STANDARD.html#variable:CMAKE_CXX_STANDARD" title="CMAKE_CXX_STANDARD"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_CXX_STANDARD</span></code></a></p></li>
+<li><p><span class="target" id="index-0-prop_tgt:CXX_STANDARD"></span><a class="reference internal" href="../../prop_tgt/CXX_STANDARD.html#prop_tgt:CXX_STANDARD" title="CXX_STANDARD"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">CXX_STANDARD</span></code></a></p></li>
+<li><p><a class="reference external" href="https://en.cppreference.com/w/cpp/utility/format/format.html">cppreference &lt;format&gt;</a></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Files to Edit<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Tutorial/Tutorial.cxx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MathFunctions/MathFunctions.cxx</span></code></p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Getting Started<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>Continue to edit files from <code class="docutils literal notranslate"><span class="pre">Step3</span></code>. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">3</span></code> through <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">7</span></code>.
+We'll be modifying our prints to use <code class="docutils literal notranslate"><span class="pre">std::format</span></code> instead of stream
+operators.</p>
+<p>Ensure your cache variables are set such that the Tutorial executable will be
+built, using any of the methods discussed in the previous exercise.</p>
+</section>
+<section id="id5">
+<h3>Build and Run<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>We need to reconfigure our project with the new standard, we can do this
+using the same method as our <code class="docutils literal notranslate"><span class="pre">TUTORIAL_BUILD_UTILITIES</span></code> cache variable.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -B build -DCMAKE_CXX_STANDARD=20</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Configuration variables are, by convention, prefixed with the provider of the
+variable. CMake configuration variables are prefixed with <code class="docutils literal notranslate"><span class="pre">CMAKE_</span></code>, while
+projects should prefix their variables with <code class="docutils literal notranslate"><span class="pre">&lt;PROJECT&gt;_</span></code>.</p>
+<p>The tutorial configuration variables follow this convention, and are prefixed
+with <code class="docutils literal notranslate"><span class="pre">TUTORIAL_</span></code>.</p>
+</div>
+<p>Now that we've configured with C++20, we can build as usual.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>Solution<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>We need to include <code class="docutils literal notranslate"><span class="pre">&lt;format&gt;</span></code> and then use it.</p>
+<details><summary>TODO 3-5: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="tutorial-tutorial-cxx-include-format">
+<div class="code-block-caption"><span class="caption-text">TODO 3: Tutorial/Tutorial.cxx</span><a class="headerlink" href="#tutorial-tutorial-cxx-include-format" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;format&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="tutorial-tutorial-cxx-format1">
+<div class="code-block-caption"><span class="caption-text">TODO 4: Tutorial/Tutorial.cxx</span><a class="headerlink" href="#tutorial-tutorial-cxx-format1" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;Usage: {} number</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="tutorial-tutorial-cxx-format3">
+<div class="code-block-caption"><span class="caption-text">TODO 5: Tutorial/Tutorial.cxx</span><a class="headerlink" href="#tutorial-tutorial-cxx-format3" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// calculate square root</span>
+<span class="kt">double</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">outputValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mathfunctions</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">inputValue</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;The square root of {} is {}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">inputValue</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">outputValue</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</details><p>And again for the <code class="docutils literal notranslate"><span class="pre">MathFunctions</span></code> library.</p>
+<details><summary>TODO 6-7: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-include-format">
+<div class="code-block-caption"><span class="caption-text">TODO 6: MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-include-format" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;format&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="mathfunctions-mathfunctions-cxx-format">
+<div class="code-block-caption"><span class="caption-text">TODO 7: MathFunctions.cxx</span><a class="headerlink" href="#mathfunctions-mathfunctions-cxx-format" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">delta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+<span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">delta</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;Computing sqrt of {} to be {}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+<section id="exercise-3-cmakepresets-json">
+<h2>Exercise 3 - CMakePresets.json<a class="headerlink" href="#exercise-3-cmakepresets-json" title="Link to this heading">¶</a></h2>
+<p>Managing these configuration values can quickly become overwhelming. In CI
+systems it is appropriate to record these as part of a given CI step. For
+example in a Github Actions CI step we might see something akin to the
+following:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure and Build</span>
+<span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">cmake \</span>
+<span class="w">      </span><span class="no">-B build \</span>
+<span class="w">      </span><span class="no">-DCMAKE_BUILD_TYPE=Release \</span>
+<span class="w">      </span><span class="no">-DCMAKE_CXX_STANDARD=20 \</span>
+<span class="w">      </span><span class="no">-DCMAKE_CXX_EXTENSIONS=ON \</span>
+<span class="w">      </span><span class="no">-DTUTORIAL_BUILD_UTILITIES=OFF \</span>
+<span class="w">      </span><span class="no"># Possibly many more options</span>
+<span class="w">      </span><span class="no"># ...</span>
+
+<span class="w">    </span><span class="no">cmake --build build</span>
+</pre></div>
+</div>
+<p>When developing code locally, typing all these options even once might be error
+prone. If a fresh configuration is needed for any reason, doing so multiple
+times could be exhausting.</p>
+<p>There are many and varied solutions to this problem, and your choice is
+ultimately up to your preferences as a developer. CLI-oriented developers
+commonly use task runners to invoke CMake with their desired options for a
+project. Most IDEs also have a custom mechanism for controlling CMake
+configuration.</p>
+<p>It would be impossible to fully enumerate every possible configuration workflow
+here. Instead we will explore CMake's built-in solution, known as
+<span class="target" id="index-0-manual:cmake-presets(7)"></span><a class="reference internal" href="../../manual/cmake-presets.7.html#manual:cmake-presets(7)" title="cmake-presets(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">Presets</span></code></a>. Presets give us a format to name
+and express collections of CMake configuration options.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Presets are capable of expressing entire CMake workflows, from
+configuration, through building, all the way to installing the software
+package.</p>
+<p>They are far more flexible than can we have room for here. We'll limit
+ourselves to using them for configuration.</p>
+</div>
+<p>CMake Presets come in two standard files, <code class="docutils literal notranslate"><span class="pre">CMakePresets.json</span></code>, which is
+intended to be a part of the project and tracked in source control; and
+<code class="docutils literal notranslate"><span class="pre">CMakeUserPresets.json</span></code>, which is intended for local user configuration
+and should not be tracked in source control.</p>
+<p>The simplest preset which would be of use to a developer does nothing more
+than configure variables.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;configurePresets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example-preset&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;cacheVariables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;EXAMPLE_FOO&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bar&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;EXAMPLE_QUX&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Baz&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When invoking CMake, where previously we would have done:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -B build -DEXAMPLE_FOO=Bar -DEXAMPLE_QUX=Baz</span>
+</pre></div>
+</div>
+<p>We can now use the preset:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake -B build --preset example-preset</span>
+</pre></div>
+</div>
+<p>CMake will search for files named <code class="docutils literal notranslate"><span class="pre">CMakePresets.json</span></code> and
+<code class="docutils literal notranslate"><span class="pre">CMakeUserPresets.json</span></code>, and load the named configuration from them if
+available.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Command line flags can be mixed with presets. Command line flags have
+precedence over values found in a preset.</p>
+</div>
+<p>Presets also support limited macros, variables that can be brace-expanded
+inside the preset. The only one of interest to us is the <code class="docutils literal notranslate"><span class="pre">${sourceDir}</span></code> macro,
+which expands to the root directory of the project. We can use this to set our
+build directory, skipping the <a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-B"><code class="xref std std-option docutils literal notranslate"><span class="pre">-B</span></code></a> flag when configuring
+the project.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example-preset&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;binaryDir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${sourceDir}/build&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="id7">
+<h3>Goal<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>Configure and build the tutorial using a CMake Preset instead of command line
+flags.</p>
+</section>
+<section id="id8">
+<h3>Helpful Resources<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="target" id="index-1-manual:cmake-presets(7)"></span><a class="reference internal" href="../../manual/cmake-presets.7.html#manual:cmake-presets(7)" title="cmake-presets(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake-presets(7)</span></code></a></p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Files to Edit<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMakePresets.json</span></code></p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Getting Started<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>Continue to edit files from <code class="docutils literal notranslate"><span class="pre">Step3</span></code>. Complete <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">8</span></code> and <code class="docutils literal notranslate"><span class="pre">TODO</span> <span class="pre">9</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">TODOs</span></code> inside <code class="docutils literal notranslate"><span class="pre">CMakePresets.json</span></code> need to be <em>replaced</em>. There should
+be no <code class="docutils literal notranslate"><span class="pre">TODO</span></code> keys left inside the file when you have completed the exercise.</p>
+</div>
+<p>You can verify the preset is working correctly by deleting the existing build
+folder before you configure, this will ensure you're not reusing the existing
+CMake Cache for configuration.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On CMake 3.24 and newer, the same effect can be achieved by configuring with
+<a class="reference internal" href="../../manual/cmake.1.html#cmdoption-cmake-fresh"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--fresh</span></code></a>.</p>
+</div>
+<p>All future configuration changes will be via the <code class="docutils literal notranslate"><span class="pre">CMakePresets.json</span></code> file.</p>
+</section>
+<section id="id11">
+<h3>Build and Run<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>We can now use the preset file to manage our configuration.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --preset tutorial</span>
+</pre></div>
+</div>
+<p>Presets are capable of running the build step for us, but for this tutorial
+we'll continue to run the build ourselves.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build build</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h3>Solution<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<p>There are two changes we need to make, first we want to set the build
+directory (also called the &quot;binary directory&quot;) to the <code class="docutils literal notranslate"><span class="pre">build</span></code> subdirectory
+of our project folder, and second we need to set the <code class="docutils literal notranslate"><span class="pre">CMAKE_CXX_STANDARD</span></code> to
+<code class="docutils literal notranslate"><span class="pre">20</span></code>.</p>
+<details><summary>TODO 8-9: Click to show/hide answer</summary><div class="literal-block-wrapper docutils container" id="cmakepresets-json-initial">
+<div class="code-block-caption"><span class="caption-text">TODO 8-9: CMakePresets.json</span><a class="headerlink" href="#cmakepresets-json-initial" title="Link to this code">¶</a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;configurePresets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tutorial&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;displayName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Tutorial Preset&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Preset to use with the tutorial&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;binaryDir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${sourceDir}/build&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;cacheVariables&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;CMAKE_CXX_STANDARD&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">Step 3: Configuration and Cache Variables</a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#exercise-1-using-options">Exercise 1 - Using Options</a><ul>
+<li><a class="reference internal" href="#goal">Goal</a></li>
+<li><a class="reference internal" href="#helpful-resources">Helpful Resources</a></li>
+<li><a class="reference internal" href="#files-to-edit">Files to Edit</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#build-and-run">Build and Run</a></li>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-2-cmake-variables">Exercise 2 - <code class="docutils literal notranslate"><span class="pre">CMAKE</span></code> Variables</a><ul>
+<li><a class="reference internal" href="#id1">Goal</a></li>
+<li><a class="reference internal" href="#id2">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id3">Files to Edit</a></li>
+<li><a class="reference internal" href="#id4">Getting Started</a></li>
+<li><a class="reference internal" href="#id5">Build and Run</a></li>
+<li><a class="reference internal" href="#id6">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exercise-3-cmakepresets-json">Exercise 3 - CMakePresets.json</a><ul>
+<li><a class="reference internal" href="#id7">Goal</a></li>
+<li><a class="reference internal" href="#id8">Helpful Resources</a></li>
+<li><a class="reference internal" href="#id9">Files to Edit</a></li>
+<li><a class="reference internal" href="#id10">Getting Started</a></li>
+<li><a class="reference internal" href="#id11">Build and Run</a></li>
+<li><a class="reference internal" href="#id12">Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMake%20Language%20Fundamentals.html"
+                          title="previous chapter">Step 2: CMake Language Fundamentals</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="In-Depth%20CMake%20Target%20Commands.html"
+                          title="next chapter">Step 4: In-Depth CMake Target Commands</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/tutorial/Configuration and Cache Variables.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="In-Depth%20CMake%20Target%20Commands.html" title="Step 4: In-Depth CMake Target Commands"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMake%20Language%20Fundamentals.html" title="Step 2: CMake Language Fundamentals"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >CMake Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Step 3: Configuration and Cache Variables</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

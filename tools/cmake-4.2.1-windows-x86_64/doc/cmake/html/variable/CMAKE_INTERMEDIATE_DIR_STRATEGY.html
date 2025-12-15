@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMAKE_INTERMEDIATE_DIR_STRATEGY &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED" href="CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED.html" />
+    <link rel="prev" title="CMAKE_MODULE_PATH" href="CMAKE_MODULE_PATH.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED.html" title="CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_MODULE_PATH.html" title="CMAKE_MODULE_PATH"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" accesskey="U">cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_INTERMEDIATE_DIR_STRATEGY</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmake-intermediate-dir-strategy">
+<span id="variable:CMAKE_INTERMEDIATE_DIR_STRATEGY"></span><h1>CMAKE_INTERMEDIATE_DIR_STRATEGY<a class="headerlink" href="#cmake-intermediate-dir-strategy" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 4.2.</span></p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">CMAKE_INTERMEDIATE_DIR_STRATEGY</span></code> is a string cache variable specifying the
+strategy to use for target intermediate directories and their contents. The
+supported values are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FULL</span></code>: Intermediate directories are named based on a
+<code class="docutils literal notranslate"><span class="pre">&lt;TARGET_NAME&gt;.dir</span></code> pattern (with some slight deviations and sanitizations
+applied in various places). Object file names are based on the filename of
+the source file being compiled or, if set, its <span class="target" id="index-0-prop_sf:OBJECT_NAME"></span><a class="reference internal" href="../prop_sf/OBJECT_NAME.html#prop_sf:OBJECT_NAME" title="OBJECT_NAME"><code class="xref cmake cmake-prop_sf docutils literal notranslate"><span class="pre">OBJECT_NAME</span></code></a>
+property.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SHORT</span></code>: Intermediate directories are named from the hash of the target
+name and the build directory location. Object file names are based on hashes
+of the source file name to reduce path lengths. This may help with projects
+that generate long paths in the build directory to support building in
+directories other than those near a root path.</p></li>
+</ul>
+<p>When unset or the named strategy is not supported, the <code class="docutils literal notranslate"><span class="pre">FULL</span></code> strategy is
+used.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This only works as a cache variable, not a locally-scoped variable.</p>
+</div>
+<p>This is supported by the following generators:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../manual/cmake-generators.7.html#ninja-generators"><span class="std std-ref">Ninja Generators</span></a></p></li>
+<li><p><a class="reference internal" href="../manual/cmake-generators.7.html#makefile-generators"><span class="std std-ref">Makefile Generators</span></a></p></li>
+<li><p><a class="reference internal" href="../manual/cmake-generators.7.html#visual-studio-generators"><span class="std std-ref">Visual Studio Generators</span></a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not all generators support all strategies and paths may differ between
+generators.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMAKE_MODULE_PATH.html"
+                          title="previous chapter">CMAKE_MODULE_PATH</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED.html"
+                          title="next chapter">CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/variable/CMAKE_INTERMEDIATE_DIR_STRATEGY.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED.html" title="CMAKE_PKG_CONFIG_DISABLE_UNINSTALLED"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_MODULE_PATH.html" title="CMAKE_MODULE_PATH"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" >cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_INTERMEDIATE_DIR_STRATEGY</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

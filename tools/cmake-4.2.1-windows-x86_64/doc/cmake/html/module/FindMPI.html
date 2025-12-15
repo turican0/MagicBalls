@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindMPI &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindMsys" href="FindMsys.html" />
+    <link rel="prev" title="FindMPEG2" href="FindMPEG2.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindMsys.html" title="FindMsys"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindMPEG2.html" title="FindMPEG2"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindMPI</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findmpi">
+<span id="module:FindMPI"></span><h1>FindMPI<a class="headerlink" href="#findmpi" title="Link to this heading">¶</a></h1>
+<p>Finds a Message Passing Interface (MPI) implementation:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">MPI</span><span class="w"> </span><span class="p">[</span><span class="nv">&lt;version&gt;</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;langs&gt;...</span><span class="p">]</span><span class="w"> </span><span class="p">[...]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The Message Passing Interface (MPI) is a library used to write
+high-performance distributed-memory parallel applications, and is
+typically deployed on a cluster.  MPI is a standard interface (defined
+by the MPI forum) for which many implementations are available.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10: </span>Major overhaul of the module: many new variables, per-language components,
+and support for a wider variety of runtimes.</p>
+</div>
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
+<p>This module supports optional components that can be specified with the
+<span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command to control which MPI languages to search
+for:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">MPI</span><span class="w"> </span><span class="p">[</span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nv">&lt;langs&gt;...</span><span class="p">]</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>Supported components include:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">C</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>Finds MPI C API.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CXX</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>Finds the MPI C API that is usable from C++.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPICXX</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>Finds the MPI-2 C++ API that was removed in MPI-3.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Fortran</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+<p>Finds the MPI Fortran API.</p>
+</dd>
+</dl>
+<p>If no components are specified, module searches for the <code class="docutils literal notranslate"><span class="pre">C</span></code>, <code class="docutils literal notranslate"><span class="pre">CXX</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">Fortran</span></code> components automatically, depending on which languages are
+enabled in the project.</p>
+</section>
+<section id="imported-targets">
+<h2>Imported Targets<a class="headerlink" href="#imported-targets" title="Link to this heading">¶</a></h2>
+<p>This module provides the following <a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">Imported Targets</span></a>:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI::MPI_&lt;lang&gt;</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<p>Target encapsulating usage requirements for using MPI from language
+<code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code>, available if MPI is found.  The <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code> is a specified
+component name as listed above.</p>
+</dd>
+</dl>
+</section>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_FOUND</span></code></dt><dd><p>Boolean indicating that MPI settings for all requested components
+(languages) were found.  If no components are specified, this variable is
+set to boolean true if MPI settings for all enabled languages were
+detected.  Note that the <code class="docutils literal notranslate"><span class="pre">MPICXX</span></code> component does not affect this
+variable.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_VERSION</span></code></dt><dd><p>Minimal version of MPI detected among the requested languages, or all
+enabled languages if no components were specified.</p>
+</dd>
+</dl>
+<p>This module will set the following variables per language in CMake project,
+where <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code> is one of C, CXX, or Fortran:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_FOUND</span></code></dt><dd><p>Boolean indicating the MPI settings for <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code> were found and that
+simple MPI test programs compile with the provided settings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILER</span></code></dt><dd><p>MPI compiler for <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code> if such a program exists.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILE_OPTIONS</span></code></dt><dd><p>Compilation options for MPI programs in <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code>, given as a
+<a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated list</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILE_DEFINITIONS</span></code></dt><dd><p>Compilation definitions for MPI programs in <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code>, given as a
+<a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated list</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_INCLUDE_DIRS</span></code></dt><dd><p>Include path(s) for MPI header.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LINK_FLAGS</span></code></dt><dd><p>Linker flags for MPI programs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LIBRARIES</span></code></dt><dd><p>All libraries to link MPI programs against.</p>
+</dd>
+</dl>
+<p>The following variables indicating which bindings are present will be
+defined:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_MPICXX_FOUND</span></code></dt><dd><p>Boolean indicating whether the MPI-2 C++ bindings are present (introduced
+in MPI-2, removed with MPI-3).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_Fortran_HAVE_F77_HEADER</span></code></dt><dd><p>True if the Fortran 77 header <code class="docutils literal notranslate"><span class="pre">&lt;mpif.h&gt;</span></code> is available.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_Fortran_HAVE_F90_MODULE</span></code></dt><dd><p>True if the Fortran 90 module <code class="docutils literal notranslate"><span class="pre">mpi</span></code> can be used for accessing MPI (MPI-2
+and higher only).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_Fortran_HAVE_F08_MODULE</span></code></dt><dd><p>True if the Fortran 2008 <code class="docutils literal notranslate"><span class="pre">mpi_f08</span></code> is available to MPI programs (MPI-3
+and higher only).</p>
+</dd>
+</dl>
+<p>If possible, the MPI version will be determined by this module.  The
+facilities to detect the MPI version were introduced with MPI-1.2, and
+therefore cannot be found for older MPI versions.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_VERSION</span></code></dt><dd><p>MPI version implemented for <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code> by the MPI distribution.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_VERSION_MAJOR</span></code></dt><dd><p>Major version of MPI implemented for <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code> by the MPI distribution.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_VERSION_MINOR</span></code></dt><dd><p>Minor version of MPI implemented for <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code> by the MPI distribution.</p>
+</dd>
+</dl>
+<p>Note that there's no variable for the C bindings being accessible through
+<code class="docutils literal notranslate"><span class="pre">&lt;mpi.h&gt;</span></code>, since the MPI standards always have required this binding to
+work in both C and C++ code.</p>
+<p>For running MPI programs, the module sets the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPIEXEC_EXECUTABLE</span></code></dt><dd><p>Executable for running MPI programs, if such exists.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPIEXEC_NUMPROC_FLAG</span></code></dt><dd><p>Flag to pass to <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> before giving it the number of processors to
+run on.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPIEXEC_MAX_NUMPROCS</span></code></dt><dd><p>Number of MPI processors to utilize.  Defaults to the number of
+processors detected on the host system.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPIEXEC_PREFLAGS</span></code></dt><dd><p>Flags to pass to <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> directly before the executable to run.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPIEXEC_POSTFLAGS</span></code></dt><dd><p>Flags to pass to <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> after other flags.</p>
+</dd>
+</dl>
+</section>
+<section id="variables-for-locating-mpi">
+<h2>Variables for Locating MPI<a class="headerlink" href="#variables-for-locating-mpi" title="Link to this heading">¶</a></h2>
+<p>This module performs a four-step search for an MPI implementation:</p>
+<ol class="arabic simple">
+<li><p>Searches for <code class="docutils literal notranslate"><span class="pre">MPIEXEC_EXECUTABLE</span></code> and, if found, uses its base
+directory.</p></li>
+<li><p>Checks if the compiler has MPI support built-in.  This is the case if
+the user passed a compiler wrapper as <span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_COMPILER"></span><a class="reference internal" href="../variable/CMAKE_LANG_COMPILER.html#variable:CMAKE_&lt;LANG&gt;_COMPILER" title="CMAKE_&lt;LANG&gt;_COMPILER"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_COMPILER</span></code></a>
+or if they use Cray system compiler wrappers.</p></li>
+<li><p>Attempts to find an MPI compiler wrapper and determines the compiler
+information from it.</p></li>
+<li><p>Tries to find an MPI implementation that does not ship such a wrapper by
+guessing settings.  Currently, only Microsoft MPI and MPICH2 on Windows
+are supported.</p></li>
+</ol>
+<p>For controlling the <code class="docutils literal notranslate"><span class="pre">MPIEXEC_EXECUTABLE</span></code> step, the following variables
+may be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPIEXEC_EXECUTABLE</span></code></dt><dd><p>Manually specify the location of <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_HOME</span></code></dt><dd><p>Specify the base directory of the MPI installation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ENV{MPI_HOME}</span></code></dt><dd><p>Environment variable to specify the base directory of the MPI installation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ENV{I_MPI_ROOT}</span></code></dt><dd><p>Environment variable to specify the base directory of the MPI installation.</p>
+</dd>
+</dl>
+<p>For controlling the compiler wrapper step, the following variables may be
+set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILER</span></code></dt><dd><p>Search for the specified compiler wrapper and use it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILER_FLAGS</span></code></dt><dd><p>Flags to pass to the MPI compiler wrapper during interrogation.  Some
+compiler wrappers support linking debug or tracing libraries if a specific
+flag is passed and this variable may be used to obtain them.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_COMPILER_FLAGS</span></code></dt><dd><p>Used to initialize <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILER_FLAGS</span></code> if no language specific
+flag has been given.  Empty by default.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_EXECUTABLE_SUFFIX</span></code></dt><dd><p>A suffix which is appended to all names that are being looked for.  For
+instance, it may be set to <code class="docutils literal notranslate"><span class="pre">.mpich</span></code> or <code class="docutils literal notranslate"><span class="pre">.openmpi</span></code> to prefer the one
+or the other on Debian and its derivatives.</p>
+</dd>
+</dl>
+<p>In order to control the guessing step, the following variable may be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_GUESS_LIBRARY_NAME</span></code></dt><dd><p>Valid values are <code class="docutils literal notranslate"><span class="pre">MSMPI</span></code> and <code class="docutils literal notranslate"><span class="pre">MPICH2</span></code>.  If set, only the given library
+will be searched for.  By default, <code class="docutils literal notranslate"><span class="pre">MSMPI</span></code> will be preferred over
+<code class="docutils literal notranslate"><span class="pre">MPICH2</span></code> if both are available.  This also sets
+<code class="docutils literal notranslate"><span class="pre">MPI_SKIP_COMPILER_WRAPPER</span></code> variable to <code class="docutils literal notranslate"><span class="pre">true</span></code>, which may be
+overridden.</p>
+</dd>
+</dl>
+<p>Each of the search steps may be skipped with the following control variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_ASSUME_NO_BUILTIN_MPI</span></code></dt><dd><p>If true, the module assumes that the compiler itself does not provide an
+MPI implementation and skips to step 2.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_SKIP_COMPILER_WRAPPER</span></code></dt><dd><p>If true, no compiler wrapper will be searched for.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_SKIP_GUESSING</span></code></dt><dd><p>If true, the guessing step will be skipped.</p>
+</dd>
+</dl>
+<p>Additionally, the following control variable is available to change search
+behavior:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_CXX_SKIP_MPICXX</span></code></dt><dd><p>Add some definitions that will disable the MPI-2 C++ bindings.
+Currently supported are MPICH, Open MPI, Platform MPI and derivatives
+thereof, for example, MVAPICH or Intel MPI.</p>
+</dd>
+</dl>
+<p>If the find procedure fails for the module's internal variable
+<code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_WORKS</span></code>, then the settings detected by or passed to the module
+did not work and even a simple MPI test program failed to compile.</p>
+<p>If all of these parameters were not sufficient to find the right MPI
+implementation, a user may disable the entire autodetection process by
+specifying both a list of libraries in <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LIBRARIES</span></code> and a list
+of include directories in <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_ADDITIONAL_INCLUDE_DIRS</span></code>.  Any other
+variable may be set in addition to these two.  The module will then validate
+the MPI settings and store the settings in the cache.</p>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The variable <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_INCLUDE_DIRS</span></code> will be assembled from the
+following variables.</p>
+<p>For C and CXX:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_HEADER_DIR</span></code></dt><dd><p>Location of the <code class="docutils literal notranslate"><span class="pre">&lt;mpi.h&gt;</span></code> header on disk.</p>
+</dd>
+</dl>
+<p>For Fortran:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_Fortran_F77_HEADER_DIR</span></code></dt><dd><p>Location of the Fortran 77 header <code class="docutils literal notranslate"><span class="pre">&lt;mpif.h&gt;</span></code>, if it exists.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_Fortran_MODULE_DIR</span></code></dt><dd><p>Location of the <code class="docutils literal notranslate"><span class="pre">mpi</span></code> or <code class="docutils literal notranslate"><span class="pre">mpi_f08</span></code> modules, if available.</p>
+</dd>
+</dl>
+<p>For all languages the following variables are additionally considered:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_ADDITIONAL_INCLUDE_DIRS</span></code></dt><dd><p>A <a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated list</span></a> of paths needed
+in addition to the normal include directories.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;include-name&gt;_INCLUDE_DIR</span></code></dt><dd><p>Path variables for include folders referred to by <code class="docutils literal notranslate"><span class="pre">&lt;include-name&gt;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_ADDITIONAL_INCLUDE_VARS</span></code></dt><dd><p>A <a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated list</span></a> of
+<code class="docutils literal notranslate"><span class="pre">&lt;include-name&gt;</span></code> that will be added to the include locations of
+<code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code>.</p>
+</dd>
+</dl>
+<p>The variable <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LIBRARIES</span></code> will be assembled from the following
+variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lib-name&gt;_LIBRARY</span></code></dt><dd><p>The location of a library called <code class="docutils literal notranslate"><span class="pre">&lt;lib-name&gt;</span></code> for use with MPI.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LIB_NAMES</span></code></dt><dd><p>A <a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated list</span></a> of <code class="docutils literal notranslate"><span class="pre">&lt;lib-name&gt;</span></code>
+that will be added to the include locations of <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="advanced-variables-for-using-mpi">
+<h2>Advanced Variables for Using MPI<a class="headerlink" href="#advanced-variables-for-using-mpi" title="Link to this heading">¶</a></h2>
+<p>The module can perform some advanced feature detections upon explicit
+request.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following checks cannot be performed without <em>executing</em> an MPI test
+program.  Consider the special considerations for the behavior of
+<span class="target" id="index-0-command:try_run"></span><a class="reference internal" href="../command/try_run.html#command:try_run" title="try_run"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">try_run()</span></code></a> during cross compilation.  Moreover, running an MPI
+program can cause additional issues, like a firewall notification on some
+systems.  These detections should be only enabled if information is
+absolutely needed.</p>
+</div>
+<p>If the following variables are set to true, the respective search will be
+performed:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_DETERMINE_Fortran_CAPABILITIES</span></code></dt><dd><p>Determine for all available Fortran bindings what the values of
+<code class="docutils literal notranslate"><span class="pre">MPI_SUBARRAYS_SUPPORTED</span></code> and <code class="docutils literal notranslate"><span class="pre">MPI_ASYNC_PROTECTS_NONBLOCKING</span></code> are
+and make their values available as <code class="docutils literal notranslate"><span class="pre">MPI_Fortran_&lt;binding&gt;_SUBARRAYS</span></code>
+and <code class="docutils literal notranslate"><span class="pre">MPI_Fortran_&lt;binding&gt;_ASYNCPROT</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;binding&gt;</span></code> is one of
+<code class="docutils literal notranslate"><span class="pre">F77_HEADER</span></code>, <code class="docutils literal notranslate"><span class="pre">F90_MODULE</span></code> and <code class="docutils literal notranslate"><span class="pre">F08_MODULE</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_DETERMINE_LIBRARY_VERSION</span></code></dt><dd><p>For each language, find the output of <code class="docutils literal notranslate"><span class="pre">MPI_Get_library_version</span></code> and
+make it available as <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LIBRARY_VERSION_STRING</span></code>.  This
+information is usually tied to the runtime component of an MPI
+implementation and might differ depending on <code class="docutils literal notranslate"><span class="pre">&lt;lang&gt;</span></code>.
+Note that the return value is entirely implementation defined.  This
+information might be used to identify the MPI vendor and for example pick
+the correct one of multiple third party binaries that matches the MPI
+vendor.</p>
+</dd>
+</dl>
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_COMPILER</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.8.5: </span>Use the <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILER</span></code> instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_LIBRARY</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.8.5: </span>Use the <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LIBRARIES</span></code> instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_EXTRA_LIBRARY</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.8.5: </span>Use the <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LIBRARIES</span></code> instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_COMPILE_FLAGS</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.8.5: </span>Use <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILE_OPTIONS</span></code> and <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILE_DEFINITIONS</span></code>
+instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_INCLUDE_PATH</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.8.5: </span>Use the <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_INCLUDE_DIRS</span></code> instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_LINK_FLAGS</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.8.5: </span>Use the <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LINK_FLAGS</span></code> instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_LIBRARIES</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.8.5: </span>Use the <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_LIBRARIES</span></code> instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILE_FLAGS</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.10: </span>Use the <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILE_OPTIONS</span></code> and
+<code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_COMPILE_DEFINITIONS</span></code> instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_INCLUDE_PATH</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.10: </span>For consumption use <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_INCLUDE_DIRS</span></code> and for specifying
+folders use <code class="docutils literal notranslate"><span class="pre">MPI_&lt;lang&gt;_ADDITIONAL_INCLUDE_DIRS</span></code> instead.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MPIEXEC</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 3.10: </span>Use <code class="docutils literal notranslate"><span class="pre">MPIEXEC_EXECUTABLE</span></code> instead.</p>
+</div>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<section id="example-basic-usage">
+<h3>Example: Basic Usage<a class="headerlink" href="#example-basic-usage" title="Link to this heading">¶</a></h3>
+<p>Finding MPI and linking imported target to project target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">MPI</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="no">MPI</span><span class="o">::</span><span class="no">MPI_C</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-usage-of-mpiexec">
+<h3>Example: Usage of mpiexec<a class="headerlink" href="#example-usage-of-mpiexec" title="Link to this heading">¶</a></h3>
+<p>When using <code class="docutils literal notranslate"><span class="pre">MPIEXEC_EXECUTABLE</span></code> to execute MPI applications, typically
+all of the <code class="docutils literal notranslate"><span class="pre">MPIEXEC_EXECUTABLE</span></code> flags should be used as follows.</p>
+<p>In the following example, the command is executed in a process.
+<code class="docutils literal notranslate"><span class="pre">&lt;executable&gt;</span></code> should be replaced with the MPI program, and <code class="docutils literal notranslate"><span class="pre">&lt;args&gt;</span></code>
+with the arguments to pass to the MPI program.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="no">MPI</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="no">MPI_FOUND</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">execute_process(</span>
+<span class="w">    </span><span class="no">COMMAND</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">MPIEXEC_EXECUTABLE</span><span class="o">}</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">MPIEXEC_NUMPROC_FLAG</span><span class="o">}</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">MPIEXEC_MAX_NUMPROCS</span><span class="o">}</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">MPIEXEC_PREFLAGS</span><span class="o">}</span>
+<span class="w">      </span><span class="nv">&lt;executable&gt;</span>
+<span class="w">      </span><span class="o">${</span><span class="nt">MPIEXEC_POSTFLAGS</span><span class="o">}</span>
+<span class="w">      </span><span class="nv">&lt;args&gt;</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindMPI</a><ul>
+<li><a class="reference internal" href="#components">Components</a></li>
+<li><a class="reference internal" href="#imported-targets">Imported Targets</a></li>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#variables-for-locating-mpi">Variables for Locating MPI</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#advanced-variables-for-using-mpi">Advanced Variables for Using MPI</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-basic-usage">Example: Basic Usage</a></li>
+<li><a class="reference internal" href="#example-usage-of-mpiexec">Example: Usage of mpiexec</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindMPEG2.html"
+                          title="previous chapter">FindMPEG2</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindMsys.html"
+                          title="next chapter">FindMsys</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindMPI.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindMsys.html" title="FindMsys"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindMPEG2.html" title="FindMPEG2"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindMPI</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

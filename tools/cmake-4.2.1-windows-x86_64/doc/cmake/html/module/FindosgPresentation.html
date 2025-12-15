@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>FindosgPresentation &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindosgProducer" href="FindosgProducer.html" />
+    <link rel="prev" title="FindosgParticle" href="FindosgParticle.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FindosgProducer.html" title="FindosgProducer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FindosgParticle.html" title="FindosgParticle"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindosgPresentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="findosgpresentation">
+<span id="module:FindosgPresentation"></span><h1>FindosgPresentation<a class="headerlink" href="#findosgpresentation" title="Link to this heading">¶</a></h1>
+<p>Finds the osgPresentation NodeKit from the OpenSceneGraph toolkit, available
+since OpenSceneGraph version 3.0.0.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In most cases, it's recommended to use the <span class="target" id="index-0-module:FindOpenSceneGraph"></span><a class="reference internal" href="FindOpenSceneGraph.html#module:FindOpenSceneGraph" title="FindOpenSceneGraph"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindOpenSceneGraph</span></code></a> module
+instead and list osgPresentation as a component.  This will automatically
+handle dependencies such as the OpenThreads and core osg libraries:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">OpenSceneGraph</span><span class="w"> </span><span class="no">COMPONENTS</span><span class="w"> </span><span class="nb">osgPresentation</span><span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+<p>This module is used internally by <span class="target" id="index-1-module:FindOpenSceneGraph"></span><a class="reference internal" href="FindOpenSceneGraph.html#module:FindOpenSceneGraph" title="FindOpenSceneGraph"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindOpenSceneGraph</span></code></a> to find the
+osgPresentation NodeKit.  It is not intended to be included directly during
+typical use of the <span class="target" id="index-0-command:find_package"></span><a class="reference internal" href="../command/find_package.html#command:find_package" title="find_package"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">find_package()</span></code></a> command.  However, it is available as
+a standalone module for advanced use cases where finer control over detection is
+needed.  For example, to find the osgPresentation explicitly or bypass automatic
+component detection:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">osgPresentation</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>OpenSceneGraph and osgPresentation headers are intended to be included in C++
+project source code as:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">example.cxx</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;osg/PositionAttitudeTransform&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;osgPresentation/SlideEventHandler&gt;</span>
+<span class="c1">// ...</span>
+</pre></div>
+</div>
+</div>
+<p>When working with the OpenSceneGraph toolkit, other libraries such as OpenGL may
+also be required.</p>
+<section id="result-variables">
+<h2>Result Variables<a class="headerlink" href="#result-variables" title="Link to this heading">¶</a></h2>
+<p>This module defines the following variables:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">osgPresentation_FOUND</span></code></dt><dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3.</span></p>
+</div>
+<p>Boolean indicating whether the osgPresentation NodeKit of the
+OpenSceneGraph toolkit was found.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OSGPRESENTATION_LIBRARIES</span></code></dt><dd><p>The libraries needed to link against to use osgPresentation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OSGPRESENTATION_LIBRARY</span></code></dt><dd><p>A result variable that is set to the same value as the
+<code class="docutils literal notranslate"><span class="pre">OSGPRESENTATION_LIBRARIES</span></code> variable.</p>
+</dd>
+</dl>
+</section>
+<section id="cache-variables">
+<h2>Cache Variables<a class="headerlink" href="#cache-variables" title="Link to this heading">¶</a></h2>
+<p>The following cache variables may also be set:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">OSGPRESENTATION_INCLUDE_DIR</span></code></dt><dd><p>The include directory containing headers needed to use osgPresentation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OSGPRESENTATION_LIBRARY_DEBUG</span></code></dt><dd><p>The path to the osgPresentation debug library.</p>
+</dd>
+</dl>
+</section>
+<section id="hints">
+<h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">¶</a></h2>
+<p>This module accepts the following variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">OSGDIR</span></code></dt><dd><p>Environment variable that can be set to help locate the OpenSceneGraph
+toolkit, including its osgPresentation NodeKit, when installed in a custom
+location.  It should point to the OpenSceneGraph installation prefix used when
+it was configured, built, and installed: <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">--prefix=$OSGDIR</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="deprecated-variables">
+<h2>Deprecated Variables<a class="headerlink" href="#deprecated-variables" title="Link to this heading">¶</a></h2>
+<p>The following variables are provided for backward compatibility:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">OSGPRESENTATION_FOUND</span></code></dt><dd><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.2: </span>Use <code class="docutils literal notranslate"><span class="pre">osgPresentation_FOUND</span></code>, which has the same value.</p>
+</div>
+<p>Boolean indicating whether the osgPresentation NodeKit of the
+OpenSceneGraph toolkit was found.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Finding osgPresentation explicitly with this module and creating an interface
+<a class="reference internal" href="../manual/cmake-buildsystem.7.html#imported-targets"><span class="std std-ref">imported target</span></a> that encapsulates its usage
+requirements for linking it to a project target:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">find_package(</span><span class="nb">osgPresentation</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="nb">osgPresentation_FOUND</span><span class="w"> </span><span class="no">AND</span><span class="w"> </span><span class="no">NOT</span><span class="w"> </span><span class="no">TARGET</span><span class="w"> </span><span class="nb">osgPresentation</span><span class="o">::</span><span class="nb">osgPresentation</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">add_library(</span><span class="nb">osgPresentation</span><span class="o">::</span><span class="nb">osgPresentation</span><span class="w"> </span><span class="no">INTERFACE</span><span class="w"> </span><span class="no">IMPORTED</span><span class="nf">)</span>
+<span class="w">  </span><span class="nf">set_target_properties(</span>
+<span class="w">    </span><span class="nb">osgPresentation</span><span class="o">::</span><span class="nb">osgPresentation</span>
+<span class="w">    </span><span class="no">PROPERTIES</span>
+<span class="w">      </span><span class="no">INTERFACE_INCLUDE_DIRECTORIES</span><span class="w"> </span><span class="s">&quot;${OSGPRESENTATION_INCLUDE_DIR}&quot;</span>
+<span class="w">      </span><span class="no">INTERFACE_LINK_LIBRARIES</span><span class="w"> </span><span class="s">&quot;${OSGPRESENTATION_LIBRARIES}&quot;</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+
+<span class="nf">target_link_libraries(</span><span class="nb">example</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="nb">osgPresentation</span><span class="o">::</span><span class="nb">osgPresentation</span><span class="nf">)</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The <span class="target" id="index-2-module:FindOpenSceneGraph"></span><a class="reference internal" href="FindOpenSceneGraph.html#module:FindOpenSceneGraph" title="FindOpenSceneGraph"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FindOpenSceneGraph</span></code></a> module to find OpenSceneGraph toolkit.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">FindosgPresentation</a><ul>
+<li><a class="reference internal" href="#result-variables">Result Variables</a></li>
+<li><a class="reference internal" href="#cache-variables">Cache Variables</a></li>
+<li><a class="reference internal" href="#hints">Hints</a></li>
+<li><a class="reference internal" href="#deprecated-variables">Deprecated Variables</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FindosgParticle.html"
+                          title="previous chapter">FindosgParticle</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FindosgProducer.html"
+                          title="next chapter">FindosgProducer</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/FindosgPresentation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FindosgProducer.html" title="FindosgProducer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FindosgParticle.html" title="FindosgParticle"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FindosgPresentation</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>

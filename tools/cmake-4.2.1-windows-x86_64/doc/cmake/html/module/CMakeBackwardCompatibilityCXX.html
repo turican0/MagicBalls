@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMakeBackwardCompatibilityCXX &mdash; CMake 4.2.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a3862c66" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=4d06bd55" />
+    
+    <script src="../_static/documentation_options.js?v=74d6e94f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMakeDependentOption" href="CMakeDependentOption.html" />
+    <link rel="prev" title="CMakeAddFortranSubdirectory" href="CMakeAddFortranSubdirectory.html" />
+ 
+
+  </head><body>
+    <input id="sidebar-check" type="checkbox" />
+    <label id="sidebar-overlay" for="sidebar-check"></label>
+
+
+
+    <div class="related relbar1" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMakeDependentOption.html" title="CMakeDependentOption"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMakeAddFortranSubdirectory.html" title="CMakeAddFortranSubdirectory"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" accesskey="U">cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMakeBackwardCompatibilityCXX</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmakebackwardcompatibilitycxx">
+<span id="module:CMakeBackwardCompatibilityCXX"></span><h1>CMakeBackwardCompatibilityCXX<a class="headerlink" href="#cmakebackwardcompatibilitycxx" title="Link to this heading">¶</a></h1>
+<p>This module defines several backward compatibility cache variables for the
+<code class="docutils literal notranslate"><span class="pre">CXX</span></code> language to support early C++ (pre-C++98, ANSI C++).</p>
+<p>Load this module in a CMake project with:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeBackwardCompatibilityCXX</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The following modules are included by this module:</p>
+<ul class="simple">
+<li><p><span class="target" id="index-0-module:TestForANSIForScope"></span><a class="reference internal" href="TestForANSIForScope.html#module:TestForANSIForScope" title="TestForANSIForScope"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">TestForANSIForScope</span></code></a></p></li>
+<li><p><span class="target" id="index-0-module:TestForANSIStreamHeaders"></span><a class="reference internal" href="TestForANSIStreamHeaders.html#module:TestForANSIStreamHeaders" title="TestForANSIStreamHeaders"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">TestForANSIStreamHeaders</span></code></a></p></li>
+<li><p><span class="target" id="index-0-module:TestForSSTREAM"></span><a class="reference internal" href="TestForSSTREAM.html#module:TestForSSTREAM" title="TestForSSTREAM"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">TestForSSTREAM</span></code></a></p></li>
+<li><p><span class="target" id="index-0-module:TestForSTDNamespace"></span><a class="reference internal" href="TestForSTDNamespace.html#module:TestForSTDNamespace" title="TestForSTDNamespace"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">TestForSTDNamespace</span></code></a></p></li>
+</ul>
+<p>Additionally, the following cache variable may be defined:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">CMAKE_ANSI_CXXFLAGS</span></code></dt><dd><p>A space-separated string of compiler options for enabling ANSI C++ mode, if
+available.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is intended for C++ code written before <code class="docutils literal notranslate"><span class="pre">C++</span> <span class="pre">98</span></code>.  As of the
+<code class="docutils literal notranslate"><span class="pre">C++</span> <span class="pre">98</span></code> standard, these issues have been formally addressed, making such
+checks obsolete.</p>
+</div>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Including this module provides backward compatibility cache variables, which
+can be used in C++.  For example:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code></span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">include(</span><span class="nb">CMakeBackwardCompatibilityCXX</span><span class="nf">)</span>
+<span class="nf">file(</span>
+<span class="w">  </span><span class="no">CONFIGURE</span>
+<span class="w">  </span><span class="no">OUTPUT</span><span class="w"> </span><span class="nb">config.h</span>
+<span class="w">  </span><span class="no">CONTENT</span><span class="w"> </span><span class="p">[[</span>
+<span class="w">    </span><span class="c">#cmakedefine CMAKE_NO_ANSI_FOR_SCOPE</span>
+<span class="w">    </span><span class="c">#cmakedefine CMAKE_NO_ANSI_STRING_STREAM</span>
+<span class="w">    </span><span class="c">#cmakedefine CMAKE_NO_ANSI_STREAM_HEADERS</span>
+<span class="w">    </span><span class="c">#cmakedefine CMAKE_NO_STD_NAMESPACE</span>
+<span class="w">  </span><span class="p">]]</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3>Table of Contents</h3>
+    <ul>
+<li><a class="reference internal" href="#">CMakeBackwardCompatibilityCXX</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMakeAddFortranSubdirectory.html"
+                          title="previous chapter">CMakeAddFortranSubdirectory</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMakeDependentOption.html"
+                          title="next chapter">CMakeDependentOption</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/module/CMakeBackwardCompatibilityCXX.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMakeDependentOption.html" title="CMakeDependentOption"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMakeAddFortranSubdirectory.html" title="CMakeAddFortranSubdirectory"
+             >previous</a> |</li>
+  <li>
+    <label class="sidebar-toggle" for="sidebar-check"></label>
+  </li>
+  <li class="rootlink">
+    <img src="../_static/cmake-logo-16.png" width="16" height="16" alt=""/>
+    <a href="https://cmake.org/">CMake 4.2.1</a>
+    <span class="reldelim1"> &#187;</span>
+  </li>
+  <li>
+    <a href="../index.html">Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-modules.7.html" >cmake-modules(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMakeBackwardCompatibilityCXX</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2025 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+<script type="text/javascript">
+(function() {
+  "use strict";
+  const hide = () => document.getElementById("sidebar-check").checked = false;
+  addEventListener("keydown", e => (e.key === "Escape") && hide());
+  addEventListener("click", e => (e.target.tagName === "A") && hide());
+  addEventListener("hashchange", hide)
+})();
+</script>
+  </body>
+</html>
