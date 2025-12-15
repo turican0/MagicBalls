@@ -16,3 +16,5 @@ export_credentials.cfg
 data_*/
 mono_crash.*.json
 test-terrain/addons/terrain_3d/bin/~libterrain.windows.debug.x86_64.dll
+*.tlog
+*.ipch
