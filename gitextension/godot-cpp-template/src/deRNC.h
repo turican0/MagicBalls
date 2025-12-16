@@ -1,5 +1,5 @@
 #pragma once
-#include "defs.h"
+#include "defsx.h"
 #define RNC_SIGN 0x524E43 // RNC
 #define RNC_HEADER_SIZE 0x12
 #define MAX_BUF_SIZE 0x90000

@@ -47,10 +47,21 @@ add_library(${LIBNAME} SHARED)
 
 target_sources(${LIBNAME}
     PRIVATE
-    src/register_types.cpp
-    src/register_types.h
+    src/Basic.cpp
+    src/Basic.h
+    src/defs.h
+    src/deRNC.cpp
+    src/deRNC.h
     src/example_class.cpp
     src/example_class.h
+    src/Terrain.cpp
+    src/Terrain.h
+    src/Unk_D47E0.cpp
+    src/Unk_D47E0.h
+    src/Unk_D4A30.cpp
+    src/Unk_D4A30.h
+    src/register_types.cpp
+    src/register_types.h
 )
 
 # Fetch a list of the xml files to use for documentation and add to our target

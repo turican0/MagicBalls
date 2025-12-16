@@ -1,3 +1,11 @@
-C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\register_types.cpp;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\register_types.obj
-C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\example_class.cpp;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\example_class.obj
-C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\gen\doc_source.cpp;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\doc_source.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\engine\Basic_mini.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\Basic_mini.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\engine\Basic_terrain.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\Basic_terrain.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\engine\Level.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\Level.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\engine\ScreenBuff.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\ScreenBuff.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\engine\Terrain.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\Terrain.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\engine\Unk_D47E0.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\Unk_D47E0.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\engine\Unk_D4A30.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\Unk_D4A30.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\deRNC.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\deRNC.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\example_class.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\example_class.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\register_types.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\register_types.obj
+C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\gen\doc_source.cpp;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\EXTENSION-NAME.dir\Debug\doc_source.obj

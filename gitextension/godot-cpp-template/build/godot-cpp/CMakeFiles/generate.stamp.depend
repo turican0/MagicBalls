@@ -1,19 +1,4 @@
 # CMake generation dependency list for this directory.
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeRCCompiler.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeSystem.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/cmake.verify_globs
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/CMakeLists.txt
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/GodotCPPModule.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/android.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/common_compiler_flags.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/emsdkHack.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/godotcpp.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/ios.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/linux.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/macos.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/web.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/windows.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeCXXCompiler.cmake.in
 C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeCXXCompilerABI.cpp
 C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeCXXInformation.cmake
@@ -106,3 +91,18 @@ C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows-MSVC.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/WindowsPaths.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/ProcessorCount.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeRCCompiler.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeSystem.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/cmake.verify_globs
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/CMakeLists.txt
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/GodotCPPModule.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/android.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/common_compiler_flags.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/emsdkHack.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/godotcpp.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/ios.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/linux.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/macos.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/web.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/windows.cmake

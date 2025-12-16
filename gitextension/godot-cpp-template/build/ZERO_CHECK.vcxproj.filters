@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\5f3695600b8791caaa98c9635ab62735\generate.stamp.rule">
+    <CustomBuild Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\c105f0b9de958860972ce8eacc97d530\generate.stamp.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{48087FCC-3237-3FF8-AAD9-0CB64E50D1D0}</UniqueIdentifier>
+      <UniqueIdentifier>{B5E6A45A-8A47-3C7E-AAB1-01F1BDEF150E}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

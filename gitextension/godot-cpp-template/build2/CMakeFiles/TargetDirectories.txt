@@ -1,7 +1,0 @@
-C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/CMakeFiles/EXTENSION-NAME.dir
-C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/CMakeFiles/generate_doc_source.dir
-C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/CMakeFiles/ALL_BUILD.dir
-C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/CMakeFiles/ZERO_CHECK.dir
-C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/godot-cpp/CMakeFiles/generate_bindings.dir
-C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/godot-cpp/CMakeFiles/godot-cpp.dir
-C:/prenos/godot-zyllan/MagicBalls/MagicBalls/gitextension/godot-cpp-template/build2/godot-cpp/CMakeFiles/ALL_BUILD.dir

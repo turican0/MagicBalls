@@ -1,6 +1,6 @@
-^C:\GAMES\GODOT\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\GODOT-CPP\CMAKELISTS.TXT
+^C:\PRENOS\GODOT-ZYLLAN\MAGICBALLS\GITEXTENSION\GODOT-CPP-TEMPLATE\GODOT-CPP\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Games/godot/MagicBalls/gitextension/godot-cpp-template -BC:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

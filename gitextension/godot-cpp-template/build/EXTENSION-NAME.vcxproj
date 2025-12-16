@@ -22,7 +22,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5CA36720-5B7B-3922-9389-EC2A57D45994}</ProjectGuid>
+    <ProjectGuid>{2134BBDE-7BFB-36E0-BC8D-AB7E7664E0FD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
@@ -59,25 +59,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\bin\windows\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\bin\windows\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EXTENSION-NAME.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EXTENSION-NAME.windows.template_debug.x86_64</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\bin\windows\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\bin\windows\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EXTENSION-NAME.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EXTENSION-NAME.windows.template_debug.x86_64</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\bin\windows\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\bin\windows\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">EXTENSION-NAME.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">EXTENSION-NAME.windows.template_debug.x86_64</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.dll</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\bin\windows\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\bin\windows\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">EXTENSION-NAME.dir\RelWithDebInfo\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">EXTENSION-NAME.windows.template_debug.x86_64</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.dll</TargetExt>
@@ -87,28 +87,36 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/gen/include" /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/gen/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <BufferSecurityCheck></BufferSecurityCheck>
-      <CallingConvention></CallingConvention>
+      <BufferSecurityCheck>
+      </BufferSecurityCheck>
+      <CallingConvention>
+      </CallingConvention>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <FloatingPointModel></FloatingPointModel>
-      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MinimalRebuild></MinimalRebuild>
+      <MinimalRebuild>
+      </MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <ProcessorNumber>15</ProcessorNumber>
-      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SupportJustMyCode></SupportJustMyCode>
-      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR="Debug";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -116,10 +124,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR=\"Debug\";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -127,9 +135,10 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
+"C:\Program Files\CMake\bin\cmake.exe" -E copy C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -142,15 +151,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalDependencies>bin\libgodot-cpp.windows.template_debug.x86_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
-      <DataExecutionPrevention></DataExecutionPrevention>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
-      <ImportLibrary>C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/Debug/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
-      <LinkErrorReporting></LinkErrorReporting>
-      <ProgramDataBaseFile>C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
-      <RandomizedBaseAddress></RandomizedBaseAddress>
-      <SubSystem></SubSystem>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/Debug/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
+      <ProgramDataBaseFile>C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -158,27 +172,35 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/gen/include" /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/gen/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <BufferSecurityCheck></BufferSecurityCheck>
-      <CallingConvention></CallingConvention>
+      <BufferSecurityCheck>
+      </BufferSecurityCheck>
+      <CallingConvention>
+      </CallingConvention>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <FloatingPointModel></FloatingPointModel>
-      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MinimalRebuild></MinimalRebuild>
+      <MinimalRebuild>
+      </MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <ProcessorNumber>15</ProcessorNumber>
-      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SupportJustMyCode></SupportJustMyCode>
-      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR="Release";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -188,10 +210,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR=\"Release\";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -199,9 +221,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
+"C:\Program Files\CMake\bin\cmake.exe" -E copy C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -214,15 +237,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalDependencies>bin\libgodot-cpp.windows.template_debug.x86_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
-      <DataExecutionPrevention></DataExecutionPrevention>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
-      <ImportLibrary>C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/Release/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
-      <LinkErrorReporting></LinkErrorReporting>
-      <ProgramDataBaseFile>C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
-      <RandomizedBaseAddress></RandomizedBaseAddress>
-      <SubSystem></SubSystem>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/Release/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
+      <ProgramDataBaseFile>C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -230,27 +258,35 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/gen/include" /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/gen/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <BufferSecurityCheck></BufferSecurityCheck>
-      <CallingConvention></CallingConvention>
+      <BufferSecurityCheck>
+      </BufferSecurityCheck>
+      <CallingConvention>
+      </CallingConvention>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <FloatingPointModel></FloatingPointModel>
-      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MinimalRebuild></MinimalRebuild>
+      <MinimalRebuild>
+      </MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MinSpace</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <ProcessorNumber>15</ProcessorNumber>
-      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SupportJustMyCode></SupportJustMyCode>
-      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR="MinSizeRel";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -260,10 +296,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR=\"MinSizeRel\";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -271,9 +307,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
+"C:\Program Files\CMake\bin\cmake.exe" -E copy C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -286,15 +323,20 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalDependencies>bin\libgodot-cpp.windows.template_debug.x86_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
-      <DataExecutionPrevention></DataExecutionPrevention>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
-      <ImportLibrary>C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/MinSizeRel/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
-      <LinkErrorReporting></LinkErrorReporting>
-      <ProgramDataBaseFile>C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
-      <RandomizedBaseAddress></RandomizedBaseAddress>
-      <SubSystem></SubSystem>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/MinSizeRel/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
+      <ProgramDataBaseFile>C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -302,28 +344,36 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/gen/include" /external:I "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/godot-cpp/gen/include" /external:I "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/gdextension" /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <BufferSecurityCheck></BufferSecurityCheck>
-      <CallingConvention></CallingConvention>
+      <BufferSecurityCheck>
+      </BufferSecurityCheck>
+      <CallingConvention>
+      </CallingConvention>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
-      <FloatingPointModel></FloatingPointModel>
-      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <ForceConformanceInForLoopScope>
+      </ForceConformanceInForLoopScope>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MinimalRebuild></MinimalRebuild>
+      <MinimalRebuild>
+      </MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <ProcessorNumber>15</ProcessorNumber>
-      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RemoveUnreferencedCodeData>
+      </RemoveUnreferencedCodeData>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SupportJustMyCode></SupportJustMyCode>
-      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType>
+      </TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR="RelWithDebInfo";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -331,10 +381,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WINDOWS_ENABLED;TYPED_METHOD_BIND;NOMINMAX;GDEXTENSION;DEBUG_ENABLED;DEBUG_METHODS_ENABLED;HOT_RELOAD_ENABLED;_HAS_EXCEPTIONS=0;THREADS_ENABLED;CMAKE_INTDIR=\"RelWithDebInfo\";EXTENSION_NAME_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\gen\include;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\gdextension;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -342,9 +392,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message></Message>
+      <Message>
+      </Message>
       <Command>setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
+"C:\Program Files\CMake\bin\cmake.exe" -E copy C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/demo/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -357,26 +408,31 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalDependencies>bin\libgodot-cpp.windows.template_debug.x86_64.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
-      <DataExecutionPrevention></DataExecutionPrevention>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
-      <ImportLibrary>C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/RelWithDebInfo/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
-      <LinkErrorReporting></LinkErrorReporting>
-      <ProgramDataBaseFile>C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
-      <RandomizedBaseAddress></RandomizedBaseAddress>
-      <SubSystem></SubSystem>
+      <ImageHasSafeExceptionHandlers>
+      </ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/RelWithDebInfo/EXTENSION-NAME.windows.template_debug.x86_64.lib</ImportLibrary>
+      <LinkErrorReporting>
+      </LinkErrorReporting>
+      <ProgramDataBaseFile>C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress>
+      </RandomizedBaseAddress>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\CMakeLists.txt">
+    <CustomBuild Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Games/godot/MagicBalls/gitextension/godot-cpp-template -BC:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -384,12 +440,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\cmake.verify_globs;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\cmake.verify_globs;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Games/godot/MagicBalls/gitextension/godot-cpp-template -BC:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -397,12 +453,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\cmake.verify_globs;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\cmake.verify_globs;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Games/godot/MagicBalls/gitextension/godot-cpp-template -BC:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -410,12 +466,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\cmake.verify_globs;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\cmake.verify_globs;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Games/godot/MagicBalls/gitextension/godot-cpp-template -BC:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template -BC:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build --check-stamp-file C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -423,34 +479,56 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\cmake.verify_globs;C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython\Support.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\FindPython3.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeCXXCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeRCCompiler.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\4.2.1\CMakeSystem.cmake;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\cmake.verify_globs;C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\godot-cpp\cmake\GodotCPPModule.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\register_types.cpp" />
-    <ClInclude Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\register_types.h" />
-    <ClCompile Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\example_class.cpp" />
-    <ClInclude Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\src\example_class.h" />
-    <ClCompile Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\gen\doc_source.cpp" />
+    <ClCompile Include="..\src\engine\Basic_mini.cpp" />
+    <ClCompile Include="..\src\engine\Basic_terrain.cpp" />
+    <ClCompile Include="..\src\engine\Level.cpp" />
+    <ClCompile Include="..\src\engine\ScreenBuff.cpp" />
+    <ClCompile Include="..\src\engine\Terrain.cpp" />
+    <ClInclude Include="..\src\engine\Basic_mini.h" />
+    <ClInclude Include="..\src\engine\Basic_terrain.h" />
+    <ClInclude Include="..\src\engine\defs.h" />
+    <ClInclude Include="..\src\engine\globals.h" />
+    <ClInclude Include="..\src\engine\global_types.h" />
+    <ClInclude Include="..\src\engine\Level.h" />
+    <ClInclude Include="..\src\engine\MapType.h" />
+    <ClInclude Include="..\src\engine\ScreenBuff.h" />
+    <ClInclude Include="..\src\engine\Terrain.h" />
+    <ClInclude Include="..\src\engine\Type_F2C20ar.h" />
+    <ClInclude Include="..\src\defsx.h" />
+    <ClCompile Include="..\src\engine\Unk_D47E0.cpp" />
+    <ClCompile Include="..\src\engine\Unk_D4A30.cpp" />
+    <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\deRNC.cpp" />
+    <ClInclude Include="..\src\engine\Unk_D47E0.h" />
+    <ClInclude Include="..\src\engine\Unk_D4A30.h" />
+    <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\deRNC.h" />
+    <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\example_class.cpp" />
+    <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\example_class.h" />
+    <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\register_types.cpp" />
+    <ClInclude Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\src\register_types.h" />
+    <ClCompile Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\gen\doc_source.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\ZERO_CHECK.vcxproj">
-      <Project>{E507F7D3-6C0E-3A94-8E2C-087CF4F96ED5}</Project>
+    <ProjectReference Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\ZERO_CHECK.vcxproj">
+      <Project>{D2FA92B6-FACF-3CB7-B889-E0CF549130EB}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\generate_doc_source.vcxproj">
-      <Project>{E440481D-D5AC-35A0-B328-821288EECAC8}</Project>
+    <ProjectReference Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\generate_doc_source.vcxproj">
+      <Project>{C8886793-36FB-3ECF-B768-850555F24635}</Project>
       <Name>generate_doc_source</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Games\godot\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\godot-cpp.vcxproj">
-      <Project>{251BA112-DDBA-35AE-9213-99F30D0E0CA3}</Project>
+    <ProjectReference Include="C:\prenos\godot-zyllan\MagicBalls\gitextension\godot-cpp-template\build\godot-cpp\godot-cpp.vcxproj">
+      <Project>{D712652A-1FBE-32EC-BD3F-C584506092F7}</Project>
       <Name>godot-cpp</Name>
     </ProjectReference>
   </ItemGroup>

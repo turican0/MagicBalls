@@ -3629,9 +3629,9 @@ events:
       The output was:
       0
       MSBuild verze 17.14.18+a338add32 pro .NET Framework
-      Vytv├í┼Öen├ş sestaven├ş bylo zah├íjeno 14.12.2025 19:36:04.
+      Vytv├í┼Öen├ş sestaven├ş bylo zah├íjeno 16.12.2025 17:33:33.
       
-      Projekt C:\\Games\\godot\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj v uzlu 1 (v├Żchoz├ş c├şle).
+      Projekt C:\\prenos\\godot-zyllan\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj v uzlu 1 (v├Żchoz├ş c├şle).
       PrepareForBuild:
         Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe Debug\\.
         Strukturovan├Ż v├Żstup je povolen├Ż. Form├ítov├ín├ş diagnostiky kompil├ítoru bude odr├í┼żet hierarchii chyb. Dal┼í├ş podrobnosti najdete na https://aka.ms/cpp/structured-output.
@@ -3644,7 +3644,7 @@ events:
         CMakeCXXCompilerId.cpp
       Link:
         C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
-        CompilerIdCXX.vcxproj -> C:\\Games\\godot\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX\\CompilerIdCXX.exe
+        CompilerIdCXX.vcxproj -> C:\\prenos\\godot-zyllan\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX\\CompilerIdCXX.exe
       PostBuildEvent:
         for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
         :VCEnd
@@ -3652,13 +3652,13 @@ events:
       FinalizeBuildStatus:
         Prob├şh├í odstra┼łov├ín├ş souboru Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild.
         Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate.
-      Sestaven├ş projektu C:\\Games\\godot\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj (s v├Żchoz├şmi c├şli) bylo dokon─Źeno.
+      Sestaven├ş projektu C:\\prenos\\godot-zyllan\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj (s v├Żchoz├şmi c├şli) bylo dokon─Źeno.
       
       Vytv├í┼Öen├ş sestaven├ş bylo ├║sp─Ť┼ín─Ť dokon─Źeno.
           0 upozorn─Ťn├ş
           Po─Źet chyb: 0
       
-      Uplynul├Ż ─Źas 00:00:00.39
+      Uplynul├Ż ─Źas 00:00:00.62
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -3666,7 +3666,7 @@ events:
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
       
       The CXX compiler identification is MSVC, found in:
-        C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CompilerIdCXX/CompilerIdCXX.exe
+        C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CompilerIdCXX/CompilerIdCXX.exe
       
   -
     kind: "find-v1"
@@ -4553,8 +4553,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-j4q8te"
-      binary: "C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-j4q8te"
+      source: "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-9dvz7j"
+      binary: "C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-9dvz7j"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -4565,39 +4565,39 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-j4q8te'
+        Change Dir: 'C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-9dvz7j'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_35d01.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_35572.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild verze 17.14.18+a338add32 pro .NET Framework
-        Vytv├í┼Öen├ş sestaven├ş bylo zah├íjeno 14.12.2025 19:36:05.
+        Vytv├í┼Öen├ş sestaven├ş bylo zah├íjeno 16.12.2025 17:33:36.
         
-        Projekt C:\\Games\\godot\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-j4q8te\\cmTC_35d01.vcxproj v uzlu 1 (v├Żchoz├ş c├şle).
+        Projekt C:\\prenos\\godot-zyllan\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9dvz7j\\cmTC_35572.vcxproj v uzlu 1 (v├Żchoz├ş c├şle).
         PrepareForBuild:
           Strukturovan├Ż v├Żstup je povolen├Ż. Form├ítov├ín├ş diagnostiky kompil├ítoru bude odr├í┼żet hierarchii chyb. Dal┼í├ş podrobnosti najdete na https://aka.ms/cpp/structured-output.
-          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe C:\\Games\\godot\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-j4q8te\\Debug\\.
-          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe cmTC_35d01.dir\\Debug\\cmTC_35d01.tlog\\.
+          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe C:\\prenos\\godot-zyllan\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9dvz7j\\Debug\\.
+          Prob├şh├í vytv├í┼Öen├ş adres├í┼Öe cmTC_35572.dir\\Debug\\cmTC_35572.tlog\\.
         InitializeBuildStatus:
-          Prob├şh├í vytv├í┼Öen├ş souboru cmTC_35d01.dir\\Debug\\cmTC_35d01.tlog\\unsuccessfulbuild v d┼»sledku zad├ín├ş AlwaysCreate.
-          Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro cmTC_35d01.dir\\Debug\\cmTC_35d01.tlog\\unsuccessfulbuild.
+          Prob├şh├í vytv├í┼Öen├ş souboru cmTC_35572.dir\\Debug\\cmTC_35572.tlog\\unsuccessfulbuild v d┼»sledku zad├ín├ş AlwaysCreate.
+          Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro cmTC_35572.dir\\Debug\\cmTC_35572.tlog\\unsuccessfulbuild.
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MT /GR /Fo"cmTC_35d01.dir\\Debug\\\\" /Fd"cmTC_35d01.dir\\Debug\\vc143.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MT /GR /Fo"cmTC_35572.dir\\Debug\\\\" /Fd"cmTC_35572.dir\\Debug\\vc143.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
           Optimalizuj├şc├ş kompil├ítor C/C++ spole─Źnosti Microsoft (R) verze 19.43.34810 pro procesory x64
           Copyright (C) Microsoft Corporation. V┼íechna pr├íva vyhrazena.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MT /GR /Fo"cmTC_35d01.dir\\Debug\\\\" /Fd"cmTC_35d01.dir\\Debug\\vc143.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MT /GR /Fo"cmTC_35572.dir\\Debug\\\\" /Fd"cmTC_35572.dir\\Debug\\vc143.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Games\\godot\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-j4q8te\\Debug\\cmTC_35d01.exe" /INCREMENTAL /ILK:"cmTC_35d01.dir\\Debug\\cmTC_35d01.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-j4q8te/Debug/cmTC_35d01.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-j4q8te/Debug/cmTC_35d01.lib" /MACHINE:X64  /machine:x64 cmTC_35d01.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_35d01.vcxproj -> C:\\Games\\godot\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-j4q8te\\Debug\\cmTC_35d01.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\prenos\\godot-zyllan\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9dvz7j\\Debug\\cmTC_35572.exe" /INCREMENTAL /ILK:"cmTC_35572.dir\\Debug\\cmTC_35572.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-9dvz7j/Debug/cmTC_35572.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/CMakeScratch/TryCompile-9dvz7j/Debug/cmTC_35572.lib" /MACHINE:X64  /machine:x64 cmTC_35572.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_35572.vcxproj -> C:\\prenos\\godot-zyllan\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9dvz7j\\Debug\\cmTC_35572.exe
         FinalizeBuildStatus:
-          Prob├şh├í odstra┼łov├ín├ş souboru cmTC_35d01.dir\\Debug\\cmTC_35d01.tlog\\unsuccessfulbuild.
-          Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro cmTC_35d01.dir\\Debug\\cmTC_35d01.tlog\\cmTC_35d01.lastbuildstate.
-        Sestaven├ş projektu C:\\Games\\godot\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-j4q8te\\cmTC_35d01.vcxproj (s v├Żchoz├şmi c├şli) bylo dokon─Źeno.
+          Prob├şh├í odstra┼łov├ín├ş souboru cmTC_35572.dir\\Debug\\cmTC_35572.tlog\\unsuccessfulbuild.
+          Prob├şh├í aktualizace ─Źasov├ęho raz├ştka pro cmTC_35572.dir\\Debug\\cmTC_35572.tlog\\cmTC_35572.lastbuildstate.
+        Sestaven├ş projektu C:\\prenos\\godot-zyllan\\MagicBalls\\gitextension\\godot-cpp-template\\build\\CMakeFiles\\CMakeScratch\\TryCompile-9dvz7j\\cmTC_35572.vcxproj (s v├Żchoz├şmi c├şli) bylo dokon─Źeno.
         
         Vytv├í┼Öen├ş sestaven├ş bylo ├║sp─Ť┼ín─Ť dokon─Źeno.
             0 upozorn─Ťn├ş
             Po─Źet chyb: 0
         
-        Uplynul├Ż ─Źas 00:00:00.54
+        Uplynul├Ż ─Źas 00:00:02.53
         
       exitCode: 0
   -

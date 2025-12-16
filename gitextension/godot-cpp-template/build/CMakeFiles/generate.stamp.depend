@@ -1,10 +1,4 @@
 # CMake generation dependency list for this directory.
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeRCCompiler.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeSystem.cmake
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/cmake.verify_globs
-C:/Games/godot/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/GodotCPPModule.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeCXXInformation.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeCommonLanguageInclude.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeGenericSystem.cmake
@@ -31,3 +25,9 @@ C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows-MSVC-CXX.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows-MSVC.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/WindowsPaths.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/CMakeLists.txt
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeCXXCompiler.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeRCCompiler.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/4.2.1/CMakeSystem.cmake
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/build/CMakeFiles/cmake.verify_globs
+C:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/godot-cpp/cmake/GodotCPPModule.cmake
