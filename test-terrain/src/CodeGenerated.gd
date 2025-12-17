@@ -130,6 +130,7 @@ func load_terrain(level_name: String) -> Terrain3D:
 			if(red_value_255_objects==3):
 				$Player.position=Vector3(x-img_width_objects-0.5, 10, y-img_height_objects-0.5)
 	
+	$Player.position=Vector3(0, 10, 0)
 	$Player.terrain = terrain
 	
 	#var xforms: Array[Transform3D]
