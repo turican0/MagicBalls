@@ -109,9 +109,6 @@ func init():
 	# Původní kód: loadlevel(0);
 	loadlevel(0)
 	
-	# Původní kód: terrain_recalculate();
-	_recalculate_terrain()
-	
 	print("--- Inicializace dokončena. ---")
 
 
@@ -174,10 +171,6 @@ func loadlevel(levelnumber: int):
 	temp_entities_inactive.fill(0) # Vyplní celou PackedByteArray nulami
 	temp_entities_selected.resize(MAX_ENTITIES)
 	temp_entities_selected.fill(0) # Vyplní celou PackedByteArray nulami
-
-func _recalculate_terrain():
-	# Vlastní generování terénu v Godotu (použití NoiseTexture nebo ArrayMesh)
-	print("- _recalculate_terrain: Přepočítávám terén s nastavením: " + str(terrain_settings))
 
 func process_tmaps():
 	print("--- process_tmaps: Načítání a příprava textur ---")
@@ -359,14 +352,16 @@ func sub_533B0_decompress_levels(level_id: int, level_data: TypeStr2FECE) -> boo
 	
 	var MBEX = ExampleClass.new()
 	var c = MBEX.my_add(5,4)
-	var level_tab_data_unpacked = MBEX.deRNC(level_tab_data)
+	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
+	MBEX.TerrainMake(level_tab_data_unpacked)
+	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
 	
-	var level_struct:TypeStr2FECE = TypeStr2FECE.new()
-	level_struct.decode_from(level_tab_data_unpacked)
-
-	sub_56C00_sound_proc2(level_struct) # <--- NUTNÁ IMPLEMENTACE!
-	sub_53590(level_struct) # <--- NUTNÁ IMPLEMENTACE!
-	generate_level_map_43830(level_struct)
+	#var level_struct:TypeStr2FECE = TypeStr2FECE.new()
+	#level_struct.decode_from(level_tab_data_unpacked)
+#
+	#sub_56C00_sound_proc2(level_struct) # <--- NUTNÁ IMPLEMENTACE!
+	#sub_53590(level_struct) # <--- NUTNÁ IMPLEMENTACE!
+	#generate_level_map_43830(level_struct)
 	return true
 
 var x_WORD_17B4E0:int

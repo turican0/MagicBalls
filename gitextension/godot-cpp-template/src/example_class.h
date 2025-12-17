@@ -19,4 +19,12 @@ public:
 	void print_type(const Variant &p_variant) const;
 	int my_add(int a, int b);
 	PackedByteArray deRNC(PackedByteArray bytearray);
+	void MakeTerrain(PackedByteArray bytearray);
+
+	void TerrainMake(PackedByteArray bytearray);
+	uint8_t TerrainGetTileTerrainType(int index);
+	void TerrainSetTileTerrainType(int index, uint8_t value);
+	PackedByteArray TerrainGetMapTerrainType();
+	PackedByteArray TerrainGetMapHeight();
+
 };

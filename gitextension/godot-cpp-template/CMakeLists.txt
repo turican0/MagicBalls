@@ -70,6 +70,8 @@ target_sources(${LIBNAME}
     src/engine/Basic_terrain.cpp
     src/engine/Basic_mini.h
     src/engine/Basic_mini.cpp
+    src/engine/ConvertMapInfo.h
+    src/engine/ConvertMapInfo.cpp
     src/utilites/DataFileRNC.h
     src/utilites/DataFileRNC.cpp
 )
