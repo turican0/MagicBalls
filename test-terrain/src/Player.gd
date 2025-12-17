@@ -8,7 +8,7 @@ extends CharacterBody3D
 
 @export var terrain: Terrain3D
 
-var min_player_height: float = 2;
+var min_player_height: float = 0.5;
 var max_speed:float = 10
 var accel_speed:float = 10
 var remove_speed:float = 2
@@ -85,6 +85,7 @@ func _physics_process(p_delta) -> void:
 	self.position+=direction2*MOVE_SPEED*p_delta
 	
 	var terrain_height_y: float = terrain.data.get_height(global_position)
+	terrain_height_y=1
 	if(terrain_height_y+min_player_height<global_position.y):
 		global_position.y-=0.1
 		if(global_position.y<min_player_height):
