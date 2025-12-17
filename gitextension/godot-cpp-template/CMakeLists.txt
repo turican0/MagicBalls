@@ -47,21 +47,31 @@ add_library(${LIBNAME} SHARED)
 
 target_sources(${LIBNAME}
     PRIVATE
-    src/Basic.cpp
-    src/Basic.h
-    src/defs.h
-    src/deRNC.cpp
-    src/deRNC.h
     src/example_class.cpp
     src/example_class.h
-    src/Terrain.cpp
-    src/Terrain.h
-    src/Unk_D47E0.cpp
-    src/Unk_D47E0.h
-    src/Unk_D4A30.cpp
-    src/Unk_D4A30.h
     src/register_types.cpp
     src/register_types.h
+    src/engine/Unk_D4A30.h
+    src/engine/Unk_D4A30.cpp
+    src/engine/Unk_D47E0.h
+    src/engine/Unk_D47E0.cpp
+    src/engine/Type_F2C20ar.h
+    src/engine/Terrain.h
+    src/engine/Terrain.cpp
+    src/engine/ScreenBuff.h
+    src/engine/ScreenBuff.cpp
+    src/engine/MapType.h
+    src/engine/Level.h
+    src/engine/Level.cpp
+    src/engine/globals.h
+    src/engine/global_types.h
+    src/engine/defs.h
+    src/engine/Basic_terrain.h
+    src/engine/Basic_terrain.cpp
+    src/engine/Basic_mini.h
+    src/engine/Basic_mini.cpp
+    src/utilites/DataFileRNC.h
+    src/utilites/DataFileRNC.cpp
 )
 
 # Fetch a list of the xml files to use for documentation and add to our target
