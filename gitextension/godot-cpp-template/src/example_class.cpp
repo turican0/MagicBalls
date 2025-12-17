@@ -1,5 +1,5 @@
 #include "example_class.h"
-#include "dernc/deRNC.h"
+#include "utilites/DataFileRNC.h"
 
 void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &ExampleClass::print_type);
@@ -20,7 +20,7 @@ PackedByteArray ExampleClass::deRNC(PackedByteArray bytearray) {
 		src[i] = bytearray[i];
 	int output_size = input_size * 20;
 	std::vector<uint8_t> dst(output_size);
-	int decompressed_size = sub_9894C_decompress(src.data(), dst.data());
+	int decompressed_size = DataFileRNC::Decompress(src.data(), dst.data());
 	PackedByteArray result;
 	result.resize(decompressed_size);
 	for (int i = 0; i < decompressed_size; ++i)
