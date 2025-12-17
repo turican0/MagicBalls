@@ -25,9 +25,12 @@ func _ready():
 	# 3. Generování a vykreslení sítě
 	recalculate_mesh()
 	get_parent().get_node("DecodeLevel").init()
-	for y in range(256):
-		for x in range(256):
-			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[y * 256 + x]*0.05
+	for y in range(GRID_SIZE):
+		for x in range(GRID_SIZE):
+			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[y * GRID_SIZE + x]
+	for y in range(VERTEX_COUNT):
+		for x in range(VERTEX_COUNT):
+			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[y%GRID_SIZE * GRID_SIZE + x%GRID_SIZE]*0.05
 	recalculate_mesh()
 	
 

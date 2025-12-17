@@ -355,6 +355,7 @@ func sub_533B0_decompress_levels(level_id: int, level_data: TypeStr2FECE) -> boo
 	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
 	MBEX.TerrainMake(level_tab_data_unpacked)
 	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
+	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()	
 	
 	#var level_struct:TypeStr2FECE = TypeStr2FECE.new()
 	#level_struct.decode_from(level_tab_data_unpacked)

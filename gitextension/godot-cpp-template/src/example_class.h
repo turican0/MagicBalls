@@ -26,5 +26,4 @@ public:
 	void TerrainSetTileTerrainType(int index, uint8_t value);
 	PackedByteArray TerrainGetMapTerrainType();
 	PackedByteArray TerrainGetMapHeight();
-
 };
