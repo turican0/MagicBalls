@@ -23,8 +23,8 @@
 [ext_resource type="Script" uid="uid://deo0gxkmk2ahd" path="res://addons/sky_3d/src/Sky3D.gd" id="14_6dc5f"]
 [ext_resource type="Script" uid="uid://b4tkplvh7fq40" path="res://addons/sky_3d/src/SkyDome.gd" id="15_f8b3d"]
 [ext_resource type="Script" uid="uid://cjmkcj8hwm7ts" path="res://addons/sky_3d/src/TimeOfDay.gd" id="16_cktu3"]
+[ext_resource type="Texture2D" uid="uid://d3wi5i11aq8nk" path="res://water/watertext/Water_N_A.png" id="24_6qqjn"]
 [ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
-[ext_resource type="Texture2D" uid="uid://bfa4xeh5thwio" path="res://tests/godot-realistic-water-4/realistic_water_shader/art/water/Water_N_A.png" id="25_qb1x1"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
 
@@ -89,8 +89,8 @@ shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_intensity = 10.0
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.5300276, 0.5300276)
-shader_parameter/cirrus_position2 = Vector2(0.5300276, 0.5300276)
+shader_parameter/cirrus_position1 = Vector2(0.600907, 0.600907)
+shader_parameter/cirrus_position2 = Vector2(0.600907, 0.600907)
 shader_parameter/cirrus_day_color = Color(0.824, 0.875, 1, 1)
 shader_parameter/cirrus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
 shader_parameter/cirrus_night_color = Color(0.09, 0.094, 0.129, 1)
@@ -103,7 +103,7 @@ shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_intensity = 0.6
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(12.667571, 12.667571)
+shader_parameter/cumulus_position = Vector2(8.003924, 8.003924)
 shader_parameter/cumulus_texture = ExtResource("9_grerw")
 shader_parameter/cumulus_day_color = Color(0.823529, 0.87451, 1, 1)
 shader_parameter/cumulus_horizon_light_color = Color(0.98, 0.43, 0.15, 1)
@@ -143,12 +143,12 @@ agent_max_slope = 30.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvamp"]
 albedo_color = Color(0.19607843, 0.45882353, 0.56078434, 0.6627451)
-metallic = 0.6
+metallic = 0.5
 metallic_specular = 0.4
 roughness = 0.1
 normal_enabled = true
 normal_scale = 0.1
-normal_texture = ExtResource("25_qb1x1")
+normal_texture = ExtResource("24_6qqjn")
 uv1_scale = Vector3(100, 100, 100)
 proximity_fade_distance = 0.01
 
@@ -158,6 +158,7 @@ size = Vector2(10000, 10000)
 
 [sub_resource type="Animation" id="Animation_wbbke"]
 length = 0.001
+loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -181,10 +182,10 @@ tracks/0/path = NodePath(".:mesh:material:uv1_offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(1, 0, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0.001, 0, 0), Vector3(0.001, 0.001, 0), Vector3(0, 0.001, 0), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_temtn"]
@@ -285,7 +286,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_temtn")
 }
 autoplay = "move_water"
-speed_scale = 0.02
+playback_auto_capture_transition_type = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("24_f8b3d")
