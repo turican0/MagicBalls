@@ -15,6 +15,44 @@ var texture_indices: Array[Array] = []
 var mesh_instance: MeshInstance3D
 var surface_tool: SurfaceTool
 
+var uv_table_d4350: Array = [
+	[0, 0, 1, 0, 1, 1, 0, 1],
+	[1, 0, 1, 1, 0, 1, 0, 0],
+	[1, 1, 0, 1, 0, 0, 1, 0],
+	[0, 1, 0, 0, 1, 0, 1, 1],
+	[1, 0, 0, 0, 0, 1, 1, 1],
+	[0, 0, 0, 1, 1, 1, 1, 0],
+	[0, 1, 1, 1, 1, 0, 0, 0],
+	[1, 1, 1, 0, 0, 0, 0, 1],
+
+	[0, 1, 1, 1, 1, 0, 0, 0],
+	[1, 1, 1, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 1, 1, 1],
+	[0, 0, 0, 1, 1, 1, 1, 0],
+	[1, 1, 0, 1, 0, 0, 1, 0],
+	[0, 1, 0, 0, 1, 0, 1, 1],
+	[0, 0, 1, 0, 1, 1, 0, 1],
+	[1, 0, 1, 1, 0, 1, 0, 0],
+
+	[0, 0, 0, 1, 1, 1, 1, 0],
+	[0, 1, 1, 1, 1, 0, 0, 0],
+	[1, 1, 1, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 1, 1, 1],
+	[0, 1, 0, 0, 1, 0, 1, 1],
+	[0, 0, 1, 0, 1, 1, 0, 1],
+	[1, 0, 1, 1, 0, 1, 0, 0],
+	[1, 1, 0, 1, 0, 0, 1, 0],
+
+	[1, 0, 1, 1, 0, 1, 0, 0],
+	[1, 1, 0, 1, 0, 0, 1, 0],
+	[0, 1, 0, 0, 1, 0, 1, 1],
+	[0, 0, 1, 0, 1, 1, 0, 1],
+	[1, 1, 1, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 1, 1, 1],
+	[0, 0, 0, 1, 1, 1, 1, 0],
+	[0, 1, 1, 1, 1, 0, 0, 0]
+]
+
 func _ready():
 	# 1. Inicializace a nastavení uzlů
 	initialize_nodes()
@@ -23,14 +61,18 @@ func _ready():
 	initialize_grid_data()
 	
 	# 3. Generování a vykreslení sítě
-	recalculate_mesh()
 	get_parent().get_node("DecodeLevel").init()
+	recalculate_mesh()	
 	for y in range(GRID_SIZE):
 		for x in range(GRID_SIZE):
-			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[y * GRID_SIZE + x]
+			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			if(y==0xcb)&&(x==0x4a):
+				var a=get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+				var a2=get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			#texture_indices[x][y]=23
 	for y in range(VERTEX_COUNT):
 		for x in range(VERTEX_COUNT):
-			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[y%GRID_SIZE * GRID_SIZE + x%GRID_SIZE]*0.05
+			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.05
 	recalculate_mesh()
 	
 
@@ -68,7 +110,7 @@ func initialize_grid_data():
 		texture_indices[x].resize(GRID_SIZE)
 		for y in range(GRID_SIZE):
 			# Nastavení náhodného indexu textury (např. 0, 1, 2)
-			texture_indices[x][y] = randi_range(0, 24) 
+			texture_indices[x][y] = randi_range(0, 24)
 
 ## --- FÁZE 2: Generování sítě ---
 
@@ -82,12 +124,22 @@ func recalculate_mesh():
 
 	for x in range(GRID_SIZE):
 		for y in range(GRID_SIZE):
+			var textUV_42:int = ((get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
+			var rPoint1 = Vector2(uv_table_d4350[textUV_42][0],uv_table_d4350[textUV_42][1])
+			var rPoint2 = Vector2(uv_table_d4350[textUV_42][2],uv_table_d4350[textUV_42][3])
+			var rPoint3 = Vector2(uv_table_d4350[textUV_42][4],uv_table_d4350[textUV_42][5])
+			var rPoint4 = Vector2(uv_table_d4350[textUV_42][6],uv_table_d4350[textUV_42][7])
 
 			# 1. Získání 4 vrcholů pro aktuální čtverec
 			var v1 = vertices[x][y]
 			var v2 = vertices[x+1][y]
 			var v3 = vertices[x+1][y+1]
 			var v4 = vertices[x][y+1]
+			
+			#var v1 = vertices[x+rPoint1.x][y+rPoint1.y]
+			#var v2 = vertices[x+rPoint2.x][y+rPoint2.y]
+			#var v3 = vertices[x+rPoint3.x][y+rPoint3.y]
+			#var v4 = vertices[x+rPoint4.x][y+rPoint4.y]
 
 			# 2. Vypočítání indexu textury pro tento čtverec
 			var texture_index = texture_indices[x][y]
@@ -98,12 +150,12 @@ func recalculate_mesh():
 
 			if diff_v1_v3 < diff_v2_v4:
 				# Možnost 1: Úhlopříčka V1 -> V3
-				add_triangle(v1, v2, v3, texture_index)
-				add_triangle(v1, v3, v4, texture_index)
-			else:
-				# Možnost 2: Úhlopříčka V2 -> V4
-				add_triangle(v2, v3, v4, texture_index)
-				add_triangle(v2, v4, v1, texture_index)
+				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3)
+				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4)
+			#else:
+				## Možnost 2: Úhlopříčka V2 -> V4
+				#add_triangle(v2, v3, v4, texture_index,rPoint1,rPoint2,rPoint4)
+				#add_triangle(v2, v4, v1, texture_index,rPoint1,rPoint2,rPoint4)
 
 	# Dokončení sítě
 	surface_tool.generate_normals()
@@ -114,14 +166,17 @@ func recalculate_mesh():
 ## --- POMOCNÁ FUNKCE ---
 
 # Přidá trojúhelník do SurfaceTool s nastavením UV mapování
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, texture_index: int):
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, texture_index: int,uv1:Vector2,uv2:Vector2,uv3:Vector2):
 	# UV mapování je zde zjednodušeno pro každý trojúhelník na rohy (0,0), (1,0), (0,1).
 	# Ve Fragment Shaderu se toto UV použije pro mapování na oblast v Texture Atlasu.
 	
 	# UV mapování v rámci jednoho čtverce:
-	var uv_p1 = Vector2(0.0, 0.0) 
-	var uv_p2 = Vector2(1.0, 0.0)
-	var uv_p3 = Vector2(0.0, 1.0)
+	#var uv_p1 = Vector2(0.0, 0.0) 
+	#var uv_p2 = Vector2(1.0, 0.0)
+	#var uv_p3 = Vector2(0.0, 1.0)
+	var uv_p1 = Vector2(uv1.x, uv1.y) 
+	var uv_p2 = Vector2(uv2.x, uv2.y)
+	var uv_p3 = Vector2(uv3.x, uv3.y)
 	
 	# 1. Vrchol P1
 	# UV2.x posílá index textury do shaderu.

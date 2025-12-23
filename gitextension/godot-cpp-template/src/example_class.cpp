@@ -1,7 +1,8 @@
 #include "example_class.h"
-#include "utilites/DataFileRNC.h"
-#include "engine/Terrain.h"
-#include "engine/ConvertMapInfo.h"
+#include "remc2/utilities/DataFileRNC.h"
+#include "remc2/engine/Terrain.h"
+#include "remc2/engine/ConvertMapInfo.h"
+#include "remc2/engine/EventsFunctions.h"
 
 void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &ExampleClass::print_type);
@@ -10,6 +11,7 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray"), &ExampleClass::TerrainMake);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight"), &ExampleClass::TerrainGetMapHeight);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &ExampleClass::TerrainGetMapTerrainType);
+	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &ExampleClass::TerrainGetAngle);
 }
 
 void ExampleClass::print_type(const Variant &p_variant) const {
@@ -32,43 +34,23 @@ PackedByteArray ExampleClass::deRNC(PackedByteArray bytearray) {
 		result[i] = dst[i];
 	return result;
 }
+
 void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	const uint8_t *src = bytearray.ptr();
-	if (bytearray.size() < sizeof(type_shadow_str_2FECE)) {
+	if (bytearray.size() < sizeof(Type_CompressedLevel_2FECE)) {
 		return;
 	}
-	type_shadow_str_2FECE shadow_a2x;
-	qmemcpy(&shadow_a2x, (type_shadow_str_2FECE *)(const void *)src, sizeof(type_shadow_str_2FECE)); //0x6604
-	Convert_from_shadow_str_2FECE(&shadow_a2x, &D41A0_0.terrain_2FECE);
+	Type_CompressedLevel_2FECE shadow_a2x;
+	qmemcpy(&shadow_a2x, (Type_CompressedLevel_2FECE *)(const void *)src, sizeof(Type_CompressedLevel_2FECE)); //0x6604
+	DecompressLevel_2FECE(&shadow_a2x, &D41A0_0.terrain_2FECE);
 
 	uint8_t buffer[1000000];
 	pdwScreenBuffer_351628 = buffer;
 	x_BYTE_14B4E0_second_heightmap = new uint8_t[65536];
+
+	LevelInitGame_56A30(1, "");
+	/*
+	sub_56C00_sound_proc2(&D41A0_0.terrain_2FECE);
 	GenerateLevelMap_43830(&D41A0_0.terrain_2FECE);
-}
-
-uint8_t ExampleClass::TerrainGetTileTerrainType(int index) {
-	if (index < 0 || index >= 65536)
-		return 0;
-	return mapTerrainType_10B4E0[index];
-}
-
-void ExampleClass::TerrainSetTileTerrainType(int index, uint8_t value) {
-	if (index < 0 || index >= 65536)
-		return;
-	mapTerrainType_10B4E0[index] = value;
-}
-
-PackedByteArray ExampleClass::TerrainGetMapTerrainType() {
-	PackedByteArray arr;
-	arr.resize(65536);
-	memcpy(arr.ptrw(), mapTerrainType_10B4E0, 65536);
-	return arr;
-}
-
-PackedByteArray ExampleClass::TerrainGetMapHeight() {
-	PackedByteArray arr;
-	arr.resize(65536);
-	memcpy(arr.ptrw(), mapHeightmap_11B4E0, 65536);
-	return arr;
+	*/
 }

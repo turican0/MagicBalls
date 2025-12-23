@@ -51,29 +51,31 @@ target_sources(${LIBNAME}
     src/example_class.h
     src/register_types.cpp
     src/register_types.h
-    src/engine/Unk_D4A30.h
-    src/engine/Unk_D4A30.cpp
-    src/engine/Unk_D47E0.h
-    src/engine/Unk_D47E0.cpp
-    src/engine/Type_F2C20ar.h
-    src/engine/Terrain.h
-    src/engine/Terrain.cpp
-    src/engine/ScreenBuff.h
-    src/engine/ScreenBuff.cpp
-    src/engine/MapType.h
-    src/engine/Level.h
-    src/engine/Level.cpp
-    src/engine/globals.h
-    src/engine/global_types.h
-    src/engine/defs.h
-    src/engine/Basic_terrain.h
-    src/engine/Basic_terrain.cpp
-    src/engine/Basic_mini.h
-    src/engine/Basic_mini.cpp
-    src/engine/ConvertMapInfo.h
-    src/engine/ConvertMapInfo.cpp
-    src/utilites/DataFileRNC.h
-    src/utilites/DataFileRNC.cpp
+    src/remc2/engine/Unk_D4A30.h
+    src/remc2/engine/Unk_D4A30.cpp
+    src/remc2/engine/Unk_D47E0.h
+    src/remc2/engine/Unk_D47E0.cpp
+    src/remc2/engine/Type_F2C20ar.h
+    src/remc2/engine/Terrain.h
+    src/remc2/engine/Terrain.cpp
+    src/remc2/engine/ScreenBuff.h
+    src/remc2/engine/ScreenBuff.cpp
+    src/remc2/engine/MapType.h
+    src/remc2/engine/Level.h
+    src/remc2/engine/Level.cpp
+    src/remc2/engine/globals.h
+    src/remc2/engine/global_types.h
+    src/remc2/engine/defs.h
+    src/remc2/engine/BasicTerrain.h
+    src/remc2/engine/BasicTerrain.cpp
+    src/remc2/engine/BasicMini.h
+    src/remc2/engine/BasicMini.cpp
+    src/remc2/engine/ConvertMapInfo.h
+    src/remc2/engine/ConvertMapInfo.cpp
+    src/remc2/utilities/DataFileRNC.h
+    src/remc2/utilities/DataFileRNC.cpp
+    src/remc2/engine/LevelStructs.h
+    src/remc2/engine/LevelStructs.cpp
 )
 
 # Fetch a list of the xml files to use for documentation and add to our target
