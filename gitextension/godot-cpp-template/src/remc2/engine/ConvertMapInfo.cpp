@@ -1,7 +1,7 @@
 #include "ConvertMapInfo.h"
-void DecompressLevel_2FECE(Type_CompressedLevel_2FECE* from, Type_Level_2FECE* to) {
+void Convert_from_shadow_str_2FECE(shadow_levelDataType_2FECE* from, levelDataType_2FECE* to) {
 	to->word_2FECE = from->word_2FECE;
-	to->levelID_2FED0 = from->levelID_2FED0;
+	to->levelID_2FED0 = from->word_2FED0;
 	to->byte_0x2FED2 = from->byte_0x2FED2;
 	to->byte_0x2FED3 = from->byte_0x2FED3;
 	to->MapType = (from->MapType == 2) ? MapType_t::Cave : (from->MapType == 1) ? MapType_t::Night : MapType_t::Day;
@@ -44,4 +44,3 @@ void DecompressLevel_2FECE(Type_CompressedLevel_2FECE* from, Type_Level_2FECE* t
 		to->StageVars_0x3647A[i].str_0x3647C_4.axis = from->array_0x3647A[i].str_0x3647C_4.axis;
 	}
 }
-

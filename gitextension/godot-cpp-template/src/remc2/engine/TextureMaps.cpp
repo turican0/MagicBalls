@@ -1,7 +1,4 @@
 #include "TextureMaps.h"
-
-#include <filesystem>
-
 #include "../utilities/BitmapIO.h"
 
 type_BIG_SPRITES_BUFFER BIG_SPRITES_BUFFERx[max_sprites];
@@ -492,13 +489,6 @@ void InitTmaps(unsigned __int16 a1)//251f50
 								//fread(BIG_SPRITES_BUFFERx[i].frames[mm], oldwidth * 4 * oldheight * 4, 1, fptr_outdata);
 								//myclose(fptr_outdata);
 								ReadGraphicsfile(filebuffer, BIG_SPRITES_BUFFERx[i].frames[mm], oldwidth * 4 * oldheight * 4);
-
-								//Saves BigSprites to png
-								/*if (m_pColorPalette == NULL)
-								{
-									m_pColorPalette = LoadTMapColorPalette(D41A0_0.terrain_2FECE.MapType);
-								}
-								BitmapIO::WritePosistructToPng(m_pColorPalette, BIG_SPRITES_BUFFERx[i].frames[mm], oldwidth * 4, oldheight * 4, filebuffer, filebuffer);*/
 							}
 
 							BIG_SPRITES_BUFFERx[i].actdatax = (type_particle_str*)malloc(oldwidth * 4 * oldheight * 4 + 6 + 2);
@@ -508,14 +498,6 @@ void InitTmaps(unsigned __int16 a1)//251f50
 							BIG_SPRITES_BUFFERx[i].actdatax->width = oldwidth * 4;
 							BIG_SPRITES_BUFFERx[i].actdatax->height = oldheight * 4;
 							*(uint16_t*)&BIG_SPRITES_BUFFERx[i].actdatax->textureBuffer[oldwidth * 4 * oldheight * 4] = mm;
-
-							Logger->trace("BIG_SPRITES_BUFFERx[i].actdatax->word_0: {}", BIG_SPRITES_BUFFERx[i].actdatax->word_0);
-							Logger->trace("BIG_SPRITES_BUFFERx[i].actdatax->width: {}", BIG_SPRITES_BUFFERx[i].actdatax->width);
-							Logger->trace("BIG_SPRITES_BUFFERx[i].actdatax->height: {}", BIG_SPRITES_BUFFERx[i].actdatax->height);
-							Logger->trace("BIG_SPRITES_BUFFERx[i].actdatax frames: {}", BIG_SPRITES_BUFFERx[i].actdatax->textureBuffer[oldwidth * 4 * oldheight * 4]);
-							int8_t* buffer = BIG_SPRITES_BUFFERx[i].actdatax->textureBuffer;
-							Logger->trace("BIG_SPRITES_BUFFERx[i].actdatax->texture buffer start: {}", fmt::ptr(buffer));
-							Logger->trace("BIG_SPRITES_BUFFERx[i].actdatax->texture buffer end: {}", fmt::ptr(buffer + (oldwidth * 4 * oldheight * 4 + 6 + 2)));
 
 							/*for (int xx = 0; xx < oldwidth*4; xx++)
 								for (int yy = 0; yy < oldheight*4; yy++)
@@ -714,23 +696,20 @@ uint8_t* LoadTMapColorPalette(MapType_t mapType)
 	switch (mapType)
 	{
 		case MapType_t::Cave:
-			sprintf(palleteName, "CD_Files/DATA/PALC-0.DAT");
+			sprintf(palleteName, "../tools/palletelight/Debug/out-%s.pal", "c");
 		break;
 		case MapType_t::Day:
-			sprintf(palleteName, "CD_Files/DATA/PALD-0.DAT");
+			sprintf(palleteName, "../tools/palletelight/Debug/out-%s.pal", "block");
 		break;
 		case MapType_t::Night:
-			sprintf(palleteName, "CD_Files/DATA/PALN-0.DAT");
+			sprintf(palleteName, "../tools/palletelight/Debug/out-%s.pal", "n");
 		break;
 	}
 
 	std::string path = GetSubDirectoryPath(palleteName);
-	if (std::filesystem::exists(path))
-	{
-		palfile = fopen(path.c_str(), "rb");
-		fread(Palettebuffer, 768, 1, palfile);
-		fclose(palfile);
-	}
+	palfile = fopen(path.c_str(), "rb");
+	fread(Palettebuffer, 768, 1, palfile);
+	fclose(palfile);
 
 	return Palettebuffer;
 }

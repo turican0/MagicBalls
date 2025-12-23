@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 
 #ifndef PROJECTION_POLYGON
 #define PROJECTION_POLYGON
@@ -16,7 +15,6 @@ public:
 	int Unknown = 0;
 
 	ProjectionPolygon(int* vertexs);
-	std::string Print();
 };
 
 #endif //PROJECTION_POLYGON

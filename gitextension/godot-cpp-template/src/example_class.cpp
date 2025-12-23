@@ -35,6 +35,25 @@ PackedByteArray ExampleClass::deRNC(PackedByteArray bytearray) {
 	return result;
 }
 
+uint8_t ExampleClass::TerrainGetTileTerrainType(int index) {
+	if (index < 0 || index >= 65536)
+		return 0;
+	return mapTerrainType_10B4E0[index];
+}
+
+void ExampleClass::TerrainSetTileTerrainType(int index, uint8_t value) {
+	if (index < 0 || index >= 65536)
+		return;
+	mapTerrainType_10B4E0[index] = value;
+}
+
+PackedByteArray ExampleClass::TerrainGetMapTerrainType() {
+	PackedByteArray arr;
+	arr.resize(65536);
+	memcpy(arr.ptrw(), mapTerrainType_10B4E0, 65536);
+	return arr;
+}
+
 void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	const uint8_t *src = bytearray.ptr();
 	if (bytearray.size() < sizeof(Type_CompressedLevel_2FECE)) {

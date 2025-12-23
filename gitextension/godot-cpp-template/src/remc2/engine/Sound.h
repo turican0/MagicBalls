@@ -1,11 +1,13 @@
 #pragma once
 
+#ifndef MAIN_SOUND
+#define MAIN_SOUND
+
 #include "ail_sound.h"
 #include "Basic.h"
 #include "../utilities/Wave.h"
 #include "../engine/CommandLineParser.h"
 #include "../portability/port_show_perifery.h"
-#include "../portability/port_sdl_sound.h"
 
 #pragma pack (1)
 typedef struct {//lenght 12
@@ -49,8 +51,6 @@ extern __int16 x_WORD_E3834;
 extern type_E3808_music_header* musicHeader_E3808;
 extern char musicDriverType_180C84;
 extern int16_t x_WORD_181B44;
-extern char x_BYTE_E2A28_speek; // weak
-extern type_F4FE0 str_F4FE0[70];
 
 extern uint8_t* x_DWORD_182188[];
 extern uint8_t* x_DWORD_1821A0[];
@@ -257,8 +257,5 @@ void SetSoundFreq_9A230(int a1);
 void WriteWaveToFile(wav_t* wav, const char* name);
 void AIL_fix();
 const char* mygetenv(const char* a1);
-void PrepareEventSound_6E450(__int16 a1, __int16 a2, __int16 a3);
-void ChangeSoundLevel_19CA0(uint8_t option);
-int sub_582B0(__int16 a1, __int16 a2);
-int sub_582F0(int a1, __int16 a2);
-bool sub_6EA90(int a1, int a2);
+
+#endif //MAIN_SOUND

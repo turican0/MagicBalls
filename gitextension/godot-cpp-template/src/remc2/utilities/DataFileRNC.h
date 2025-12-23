@@ -2,18 +2,19 @@
 #ifndef DataFileRNC_H
 #define DataFileRNC_H
 
-#include "../engine/BasicMini.h"
-#include "../engine/global_types.h"
+#include "stdlib.h"
+#include <string.h>
+#include <cstdio>
+#include <cstdint>
 
 #define RNC_SIGN 0x524E43 // RNC
 #define RNC_HEADER_SIZE 0x12
 #define MAX_BUF_SIZE 0x90000
 
-extern Pathstruct pstr[];
-
 class DataFileRNC
 {
 private:
+
 	typedef struct huftable_s {
 		uint32_t l1; // +0
 		uint16_t l2; // +4
@@ -76,9 +77,10 @@ private:
 	} vars_t;
 
 	static uint16_t crc_table[256];
-	// Disallow creating an instance of this object
-	DataFileRNC();
 
+public:
+	static int ReadFileAndDecompress(const char* path, uint8_t** data); //Reads the file path passed in into "data" array of 1 byte elements
+	static int Decompress(uint8_t* a1, uint8_t* a2);
 	static vars_t* init_vars();
 	static int UnpackData(vars_t* v);
 	static int Unpack(vars_t* v);
@@ -103,8 +105,11 @@ private:
 	static void make_huftable(vars_t* v, huftable_t* data, int count);
 	static uint32_t decode_table_data(vars_t* v, huftable_t* data);
 	static void clear_table(huftable_t* data, int count);
-public:
-	static int Decompress(uint8_t* a1, uint8_t* a2);
+
+
+private:
+	// Disallow creating an instance of this object
+	DataFileRNC();
 };
 
 #endif

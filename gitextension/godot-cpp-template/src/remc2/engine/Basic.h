@@ -1,8 +1,10 @@
 #pragma once
 
-#include "BasicMini.h"
+#ifndef MAIN_BASIC
+#define MAIN_BASIC
+
+#include "Basic_mini.h"
 #include "Spells.h"
-#include "LevelStructs.h"
 
 #ifdef _MSC_VER
 #include <direct.h>  
@@ -12,17 +14,23 @@
 #include "dirent.h"
 #endif
 
+
 #include "../portability/port_outputs.h"
 #include "../portability/port_time.h"
 #include "../portability/port_filesystem.h"
 #include "engine_support.h"
 #include "read_config.h"
 
+
+#include "../utilities/DataFileRNC.h"
 #include "../utilities/DataFileIO.h"
 #include "../engine/ViewPort.h"
-#include "../engine/GameBitmap.h"
 #include "Type_E9C38_Smalltit.h"
 #include "Type_F2C20ar.h"
+
+#include "globals.h"
+#include "Level.h"
+#include "ScreenBuff.h"
 
 #if defined(__LP64__) || defined(_WIN64) || (defined(__x86_64__) &&     !defined(__ILP32__) ) || defined(_M_X64) || defined(__ia64) || defined (_M_IA64) || defined(__aarch64__) || defined(__powerpc64__) || defined(__x86_64__) || (UINT_MAX >= 0xffffffffffffffff) || defined (COMPILE_FOR_64BIT)
 #define x64_BIT_ENVIRONMENT 1
@@ -30,10 +38,11 @@
 #define x32_BIT_ENVIRONMENT 1
 #endif
 
+
 #define __CFSHL__(x, y) (x<<y)
 
 
-#pragma pack (push,1)
+#pragma pack (1)
 typedef struct//lenght 11
 {
 	int8_t connected_0;
@@ -45,14 +54,14 @@ typedef struct//lenght 11
 typedef struct {//lenght 18
 	int32_t dword_0;
 }type_17ECA0;
-#pragma pack (pop)
+#pragma pack (16)
 
 typedef struct {
 	TColor c[256];
 	uint8_t data[];
 }TcolNext;
 
-#pragma pack (push,1)
+#pragma pack (1)
 typedef struct//lenght 613 // end 17E09D
 {
 	TColor* x_DWORD_17DE38x; // weak
@@ -79,13 +88,13 @@ typedef struct//lenght 613 // end 17E09D
 	//char x_BYTE_17DE69[1]; //x_BYTE_17DE68x[1] fix it -  weak
 	//char x_BYTE_17DE71[1]; //x_BYTE_17DE68x[9] fix it -  weak
 	//char x_BYTE_17DE72[78]; //x_BYTE_17DE68x[10] idb
-	bitmap_pos_struct2_t* x_DWORD_17DEC0; // weak
-	bitmap_pos_struct2_t* x_DWORD_17DEC4; // weak
-	bitmap_pos_struct2_t* x_DWORD_17DEC8; // weak
-	bitmap_pos_struct2_t* x_DWORD_17DECC; // weak
+	posistruct2_t* x_DWORD_17DEC0; // weak
+	posistruct2_t* x_DWORD_17DEC4; // weak
+	posistruct2_t* x_DWORD_17DEC8; // weak
+	posistruct2_t* x_DWORD_17DECC; // weak
 	int x_DWORD_17DED0; // weak
-	bitmap_pos_struct2_t* x_DWORD_17DED4; // weak
-	bitmap_pos_struct2_t* x_DWORD_17DED8; // weak
+	posistruct2_t* x_DWORD_17DED4; // weak
+	posistruct2_t* x_DWORD_17DED8; // weak
 	int x_DWORD_17DEDC; // weak
 	FILE* x_DWORD_17DEE0_filedesc; // weak
 	int16_t x_DWORD_17DEE4_mouse_positionx; // weak
@@ -133,7 +142,7 @@ typedef struct//lenght 613 // end 17E09D
 	int16_t unk_17E084x[12]; // weak [11]
 	char x_BYTE_17E09C; // weak
 } type_x_DWORD_17DE38str;
-#pragma pack (pop)
+#pragma pack (16)
 
 //extern int16_t m_iViewPortX_EA3D0; // weak?x_DWORD_E9C4C_langindexbuffer[481]
 //extern uint16_t m_uiViewPortWidth_EA3C4; // weak?x_DWORD_E9C4C_langindexbuffer[478]
@@ -142,6 +151,7 @@ extern type_str_unk_1804B0ar str_unk_1804B0ar;
 extern __int16 x_WORD_180660_VGA_type_resolution;
 extern uint8_t x_BYTE_E88E0x[32];
 extern uint8_t unk_F0A20x[1024];//2c1a20
+//extern char isCaveLevel_D41B6;
 extern uint8_t keyColor1_D4B7C; // weak
 extern uint8_t keyColor2_D4B7E; // weak
 extern type_event_0x6E8E* x_DWORD_EA3E4[1001];//2bb3e4
@@ -217,21 +227,34 @@ extern TColor unk_17D838x[]; // weak
 
 extern uint8_t x_BYTE_D41B5_texture_size;
 
-#pragma pack (push,1)
+#pragma pack (1)
 typedef struct {
-	bitmap_pos_struct2_t** begin_buffer;
-	bitmap_pos_struct2_t** end_buffer;
+	posistruct2_t** begin_buffer;
+	posistruct2_t** end_buffer;
 	uint8_t** dat_buffer;
-	bitmap_pos_struct_t** posistruct;
+	posistruct_t** posistruct;
 } filearray_struct;
 
+#pragma pack (16)
+
+#pragma pack (1)
+typedef struct {
+	char path[512];
+	uint8_t** colorPalette_var28;//1C // Palette
+	uint8_t** var32_end_buffer;//20 // maybe buffer
+	uint32_t var36_size_buffer;//24 //maybe file size
+	uint32_t var40_alloc_type;//28
+} Pathstruct;
+#pragma pack (16)
+
+#pragma pack (1)
 typedef struct {//lenght 10
 	int32_t dword_0;
 	int32_t dword_4;
 	int16_t word_8;
 }
 type_TMAPS00TAB_BEGIN_BUFFER;
-#pragma pack (pop)
+#pragma pack (16)
 
 extern int filearrayindex_POINTERSDATTAB;
 extern int filearrayindex_FONTS0DATTAB;
@@ -245,27 +268,27 @@ extern int filearrayindex_BUILD00DATTAB;
 extern int filearrayindex_ZERO4;
 
 extern uint8_t* ZERO_BUFFER;
-extern bitmap_pos_struct2_t* ZERO_BUFFER_PST2;
+extern posistruct2_t* ZERO_BUFFER_PST2;
 
 extern uint8_t* SEARCH_BEGIN_BUFFER;
 extern uint8_t* SEARCH_END_BUFFER;
 extern uint8_t* FONTS0DAT_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* FONTS0TAB_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* FONTS0TAB_END_BUFFER;
+extern posistruct2_t* FONTS0TAB_BEGIN_BUFFER;
+extern posistruct2_t* FONTS0TAB_END_BUFFER;
 extern uint8_t* FONTS1DAT_BEGIN_BUFFER;//2baa94
-extern bitmap_pos_struct2_t* FONTS1TAB_BEGIN_BUFFER;//2bab24
-extern bitmap_pos_struct2_t* FONTS1TAB_END_BUFFER;//2bab04
+extern posistruct2_t* FONTS1TAB_BEGIN_BUFFER;//2bab24
+extern posistruct2_t* FONTS1TAB_END_BUFFER;//2bab04
 extern type_TMAPS00TAB_BEGIN_BUFFER* str_TMAPS00TAB_BEGIN_BUFFER;
 //uint8_t* TMAPS00TAB_BEGIN_BUFFER;//2c7ed0
 extern TColor* str_PALDATA_BEGIN_BUFFER;//2bb3c8
 extern TColor* str_PALMEM_BEGIN_BUFFER;//6d654d
 extern uint8_t* POINTERSDAT_BEGIN_BUFFER;//2bc390
-extern bitmap_pos_struct2_t* POINTERSTAB_BEGIN_BUFFER;//2bc394
-extern bitmap_pos_struct2_t* POINTERSTAB_END_BUFFER;//2bc388
+extern posistruct2_t* POINTERSTAB_BEGIN_BUFFER;//2bc394
+extern posistruct2_t* POINTERSTAB_END_BUFFER;//2bc388
 
 extern uint8_t* BUILD00DAT_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* BUILD00TAB_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* BUILD00TAB_END_BUFFER;
+extern posistruct2_t* BUILD00TAB_BEGIN_BUFFER;
+extern posistruct2_t* BUILD00TAB_END_BUFFER;
 
 extern uint8_t* ETEXT_BEGIN_BUFFER;
 extern uint8_t* FTEXT_BEGIN_BUFFER;
@@ -288,16 +311,16 @@ extern uint8_t* WSCREEN_END_BUFFER;
 extern uint8_t* BSCREEN2_END_BUFFER;
 
 extern uint8_t* MSPRD00DAT_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* MSPRD00TAB_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* MSPRD00TAB_END_BUFFER;
+extern posistruct2_t* MSPRD00TAB_BEGIN_BUFFER;
+extern posistruct2_t* MSPRD00TAB_END_BUFFER;
 
 extern uint8_t* HSPRD00DAT_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* HSPRD00TAB_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* HSPRD00TAB_END_BUFFER;
+extern posistruct2_t* HSPRD00TAB_BEGIN_BUFFER;
+extern posistruct2_t* HSPRD00TAB_END_BUFFER;
 
 extern uint8_t* HFONT3DAT_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* HFONT3TAB_BEGIN_BUFFER;
-extern bitmap_pos_struct2_t* HFONT3TAB_END_BUFFER;
+extern posistruct2_t* HFONT3TAB_BEGIN_BUFFER;
+extern posistruct2_t* HFONT3TAB_END_BUFFER;
 
 extern uint8_t* CLRD0DAT_BEGIN_BUFFER;
 
@@ -307,19 +330,19 @@ extern int help_VGA_type_resolution;
 
 extern filearray_struct filearray_2aa18c[];
 
-extern bitmap_pos_struct_t* posistruct1;//fix it
-extern bitmap_pos_struct_t* posistruct2;//fix it
-extern bitmap_pos_struct_t* posistruct3;//fix it
-extern bitmap_pos_struct_t* posistruct4;//fix it
-extern bitmap_pos_struct_t* posistruct5;//fix it
-extern bitmap_pos_struct_t* posistruct6;//fix it
-extern bitmap_pos_struct_t* posistruct7;//fix it
-extern bitmap_pos_struct_t* posistruct8;//fix it
-extern bitmap_pos_struct_t* posistruct9;//fix it
-extern bitmap_pos_struct_t* posistruct10;//fix it
-extern bitmap_pos_struct_t* posistruct11;//fix it
+extern posistruct_t* posistruct1;//fix it
+extern posistruct_t* posistruct2;//fix it
+extern posistruct_t* posistruct3;//fix it
+extern posistruct_t* posistruct4;//fix it
+extern posistruct_t* posistruct5;//fix it
+extern posistruct_t* posistruct6;//fix it
+extern posistruct_t* posistruct7;//fix it
+extern posistruct_t* posistruct8;//fix it
+extern posistruct_t* posistruct9;//fix it
+extern posistruct_t* posistruct10;//fix it
+extern posistruct_t* posistruct11;//fix it
 
-extern bitmap_pos_struct_t* x_DWORD_EA3D4; // weak
+extern posistruct_t* x_DWORD_EA3D4; // weak
 
 extern Pathstruct xasearchd_2bac30;
 #define psxasearchd_2bac30 0
@@ -421,12 +444,11 @@ extern Pathstruct xadatatables;
 
 extern axis_2d x_WORD_E3760_mouse;
 extern uint8_t* x_DWORD_E9C3C; // weak
-extern type_SPELLS_BEGIN_BUFFER_str SPELLS_BEGIN_BUFFER_str[];
 
 extern int16_t x_WORD_1806EE; // weak
 
-extern uint8_t* ptrScreenPos_180708; // weak
-extern uint8_t* ptrCursorBitmapPos_18070C; // weak
+extern uint8_t* x_DWORD_180708; // weak
+extern uint8_t* x_DWORD_18070C; // weak
 extern uint8_t* x_DWORD_180714; // weak
 extern uint8_t* x_DWORD_180718; // weak
 
@@ -464,17 +486,15 @@ extern __int16 x_WORD_E36D4; // weak
 
 extern type_TMAPS00TAB_BEGIN_BUFFER* str_TMAPS00TAB_BEGIN_BUFFER;
 
-extern uint8_t* Zero_pointer;
-
 bool DefaultResolutions();
 
 void FreeMem_83E80(uint8_t* a1);
+int sub_84000(int a1);
 
 x_DWORD x_outp(x_DWORD, char);// weak
 x_DWORD x_inp(x_DWORD);// weak
 void stub_fix_it();
 void* Malloc_83CD0(size_t a1);
-void qmemcpy(void* dest, void* src, size_t size);
 int FreeMem_9D490(void* a1, int a2);
 int x_free(void* ptr);
 void* Malloc_83D70(int a1);
@@ -511,7 +531,8 @@ void sub_2EC30_clear_img_mem();
 void sub_2EB60();
 void sub_2EBB0_draw_text_with_border_630x340(char* textString);
 int sub_7FCB0_draw_text_with_border(/*int a1,*/ char* textString, int32_t a3, int32_t a4, int a5, uint8_t a6, unsigned __int8 a7, uint32_t a8);//560cb0
-void sub_7C120_draw_bitmap_640(int16_t posx, int16_t posy, bitmap_pos_struct_t tempstr);
+void sub_7C120_draw_bitmap_640(int16_t posx, int16_t posy, posistruct_t tempstr);
+void sub_76260_read_intro_Palette(uint8_t a1);
 uint8_t getPaletteIndex_5BE80(TColor* a1x, uint8_t a2, uint8_t a3, uint8_t a4);
 void sub_7C140_draw_text_background(int16_t a1, int16_t a2, int16_t a3, int16_t a4, uint8_t a5);
 void sub_41A90_VGA_Palette_install(TColor* a1x);
@@ -519,15 +540,15 @@ void sub_2EC90(char a1);
 uint32_t sub_7FAE0_draw_text(char* a1, __int16 a2, __int16 a3, __int16 a4, unsigned __int8 a5);
 void sub_90478_VGA_Blit320(uint8_t maxFps = 0);
 void sub_75200_VGA_Blit640(uint16_t height, uint8_t maxFps = 0);
-uint8_t GetLetterHeight_6FC30();
-void sub_2BB40_draw_bitmap(int16_t posx, int16_t posy, bitmap_pos_struct_t temposstr, uint8_t scale = 1);
+uint8_t sub_6FC30_get34_height();
+void sub_2BB40_draw_bitmap(int16_t posx, int16_t posy, posistruct_t temposstr);
 
-void GetFont_6FC50(__int16 a1);//250c50
-uint8_t GetLetterWidth_6FC10();
+void DrawHelpText_6FC50(__int16 a1);//250c50
+uint8_t sub_6FC10_letter_width();
 unsigned int sub_6FC80_pre_draw_text(char* a1, __int16 a2, __int16 a3, __int16 a4, unsigned __int8 a5);
 void sub_75D70(uint8_t* a1, uint32_t a2);
 void DrawLine_2BC80(int16_t posStartX, int16_t posStartY, int16_t posEndX, int16_t posEndY, uint8_t colorIdx);
-void DrawText_2BC10(const char* textbuffer, int16_t posx, int16_t posy, uint8_t color, uint8_t scale = 1);//20cc10
+void DrawText_2BC10(const char* textbuffer, int16_t posx, int16_t posy, uint8_t color);//20cc10
 void SetFrameStart(std::chrono::system_clock::time_point frameStart);
 std::chrono::duration<double, std::milli> CalculateTimeDelta();
 void VGA_CalculateAndPrintFps(int x, int y, float timeDelta);
@@ -537,21 +558,25 @@ void LockFps(uint8_t maxFps);
 void sub_6EF10_set_mouse_minmax(__int16 a1, signed __int16 a2, __int16 a3, signed __int16 a4);
 void sub_7FB90_draw_text(char* a1, int16_t a2, int16_t a3, uint8_t a4);
 void sub_8CACD_draw_cursor2();
-void sub_8F8B0_draw_bitmap320(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr, uint8_t scale = 1);
-void sub_8F8E8_draw_bitmap640(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr, uint8_t scale = 1);
+void sub_8F8B0_draw_bitmap320(int16_t posx, int16_t posy, posistruct_t temppstr);
+void sub_8F8E8_draw_bitmap640(int16_t posx, int16_t posy, posistruct_t temppstr);
 void DrawLineLowRes_90164(int16_t posStartX, int16_t posStartY, int16_t posEndX, int16_t posEndY, uint8_t colorIdx);
 void DrawLineHighRes_901E4(int16_t posStartX, int16_t posStartY, int16_t posEndX, int16_t posEndY, uint8_t colorIdx);
-void sub_6F940_sub_draw_text(const char* textbuffer, int posx, int posy, uint8_t color, uint8_t scale = 1);//250940
-void sub_72C40_draw_bitmap_640_setcolor(int16_t posx, int16_t posy, bitmap_pos_struct_t a3, uint8_t color, uint8_t scale = 1);
+void sub_6F940_sub_draw_text(const char* textbuffer, int posx, int posy, uint8_t color);//250940
+void sub_72C40_draw_bitmap_640_setcolor(__int16 a1, __int16 a2, posistruct_t a3, unsigned __int8 a4);
 void sub_8C635_draw_cursor();
-void sub_8F935_bitmap_draw_final(uint8_t width, uint8_t height, uint16_t tiley, int tilex, uint8_t* texture, uint8_t setbyte, char a6, uint8_t scale);
+void sub_8F935_bitmap_draw_final(uint8_t a1byte1, uint8_t a1byte2, uint16_t a2, int a3, uint8_t* a4, uint8_t setbyte, char a6);
 void sub_8F920(uint8_t a1byte1, uint8_t a1byte2, int16_t posx, int16_t posy, uint8_t* a4, unsigned __int8 a5, char a6);
 
+void sub_99A77_create_index_dattab_div(uint8_t* a1, uint8_t* a2, uint8_t* a3, posistruct_t* a4);
+void sub_99AEB_create_index_dattab_minus(uint8_t* a1, uint8_t* a2, uint8_t* a3, posistruct_t* a4);
+void sub_98709_create_index_dattab_power(posistruct2_t* a1, posistruct2_t* a2, uint8_t* a3, posistruct_t* a4);
+void sub_98709_create_index_dattab_power_add(uint8_t* a1, uint8_t* a2, uint8_t* a3, posistruct_t* a4, int add);
+void sub_9874D_create_index_dattab(posistruct2_t* a1, posistruct2_t* a2, uint8_t* a3, posistruct_t* a4);
+void sub_9874D_create_index_dattab_add(uint8_t* a1, uint8_t* a2, uint8_t* a3, posistruct_t* a4, int add);
 signed int GetTrueWizardNumber_61790(signed int inputnumber);
 
 void Convert_from_shadow_D41A0_BYTESTR_0(type_shadow_D41A0_BYTESTR_0* from, type_D41A0_BYTESTR_0* to);
-void Convert_to_shadow_D41A0_BYTESTR_0(type_D41A0_BYTESTR_0* from, type_shadow_D41A0_BYTESTR_0* to);
 void Convert_to_shadow_str_E2A74(const type_array_str_E2A74 &from, type_shadow_str_E2A74* to);
 
-void sub_417A0_install_pal_and_mouse_minmax();
-unsigned long j___clock();
+#endif //MAIN_BASIC
