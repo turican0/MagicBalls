@@ -54,6 +54,20 @@ PackedByteArray ExampleClass::TerrainGetMapTerrainType() {
 	return arr;
 }
 
+PackedByteArray ExampleClass::TerrainGetMapHeight() {
+	PackedByteArray arr;
+	arr.resize(65536);
+	memcpy(arr.ptrw(), mapHeightmap_11B4E0, 65536);
+	return arr;
+}
+
+PackedByteArray ExampleClass::TerrainGetAngle() {
+	PackedByteArray arr;
+	arr.resize(65536);
+	memcpy(arr.ptrw(), mapAngle_13B4E0, 65536);
+	return arr;
+}
+
 void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	const uint8_t *src = bytearray.ptr();
 	if (bytearray.size() < sizeof(Type_CompressedLevel_2FECE)) {

@@ -170,6 +170,8 @@ target_sources(${LIBNAME}
     src/remc2/engine/UVTable_D4350.h
     src/remc2/utilities/DataFileRNC.cpp
     src/remc2/utilities/DataFileRNC.h
+    src/remc2/portability/port_filesystem.cpp
+    src/remc2/portability/port_filesystem.h
 )
 
 # Fetch a list of the xml files to use for documentation and add to our target

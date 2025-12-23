@@ -3,21 +3,15 @@
 #ifndef MAIN_TERRAIN
 #define MAIN_TERRAIN
 
-#include "globals.h"
-//#include "Basic.h"
-#include "Basic_mini.h"
-#include "Basic_terrain.h"
+#include "Basic.h"
+#include "BasicMini.h"
+#include "BasicTerrain.h"
 #include "Unk_D4A30.h"
 #include "Unk_D47E0.h"
 
-#include "Level.h"
-#include "ScreenBuff.h"
-//#include "engine_support.h"
-//#include "CommandLineParser.h"
-//Convert_to_shadow_D41A0_BYTESTR_0
-//qmemcpy
+#include "LevelStructs.h"
 
-extern char x_BYTE_F2CD0x[7 * 7 * 7 * 7][2]; // 233cd0//4802 //4816
+extern char x_BYTE_F2CD0x[2800][2]; // 233cd0//4802 //4816 // size has to be 2 * (7^4 + 7^3 + 7^2 + 7^1) = 2 * (2401 + 343 + 49 + 7) = 2*2800 as seen in sub_462A0_orig
 extern uint8_t MapBasicHeight_D41B7;
 
 extern uint16_t x_WORD_17B4E0;
@@ -30,7 +24,7 @@ extern __int16 mapEntityIndex_15B4E0[65536];
 
 extern bool lowDiffHeightmap_D47DC;
 
-void GenerateLevelMap_43830(levelDataType_2FECE* a2x);//224830
+void GenerateLevelMap_43830(Type_Level_2FECE* a2x);//224830
 void sub_B5E70_decompress_terrain_map_level(__int16 a1, unsigned __int16 a2, __int16 a3, int32_t a4);//296e70
 void sub_44DB0_truncTerrainHeight(int16_t mapEntityIndex_15B4E0[], uint8_t mapHeightmap_11B4E0[]);//225db0 // map to heightmap
 int sub_B5C60_getTerrainAlt2(uint16_t a1, uint16_t a2);//296c60
@@ -70,8 +64,6 @@ int getTerrainAlt_10C40(axis_3d* a1);
 bool sub_11E70(type_event_0x6E8E* a1, axis_3d* a2);
 int sub_10C60(axis_3d* a1);
 int sub_B5D68(uint16_t a1, uint16_t a2);
-
-void Convert_to_shadow_D41A0_BYTESTR_0(type_D41A0_BYTESTR_0* from, type_shadow_D41A0_BYTESTR_0* to);
 
 typedef struct {
 	int index;

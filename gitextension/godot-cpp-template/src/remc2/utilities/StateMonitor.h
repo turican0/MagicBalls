@@ -1,7 +1,7 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+//#include <SDL2/SDL.h>
+//#include <SDL2/SDL_ttf.h>
 #include <string>
 #include <map>
 
@@ -44,13 +44,13 @@ class StateMonitor {
         void Monitor17DB70str();
         void Monitor_str_D4C48ar();
 
-        bool m_initialized = false;
+        //bool m_initialized = false;
 
-        TTF_Font *m_font;
-        SDL_Window *m_window;
-        SDL_Renderer *m_renderer;
-        SDL_Surface *m_surface;
-        SDL_Texture *m_texture;
+        //TTF_Font *m_font;
+        //SDL_Window *m_window;
+        //SDL_Renderer *m_renderer;
+        //SDL_Surface *m_surface;
+        //SDL_Texture *m_texture;
 
         map<string, ObservedChange> m_observed_changes;
 

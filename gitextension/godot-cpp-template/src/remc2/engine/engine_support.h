@@ -1,29 +1,28 @@
 #pragma once
-#ifndef ENGINE_SUPPORT_H
-#define ENGINE_SUPPORT_H
 
 #include <stdio.h>
 #include <cstdint>
 #include <assert.h>
 #include <array>
+#include <map>
 #include <sstream>
 #include <stddef.h>
 #include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
 
+#ifdef _DEBUG
 #include "png.h"
-#pragma comment(lib, "zlib.lib") // must be before libpng!
-#ifndef _WIN64
-#pragma comment(lib, "libpng15.lib") // must be after zlib!
-#else
 #endif
 
+#include "global_types.h"
+#include "MapType.h"
 #include "../portability/port_time.h"
 #include "../portability/port_sdl_vga_mouse.h"
+#include "../portability/port_sdl_joystick.h"
 #include "../portability/port_outputs.h"
 #include "../portability/port_show_perifery.h"
 
-#include "Basic_terrain.h"
-#include "Level.h"
+#include "BasicTerrain.h"
+#include "LevelStructs.h"
 #include "ScreenBuff.h"
 
 #pragma pack (1)
@@ -148,7 +147,6 @@ extern int32_t x_DWORD_D41A4_x96BF;*/
 //extern uint8_t* x_D41A0_BYTEARRAY_4;
 
 extern uint8_t* off_D41A8_sky;
-//extern uint8_t* x_BYTE_14B4E0_second_heightmap;
 
 #pragma pack (1)
 
@@ -156,65 +154,6 @@ typedef struct {
 	int32_t dword[26];
 }
 type_dword_0x649_2BDE;
-
-/*
-typedef struct {//begin 0x649 //lenght 0x1F9
-	type_dword_0x649_2BDE dword_0x649_2BDE;//1609//0x649+0,lenght 0x68(4x0x1a)
-	uint8_t stub1[104];
-	int16_t word_0x719_2BDE[26];// -2xa1 tj 2x 26//1817
-	//1817
-	uint8_t stub4c[52];
-	//int16_t word_0x731_2BDE;//13071
-	int8_t byte_0x781_2BDE[26];//1921
-	type_2255ar array_0x79B_2BDE_13177;//0x649+338,lenght 0x18+2
-	int8_t byte_0x7B5_2BDE[26];//1973
-	//uint8_t array_0x7CF_2BDE_13229[52];//1999
-	//uint8_t array_0x7CF_2BDE_13229[24];//1999
-	type_2255ar array_0x7CF_2BDE_13229;//0x649+390,lenght 0x18+2
-	//uint8_t stub4e[26];
-	//24
-	//2
-
-	//int8_t array_0x7E7_2BDE_13253[28];//array_0x7CF_2BDE_13229[24]
-	type_2255ar byte_0x7E9_2BDE;// -1x26//2026
-
-	type_2255ar byte_0x803_2BDE;// -1x26//2051//0x649+442, lenght 0x18+2
-
-	type_2255ar byte_0x81D_2BDE;// -1x26//2077//0x649+468, lenght 0x18+2
-	//uint8_t stub2[1];
-
-	int16_t word_0x837_2BDE;//2103
-	int16_t word_0x839_2BDE;//2105
-	uint8_t stub4[2];
-	int8_t byte_0x83D_2BDE;//2109
-
-	int8_t byte_0x83E_2BDE;//2110 - 501//spell index
-
-	//int8_t byte_0x83E_2BDE;//2110 //spell index
-	uint8_t stub5[3];
-} type_struct_0x649_2BDE_12839;*/
-
-/*typedef struct {//lenght 2124?
-	type_str_0x6E3E str_0x256_0;
-	uint8_t stub[14];
-	uint32_t str0x256_24;//??lenght
-	uint8_t stubc[1581];
-	//uint8_t str0x256_24[1585];//??lenght
-	type_str_611 str0x256_1609;//??lenght
-
-	int8_t byte_0x45C_1116;
-	int8_t byte_0x45D_1117;
-	int8_t byte_0x45E_1118;
-	int8_t byte_0x45E_1119;
-
-	//0x100//x_D41A0_BYTEARRAY_4_struct.byteindex_256ar
-	//280=byteindex_256ar[24];//x_D41A0_BYTEARRAY_4_struct.byteindex_256ar[24]
-	//565=byteindex_256ar[309];//0x235//x_D41A0_BYTEARRAY_4_struct.byteindex_256ar[309]
-	//1865=byteindex_256ar[1609];//0x749//x_D41A0_BYTEARRAY_4_struct.byteindex_256ar[1609]
-	//end 2224
-	uint8_t stubb[6];
-}
-type_str_0x256;*/
 
 typedef struct {//size 5152
 	//type_particle_str_0 un_0;//lenght?
@@ -270,7 +209,7 @@ typedef struct Type_x_D41A0_BYTEARRAY_4_struct {
 	uint16_t langIndex_4;//x_D41A0_BYTEARRAY_4_struct.byteindex_4
 	uint16_t soundVolume_6;//x_D41A0_BYTEARRAY_4_struct.wordindex_6
 	uint16_t musicVolume_8;//x_D41A0_BYTEARRAY_4_struct.wordindex_8
-	uint8_t byteindex_10;//0xa//x_D41A0_BYTEARRAY_4_struct.byteindex_10//show help
+	uint8_t showHelp_10;//0xa//x_D41A0_BYTEARRAY_4_struct.byteindex_10//show help
 	int8_t brightness_11;//0xb//x_D41A0_BYTEARRAY_4_struct.byteindex_11
 	int8_t brightness_12;//0xc//x_D41A0_BYTEARRAY_4_struct.byteindex_12
 	int8_t brightness_13;//0xd//x_D41A0_BYTEARRAY_4_struct.byteindex_13
@@ -448,11 +387,11 @@ extern int16_t x_D41A0_WORDARRAY[];
 
 //xx extern uint8_t* dword_E9C30[]; // weak
 
-extern posistruct_t* xy_DWORD_17DED4_spritestr;
-extern posistruct_t* xy_DWORD_17DEC0_spritestr;
-extern posistruct_t* xy_DWORD_17DEC8_spritestr;
+extern bitmap_pos_struct_t* xy_DWORD_17DED4_spritestr;
+extern bitmap_pos_struct_t* xy_DWORD_17DEC0_spritestr;
+extern bitmap_pos_struct_t* xy_DWORD_17DEC8_spritestr;
 
-extern posistruct_t* x_DWORD_D4188t_spritestr;
+extern bitmap_pos_struct_t* x_DWORD_D4188t_spritestr;
 
 /*extern x_DWORD x_DWORD_355208;//3551CE+3A DWORD
 extern x_BYTE x_BYTE_355234_hardisknumber;//harddrive//3551CE+66 BYTE
@@ -533,7 +472,9 @@ uint32_t compare_0x6E8E(const char* filename, uint8_t* adress, uint32_t count, u
 void writehex(uint8_t* buffer, uint32_t count);
 
 void mine_texts(const char* filename, uint32_t adressdos, uint32_t count, char* outfilename);
+#ifdef _DEBUG
 int writeImage(const char* filename, int width, int height, uint8_t* buffer, char* title);
+#endif
 void writeImageBMP(const char* imageFileName, int width, int height, uint8_t* image);
 
 /*
@@ -605,7 +546,6 @@ typedef struct {//lenght 20
 	uint8_t byte_19;//type_str_0x30323//type_str_0x30337
 }
 type_str_0x30310;*/
-
 /*
 typedef struct {//lenght 20
 	uint8_t byte_0;//array_0x3030E
@@ -685,73 +625,6 @@ typedef struct {//lenght 110
 }
 type_str_0x360FB;*/
 
-/*
-typedef struct {
-	int32_t dw;
-	int16_t w;
-} dw_ws;
-*/
-/*typedef struct {
-	int8_t Bit_0;
-	int8_t Bit_1;
-	int8_t Bit_2;
-	int8_t Bit_3;
-	int8_t Bit_4;
-	int8_t Bit_5;
-	int8_t Bit_6;
-	int8_t Bit_7;
-	int8_t Bit_8;
-	int8_t Bit_9;
-}
-typedef_str_0x6E3E;*/
-
-/*typedef union {
-	type_str_0x8586 str;
-	uint32_t dword;
-}
-type_uni_0x8586;*/
-
-/*typedef union {
-	type_str_0x218E str;
-	uint32_t dword;
-}
-type_uni_0x218E;*/
-
-/*typedef union {
-	type_str_0x2192 str;
-	uint32_t dword;
-}
-type_uni_0x2192;*/
-
-/*typedef union {
-	type_str_0x2196 str;
-	uint32_t dword;
-}
-type_uni_0x2196;*/
-
-/*typedef union {
-	type_str_0x21AA str;
-	uint32_t dword;
-}
-type_uni_0x21AA;*/
-
-/*typedef union {
-	type_str_0x21AE str;
-	uint32_t dword;
-}
-type_uni_0x21AE;*/
-
-/*typedef union {
-	type_str_0x21B2 str;
-	uint32_t dword;
-}
-type_uni_0x21B2;*/
-
-/*typedef union {
-	type_str_0x21B6 str;
-	uint32_t dword;
-}
-type_uni_0x21B6;*/
 typedef struct {//lenght 7
 	int8_t byte_0;//25972
 	int8_t byte_1;//25973
@@ -770,14 +643,14 @@ struct {//lenght 0x33
 	int16_t maxTextboxHeight2_0xe;//e //7
 	int16_t charWidth_0x10;//10 //8
 	int16_t charHeight_0x12;//12 //9
-	int16_t minWidth_0x14;//14 //10
-	int16_t maxWidth_0x16;//16 //11
-	int16_t minHeight_0x18;//18 //12
-	int16_t maxHeight_0x1a;//1a //13
-	int16_t lineX1_0x1c;//1c-4f //14
-	int16_t lineY1_0x1e;//1e-51 //15
-	int16_t lineX2_0x20;//20 //16
-	int16_t lineY2_0x22;//22 //17
+	int16_t minPosX_0x14;//14 //10
+	int16_t maxPosX_0x16;//16 //11
+	int16_t minPosY_0x18;//18 //12
+	int16_t maxPosY_0x1a;//1a //13
+	int16_t lineSrcX_0x1c;//1c-4f //14
+	int16_t lineSrcY_0x1e;//1e-51 //15
+	int16_t lineDestX_0x20;//20 //16
+	int16_t lineDestY_0x22;//22 //17
 	int16_t framePosX_0x24;//24-57 //width 18
 	int16_t framePosY_0x26;//26-59 //19
 	int16_t frameWidth_0x28;//28-5b //20
@@ -787,7 +660,7 @@ struct {//lenght 0x33
 	int8_t color2_0x31;//31-64 - color2
 	int8_t color3_0x32;//32-65 - color2
 }
-typedef type_textbox_sub1804B0;
+typedef Type_TextBox_1804B0;
 
 typedef union {//lenght 12
 	int32_t dword[3];
@@ -796,7 +669,7 @@ typedef union {//lenght 12
 type_uni_0x8a;
 
 struct {//0xb0 nebo spis 171(0xab)
-	type_textbox_sub1804B0 type_sub_0[2];
+	Type_TextBox_1804B0 type_sub_0[2];
 	/*int16_t word_0xe;//e
 	int16_t word_0x10;//10
 	int16_t word_0x12;//12
@@ -816,7 +689,7 @@ struct {//0xb0 nebo spis 171(0xab)
 	int32_t dword_0x7a;//7a
 	int8_t stub[4];
 	int32_t dword_0x82;//82
-	int16_t word_0x86;//86
+	int16_t Index_0x86;//86
 	int16_t word_0x88;//88
 	type_uni_0x8a uni_0x8a;
 	//int32_t dword_0x8a;//8a
@@ -825,7 +698,7 @@ struct {//0xb0 nebo spis 171(0xab)
 	int16_t word_0x98;//98
 	int16_t word_0x9a;//9A
 	int16_t word_0x9c;//9C
-	int8_t byte_0x9e;//9e
+	int8_t PopupStatusByte_0x9e;//9e
 	int8_t byte_0x9f;//9f
 	int8_t byte_0xa0;//a0
 	int8_t byte_0xa1;//a1
@@ -834,8 +707,8 @@ struct {//0xb0 nebo spis 171(0xab)
 	int8_t byte_0xa4;//a4
 	int8_t byte_0xa5;//a5
 	int8_t byte_0xa6;//a6
-	int8_t byte_0xa7;//a7
-	int8_t byte_0xa8;//a8
+	int8_t showPlayerScores_0xa7;//a7
+	int8_t byte_0xa8;//a8 - wizard number
 	int8_t byte_0xa9;//a9
 	int8_t byte_0xaa;//aa
 	//int8_t stubb[1];
@@ -1041,9 +914,7 @@ void test_x_D41A0_BYTEARRAY_0();
 
 /*void x_D41A0_BYTEARRAY_0_to_x_D41A0_BYTESTR_0();
 void x_D41A0_BYTESTR_0_to_x_D41A0_BYTEARRAY_0();*/
-void write_posistruct_to_png(uint8_t* buffer, int width, int height, const char* filename);
+void write_bitmap_pos_struct_to_png(uint8_t* buffer, int width, int height, const char* filename);
 
 int my_sign32(int32_t var);
 int my_sign16(int16_t var);
-
-#endif //ENGINE_SUPPORT_ACTIVE

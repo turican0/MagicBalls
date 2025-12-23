@@ -73,8 +73,8 @@ void InitializeLogging(spdlog::level::level_enum level, const char* logFileName)
 			file_sink->set_level(level);
 			file_sink->set_pattern("[%H:%M:%S:%f %z] [%^%-8l%$] %v");
 
-			Logger = new spdlog::logger("multi_sink", { console_sink, file_sink });
-			Logger->set_level(level);
+			//Logger = new spdlog::logger("multi_sink", { console_sink, file_sink });
+			//Logger->set_level(level);
 			auto levelStr = GetStringFromLoggingLevel(level);
 			Logger->info("Logging Initialized with Level: {}", levelStr);
 		}
@@ -85,7 +85,7 @@ void InitializeLogging(spdlog::level::level_enum level, const char* logFileName)
 	}
 	catch (const spdlog::spdlog_ex& ex)
 	{
-		std::cout << "Log init failed: " << ex.what() << std::endl;
+		//std::cout << "Log init failed: " << ex.what() << std::endl;
 	}
 }
 
@@ -105,7 +105,7 @@ bool firstrun = true;
 std::string get_exe_path() {
 #ifdef _MSC_VER
 	LPWSTR buffer = new WCHAR[MAX_PATH];
-	GetModuleFileName(NULL, buffer, MAX_PATH);
+	//GetModuleFileName(NULL, buffer, MAX_PATH);
 	std::string locstr = utf8_encode(buffer);
 	delete[] buffer;
 	std::string::size_type pos = std::string(locstr).find_last_of("\\/");

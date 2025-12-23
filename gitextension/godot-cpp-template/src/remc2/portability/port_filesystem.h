@@ -31,6 +31,11 @@
 	#define _chdir chdir
 #endif
 
+#include "fake_spdlog.h"
+
+// můžeš mít globálně, ale není to součást návrhu
+extern spdlog::logger *Logger;
+
 //#include <stdlib.h>
 //#include <string.h>
 //#include <ctype.h>
@@ -44,9 +49,9 @@ extern char forceRender[512];
 //extern spdlog::logger* Logger;
 
 //const char* GetStringFromLoggingLevel(spdlog::level::level_enum level);
-//spdlog::level::level_enum GetLoggingLevelFromString(const char* levelStr);
-//void InitializeLogging(spdlog::level::level_enum level);
-//void InitializeLogging(spdlog::level::level_enum level, const char* logFileName);
+spdlog::level::level_enum GetLoggingLevelFromString(const char* levelStr);
+void InitializeLogging(spdlog::level::level_enum level);
+void InitializeLogging(spdlog::level::level_enum level, const char* logFileName);
 long my_findfirst(char* path, _finddata_t* c_file);
 long my_findnext(long hFile, _finddata_t* c_file);
 void my_findclose(long hFile);

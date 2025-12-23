@@ -1,5 +1,10 @@
 #include "DataFileRNC.h"
 
+#ifndef _countof
+#define _countof(arr) sizeof(arr) / sizeof(arr[0])
+//dirty
+#endif
+
 uint16_t DataFileRNC::crc_table[256] = {
 		0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
 		0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
@@ -497,7 +502,7 @@ void DataFileRNC::ror_w(uint16_t* x)
 		*x >>= 1;
 }
 
-uint32_t  DataFileRNC::inverse_bits(uint32_t value, int count)
+uint32_t DataFileRNC::inverse_bits(uint32_t value, int count)
 {
 	int i = 0;
 	while (count--)
@@ -513,7 +518,7 @@ uint32_t  DataFileRNC::inverse_bits(uint32_t value, int count)
 	return i;
 }
 
-void  DataFileRNC::proc_20(huftable_t* data, int count)
+void DataFileRNC::proc_20(huftable_t* data, int count)
 {
 	int val = 0;
 	uint32_t div = 0x80000000;
@@ -543,7 +548,7 @@ void  DataFileRNC::proc_20(huftable_t* data, int count)
 	}
 }
 
-void  DataFileRNC::make_huftable(vars_t* v, huftable_t* data, int count)
+void DataFileRNC::make_huftable(vars_t* v, huftable_t* data, int count)
 {
 	clear_table(data, count);
 

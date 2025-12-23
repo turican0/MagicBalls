@@ -31454,7 +31454,7 @@ void sub_41A90_VGA_Palette_install(TColor* bufferx)//222a90
 	//loadfromsnapshot((char*)"0160-00222A90-x", a1, 0x1a7358, 0x300);//4c
 	//loadfromsnapshot((char*)"0160-00222A90-x", a1, 0x3aa0a4, 0x300);//4c
 	//debug
-	VGA_Set_Palette((Uint8*)bufferx);
+	VGA_Set_Palette((uint8*)bufferx);
 }
 //----- (00041A90) --------------------------------------------------------
 /*char sub_41A90_VGA_Palette_install_orig(unsigned __int8 *a1)//insgtalace palety viz:http://www.hoschl.cz/cyril/voxel5.c

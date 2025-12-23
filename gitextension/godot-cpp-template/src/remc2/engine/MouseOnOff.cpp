@@ -1,2 +1,2 @@
-﻿#include "MouseOnOff.h"
+#include "MouseOnOff.h"
 bool mouseturnoff = false;

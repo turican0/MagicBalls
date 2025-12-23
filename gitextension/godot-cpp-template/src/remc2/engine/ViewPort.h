@@ -5,7 +5,6 @@
 
 #include "Rectangle.h"
 #include "globals.h"
-#include "ScreenBuff.h"
 
 class ViewPort: public Rectangle
 {
