@@ -290,41 +290,10 @@ void GameRenderHD::DrawWorld_411A0(int posX, int posY, int16_t yaw, int16_t posZ
 
 void GameRenderHD::WriteWorldToBMP()
 {
-	std::string path = GetSubDirectoryPath("BufferOut");
-	if (myaccess(path.c_str(), 0) < 0)
-	{
-		mymkdir(path.c_str());
-	}
-
-	path = GetSubDirectoryPath("BufferOut");
-	path.append("/PaletteOut.bmp");
-	BitmapIO::WritePaletteAsImageBMP(path.c_str(), 256, m_ptrColorPalette);
-	path = GetSubDirectoryPath("BufferOut");
-	path.append("/BufferOut.bmp");
-	BitmapIO::WriteImageBufferAsImageBMP(path.c_str(), screenWidth_18062C, screenHeight_180624, m_ptrColorPalette, m_ptrScreenBuffer_351628);
 }
 
 void GameRenderHD::WriteWholeBufferToBmp()
 {
-	std::string path = GetSubDirectoryPath("BufferOut");
-	if (myaccess(path.c_str(), 0) < 0)
-	{
-		mymkdir(path.c_str());
-	}
-
-	int stride = (screenWidth_18062C * screenHeight_180624);
-
-	path = GetSubDirectoryPath("BufferOut");
-	path.append("/WholeBufferOutTop.bmp");
-	BitmapIO::WriteImageBufferAsImageBMP(path.c_str(), screenWidth_18062C, screenHeight_180624, m_ptrColorPalette, m_ptrScreenBuffer_351628 - stride);
-
-	path = GetSubDirectoryPath("BufferOut");
-	path.append("/WholeBufferOutMiddle.bmp");
-	BitmapIO::WriteImageBufferAsImageBMP(path.c_str(), screenWidth_18062C, screenHeight_180624, m_ptrColorPalette, m_ptrScreenBuffer_351628);
-
-	path = GetSubDirectoryPath("BufferOut");
-	path.append("/WholeBufferOutBottom.bmp");
-	BitmapIO::WriteImageBufferAsImageBMP(path.c_str(), screenWidth_18062C, screenHeight_180624, m_ptrColorPalette, m_ptrScreenBuffer_351628 + stride);
 }
 
 void GameRenderHD::ClearGraphicsBuffer(uint8_t colorIdx)

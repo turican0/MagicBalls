@@ -172,6 +172,20 @@ target_sources(${LIBNAME}
     src/remc2/utilities/DataFileRNC.h
     src/remc2/portability/port_filesystem.cpp
     src/remc2/portability/port_filesystem.h
+    src/remc2/portability/port_time.cpp
+    src/remc2/portability/port_time.h
+    src/remc2/portability/port_sdl_vga_mouse.cpp
+    src/remc2/portability/port_sdl_vga_mouse.h
+    src/remc2/portability/port_show_perifery.cpp
+    src/remc2/portability/port_show_perifery.h
+    src/remc2/portability/port_sdl_joystick.cpp
+    src/remc2/portability/port_sdl_joystick.h
+    src/remc2/portability/port_net.cpp
+    src/remc2/portability/port_net.h
+    src/remc2/portability/port_outputs.cpp
+    src/remc2/portability/port_outputs.h
+    src/remc2/portability/port_sdl_sound.cpp
+    src/remc2/portability/port_sdl_sound.h
 )
 
 # Fetch a list of the xml files to use for documentation and add to our target

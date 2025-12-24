@@ -141,45 +141,15 @@ void my_findclose(long hFile){
 };
 
 bool file_exists(const char * filename) {
-	/*if (FILE * file = fcaseopen(filename, "r")) {
-		fclose(file);
-		return true;
-	}
-	return false;*/
-	FILE* file;
-	if ((file = fcaseopen(filename, "r")) != NULL) {
-		fclose(file);
-		Logger->debug("file_exists:true-{}", filename);
-		return true;
-	}
-	Logger->debug("file_exists:false-{}", filename);
 	return false;
 }
 
 FILE* mycreate(const char* path, uint32_t  /*flags*/) {
-	FILE *fp = fcaseopen(path, "wb+");
-	Logger->debug("mycreate:{}", fmt::ptr(fp));
+	FILE *fp;
 	return fp;
 };
 
 int32_t myaccess(const char* path, uint32_t  /*flags*/) {
-	DIR *dir;
-	//char path2[2048] = "\0";
-	Logger->debug("myaccess:orig path:{}", path);
-	//pathfix(path, path2);//only for DOSBOX version
-	//	Logger->debug("myaccess:fix path:%s\n", path2);
-	dir = opendir(path);
-	Logger->debug("myaccess:exit:{} {}", fmt::ptr(dir), errno);
-	if (dir)
-	{
-		/* Directory exists. */
-		closedir(dir);
-		return 1;
-	}
-	else if (ENOENT == errno)
-	{
-		return -1;
-	}
 	return -1;
 };
 
@@ -215,27 +185,7 @@ int32_t /*__cdecl*/ mymkdir(const char* path) {
 };
 
 FILE* myopen(const char* path, int pmode, uint32_t flags) {
-
-	Logger->debug("myopen:open file: {}", path);
-	//bool localDrive::FileOpen(DOS_File * * file, const char * name, uint32_t flags) {
-	const char * type;
-	if ((pmode == 0x222) && (flags == 0x40)) {
-		// Open for reading and writing.  The stream is positioned at the beginning of the file.
-		type = "rb+";
-	} else if ((pmode == 0x200) && (flags == 0x40)) {
-		// Open file for reading.  The stream is positioned at the beginning of the file.
-		type = "rb";
-	} else {
-		exit(1);//error - DOSSetError(DOSERR_ACCESS_CODE_INVALID);
-	}
 	FILE* fp = nullptr;
-	//char path2[512] = "\0";
-	//pathfix(path, path2);//only for DOSBOX version
-	//	Logger->debug("myopen:open file:{}", path2);
-	//if(file_exists(path2))
-
-	fp= fcaseopen(path, type);
-	Logger->debug("myopen:open end {}", fmt::ptr(fp));
 	return fp;
 };
 int myclose(FILE* descriptor) {
@@ -267,32 +217,12 @@ int DirExists(const char* path)
 
 FILE* myopent(char* path, char* type) {
 	FILE *fp;
-	fp= fcaseopen(path, type);
-	Logger->debug("myopent:end: {}", fmt::ptr(fp));
 	return fp;
 };
 
 dirsstruct getListDir(char* dirname)
 {
-	struct dirent *de;  // Pointer for directory entry 
 	dirsstruct directories;
-	directories.number = 0;
-	// opendir() returns a pointer of DIR type.  
-	DIR *dr = opendir(dirname);
-	if (dr == NULL)  // opendir returns NULL if couldn't open directory 
-	{
-		Logger->error("Could not open current directory1 {}", dirname);
-		return directories;
-	}
-	// Refer http://pubs.opengroup.org/onlinepubs/7990989775/xsh/readdir.html 
-	// for readdir() 
-	while ((de = readdir(dr)) != NULL)
-	{
-		if(de->d_name[0]!='.')
-			sprintf(directories.dir[directories.number++],"%s", de->d_name);
-		//printf("%s\n", de->d_name);		
-	}
-	closedir(dr);
 	return directories;
 }
 
@@ -424,23 +354,6 @@ unsigned __int64 dos_getdiskfree(__int16 a1, __int16 a2, uint8_t a, short* b) {
 #endif
 
 void AdvReadfile(const char* path, uint8_t* buffer) {
-	std::string pathexe = get_exe_path();
-	std::string path2 = pathexe + "/" + std::string(path);
-	/*
-	FILE* file0;
-	fopen_s(&file0, path2, (char*)"wb");
-	char x = 1;
-	fwrite(&x, 1, 1, file0);
-	myclose(file0);
-	*/
-	FILE* file;
-	//fopen_s(&file, (char*)"c:\\prenos\\remc2\\biggraphics\\out_rlt-n-out.data", (char*)"rb");
-	file= fcaseopen(path2.c_str(), (char*)"rb");
-	fseek(file, 0L, SEEK_END);
-	long szdata = ftell(file);
-	fseek(file, 0L, SEEK_SET);
-	fread(buffer, szdata, 1, file);
-	myclose(file);
 };
 
 bool ExistGraphicsfile(const char* path) {
@@ -462,20 +375,6 @@ bool ExistGraphicsfile(const char* path) {
 
 long ReadGraphicsfile(const char* path, uint8_t* buffer, long size) 
 {
-	FILE* file;
-	file = fcaseopen(path, (char*)"rb");
-	if (file != NULL)
-	{
-		if (size == -1)
-		{
-			fseek(file, 0L, SEEK_END);
-			size = ftell(file);
-			fseek(file, 0L, SEEK_SET);
-		}
-		fread(buffer, size, 1, file);
-		myclose(file);
-		return size;
-	}
 	return -1;
 };
 

@@ -5501,27 +5501,6 @@ void SetSoundFreq_9A230(int freq)//27B230
 
 void WriteWaveToFile(wav_t* wav, const char* name)
 {
-	if (wav != nullptr && wav->data_44 != nullptr)
-	{
-		std::string path = GetSubDirectoryPath("BufferOut");
-		if (myaccess(path.c_str(), 0) < 0)
-		{
-			std::string exepath = get_exe_path();
-			mymkdir((exepath + "/" + std::string("BufferOut")).c_str());
-		}
-
-		if (_stricmp(name, "") == 0)
-		{
-			name = "UNKNOWN.WAV";
-		}
-
-		path = GetSubDirectoryFilePath("BufferOut", name);
-		FILE* wavFile = fopen(path.c_str(), "wb");
-		fwrite((uint8_t*)wav, 1, WAVE_HEADER_SIZE_BYTES, wavFile);
-		fwrite((uint8_t*)wav->data_44, 1, wav->dataSizeBytes_40, wavFile);
-
-		fclose(wavFile);
-	}
 }
 
 //----- (0006E450) --------------------------------------------------------

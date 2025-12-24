@@ -9,7 +9,7 @@
 #include <string.h>
 #include <string>
 #include "bitmap_pos_struct.h"
-#include "fcaseopen.h"
+//#include "fcaseopen.h"
 /*
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/rotating_file_sink.h"
@@ -57,7 +57,7 @@ long my_findnext(long hFile, _finddata_t* c_file);
 void my_findclose(long hFile);
 bool file_exists(const char * filename);
 FILE* mycreate(const char* path, uint32_t flags);
-int32_t myaccess(const char* path, uint32_t flags);
+//int32_t myaccess(const char* path, uint32_t flags);
 int32_t mymkdir(const char* path);
 
 FILE* myopen(const char* path, int pmode, uint32_t flags);
@@ -80,7 +80,7 @@ typedef struct {
 	char dir[256][512];
 } dirsstruct;
 
-dirsstruct getListDir(char* dirname);
+//dirsstruct getListDir(char* dirname);
 //dirsstruct getListDirFix(char* dirname);
 void FixDir(char* outdirname, char* indirname);
 
