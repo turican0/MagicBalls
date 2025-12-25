@@ -1,0 +1,6 @@
+@mkdir C:\NETHERW
+@mkdir C:\NETHERW\SOUND
+@copy SOUND\*.MDI C:\NETHERW\SOUND > NUL:
+@copy SOUND\*.DIG C:\NETHERW\SOUND > NUL:
+@copy SOUND\*.LST C:\NETHERW\SOUND > NUL:
+setsound
