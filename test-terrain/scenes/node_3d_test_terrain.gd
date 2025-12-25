@@ -66,13 +66,9 @@ func _ready():
 	for y in range(GRID_SIZE):
 		for x in range(GRID_SIZE):
 			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-			if(y==0xcb)&&(x==0x4a):
-				var a=get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-				var a2=get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-			#texture_indices[x][y]=23
 	for y in range(VERTEX_COUNT):
 		for x in range(VERTEX_COUNT):
-			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.05
+			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.1
 	recalculate_mesh()
 	
 
@@ -152,10 +148,10 @@ func recalculate_mesh():
 				# Možnost 1: Úhlopříčka V1 -> V3
 				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3)
 				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4)
-			#else:
+			else:
 				## Možnost 2: Úhlopříčka V2 -> V4
-				#add_triangle(v2, v3, v4, texture_index,rPoint1,rPoint2,rPoint4)
-				#add_triangle(v2, v4, v1, texture_index,rPoint1,rPoint2,rPoint4)
+				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4)
+				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1)
 
 	# Dokončení sítě
 	surface_tool.generate_normals()

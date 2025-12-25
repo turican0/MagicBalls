@@ -3,6 +3,10 @@
 #include "remc2/engine/Terrain.h"
 #include "remc2/engine/ConvertMapInfo.h"
 #include "remc2/engine/EventsFunctions.h"
+#include "remc2/engine/LevelInit.h"
+#include "remc2/engine/Level.h"
+#include "remc2/engine/DatTabIndexes.h"
+#include "remc2/sub_main.h"
 
 void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &ExampleClass::print_type);
@@ -80,10 +84,61 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	uint8_t buffer[1000000];
 	pdwScreenBuffer_351628 = buffer;
 	x_BYTE_14B4E0_second_heightmap = new uint8_t[65536];
+	*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it 3x256 ?
 
-	LevelInitGame_56A30(1, "");
+	//begin - code from sub_main
+	initposistruct();
+	//end - code from sub_main
+
+	sprintf(gameFolder, "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/GAME/NETHERW");
+	sprintf(cdFolder, "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/CD_Files");
+	gameDataPath = GetSubDirectoryPath(gameFolder);
+	cdDataPath = GetSubDirectoryPath(cdFolder);
+
+	//begin - code from Initialize
+	DataFileIO::SetCDFilePaths(cdDataPath.c_str(), pstr);
+	//---------------------
+	sub_5BCC0_set_any_variables1(); //23C9F2 - 23CCC0
+	if (!sub_5BF50_load_psxdata()) //23C9F7 - 23CF50 //something with files about their loading, or just a set of Palettes
+		exit(-1);
+	sub_5C1B0_set_any_variables2(); //23CA05 - 23D1B0
+	sub_71410_process_tmaps(); //252410
+	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_POINTERSDATTAB]); //24fb90
+	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
+	//end - code from Initialize
+
+	//x_BYTE_F5538[str_TMAPS00TAB_BEGIN_BUFFER[str_WORD_D951C[a1].word_0].word_8]
 	/*
-	sub_56C00_sound_proc2(&D41A0_0.terrain_2FECE);
-	GenerateLevelMap_43830(&D41A0_0.terrain_2FECE);
+	fix this: !!!!!!
+	sub_712F0
 	*/
+
+	//begin - code from LevelDecompress_533B0
+	//LevelInitGame_56A30(-1, "");
+	LevelInit_56C00(&D41A0_0.terrain_2FECE);
+	SetLevelId_53590(&D41A0_0.terrain_2FECE);
+	//end - code from LevelDecompress_533B0
+
+	//begin - code from LevelInitGame_56A30
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10))
+		D41A0_0.word_0xe = D41A0_0.terrain_2FECE.word_0x2FED7;
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
+		GenerateLevelMap_43830(&D41A0_0.terrain_2FECE);
+	sub_49F30(); //prepare events pointers
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
+		sub_49270_generate_level_features(&D41A0_0.terrain_2FECE);
+	memset(&x_WORD_EB398ar, 0, 6);
+	sub_49F90();
+	D41A0_0.dword_0x11e6 = -1;
+	sub_71A70_setTmaps(D41A0_0.terrain_2FECE.MapType);
+	//adress 237b75
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4)) {
+		InitStages_58940();
+		InitStageVars_11EE0();
+		Init0x3664C_84790();
+	}
+	sub_4A1E0(0, 1);
+	sub_53160();
+	sub_60F00();
+	//begin - code from LevelInitGame_56A30
 }
