@@ -1575,4 +1575,5 @@ void InitStages_58940();
 void InitStageVars_11EE0();
 void Init0x3664C_84790();
 void sub_4A1E0(int a1, char a2);
+void ClearSettings_567C0();
 #endif

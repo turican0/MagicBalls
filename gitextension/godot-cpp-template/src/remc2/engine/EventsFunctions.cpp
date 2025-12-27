@@ -812,7 +812,6 @@ bool SaveSMAPSLEVmovie2_54F00(__int16 a1);
 // unsigned int sub_55C60(int a1, int a2, int a3);
 void sub_55EB0(__int16 a1);
 //int sub_main(int argc, const char **argv, const char **envp);
-void ClearSettings_567C0();
 // char LevelInitGame_56A30(unsigned int a1);
 // char sub_56D60(unsigned int a1, char a2);
 bool sub_56EE0(uaxis_2d a1);

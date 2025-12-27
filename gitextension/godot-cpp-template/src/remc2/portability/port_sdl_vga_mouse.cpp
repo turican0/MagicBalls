@@ -41,7 +41,7 @@ bool settingWASD = false;
 const char* default_caption = "Magic Carpet 2 - Community Update";
 
 bool inited = false;
-//Uint8 tempPalettebuffer[768];
+uint8 tempPalettebuffer[768];
 
 int oldWidth;
 
@@ -105,7 +105,7 @@ void VGA_Init(uint32_t /*flags*/, int windowWidth, int windowHeight, int gameRes
 }
 
 uint8_t *VGA_Get_Palette() {
-	return 0;
+	return tempPalettebuffer;
 }
 
 uint16_t lastResHeight=0;

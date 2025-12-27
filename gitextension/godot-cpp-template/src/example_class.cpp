@@ -7,6 +7,7 @@
 #include "remc2/engine/Level.h"
 #include "remc2/engine/DatTabIndexes.h"
 #include "remc2/sub_main.h"
+#include "remc2/engine/ReadAndDecompress.h"
 
 void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &ExampleClass::print_type);
@@ -77,6 +78,9 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	if (bytearray.size() < sizeof(Type_CompressedLevel_2FECE)) {
 		return;
 	}
+
+	support_begin();
+
 	Type_CompressedLevel_2FECE shadow_a2x;
 	qmemcpy(&shadow_a2x, (Type_CompressedLevel_2FECE *)(const void *)src, sizeof(Type_CompressedLevel_2FECE)); //0x6604
 	DecompressLevel_2FECE(&shadow_a2x, &D41A0_0.terrain_2FECE);
@@ -111,7 +115,24 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	/*
 	fix this: !!!!!!
 	sub_712F0
+	void sub_712F0()//2522f0 - x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226
+	sub_7A110_load_hscreen -zkontroluj
+
+	x_DWORD_E9C28_str->str_8_data->word_8
+	//x_DWORD_E9C28_str = sub_71B40
+
+	x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226 --toto neni pripraveno
 	*/
+
+	//begin - code from MainMenu
+	// sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
+	x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
+	x_WORD_180660_VGA_type_resolution = 8;
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
+	//end - code from MainMenu
+
+	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;
 
 	//begin - code from LevelDecompress_533B0
 	//LevelInitGame_56A30(-1, "");
@@ -120,6 +141,16 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	//end - code from LevelDecompress_533B0
 
 	//begin - code from LevelInitGame_56A30
+	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
+	char temp_x_BYTE_E3799_sound_card = soundActive_E3799;
+	soundActive_E3799 = false;
+	ClearSettings_567C0();
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 8)) {
+		LevelDecompress_533B0(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, &D41A0_0.terrain_2FECE, "");
+	}
+	sub_54660_read_and_decompress_sky_and_blocks(D41A0_0.terrain_2FECE.MapType, x_BYTE_D41B5_texture_size); //235660
+	sub_54800_read_and_decompress_tables(D41A0_0.terrain_2FECE.MapType); //235800
+	//237ab3
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10))
 		D41A0_0.word_0xe = D41A0_0.terrain_2FECE.word_0x2FED7;
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
@@ -131,7 +162,6 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	sub_49F90();
 	D41A0_0.dword_0x11e6 = -1;
 	sub_71A70_setTmaps(D41A0_0.terrain_2FECE.MapType);
-	//adress 237b75
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4)) {
 		InitStages_58940();
 		InitStageVars_11EE0();
@@ -140,5 +170,5 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	sub_4A1E0(0, 1);
 	sub_53160();
 	sub_60F00();
-	//begin - code from LevelInitGame_56A30
+	//end - code from LevelInitGame_56A30
 }
