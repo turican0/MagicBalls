@@ -144,7 +144,7 @@ func recalculate_mesh():
 			var diff_v1_v3 = abs(v1.y - v3.y)
 			var diff_v2_v4 = abs(v2.y - v4.y)
 
-			if diff_v1_v3 < diff_v2_v4:
+			if ((x+y+1)&1):
 				# Možnost 1: Úhlopříčka V1 -> V3
 				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3)
 				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4)

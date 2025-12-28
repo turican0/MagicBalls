@@ -17,6 +17,7 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight"), &ExampleClass::TerrainGetMapHeight);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &ExampleClass::TerrainGetMapTerrainType);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &ExampleClass::TerrainGetAngle);
+	godot::ClassDB::bind_method(D_METHOD("RunGameStep"), &ExampleClass::RunGameStep);
 }
 
 void ExampleClass::print_type(const Variant &p_variant) const {
@@ -71,6 +72,14 @@ PackedByteArray ExampleClass::TerrainGetAngle() {
 	arr.resize(65536);
 	memcpy(arr.ptrw(), mapAngle_13B4E0, 65536);
 	return arr;
+}
+
+void ExampleClass::RunGameStep() {
+	UpdateEntities_57730();
+}
+
+void ExampleClass::GetPlayerPositionRotation() {
+	type_struct_0x1d1_2BDE_11695 result = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00e_2BDE_11244 + 1];
 }
 
 void ExampleClass::TerrainMake(PackedByteArray bytearray) {

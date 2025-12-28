@@ -22,6 +22,8 @@ public:
 	void MakeTerrain(PackedByteArray bytearray);
 
 	void TerrainMake(PackedByteArray bytearray);
+	void RunGameStep();
+	void GetPlayerPositionRotation();
 	uint8_t TerrainGetTileTerrainType(int index);
 	void TerrainSetTileTerrainType(int index, uint8_t value);
 	PackedByteArray TerrainGetMapTerrainType();
