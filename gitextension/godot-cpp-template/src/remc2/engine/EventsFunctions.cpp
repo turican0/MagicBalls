@@ -31824,7 +31824,52 @@ void sub_46820_simple_timer(HMDIDRIVER  /*user*/)//227820
 
 void write_pngs2()
 {
+	//uint8_t buffer[10000];
+	if (std::string outdir = GetSubDirectoryPath("outimg"); myaccess(outdir.c_str(), 0) < 0)
+	{
+		std::string exepath = get_exe_path();
+		mymkdir((exepath + "/" + "outimg").c_str());
+	}
 
+	for (int k = 0; k < 0x1F8u; k++)
+	{
+		if (str_DWORD_F66F0x[k] != 0)
+		{
+			type_particle_str* actimg = *str_DWORD_F66F0x[k];
+			//int lenght = actimg->word_0;
+			int width = actimg->width;
+			int height = actimg->height;
+			/*int lenght = *(uint16_t*)(actimg + 0);
+			int width = *(uint16_t*)(actimg + 2);
+			int height = *(uint16_t*)(actimg + 4);*/
+
+			//memcpy((uint8_t*)buffer, actimg + 6, lenght);
+			if ((width > 0) && (width < 1024) && (width != 0xcdcd) && (height < 768))
+			{
+				char outname[MAX_PATH];
+				sprintf(outname, "test-%03d.bmp", k);
+				std::string path = GetSubDirectoryFilePath("outimg", outname);
+				write_bitmap_pos_struct_to_png((uint8_t*)&actimg->textureBuffer, width, height, path.c_str());//test write
+			}
+		}
+	}
+	/*for (int k = 0; k < 0x1F8u; k++)
+	{
+		if ((uint32_t*)x_DWORD_F66F0[k] != 0)
+		{
+			uint8_t* actimg = (uint8_t*) * (uint32_t*)x_DWORD_F5F10[k];
+			int lenght = *(uint16_t*)(actimg + 0);
+			int width = *(uint16_t*)(actimg + 2);
+			int height = *(uint16_t*)(actimg + 4);
+
+			//memcpy((uint8_t*)buffer, actimg + 6, lenght);
+			if ((width > 0) && (width < 1024) && (width != 0xcdcd) && (height < 768))
+			{
+				sprintf(outname, "c:\\prenos\\remc2\\outimg\\testB-%03d.png", k);
+				write_bitmap_pos_struct_to_png(actimg + 6, width, height, outname);//test write
+			}
+		}
+	}*/
 }
 
 /*
@@ -45877,10 +45922,40 @@ void ClearGraphicsBuffer_72883(void* ptrScreenBuffer, uint16_t width, uint16_t h
 
 void WriteBufferToBMP(uint16_t width, uint16_t height, uint8_t* ptrPalette, uint8_t* ptrBuffer, const std::string& filename)
 {
+	std::string path = GetSubDirectoryPath("BufferOut");
+	if (myaccess(path.c_str(), 0) < 0)
+	{
+		std::string exepath = get_exe_path();
+		mymkdir((exepath + "/" + "BufferOut").c_str());
+	}
+
+	path = GetSubDirectoryFilePath("BufferOut", "PaletteOut.bmp");
+	BitmapIO::WritePaletteAsImageBMP(path.c_str(), 256, ptrPalette);
+	path = GetSubDirectoryFilePath("BufferOut", filename.c_str());
+	BitmapIO::WriteImageBufferAsImageBMP(path.c_str(), width, height, ptrPalette, ptrBuffer);
 }
 
 void WriteMenuGraphicToBMP(uint16_t width, uint16_t height, uint8_t scale, uint8_t* ptrPalette, uint8_t* ptrBuffer)
 {
+	width = width * scale;
+	height = height * scale;
+
+	std::string path = GetSubDirectoryPath("BufferOut");
+	if (myaccess(path.c_str(), 0) < 0)
+	{
+		std::string exepath = get_exe_path();
+		mymkdir((exepath + "/" + "BufferOut").c_str());
+	}
+
+	path = GetSubDirectoryFilePath("BufferOut", "PaletteOut.bmp");
+	BitmapIO::WritePaletteAsImageBMP(path.c_str(), 256, ptrPalette);
+	path = GetSubDirectoryFilePath("BufferOut", "MenuGraphic.bmp");
+
+	uint8_t* ptrImage = new uint8_t[width * height];
+	GameBitmap::DrawMenuGraphic(width, height, scale, ptrBuffer, ptrImage);
+
+	BitmapIO::WriteImageBufferAsImageBMP(path.c_str(), width, height, ptrPalette, ptrImage);
+	delete ptrImage;
 }
 
 //----- (00072CB0) --------------------------------------------------------
