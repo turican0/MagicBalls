@@ -685,6 +685,24 @@ int sub_70C60_decompress_tmap(uint16_t texture_index, uint8_t* texture_buffer)//
 
 void WriteTextureMapToBmp(uint16_t texture_index, type_particle_str* ptextureMap, MapType_t mapType)
 {
+	char name[MAX_PATH];
+	std::string path = GetSubDirectoryPath("BufferOut");
+	if (myaccess(path.c_str(), 0) < 0)
+	{
+		std::string exepath = get_exe_path();
+		mymkdir((exepath + "/" + "BufferOut").c_str());
+	}
+
+	if (m_pColorPalette == NULL)
+	{
+		m_pColorPalette = LoadTMapColorPalette(mapType);
+		path = GetSubDirectoryFilePath("BufferOut","PalletOut.bmp");
+		BitmapIO::WritePaletteAsImageBMP(path.c_str(), 256, m_pColorPalette);
+	}
+
+	sprintf(name, "TmapOut%03d%s", texture_index, ".bmp");
+	path = GetSubDirectoryFilePath("BufferOut", name);
+	BitmapIO::WriteRGBAImageBufferAsImageBMP(path.c_str(), ptextureMap->width, ptextureMap->height, m_pColorPalette, (uint8_t*)ptextureMap->textureBuffer);
 }
 
 uint8_t* LoadTMapColorPalette(MapType_t mapType)

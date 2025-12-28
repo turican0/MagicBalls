@@ -19,11 +19,13 @@
 #include "../portability/port_sdl_sound.h"
 #include "../portability/port_time.h"
 
-//#include "INIReader.h"
-//#include "ini.h"
-//#include "rapidjson/document.h"
-//#include "rapidjson/stringbuffer.h"
-//#include "rapidjson/writer.h"
+#ifdef REMC2_CODE
+#include "INIReader.h"
+#include "ini.h"
+#include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
+#endif //REMC2_CODE
 
 int config_skip_screen;
 int texturepixels = 32;
@@ -98,12 +100,12 @@ std::string findIniFile() {
 
 std::vector<Maths::Zone> ReadZones(std::string zonesJson) {
 	std::vector<Maths::Zone> zones;
-
+#ifdef REMC2_CODE
 	if (zonesJson.size() > 0)
 	{
-		//rapidjson::Document document;
-		//document.Parse(zonesJson.c_str());
-		/* if (document.HasMember("Zones"))
+		rapidjson::Document document;
+		document.Parse(zonesJson.c_str());
+		if (document.HasMember("Zones"))
 		{
 			auto zonesArray = document["Zones"].GetArray();
 			for (int i = 0; i < zonesArray.Size(); i++) // Uses SizeType instead of size_t
@@ -118,8 +120,9 @@ std::vector<Maths::Zone> ReadZones(std::string zonesJson) {
 					zones.push_back(Maths::Zone{ (uint16_t)zone["Start"].GetInt(), (uint16_t)zone["End"].GetInt(), zone["Factor"].GetDouble() });
 				}
 			}
-		}*/
+		}
 	}
+#endif //REMC2_CODE
 	return zones;
 }
 
@@ -136,8 +139,9 @@ bool readini() {
 		return false;
 	}
 
-	//INIReader reader(inifile);
-	/*
+#ifdef REMC2_CODE
+	INIReader reader(inifile);
+
 	if (reader.ParseError() < 0) {
 		std::cout << "Can't load 'test.ini'\n";
 		return false;
@@ -172,13 +176,13 @@ bool readini() {
 	{
 		oggmusicalternative = false;
 	}
-	
+
 	std::string readstr = reader.GetString("sound", "oggmusicFolder", "");
 	strcpy(oggmusicFolder, (char*)readstr.c_str());
 
 	std::string readstr3 = reader.GetString("graphics", "bigGraphicsFolder", "");
 	strcpy(bigGraphicsFolder, (char*)readstr3.c_str());
-	
+
 	if (reader.GetBoolean("graphics", "useEnhancedGraphics", false) && strlen(bigGraphicsFolder) > 0 
 		&& std::filesystem::is_directory(GetSubDirectoryPath(bigGraphicsFolder)))
 	{
@@ -359,6 +363,6 @@ bool readini() {
 
 	gpc.haptic_enabled = reader.GetBoolean("gamepad", "haptic_enabled", false);
 	gpc.haptic_gain_max = reader.GetInteger("gamepad", "haptic_max_gain", 75);
-	*/
+#endif //REMC2_CODE
 	return true;
 };
