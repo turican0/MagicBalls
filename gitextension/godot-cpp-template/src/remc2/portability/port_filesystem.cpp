@@ -150,7 +150,7 @@ FILE* mycreate(const char* path, uint32_t  /*flags*/) {
 };
 
 int32_t myaccess(const char* path, uint32_t  /*flags*/) {
-	return -1;
+	return 1;
 };
 
 int32_t /*__cdecl*/ mymkdir(const char* path) {

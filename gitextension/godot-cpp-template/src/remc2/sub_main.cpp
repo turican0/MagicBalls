@@ -340,7 +340,7 @@ int sub_8B5A0()//26c5a0
 //----- (00053CF0) --------------------------------------------------------
 int sub_53CF0_access(const char* a1)//234cf0
 {
-	return 0;
+	return myaccess(a1, 0);
 }
 // 98CF2: using guessed type x_DWORD access(x_DWORD, x_DWORD);
 
@@ -525,7 +525,7 @@ char LoadFilesFromCDAndGameData(const char* cdPath, const char* gamePath, const 
 //----- (00053F60) --------------------------------------------------------
 bool sub_53F60(const char* a1)//234f60
 {
-	return true;
+	return myaccess(a1, 0) != NULL;//234F69 - 279CF2
 }
 // 98CF2: using guessed type x_DWORD access(x_DWORD, x_DWORD);
 

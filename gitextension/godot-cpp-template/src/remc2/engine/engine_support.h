@@ -173,7 +173,7 @@ typedef struct {//size 14
 }
 subtype_x_DWORD_E9C28_str;
 
-typedef struct {//size 26
+typedef struct {//size 4
 	int8_t byte_0;
 	int8_t byte_1;
 	int8_t byte_2;
@@ -190,7 +190,7 @@ typedef struct {//size 26
 	int16_t word_20;
 	int16_t word_22;
 	int16_t word_24;
-	subtype_x_DWORD_E9C28_str2 data[];
+	subtype_x_DWORD_E9C28_str data[];
 	//uint32_t dword_26;
 } type_x_DWORD_E9C28_str;
 
