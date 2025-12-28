@@ -10,22 +10,15 @@
 #include "remc2/engine/ReadAndDecompress.h"
 
 void ExampleClass::_bind_methods() {
-	godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &ExampleClass::print_type);
-	godot::ClassDB::bind_method(D_METHOD("my_add", "a", "b"), &ExampleClass::my_add);
 	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &ExampleClass::deRNC);
 	godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray"), &ExampleClass::TerrainMake);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight"), &ExampleClass::TerrainGetMapHeight);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &ExampleClass::TerrainGetMapTerrainType);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &ExampleClass::TerrainGetAngle);
 	godot::ClassDB::bind_method(D_METHOD("RunGameStep"), &ExampleClass::RunGameStep);
+	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &ExampleClass::GetPlayerPositionRotation);
 }
 
-void ExampleClass::print_type(const Variant &p_variant) const {
-	print_line(vformat("Type: %d", p_variant.get_type()));
-}
-int ExampleClass::my_add(int a, int b) {
-	return a + b;
-}
 PackedByteArray ExampleClass::deRNC(PackedByteArray bytearray) {
 	int input_size = bytearray.size();
 	std::vector<uint8_t> src(input_size);
@@ -78,8 +71,25 @@ void ExampleClass::RunGameStep() {
 	UpdateEntities_57730();
 }
 
-void ExampleClass::GetPlayerPositionRotation() {
-	type_struct_0x1d1_2BDE_11695 result = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00e_2BDE_11244 + 1];
+Dictionary ExampleClass::GetPlayerPositionRotation() {
+	type_struct_0x1d1_2BDE_11695 raw_data = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1];
+	Dictionary res;
+
+	Vector3 pos = Vector3(
+			(float)raw_data.axis_2BDE_11695.x,
+			(float)raw_data.axis_2BDE_11695.y,
+			(float)raw_data.axis_2BDE_11695.z);
+
+	Dictionary rot;
+	rot["yaw"] = raw_data.rotation__2BDE_11701.yaw;
+	rot["pitch"] = raw_data.rotation__2BDE_11701.pitch;
+	rot["roll"] = raw_data.rotation__2BDE_11701.roll;
+	rot["fov"] = raw_data.rotation__2BDE_11701.fov;
+
+	res["position"] = pos;
+	res["rotation"] = rot;
+
+	return res;
 }
 
 void ExampleClass::TerrainMake(PackedByteArray bytearray) {

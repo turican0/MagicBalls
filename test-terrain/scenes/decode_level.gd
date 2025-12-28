@@ -16,6 +16,8 @@ var xadataclrd0dat_color_palette: PackedByteArray = PackedByteArray()
 const FILEARRAYINDEX_POINTERSDATTAB: int = 0
 const FILEARRAYINDEX_BUILD00DATTAB: int = 1
 
+var MBEX
+
 # Nastavení terénu (Adaptace struktury D41A0_0.terrain_2FECE)
 # Použijeme slovník pro přehlednost
 var terrain_settings: Dictionary = {
@@ -350,8 +352,7 @@ func sub_533B0_decompress_levels(level_id: int, level_data: TypeStr2FECE) -> boo
 	
 	#var level_tab_data_unpacked = decompress_rnc1(level_tab_data)
 	
-	var MBEX = ExampleClass.new()
-	var c = MBEX.my_add(5,4)
+	MBEX = ExampleClass.new()
 	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
 	MBEX.TerrainMake(level_tab_data_unpacked)
 	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
@@ -365,6 +366,10 @@ func sub_533B0_decompress_levels(level_id: int, level_data: TypeStr2FECE) -> boo
 	#sub_53590(level_struct) # <--- NUTNÁ IMPLEMENTACE!
 	#generate_level_map_43830(level_struct)
 	return true
+	
+func getPlayerPosRot() -> Dictionary:
+	var playerPosRot: Dictionary = MBEX.GetPlayerPositionRotation()
+	return playerPosRot
 
 var x_WORD_17B4E0:int
 var D41A0_0:type_D41A0_BYTESTR_0
