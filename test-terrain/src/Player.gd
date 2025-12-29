@@ -84,8 +84,8 @@ func _physics_process(p_delta) -> void:
 			
 	self.position+=direction2*MOVE_SPEED*p_delta
 	
-	var terrain_height_y: float = terrain.data.get_height(global_position)
-	terrain_height_y=1
+	#var terrain_height_y: float = terrain.data.get_height(global_position)
+	var terrain_height_y=1
 	if(terrain_height_y+min_player_height<global_position.y):
 		global_position.y-=1*p_delta
 		if(global_position.y<min_player_height):
@@ -93,6 +93,7 @@ func _physics_process(p_delta) -> void:
 	else:
 		if(terrain_height_y+min_player_height>global_position.y):
 			global_position.y+=1*p_delta
+			
 	#move_and_slide()
 
 # Returns the input vector relative to the camera. Forward is always the direction the camera is facing

@@ -22,7 +22,13 @@ func _ready() -> void:
 		$RunThisSceneLabel3D.queue_free()
 
 	#terrain = await create_terrain()
-	terrain = load_terrain("level1")
+	#terrain = load_terrain("level1")
+	
+	Main_DecodeLevel.runGameStep()
+	var playerPosRot=Main_DecodeLevel.getPlayerPosRot()
+	Main_Player.position=playerPosRot.position/256
+	Main_Player.rotation=Vector3(0,90,0)
+	Main_Player.terrain = terrain
 
 	# Enable runtime navigation baking using the terrain
 	# Enable `Debug/Visible Navigation` if you wish to see it
@@ -132,12 +138,6 @@ func load_terrain(level_name: String) -> Terrain3D:
 				terrain.add_child(vase_mesh2)
 			if(red_value_255_objects==3):
 				$Player.position=Vector3(x-img_width_objects-0.5, 10, y-img_height_objects-0.5)
-	
-	Main_DecodeLevel.runGameStep()
-	var playerPosRot=Main_DecodeLevel.getPlayerPosRot()
-	Main_Player.position=playerPosRot.position/256
-	Main_Player.rotation=Vector3(0,90,0)
-	Main_Player.terrain = terrain
 	
 	#var xforms: Array[Transform3D]
 	#var width: int = 100

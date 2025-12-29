@@ -71,6 +71,33 @@ func _ready():
 			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.1
 	recalculate_mesh()
 	
+	#begin of Multimesh
+	var mmi:MultiMeshInstance3D = get_parent().get_node("MultiMeshInstance3D")
+	# 1. Pokud už MultiMesh v uzlu existuje, použijeme ho, jinak vytvoříme nový
+	if not mmi.multimesh:
+		mmi.multimesh = MultiMesh.new()
+		mmi.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	# 2. Přiřadíme tvůj vygenerovaný mesh
+	mmi.multimesh.mesh = mesh_instance.mesh
+	
+	# Překopíruje materiál z hlavního terénu na kopie
+	mmi.material_override = mesh_instance.material_override 
+	# Pokud nepoužíváš override, zkus:
+	if not mmi.material_override:
+		mmi.material_override = mesh_instance.mesh.surface_get_material(0)
+	# 3. Nastavíme pozice kopií (mřížka 3x3 bez středu)
+	var offset = GRID_SIZE * CELL_SCALE
+	var positions = []
+	for x in [-1, 0, 1]:
+		for z in [-1, 0, 1]:
+			if x == 0 and z == 0: continue # Vynechá místo původního terénu
+			positions.append(Vector3(x * offset, 0, z * offset))
+	# 4. Aplikujeme počet a transformace
+	mmi.multimesh.instance_count = positions.size()
+	for i in range(positions.size()):
+		var t = Transform3D(Basis(), positions[i])
+		mmi.multimesh.set_instance_transform(i, t)
+	#end of Multimesh
 
 ## --- FÁZE 1: Inicializace ---
 
