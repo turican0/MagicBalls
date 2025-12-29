@@ -43,7 +43,7 @@ var remove_rot:float = 0.5
 		$CollisionShapeRay.disabled = ! collision_enabled
 
 #var speed: float = 0
-var direction2: Vector3 = Vector3(0,0,-1)
+var direction2: Vector3 = Vector3(1,0,0)
 
 func _physics_process(p_delta) -> void:
 	get_camera_relative_input(p_delta)

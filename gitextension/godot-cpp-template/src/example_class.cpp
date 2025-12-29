@@ -68,6 +68,7 @@ PackedByteArray ExampleClass::TerrainGetAngle() {
 }
 
 void ExampleClass::RunGameStep() {
+	GameEvents_51BB0();
 	UpdateEntities_57730();
 }
 
@@ -77,8 +78,8 @@ Dictionary ExampleClass::GetPlayerPositionRotation() {
 
 	Vector3 pos = Vector3(
 			(float)raw_data.axis_2BDE_11695.x,
-			(float)raw_data.axis_2BDE_11695.y,
-			(float)raw_data.axis_2BDE_11695.z);
+			(float)raw_data.axis_2BDE_11695.z,
+			(float)raw_data.axis_2BDE_11695.y);
 
 	Dictionary rot;
 	rot["yaw"] = raw_data.rotation__2BDE_11701.yaw;
@@ -128,6 +129,8 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	sub_71410_process_tmaps(); //252410
 	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_POINTERSDATTAB]); //24fb90
 	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
+	sub_101C0();
+	sub_8CEDF_install_mouse();
 	//end - code from Initialize
 
 	//x_BYTE_F5538[str_TMAPS00TAB_BEGIN_BUFFER[str_WORD_D951C[a1].word_0].word_8]
@@ -190,4 +193,8 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	sub_53160();
 	sub_60F00();
 	//end - code from LevelInitGame_56A30
+
+	//begin - sub_46830_main_loop
+	sub_47160();
+	//end - sub_46830_main_loop
 }

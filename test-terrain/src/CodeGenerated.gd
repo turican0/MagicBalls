@@ -9,8 +9,11 @@ var terrain: Terrain3D
 @export var vase_mesh: PackedScene
 
 
-
+var Main_DecodeLevel
+var Main_Player
 func _ready() -> void:
+	Main_DecodeLevel = get_node("DecodeLevel") 
+	Main_Player = get_node("Player")
 	$UI.player = $Player
 	$CanvasUI.player = $Player
 	$CanvasUI.init()
@@ -130,9 +133,11 @@ func load_terrain(level_name: String) -> Terrain3D:
 			if(red_value_255_objects==3):
 				$Player.position=Vector3(x-img_width_objects-0.5, 10, y-img_height_objects-0.5)
 	
-	var playerPosRot=$DecodeLevel.getPlayerPosRot()
-	$Player.position=playerPosRot.position
-	$Player.terrain = terrain
+	Main_DecodeLevel.runGameStep()
+	var playerPosRot=Main_DecodeLevel.getPlayerPosRot()
+	Main_Player.position=playerPosRot.position/256
+	Main_Player.rotation=Vector3(0,90,0)
+	Main_Player.terrain = terrain
 	
 	#var xforms: Array[Transform3D]
 	#var width: int = 100

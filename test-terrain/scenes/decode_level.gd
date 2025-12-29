@@ -371,6 +371,9 @@ func getPlayerPosRot() -> Dictionary:
 	var playerPosRot: Dictionary = MBEX.GetPlayerPositionRotation()
 	return playerPosRot
 
+func runGameStep():
+	MBEX.RunGameStep()
+
 var x_WORD_17B4E0:int
 var D41A0_0:type_D41A0_BYTESTR_0
 var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
