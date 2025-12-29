@@ -45,45 +45,45 @@ var remove_rot:float = 0.5
 #var speed: float = 0
 var direction2: Vector3 = Vector3(1,0,0)
 
+const KEY_INDEX := {
+	KEY_A: 0, # Left
+	KEY_D: 1, # Right
+	KEY_W: 2, # Forward
+	KEY_S: 3  # Backward
+}
+
+var input_state := {
+	"keys": {},
+	"mouse_pos": Vector2.ZERO
+}
+
 func _physics_process(p_delta) -> void:
-	get_camera_relative_input(p_delta)
-	#var h_input_dir: Vector2 = Vector2(direction.x, direction.z)
-	#var h_veloc: Vector2 = Vector2(direction.x, direction.z).normalized() * MOVE_SPEED
-	#if Input.is_key_pressed(KEY_SHIFT):
-	#	h_veloc *= 2
-	#velocity.x = h_veloc.x
-	#velocity.z = h_veloc.y
+	for keycode: int in KEY_INDEX:
+		var index: int = KEY_INDEX[keycode]
+		input_state["keys"][index] = Input.is_key_pressed(keycode)
+	input_state["mouse_pos"] = get_viewport().get_mouse_position()
 	
-	# --- KÓD PRO ROTACI HRÁČE ---
-	#if h_input_dir.length_squared() > 0.0:
-		#var target_direction: Vector3 = Vector3(h_input_dir.x, 0, h_input_dir.y).normalized()
-		#var target_rotation: float = atan2(target_direction.x, target_direction.z)
-		#rotation.y = lerp_angle(rotation.y, target_rotation, p_delta * ROTATION_SPEED)
-		
-	#if gravity_enabled:
-	#	velocity.y -= 40 * p_delta
-	
+	#get_camera_relative_input(p_delta)
+	#update_keys(p_delta)
+
+func update_keys(p_delta) -> void:
 	if(ROTATION_SPEED>remove_rot*p_delta):
 		ROTATION_SPEED-=remove_rot*p_delta
 	else:
 		if(ROTATION_SPEED<-remove_rot*p_delta):
 			ROTATION_SPEED+=remove_rot*p_delta
 		else:
-			ROTATION_SPEED=0
-	
+			ROTATION_SPEED=0	
 	direction2 = direction2.rotated(Vector3.UP, ROTATION_SPEED*p_delta)
-	look_at(global_position + direction2, Vector3.UP)
-		
+	look_at(global_position + direction2, Vector3.UP)		
 	if(MOVE_SPEED>remove_speed*p_delta):
 		MOVE_SPEED-=remove_speed*p_delta
 	else:
 		if(MOVE_SPEED<-remove_speed*p_delta):
 			MOVE_SPEED+=remove_speed*p_delta
 		else:
-			MOVE_SPEED=0
-			
-	self.position+=direction2*MOVE_SPEED*p_delta
-	
+			MOVE_SPEED=0			
+	self.position+=direction2*MOVE_SPEED*p_delta	
 	#var terrain_height_y: float = terrain.data.get_height(global_position)
 	var terrain_height_y=1
 	if(terrain_height_y+min_player_height<global_position.y):
@@ -93,8 +93,6 @@ func _physics_process(p_delta) -> void:
 	else:
 		if(terrain_height_y+min_player_height>global_position.y):
 			global_position.y+=1*p_delta
-			
-	#move_and_slide()
 
 # Returns the input vector relative to the camera. Forward is always the direction the camera is facing
 func get_camera_relative_input(p_delta):
@@ -116,28 +114,12 @@ func get_camera_relative_input(p_delta):
 		MOVE_SPEED=MOVE_SPEED-accel_speed*p_delta
 		if(MOVE_SPEED<-max_speed):
 			MOVE_SPEED=-max_speed
-		#input_dir += %Camera3D.global_transform.basis.z
-	#if Input.is_key_pressed(KEY_E) or Input.is_key_pressed(KEY_SPACE): # Up
-	#	velocity.y += JUMP_SPEED + MOVE_SPEED*.016
-	#if Input.is_key_pressed(KEY_Q): # Down
-	#	velocity.y -= JUMP_SPEED + MOVE_SPEED*.016
-	#if Input.is_key_pressed(KEY_KP_ADD) or Input.is_key_pressed(KEY_EQUAL):
-	#	MOVE_SPEED = clamp(MOVE_SPEED + .5, 5, 9999)
-	#if Input.is_key_pressed(KEY_KP_SUBTRACT) or Input.is_key_pressed(KEY_MINUS):
-	#	MOVE_SPEED = clamp(MOVE_SPEED - .5, 5, 9999)
-	#return input_dir
 
 func shoot_bullet() -> void:
 	if bullet_scene == null:
 		return
 	var bullet: Node3D = bullet_scene.instantiate()
-	#var dir: Vector3 = -%Camera3D.global_transform.basis.z
-	
-	#bullet.direction = dir.normalized()
-	#bullet.direction.y = 0.0
-	#bullet.direction = bullet.direction.normalized()
 	bullet.direction = direction2
-	#bullet.global_position = global_position + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = global_position + Vector3(0, 1.5, 0) # 1.5 = výška od podlahy
 	
@@ -145,11 +127,6 @@ func shoot_bullet() -> void:
 func _input(p_event: InputEvent) -> void:
 	if p_event is InputEventMouseButton and p_event.button_index == MOUSE_BUTTON_LEFT and p_event.pressed:
 		shoot_bullet()
-	#if p_event is InputEventMouseButton and p_event.pressed:
-	#	if p_event.button_index == MOUSE_BUTTON_WHEEL_UP:
-	#		MOVE_SPEED = clamp(MOVE_SPEED + 5, 5, 9999)
-	#	elif p_event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-	#		MOVE_SPEED = clamp(MOVE_SPEED - 5, 5, 9999)
 	
 	elif p_event is InputEventKey:
 		if p_event.pressed:
