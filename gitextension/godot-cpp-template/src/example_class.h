@@ -20,7 +20,7 @@ public:
 	void MakeTerrain(PackedByteArray bytearray);
 
 	void TerrainMake(PackedByteArray bytearray);
-	void RunGameStep();
+	void RunGameStep(Dictionary inputs);
 	Dictionary GetPlayerPositionRotation();
 	uint8_t TerrainGetTileTerrainType(int index);
 	void TerrainSetTileTerrainType(int index, uint8_t value);

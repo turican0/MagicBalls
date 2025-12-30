@@ -376,7 +376,7 @@ bool VGA_check_standart_input_status() {
 }
 
 uint16_t fixchar(uint16_t loclastchar) {
-	return 0;
+	return loclastchar;
 }
 
 void VGA_cleanKeyBuffer() {

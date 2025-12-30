@@ -9,6 +9,36 @@ var MBEX
 var game_data_path: String = ""
 var cd_data_path: String = ""
 
+#var speed: float = 0
+var direction2: Vector3 = Vector3(1,0,0)
+
+var Main_Player
+
+const KEY_INDEX := {
+	KEY_W: 0, # Forward
+	KEY_S: 1,  # Backward
+	KEY_A: 2, # Left
+	KEY_D: 3 # Right
+}
+
+var input_state: Dictionary = {
+	"keys": {},
+	"mouse_pos": Vector2.ZERO
+}
+
+func _physics_process(p_delta) -> void:
+	getInputs()
+	runGameStep(input_state)
+	var playerPosRot=getPlayerPosRot()
+	Main_Player.position=playerPosRot.position/256
+	Main_Player.rotation=Vector3(0,90,0)
+
+func getInputs():
+	for keycode: int in KEY_INDEX:
+		var index: int = KEY_INDEX[keycode]
+		input_state["keys"][index] = Input.is_key_pressed(keycode)
+	input_state["mouse_pos"] = get_viewport().get_mouse_position()
+
 # Funkce, která by v Godotu volala ekvivalenty C-funkcí
 func init():
 	print("--- Start Godot Initialization Adaptace ---")
@@ -56,9 +86,12 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 func getPlayerPosRot() -> Dictionary:
 	var playerPosRot: Dictionary = MBEX.GetPlayerPositionRotation()
 	return playerPosRot
+	
+func runGameStep0():
+	runGameStep(input_state)
 
-func runGameStep():
-	MBEX.RunGameStep()
+func runGameStep(inputs:Dictionary):
+	MBEX.RunGameStep(input_state)
 
 var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
 var mapHeightmap_11B4E0: PackedByteArray = PackedByteArray()
