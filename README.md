@@ -3,7 +3,7 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 
 ## Version 251230:
 
-Changes:
+### Changes:
 
 -fix terrain rendering triangles
 
@@ -15,7 +15,7 @@ Changes:
 
 ## Version 0:
 
-Changes:
+### Changes:
 
 -first render of terrain
 
