@@ -70,19 +70,32 @@ PackedByteArray ExampleClass::TerrainGetAngle() {
 
 void ExampleClass::RunGameStep(Dictionary inputs) {
 	Vector2 mouse_pos = inputs["mouse_pos"];
-	Dictionary keys = inputs["keys"];
-	if (keys.has(0))
-		if(keys[0])
-			setPress(true, 0x4800);
-	if (keys.has(1))
-		if (keys[1])
-			setPress(true, 0x5000);
-	if (keys.has(2))
-		if (keys[2])
-			setPress(true, 0x4b00);
-	if (keys.has(3))
-		if (keys[3])
-			setPress(true, 0x4d00);
+	Array key_changes = inputs["key_changes"];
+	for (int i = 0; i < key_changes.size(); i++) {
+		Dictionary change = key_changes[i];
+		int key_index = change["key_index"];
+		String action = change["action"];
+		bool is_pressed = (action == "pressed");
+		switch (key_index) {
+			case 0:
+				setPress(is_pressed, 0x4800);
+				break;
+			case 1:
+				setPress(is_pressed, 0x5000);
+				break;
+			case 2:
+				setPress(is_pressed, 0x4b00);
+				break;
+			case 3:
+				setPress(is_pressed, 0x4d00);
+				break;
+		}
+	}
+
+	x_WORD_E3760_mouse.x = 320;
+	x_WORD_E3760_mouse.y = 240;
+	x_WORD_E375C_mouse_position_x = 320;
+	x_WORD_E375E_mouse_position_y = 240;
 
 	ReadGameUserInputs_89D10(); //get keys
 	MouseAndKeysEvents_17A00(0, x_DWORD_17DB54_game_turn2);

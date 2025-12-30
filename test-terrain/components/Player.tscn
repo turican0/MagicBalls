@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://domhm87hbhbg1"]
 
-[ext_resource type="Script" uid="uid://dajlr3n5wjwmb" path="res://demo/src/Player.gd" id="1_nm1yx"]
-[ext_resource type="Script" uid="uid://b62ppvc03a6b1" path="res://demo/src/CameraManager.gd" id="2_loos7"]
-[ext_resource type="PackedScene" uid="uid://bgu4ojcecgsin" path="res://demo/components/Bullet.tscn" id="2_sgnwv"]
+[ext_resource type="Script" uid="uid://dajlr3n5wjwmb" path="res://src/Player.gd" id="1_nm1yx"]
+[ext_resource type="Script" uid="uid://b62ppvc03a6b1" path="res://src/CameraManager.gd" id="2_loos7"]
+[ext_resource type="PackedScene" uid="uid://bgu4ojcecgsin" path="res://components/Bullet.tscn" id="2_sgnwv"]
 [ext_resource type="PackedScene" uid="uid://c53w4arbuny7l" path="res://assets/carpets/sketchfab_scene.tscn" id="4_ops02"]
 [ext_resource type="PackedScene" uid="uid://b7fps2taalaix" path="res://assets/cat/sketchfab_scene.tscn" id="5_7x12g"]
 
@@ -23,7 +23,7 @@ script = ExtResource("2_loos7")
 
 [node name="Arm" type="SpringArm3D" parent="CameraManager"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 2.32515, -0.0321627)
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 2.32515, -0.0321627)
 shape = SubResource("SphereShape3D_smq6u")
 spring_length = 6.0
 margin = 0.5

@@ -31,12 +31,24 @@ func _physics_process(p_delta) -> void:
 	runGameStep(input_state)
 	var playerPosRot=getPlayerPosRot()
 	Main_Player.position=playerPosRot.position/256
-	Main_Player.rotation=Vector3(0,90,0)
+	Main_Player.rotation=Vector3(0,0,0)
+
+var last_keys_state: Dictionary = {}
 
 func getInputs():
+	var changes = []	
 	for keycode: int in KEY_INDEX:
 		var index: int = KEY_INDEX[keycode]
-		input_state["keys"][index] = Input.is_key_pressed(keycode)
+		var is_pressed: bool = Input.is_key_pressed(keycode)
+		var previous_state = last_keys_state.get(index, false)		
+		if is_pressed != previous_state:
+			var status = "pressed" if is_pressed else "released"
+			changes.append({
+				"key_index": index,
+				"action": status
+			})
+			last_keys_state[index] = is_pressed
+	input_state["key_changes"] = changes
 	input_state["mouse_pos"] = get_viewport().get_mouse_position()
 
 # Funkce, která by v Godotu volala ekvivalenty C-funkcí

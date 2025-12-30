@@ -28,7 +28,7 @@ func _ready() -> void:
 	Main_DecodeLevel.runGameStep0()
 	var playerPosRot=Main_DecodeLevel.getPlayerPosRot()
 	Main_Player.position=playerPosRot.position/256
-	Main_Player.rotation=Vector3(0,90,0)
+	#Main_Player.rotation=Vector3(0,0,0)
 	Main_Player.terrain = terrain
 
 	# Enable runtime navigation baking using the terrain
