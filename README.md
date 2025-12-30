@@ -6,8 +6,11 @@ Version 251230:
 Changes:
 
 -fix terrain rendering triangles
+
 -add compute position of player by REMC2
+
 -add arrows input by REMC2
+
 -many cleanings in REMC2(copy new engine version)
 
 <img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-second%20test.gif" width="400">
