@@ -12,7 +12,7 @@ var cd_data_path: String = ""
 #var speed: float = 0
 var direction2: Vector3 = Vector3(1,0,0)
 
-var Main_Player
+var Main_Player: Node
 
 const KEY_INDEX := {
 	KEY_W: 0, # Forward
@@ -26,6 +26,16 @@ var input_state: Dictionary = {
 	"mouse_pos": Vector2.ZERO
 }
 
+# Akumulovaný posun myši od startu
+var total_mouse_delta := Vector2.ZERO
+
+func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func _input(event):
+	if event is InputEventMouseMotion:
+		total_mouse_delta += event.relative
+
 func _physics_process(p_delta) -> void:
 	getInputs()
 	runGameStep(input_state)
@@ -34,7 +44,10 @@ func _physics_process(p_delta) -> void:
 	Main_Player.rotation=Vector3(0,0,0)
 
 var last_keys_state: Dictionary = {}
-
+var mouse_640: Vector2
+const SCREEN_WIDTH := 640
+const SCREEN_HEIGHT := 480
+	
 func getInputs():
 	var changes = []	
 	for keycode: int in KEY_INDEX:
@@ -49,7 +62,20 @@ func getInputs():
 			})
 			last_keys_state[index] = is_pressed
 	input_state["key_changes"] = changes
-	input_state["mouse_pos"] = get_viewport().get_mouse_position()
+	#var mouse := get_viewport().get_mouse_position()
+	#var vp_size := get_viewport().get_visible_rect().size
+	#var mouse_640 := Vector2(
+		#mouse.x / vp_size.x * 640.0,
+		#mouse.y / vp_size.y * 480.0
+	#)
+	mouse_640 = Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+	mouse_640 += total_mouse_delta*0.2
+
+	# Omez na velikost obrazovky
+	mouse_640.x = clamp(mouse_640.x, 0, SCREEN_WIDTH)
+	mouse_640.y = clamp(mouse_640.y, 0, SCREEN_HEIGHT)
+		
+	input_state["mouse_pos"] = mouse_640
 
 # Funkce, která by v Godotu volala ekvivalenty C-funkcí
 func init():

@@ -92,10 +92,16 @@ void ExampleClass::RunGameStep(Dictionary inputs) {
 		}
 	}
 
-	x_WORD_E3760_mouse.x = 320;
-	x_WORD_E3760_mouse.y = 240;
-	x_WORD_E375C_mouse_position_x = 320;
-	x_WORD_E375E_mouse_position_y = 240;
+	//x_WORD_E3760_mouse.x = 320;
+	//x_WORD_E3760_mouse.y = 240;
+	//x_WORD_E375C_mouse_position_x = 320;
+	//x_WORD_E375E_mouse_position_y = 240;
+
+	//mousex = event.motion.x;
+	//mousey = event.motion.y;
+	//mouse_pos.x = 320;
+	//mouse_pos.y = 240;
+	MouseEvents(1, mouse_pos.x, mouse_pos.y);
 
 	ReadGameUserInputs_89D10(); //get keys
 	MouseAndKeysEvents_17A00(0, x_DWORD_17DB54_game_turn2);
@@ -219,7 +225,7 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	sub_49F30(); //prepare events pointers
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
 		sub_49270_generate_level_features(&D41A0_0.terrain_2FECE);
-	memset(&x_WORD_EB398ar, 0, 6);
+	memset(&predictedAxis_EB398ar, 0, 6);
 	sub_49F90();
 	D41A0_0.dword_0x11e6 = -1;
 	sub_71A70_setTmaps(D41A0_0.terrain_2FECE.MapType);
