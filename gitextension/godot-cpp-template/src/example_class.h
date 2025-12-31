@@ -22,6 +22,8 @@ public:
 	void TerrainMake(PackedByteArray bytearray);
 	void RunGameStep(Dictionary inputs);
 	Dictionary GetPlayerPositionRotation();
+	PackedFloat32Array GetEntites();
+	Dictionary GetTerrainChanges();
 	uint8_t TerrainGetTileTerrainType(int index);
 	void TerrainSetTileTerrainType(int index, uint8_t value);
 	PackedByteArray TerrainGetMapTerrainType();

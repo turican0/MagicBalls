@@ -9,6 +9,7 @@
 #include "remc2/sub_main.h"
 #include "remc2/engine/ReadAndDecompress.h"
 #include "remc2/engine/MenusAndIntros.h"
+#include "remc2/engine/Basic.h"
 
 void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &ExampleClass::deRNC);
@@ -17,6 +18,8 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &ExampleClass::TerrainGetMapTerrainType);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &ExampleClass::TerrainGetAngle);
 	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &ExampleClass::RunGameStep);
+	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &ExampleClass::GetEntites);
+	godot::ClassDB::bind_method(D_METHOD("GetTerrainChanges"), &ExampleClass::GetTerrainChanges);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &ExampleClass::GetPlayerPositionRotation);
 }
 
@@ -66,6 +69,40 @@ PackedByteArray ExampleClass::TerrainGetAngle() {
 	arr.resize(65536);
 	memcpy(arr.ptrw(), mapAngle_13B4E0, 65536);
 	return arr;
+}
+
+PackedFloat32Array ExampleClass::GetEntites() {
+	PackedFloat32Array result;
+	int count = 1000;
+	result.resize(count * 14);
+
+	float *write_ptr = result.ptrw();
+	int idx = 0;
+
+	for (int i = 0; i < count; i++) {
+		type_event_0x6E8E *actEntity = x_DWORD_EA3E4[i];
+
+		write_ptr[idx++] = (float)actEntity->axis_0x4C_76.x;//1
+		write_ptr[idx++] = (float)actEntity->axis_0x4C_76.y;//2
+		write_ptr[idx++] = (float)actEntity->axis_0x4C_76.z;//3
+		write_ptr[idx++] = (float)actEntity->array_0x52_82.yaw;//4
+		write_ptr[idx++] = (float)actEntity->array_0x52_82.pitch;//5
+		write_ptr[idx++] = (float)actEntity->array_0x52_82.roll;//6
+		write_ptr[idx++] = (float)actEntity->class_0x3F_63;//7
+		write_ptr[idx++] = (float)actEntity->model_0x40_64;//8
+		write_ptr[idx++] = (float)actEntity->state_0x45_69;//9
+		write_ptr[idx++] = (float)actEntity->id_0x1A_26;//10
+		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[0]; //11
+		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[1]; //12
+		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[2]; //13
+		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[3]; //14
+	}
+	return result;
+}
+
+Dictionary ExampleClass::GetTerrainChanges() {
+	Dictionary result;
+	return result;
 }
 
 void ExampleClass::RunGameStep(Dictionary inputs) {

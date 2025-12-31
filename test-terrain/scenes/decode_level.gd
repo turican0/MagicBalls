@@ -1,4 +1,4 @@
-extends Node
+extends Node3D
 
 @export_file("*.tab") var levels_tab_path: String = ""
 @export_file("*.dat") var levels_dat_path: String = ""
@@ -29,8 +29,22 @@ var input_state: Dictionary = {
 # Akumulovaný posun myši od startu
 var total_mouse_delta := Vector2.ZERO
 
+var node_pool = []
+var pool_size = 1000
+# Katalog cest k tscn souborům podle ID typu
+var library = {
+	0: "res://components/gold_sphere.tscn",
+	1: "res://components/gold_sphere.tscn",
+	2: "res://components/gold_sphere.tscn"
+}
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	# Inicializujeme pole s nulami (prázdná místa)
+	node_pool.resize(pool_size)
+	for i in range(pool_size):
+		node_pool[i] = null
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -40,11 +54,52 @@ func _physics_process(p_delta) -> void:
 	getInputs()
 	runGameStep(input_state)
 	var playerPosRot=getPlayerPosRot()
+	var newEntites: PackedFloat32Array=getEntites()
+	renderEntites(newEntites)
+	var terrainChanges=getTerrainChanges()
 	Main_Player.position=playerPosRot.position/256
 	var yaw = PI*playerPosRot.rotation.yaw/(256*4)   # Rotace kolem osy Y
 	var pitch = PI*playerPosRot.rotation.pitch/(256*4) # Rotace kolem osy X
 	var roll = PI*playerPosRot.rotation.roll/(256*4)  # Rotace kolem osy Z
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
+
+func renderEntites(data_array: PackedFloat32Array) -> void:
+	var stride = 14
+	var count = data_array.size() / stride
+	for i in range(pool_size):
+		var offset = i * stride
+		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
+		var rot = Vector3(data_array[offset+3], data_array[offset+4], data_array[offset+5])
+		var actClass = int(data_array[offset+6])
+		var actModel = int(data_array[offset+7])
+		var actState = int(data_array[offset+8])
+		var actId = int(data_array[offset+9])
+		var actByte0 = int(data_array[offset+10])
+		var actByte1 = int(data_array[offset+11])
+		var actByte2 = int(data_array[offset+12])
+		var actByte3 = int(data_array[offset+13])
+		var current_node = node_pool[i]
+		if current_node == null or current_node.get_meta("id") != actId:
+			if current_node != null:
+				current_node.queue_free()
+			#if (1):
+			#if (actClass && actByte1 & 4):
+			if !(actByte1 & 4):
+				actModel=0#only for debug
+				var new_node = load(library[actModel]).instantiate()
+				add_child(new_node)
+				new_node.set_meta("id", actId) # Uložíme ID pro budoucí kontrolu
+				node_pool[i] = new_node
+				current_node = new_node
+		else:
+			if (actByte1 & 4):
+				current_node.queue_free()
+		if current_node:
+			current_node.position=pos/256
+			var yaw = PI*rot.x/(256*4)   # Rotace kolem osy Y
+			var pitch = PI*rot.y/(256*4) # Rotace kolem osy X
+			var roll = PI*rot.z/(256*4)  # Rotace kolem osy Z
+			current_node.rotation=Vector3(-pitch, -yaw, -roll)
 
 var last_keys_state: Dictionary = {}
 var mouse_640: Vector2
@@ -128,6 +183,14 @@ func getPlayerPosRot() -> Dictionary:
 	var playerPosRot: Dictionary = MBEX.GetPlayerPositionRotation()
 	return playerPosRot
 	
+func getEntites() -> Array:
+	var result: Array = MBEX.GetEntites()
+	return result
+	
+func getTerrainChanges() -> Dictionary:
+	var result: Dictionary = MBEX.GetTerrainChanges()
+	return result
+
 func runGameStep0():
 	runGameStep(input_state)
 
