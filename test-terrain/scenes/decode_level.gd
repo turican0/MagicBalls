@@ -41,7 +41,10 @@ func _physics_process(p_delta) -> void:
 	runGameStep(input_state)
 	var playerPosRot=getPlayerPosRot()
 	Main_Player.position=playerPosRot.position/256
-	Main_Player.rotation=Vector3(0,0,0)
+	var yaw = PI*playerPosRot.rotation.yaw/(256*4)   # Rotace kolem osy Y
+	var pitch = PI*playerPosRot.rotation.pitch/(256*4) # Rotace kolem osy X
+	var roll = PI*playerPosRot.rotation.roll/(256*4)  # Rotace kolem osy Z
+	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
 
 var last_keys_state: Dictionary = {}
 var mouse_640: Vector2
