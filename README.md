@@ -4,9 +4,12 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 ---
 
 ## What needs to be done to complete the game:
--create 3D models of all entities<br>
--add sounds/music<br>
--add menus/levels, etc.<br>
+-Create 3D models of all entities.<br>
+-Add sounds/music.<br>
+-Add menus/levels, etc.<br>
+-Add proper water.<br>
+-Add particle effects.<br>
+-Add gamepad controls, etc.<br>
 -integrate data copier from Magic Carpet 2<br>
 
 ## Next version:
