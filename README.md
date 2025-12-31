@@ -13,12 +13,15 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add first-person/third-person camera options<br>
 -integrate data copier from Magic Carpet 2<br>
 
-## Next version:
+---
+
+## Version 251231:
+### Changes:
 -display entities (all as universal objects for now)<br>
 -synchronize speed with engine (limit frame rate)<br>
 -add rotation to REMC2 engine<br>
 
----
+<img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-3.%20test.gif" width="400">
 
 ## Version 251230:
 ### Changes:
