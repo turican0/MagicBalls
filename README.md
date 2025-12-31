@@ -10,6 +10,7 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add proper water.<br>
 -Add particle effects.<br>
 -Add gamepad controls, etc.<br>
+-Add first-person/third-person camera options<br>
 -integrate data copier from Magic Carpet 2<br>
 
 ## Next version:
