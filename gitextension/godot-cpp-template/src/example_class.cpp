@@ -74,7 +74,7 @@ PackedByteArray ExampleClass::TerrainGetAngle() {
 PackedFloat32Array ExampleClass::GetEntites() {
 	PackedFloat32Array result;
 	int count = 1000;
-	result.resize(count * 14);
+	result.resize(count * 17);
 
 	float *write_ptr = result.ptrw();
 	int idx = 0;
@@ -96,6 +96,48 @@ PackedFloat32Array ExampleClass::GetEntites() {
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[1]; //12
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[2]; //13
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[3]; //14
+		write_ptr[idx++] = (float)str_WORD_D951C[actEntity->word_0x5A_90].word_0; //15
+		write_ptr[idx++] = (float)actEntity->yaw_0x1C_28; //16
+		write_ptr[idx++] = (float)actEntity->pitchAngle_0x1E_30; //17
+		int test=str_WORD_D951C[actEntity->word_0x5A_90].word_0;
+		switch (test) {
+			case 0: //hrac0
+				break;
+			case 8://strelec
+				break;
+			case 38: //ohen
+				break;
+			case 54: //ohen
+				break;
+			case 57: //kour1(dole)
+				break;
+			case 59: //schranka s kouzlem
+				break;
+			case 63: //kour2(na zacatku)
+				break;
+			case 79: //stonehenge
+				break;
+			case 96: //oznaceni domu
+				break;
+			case 152: //koza
+				break;
+			case 155: //vesnican
+				break;
+			case 180: //vesnican
+				break;
+			case 183: //vesnican
+				break;
+			case 199: //vesnican
+				break;
+			default:
+				test = 200;
+		}
+		/*
+		word_0x5A_90
+		v9x = &str_WORD_D951C[v41x->word_0x5A_90];
+		str_TMAPS00TAB_BEGIN_BUFFER[v9x->word_0]
+		str_TMAPS00TAB_BEGIN_BUFFER[v26 + v9x->word_0] v26 0..7
+		*/
 	}
 	return result;
 }

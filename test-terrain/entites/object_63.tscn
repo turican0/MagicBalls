@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://cj064h8ixf1v4"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ix0hf"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6l2xm"]
+noise = SubResource("FastNoiseLite_ix0hf")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ko1kv"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.5294118)
+albedo_texture = SubResource("NoiseTexture2D_6l2xm")
+uv1_scale = Vector3(3, 3, 3)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ow6k3"]
+material = SubResource("StandardMaterial3D_ko1kv")
+
+[node name="MeshInstance3D" type="MeshInstance3D"]
+mesh = SubResource("SphereMesh_ow6k3")

@@ -35,7 +35,11 @@ var pool_size = 1000
 var library = {
 	0: "res://components/gold_sphere.tscn",
 	1: "res://components/gold_sphere.tscn",
-	2: "res://components/gold_sphere.tscn"
+	2: "res://components/gold_sphere.tscn",
+	57: "res://entites/object_63b.tscn",
+	63: "res://entites/object_63b.tscn",
+	152: "res://entites/object_152b.tscn",
+	153: "res://entites/object_152b.tscn"
 }
 
 func _ready():
@@ -64,7 +68,7 @@ func _physics_process(p_delta) -> void:
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
-	var stride = 14
+	var stride = 17
 	var count = data_array.size() / stride
 	for i in range(pool_size):
 		var offset = i * stride
@@ -78,6 +82,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actByte1 = int(data_array[offset+11])
 		var actByte2 = int(data_array[offset+12])
 		var actByte3 = int(data_array[offset+13])
+		var modelIndex = int(data_array[offset+14])
+		var rot2 = Vector3(data_array[offset+15], data_array[offset+16], 0)
 		var current_node = node_pool[i]
 		if current_node == null or current_node.get_meta("id") != actId:
 			if current_node != null:
@@ -85,7 +91,9 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			#if (1):
 			#if (actClass && actByte1 & 4):
 			if !(actByte1 & 4):
-				actModel=0#only for debug
+				actModel=modelIndex
+				if(actModel!=57)&&(actModel!=63)&&(actModel!=152)&&(actModel!=153):#only for debug
+					actModel=0
 				var new_node = load(library[actModel]).instantiate()
 				add_child(new_node)
 				new_node.set_meta("id", actId) # Uložíme ID pro budoucí kontrolu
@@ -96,9 +104,9 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				current_node.queue_free()
 		if current_node:
 			current_node.position=pos/256
-			var yaw = PI*rot.x/(256*4)   # Rotace kolem osy Y
-			var pitch = PI*rot.y/(256*4) # Rotace kolem osy X
-			var roll = PI*rot.z/(256*4)  # Rotace kolem osy Z
+			var yaw = PI*rot2.x/(256*4)   # Rotace kolem osy Y
+			var pitch = PI*rot2.y/(256*4) # Rotace kolem osy X
+			var roll = PI*rot2.z/(256*4)  # Rotace kolem osy Z
 			current_node.rotation=Vector3(-pitch, -yaw, -roll)
 
 var last_keys_state: Dictionary = {}
