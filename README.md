@@ -11,9 +11,20 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add particle effects.<br>
 -Add gamepad controls, etc.<br>
 -Add first-person/third-person camera options<br>
--integrate data copier from Magic Carpet 2<br>
+-Integrate data copier from Magic Carpet 2<br>
+-Better terrain abilites(water/lava)
+-Add terrain changes
+-Add using mouse buttons
+-Add select spells
+-Add multimesh for objects(for corect visibility of objects)
 
 ---
+
+## Version 260101:
+### Changes:
+-test using first billboards and models(smoke and goat)<br>
+
+<img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-4.%20test.gif" width="400">
 
 ## Version 251231:
 ### Changes:
