@@ -111,18 +111,19 @@ func _process(delta: float) -> void:
 ## If [method process_method] is set to manual, this function can be called with the number of 
 ## seconds passed to update the position of the clouds.
 func process_tick(delta: float) -> void:
-	if not (cirrus_visible or cumulus_visible):
-		return
-	var position_delta: Vector2 = _cloud_velocity * delta
-	if cumulus_visible:
-		_cumulus_position += position_delta
-		sky_material.set_shader_parameter("cumulus_position", _cumulus_position)
-	if cirrus_visible:
-		position_delta *= cirrus_speed_reduction
-		_cirrus_position1 = (_cirrus_position1 + position_delta).posmod(1.0)
-		_cirrus_position2 = (_cirrus_position2 + position_delta).posmod(1.0)
-		sky_material.set_shader_parameter("cirrus_position1", _cirrus_position1)
-		sky_material.set_shader_parameter("cirrus_position2", _cirrus_position2)
+	pass
+	#if not (cirrus_visible or cumulus_visible):
+		#return
+	#var position_delta: Vector2 = _cloud_velocity * delta
+	#if cumulus_visible:
+		#_cumulus_position += position_delta
+		#sky_material.set_shader_parameter("cumulus_position", _cumulus_position)
+	#if cirrus_visible:
+		#position_delta *= cirrus_speed_reduction
+		#_cirrus_position1 = (_cirrus_position1 + position_delta).posmod(1.0)
+		#_cirrus_position2 = (_cirrus_position2 + position_delta).posmod(1.0)
+		#sky_material.set_shader_parameter("cirrus_position1", _cirrus_position1)
+		#sky_material.set_shader_parameter("cirrus_position2", _cirrus_position2)
 
 
 #####################

@@ -1,0 +1,44 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://c7meavo7b8edp"
+path.s3tc="res://.godot/imported/archer-walk_FemaleFitA_StdNM.png-4e7e6bb48100dfe23018fe4b8fc3b13a.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "e73b125a4b9ab8c49324d46b064fc830"
+}
+
+[deps]
+
+source_file="res://entites/archer-walk_FemaleFitA_StdNM.png"
+dest_files=["res://.godot/imported/archer-walk_FemaleFitA_StdNM.png-4e7e6bb48100dfe23018fe4b8fc3b13a.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=1
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://entites/archer-walk_FemaleFitA_StdNM.png"
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

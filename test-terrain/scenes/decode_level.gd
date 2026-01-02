@@ -33,13 +33,27 @@ var node_pool = []
 var pool_size = 1000
 # Katalog cest k tscn souborům podle ID typu
 var library = {
-	0: "res://components/gold_sphere.tscn",
-	1: "res://components/gold_sphere.tscn",
-	2: "res://components/gold_sphere.tscn",
+	#0: "res://components/gold_sphere.tscn",
+	#1: "res://components/gold_sphere.tscn",
+	#2: "res://components/gold_sphere.tscn",
+	8: "res://entites/object_38b.tscn",
+	#38: "res://entites/object_38b.tscn",
+	#54: "res://entites/object_38b.tscn",
 	57: "res://entites/object_63b.tscn",
+	#59: "res://entites/object_63b.tscn",
 	63: "res://entites/object_63b.tscn",
+	75: "res://entites/object_75b.tscn",#tree
+	79: "res://entites/object_79b.tscn",
+	87: "res://entites/object_75b.tscn",#tree
+	#96: "res://entites/object_8b.tscn",
 	152: "res://entites/object_152b.tscn",
-	153: "res://entites/object_152b.tscn"
+	#153: "res://entites/object_152b.tscn",
+	155: "res://entites/object_155b.tscn",#people
+	180: "res://entites/object_155b.tscn",#people
+	183: "res://entites/object_155b.tscn",#people
+	#186: "res://entites/object_8b.tscn",
+	199: "res://entites/object_155b.tscn",#people
+	999: "res://entites/object_text.tscn"
 }
 
 func _ready():
@@ -83,18 +97,31 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actByte2 = int(data_array[offset+12])
 		var actByte3 = int(data_array[offset+13])
 		var modelIndex = int(data_array[offset+14])
-		var rot2 = Vector3(data_array[offset+15], data_array[offset+16], 0)
+		var rot2 = Vector3(data_array[offset+15], 0, 0)
 		var current_node = node_pool[i]
 		if current_node == null or current_node.get_meta("id") != actId:
 			if current_node != null:
 				current_node.queue_free()
 			#if (1):
 			#if (actClass && actByte1 & 4):
+			#if (!(v3x->struct_byte_0xc_12_15.byte[0] & 0x21))
+			var fromlib=false
 			if !(actByte1 & 4):
 				actModel=modelIndex
-				if(actModel!=57)&&(actModel!=63)&&(actModel!=152)&&(actModel!=153):#only for debug
-					actModel=0
-				var new_node = load(library[actModel]).instantiate()
+				var tempModel
+				if(actClass==2)||(actClass==5)||(actClass==10):
+					if library.has(actModel):
+						tempModel=library[actModel]
+						fromlib=true
+					else:
+						tempModel=library[999]
+				else:
+					tempModel=library[999]
+				var new_node = load(tempModel).instantiate()
+				
+				if !fromlib:
+					new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)
+					
 				add_child(new_node)
 				new_node.set_meta("id", actId) # Uložíme ID pro budoucí kontrolu
 				node_pool[i] = new_node

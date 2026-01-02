@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c07ym3jhlk86a"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+pixel_size = 0.05
+text = "TEST"

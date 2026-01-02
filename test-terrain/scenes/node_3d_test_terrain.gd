@@ -88,8 +88,8 @@ func _ready():
 	# 3. Nastavíme pozice kopií (mřížka 3x3 bez středu)
 	var offset = GRID_SIZE * CELL_SCALE
 	var positions = []
-	for x in [-1, 0, 1]:
-		for z in [-1, 0, 1]:
+	for x in [-2, -1, 0, 1, 2]:
+		for z in [-2, -1, 0, 1, 2]:
 			if x == 0 and z == 0: continue # Vynechá místo původního terénu
 			positions.append(Vector3(x * offset, 0, z * offset))
 	# 4. Aplikujeme počet a transformace

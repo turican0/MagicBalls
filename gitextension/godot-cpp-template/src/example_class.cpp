@@ -99,9 +99,10 @@ PackedFloat32Array ExampleClass::GetEntites() {
 		write_ptr[idx++] = (float)str_WORD_D951C[actEntity->word_0x5A_90].word_0; //15
 		write_ptr[idx++] = (float)actEntity->yaw_0x1C_28; //16
 		write_ptr[idx++] = (float)actEntity->pitchAngle_0x1E_30; //17
+		//write_ptr[idx++] = (float)actEntity->textAtyp_43; //18
 		int test=str_WORD_D951C[actEntity->word_0x5A_90].word_0;
 		switch (test) {
-			case 0: //hrac0
+			case 0: //hrac0-ok
 				break;
 			case 8://strelec
 				break;
@@ -109,17 +110,17 @@ PackedFloat32Array ExampleClass::GetEntites() {
 				break;
 			case 54: //ohen
 				break;
-			case 57: //kour1(dole)
+			case 57: //kour1(dole)-ok
 				break;
 			case 59: //schranka s kouzlem
 				break;
-			case 63: //kour2(na zacatku)
+			case 63: //kour2(na zacatku)-ok
 				break;
 			case 79: //stonehenge
 				break;
 			case 96: //oznaceni domu
 				break;
-			case 152: //koza
+			case 152: //koza-ok
 				break;
 			case 155: //vesnican
 				break;
