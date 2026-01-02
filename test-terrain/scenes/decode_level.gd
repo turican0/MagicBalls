@@ -40,7 +40,7 @@ var library = {
 	#38: "res://entites/object_38b.tscn",
 	#54: "res://entites/object_38b.tscn",
 	57: "res://entites/object_63b.tscn",
-	#59: "res://entites/object_63b.tscn",
+	59: "res://entites/object_59b.tscn",
 	63: "res://entites/object_63b.tscn",
 	75: "res://entites/object_75b.tscn",#tree
 	79: "res://entites/object_79b.tscn",
@@ -73,13 +73,13 @@ func _physics_process(p_delta) -> void:
 	runGameStep(input_state)
 	var playerPosRot=getPlayerPosRot()
 	var newEntites: PackedFloat32Array=getEntites()
-	renderEntites(newEntites)
-	var terrainChanges=getTerrainChanges()
 	Main_Player.position=playerPosRot.position/256
 	var yaw = PI*playerPosRot.rotation.yaw/(256*4)   # Rotace kolem osy Y
 	var pitch = PI*playerPosRot.rotation.pitch/(256*4) # Rotace kolem osy X
 	var roll = PI*playerPosRot.rotation.roll/(256*4)  # Rotace kolem osy Z
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
+	renderEntites(newEntites)
+	var terrainChanges=getTerrainChanges()
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var stride = 17
@@ -109,7 +109,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			if !(actByte1 & 4):
 				actModel=modelIndex
 				var tempModel
-				if(actClass==2)||(actClass==5)||(actClass==10):
+				if(actClass==2)||(actClass==5)||(actClass==10)||(actClass==15):
 					if library.has(actModel):
 						tempModel=library[actModel]
 						fromlib=true
@@ -129,12 +129,29 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		else:
 			if (actByte1 & 4):
 				current_node.queue_free()
-		if current_node:
-			current_node.position=pos/256
+		if current_node != null:
+			var base_pos = pos / 256.0
+			var camera = get_viewport().get_camera_3d()
+			if camera:
+				var cam_pos = camera.global_position
+				var grid_size = 256.0
+				var half_grid = grid_size / 2.0
+				var new_x = cam_pos.x + fposmod(base_pos.x - cam_pos.x + half_grid, grid_size) - half_grid
+				var new_z = cam_pos.z + fposmod(base_pos.z - cam_pos.z + half_grid, grid_size) - half_grid
+				current_node.global_position = Vector3(new_x, base_pos.y, new_z)
+			else:
+				current_node.position = base_pos
 			var yaw = PI*rot2.x/(256*4)   # Rotace kolem osy Y
 			var pitch = PI*rot2.y/(256*4) # Rotace kolem osy X
 			var roll = PI*rot2.z/(256*4)  # Rotace kolem osy Z
 			current_node.rotation=Vector3(-pitch, -yaw, -roll)
+			
+			
+			#current_node.position=pos/256
+			#var yaw = PI*rot2.x/(256*4)   # Rotace kolem osy Y
+			#var pitch = PI*rot2.y/(256*4) # Rotace kolem osy X
+			#var roll = PI*rot2.z/(256*4)  # Rotace kolem osy Z
+			#current_node.rotation=Vector3(-pitch, -yaw, -roll)
 
 var last_keys_state: Dictionary = {}
 var mouse_640: Vector2
