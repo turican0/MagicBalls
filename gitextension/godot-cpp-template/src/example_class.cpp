@@ -106,29 +106,29 @@ PackedFloat32Array ExampleClass::GetEntites() {
 				break;
 			case 8://strelec
 				break;
-			case 38: //ohen
+			case 38: //ohen-ok
 				break;
-			case 54: //ohen
+			case 54: //ohen-ok
 				break;
 			case 57: //kour1(dole)-ok
 				break;
-			case 59: //schranka s kouzlem
+			case 59: //schranka s kouzlem-ok
 				break;
 			case 63: //kour2(na zacatku)-ok
 				break;
-			case 79: //stonehenge
+			case 79: //dolmen-ok
 				break;
 			case 96: //oznaceni domu
 				break;
 			case 152: //koza-ok
 				break;
-			case 155: //vesnican
+			case 155: //vesnican-ok
 				break;
-			case 180: //vesnican
+			case 180: //vesnican-ok
 				break;
-			case 183: //vesnican
+			case 183: //vesnican-ok
 				break;
-			case 199: //vesnican
+			case 199: //vesnican-ok
 				break;
 			default:
 				test = 200;
