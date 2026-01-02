@@ -20,9 +20,21 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 
 ---
 
+## Next version:
+-Check spell disappearance<br>
+-Test mouse button<br>
+
+## Version 260102:
+### Changes:
+-Add additional temporary models<br>
+-Fix object display so they are always in front of the camera<br>
+-Extend Multimesh terrain to 5x5<br>
+
+<img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-5.%20test.gif" width="400">
+
 ## Version 260101:
 ### Changes:
--test using first billboards and models(smoke and goat)<br>
+-Test using first billboards and models(smoke and goat)<br>
 
 <img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-4.%20test.gif" width="400">
 
