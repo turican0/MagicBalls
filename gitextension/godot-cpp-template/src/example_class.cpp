@@ -74,13 +74,13 @@ PackedByteArray ExampleClass::TerrainGetAngle() {
 PackedFloat32Array ExampleClass::GetEntites() {
 	PackedFloat32Array result;
 	int count = 1000;
-	result.resize(count * 17);
+	result.resize(count * 29);
 
 	float *write_ptr = result.ptrw();
 	int idx = 0;
 
 	for (int i = 0; i < count; i++) {
-		type_event_0x6E8E *actEntity = x_DWORD_EA3E4[i];
+		type_event_0x6E8E *actEntity = ENTITY_EA3E4[i];
 
 		write_ptr[idx++] = (float)actEntity->axis_0x4C_76.x;//1
 		write_ptr[idx++] = (float)actEntity->axis_0x4C_76.y;//2
@@ -88,18 +88,37 @@ PackedFloat32Array ExampleClass::GetEntites() {
 		write_ptr[idx++] = (float)actEntity->array_0x52_82.yaw;//4
 		write_ptr[idx++] = (float)actEntity->array_0x52_82.pitch;//5
 		write_ptr[idx++] = (float)actEntity->array_0x52_82.roll;//6
-		write_ptr[idx++] = (float)actEntity->class_0x3F_63;//7
-		write_ptr[idx++] = (float)actEntity->model_0x40_64;//8
-		write_ptr[idx++] = (float)actEntity->state_0x45_69;//9
-		write_ptr[idx++] = (float)actEntity->id_0x1A_26;//10
-		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[0]; //11
-		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[1]; //12
-		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[2]; //13
-		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[3]; //14
-		write_ptr[idx++] = (float)str_WORD_D951C[actEntity->word_0x5A_90].word_0; //15
-		write_ptr[idx++] = (float)actEntity->yaw_0x1C_28; //16
-		write_ptr[idx++] = (float)actEntity->pitchAngle_0x1E_30; //17
-		//write_ptr[idx++] = (float)actEntity->textAtyp_43; //18
+
+		write_ptr[idx++] = (float)actEntity->actionIndex_0x45_69; //7 = 0x29;
+		write_ptr[idx++] = (float)actEntity->class_0x3F_63; //8 = 0xA;
+		write_ptr[idx++] = (float)actEntity->model_0x40_64; //9 = 0x27;
+		write_ptr[idx++] = (float)actEntity->xtype_0x41_65; //10 = 10;
+		write_ptr[idx++] = (float)actEntity->xsubtype_0x42_66; //11 = 39;
+		write_ptr[idx++] = (float)actEntity->word_0x2C_44; //12 = 128;
+		write_ptr[idx++] = (float)actEntity->actSpeed_0x82_130; //13 = 32;
+		write_ptr[idx++] = (float)actEntity->byte_0x38_56; //14 = 3;
+		write_ptr[idx++] = (float)actEntity->byte_0x39_57; //15 = 128;
+		write_ptr[idx++] = (float)actEntity->byte_0x3A_58; //16 = 0;
+
+		write_ptr[idx++] = (float)actEntity->id_0x1A_26;//17
+		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[0]; //18
+		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[1]; //19
+		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[2]; //20
+		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[3]; //21
+		write_ptr[idx++] = (float)str_WORD_D951C[actEntity->word_0x5A_90].word_0; //22
+		write_ptr[idx++] = (float)actEntity->yaw_0x1C_28; //23
+		write_ptr[idx++] = (float)actEntity->pitch_0x1E_30; //24
+		write_ptr[idx++] = (float)actEntity->mana_0x90_144; //25
+		write_ptr[idx++] = (float)actEntity->life_0x8; //26
+		write_ptr[idx++] = (float)actEntity->maxMana_0x8C_140; //27
+		write_ptr[idx++] = (float)actEntity->maxLife_0x4; //28
+		write_ptr[idx++] = (float)actEntity->playerEntityIndex_0x94_148; //29
+
+		//v7x = &str_WORD_D951C[str_F2C20ar.dword0x14x->word_0x5A_90];
+		//67
+
+		//v5x->str_0x5E_94.word_0x68_104 = a1x->id_0x1A_26;
+
 		int test=str_WORD_D951C[actEntity->word_0x5A_90].word_0;
 		switch (test) {
 			case 0: //hrac0-ok
@@ -115,6 +134,8 @@ PackedFloat32Array ExampleClass::GetEntites() {
 			case 59: //schranka s kouzlem-ok
 				break;
 			case 63: //kour2(na zacatku)-ok
+				break;
+			case 67: //white sphere
 				break;
 			case 79: //dolmen-ok
 				break;
@@ -149,7 +170,7 @@ Dictionary ExampleClass::GetTerrainChanges() {
 }
 
 void ExampleClass::RunGameStep(Dictionary inputs) {
-	Vector2 mouse_pos = inputs["mouse_pos"];
+
 	Array key_changes = inputs["key_changes"];
 	for (int i = 0; i < key_changes.size(); i++) {
 		Dictionary change = key_changes[i];
@@ -172,16 +193,49 @@ void ExampleClass::RunGameStep(Dictionary inputs) {
 		}
 	}
 
-	//x_WORD_E3760_mouse.x = 320;
-	//x_WORD_E3760_mouse.y = 240;
-	//x_WORD_E375C_mouse_position_x = 320;
-	//x_WORD_E375E_mouse_position_y = 240;
+	int buttonresult = 1;
+	Array mouse_button_changes = inputs["mouse_button_changes"];
+	for (int i = 0; i < mouse_button_changes.size(); i++) {
+		Dictionary change = mouse_button_changes[i];
+		int button_index = change["button_index"];
+		String action = change["action"];
+		bool is_pressed = (action == "pressed");
+		switch (button_index) {
+			case 0://MOUSE_BUTTON_LEFT
+				if (is_pressed)
+					buttonresult |= 0x2;
+				else
+					buttonresult |= 0x4;
+				break;
+			case 1://MOUSE_BUTTON_RIGHT
+				if (is_pressed)
+					buttonresult |= 0x8;
+				else
+					buttonresult |= 0x10;
+				break;
+			case 2://MOUSE_BUTTON_MIDDLE
+				if (is_pressed)
+					buttonresult |= 0x20;
+				else
+					buttonresult |= 0x40;
+				break;
+			case 3://MOUSE_BUTTON_WHEEL_UP
+				/* if (is_pressed)
+					buttonresult |= 2;
+				else
+					buttonresult |= 4;*/
+				break;
+			case 4: //MOUSE_BUTTON_WHEEL_DOWN
+				/* if (is_pressed)
+					buttonresult |= 2;
+				else
+					buttonresult |= 4;*/
+				break;
+		}
+	}
 
-	//mousex = event.motion.x;
-	//mousey = event.motion.y;
-	//mouse_pos.x = 320;
-	//mouse_pos.y = 240;
-	MouseEvents(1, mouse_pos.x, mouse_pos.y);
+	Vector2 mouse_pos = inputs["mouse_pos"];
+	MouseEvents(buttonresult, mouse_pos.x, 480-mouse_pos.y);
 
 	ReadGameUserInputs_89D10(); //get keys
 	MouseAndKeysEvents_17A00(0, x_DWORD_17DB54_game_turn2);

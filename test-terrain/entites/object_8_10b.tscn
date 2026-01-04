@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://0jgcvf647o6g"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7hled"]
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 1.5
+initial_velocity_max = 3.0
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="Gradient" id="Gradient_fi65x"]
+offsets = PackedFloat32Array(0, 0.17351598, 0.42465752, 0.7351598, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 0, 1, 1, 0.4745098, 0.3647059, 1, 0.92156863, 0, 0, 0, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bjna2"]
+gradient = SubResource("Gradient_fi65x")
+fill = 1
+fill_from = Vector2(0.52136755, 0.4871795)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b0wp"]
+transparency = 1
+blend_mode = 1
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("GradientTexture2D_bjna2")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_v5wgy"]
+material = SubResource("StandardMaterial3D_8b0wp")
+size = Vector2(0.4, 0.4)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+amount = 200
+process_material = SubResource("ParticleProcessMaterial_7hled")
+draw_pass_1 = SubResource("QuadMesh_v5wgy")

@@ -232,12 +232,12 @@ typedef struct Type_str_164 {//size 1136
 	uint8_t stubc[2];
 	int16_t moveBoost_0x1E_30;
 	int16_t yaw_0x1E_30;
-	int16_t word_0x22_34;
+	int16_t fov_0x22_34;
 	int16_t pitch_0x24_36;
 	int16_t word_0x26_38[8];
 	//int16_t word_0x2E_46;//word_0x26_38[4]
 	int16_t word_0x36_54;
-	int16_t word_0x38_56;
+	int16_t playerColorIndex_0x38_56;
 	int16_t word_0x3A_58;
 	uint16_t array_0x3C_60[16];//size??
 	std::array<uint16_t, 103> array_0x5C_92; // size?? at least index 33 is accessed in level 19
@@ -334,10 +334,10 @@ typedef struct _str_0x6E8E {//lenght a8//THING
 	uint16_t nextEntity_0x18_24;//24 //next entity index
 	uint16_t id_0x1A_26;//26 // index - owner //ID last index
 	int16_t yaw_0x1C_28;//28//rotate1
-	int16_t pitchAngle_0x1E_30;//30//rotate2
-	int16_t word_0x20_32;//32//rotate3
+	int16_t pitch_0x1E_30;//30//rotate2
+	int16_t roll_0x20_32;//32//rotate3
 	//int8_t byte_0x21_33;//33
-	int16_t word_0x22_34;//34//rotate4
+	int16_t fov_0x22_34;//34//rotate4
 	int16_t word_0x24_36;//36 // index subentity
 	int16_t word_0x26_38;//38 // index subentity
 	uint16_t parentId_0x28_40;//40//WHO OWNS ME
@@ -363,7 +363,7 @@ typedef struct _str_0x6E8E {//lenght a8//THING
 	int8_t xsubtype_0x42_66;//66 //subtype subentity
 	int8_t byte_0x43_67;//67
 	int8_t byte_0x44_68;//68
-	uint8_t state_0x45_69;//69 // index of structure with lenght 14//STATE-
+	uint8_t actionIndex_0x45_69;//69 // index of structure with lenght 14//STATE-
 	int8_t byte_0x46_70;//70 // index of bitmap // index of ending sequence
 	int8_t byte_0x47_71_xx;//71
 	int8_t StageVar1_0x48_72;//72
@@ -382,7 +382,7 @@ typedef struct _str_0x6E8E {//lenght a8//THING
 	int32_t manaRegen_0x88_136;//136
 	int32_t maxMana_0x8C_140;//140 //wiz name?//ACTUAL MANA
 	int32_t mana_0x90_144;//144 0-1000//MAX MANA
-	uint16_t word_0x94_148;//148
+	uint16_t playerEntityIndex_0x94_148;//148
 	int16_t word_0x96_150;//150 // index subentity
 	uint16_t word_0x98_152;//152
 	axis_3d word_0x9A_154x;//154

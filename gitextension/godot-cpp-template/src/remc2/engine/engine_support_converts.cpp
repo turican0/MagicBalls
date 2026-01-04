@@ -50,10 +50,10 @@ void convert_struct_to_array_164(type_str_164* input, uint8_t* output) {
 	memset(output + 0x1c, 0, 2);
 	//int16_t word_0x1E_30;
 	memcpy(output + 0x1e, &input->moveBoost_0x1E_30, 2);
-	//int16_t word_0x20_32;
+	//int16_t roll_0x20_32;
 	memcpy(output + 0x20, &input->yaw_0x1E_30, 2);
-	//int16_t word_0x22_34;
-	memcpy(output + 0x22, &input->word_0x22_34, 2);
+	//int16_t fov_0x22_34;
+	memcpy(output + 0x22, &input->fov_0x22_34, 2);
 	//int16_t word_0x24_36;
 	memcpy(output + 0x24, &input->pitch_0x24_36, 2);
 	//int16_t word_0x26_38[8];
@@ -62,7 +62,7 @@ void convert_struct_to_array_164(type_str_164* input, uint8_t* output) {
 	//int16_t word_0x36_54;
 	memcpy(output + 0x36, &input->word_0x36_54, 2);
 	//int16_t word_0x38_56;
-	memcpy(output + 0x36, &input->word_0x38_56, 2);
+	memcpy(output + 0x36, &input->playerColorIndex_0x38_56, 2);
 	//int16_t word_0x3A_58;
 	memcpy(output + 0x3a, &input->word_0x3A_58, 2);
 	//uint16_t array_0x3C_60[16];//size??
@@ -358,11 +358,11 @@ void convert_struct_to_array_0x6E8E(type_event_0x6E8E* input, uint8_t* output) {
 	//int16_t word_0x1C_28;//28//rotate1
 	memcpy(output + 28, &input->yaw_0x1C_28, 2);
 	//int16_t word_0x1E_30;//30//rotate2
-	memcpy(output + 30, &input->pitchAngle_0x1E_30, 2);
-	//int16_t word_0x20_32;//32//rotate3
-	memcpy(output + 32, &input->word_0x20_32, 2);
-	//int16_t word_0x22_34;//34//rotate4
-	memcpy(output + 34, &input->word_0x22_34, 2);
+	memcpy(output + 30, &input->pitch_0x1E_30, 2);
+	//int16_t roll_0x20_32;//32//rotate3
+	memcpy(output + 32, &input->roll_0x20_32, 2);
+	//int16_t fov_0x22_34;//34//rotate4
+	memcpy(output + 34, &input->fov_0x22_34, 2);
 	//int16_t word_0x24_36;//36 // index subentity
 	memcpy(output + 36, &input->word_0x24_36, 2);
 	//int16_t word_0x26_38;//38 // index subentity
@@ -410,7 +410,7 @@ void convert_struct_to_array_0x6E8E(type_event_0x6E8E* input, uint8_t* output) {
 	//int8_t byte_0x44_68;//68	
 	memcpy(output + 68, &input->byte_0x44_68, 1);
 	//uint8_t byte_0x45_69;//69 // index of structure with lenght 14//STATE
-	memcpy(output + 69, &input->state_0x45_69, 1);
+	memcpy(output + 69, &input->actionIndex_0x45_69, 1);
 	//uint8_t byte_0x46_70;//70 // index of bitmap
 	memcpy(output + 70, &input->byte_0x46_70, 1);
 	//int8_t byte_0x47_71_xx;//71
@@ -443,8 +443,8 @@ void convert_struct_to_array_0x6E8E(type_event_0x6E8E* input, uint8_t* output) {
 	memcpy(output + 140, &input->maxMana_0x8C_140, 4);
 	//int32_t dword_0x90_144;//144 0-1000//MAX MANA
 	memcpy(output + 144, &input->mana_0x90_144, 4);
-	//uint16_t word_0x94_148;//148
-	memcpy(output + 0x94, &input->word_0x94_148, 2);
+	//uint16_t playerEntityIndex_0x94_148;//148
+	memcpy(output + 0x94, &input->playerEntityIndex_0x94_148, 2);
 	//int16_t word_0x96_150;//150 // index subentity
 	memcpy(output + 0x96, &input->word_0x96_150, 2);
 	//uint16_t word_0x98_152;//152

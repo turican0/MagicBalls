@@ -21,6 +21,14 @@ const KEY_INDEX := {
 	KEY_D: 3 # Right
 }
 
+const MOUSE_BUTTON_INDEX := {
+	MOUSE_BUTTON_LEFT: 0,
+	MOUSE_BUTTON_RIGHT: 1,
+	MOUSE_BUTTON_MIDDLE: 2,
+	MOUSE_BUTTON_WHEEL_UP: 3,
+	MOUSE_BUTTON_WHEEL_DOWN: 4
+}
+
 var input_state: Dictionary = {
 	"keys": {},
 	"mouse_pos": Vector2.ZERO
@@ -36,24 +44,29 @@ var library = {
 	#0: "res://components/gold_sphere.tscn",
 	#1: "res://components/gold_sphere.tscn",
 	#2: "res://components/gold_sphere.tscn",
-	8: "res://entites/object_38b.tscn",
+	Vector3i(10,8,0): "res://entites/object_8_10b.tscn",#fair
+	Vector3i(9,144,0): "res://entites/object_54_9b.tscn",#select
+	Vector3i(9,55,0): "res://entites/object_55_9b.tscn",#fairball
 	#38: "res://entites/object_38b.tscn",
 	#54: "res://entites/object_38b.tscn",
-	57: "res://entites/object_63b.tscn",
-	59: "res://entites/object_59b.tscn",
-	63: "res://entites/object_63b.tscn",
-	75: "res://entites/object_75b.tscn",#tree
-	79: "res://entites/object_79b.tscn",
-	87: "res://entites/object_75b.tscn",#tree
-	#96: "res://entites/object_8b.tscn",
-	152: "res://entites/object_152b.tscn",
+	Vector3i(10,57,0): "res://entites/object_63b.tscn",#smoke
+	Vector3i(10,58,0): "res://components/gold_sphere.tscn",
+	Vector3i(10,67,0): "res://components/white_sphere.tscn",
+	Vector3i(0,59,0): "res://entites/object_59b.tscn",
+	Vector3i(10,63,0): "res://entites/object_63b.tscn",#smoke
+	Vector3i(2,75,0): "res://entites/object_75b.tscn",#tree
+	Vector3i(2,79,0): "res://entites/object_79b.tscn",#dolmen
+	Vector3i(2,87,0): "res://entites/object_75b.tscn",#tree
+	Vector3i(10,96,0): "res://components/gold_sphere.tscn",#building
+	Vector3i(0,121,0): "res://entites/object_8b.tscn",#bowman
+	Vector3i(5,152,0): "res://entites/object_152b.tscn",#goat
 	#153: "res://entites/object_152b.tscn",
-	155: "res://entites/object_155b.tscn",#people
-	180: "res://entites/object_155b.tscn",#people
-	183: "res://entites/object_155b.tscn",#people
+	Vector3i(5,155,0): "res://entites/object_155b.tscn",#people
+	Vector3i(5,180,0): "res://entites/object_155b.tscn",#people
+	Vector3i(5,183,0): "res://entites/object_155b.tscn",#people
 	#186: "res://entites/object_8b.tscn",
-	199: "res://entites/object_155b.tscn",#people
-	999: "res://entites/object_text.tscn"
+	Vector3i(5,199,0): "res://entites/object_155b.tscn",#people
+	Vector3i(0,999,0): "res://entites/object_text.tscn"
 }
 
 func _ready():
@@ -82,24 +95,65 @@ func _physics_process(p_delta) -> void:
 	var terrainChanges=getTerrainChanges()
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
-	var stride = 17
+	var stride = 29
 	var count = data_array.size() / stride
 	for i in range(pool_size):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
 		var rot = Vector3(data_array[offset+3], data_array[offset+4], data_array[offset+5])
-		var actClass = int(data_array[offset+6])
-		var actModel = int(data_array[offset+7])
-		var actState = int(data_array[offset+8])
-		var actId = int(data_array[offset+9])
-		var actByte0 = int(data_array[offset+10])
-		var actByte1 = int(data_array[offset+11])
-		var actByte2 = int(data_array[offset+12])
-		var actByte3 = int(data_array[offset+13])
-		var modelIndex = int(data_array[offset+14])
-		var rot2 = Vector3(data_array[offset+15], 0, 0)
+		
+		#write_ptr[idx++] = (float)actEntity->state_0x45_69; //7 = 0x29;
+		#write_ptr[idx++] = (float)actEntity->class_0x3F_63; //8 = 0xA;
+		#write_ptr[idx++] = (float)actEntity->model_0x40_64; //9 = 0x27;
+		#write_ptr[idx++] = (float)actEntity->xtype_0x41_65; //10 = 10;
+		#write_ptr[idx++] = (float)actEntity->xsubtype_0x42_66; //11 = 39;
+		#write_ptr[idx++] = (float)actEntity->word_0x2C_44; //12 = 128;
+		#write_ptr[idx++] = (float)actEntity->actSpeed_0x82_130; //13 = 32;
+		#write_ptr[idx++] = (float)actEntity->byte_0x38_56; //14 = 3;
+		#write_ptr[idx++] = (float)actEntity->byte_0x39_57; //15 = 128;
+		#write_ptr[idx++] = (float)actEntity->byte_0x3A_58; //16 = 0;
+		
+		var actState = int(data_array[offset+6])
+		var actClass = int(data_array[offset+7])
+		var actModel = int(data_array[offset+8])
+		var actXtype = int(data_array[offset+9])
+		var actXsubtype = int(data_array[offset+10])
+		var actWord2C = int(data_array[offset+11])
+		var actSpeed = int(data_array[offset+12])
+		var actByte38 = int(data_array[offset+13])
+		var actByte39 = int(data_array[offset+14])
+		var actByte3A = int(data_array[offset+15])
+		
+		var actId = int(data_array[offset+16])
+		var actByte0 = int(data_array[offset+17])
+		var actByte1 = int(data_array[offset+18])
+		var actByte2 = int(data_array[offset+19])
+		var actByte3 = int(data_array[offset+20])
+		var modelIndex = int(data_array[offset+21])
+		var rot2 = Vector3(data_array[offset+22], 0, 0)
+		var actMana = int(data_array[offset+24])
+		var actLife = int(data_array[offset+25])
+		var actMaxMana = int(data_array[offset+26])
+		var actMaxLife = int(data_array[offset+27])
+		var actOwnerObject = int(data_array[offset+28])
+		
+		if(modelIndex==0)&&(actClass==3):
+			Main_Player.MOVE_SPEED=actSpeed
+			Main_Player.LIFE=actLife
+			Main_Player.MANA=actMana
+		
 		var current_node = node_pool[i]
-		if current_node == null or current_node.get_meta("id") != actId:
+		
+		#if(modelIndex==67):
+			#actModel+=1
+			#actModel-=1
+			#if!(actByte0&1):
+				#if current_node != null:
+					#current_node.queue_free()
+			#if(actOwnerObject!=0):
+				#current_node.queue_free()
+		
+		if current_node == null or current_node.get_meta("id") != modelIndex*1024*1024+actId*1024+actByte0:
 			if current_node != null:
 				current_node.queue_free()
 			#if (1):
@@ -107,23 +161,26 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			#if (!(v3x->struct_byte_0xc_12_15.byte[0] & 0x21))
 			var fromlib=false
 			if !(actByte1 & 4):
-				actModel=modelIndex
+				var isDraw = true
+				if(actByte0&1):
+					isDraw = false
 				var tempModel
-				if(actClass==2)||(actClass==5)||(actClass==10)||(actClass==15):
-					if library.has(actModel):
-						tempModel=library[actModel]
+				if(isDraw)&&((actClass==2)||(actClass==5)||(actClass==9)||(actClass==10)||(actClass==15)):
+					var key = Vector3i(actClass, modelIndex,0)
+					if library.has(key):
+						tempModel=library[key]
 						fromlib=true
 					else:
-						tempModel=library[999]
+						tempModel=library[Vector3i(0, 999, 0)]
 				else:
-					tempModel=library[999]
+					tempModel=library[Vector3i(0, 999, 0)]
 				var new_node = load(tempModel).instantiate()
 				
 				if !fromlib:
 					new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)
 					
 				add_child(new_node)
-				new_node.set_meta("id", actId) # Uložíme ID pro budoucí kontrolu
+				new_node.set_meta("id", modelIndex*1024*1024+actId*1024+actByte0) # Uložíme ID pro budoucí kontrolu
 				node_pool[i] = new_node
 				current_node = new_node
 		else:
@@ -132,6 +189,10 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		if current_node != null:
 			var base_pos = pos / 256.0
 			var camera = get_viewport().get_camera_3d()
+			var scale=1
+			if(actState==0x29)&&(actClass==0xA)&&(actModel==0x27):#manSphere
+				scale=pow(actMana, 1.0 / 3.0)*0.2
+			current_node.scale = Vector3(scale, scale, scale)
 			if camera:
 				var cam_pos = camera.global_position
 				var grid_size = 256.0
@@ -154,6 +215,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			#current_node.rotation=Vector3(-pitch, -yaw, -roll)
 
 var last_keys_state: Dictionary = {}
+var last_mouse_buttons_state: Dictionary = {}
 var mouse_640: Vector2
 const SCREEN_WIDTH := 640
 const SCREEN_HEIGHT := 480
@@ -163,7 +225,7 @@ func getInputs():
 	for keycode: int in KEY_INDEX:
 		var index: int = KEY_INDEX[keycode]
 		var is_pressed: bool = Input.is_key_pressed(keycode)
-		var previous_state = last_keys_state.get(index, false)		
+		var previous_state = last_keys_state.get(index, false)
 		if is_pressed != previous_state:
 			var status = "pressed" if is_pressed else "released"
 			changes.append({
@@ -172,19 +234,26 @@ func getInputs():
 			})
 			last_keys_state[index] = is_pressed
 	input_state["key_changes"] = changes
-	#var mouse := get_viewport().get_mouse_position()
-	#var vp_size := get_viewport().get_visible_rect().size
-	#var mouse_640 := Vector2(
-		#mouse.x / vp_size.x * 640.0,
-		#mouse.y / vp_size.y * 480.0
-	#)
+	
+	var mouse_changes := []
+
+	for button: int in MOUSE_BUTTON_INDEX:
+		var index: int = MOUSE_BUTTON_INDEX[button]
+		var is_pressed: bool = Input.is_mouse_button_pressed(button)
+		var previous_state = last_mouse_buttons_state.get(index, false)
+		if is_pressed != previous_state:
+			var status = "pressed" if is_pressed else "released"
+			mouse_changes.append({
+				"button_index": index,
+				"action": status
+			})
+			last_mouse_buttons_state[index] = is_pressed
+	input_state["mouse_button_changes"] = mouse_changes
+
 	mouse_640 = Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 	mouse_640 += total_mouse_delta*0.2
-
-	# Omez na velikost obrazovky
 	mouse_640.x = clamp(mouse_640.x, 0, SCREEN_WIDTH)
-	mouse_640.y = clamp(mouse_640.y, 0, SCREEN_HEIGHT)
-		
+	mouse_640.y = clamp(mouse_640.y, 0, SCREEN_HEIGHT)		
 	input_state["mouse_pos"] = mouse_640
 
 # Funkce, která by v Godotu volala ekvivalenty C-funkcí

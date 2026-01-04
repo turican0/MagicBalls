@@ -13,6 +13,8 @@ func _process(_p_delta) -> void:
 	$Label.text = "FPS: %d\n" % Engine.get_frames_per_second()
 	if(visible_mode == 1):
 		$Label.text += "Move Speed: %.1f\n" % player.MOVE_SPEED if player else ""
+		$Label.text += "Life: %.1f\n" % player.LIFE if player else ""
+		$Label.text += "Mana: %.1f\n" % player.MANA if player else ""
 		$Label.text += "Position: %.1v\n" % player.global_position if player else ""
 		$Label.text += """
 			Player

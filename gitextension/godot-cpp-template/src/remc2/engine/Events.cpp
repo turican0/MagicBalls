@@ -432,7 +432,7 @@ void ApplyEvents_498A0()//22a8a0
 					{
 						if (D41A0_0.struct_0x6E8E[iy].model_0x40_64 == 2 && !D41A0_0.struct_0x6E8E[iy].life_0x8)
 						{
-							v6 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].state_0x45_69];
+							v6 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].actionIndex_0x45_69];
 							runagain = true;
 							if (v6->address_6 && v6->dword_10)
 							{
@@ -442,7 +442,7 @@ void ApplyEvents_498A0()//22a8a0
 					}
 					else//all without 0xA and 0xE
 					{
-						SetEntity04_57F10(&D41A0_0.struct_0x6E8E[iy]);
+						DisableEntityDrawing04_57F10(&D41A0_0.struct_0x6E8E[iy]);
 					}
 					//all without 0xA
 					if (D41A0_0.struct_0x6E8E[iy].struct_byte_0xc_12_15.byte[1] & 4)//all without 0xE
@@ -457,13 +457,13 @@ void ApplyEvents_498A0()//22a8a0
 					{
 						if (v4 > 0xBu && v4 != 0xFu)//T=0xA ST=0xC,0xD,0xE,0x10,0x11,0x12..0x1A
 						{
-							SetEntity04_57F10(&D41A0_0.struct_0x6E8E[iy]);
+							DisableEntityDrawing04_57F10(&D41A0_0.struct_0x6E8E[iy]);
 							D41A0_0.struct_0x6E8E[iy].byte_0x3E_62++;
 							if (D41A0_0.struct_0x6E8E[iy].struct_byte_0xc_12_15.byte[1] & 4)
 								sub_57F20(&D41A0_0.struct_0x6E8E[iy]);
 							continue;
 						}
-						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].state_0x45_69];//ok
+						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].actionIndex_0x45_69];//ok
 						runagain = true;
 						if (v5->address_6 && v5->dword_10)
 						{
@@ -476,7 +476,7 @@ void ApplyEvents_498A0()//22a8a0
 					}
 					if (v4 == 0x9)//0xA,0x9
 					{
-						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].state_0x45_69];//ok
+						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].actionIndex_0x45_69];//ok
 						runagain = true;
 						if (v5->address_6 && v5->dword_10)
 						{
@@ -492,7 +492,7 @@ void ApplyEvents_498A0()//22a8a0
 				{
 					if (v4 <= 0x20)
 					{
-						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].state_0x45_69];//ok
+						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].actionIndex_0x45_69];//ok
 						runagain = true;
 						if (v5->address_6 && v5->dword_10)
 						{
@@ -507,13 +507,13 @@ void ApplyEvents_498A0()//22a8a0
 					{
 						if (v4 > 0x33 && (v4 < 0x50 || v4 > 0x55 && v4 != 0x58))
 						{
-							SetEntity04_57F10(&D41A0_0.struct_0x6E8E[iy]);
+							DisableEntityDrawing04_57F10(&D41A0_0.struct_0x6E8E[iy]);
 							D41A0_0.struct_0x6E8E[iy].byte_0x3E_62++;
 							if (D41A0_0.struct_0x6E8E[iy].struct_byte_0xc_12_15.byte[1] & 4)
 								sub_57F20(&D41A0_0.struct_0x6E8E[iy]);
 							continue;
 						}
-						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].state_0x45_69];//ok
+						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].actionIndex_0x45_69];//ok
 						runagain = true;
 						if (v5->address_6 && v5->dword_10)
 						{
@@ -526,14 +526,14 @@ void ApplyEvents_498A0()//22a8a0
 					}
 					if (v4 == 0x2D)
 					{
-						if (D41A0_0.struct_0x6E8E[iy].state_0x45_69 != 0x33)
+						if (D41A0_0.struct_0x6E8E[iy].actionIndex_0x45_69 != 0x33)
 						{
 							D41A0_0.struct_0x6E8E[iy].byte_0x3E_62++;
 							if (D41A0_0.struct_0x6E8E[iy].struct_byte_0xc_12_15.byte[1] & 4)
 								sub_57F20(&D41A0_0.struct_0x6E8E[iy]);
 							continue;
 						}
-						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].state_0x45_69];//ok
+						v5 = &str_D4C48ar[D41A0_0.struct_0x6E8E[iy].class_0x3F_63].dword_10[D41A0_0.struct_0x6E8E[iy].actionIndex_0x45_69];//ok
 						runagain = true;
 						if (v5->address_6 && v5->dword_10)
 						{
@@ -545,7 +545,7 @@ void ApplyEvents_498A0()//22a8a0
 						continue;
 					}
 				}
-				SetEntity04_57F10(&D41A0_0.struct_0x6E8E[iy]);
+				DisableEntityDrawing04_57F10(&D41A0_0.struct_0x6E8E[iy]);
 				D41A0_0.struct_0x6E8E[iy].byte_0x3E_62++;
 				if (D41A0_0.struct_0x6E8E[iy].struct_byte_0xc_12_15.byte[1] & 4)
 					sub_57F20(&D41A0_0.struct_0x6E8E[iy]);
@@ -611,6 +611,11 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 {
 	if (CommandLineParams.DoShowNewProcedures()) {
 		test_pre_sub_4a190(adress);//for debug
+	}
+	if (str_WORD_D951C[a1_6E8E->word_0x5A_90].word_0 == 58)
+	{
+		int xxx = 1;
+		xxx++;
 	}
 	switch (adress)
 	{
@@ -1056,11 +1061,11 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 	}
 
 	case 0x1fd890: {
-		sub_1C890(a1_6E8E, 0);
+		PreKillEntity_1C890(a1_6E8E, 0);
 		break;
 	}
 	case 0x1fd930: {
-		sub_1C930(a1_6E8E);
+		KillEntity_1C930(a1_6E8E);
 		break;
 	}
 	case 0x1fd980: {
@@ -1249,12 +1254,12 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 		break;
 	}
 	case 0x2004f0: {//begin of goat kill
-		KillGoat_1F4F0(a1_6E8E);
+		PreKillGoat_1F4F0(a1_6E8E);
 		break;
 	}
 
 	case 0x200510: {//end of goat kill
-		TransformGoatToMana_1F510(a1_6E8E);
+		KillGoat_1F510(a1_6E8E);
 		break;
 	}
 	case 0x200530: {
@@ -2594,7 +2599,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 		break;
 	}
 	case 0x217920: {
-		sub_36920(a1_6E8E);
+		SetManaSphereColorAndRot_36920(a1_6E8E);
 		break;
 	}
 	case 0x2179f0: {
@@ -2604,7 +2609,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 #ifdef COMPILE_FOR_64BIT // FIXME: 64bit
   std::cout << "FIXME: 64bit @ function " << __FUNCTION__ << ", line " << __LINE__ << std::endl;
 #else
-		sub_369F0((int)a1_6E8E);
+		GetManaSphereColorIndexFromEntityId_369F0((int)a1_6E8E);
 		allert_error();
 #endif
 		break;
@@ -2616,7 +2621,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 #ifdef COMPILE_FOR_64BIT // FIXME: 64bit
   std::cout << "FIXME: 64bit @ function " << __FUNCTION__ << ", line " << __LINE__ << std::endl;
 #else
-		sub_36A50((int)a1_6E8E);
+		GetManaSphereIndexFromId_36A50((int)a1_6E8E);
 		allert_error();
 #endif
 		break;
@@ -2627,7 +2632,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 	}
 
 	case 0x217ba0: {
-		sub_36BA0(a1_6E8E, 0);
+		TransformEntityToManaSphere_36BA0(a1_6E8E, false);
 		break;
 	}
 	case 0x217d50: {
@@ -3018,7 +3023,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
         std::cout << "FIXME: 64bit @ function " << __FUNCTION__ << ", line " << __LINE__ << std::endl;
 		allert_error();
 #else
-		sub_616D0((int)a1_6E8E);
+		TransformPlayerColorIndex_616D0((int)a1_6E8E);
 		allert_error();
 #endif
 		break;
@@ -4700,15 +4705,15 @@ type_event_0x6E8E* pre_sub_4A190_axis_3d(uint32_t adress, axis_3d* a1_axis3d)//p
 		break;
 	}
 	case 0x231080: {//creating mana sphere
-		return sub_50080(a1_axis3d);
+		return CreateManaSphere512_50080(a1_axis3d);
 		break;
 	}
 	case 0x2310a0: {
-		return sub_500A0(a1_axis3d);
+		return CreateManaSphere2560_500A0(a1_axis3d);
 		break;
 	}
 	case 0x2310c0: {
-		return sub_500C0(a1_axis3d, 0);//fix it
+		return CreateManaSphere_500C0(a1_axis3d, 0);//fix it
 		break;
 	}
 	case 0x231130: {
@@ -5122,7 +5127,7 @@ type_event_0x6E8E* pre_sub_4A190_axis_3d(uint32_t adress, axis_3d* a1_axis3d)//p
 }
 
 //----- (0004A190) --------------------------------------------------------
-type_event_0x6E8E* IfSubtypeCallAxisEvent_4A190(axis_3d* position, int type, int subtype)//22b190
+type_event_0x6E8E* IfSubtypeCallCreatingManaSphere_4A190(axis_3d* position, int type, int subtype)//22b190
 {
 	if (str_D4C48ar[type].dword_14[subtype].dword_10 && str_D4C48ar[type].dword_14[subtype].word_4 == subtype)
 		return pre_sub_4A190_axis_3d(str_D4C48ar[type].dword_14[subtype].address_6, position);
@@ -5183,14 +5188,14 @@ signed int sub_69250(type_event_0x6E8E* a1x)//24a250
 {
 	signed int result; // eax
 	type_event_0x6E8E* resultx;
-	result = sub_68FF0(a1x, a1x->model_0x40_64, a1x->state_0x45_69 - 2);
+	result = sub_68FF0(a1x, a1x->model_0x40_64, a1x->actionIndex_0x45_69 - 2);
 	if (result)
 	{
 		resultx = arsub_2a881e[a1x->model_0x40_64](&a1x->axis_0x4C_76);
 		//resultx = pre_sub_4A190(0x2a881e + 14 * a1x->byte_0x40_64, (int16_t*)&a1x->array_0x4C_76,2);//result = (*(int(**)(uint8_t*))((char *)&off_D781E + 14 * *(char *)(a1 + 64)))(a1 + 76);
 		//v63 = (uint8_t*)pre_sub_4A190(0x232530 + 14 * v112, v113 + 76);//v63 = (uint8_t*)(*(int(**)(uint8_t*))((char *)&off_D781E + 14 * v112))(v113 + 76);
 		if (resultx)
-			resultx->state_0x45_69 += 2;
+			resultx->actionIndex_0x45_69 += 2;
 	}
 	return result;
 }
@@ -5362,23 +5367,23 @@ void sub_48400(uint16_t posX2, uint16_t posY2, uint16_t posX, uint16_t posY, uin
 			for (i = v6 - result; v18; v28 = 0)
 			{
 				sub_483A0(posX2, posY2, posX, posY);
-				v22x = IfSubtypeCallAxisEvent_4A190(&predictedAxis_EB398ar, 10, 27);
+				v22x = IfSubtypeCallCreatingManaSphere_4A190(&predictedAxis_EB398ar, 10, 27);
 				if (v20 >= 0)
 				{
-					v22x->state_0x45_69 = 28;
+					v22x->actionIndex_0x45_69 = 28;
 					v23 = v20 + v28;
 				}
 				else
 				{
-					v22x->state_0x45_69 = 27;
+					v22x->actionIndex_0x45_69 = 27;
 					v23 = -v20 - v28;
 				}
 				v22x->dword_0x10_16 = v23;
 				sub_483A0(posX2, (unsigned __int16)(v20 + v28 + posY2), posX, posY);
 				v18--;
 				posY2 += v20 + v28;
-				v24x = IfSubtypeCallAxisEvent_4A190(&predictedAxis_EB398ar, 10, 27);
-				v24x->state_0x45_69 = 29;
+				v24x = IfSubtypeCallCreatingManaSphere_4A190(&predictedAxis_EB398ar, 10, 27);
+				v24x->actionIndex_0x45_69 = 29;
 				v24x->dword_0x10_16 = i + v30;
 				result = 0;
 				posX2 += i + v30;
@@ -5398,20 +5403,20 @@ void sub_48400(uint16_t posX2, uint16_t posY2, uint16_t posX, uint16_t posY, uin
 				do
 				{
 					sub_483A0(posX2, posY2, posX, posY);
-					v13x = IfSubtypeCallAxisEvent_4A190(&predictedAxis_EB398ar, 10, 27);
-					v13x->state_0x45_69 = 29;
+					v13x = IfSubtypeCallCreatingManaSphere_4A190(&predictedAxis_EB398ar, 10, 27);
+					v13x->actionIndex_0x45_69 = 29;
 					v13x->dword_0x10_16 = v25 + v29;
 					posX2 += v25 + v29;
 					sub_483A0(posX2, posY2, posX, posY);
-					v14x = IfSubtypeCallAxisEvent_4A190(&predictedAxis_EB398ar, 10, 27);
+					v14x = IfSubtypeCallCreatingManaSphere_4A190(&predictedAxis_EB398ar, 10, 27);
 					if (v12 >= 0)
 					{
-						v14x->state_0x45_69 = 28;
+						v14x->actionIndex_0x45_69 = 28;
 						v15 = v12 + v27;
 					}
 					else
 					{
-						v14x->state_0x45_69 = 27;
+						v14x->actionIndex_0x45_69 = 27;
 						v15 = -v12 - v27;
 					}
 					v14x->dword_0x10_16 = v15;
@@ -5475,21 +5480,21 @@ void sub_48690(uint16_t posX2, uint16_t posY2, uint16_t posX, uint16_t posY, uin
 	}
 	predictedAxis_EB398ar.x = posX2 << 8;
 	predictedAxis_EB398ar.y = posY2 << 8;
-	v10x = IfSubtypeCallAxisEvent_4A190(&predictedAxis_EB398ar, 10, 30);
+	v10x = IfSubtypeCallCreatingManaSphere_4A190(&predictedAxis_EB398ar, 10, 30);
 	if (v10x)
 	{
 		v10x->dword_0x10_16 = maxabsdist;
 		v10x->yaw_0x1C_28 = Xdir;
-		v10x->pitchAngle_0x1E_30 = Ydir;
+		v10x->pitch_0x1E_30 = Ydir;
 	}
 	predictedAxis_EB398ar.x = (maxabsdist * Xdir + posX2) << 8;
 	predictedAxis_EB398ar.y = (maxabsdist * Ydir + posY2) << 8;
-	resultx = IfSubtypeCallAxisEvent_4A190(&predictedAxis_EB398ar, 10, 30);
+	resultx = IfSubtypeCallCreatingManaSphere_4A190(&predictedAxis_EB398ar, 10, 30);
 	if (resultx)
 	{
 		resultx->dword_0x10_16 = distXYdiff;
 		resultx->yaw_0x1C_28 = v14;
-		resultx->pitchAngle_0x1E_30 = v15;
+		resultx->pitch_0x1E_30 = v15;
 	}
 }
 
@@ -5512,7 +5517,7 @@ void sub_487D0(uint16_t posX2, uint16_t posY2, uint16_t posX, uint16_t posY, uin
 	v11x.y = posY << 8;
 	v5 = Maths::sub_581E0_maybe_tan2(&v8x, &v11x);
 	v6 = Maths::sub_58490_radix_3d_2(&v8x, &v11x);
-	resultx = IfSubtypeCallAxisEvent_4A190(&v8x, 10, 32);
+	resultx = IfSubtypeCallCreatingManaSphere_4A190(&v8x, 10, 32);
 	if (resultx)
 	{
 		resultx->yaw_0x1C_28 = v5;
@@ -5542,7 +5547,7 @@ void sub_48880(uint16_t posX2, uint16_t posY2, uint16_t posX, uint16_t posY, uin
 	v12x.y = posY << 8;
 	v4 = Maths::sub_581E0_maybe_tan2(&v9x, &v12x);
 	v5 = Maths::sub_58490_radix_3d_2(&v9x, &v12x);
-	resultx = IfSubtypeCallAxisEvent_4A190(&v9x, 10, 51);
+	resultx = IfSubtypeCallCreatingManaSphere_4A190(&v9x, 10, 51);
 	//v7x = resultx;
 	if (resultx)
 	{

@@ -76,6 +76,7 @@ target_sources(${LIBNAME}
     src/remc2/engine/GameUI.cpp
     src/remc2/engine/GameUI.h
     src/remc2/engine/GameUiConstants.h
+    src/remc2/engine/global_types.h
     src/remc2/engine/Graphics.cpp
     src/remc2/engine/Graphics.h
     src/remc2/engine/LangTextIndexes.h

@@ -75,7 +75,7 @@ shader_parameter/starmap_flip_v = false
 shader_parameter/starmap_alignment = Vector3(2.68288, -0.25891, 0.40101)
 shader_parameter/star_rotation_offset = 9.38899
 shader_parameter/star_rotation = -8.370970579055125
-shader_parameter/star_tilt = -1.2915436464758039
+shader_parameter/star_tilt = -1.291543646475804
 shader_parameter/star_field_color = Color(1, 1, 1, 1)
 shader_parameter/star_field_texture = ExtResource("12_jp8wu")
 shader_parameter/star_scintillation = 0.75
@@ -133,6 +133,9 @@ ssr_enabled = true
 ssr_max_steps = 128
 ssr_fade_in = 0.113678806
 ssr_fade_out = 0.3789291
+fog_enabled = true
+fog_light_color = Color(0, 0, 0, 1)
+fog_aerial_perspective = 0.02
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_irgjg"]
 
@@ -224,9 +227,8 @@ camera_attributes = SubResource("CameraAttributesPractical_irgjg")
 script = ExtResource("14_6dc5f")
 editor_time_enabled = false
 game_time_enabled = false
-current_time = 12.869
+current_time = 5.0
 minutes_per_day = 10.0
-wind_direction = 2.35619451204804
 
 [node name="SunLight" type="DirectionalLight3D" parent="Sky3D"]
 transform = Transform3D(0, -0.9715827, -0.2367005, -0.12963897, -0.23470306, 0.96338373, -0.9915613, 0.03068561, -0.12595497, -0.2367005, 0.96338373, -0.12595497)
@@ -239,10 +241,10 @@ light_energy = 0.0
 
 [node name="SkyDome" type="Node" parent="Sky3D"]
 script = ExtResource("15_f8b3d")
-sun_azimuth = -5.2014074
-sun_altitude = -0.27144772
-moon_azimuth = -1.3047408
-moon_altitude = -0.29830208
+sun_azimuth = -1.1242076
+sun_altitude = -1.6658549
+moon_azimuth = -0.92666066
+moon_altitude = -2.1034865
 wind_direction = 2.35619451204804
 
 [node name="TimeOfDay" type="Node" parent="Sky3D"]
@@ -251,7 +253,7 @@ editor_time_enabled = false
 game_time_enabled = false
 dome_path = NodePath("../SkyDome")
 minutes_per_day = 10.0
-current_time = 12.869
+current_time = 5.0
 day = 5
 month = 7
 

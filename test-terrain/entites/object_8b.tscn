@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://tb7pe6sqjmxf"]
-
-[ext_resource type="PackedScene" uid="uid://bgkmwnjuejtpa" path="res://entites/sketchfab_scene-archer.tscn" id="1_ihq13"]
-
-[node name="Node3D" type="Node3D"]
-
-[node name="Sketchfab_Scene2" parent="." instance=ExtResource("1_ihq13")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)

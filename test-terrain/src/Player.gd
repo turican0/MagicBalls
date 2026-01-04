@@ -4,6 +4,8 @@ extends CharacterBody3D
 
 @export var ROTATION_SPEED: float = 0.0
 @export var MOVE_SPEED: float = 0.0
+@export var LIFE: float = 0.0
+@export var MANA: float = 0.0
 @export var JUMP_SPEED: float = 2.0
 
 @export var terrain: Terrain3D
