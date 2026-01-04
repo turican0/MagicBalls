@@ -21,8 +21,17 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 ---
 
 ## Next version:
--Check spell disappearance<br>
+-Create true model for building possession
+
+## Version 260104:
+### Changes:
+-Check spell disappearance-maybe-ok<br>
 -Test mouse button<br>
+-Add teplate spells fireball and possesion<br>
+-Add mana spheres for gold and white<br>
+-Test kill and possesion mana from goats<br>
+
+<img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-6.%20test.gif" width="400">
 
 ## Version 260102:
 ### Changes:
