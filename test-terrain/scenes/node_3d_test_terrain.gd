@@ -150,32 +150,24 @@ func recalculate_mesh():
 			var v3 = vertices[x+1][y+1]
 			var v4 = vertices[x][y+1]
 			var texture_index = texture_indices[x][y]
-			var reflexivity=0
-			if(texture_index==0):
-				reflexivity=1
 			if ((x+y+1)&1):
-				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3,reflexivity,reflexivity,reflexivity,reflexivity,reflexivity,reflexivity)
-				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4,reflexivity,reflexivity,reflexivity,reflexivity,reflexivity,reflexivity)
+				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3)
+				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4)
 			else:
-				add_triangle(v2, v3, v4, texture_index,texture_index,0,rPoint2,rPoint3,rPoint4,0,0,0,0,0,0)
-				add_triangle(v2, v4, v1, texture_index,texture_index,0,rPoint2,rPoint4,rPoint1,0,0,0,0,0,0)
+				add_triangle(v2, v3, v4, texture_index,texture_index,0,rPoint2,rPoint3,rPoint4)
+				add_triangle(v2, v4, v1, texture_index,texture_index,0,rPoint2,rPoint4,rPoint1)
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
 
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, idx2: int, weight: float, uv1: Vector2, uv2: Vector2, uv3: Vector2, idx1_v1:int, idx1_v2:int, idx1_v3:int, idx2_v1:int, idx2_v2:int, idx2_v3:int ):
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, idx2: int, weight: float, uv1: Vector2, uv2: Vector2, uv3: Vector2):
 	var verts = [p1, p2, p3]
 	var uvs = [uv1, uv2, uv3]
 	
-	var idxs1: Array = [idx1_v1, idx1_v2, idx1_v3]
-	var idxs2: Array = [idx2_v1, idx2_v2, idx2_v3]
-	
 	for i in range(3):
-		var final_refl = lerp(idxs1[i], idxs2[i], weight)
-		
-		surface_tool.set_color(Color(final_refl, 0, 0))
+		surface_tool.set_color(Color(weight, 0, 0))
 		surface_tool.set_uv(uvs[i])
-		surface_tool.set_uv2(Vector2(float(idx1), float(idx2)))
+		surface_tool.set_uv2(Vector2(idx1, idx2))
 		surface_tool.add_vertex(verts[i])
 
 # Funkce, která by se volala, kdykoli se změní výška:

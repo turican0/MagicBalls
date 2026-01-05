@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\MakeReflectionTexture\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C3500B15-779D-4B2A-A9D7-313455DDFC11}|MakeReflectionTexture.vcxproj|c:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\MakeReflectionTexture\\MakeReflectionTexture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C3500B15-779D-4B2A-A9D7-313455DDFC11}|MakeReflectionTexture.vcxproj|solutionrelative:MakeReflectionTexture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\MakeReflectionTexture\\stb-master\\stb_image_write.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:stb-master\\stb_image_write.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "stb_image_write.h",
+              "DocumentMoniker": "c:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\MakeReflectionTexture\\stb-master\\stb_image_write.h",
+              "RelativeDocumentMoniker": "stb-master\\stb_image_write.h",
+              "ToolTip": "c:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\MakeReflectionTexture\\stb-master\\stb_image_write.h",
+              "RelativeToolTip": "stb-master\\stb_image_write.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcDAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-05T16:04:27.942Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MakeReflectionTexture.cpp",
+              "DocumentMoniker": "c:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\MakeReflectionTexture\\MakeReflectionTexture.cpp",
+              "RelativeDocumentMoniker": "MakeReflectionTexture.cpp",
+              "ToolTip": "c:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\MakeReflectionTexture\\MakeReflectionTexture.cpp",
+              "RelativeToolTip": "MakeReflectionTexture.cpp",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAkwD4AAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-05T15:59:32.071Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
