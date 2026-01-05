@@ -17,8 +17,9 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add using mouse buttons<br>
 -Add select spells<br>
 -Add multimesh for objects(for corect visibility of objects)<br>
--Fix water reflections
--Fix water waves
+-Fix water reflections<br>
+-Fix water waves<br>
+-Copy terrain modification<br>
 
 ---
 
