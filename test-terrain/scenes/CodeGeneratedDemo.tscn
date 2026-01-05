@@ -120,6 +120,7 @@ shader_parameter/moon_matrix = Basis(-1.8626449e-09, -0.08058131, -0.996748, -0.
 
 [sub_resource type="Sky" id="Sky_l86mf"]
 sky_material = SubResource("ShaderMaterial_aiqs8")
+process_mode = 2
 
 [sub_resource type="Environment" id="Environment_qgmqs"]
 background_mode = 2
@@ -131,11 +132,10 @@ tonemap_mode = 3
 tonemap_white = 6.0
 ssr_enabled = true
 ssr_max_steps = 256
-ssr_fade_in = 0.113678806
-ssr_fade_out = 0.3789291
+ssr_fade_in = 0.19118366
+ssr_fade_out = 0.2679437
 fog_enabled = true
 fog_light_color = Color(0, 0, 0, 1)
-fog_aerial_perspective = 0.02
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_irgjg"]
 
