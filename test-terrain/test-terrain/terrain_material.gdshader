@@ -11,8 +11,8 @@ varying flat float v_texture_index1;
 varying flat float v_texture_index2;
 
 void vertex() {
-    v_texture_index1 = floor(UV2.x + 0.1);
-	v_texture_index2 = floor(UV2.y + 0.1);
+    v_texture_index1 = UV2.x;
+	v_texture_index2 = UV2.y;
 	v_weight = COLOR.r;
 }
 
@@ -30,7 +30,7 @@ void fragment() {
 	vec2 atlas_offset1 = vec2(atlas_col1, atlas_row1) * tile_uv_size;
 	vec2 min_uv1 = atlas_offset1 + border_uv ;
 	vec2 max_uv1 = atlas_offset1 + tile_uv_size - border_uv ;
-	vec2 final_uv1 = clamp(atlas_offset1 + (UV * tile_uv_size), min_uv1, max_uv1);
+	vec2 final_uv1 = mix(min_uv1, max_uv1, UV);
 	vec3 tex1 = texture(atlas_texture, final_uv1).rgb;
 	float refl1 = texture(reflect_texture, final_uv1).r;
 	
@@ -39,7 +39,7 @@ void fragment() {
 	vec2 atlas_offset2 = vec2(atlas_col2, atlas_row2) * tile_uv_size;
 	vec2 min_uv2 = atlas_offset2 + border_uv ;
 	vec2 max_uv2 = atlas_offset2 + tile_uv_size - border_uv ;
-	vec2 final_uv2 = clamp(atlas_offset2 + (UV * tile_uv_size), min_uv2, max_uv2);
+	vec2 final_uv2 = mix(min_uv2, max_uv2, UV);
 	vec3 tex2 = texture(atlas_texture, final_uv2).rgb;
 	float refl2 = texture(reflect_texture, final_uv2).r;
 	
