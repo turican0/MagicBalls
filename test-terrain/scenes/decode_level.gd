@@ -57,7 +57,7 @@ var library = {
 	Vector3i(2,75,0): "res://entites/object_75b.tscn",#tree
 	Vector3i(2,79,0): "res://entites/object_79b.tscn",#dolmen
 	Vector3i(2,87,0): "res://entites/object_75b.tscn",#tree
-	Vector3i(10,96,0): "res://components/gold_sphere.tscn",#building
+	Vector3i(10,96,0): "res://entites/object_96b.tscn",#building
 	Vector3i(0,121,0): "res://entites/object_8b.tscn",#bowman
 	Vector3i(5,152,0): "res://entites/object_152b.tscn",#goat
 	#153: "res://entites/object_152b.tscn",
