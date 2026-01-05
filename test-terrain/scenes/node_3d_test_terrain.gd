@@ -135,16 +135,9 @@ func initialize_grid_data():
 			# Nastavení náhodného indexu textury (např. 0, 1, 2)
 			texture_indices[x][y] = randi_range(0, 24)
 
-## --- FÁZE 2: Generování sítě ---
-
 func recalculate_mesh():
-	# SurfaceTool je nástroj pro snadné programové vytváření sítě
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-
-	# OPRAVA CHYBY: Používá SurfaceTool.WINDING_CLOCKWISE místo Mesh.WINDING_CLOCKWISE
-	#surface_tool.set_winding_from_front_face(SurfaceTool.WINDING_CLOCKWISE)
-
 	for x in range(GRID_SIZE):
 		for y in range(GRID_SIZE):
 			var textUV_42:int = ((get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
@@ -152,72 +145,38 @@ func recalculate_mesh():
 			var rPoint2 = Vector2(uv_table_d4350[textUV_42][2],uv_table_d4350[textUV_42][3])
 			var rPoint3 = Vector2(uv_table_d4350[textUV_42][4],uv_table_d4350[textUV_42][5])
 			var rPoint4 = Vector2(uv_table_d4350[textUV_42][6],uv_table_d4350[textUV_42][7])
-
-			# 1. Získání 4 vrcholů pro aktuální čtverec
 			var v1 = vertices[x][y]
 			var v2 = vertices[x+1][y]
 			var v3 = vertices[x+1][y+1]
 			var v4 = vertices[x][y+1]
-			
-			#var v1 = vertices[x+rPoint1.x][y+rPoint1.y]
-			#var v2 = vertices[x+rPoint2.x][y+rPoint2.y]
-			#var v3 = vertices[x+rPoint3.x][y+rPoint3.y]
-			#var v4 = vertices[x+rPoint4.x][y+rPoint4.y]
-
-			# 2. Vypočítání indexu textury pro tento čtverec
 			var texture_index = texture_indices[x][y]
-
-			# 3. Rozhodnutí o triangulaci
-			var diff_v1_v3 = abs(v1.y - v3.y)
-			var diff_v2_v4 = abs(v2.y - v4.y)
-
+			var reflexivity=0
+			if(texture_index==0):
+				reflexivity=1
 			if ((x+y+1)&1):
-				# Možnost 1: Úhlopříčka V1 -> V3
-				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3)
-				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4)
+				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3,reflexivity,reflexivity,reflexivity,reflexivity,reflexivity,reflexivity)
+				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4,reflexivity,reflexivity,reflexivity,reflexivity,reflexivity,reflexivity)
 			else:
-				## Možnost 2: Úhlopříčka V2 -> V4
-				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4)
-				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1)
-
-	# Dokončení sítě
+				add_triangle(v2, v3, v4, texture_index,texture_index,0,rPoint2,rPoint3,rPoint4,0,0,0,0,0,0)
+				add_triangle(v2, v4, v1, texture_index,texture_index,0,rPoint2,rPoint4,rPoint1,0,0,0,0,0,0)
 	surface_tool.generate_normals()
-	surface_tool.index() 
-
+	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
 
-## --- POMOCNÁ FUNKCE ---
-
-# Přidá trojúhelník do SurfaceTool s nastavením UV mapování
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, texture_index: int,uv1:Vector2,uv2:Vector2,uv3:Vector2):
-	# UV mapování je zde zjednodušeno pro každý trojúhelník na rohy (0,0), (1,0), (0,1).
-	# Ve Fragment Shaderu se toto UV použije pro mapování na oblast v Texture Atlasu.
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, idx2: int, weight: float, uv1: Vector2, uv2: Vector2, uv3: Vector2, idx1_v1:int, idx1_v2:int, idx1_v3:int, idx2_v1:int, idx2_v2:int, idx2_v3:int ):
+	var verts = [p1, p2, p3]
+	var uvs = [uv1, uv2, uv3]
 	
-	# UV mapování v rámci jednoho čtverce:
-	#var uv_p1 = Vector2(0.0, 0.0) 
-	#var uv_p2 = Vector2(1.0, 0.0)
-	#var uv_p3 = Vector2(0.0, 1.0)
-	var uv_p1 = Vector2(uv1.x, uv1.y) 
-	var uv_p2 = Vector2(uv2.x, uv2.y)
-	var uv_p3 = Vector2(uv3.x, uv3.y)
+	var idxs1: Array = [idx1_v1, idx1_v2, idx1_v3]
+	var idxs2: Array = [idx2_v1, idx2_v2, idx2_v3]
 	
-	# 1. Vrchol P1
-	# UV2.x posílá index textury do shaderu.
-	surface_tool.set_uv2(Vector2(texture_index, 0)) 
-	surface_tool.set_uv(uv_p1)
-	surface_tool.add_vertex(p1)
-	
-	# 2. Vrchol P2
-	surface_tool.set_uv2(Vector2(texture_index, 0))
-	surface_tool.set_uv(uv_p2)
-	surface_tool.add_vertex(p2)
-	
-	# 3. Vrchol P3
-	surface_tool.set_uv2(Vector2(texture_index, 0))
-	surface_tool.set_uv(uv_p3)
-	surface_tool.add_vertex(p3)
-
-## --- PŘÍKLAD MODIFIKACE (volitelné) ---
+	for i in range(3):
+		var final_refl = lerp(idxs1[i], idxs2[i], weight)
+		
+		surface_tool.set_color(Color(final_refl, 0, 0))
+		surface_tool.set_uv(uvs[i])
+		surface_tool.set_uv2(Vector2(float(idx1), float(idx2)))
+		surface_tool.add_vertex(verts[i])
 
 # Funkce, která by se volala, kdykoli se změní výška:
 func modify_vertex_height(x: int, y: int, new_height: float):
