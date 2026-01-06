@@ -323,6 +323,8 @@ func runGameStep0():
 
 func runGameStep(inputs:Dictionary):
 	MBEX.RunGameStep(input_state)
+	MBEX.initialize_grid_data()
+	MBEX.recalculate_mesh()
 
 var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
 var mapHeightmap_11B4E0: PackedByteArray = PackedByteArray()
