@@ -135,9 +135,22 @@ func initialize_grid_data():
 			# Nastavení náhodného indexu textury (např. 0, 1, 2)
 			texture_indices[x][y] = randi_range(0, 24)
 
+var wave_scale: Array = []
+
 func recalculate_mesh():
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	
+	wave_scale.resize(GRID_SIZE)
+	for x in range(GRID_SIZE):
+		wave_scale[x] = []
+		wave_scale[x].resize(GRID_SIZE)
+		for y in range(GRID_SIZE):
+			wave_scale[x][y] = 0
+			if(texture_indices[x][y]==0)&&(texture_indices[(x+(GRID_SIZE-1))%GRID_SIZE][y]==0)&&(texture_indices[x][(y+(GRID_SIZE-1))%GRID_SIZE]==0)&&(texture_indices[(x+(GRID_SIZE-1))%GRID_SIZE][(y+(GRID_SIZE-1))%GRID_SIZE]==0):
+				wave_scale[x][y] = 1
+				
+	
 	for x in range(GRID_SIZE):
 		for y in range(GRID_SIZE):
 			var textUV_42:int = ((get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
@@ -149,16 +162,22 @@ func recalculate_mesh():
 			var v2 = vertices[x+1][y]
 			var v3 = vertices[x+1][y+1]
 			var v4 = vertices[x][y+1]
+			
+			var waves1 = wave_scale[x][y]
+			var waves2 = wave_scale[(x+1)%GRID_SIZE][y]
+			var waves3 = wave_scale[(x+1)%GRID_SIZE][(y+1)%GRID_SIZE]
+			var waves4 = wave_scale[x][(y+1)%GRID_SIZE]
+			
 			var texture_index = texture_indices[x][y]
 			var v_scale=0
 			if(texture_index==0):
 				v_scale=1
 			if ((x+y+1)&1):
-				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3,v_scale,v_scale,v_scale,v_scale,v_scale,v_scale)
-				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4,v_scale,v_scale,v_scale,v_scale,v_scale,v_scale)
+				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3,waves1,waves2,waves3)
+				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4,waves1,waves3,waves4)
 			else:
-				add_triangle(v2, v3, v4, texture_index,texture_index,0,rPoint2,rPoint3,rPoint4,v_scale,v_scale,v_scale,v_scale,v_scale,v_scale)
-				add_triangle(v2, v4, v1, texture_index,texture_index,0,rPoint2,rPoint4,rPoint1,v_scale,v_scale,v_scale,v_scale,v_scale,v_scale)
+				add_triangle(v2, v3, v4, texture_index,texture_index,0,rPoint2,rPoint3,rPoint4,waves2,waves3,waves4,waves2,waves3,waves4)
+				add_triangle(v2, v4, v1, texture_index,texture_index,0,rPoint2,rPoint4,rPoint1,waves2,waves4,waves1,waves2,waves4,waves1)
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
