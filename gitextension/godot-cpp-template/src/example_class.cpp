@@ -22,7 +22,6 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &ExampleClass::TerrainGetAngle);
 	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &ExampleClass::RunGameStep);
 	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &ExampleClass::GetEntites);
-	godot::ClassDB::bind_method(D_METHOD("GetTerrainChanges"), &ExampleClass::GetTerrainChanges);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &ExampleClass::GetPlayerPositionRotation);
 	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D"), &ExampleClass::set_mesh_instance);
 	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &ExampleClass::initialize_grid_data);
@@ -48,7 +47,7 @@ void ExampleClass::initialize_grid_data() {
 	for (int x = 0; x < VERTEX_COUNT; x++) {
 		for (int y = 0; y < VERTEX_COUNT; y++) {
 			float height = (UtilityFunctions::randf() * 2.0f - 1.0f) * 0.5f;
-			vertices[x * VERTEX_COUNT + y] = Vector3(x * CELL_SCALE, height, y * CELL_SCALE);
+			vertices[y * VERTEX_COUNT + x] = Vector3(x * CELL_SCALE, height, y * CELL_SCALE);
 		}
 	}
 
@@ -56,9 +55,25 @@ void ExampleClass::initialize_grid_data() {
 	for (int i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
 		texture_indices[i] = UtilityFunctions::randi() % 25;
 	}
+
+	for (int y = 0; y < GRID_SIZE; y++) {
+		for (int x = 0; x < GRID_SIZE; x++) {
+			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
+			texture_indices[y * GRID_SIZE + x] = mapTerrainType_10B4E0[idx];
+		}
+	}
+
+	for (int y = 0; y < VERTEX_COUNT; y++) {
+		for (int x = 0; x < VERTEX_COUNT; x++) {
+			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
+			float h = mapHeightmap_11B4E0[idx] * 0.125f;
+			vertices[y * VERTEX_COUNT + x] = Vector3(x * CELL_SCALE, h, y * CELL_SCALE);
+		}
+	}
 }
 
 void ExampleClass::recalculate_mesh() {
+	surface_tool.instantiate();
 	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
 
 	std::vector<float> wave_scale(GRID_SIZE * GRID_SIZE, 0.0f);
@@ -69,11 +84,11 @@ void ExampleClass::recalculate_mesh() {
 			int prev_x = (x + GRID_SIZE - 1) % GRID_SIZE;
 			int prev_y = (y + GRID_SIZE - 1) % GRID_SIZE;
 
-			if (texture_indices[x * GRID_SIZE + y] == 0 &&
-					texture_indices[prev_x * GRID_SIZE + y] == 0 &&
-					texture_indices[x * GRID_SIZE + prev_y] == 0 &&
-					texture_indices[prev_x * GRID_SIZE + prev_y] == 0) {
-				wave_scale[x * GRID_SIZE + y] = 1.0f;
+			if (texture_indices[y * GRID_SIZE + x] == 0 &&
+					texture_indices[y * GRID_SIZE + prev_x] == 0 &&
+					texture_indices[prev_y * GRID_SIZE + x] == 0 &&
+					texture_indices[prev_y * GRID_SIZE + prev_x] == 0) {
+				wave_scale[y * GRID_SIZE + x] = 1.0f;
 			}
 		}
 	}
@@ -83,20 +98,25 @@ void ExampleClass::recalculate_mesh() {
 
 	for (int x = 0; x < GRID_SIZE; x++) {
 		for (int y = 0; y < GRID_SIZE; y++) {
-			// Zde by přišlo načtení UV z vaší tabulky (zjednodušeno pro příklad)
-			Vector2 rP1, rP2, rP3, rP4;
+			int angle_idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
+			int textUV_42 = (mapAngle_13B4E0[angle_idx] >> 2) & 0x1C;
 
-			Vector3 v1 = vertices[x * VERTEX_COUNT + y];
-			Vector3 v2 = vertices[(x + 1) * VERTEX_COUNT + y];
-			Vector3 v3 = vertices[(x + 1) * VERTEX_COUNT + (y + 1)];
-			Vector3 v4 = vertices[x * VERTEX_COUNT + (y + 1)];
+			Vector2 rP1 = Vector2(UVTable_D4350[textUV_42][0] > 0 ? 1.0f : 0.0f, UVTable_D4350[textUV_42][1] > 0 ? 1.0f : 0.0f);
+			Vector2 rP2 = Vector2(UVTable_D4350[textUV_42][2] > 0 ? 1.0f : 0.0f, UVTable_D4350[textUV_42][3] > 0 ? 1.0f : 0.0f);
+			Vector2 rP3 = Vector2(UVTable_D4350[textUV_42][4] > 0 ? 1.0f : 0.0f, UVTable_D4350[textUV_42][5] > 0 ? 1.0f : 0.0f);
+			Vector2 rP4 = Vector2(UVTable_D4350[textUV_42][6] > 0 ? 1.0f : 0.0f, UVTable_D4350[textUV_42][7] > 0 ? 1.0f : 0.0f);
 
-			float waves1 = wave_scale[x * GRID_SIZE + y];
-			float waves2 = wave_scale[((x + 1) % GRID_SIZE) * GRID_SIZE + y];
-			float waves3 = wave_scale[((x + 1) % GRID_SIZE) * GRID_SIZE + ((y + 1) % GRID_SIZE)];
-			float waves4 = wave_scale[x * GRID_SIZE + ((y + 1) % GRID_SIZE)];
+			Vector3 v1 = vertices[y * VERTEX_COUNT + x];
+			Vector3 v2 = vertices[y * VERTEX_COUNT + (x + 1)];
+			Vector3 v3 = vertices[(y + 1) * VERTEX_COUNT + (x + 1)];
+			Vector3 v4 = vertices[(y + 1) * VERTEX_COUNT + x];
 
-			int texture_index = texture_indices[x * GRID_SIZE + y];
+			float waves1 = wave_scale[y * GRID_SIZE + x];
+			float waves2 = wave_scale[y * GRID_SIZE + ((x + 1) % GRID_SIZE)];
+			float waves3 = wave_scale[((y + 1) % GRID_SIZE) * GRID_SIZE + ((x + 1) % GRID_SIZE)];
+			float waves4 = wave_scale[((y + 1) % GRID_SIZE) * GRID_SIZE + x];
+
+			int texture_index = texture_indices[y * GRID_SIZE + x];
 
 			if ((x + y + 1) & 1) {
 				add_triangle(v1, v2, v3, texture_index, texture_index, 0.0f, rP1, rP2, rP3, waves1, waves2, waves3, waves1, waves2, waves3);
@@ -268,11 +288,6 @@ PackedFloat32Array ExampleClass::GetEntites() {
 		str_TMAPS00TAB_BEGIN_BUFFER[v26 + v9x->word_0] v26 0..7
 		*/
 	}
-	return result;
-}
-
-Dictionary ExampleClass::GetTerrainChanges() {
-	Dictionary result;
 	return result;
 }
 

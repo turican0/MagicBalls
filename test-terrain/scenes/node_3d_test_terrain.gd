@@ -58,18 +58,18 @@ func _ready():
 	initialize_nodes()
 	
 	# 2. Inicializace dat sítě (vrcholy a textury)
-	initialize_grid_data()
+	#initialize_grid_data()
 	
 	# 3. Generování a vykreslení sítě
 	get_parent().get_node("DecodeLevel").init()
 	#recalculate_mesh()	
-	for y in range(GRID_SIZE):
-		for x in range(GRID_SIZE):
-			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-	for y in range(VERTEX_COUNT):
-		for x in range(VERTEX_COUNT):
-			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.125
-	recalculate_mesh()
+	#for y in range(GRID_SIZE):
+		#for x in range(GRID_SIZE):
+			#texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+	#for y in range(VERTEX_COUNT):
+		#for x in range(VERTEX_COUNT):
+			#vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.125
+	#recalculate_mesh()
 	
 	#begin of Multimesh
 	var mmi:MultiMeshInstance3D = get_parent().get_node("MultiMeshInstance3D")
