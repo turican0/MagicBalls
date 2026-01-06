@@ -150,22 +150,28 @@ func recalculate_mesh():
 			var v3 = vertices[x+1][y+1]
 			var v4 = vertices[x][y+1]
 			var texture_index = texture_indices[x][y]
+			var v_scale=0
+			if(texture_index==0):
+				v_scale=1
 			if ((x+y+1)&1):
-				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3)
-				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4)
+				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3,v_scale,v_scale,v_scale,v_scale,v_scale,v_scale)
+				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4,v_scale,v_scale,v_scale,v_scale,v_scale,v_scale)
 			else:
-				add_triangle(v2, v3, v4, texture_index,texture_index,0,rPoint2,rPoint3,rPoint4)
-				add_triangle(v2, v4, v1, texture_index,texture_index,0,rPoint2,rPoint4,rPoint1)
+				add_triangle(v2, v3, v4, texture_index,texture_index,0,rPoint2,rPoint3,rPoint4,v_scale,v_scale,v_scale,v_scale,v_scale,v_scale)
+				add_triangle(v2, v4, v1, texture_index,texture_index,0,rPoint2,rPoint4,rPoint1,v_scale,v_scale,v_scale,v_scale,v_scale,v_scale)
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
 
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, idx2: int, weight: float, uv1: Vector2, uv2: Vector2, uv3: Vector2):
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, idx2: int, weight: float, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float, w2_1:float, w2_2:float, w2_3:float):
 	var verts = [p1, p2, p3]
 	var uvs = [uv1, uv2, uv3]
 	
+	var wave_sizes1 = [w1_1, w1_2, w1_3]
+	var wave_sizes2 = [w2_1, w2_2, w2_3]
+	
 	for i in range(3):
-		surface_tool.set_color(Color(weight, 0, 0))
+		surface_tool.set_color(Color(weight, wave_sizes1[i], wave_sizes2[i]))
 		surface_tool.set_uv(uvs[i])
 		surface_tool.set_uv2(Vector2(idx1, idx2))
 		surface_tool.add_vertex(verts[i])

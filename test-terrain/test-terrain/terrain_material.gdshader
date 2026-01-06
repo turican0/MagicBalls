@@ -8,10 +8,9 @@ uniform vec2 atlas_border_px;
 
 uniform float wave_height : hint_range(0.0, 1.0) = 0.5;
 uniform float wave_speed : hint_range(0.1, 5.0) = 1.0;
-uniform float wave_freq : hint_range(0.1, 10.0) = 2.0;
+uniform float wave_scale : hint_range(0.1, 10.0) = 4.0;
 
 varying float v_weight;
-
 varying flat float v_texture_index1;
 varying flat float v_texture_index2;
 
@@ -20,11 +19,13 @@ void vertex() {
 	v_texture_index2 = UV2.y;
 	v_weight = COLOR.r;
 	
+	float v_final = mix(COLOR.g, COLOR.b, v_weight);
+	
 	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 
-    float wave = sin(world_pos.x * wave_freq + TIME * wave_speed) 
-               * cos(world_pos.z * wave_freq + TIME * wave_speed);
-    VERTEX.y += wave * wave_height;
+    float wave = sin(world_pos.x / wave_scale + TIME * wave_speed) 
+               * cos(world_pos.z / wave_scale + TIME * wave_speed);
+    VERTEX.y += v_final * wave * wave_height;
 }
 
 void fragment() {
