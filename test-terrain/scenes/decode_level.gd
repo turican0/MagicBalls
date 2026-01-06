@@ -92,7 +92,8 @@ func _physics_process(p_delta) -> void:
 	var roll = PI*playerPosRot.rotation.roll/(256*4)  # Rotace kolem osy Z
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
 	renderEntites(newEntites)
-	var terrainChanges=getTerrainChanges()
+	#get_parent().get_node("Node3D-testTerrain").renew_terrain()
+	#var terrainChanges=getTerrainChanges()
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var stride = 29
@@ -298,6 +299,10 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()
 	mapAngle_13B4E0 = MBEX.TerrainGetAngle()
+	
+	MBEX.set_mesh_instance(get_parent().get_node("Node3D-testTerrain").mesh_instance)
+	MBEX.recalculate_mesh()
+	
 	return true
 	
 func getPlayerPosRot() -> Dictionary:

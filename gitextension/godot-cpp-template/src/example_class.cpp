@@ -11,6 +11,9 @@
 #include "remc2/engine/MenusAndIntros.h"
 #include "remc2/engine/Basic.h"
 
+#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/node3d.hpp>
+
 void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &ExampleClass::deRNC);
 	godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray"), &ExampleClass::TerrainMake);
@@ -21,6 +24,110 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &ExampleClass::GetEntites);
 	godot::ClassDB::bind_method(D_METHOD("GetTerrainChanges"), &ExampleClass::GetTerrainChanges);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &ExampleClass::GetPlayerPositionRotation);
+	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D"), &ExampleClass::set_mesh_instance);
+	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &ExampleClass::initialize_grid_data);
+	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh"), &ExampleClass::recalculate_mesh);
+}
+
+void ExampleClass::set_mesh_instance(Node *p_node) {
+	if (!p_node) {
+		mesh_instance = nullptr;
+		return;
+	}
+
+	// Bezpečné přetypování (ekvivalent "as MeshInstance3D" v GDScriptu)
+	mesh_instance = Object::cast_to<MeshInstance3D>(p_node);
+
+	if (!mesh_instance) {
+		UtilityFunctions::printerr("Chyba: Předaný uzel není typu MeshInstance3D!");
+	}
+}
+
+void ExampleClass::initialize_grid_data() {
+	vertices.resize(VERTEX_COUNT * VERTEX_COUNT);
+	for (int x = 0; x < VERTEX_COUNT; x++) {
+		for (int y = 0; y < VERTEX_COUNT; y++) {
+			float height = (UtilityFunctions::randf() * 2.0f - 1.0f) * 0.5f;
+			vertices[x * VERTEX_COUNT + y] = Vector3(x * CELL_SCALE, height, y * CELL_SCALE);
+		}
+	}
+
+	texture_indices.resize(GRID_SIZE * GRID_SIZE);
+	for (int i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+		texture_indices[i] = UtilityFunctions::randi() % 25;
+	}
+}
+
+void ExampleClass::recalculate_mesh() {
+	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
+
+	std::vector<float> wave_scale(GRID_SIZE * GRID_SIZE, 0.0f);
+
+	// Výpočet wave_scale
+	for (int x = 0; x < GRID_SIZE; x++) {
+		for (int y = 0; y < GRID_SIZE; y++) {
+			int prev_x = (x + GRID_SIZE - 1) % GRID_SIZE;
+			int prev_y = (y + GRID_SIZE - 1) % GRID_SIZE;
+
+			if (texture_indices[x * GRID_SIZE + y] == 0 &&
+					texture_indices[prev_x * GRID_SIZE + y] == 0 &&
+					texture_indices[x * GRID_SIZE + prev_y] == 0 &&
+					texture_indices[prev_x * GRID_SIZE + prev_y] == 0) {
+				wave_scale[x * GRID_SIZE + y] = 1.0f;
+			}
+		}
+	}
+
+	// Poznámka: Zde předpokládám existenci uv_table_d4350 a mapAngle_13B4E0 ve vašem C++ kódu
+	// nebo přístup přes get_parent(). Nahraďte logikou dle vašeho projektu.
+
+	for (int x = 0; x < GRID_SIZE; x++) {
+		for (int y = 0; y < GRID_SIZE; y++) {
+			// Zde by přišlo načtení UV z vaší tabulky (zjednodušeno pro příklad)
+			Vector2 rP1, rP2, rP3, rP4;
+
+			Vector3 v1 = vertices[x * VERTEX_COUNT + y];
+			Vector3 v2 = vertices[(x + 1) * VERTEX_COUNT + y];
+			Vector3 v3 = vertices[(x + 1) * VERTEX_COUNT + (y + 1)];
+			Vector3 v4 = vertices[x * VERTEX_COUNT + (y + 1)];
+
+			float waves1 = wave_scale[x * GRID_SIZE + y];
+			float waves2 = wave_scale[((x + 1) % GRID_SIZE) * GRID_SIZE + y];
+			float waves3 = wave_scale[((x + 1) % GRID_SIZE) * GRID_SIZE + ((y + 1) % GRID_SIZE)];
+			float waves4 = wave_scale[x * GRID_SIZE + ((y + 1) % GRID_SIZE)];
+
+			int texture_index = texture_indices[x * GRID_SIZE + y];
+
+			if ((x + y + 1) & 1) {
+				add_triangle(v1, v2, v3, texture_index, texture_index, 0.0f, rP1, rP2, rP3, waves1, waves2, waves3, waves1, waves2, waves3);
+				add_triangle(v1, v3, v4, texture_index, texture_index, 0.0f, rP1, rP3, rP4, waves1, waves3, waves4, waves1, waves3, waves4);
+			} else {
+				add_triangle(v2, v3, v4, texture_index, texture_index, 0.0f, rP2, rP3, rP4, waves2, waves3, waves4, waves2, waves3, waves4);
+				add_triangle(v2, v4, v1, texture_index, texture_index, 0.0f, rP2, rP4, rP1, waves2, waves4, waves1, waves2, waves4, waves1);
+			}
+		}
+	}
+
+	surface_tool->generate_normals();
+	surface_tool->index();
+	mesh_instance->set_mesh(surface_tool->commit());
+}
+
+void ExampleClass::add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, int idx1, int idx2, float weight,
+		Vector2 uv1, Vector2 uv2, Vector2 uv3,
+		float w1_1, float w1_2, float w1_3,
+		float w2_1, float w2_2, float w2_3) {
+	Vector3 verts[] = { p1, p2, p3 };
+	Vector2 uvs[] = { uv1, uv2, uv3 };
+	float ws1[] = { w1_1, w1_2, w1_3 };
+	float ws2[] = { w2_1, w2_2, w2_3 };
+
+	for (int i = 0; i < 3; i++) {
+		surface_tool->set_color(Color(weight, ws1[i], ws2[i]));
+		surface_tool->set_uv(uvs[i]);
+		surface_tool->set_uv2(Vector2(idx1, idx2));
+		surface_tool->add_vertex(verts[i]);
+	}
 }
 
 PackedByteArray ExampleClass::deRNC(PackedByteArray bytearray) {

@@ -7,7 +7,7 @@ uniform vec2 atlas_grid_size;
 uniform vec2 atlas_border_px;
 
 uniform float wave_height : hint_range(0.0, 1.0) = 0.5;
-uniform float wave_speed : hint_range(0.1, 5.0) = 1.0;
+uniform float wave_speed : hint_range(0.1, 5.0) = 2.0;
 uniform float wave_scale : hint_range(0.1, 10.0) = 4.0;
 
 varying float v_weight;

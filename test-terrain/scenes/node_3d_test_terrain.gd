@@ -62,7 +62,7 @@ func _ready():
 	
 	# 3. Generování a vykreslení sítě
 	get_parent().get_node("DecodeLevel").init()
-	recalculate_mesh()	
+	#recalculate_mesh()	
 	for y in range(GRID_SIZE):
 		for x in range(GRID_SIZE):
 			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
@@ -169,9 +169,6 @@ func recalculate_mesh():
 			var waves4 = wave_scale[x][(y+1)%GRID_SIZE]
 			
 			var texture_index = texture_indices[x][y]
-			var v_scale=0
-			if(texture_index==0):
-				v_scale=1
 			if ((x+y+1)&1):
 				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3,waves1,waves2,waves3)
 				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4,waves1,waves3,waves4)
@@ -204,3 +201,12 @@ func modify_vertex_height(x: int, y: int, new_height: float):
 		# Po změně vždy přepočítat celou síť (nebo jen dotčené čtverce)
 		# Pro zjednodušení voláme recalculate_mesh() celou:
 		recalculate_mesh()
+
+func renew_terrain():
+	for y in range(GRID_SIZE):
+		for x in range(GRID_SIZE):
+			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+	for y in range(VERTEX_COUNT):
+		for x in range(VERTEX_COUNT):
+			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.125
+	recalculate_mesh()
