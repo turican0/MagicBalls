@@ -270,7 +270,7 @@ func renew_terrain():
 			control_data[(y * GRID_SIZE + x)*4 + 1] = textUV_42
 			control_data[(y * GRID_SIZE + x)*4 + 2] = 0
 			control_data[(y * GRID_SIZE + x)*4 + 3] = 0
-			if!(textUV_42>32):
+			if(textUV_42>32):
 				textUV_42=+0
 	for y in range(VERTEX_COUNT):
 		for x in range(VERTEX_COUNT):

@@ -14,8 +14,11 @@ uniform float wave_speed : hint_range(0.1, 5.0) = 2.0;
 uniform float wave_scale : hint_range(0.1, 10.0) = 4.0;
 
 varying flat float v_texture_index1;
+varying flat int row_index;
 
-varying vec2 v_rotated_uv;
+//varying vec2 v_rotated_uv;
+
+//varying vec2 v_global_uv;
 
 void vertex() {
     //v_texture_index1 = UV2.x;
@@ -33,51 +36,28 @@ void vertex() {
 	
 	float t0 = textureLod(control_map, target_offset + global_uv, 0.0).r;
     float t1 = textureLod(control_map, target_offset + global_uv + vec2(-texel.x, 0.0), 0.0).r;
-    float t2 = textureLod(control_map, target_offset + global_uv + vec2(0.0, -texel.y), 0.0).r;
-    float t3 = textureLod(control_map, target_offset + global_uv + vec2(-texel.x, -texel.y), 0.0).r;
+    float t2 = textureLod(control_map, target_offset + global_uv + vec2(texel.x, 0.0), 0.0).r;
+    float t3 = textureLod(control_map, target_offset + global_uv + vec2(0.0, texel.y), 0.0).r;
+	float t4 = textureLod(control_map, target_offset + global_uv + vec2(0.0, -texel.y), 0.0).r;
 	v_texture_index1 = t0 * 255.0;
-
-	//if (is_flipped) {
-		//v_texture_index1=0.0;
-	//}
-	//v_texture_index1=0.0;
     float mask = 0.0;
-    if (t0 < 0.001 && t1 < 0.001 && t2 < 0.001 && t3 < 0.001) {
+    if (t0 < 0.001 && t1 < 0.001 && t2 < 0.001 && t3 < 0.001 && t4 < 0.001) {
         mask = 1.0;
     }
     float v_final = mask;
 	
-	float row_index = textureLod(control_map, target_offset + global_uv, 0.0).g;
-	int row_index2 = int(floor(row_index * 255.0 + 0.5));
-	//row_index2=3;
-	if(row_index2 == 0 || row_index2 == 14 || row_index2 == 21 || row_index2 == 27) {
-	    v_rotated_uv = vec2(UV.x, UV.y); // Bez rotace
-	}
-	else if(row_index2 == 1 || row_index2 == 15 || row_index2 == 22 || row_index2 == 24) {
-	    v_rotated_uv = vec2(1.0 - UV.y, UV.x); // PŮVODNĚ 90° (nyní obráceno)
-	}
-	else if(row_index2 == 2 || row_index2 == 12 || row_index2 == 23 || row_index2 == 25) {
-	    v_rotated_uv = vec2(1.0 - UV.x, 1.0 - UV.y); // 180°
-	}
-	else if(row_index2 == 3 || row_index2 == 13 || row_index2 == 20 || row_index2 == 26) {
-	    v_rotated_uv = vec2(UV.y, 1.0 - UV.x); // PŮVODNĚ 270° (nyní obráceno)
-	}
-	else if(row_index2 == 4 || row_index2 == 10 || row_index2 == 19 || row_index2 == 29) {
-	    v_rotated_uv = vec2(UV.x, 1.0 - UV.y); // Flip X
-	}
-	else if(row_index2 == 5 || row_index2 == 11 || row_index2 == 16 || row_index2 == 30) {
-	    v_rotated_uv = vec2(UV.y, UV.x); // Flip / Transpose
-	}
-	else if(row_index2 == 6 || row_index2 == 8 || row_index2 == 17 || row_index2 == 31) {
-	    v_rotated_uv = vec2(1.0 - UV.x, UV.y); // Flip Y
-	}
-	else if(row_index2 == 7 || row_index2 == 9 || row_index2 == 18 || row_index2 == 28) {
-	    v_rotated_uv = vec2(1.0 - UV.y, 1.0 - UV.x); // Flip / Anti-transpose
-	}
-	else {
-	    v_rotated_uv = UV; // Default
-	}
-
+		// PŘESUNUTÁ LOGIKA Z VERTEXU
+	//vec2 texel = 1.0 / vec2(textureSize(control_map, 0));
+	//bool is_flipped = UV.x < 0.5;
+	//vec2 target_offset = vec2(0,0);
+	//if (!is_flipped) target_offset = vec2(-texel.x, 0.0);
+	
+	//vec2 sample_uv = v_global_uv + target_offset;
+	//vec4 control_sample = textureLod(control_map, sample_uv, 0.0);
+	float row_float = textureLod(control_map, target_offset + global_uv, 0.0).g;
+	row_index = int(round(row_float * 255.0));
+	if(row_index>=32)
+		v_texture_index1=0.0;
 	//v_rotated_uv = vec2(uv_table[base_idx]*0.5, uv_table[base_idx + 1]*0.5);
 	//v_rotated_uv = vec2(1.0-UV.x, 1.0-UV.y);
 	
@@ -91,6 +71,37 @@ void vertex() {
 }
 
 void fragment() {
+	
+	// Výpočet rotace UV přímo ve fragmentu (používáme nativní UV)
+	vec2 rotated_uv;
+	if(row_index == 0 || row_index == 14 || row_index == 21 || row_index == 27) {
+		rotated_uv = UV;
+	}
+	else if(row_index == 1 || row_index == 15 || row_index == 22 || row_index == 24) {
+		rotated_uv = vec2(1.0 - UV.y, UV.x);
+	}
+	else if(row_index == 2 || row_index == 12 || row_index == 23 || row_index == 25) {
+		rotated_uv = vec2(1.0 - UV.x, 1.0 - UV.y);
+	}
+	else if(row_index == 3 || row_index == 13 || row_index == 20 || row_index == 26) {
+		rotated_uv = vec2(UV.y, 1.0 - UV.x);
+	}
+	else if(row_index == 4 || row_index == 10 || row_index == 19 || row_index == 29) {
+		rotated_uv = vec2(UV.x, 1.0 - UV.y);
+	}
+	else if(row_index == 5 || row_index == 11 || row_index == 16 || row_index == 30) {
+		rotated_uv = vec2(UV.y, UV.x);
+	}
+	else if(row_index == 6 || row_index == 8 || row_index == 17 || row_index == 31) {
+		rotated_uv = vec2(1.0 - UV.x, UV.y);
+	}
+	else if(row_index == 7 || row_index == 9 || row_index == 18 || row_index == 28) {
+		rotated_uv = vec2(1.0 - UV.y, 1.0 - UV.x);
+	}
+	else {
+		rotated_uv = UV;
+	}
+	//rotated_uv = UV;
 	//vec2 atlas_res = vec2(textureSize(atlas_texture, 0));
 	//vec2 tile_uv_size = 1.0 / atlas_grid_size;
 	//vec2 half_pixel = vec2(0.5) / atlas_res;
@@ -98,14 +109,19 @@ void fragment() {
 	vec2 atlas_res = vec2(textureSize(atlas_texture, 0));
     vec2 tile_uv_size = 1.0 / atlas_grid_size;
     vec2 border_uv = atlas_border_px / atlas_res;
-
+	
 	float atlas_col1 = mod(v_texture_index1, atlas_grid_size.x);
 	float atlas_row1 = floor(v_texture_index1 / atlas_grid_size.x);
+	//if(row_index<1)
+	//{
+		//atlas_col1 = mod(0.0, atlas_grid_size.x);
+		//atlas_row1 = floor(0.0 / atlas_grid_size.x);
+	//}
 	vec2 atlas_offset1 = vec2(atlas_col1, atlas_row1) * tile_uv_size;
 	vec2 min_uv1 = atlas_offset1 + border_uv ;
 	vec2 max_uv1 = atlas_offset1 + tile_uv_size - border_uv ;
 	//vec2 final_uv1 = mix(min_uv1, max_uv1, UV);
-	vec2 final_uv1 = mix(min_uv1, max_uv1, v_rotated_uv);
+	vec2 final_uv1 = mix(min_uv1, max_uv1, rotated_uv);
 	vec3 tex1 = texture(atlas_texture, final_uv1).rgb;
 	float refl1 = texture(reflect_texture, final_uv1).r;
 	
