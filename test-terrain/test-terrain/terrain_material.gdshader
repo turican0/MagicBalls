@@ -13,53 +13,43 @@ uniform float wave_height : hint_range(0.0, 1.0) = 0.5;
 uniform float wave_speed : hint_range(0.1, 5.0) = 2.0;
 uniform float wave_scale : hint_range(0.1, 10.0) = 4.0;
 
-varying flat int v_texture_index1;
+varying flat float v_texture_index1;
 
 varying vec2 v_rotated_uv;
-
-varying vec2 v_test_uv;
 
 void vertex() {
     //v_texture_index1 = UV2.x;
 	
 	vec2 global_uv = CUSTOM0.rg;
-	v_test_uv = global_uv;
 	
 	float h = textureLod(height_map, global_uv, 0.0).r;
-	VERTEX.y = h * height_scale;	
-	
-	vec2 map_size = vec2(textureSize(control_map, 0));
-	vec2 half_texel = 0.5 / map_size;
-    vec2 shifted_uv = global_uv - half_texel; 
-    ivec2 coords = ivec2(floor(shifted_uv * map_size + 0.5));
-    coords = clamp(coords, ivec2(0), ivec2(map_size) - 1);    
-    float t0 = texelFetch(control_map, coords, 0).r;
-	float t1 = texelFetch(control_map, coords + ivec2(-1, 0), 0).r;
-	float t2 = texelFetch(control_map, coords + ivec2(0, -1), 0).r;
-	float t3 = texelFetch(control_map, coords + ivec2(-1, -1), 0).r;
-	/*
-	vec2 map_res = vec2(textureSize(control_map, 0));
-    vec2 snapped_uv = (floor(global_uv * map_res) + 0.5) / map_res;
+	VERTEX.y = h * height_scale;
 	
 	vec2 texel = 1.0 / vec2(textureSize(control_map, 0));
-    float t0 = textureLod(control_map, snapped_uv, 0.0).r;
-    float t1 = textureLod(control_map, snapped_uv + vec2(-texel.x, 0.0), 0.0).r;
-    float t2 = textureLod(control_map, snapped_uv + vec2(0.0, -texel.y), 0.0).r;
-    float t3 = textureLod(control_map, snapped_uv + vec2(-texel.x, -texel.y), 0.0).r;
-	*/
-	v_texture_index1 = int(round(t0 * 255.0));
+	bool is_flipped = UV.x < 0.5;
+	vec2 target_offset = vec2(0,0);
+	if (!is_flipped)
+		target_offset = vec2(-texel.x, 0.0);
+	
+	float t0 = textureLod(control_map, target_offset + global_uv, 0.0).r;
+    float t1 = textureLod(control_map, target_offset + global_uv + vec2(-texel.x, 0.0), 0.0).r;
+    float t2 = textureLod(control_map, target_offset + global_uv + vec2(0.0, -texel.y), 0.0).r;
+    float t3 = textureLod(control_map, target_offset + global_uv + vec2(-texel.x, -texel.y), 0.0).r;
+	v_texture_index1 = t0 * 255.0;
+
+	//if (is_flipped) {
+		//v_texture_index1=0.0;
+	//}
+	//v_texture_index1=0.0;
     float mask = 0.0;
     if (t0 < 0.001 && t1 < 0.001 && t2 < 0.001 && t3 < 0.001) {
         mask = 1.0;
     }
     float v_final = mask;
 	
-	//vec2 map_size = vec2(textureSize(control_map, 0));
-	vec2 centered_global_uv = (floor(global_uv * map_size) + 0.5) / map_size;
-	//float row_index = textureLod(control_map, centered_global_uv, 0.0).g;
-	float row_index = texelFetch(control_map, coords, 0).g;
-	int row_index2 = int(round(row_index * 255.0));
-		//row_index2=3;
+	float row_index = textureLod(control_map, target_offset + global_uv, 0.0).g;
+	int row_index2 = int(floor(row_index * 255.0 + 0.5));
+	//row_index2=3;
 	if(row_index2 == 0 || row_index2 == 14 || row_index2 == 21 || row_index2 == 27) {
 	    v_rotated_uv = vec2(UV.x, UV.y); // Bez rotace
 	}
@@ -73,13 +63,13 @@ void vertex() {
 	    v_rotated_uv = vec2(UV.y, 1.0 - UV.x); // PŮVODNĚ 270° (nyní obráceno)
 	}
 	else if(row_index2 == 4 || row_index2 == 10 || row_index2 == 19 || row_index2 == 29) {
-	    v_rotated_uv = vec2(1.0 - UV.x, UV.y); // Flip X
+	    v_rotated_uv = vec2(UV.x, 1.0 - UV.y); // Flip X
 	}
 	else if(row_index2 == 5 || row_index2 == 11 || row_index2 == 16 || row_index2 == 30) {
 	    v_rotated_uv = vec2(UV.y, UV.x); // Flip / Transpose
 	}
 	else if(row_index2 == 6 || row_index2 == 8 || row_index2 == 17 || row_index2 == 31) {
-	    v_rotated_uv = vec2(UV.x, 1.0 - UV.y); // Flip Y
+	    v_rotated_uv = vec2(1.0 - UV.x, UV.y); // Flip Y
 	}
 	else if(row_index2 == 7 || row_index2 == 9 || row_index2 == 18 || row_index2 == 28) {
 	    v_rotated_uv = vec2(1.0 - UV.y, 1.0 - UV.x); // Flip / Anti-transpose
@@ -87,7 +77,7 @@ void vertex() {
 	else {
 	    v_rotated_uv = UV; // Default
 	}
-	v_rotated_uv = UV;
+
 	//v_rotated_uv = vec2(uv_table[base_idx]*0.5, uv_table[base_idx + 1]*0.5);
 	//v_rotated_uv = vec2(1.0-UV.x, 1.0-UV.y);
 	
@@ -109,8 +99,8 @@ void fragment() {
     vec2 tile_uv_size = 1.0 / atlas_grid_size;
     vec2 border_uv = atlas_border_px / atlas_res;
 
-	float atlas_col1 = float(v_texture_index1 % int(atlas_grid_size.x));
-    float atlas_row1 = float(v_texture_index1 / int(atlas_grid_size.x));
+	float atlas_col1 = mod(v_texture_index1, atlas_grid_size.x);
+	float atlas_row1 = floor(v_texture_index1 / atlas_grid_size.x);
 	vec2 atlas_offset1 = vec2(atlas_col1, atlas_row1) * tile_uv_size;
 	vec2 min_uv1 = atlas_offset1 + border_uv ;
 	vec2 max_uv1 = atlas_offset1 + tile_uv_size - border_uv ;
