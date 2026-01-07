@@ -17,7 +17,7 @@ varying flat float v_texture_index1;
 void vertex() {
     v_texture_index1 = UV2.x;
 	
-	//vec2 global_uv = CUSTOM0.rg;	
+	vec2 global_uv = CUSTOM0.rg;	
 	//float h = textureLod(height_map, global_uv, 0.0).r;
 	//VERTEX.y = h * height_scale;
 	

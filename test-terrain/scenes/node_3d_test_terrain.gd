@@ -141,7 +141,7 @@ func recalculate_mesh():
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	#surface_tool.set_custom_format(0, SurfaceTool.CUSTOM_RGBA_FLOAT)
+	surface_tool.set_custom_format(0, SurfaceTool.CUSTOM_RGBA_FLOAT)
 	
 	wave_scale.resize(GRID_SIZE)
 	for x in range(GRID_SIZE):
@@ -202,7 +202,7 @@ func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2
 		surface_tool.set_color(Color(0, wave_sizes1[i], 0))
 		surface_tool.set_uv(uvs[i])
 		surface_tool.set_uv2(Vector2(idx1, 0))
-		#surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, 0, 0))
+		surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, 0, 0))
 		surface_tool.add_vertex(verts[i])
 
 # Funkce, která by se volala, kdykoli se změní výška:
