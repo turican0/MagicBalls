@@ -1,7 +1,5 @@
 shader_type spatial;
 
-uniform int remove_rotation = 33;
-
 uniform sampler2D height_map: filter_nearest, repeat_enable;
 uniform sampler2D control_map : filter_nearest, repeat_enable;
 uniform float height_scale : hint_range(0.0, 100.0) = 1.0;
@@ -35,17 +33,32 @@ void vertex() {
 	vec2 target_offset = vec2(0,0);
 	if (!is_flipped)
 		target_offset = vec2(-texel.x, 0.0);
+	float truex = textureLod(control_map, target_offset + global_uv, 0.0).b;
+	float truey = textureLod(control_map, target_offset + global_uv, 0.0).a;
+	//target_offset = vec2(0,-texel.y);
+	//if (!is_flipped)
+		//target_offset = vec2(-texel.x, -texel.y);
+	vec2 target_uv = textureLod(control_map, target_offset + global_uv, 0.0).ba;
+	vec2 size = vec2(textureSize(control_map, 0));
+	vec2 snapped_target_uv = (floor(target_uv * size) + 0.5) / size;
+	//float t0x = textureLod(control_map, snapped_target_uv, 0.0).r;
+	float t0x = textureLod(control_map, target_offset + global_uv, 0.0).r;
+	v_texture_index1 = t0x * 255.0;
 	
 	float t0 = textureLod(control_map, target_offset + global_uv, 0.0).r;
-    float t1 = textureLod(control_map, target_offset + global_uv + vec2(-texel.x, 0.0), 0.0).r;
-    float t2 = textureLod(control_map, target_offset + global_uv + vec2(texel.x, 0.0), 0.0).r;
-    float t3 = textureLod(control_map, target_offset + global_uv + vec2(0.0, texel.y), 0.0).r;
-	float t4 = textureLod(control_map, target_offset + global_uv + vec2(0.0, -texel.y), 0.0).r;
-	v_texture_index1 = t0 * 255.0;
+    float t1 = textureLod(control_map, target_offset + global_uv + vec2(texel.x, 0.0), 0.0).r;
+    float t2 = textureLod(control_map, target_offset + global_uv + vec2(texel.x, -texel.y), 0.0).r;
+    float t3 = textureLod(control_map, target_offset + global_uv + vec2(0.0, -texel.y), 0.0).r;
+	float t4 = textureLod(control_map, target_offset + global_uv + vec2(-texel.x, -texel.y), 0.0).r;
+	float t5 = textureLod(control_map, target_offset + global_uv + vec2(-texel.x, 0.0), 0.0).r;
+    float t6 = textureLod(control_map, target_offset + global_uv + vec2(-texel.x, texel.y), 0.0).r;
+    float t7 = textureLod(control_map, target_offset + global_uv + vec2(0.0, texel.y), 0.0).r;
+	float t8 = textureLod(control_map, target_offset + global_uv + vec2(texel.x, texel.y), 0.0).r;
     float mask = 0.0;
-    if (t0 < 0.001 && t1 < 0.001 && t2 < 0.001 && t3 < 0.001 && t4 < 0.001) {
-        mask = 1.0;
-    }
+    if (t0 < 0.001 && t1 < 0.001 && t2 < 0.001 && t3 < 0.001) mask = 1.0;
+    if (t0 < 0.001 && t3 < 0.001 && t4 < 0.001 && t5 < 0.001) mask = 1.0;
+	if (t0 < 0.001 && t5 < 0.001 && t6 < 0.001 && t7 < 0.001) mask = 1.0;
+    if (t0 < 0.001 && t7 < 0.001 && t8 < 0.001 && t1 < 0.001) mask = 1.0;
     float v_final = mask;
 	
 	// PŘESUNUTÁ LOGIKA Z VERTEXU
@@ -58,8 +71,6 @@ void vertex() {
 	//vec4 control_sample = textureLod(control_map, sample_uv, 0.0);
 	float row_float = textureLod(control_map, target_offset + global_uv, 0.0).g;
 	row_index = int(round(row_float * 255.0));
-	if(row_index==remove_rotation)
-		v_texture_index1=0.0;
 	//v_rotated_uv = vec2(uv_table[base_idx]*0.5, uv_table[base_idx + 1]*0.5);
 	//v_rotated_uv = vec2(1.0-UV.x, 1.0-UV.y);
 	

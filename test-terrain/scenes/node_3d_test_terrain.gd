@@ -5,8 +5,6 @@ const GRID_SIZE = 256        # Počet buněk (čtverců) na jedné ose (64x64)
 const VERTEX_COUNT = GRID_SIZE + 1 # Počet vrcholů na jedné ose (65x65)
 const CELL_SCALE = 1.0      # Velikost jedné buňky v herních jednotkách
 
-var remove_rotation=33
-
 ## --- DATové STRUKTURY ---
 # Pole pro uložení pozic vrcholů (Vector3, X/Y jsou pozice, Z je výška)
 var vertices: Array[Array] = [] 
@@ -169,10 +167,10 @@ func recalculate_mesh():
 			var v3 = vertices[x+1][y+1]
 			var v4 = vertices[x][y+1]
 			
-			var waves1 = wave_scale[x][y]
-			var waves2 = wave_scale[(x+1)%GRID_SIZE][y]
-			var waves3 = wave_scale[(x+1)%GRID_SIZE][(y+1)%GRID_SIZE]
-			var waves4 = wave_scale[x][(y+1)%GRID_SIZE]
+			#var waves1 = wave_scale[x][y]
+			#var waves2 = wave_scale[(x+1)%GRID_SIZE][y]
+			#var waves3 = wave_scale[(x+1)%GRID_SIZE][(y+1)%GRID_SIZE]
+			#var waves4 = wave_scale[x][(y+1)%GRID_SIZE]
 			
 			#var g1 = Vector2(x, y)
 			#var g2 = Vector2(x+1, y)
@@ -186,21 +184,19 @@ func recalculate_mesh():
 			
 			var texture_index = texture_indices[x][y]
 			if ((x+y+1)&1):
-				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3, g1, g2, g3)
-				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4, g1, g3, g4)
+				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3,g1, g2, g3,x,y)
+				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4,g1, g3, g4,x,y)
 			else:
-				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4,waves2,waves3,waves4, g2, g3, g4)
-				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1,waves2,waves4,waves1, g2, g4, g1)
+				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4,g2, g3, g4,x,y)
+				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1,g2, g4, g1,x,y)
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
 	renew_terrain()
 
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2):
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2, x:int, y:int):
 	var verts = [p1, p2, p3]
 	var uvs = [uv1, uv2, uv3]
-	
-	var wave_sizes1 = [w1_1, w1_2, w1_3]
 	
 	var global_uvs = [
 		grid_p1 / float(GRID_SIZE),
@@ -212,7 +208,7 @@ func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2
 		#surface_tool.set_color(Color(0, wave_sizes1[i], 0))
 		surface_tool.set_uv(uvs[i])
 		#surface_tool.set_uv2(Vector2(idx1, 0))
-		surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, 0, 0))
+		surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, x, y))
 		surface_tool.add_vertex(verts[i])
 
 # Funkce, která by se volala, kdykoli se změní výška:

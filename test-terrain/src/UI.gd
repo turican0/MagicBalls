@@ -12,7 +12,6 @@ func _init() -> void:
 func _process(_p_delta) -> void:
 	$Label.text = "FPS: %d\n" % Engine.get_frames_per_second()
 	if(visible_mode == 1):
-		$Label.text += "Remove rot %.1f\n" % get_parent().get_node("Node3D-testTerrain").remove_rotation if player else ""
 		$Label.text += "Move Speed: %.1f\n" % player.MOVE_SPEED if player else ""
 		$Label.text += "Life: %.1f\n" % player.LIFE if player else ""
 		$Label.text += "Mana: %.1f\n" % player.MANA if player else ""
@@ -37,12 +36,6 @@ func _process(_p_delta) -> void:
 func _unhandled_key_input(p_event: InputEvent) -> void:
 	if p_event is InputEventKey and p_event.pressed:
 		match p_event.keycode:
-			KEY_R: # Backward
-				get_parent().get_node("Node3D-testTerrain").remove_rotation-=1
-				get_parent().get_node("Node3D-testTerrain").material.set_shader_parameter("remove_rotation", get_parent().get_node("Node3D-testTerrain").remove_rotation)
-			KEY_T: # Backward
-				get_parent().get_node("Node3D-testTerrain").remove_rotation+=1
-				get_parent().get_node("Node3D-testTerrain").material.set_shader_parameter("remove_rotation", get_parent().get_node("Node3D-testTerrain").remove_rotation)
 			KEY_F8:
 				get_tree().quit()
 			KEY_F9:
