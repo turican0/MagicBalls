@@ -263,12 +263,10 @@ func renew_terrain():
 			var final_c=raw_t_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
 			texture_indices[x][y]=final_c
 			var textUV_42:int = ((decode.mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
-			control_data[(y * GRID_SIZE + x)*4 + 0] = 20
-			control_data[(y * GRID_SIZE + x)*4 + 1] = 27
+			control_data[(y * GRID_SIZE + x)*4 + 0] = final_c
+			control_data[(y * GRID_SIZE + x)*4 + 1] = 3
 			control_data[(y * GRID_SIZE + x)*4 + 2] = 0
 			control_data[(y * GRID_SIZE + x)*4 + 3] = 255
-			if(textUV_42>32):
-				textUV_42=+0
 	for y in range(VERTEX_COUNT):
 		for x in range(VERTEX_COUNT):
 			var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
