@@ -323,6 +323,7 @@ func runGameStep0():
 
 func runGameStep(inputs:Dictionary):
 	MBEX.RunGameStep(input_state)
+	get_parent().get_node("Node3D-testTerrain").renew_terrain()
 	#MBEX.initialize_grid_data()
 	#MBEX.recalculate_mesh()
 

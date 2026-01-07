@@ -1,6 +1,6 @@
 shader_type spatial;
 
-uniform sampler2D height_map;
+uniform sampler2D height_map: filter_nearest, repeat_enable;
 uniform float height_scale : hint_range(0.0, 100.0) = 1.0;
 
 uniform sampler2D atlas_texture : source_color;
@@ -18,8 +18,8 @@ void vertex() {
     v_texture_index1 = UV2.x;
 	
 	vec2 global_uv = CUSTOM0.rg;	
-	//float h = textureLod(height_map, global_uv, 0.0).r;
-	//VERTEX.y = h * height_scale;
+	float h = textureLod(height_map, global_uv, 0.0).r;
+	VERTEX.y = h * height_scale;
 	
 	float v_final = COLOR.g;
 	

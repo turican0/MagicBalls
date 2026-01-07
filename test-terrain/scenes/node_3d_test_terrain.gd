@@ -185,6 +185,7 @@ func recalculate_mesh():
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
+	renew_terrain()
 
 func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2):
 	var verts = [p1, p2, p3]
@@ -215,11 +216,49 @@ func modify_vertex_height(x: int, y: int, new_height: float):
 		# Pro zjednodušení voláme recalculate_mesh() celou:
 		recalculate_mesh()
 
+var height_data : PackedFloat32Array = []
+var height_image : Image
+var height_texture : ImageTexture
+
+func initialize_heightmap():
+	# Inicializace pole bajtů pro formát RF (Red Float 32-bit)
+	height_data.resize(GRID_SIZE * GRID_SIZE)
+	height_data.fill(0.0)
+	
+	# Vytvoření Image objektu
+	height_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RF)
+	
+	# Vytvoření ImageTexture
+	height_texture = ImageTexture.create_from_image(height_image)
+	
+	# Propojení se shaderem
+	var mat = mesh_instance.material_override as ShaderMaterial
+	if mat:
+		mat.set_shader_parameter("height_map", height_texture)
+
 func renew_terrain():
-	for y in range(GRID_SIZE):
-		for x in range(GRID_SIZE):
-			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-	for y in range(VERTEX_COUNT):
-		for x in range(VERTEX_COUNT):
-			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.125
-	recalculate_mesh()
+	if not height_image:
+		initialize_heightmap()
+	#for y in range(GRID_SIZE):
+		#for x in range(GRID_SIZE):
+			#texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+	#for y in range(VERTEX_COUNT):
+		#for x in range(VERTEX_COUNT):
+			#var raw_h=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			#var final_h = raw_h * 0.125
+			#vertices[x][y].y = final_h
+			#
+	#for y in range(GRID_SIZE):
+		#for x in range(GRID_SIZE):
+			#var raw_h=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			#var final_h = raw_h * 0.125*0.1
+			#height_data[y * GRID_SIZE + x] = final_h
+	update_gpu_heightmap()
+	#recalculate_mesh()
+	
+func update_gpu_heightmap():
+	if not height_image:
+		initialize_heightmap() # Zavolá Image.create a ImageTexture.create
+	var byte_array = height_data.to_byte_array()
+	height_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RF, byte_array)
+	height_texture.update(height_image)
