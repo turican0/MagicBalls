@@ -156,6 +156,7 @@ func recalculate_mesh():
 	for x in range(GRID_SIZE):
 		for y in range(GRID_SIZE):
 			var textUV_42:int = ((get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
+			textUV_42=0
 			var rPoint1 = Vector2(uv_table_d4350[textUV_42][0],uv_table_d4350[textUV_42][1])
 			var rPoint2 = Vector2(uv_table_d4350[textUV_42][2],uv_table_d4350[textUV_42][3])
 			var rPoint3 = Vector2(uv_table_d4350[textUV_42][4],uv_table_d4350[textUV_42][5])
@@ -170,6 +171,11 @@ func recalculate_mesh():
 			var waves3 = wave_scale[(x+1)%GRID_SIZE][(y+1)%GRID_SIZE]
 			var waves4 = wave_scale[x][(y+1)%GRID_SIZE]
 			
+			#var g1 = Vector2(x, y)
+			#var g2 = Vector2(x+1, y)
+			#var g3 = Vector2(x+1, y+1)
+			#var g4 = Vector2(x, y+1)
+			
 			var g1 = Vector2(x, y)
 			var g2 = Vector2(x+1, y)
 			var g3 = Vector2(x+1, y+1)
@@ -177,17 +183,17 @@ func recalculate_mesh():
 			
 			var texture_index = texture_indices[x][y]
 			if ((x+y+1)&1):
-				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3, g1, g2, g3)
-				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4, g1, g3, g4)
+				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3, g1, g2, g3,1)
+				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4, g1, g3, g4,2)
 			else:
-				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4,waves2,waves3,waves4, g2, g3, g4)
-				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1,waves2,waves4,waves1, g2, g4, g1)
+				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4,waves2,waves3,waves4, g2, g3, g4,3)
+				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1,waves2,waves4,waves1, g2, g4, g1,4)
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
 	renew_terrain()
 
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2):
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2,type:int):
 	var verts = [p1, p2, p3]
 	var uvs = [uv1, uv2, uv3]
 	
@@ -200,10 +206,10 @@ func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2
 	]
 	
 	for i in range(3):
-		surface_tool.set_color(Color(0, wave_sizes1[i], 0))
+		#surface_tool.set_color(Color(0, wave_sizes1[i], 0))
 		surface_tool.set_uv(uvs[i])
-		surface_tool.set_uv2(Vector2(idx1, 0))
-		surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, 0, 0))
+		#surface_tool.set_uv2(Vector2(idx1, 0))
+		surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, type/100, 0))
 		surface_tool.add_vertex(verts[i])
 
 # Funkce, která by se volala, kdykoli se změní výška:
@@ -220,18 +226,22 @@ var height_data : PackedFloat32Array = []
 var height_image : Image
 var height_texture : ImageTexture
 
+var control_data : PackedByteArray = PackedByteArray()
+var control_image : Image
+var control_texture : ImageTexture
+
+func initialize_controlmap():
+	control_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8)
+	control_texture = ImageTexture.create_from_image(control_image)
+	var mat = mesh_instance.material_override as ShaderMaterial
+	if mat:
+		mat.set_shader_parameter("control_map", control_texture)
+
 func initialize_heightmap():
-	# Inicializace pole bajtů pro formát RF (Red Float 32-bit)
 	height_data.resize(GRID_SIZE * GRID_SIZE)
 	height_data.fill(0.0)
-	
-	# Vytvoření Image objektu
 	height_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RF)
-	
-	# Vytvoření ImageTexture
 	height_texture = ImageTexture.create_from_image(height_image)
-	
-	# Propojení se shaderem
 	var mat = mesh_instance.material_override as ShaderMaterial
 	if mat:
 		mat.set_shader_parameter("height_map", height_texture)
@@ -239,21 +249,37 @@ func initialize_heightmap():
 func renew_terrain():
 	if not height_image:
 		initialize_heightmap()
-	#for y in range(GRID_SIZE):
-		#for x in range(GRID_SIZE):
-			#texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-	#for y in range(VERTEX_COUNT):
-		#for x in range(VERTEX_COUNT):
-			#var raw_h=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-			#var final_h = raw_h * 0.125
-			#vertices[x][y].y = final_h
-			#
-	#for y in range(GRID_SIZE):
-		#for x in range(GRID_SIZE):
-			#var raw_h=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-			#var final_h = raw_h * 0.125*0.1
-			#height_data[y * GRID_SIZE + x] = final_h
+	if not control_image:
+		initialize_controlmap()
+	var decode = get_parent().get_node("DecodeLevel")
+	# Zajištění velikosti: GRID_SIZE * GRID_SIZE * 4 (RGBA)
+	if control_data.size() != GRID_SIZE * GRID_SIZE * 4:
+		control_data.resize(GRID_SIZE * GRID_SIZE * 4)
+	
+	var raw_h_map = decode.mapHeightmap_11B4E0
+	var raw_t_map = decode.mapTerrainType_10B4E0
+	for y in range(GRID_SIZE):
+		for x in range(GRID_SIZE):
+			var final_c=raw_t_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			texture_indices[x][y]=final_c
+			var textUV_42:int = ((decode.mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
+			control_data[(y * GRID_SIZE + x)*4 + 0] = final_c
+			control_data[(y * GRID_SIZE + x)*4 + 1] = textUV_42
+			control_data[(y * GRID_SIZE + x)*4 + 2] = 0
+			control_data[(y * GRID_SIZE + x)*4 + 3] = 255
+	for y in range(VERTEX_COUNT):
+		for x in range(VERTEX_COUNT):
+			var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			var final_h = raw_h * 0.125
+			vertices[x][y].y = final_h
+			
+	for y in range(GRID_SIZE):
+		for x in range(GRID_SIZE):
+			var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			var final_h = raw_h * 0.125*0.1
+			height_data[y * GRID_SIZE + x] = final_h
 	update_gpu_heightmap()
+	update_gpu_controlmap()
 	#recalculate_mesh()
 	
 func update_gpu_heightmap():
@@ -262,3 +288,30 @@ func update_gpu_heightmap():
 	var byte_array = height_data.to_byte_array()
 	height_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RF, byte_array)
 	height_texture.update(height_image)
+	
+func update_gpu_controlmap():
+	control_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8, control_data)
+	control_texture.update(control_image)
+
+func initialize_control_map():
+	control_data.resize(GRID_SIZE * GRID_SIZE * 4) # RGBA (4 bajty na pixel)
+	control_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8)
+	control_texture = ImageTexture.create_from_image(control_image)
+
+	var mat = mesh_instance.material_override as ShaderMaterial
+	mat.set_shader_parameter("control_map", control_texture)
+	
+func update_control_mapxx():
+	var decode = get_parent().get_node("DecodeLevel")
+	for y in range(GRID_SIZE):
+		for x in range(GRID_SIZE):
+			var idx = y * GRID_SIZE + x
+			var t_idx = decode.mapTerrainType_10B4E0[idx]
+			# Zapíšeme do bajtů (RGBA)
+			control_data[idx * 4 + 0] = t_idx # R: Index textury
+			control_data[idx * 4 + 1] = 0     # G: (rezerva)
+			control_data[idx * 4 + 2] = 0     # B: (rezerva)
+			control_data[idx * 4 + 3] = 255   # A: (rezerva)
+			
+	control_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8, control_data)
+	control_texture.update(control_image)
