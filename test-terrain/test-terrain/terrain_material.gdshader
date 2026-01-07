@@ -10,16 +10,12 @@ uniform float wave_height : hint_range(0.0, 1.0) = 0.5;
 uniform float wave_speed : hint_range(0.1, 5.0) = 2.0;
 uniform float wave_scale : hint_range(0.1, 10.0) = 4.0;
 
-varying float v_weight;
 varying flat float v_texture_index1;
-varying flat float v_texture_index2;
 
 void vertex() {
     v_texture_index1 = UV2.x;
-	v_texture_index2 = UV2.y;
-	v_weight = COLOR.r;
 	
-	float v_final = mix(COLOR.g, COLOR.b, v_weight);
+	float v_final = COLOR.g;
 	
 	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 
@@ -46,24 +42,13 @@ void fragment() {
 	vec3 tex1 = texture(atlas_texture, final_uv1).rgb;
 	float refl1 = texture(reflect_texture, final_uv1).r;
 	
-	float atlas_col2 = mod(v_texture_index2, atlas_grid_size.x);
-	float atlas_row2 = floor(v_texture_index2 / atlas_grid_size.x);
-	vec2 atlas_offset2 = vec2(atlas_col2, atlas_row2) * tile_uv_size;
-	vec2 min_uv2 = atlas_offset2 + border_uv ;
-	vec2 max_uv2 = atlas_offset2 + tile_uv_size - border_uv ;
-	vec2 final_uv2 = mix(min_uv2, max_uv2, UV);
-	vec3 tex2 = texture(atlas_texture, final_uv2).rgb;
-	float refl2 = texture(reflect_texture, final_uv2).r;
+	ALBEDO = tex1;
 	
-	vec3 final_color = mix(tex1, tex2, v_weight);
-	ALBEDO = final_color;
-	
-	float final_refl = mix(refl1, refl2, v_weight);
 	float target_roughness = 0.05;
 	float target_metallic = 0.5;
 	float default_roughness = 1.0;
 	float default_metallic = 0.0;
 	
-	ROUGHNESS = mix(default_roughness, target_roughness, final_refl);
-	METALLIC = mix(default_metallic, target_metallic, final_refl);
+	ROUGHNESS = mix(default_roughness, target_roughness, refl1);
+	METALLIC = mix(default_metallic, target_metallic, refl1);
 }

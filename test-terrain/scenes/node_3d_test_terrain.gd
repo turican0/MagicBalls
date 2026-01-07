@@ -170,26 +170,25 @@ func recalculate_mesh():
 			
 			var texture_index = texture_indices[x][y]
 			if ((x+y+1)&1):
-				add_triangle(v1, v2, v3, texture_index,texture_index,0,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3,waves1,waves2,waves3)
-				add_triangle(v1, v3, v4, texture_index,texture_index,0,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4,waves1,waves3,waves4)
+				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3)
+				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4)
 			else:
-				add_triangle(v2, v3, v4, texture_index,texture_index,0,rPoint2,rPoint3,rPoint4,waves2,waves3,waves4,waves2,waves3,waves4)
-				add_triangle(v2, v4, v1, texture_index,texture_index,0,rPoint2,rPoint4,rPoint1,waves2,waves4,waves1,waves2,waves4,waves1)
+				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4,waves2,waves3,waves4)
+				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1,waves2,waves4,waves1)
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
 
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, idx2: int, weight: float, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float, w2_1:float, w2_2:float, w2_3:float):
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float):
 	var verts = [p1, p2, p3]
 	var uvs = [uv1, uv2, uv3]
 	
 	var wave_sizes1 = [w1_1, w1_2, w1_3]
-	var wave_sizes2 = [w2_1, w2_2, w2_3]
 	
 	for i in range(3):
-		surface_tool.set_color(Color(weight, wave_sizes1[i], wave_sizes2[i]))
+		surface_tool.set_color(Color(0, wave_sizes1[i], 0))
 		surface_tool.set_uv(uvs[i])
-		surface_tool.set_uv2(Vector2(idx1, idx2))
+		surface_tool.set_uv2(Vector2(idx1, 0))
 		surface_tool.add_vertex(verts[i])
 
 # Funkce, která by se volala, kdykoli se změní výška:
