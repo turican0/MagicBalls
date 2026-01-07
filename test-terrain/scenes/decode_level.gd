@@ -300,9 +300,9 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()
 	mapAngle_13B4E0 = MBEX.TerrainGetAngle()
 	
-	MBEX.set_mesh_instance(get_parent().get_node("Node3D-testTerrain").mesh_instance)
-	MBEX.initialize_grid_data()
-	MBEX.recalculate_mesh()
+	#MBEX.set_mesh_instance(get_parent().get_node("Node3D-testTerrain").mesh_instance)
+	#MBEX.initialize_grid_data()
+	#MBEX.recalculate_mesh()
 	
 	return true
 	
@@ -323,8 +323,8 @@ func runGameStep0():
 
 func runGameStep(inputs:Dictionary):
 	MBEX.RunGameStep(input_state)
-	MBEX.initialize_grid_data()
-	MBEX.recalculate_mesh()
+	#MBEX.initialize_grid_data()
+	#MBEX.recalculate_mesh()
 
 var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
 var mapHeightmap_11B4E0: PackedByteArray = PackedByteArray()
