@@ -15,17 +15,6 @@ uniform float wave_scale : hint_range(0.1, 10.0) = 4.0;
 
 varying flat float v_texture_index1;
 
-const float uv_table[256] = float[](
-	0.,0., 1.,0., 1.,1., 0.,1.,  1.,0., 1.,1., 0.,1., 0.,0.,  1.,1., 0.,1., 0.,0., 1.,0.,  0.,1., 0.,0., 1.,0., 1.,1.,
-	1.,0., 0.,0., 0.,1., 1.,1.,  0.,0., 0.,1., 1.,1., 1.,0.,  0.,1., 1.,1., 1.,0., 0.,0.,  1.,1., 1.,0., 0.,0., 0.,1.,
-	0.,1., 1.,1., 1.,0., 0.,0.,  1.,1., 1.,0., 0.,0., 0.,1.,  1.,0., 0.,0., 0.,1., 1.,1.,  0.,0., 0.,1., 1.,1., 1.,0.,
-	1.,1., 0.,1., 0.,0., 1.,0.,  0.,1., 0.,0., 1.,0., 1.,1.,  0.,0., 1.,0., 1.,1., 0.,1.,  1.,0., 1.,1., 0.,1., 0.,0.,
-	0.,0., 0.,1., 1.,1., 1.,0.,  0.,1., 1.,1., 1.,0., 0.,0.,  1.,1., 1.,0., 0.,0., 0.,1.,  1.,0., 0.,0., 0.,1., 1.,1.,
-	0.,1., 0.,0., 1.,0., 1.,1.,  0.,0., 1.,0., 1.,1., 0.,1.,  1.,0., 1.,1., 0.,1., 0.,0.,  1.,1., 0.,1., 0.,0., 1.,0.,
-	1.,0., 1.,1., 0.,1., 0.,0.,  1.,1., 0.,1., 0.,0., 1.,0.,  0.,1., 0.,0., 1.,0., 1.,1.,  0.,0., 1.,0., 1.,1., 0.,1.,
-	1.,1., 0.,1., 0.,0., 1.,0.,  1.,0., 0.,0., 0.,1., 1.,1.,  0.,0., 0.,1., 1.,1., 1.,0.,  0.,1., 1.,1., 1.,0., 0.,0.
-);
-
 varying vec2 v_rotated_uv;
 
 void vertex() {
@@ -48,39 +37,39 @@ void vertex() {
     }
     float v_final = mask;
 	
-	float row_index = textureLod(control_map, global_uv, 0.0).b;
-	int row_index2 = int(floor(row_index * 255.0 + 0.5)); // Kanál B pro rotaci
-	row_index2 = clamp(row_index2, 0, 31); // Bezpečnostní pojistka
-	int vertex_id = 0;
-	int type_index = int(CUSTOM0.b * 100.0 + 0.5);
-	//if (type_index == 1)
-	{
-		if (UV.x < 0.5 && UV.y < 0.5) vertex_id = 1;
-		else if (UV.x > 0.5 && UV.y < 0.5) vertex_id = 2;
-		else vertex_id = 3;
-	}
-	//else if (type_index == 2)
-	//{
-		//if (UV.x < 0.5 && UV.y < 0.5) vertex_id = 1;
-		//else if (UV.x > 0.5 && UV.y > 0.5) vertex_id = 3;
-		//else vertex_id = 4;
-	//}
-	//else if (type_index == 3)
-	//{
-		//if (UV.x > 0.5 && UV.y < 0.5) vertex_id = 2;
-		//else if (UV.x > 0.5 && UV.y > 0.5) vertex_id = 3;
-		//else vertex_id = 4;
-	//}
-	//else
-	//{
-		//if (UV.x > 0.5 && UV.y < 0.5) vertex_id = 2;
-		//else if (UV.x < 0.5 && UV.y > 0.5) vertex_id = 4;
-		//else vertex_id = 1;
-	//}
+	float row_index = textureLod(control_map, global_uv, 0.0).g;
+	int row_index2 = int(floor(row_index * 255.0 + 0.5));
+	//row_index2=3;
+if(row_index2 == 0 || row_index2 == 14 || row_index2 == 21 || row_index2 == 27) {
+    v_rotated_uv = vec2(UV.x, UV.y); // Bez rotace
+}
+else if(row_index2 == 1 || row_index2 == 15 || row_index2 == 22 || row_index2 == 24) {
+    v_rotated_uv = vec2(1.0 - UV.y, UV.x); // PŮVODNĚ 90° (nyní obráceno)
+}
+else if(row_index2 == 2 || row_index2 == 12 || row_index2 == 23 || row_index2 == 25) {
+    v_rotated_uv = vec2(1.0 - UV.x, 1.0 - UV.y); // 180°
+}
+else if(row_index2 == 3 || row_index2 == 13 || row_index2 == 20 || row_index2 == 26) {
+    v_rotated_uv = vec2(UV.y, 1.0 - UV.x); // PŮVODNĚ 270° (nyní obráceno)
+}
+else if(row_index2 == 4 || row_index2 == 10 || row_index2 == 19 || row_index2 == 29) {
+    v_rotated_uv = vec2(UV.x, 1.0 - UV.y); // Flip X
+}
+else if(row_index2 == 5 || row_index2 == 11 || row_index2 == 16 || row_index2 == 30) {
+    v_rotated_uv = vec2(UV.y, UV.x); // Flip / Transpose
+}
+else if(row_index2 == 6 || row_index2 == 8 || row_index2 == 17 || row_index2 == 31) {
+    v_rotated_uv = vec2(1.0 - UV.x, UV.y); // Flip Y
+}
+else if(row_index2 == 7 || row_index2 == 9 || row_index2 == 18 || row_index2 == 28) {
+    v_rotated_uv = vec2(1.0 - UV.y, 1.0 - UV.x); // Flip / Anti-transpose
+}
+else {
+    v_rotated_uv = UV; // Default
+}
 
-	int base_idx = row_index2 * 8 + 0 * 2;
-	v_rotated_uv = vec2(uv_table[base_idx]*0.5, uv_table[base_idx + 1]*0.5);
-	//v_rotated_uv = vec2(uv_table[0], uv_table[0 + 1]);
+	//v_rotated_uv = vec2(uv_table[base_idx]*0.5, uv_table[base_idx + 1]*0.5);
+	//v_rotated_uv = vec2(1.0-UV.x, 1.0-UV.y);
 	
 	//float v_final = COLOR.g;
 	

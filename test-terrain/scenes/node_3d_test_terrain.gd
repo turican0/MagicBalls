@@ -16,41 +16,41 @@ var mesh_instance: MeshInstance3D
 var surface_tool: SurfaceTool
 
 var uv_table_d4350: Array = [
-	[0, 0, 1, 0, 1, 1, 0, 1],
-	[1, 0, 1, 1, 0, 1, 0, 0],
-	[1, 1, 0, 1, 0, 0, 1, 0],
-	[0, 1, 0, 0, 1, 0, 1, 1],
-	[1, 0, 0, 0, 0, 1, 1, 1],
-	[0, 0, 0, 1, 1, 1, 1, 0],
-	[0, 1, 1, 1, 1, 0, 0, 0],
-	[1, 1, 1, 0, 0, 0, 0, 1],
+	[0, 0, 1, 0, 1, 1, 0, 1],#0
+	[1, 0, 1, 1, 0, 1, 0, 0],#1
+	[1, 1, 0, 1, 0, 0, 1, 0],#2
+	[0, 1, 0, 0, 1, 0, 1, 1],#3
+	[1, 0, 0, 0, 0, 1, 1, 1],#4
+	[0, 0, 0, 1, 1, 1, 1, 0],#5
+	[0, 1, 1, 1, 1, 0, 0, 0],#6
+	[1, 1, 1, 0, 0, 0, 0, 1],#7
 
-	[0, 1, 1, 1, 1, 0, 0, 0],
-	[1, 1, 1, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 1, 1, 1],
-	[0, 0, 0, 1, 1, 1, 1, 0],
-	[1, 1, 0, 1, 0, 0, 1, 0],
-	[0, 1, 0, 0, 1, 0, 1, 1],
-	[0, 0, 1, 0, 1, 1, 0, 1],
-	[1, 0, 1, 1, 0, 1, 0, 0],
+	[0, 1, 1, 1, 1, 0, 0, 0],#8-6
+	[1, 1, 1, 0, 0, 0, 0, 1],#9-7
+	[1, 0, 0, 0, 0, 1, 1, 1],#10-4
+	[0, 0, 0, 1, 1, 1, 1, 0],#11-5
+	[1, 1, 0, 1, 0, 0, 1, 0],#12-2
+	[0, 1, 0, 0, 1, 0, 1, 1],#13-3
+	[0, 0, 1, 0, 1, 1, 0, 1],#14-0
+	[1, 0, 1, 1, 0, 1, 0, 0],#15-1
 
-	[0, 0, 0, 1, 1, 1, 1, 0],
-	[0, 1, 1, 1, 1, 0, 0, 0],
-	[1, 1, 1, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 1, 1, 1],
-	[0, 1, 0, 0, 1, 0, 1, 1],
-	[0, 0, 1, 0, 1, 1, 0, 1],
-	[1, 0, 1, 1, 0, 1, 0, 0],
-	[1, 1, 0, 1, 0, 0, 1, 0],
+	[0, 0, 0, 1, 1, 1, 1, 0],#16-5
+	[0, 1, 1, 1, 1, 0, 0, 0],#17-6
+	[1, 1, 1, 0, 0, 0, 0, 1],#18-7
+	[1, 0, 0, 0, 0, 1, 1, 1],#19-4
+	[0, 1, 0, 0, 1, 0, 1, 1],#20-3
+	[0, 0, 1, 0, 1, 1, 0, 1],#21-0
+	[1, 0, 1, 1, 0, 1, 0, 0],#22-1
+	[1, 1, 0, 1, 0, 0, 1, 0],#23-2
 
-	[1, 0, 1, 1, 0, 1, 0, 0],
-	[1, 1, 0, 1, 0, 0, 1, 0],
-	[0, 1, 0, 0, 1, 0, 1, 1],
-	[0, 0, 1, 0, 1, 1, 0, 1],
-	[1, 1, 1, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 1, 1, 1],
-	[0, 0, 0, 1, 1, 1, 1, 0],
-	[0, 1, 1, 1, 1, 0, 0, 0]
+	[1, 0, 1, 1, 0, 1, 0, 0],#24-1
+	[1, 1, 0, 1, 0, 0, 1, 0],#25-2
+	[0, 1, 0, 0, 1, 0, 1, 1],#26-3
+	[0, 0, 1, 0, 1, 1, 0, 1],#27-0
+	[1, 1, 1, 0, 0, 0, 0, 1],#28-7
+	[1, 0, 0, 0, 0, 1, 1, 1],#29-4
+	[0, 0, 0, 1, 1, 1, 1, 0],#30-5
+	[0, 1, 1, 1, 1, 0, 0, 0]#31-6
 ]
 
 func _ready():
@@ -183,17 +183,17 @@ func recalculate_mesh():
 			
 			var texture_index = texture_indices[x][y]
 			if ((x+y+1)&1):
-				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3, g1, g2, g3,1)
-				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4, g1, g3, g4,2)
+				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3,waves1,waves2,waves3, g1, g2, g3)
+				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4,waves1,waves3,waves4, g1, g3, g4)
 			else:
-				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4,waves2,waves3,waves4, g2, g3, g4,3)
-				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1,waves2,waves4,waves1, g2, g4, g1,4)
+				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4,waves2,waves3,waves4, g2, g3, g4)
+				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1,waves2,waves4,waves1, g2, g4, g1)
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
 	renew_terrain()
 
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2,type:int):
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, w1_1:float, w1_2:float, w1_3:float, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2):
 	var verts = [p1, p2, p3]
 	var uvs = [uv1, uv2, uv3]
 	
@@ -209,7 +209,7 @@ func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2
 		#surface_tool.set_color(Color(0, wave_sizes1[i], 0))
 		surface_tool.set_uv(uvs[i])
 		#surface_tool.set_uv2(Vector2(idx1, 0))
-		surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, type/100, 0))
+		surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, 0, 0))
 		surface_tool.add_vertex(verts[i])
 
 # Funkce, která by se volala, kdykoli se změní výška:
@@ -263,10 +263,12 @@ func renew_terrain():
 			var final_c=raw_t_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
 			texture_indices[x][y]=final_c
 			var textUV_42:int = ((decode.mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
-			control_data[(y * GRID_SIZE + x)*4 + 0] = final_c
-			control_data[(y * GRID_SIZE + x)*4 + 1] = textUV_42
+			control_data[(y * GRID_SIZE + x)*4 + 0] = 20
+			control_data[(y * GRID_SIZE + x)*4 + 1] = 27
 			control_data[(y * GRID_SIZE + x)*4 + 2] = 0
 			control_data[(y * GRID_SIZE + x)*4 + 3] = 255
+			if(textUV_42>32):
+				textUV_42=+0
 	for y in range(VERTEX_COUNT):
 		for x in range(VERTEX_COUNT):
 			var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
