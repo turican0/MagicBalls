@@ -1,6 +1,8 @@
 shader_type spatial;
 
-// --- UNIFORMY (ponecháno podle tvého zadání) ---
+uniform sampler2D height_map;
+uniform float height_scale : hint_range(0.0, 100.0) = 1.0;
+
 uniform sampler2D atlas_texture : source_color;
 uniform sampler2D reflect_texture : source_color;
 uniform vec2 atlas_grid_size;
@@ -14,6 +16,10 @@ varying flat float v_texture_index1;
 
 void vertex() {
     v_texture_index1 = UV2.x;
+	
+	//vec2 global_uv = CUSTOM0.rg;	
+	//float h = textureLod(height_map, global_uv, 0.0).r;
+	//VERTEX.y = h * height_scale;
 	
 	float v_final = COLOR.g;
 	
