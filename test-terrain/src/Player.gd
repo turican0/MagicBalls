@@ -117,7 +117,7 @@ func get_camera_relative_input(p_delta):
 		MOVE_SPEED=MOVE_SPEED-accel_speed*p_delta
 		if(MOVE_SPEED<-max_speed):
 			MOVE_SPEED=-max_speed
-
+			
 #func shoot_bullet() -> void:
 	#if bullet_scene == null:
 		#return

@@ -1,5 +1,7 @@
 shader_type spatial;
 
+uniform int remove_rotation = 33;
+
 uniform sampler2D height_map: filter_nearest, repeat_enable;
 uniform sampler2D control_map : filter_nearest, repeat_enable;
 uniform float height_scale : hint_range(0.0, 100.0) = 1.0;
@@ -46,7 +48,7 @@ void vertex() {
     }
     float v_final = mask;
 	
-		// PŘESUNUTÁ LOGIKA Z VERTEXU
+	// PŘESUNUTÁ LOGIKA Z VERTEXU
 	//vec2 texel = 1.0 / vec2(textureSize(control_map, 0));
 	//bool is_flipped = UV.x < 0.5;
 	//vec2 target_offset = vec2(0,0);
@@ -56,7 +58,7 @@ void vertex() {
 	//vec4 control_sample = textureLod(control_map, sample_uv, 0.0);
 	float row_float = textureLod(control_map, target_offset + global_uv, 0.0).g;
 	row_index = int(round(row_float * 255.0));
-	if(row_index>=32)
+	if(row_index==remove_rotation)
 		v_texture_index1=0.0;
 	//v_rotated_uv = vec2(uv_table[base_idx]*0.5, uv_table[base_idx + 1]*0.5);
 	//v_rotated_uv = vec2(1.0-UV.x, 1.0-UV.y);
@@ -87,13 +89,13 @@ void fragment() {
 		rotated_uv = vec2(UV.y, 1.0 - UV.x);
 	}
 	else if(row_index == 4 || row_index == 10 || row_index == 19 || row_index == 29) {
-		rotated_uv = vec2(UV.x, 1.0 - UV.y);
+		rotated_uv = vec2(1.0 - UV.x, UV.y);
 	}
 	else if(row_index == 5 || row_index == 11 || row_index == 16 || row_index == 30) {
 		rotated_uv = vec2(UV.y, UV.x);
 	}
 	else if(row_index == 6 || row_index == 8 || row_index == 17 || row_index == 31) {
-		rotated_uv = vec2(1.0 - UV.x, UV.y);
+		rotated_uv = vec2(UV.x, 1.0 - UV.y);
 	}
 	else if(row_index == 7 || row_index == 9 || row_index == 18 || row_index == 28) {
 		rotated_uv = vec2(1.0 - UV.y, 1.0 - UV.x);

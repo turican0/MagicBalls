@@ -5,6 +5,8 @@ const GRID_SIZE = 256        # Počet buněk (čtverců) na jedné ose (64x64)
 const VERTEX_COUNT = GRID_SIZE + 1 # Počet vrcholů na jedné ose (65x65)
 const CELL_SCALE = 1.0      # Velikost jedné buňky v herních jednotkách
 
+var remove_rotation=33
+
 ## --- DATové STRUKTURY ---
 # Pole pro uložení pozic vrcholů (Vector3, X/Y jsou pozice, Z je výška)
 var vertices: Array[Array] = [] 
@@ -100,6 +102,7 @@ func _ready():
 	#end of Multimesh
 
 ## --- FÁZE 1: Inicializace ---
+var material
 
 func initialize_nodes():
 	mesh_instance = MeshInstance3D.new()
@@ -107,7 +110,7 @@ func initialize_nodes():
 	add_child(mesh_instance)
 	
 	# Zde načtěte váš ShaderMaterial (který odkazuje na Texture Atlas)
-	var material = load("res://test-terrain/terrain_material.tres")
+	material = load("res://test-terrain/terrain_material.tres")
 	if material:
 		mesh_instance.material_override = material
 	else:
