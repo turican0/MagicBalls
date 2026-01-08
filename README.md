@@ -30,7 +30,7 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Fix water waves<br>
 -Copy terrain modification<br>
 
-https://github.com/turican0/MagicBalls/blob/wiki/MB-7.%20test.gif
+<img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-7.%20test.gif" width="400">
 
 ## Version 260104:
 ### Changes:
