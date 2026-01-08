@@ -331,6 +331,7 @@ func runGameStep(inputs:Dictionary):
 	#get_parent().get_node("Node3D-testTerrain").renew_terrain()
 	#MBEX.initialize_grid_data()
 	#MBEX.recalculate_mesh()
+	MBEX.renew_terrain()
 
 var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
 var mapHeightmap_11B4E0: PackedByteArray = PackedByteArray()
