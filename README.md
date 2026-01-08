@@ -17,6 +17,13 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add using mouse buttons<br>
 -Add select spells<br>
 
+-Draw Terrain modification by fire
+-Draw Spider Web
+-Draw Red blinking
+-Draw minimap
+-Draw healt
+-Add Ballon 3d model
+
 ---
 
 ## Next version:
