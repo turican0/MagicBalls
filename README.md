@@ -23,7 +23,16 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -update UI
 
 ## Version 260108:
+A lot has changed in this version. I found that copying terrain in every frame is extremely demanding.<br>
+The first tests showed less than 1 FPS.<br>
+I had to put most things into the shader. After a series of struggles, I created a shader that:<br>
+-handles reflections and water waves<br>
+-I now send the height, index, and rotation maps to the shader as textures<br>
+Thanks to this, I got up to 3-4 FPS.<br>
+Then all I had to do was rewrite the key parts of the code from GDSCRIPT to C++, and I got up to 60 FPS.<br>
 ### Changes:
+-terrain rendering and updating moved to shader<br>
+-terrain work moved to C++<br>
 -Create true model for building possession<br>
 -Add multimesh for objects(for corect visibility of objects)<br>
 -Fix water reflections<br>
