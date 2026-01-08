@@ -15,44 +15,6 @@ var texture_indices: Array[Array] = []
 var mesh_instance: MeshInstance3D
 var surface_tool: SurfaceTool
 
-var uv_table_d4350: Array = [
-	[0, 0, 1, 0, 1, 1, 0, 1],#0
-	[1, 0, 1, 1, 0, 1, 0, 0],#1
-	[1, 1, 0, 1, 0, 0, 1, 0],#2
-	[0, 1, 0, 0, 1, 0, 1, 1],#3
-	[1, 0, 0, 0, 0, 1, 1, 1],#4
-	[0, 0, 0, 1, 1, 1, 1, 0],#5
-	[0, 1, 1, 1, 1, 0, 0, 0],#6
-	[1, 1, 1, 0, 0, 0, 0, 1],#7
-
-	[0, 1, 1, 1, 1, 0, 0, 0],#8-6
-	[1, 1, 1, 0, 0, 0, 0, 1],#9-7
-	[1, 0, 0, 0, 0, 1, 1, 1],#10-4
-	[0, 0, 0, 1, 1, 1, 1, 0],#11-5
-	[1, 1, 0, 1, 0, 0, 1, 0],#12-2
-	[0, 1, 0, 0, 1, 0, 1, 1],#13-3
-	[0, 0, 1, 0, 1, 1, 0, 1],#14-0
-	[1, 0, 1, 1, 0, 1, 0, 0],#15-1
-
-	[0, 0, 0, 1, 1, 1, 1, 0],#16-5
-	[0, 1, 1, 1, 1, 0, 0, 0],#17-6
-	[1, 1, 1, 0, 0, 0, 0, 1],#18-7
-	[1, 0, 0, 0, 0, 1, 1, 1],#19-4
-	[0, 1, 0, 0, 1, 0, 1, 1],#20-3
-	[0, 0, 1, 0, 1, 1, 0, 1],#21-0
-	[1, 0, 1, 1, 0, 1, 0, 0],#22-1
-	[1, 1, 0, 1, 0, 0, 1, 0],#23-2
-
-	[1, 0, 1, 1, 0, 1, 0, 0],#24-1
-	[1, 1, 0, 1, 0, 0, 1, 0],#25-2
-	[0, 1, 0, 0, 1, 0, 1, 1],#26-3
-	[0, 0, 1, 0, 1, 1, 0, 1],#27-0
-	[1, 1, 1, 0, 0, 0, 0, 1],#28-7
-	[1, 0, 0, 0, 0, 1, 1, 1],#29-4
-	[0, 0, 0, 1, 1, 1, 1, 0],#30-5
-	[0, 1, 1, 1, 1, 0, 0, 0]#31-6
-]
-
 func _ready():
 	# 1. Inicializace a nastavení uzlů
 	initialize_nodes()
@@ -144,57 +106,34 @@ func recalculate_mesh():
 	
 	surface_tool.set_custom_format(0, SurfaceTool.CUSTOM_RGBA_FLOAT)
 	
-	wave_scale.resize(GRID_SIZE)
-	for x in range(GRID_SIZE):
-		wave_scale[x] = []
-		wave_scale[x].resize(GRID_SIZE)
-		for y in range(GRID_SIZE):
-			wave_scale[x][y] = 0
-			if(texture_indices[x][y]==0)&&(texture_indices[(x+(GRID_SIZE-1))%GRID_SIZE][y]==0)&&(texture_indices[x][(y+(GRID_SIZE-1))%GRID_SIZE]==0)&&(texture_indices[(x+(GRID_SIZE-1))%GRID_SIZE][(y+(GRID_SIZE-1))%GRID_SIZE]==0):
-				wave_scale[x][y] = 1
-				
-	
 	for x in range(GRID_SIZE):
 		for y in range(GRID_SIZE):
-			var textUV_42:int = ((get_parent().get_node("DecodeLevel").mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
-			textUV_42=0
-			var rPoint1 = Vector2(uv_table_d4350[textUV_42][0],uv_table_d4350[textUV_42][1])
-			var rPoint2 = Vector2(uv_table_d4350[textUV_42][2],uv_table_d4350[textUV_42][3])
-			var rPoint3 = Vector2(uv_table_d4350[textUV_42][4],uv_table_d4350[textUV_42][5])
-			var rPoint4 = Vector2(uv_table_d4350[textUV_42][6],uv_table_d4350[textUV_42][7])
+			var rPoint1 = Vector2(0,0)
+			var rPoint2 = Vector2(1,0)
+			var rPoint3 = Vector2(1,1)
+			var rPoint4 = Vector2(0,1)
 			var v1 = vertices[x][y]
 			var v2 = vertices[x+1][y]
 			var v3 = vertices[x+1][y+1]
 			var v4 = vertices[x][y+1]
-			
-			#var waves1 = wave_scale[x][y]
-			#var waves2 = wave_scale[(x+1)%GRID_SIZE][y]
-			#var waves3 = wave_scale[(x+1)%GRID_SIZE][(y+1)%GRID_SIZE]
-			#var waves4 = wave_scale[x][(y+1)%GRID_SIZE]
-			
-			#var g1 = Vector2(x, y)
-			#var g2 = Vector2(x+1, y)
-			#var g3 = Vector2(x+1, y+1)
-			#var g4 = Vector2(x, y+1)
 			
 			var g1 = Vector2(x, y)
 			var g2 = Vector2(x+1, y)
 			var g3 = Vector2(x+1, y+1)
 			var g4 = Vector2(x, y+1)
 			
-			var texture_index = texture_indices[x][y]
 			if ((x+y+1)&1):
-				add_triangle(v1, v2, v3, texture_index,rPoint1,rPoint2,rPoint3,g1, g2, g3, g1)
-				add_triangle(v1, v3, v4, texture_index,rPoint1,rPoint3,rPoint4,g1, g3, g4, g1)
+				add_triangle(v1, v2, v3, rPoint1,rPoint2,rPoint3,g1, g2, g3, g1)
+				add_triangle(v1, v3, v4, rPoint1,rPoint3,rPoint4,g1, g3, g4, g1)
 			else:
-				add_triangle(v2, v3, v4, texture_index,rPoint2,rPoint3,rPoint4,g2, g3, g4, g1)
-				add_triangle(v2, v4, v1, texture_index,rPoint2,rPoint4,rPoint1,g2, g4, g1, g1)
+				add_triangle(v2, v3, v4, rPoint2,rPoint3,rPoint4,g2, g3, g4, g1)
+				add_triangle(v2, v4, v1, rPoint2,rPoint4,rPoint1,g2, g4, g1, g1)
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
 	renew_terrain()
 
-func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2, uv2: Vector2, uv3: Vector2, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2, main_p: Vector2):
+func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, uv1: Vector2, uv2: Vector2, uv3: Vector2, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2, main_p: Vector2):
 	var verts = [p1, p2, p3]
 	var uvs = [uv1, uv2, uv3]
 	
@@ -207,9 +146,7 @@ func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, idx1: int, uv1: Vector2
 	var main_uvs = main_p / float(GRID_SIZE)
 	
 	for i in range(3):
-		#surface_tool.set_color(Color(0, wave_sizes1[i], 0))
 		surface_tool.set_uv(uvs[i])
-		#surface_tool.set_uv2(Vector2(idx1, 0))
 		surface_tool.set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, main_uvs.x, main_uvs.y))
 		surface_tool.add_vertex(verts[i])
 
@@ -264,9 +201,6 @@ func renew_terrain():
 			var final_c=raw_t_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
 			texture_indices[x][y]=final_c
 			var textUV_42:int = ((decode.mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
-			#final_c=19
-			#if(x+y)%2:
-				#final_c = 34
 			control_data[(y * GRID_SIZE + x)*4 + 0] = final_c
 			control_data[(y * GRID_SIZE + x)*4 + 1] = textUV_42
 			control_data[(y * GRID_SIZE + x)*4 + 2] = 0

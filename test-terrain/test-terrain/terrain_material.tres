@@ -13,5 +13,5 @@ shader_parameter/reflect_texture = ExtResource("3_otvtb")
 shader_parameter/atlas_grid_size = Vector2(8, 19)
 shader_parameter/atlas_border_px = Vector2(8, 8)
 shader_parameter/wave_height = 0.5
-shader_parameter/wave_speed = 2.00000009174012
-shader_parameter/wave_scale = 4.0
+shader_parameter/wave_speed = 5.0
+shader_parameter/wave_scale = 32.0

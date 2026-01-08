@@ -227,7 +227,7 @@ camera_attributes = SubResource("CameraAttributesPractical_irgjg")
 script = ExtResource("14_6dc5f")
 editor_time_enabled = false
 game_time_enabled = false
-current_time = 5.0
+current_time = 10.0
 minutes_per_day = 10.0
 
 [node name="SunLight" type="DirectionalLight3D" parent="Sky3D"]
@@ -241,10 +241,10 @@ light_energy = 0.0
 
 [node name="SkyDome" type="Node" parent="Sky3D"]
 script = ExtResource("15_f8b3d")
-sun_azimuth = -1.1242076
-sun_altitude = -1.6658549
-moon_azimuth = -0.92666066
-moon_altitude = -2.1034865
+sun_azimuth = -1.2435461
+sun_altitude = -0.4775009
+moon_azimuth = -1.3284005
+moon_altitude = -0.9850419
 wind_direction = 2.35619451204804
 
 [node name="TimeOfDay" type="Node" parent="Sky3D"]
@@ -253,7 +253,7 @@ editor_time_enabled = false
 game_time_enabled = false
 dome_path = NodePath("../SkyDome")
 minutes_per_day = 10.0
-current_time = 5.0
+current_time = 10.0
 day = 5
 month = 7
 
