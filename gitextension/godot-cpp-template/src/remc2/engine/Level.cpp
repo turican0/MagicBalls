@@ -348,7 +348,7 @@ bool LoadLevelSMAP_558E0(uint8_t savefileindex)//2368e0
 	//        was before: debugafterload = 1;
 	//        cannot be: CommandLineParams.DoDebugafterload() = 1;
 	x_D41A0_BYTEARRAY_4_struct.setting_30 = 0x3d;//fix same run after load
-	x_WORD_17B4E0 = 0x21ed;//fix random variable for debugging
+	rand2_17B4E0 = 0x21ed;//fix random variable for debugging
 
 	sprintf(printbuffer, "%s/%s/%s%d.DAT", gameDataPath.c_str(), "SAVE", "SMAP", savefileindex + 1);
 	FILE* loadfile = DataFileIO::CreateOrOpenFile(printbuffer, 512);
@@ -748,26 +748,26 @@ void sub_55AB0(type_str_0x2BDE* playStr)//236ab0
 {
 	for (int i = 0; i < 26; i++)
 	{
-		if (playStr->dword_0x3E6_2BE4_12228.str_611.array_0x3E9_1001x.byte[x_BYTE_D94FF_spell_index[i]] || playStr->dword_0x3E6_2BE4_12228.str_611.array_0x403_1027x.byte[x_BYTE_D94FF_spell_index[i]])
+		if (playStr->dword_0x3E6_2BE4_12228.str_611.array_0x3E9_1001x.byte[spellIndex_D94FF[i]] || playStr->dword_0x3E6_2BE4_12228.str_611.array_0x403_1027x.byte[spellIndex_D94FF[i]])
 		{
-			if (!playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[x_BYTE_D94FF_spell_index[i]])
+			if (!playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[spellIndex_D94FF[i]])
 			{
-				type_event_0x6E8E* tempEvent = IfSubtypeCallCreatingManaSphere_4A190(&ENTITY_EA3E4[playStr->word_0x00a_2BE4_11240]->axis_0x4C_76, 15, x_BYTE_D94FF_spell_index[i]);
+				type_event_0x6E8E* tempEvent = IfSubtypeCallCreatingManaSphere_4A190(&ENTITY_EA3E4[playStr->word_0x00a_2BE4_11240]->axis_0x4C_76, 15, spellIndex_D94FF[i]);
 				if (tempEvent)
 				{
-					playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[x_BYTE_D94FF_spell_index[i]] = tempEvent - D41A0_0.struct_0x6E8E;
+					playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[spellIndex_D94FF[i]] = tempEvent - D41A0_0.struct_0x6E8E;
 					tempEvent->parentId_0x28_40 = ENTITY_EA3E4[playStr->word_0x00a_2BE4_11240] - D41A0_0.struct_0x6E8E;
 					tempEvent->struct_byte_0xc_12_15.byte[0] |= 1u;
-					SetSpell_6D5E0(tempEvent, playStr->dword_0x3E6_2BE4_12228.str_611.array_0x437_1079x.byte[x_BYTE_D94FF_spell_index[i]]);
+					SetSpell_6D5E0(tempEvent, playStr->dword_0x3E6_2BE4_12228.str_611.array_0x437_1079x.byte[spellIndex_D94FF[i]]);
 				}
 			}
 		}
 		else
 		{
-			if (playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[x_BYTE_D94FF_spell_index[i]])
+			if (playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[spellIndex_D94FF[i]])
 			{
-				playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[x_BYTE_D94FF_spell_index[i]] = 0;
-				sub_57F20(ENTITY_EA3E4[playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[x_BYTE_D94FF_spell_index[i]]]);
+				playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[spellIndex_D94FF[i]] = 0;
+				sub_57F20(ENTITY_EA3E4[playStr->dword_0x3E6_2BE4_12228.str_611.array_0x333_819x.word[spellIndex_D94FF[i]]]);
 			}
 		}
 	}
@@ -790,7 +790,7 @@ void sub_71990()//252990
 		sub_712F0();
 	for(int i=0;i<504;i++)
 		if (!D41A0_0.array_0x39[i])
-			sub_70D20(i);
+			ResetTmap_70D20(i);
 	for (i = 2; i && !v6_return; i--)
 	{
 		for (j = 0; j < 504 && !v6_return; j++)
@@ -944,34 +944,31 @@ void LoadTextureData(__int16 vgaTypeResolution, MapType_t MapType, uint8_t* text
 }
 
 //----- (0006D5E0) --------------------------------------------------------
-void SetSpell_6D5E0(type_event_0x6E8E* entity, char spell)//24e5e0
+void SetSpell_6D5E0(type_event_0x6E8E* entity, int spellId)//24e5e0
 {
-	int v2y; // eax
-	int8_t actspell;
-
-	actspell = spell;
-	if (spell > SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].byte_0 - 1)
-		actspell = SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].byte_0 - 1;
+	int locSpellId = spellId;
+	if (locSpellId > SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].byte_0 - 1)
+		locSpellId = SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].byte_0 - 1;
 	if (entity->word_0x2E_46)
 	{
-		entity->word_0x2C_44 = actspell + 1;
+		entity->word_0x2C_44 = locSpellId + 1;
 	}
 	else
 	{
-		entity->byte_0x46_70 = actspell;
-		entity->word_0x2A_42 = SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].subspell[actspell].dword_2;
-		entity->word_0x30_48 = SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].subspell[actspell].word_0x18;
-		entity->byte_0x3B_59 = (SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].subspell[actspell].byte_0x1B & 1) == 0;
+		entity->byte_0x46_70 = locSpellId;
+		entity->subSpellIndex_0x2A_42 = SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].subspell[locSpellId].subSpellIndex_2;
+		entity->word_0x30_48 = SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].subspell[locSpellId].word_0x18;
+		entity->byte_0x3B_59 = (SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].subspell[locSpellId].fontType_0x1B & 1) == 0;
 		entity->byte_0x3C_60 = 0;
-		entity->byte_0x3D_61 = 0;
+		entity->fontTypeIndex_0x3D_61 = 0;
 		//fix
-		entity->manaRegen_0x88_136 = SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].subspell[actspell].dword_A;
+		entity->manaRegen_0x88_136 = SPELLS_BEGIN_BUFFER_str[entity->model_0x40_64].subspell[locSpellId].maxManaLimit_A;
 		//fix
-		v2y = sub_6D710(ENTITY_EA3E4[entity->parentId_0x28_40], entity->model_0x40_64, actspell);
-		entity->maxMana_0x8C_140 = v2y;
+		int mana = sub_6D710(ENTITY_EA3E4[entity->parentId_0x28_40], entity->model_0x40_64, locSpellId);
+		entity->maxMana_0x8C_140 = mana;
 		if (entity->word_0x30_48)
-			v2y /= entity->word_0x30_48;
-		entity->mana_0x90_144 = v2y;		
+			mana /= entity->word_0x30_48;
+		entity->mana_0x90_144 = mana;
 		if (x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 0x20)
 		{
 			entity->manaRegen_0x88_136 = 0;
@@ -985,7 +982,7 @@ void sub_712F0()//2522f0
 {
 	x_DWORD_E9C28_str = sub_71B40(x_D41A0_BYTEARRAY_4_struct.dword_0xE6_heapsize_230, 504, (type_x_DWORD_E9C28_str*)x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226);
 	if (x_DWORD_E9C28_str)
-		x_DWORD_E9C08x = sub_72120(0x1F8u);
+		animations_E9C08x = sub_72120(0x1F8u);
 	sub_70A60_open_tmaps();
 	sub_71A70_setTmaps(D41A0_0.terrain_2FECE.MapType);
 	memset(str_DWORD_F66F0x, 0, 504 * sizeof(type_particle_str**));
@@ -1167,7 +1164,7 @@ int sub_6D710(type_event_0x6E8E* a1x, unsigned __int8 a2, unsigned __int8 a3)//2
 
 	v3 = 0;
 	//result = *(x_DWORD *)&(*xadataspellsdat.colorPalette_var28)[80 * a2 + 6 + 26 * a3];
-	result = SPELLS_BEGIN_BUFFER_str[a2].subspell[a3].dword_6;
+	result = SPELLS_BEGIN_BUFFER_str[a2].subspell[a3].manaCost_6;
 	if (a2 == 2 && a1x > ENTITY_EA3E4[0])
 	{
 		//v5 = a1x->dword_0xA4_164;

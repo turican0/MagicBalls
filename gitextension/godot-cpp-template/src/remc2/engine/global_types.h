@@ -174,7 +174,7 @@ enum class spell_t {
 
 typedef struct {//begin 611//str_611
 	type_32_1a array_0x263_611x;//size??//dword_0x649_2BDE
-	std::array<int32_t,NUMBER_OF_SPELLS> spells_experience_0x2CB_715x;//104//size?? spell experience, one dword per spell, 26*4=104 bytes
+	std::array<int32_t,NUMBER_OF_SPELLS> spellsExperience_0x2CB_715x;//104//size?? spell experience, one dword per spell, 26*4=104 bytes
 	//array_0x2CB_715[2] 723
 	type_16_1a array_0x333_819x;//208//size?? spells//word_0x719_2BDE
 	//821//array_0x333_819[1]
@@ -341,7 +341,7 @@ typedef struct _str_0x6E8E {//lenght a8//THING
 	int16_t word_0x24_36;//36 // index subentity
 	int16_t word_0x26_38;//38 // index subentity
 	uint16_t parentId_0x28_40;//40//WHO OWNS ME
-	uint16_t word_0x2A_42;//42 //maybe int16_t
+	uint16_t subSpellIndex_0x2A_42;//42 //maybe int16_t
 	int16_t word_0x2C_44;//44 //add to z
 	int16_t word_0x2E_46;//46
 	uint16_t word_0x30_48;//48
@@ -353,12 +353,12 @@ typedef struct _str_0x6E8E {//lenght a8//THING
 	int8_t byte_0x3A_58;//58
 	int8_t byte_0x3B_59;//59
 	int8_t byte_0x3C_60;//60
-	int8_t byte_0x3D_61;//61
+	int8_t fontTypeIndex_0x3D_61;//61
 	uint8_t byte_0x3E_62;//62 //index
 	uint8_t class_0x3F_63;//63 //type//MODEL
 	//11 - spell
 	uint8_t model_0x40_64;//64 //subtype//CLASS
-	//0 or 1 - player, 2 - castle,3-ballon
+	//0 or 1 - player, 2 - castle, 3 - ballon
 	int8_t xtype_0x41_65;//65 //type subentity
 	int8_t xsubtype_0x42_66;//66 //subtype subentity
 	int8_t byte_0x43_67;//67
@@ -385,7 +385,7 @@ typedef struct _str_0x6E8E {//lenght a8//THING
 	uint16_t playerEntityIndex_0x94_148;//148
 	int16_t word_0x96_150;//150 // index subentity
 	uint16_t word_0x98_152;//152
-	axis_3d word_0x9A_154x;//154
+	axis_3d axis_0x9A_154x;//154
 	//int16_t word_0x9E_158;//152
 	type_str_160* dword_0xA0_160x;//160 //special settings
 	//uint16_t word_0xA2_162;//162

@@ -370,7 +370,7 @@ void convert_struct_to_array_0x6E8E(type_event_0x6E8E* input, uint8_t* output) {
 	//uint16_t word_0x28_40;//40//WHO OWNS ME
 	memcpy(output + 40, &input->parentId_0x28_40, 2);
 	//uint16_t word_0x2A_42;//42 //maybe int16_t
-	memcpy(output + 42, &input->word_0x2A_42, 2);
+	memcpy(output + 42, &input->subSpellIndex_0x2A_42, 2);
 	//int16_t word_0x2C_44;//44 //add to z
 	memcpy(output + 44, &input->word_0x2C_44, 2);
 	//int16_t word_0x2E_46;//46
@@ -394,7 +394,7 @@ void convert_struct_to_array_0x6E8E(type_event_0x6E8E* input, uint8_t* output) {
 	//int8_t byte_0x3C_60;//60
 	memcpy(output + 60, &input->byte_0x3C_60, 1);
 	//int8_t byte_0x3D_61;//61
-	memcpy(output + 61, &input->byte_0x3D_61, 1);
+	memcpy(output + 61, &input->fontTypeIndex_0x3D_61, 1);
 	//int8_t byte_0x3E_62;//62 //index
 	memcpy(output + 62, &input->byte_0x3E_62, 1);
 	//int8_t byte_0x3F_63;//63 //type//MODEL
@@ -449,8 +449,8 @@ void convert_struct_to_array_0x6E8E(type_event_0x6E8E* input, uint8_t* output) {
 	memcpy(output + 0x96, &input->word_0x96_150, 2);
 	//uint16_t word_0x98_152;//152
 	memcpy(output + 0x98, &input->word_0x98_152, 2);
-	//axis_3d word_0x9A_154x;//154
-	convert_struct_to_array_axis_3d(&input->word_0x9A_154x, output + 0x9a);
+	//axis_3d axis_0x9A_154x;//154
+	convert_struct_to_array_axis_3d(&input->axis_0x9A_154x, output + 0x9a);
 	//type_str_160* dword_0xA0_160x;//160 //special settings
 	memcpy(output + 160, &input->dword_0xA0_160x, 4);
 	//type_str_164* dword_0xA4_164x;//100 // adress of xx

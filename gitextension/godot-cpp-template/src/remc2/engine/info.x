@@ -2467,7 +2467,7 @@ sub_5BF50_load_psxdata -23cf50
 *pstr[ c].colorPalette_var28
 
 find
-x_WORD_17B4E0 - 34c4e0
+rand2_17B4E0 - 34c4e0
 sub_44E40 - 225e40
 f33b - ok
 
@@ -2732,7 +2732,7 @@ unsigned int sub_43970(unsigned int a1)//224970
 void sub_37240(uint8_t* a1)//218240
 
 229c84
-__int16 sub_48B90(int a1)//229b90
+__int16 SetHeightmapByBuilding_48B90(int a1)//229b90
 
 sub_44D00();//225d00
 
@@ -4797,13 +4797,13 @@ x_BYTE_12B4E0(0x1e)
 versus
 0x2fc4e0(0x20)
 
-char sub_46570(unsigned __int16 a1, __int16 a2)//227570
+char AddBuildingToTerrain_46570(unsigned __int16 a1, __int16 a2)//227570
 void sub_37BC0(uint8_t* a1)//218bc0
 
 2276b8 -2401
 
 ---------------
-sub_46570
+AddBuildingToTerrain_46570
 0100-ok
 2500-ok
 2501-ok
@@ -4844,7 +4844,7 @@ x_BYTE_12B4E0+0xfe(0x1f)
 versus
 0x2fc4e0+0xfe(0x20)
 
-2277bf - call char sub_46570(unsigned __int16 a1, __int16 a2)//227570
+2277bf - call char AddBuildingToTerrain_46570(unsigned __int16 a1, __int16 a2)//227570
 eax=ffff
 alah=0000
 218f79 - call void sub_37BC0(uint8_t* a1)//218bc0
@@ -4860,7 +4860,7 @@ versus
 x_BYTE_10B4E0(0x1)
 versus
 0x2dc4e0(0x0)
-char sub_46570(unsigned __int16 a1, __int16 a2)//227570
+char AddBuildingToTerrain_46570(unsigned __int16 a1, __int16 a2)//227570
 0101 =1
 0124 =v14
 
@@ -6276,7 +6276,7 @@ void sub_30D50(type_str_0x6E8E* a1x, uint8_t v2, uint8_t v4)//211d50
 
 20c
 
-axis_3d word_0x9A_154x;//154 - mozna dat jako int16_t
+axis_3d axis_0x9A_154x;//154 - mozna dat jako int16_t
 
 0x18e
 
@@ -6437,7 +6437,7 @@ pdwScreenBuffer_351628+0x3688 0xe3
  32C4E0+0x18802
 
  test here:
- v6 = sub_581E0_maybe_tan2(&a1x->word_0x9A_154x, &ix->array_0x4C_76);
+ v6 = sub_581E0_maybe_tan2(&a1x->axis_0x9A_154x, &ix->array_0x4C_76);
 
 step 0xa1f
 (uint8_t*)&D41A0_BYTESTR_0+0x39d1 0x06
@@ -7104,7 +7104,7 @@ x_BYTE_13B4E0+0xe683(0x15)
 versus
 0x30c4e0+0xe683(0x35)
 
-sub_46570 - step 1
+AddBuildingToTerrain_46570 - step 1
 
 pointer_0xE2_heapbuffer_226
 
@@ -7273,9 +7273,9 @@ sub_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]);//24fb90 adress 0x23c
 &v37x->dword_0xA4_164x->str_611.byte_0x458_1112 -selected
 &v37x->dword_0xA4_164x->str_611.byte_0x459_1113 -selected
 
-&v37x->dword_0xA4_164x->str_611.array_0x437_1079x.byte[x_BYTE_D94FF_spell_index[v54]]
+&v37x->dword_0xA4_164x->str_611.array_0x437_1079x.byte[spellIndex_D94FF[v54]]
 
-v79x->array_0x437_1079x.byte[x_BYTE_D94FF_spell_index[D41A0_BYTESTR_0.array_0x6E3E[v114x].str_0x6E3E_byte2]] = D41A0_BYTESTR_0.array_0x6E3E[v114x].str_0x6E3E_byte2;
+v79x->array_0x437_1079x.byte[spellIndex_D94FF[D41A0_BYTESTR_0.array_0x6E3E[v114x].str_0x6E3E_byte2]] = D41A0_BYTESTR_0.array_0x6E3E[v114x].str_0x6E3E_byte2;
 
 x_BYTE_10B4E0 + 0x5050 (0x3)
 versus
@@ -7584,7 +7584,7 @@ int sub_34520(type_str_0x6E8E* a1x)//215520
 
 https://philippegroarke.com/posts/2018/c++_ui_solutions/
 
-char sub_46570(unsigned __int16 a1, __int16 a2)//227570
+char AddBuildingToTerrain_46570(unsigned __int16 a1, __int16 a2)//227570
 rewrite
 
 test
@@ -8128,7 +8128,7 @@ result-*(uint32_t *)(a1 + 2)
 *(uint32_t *)(a1 + 2)+0x3544
 *(uint32_t *)(x_DWORD_E9C08 + 2)+0x3544
 
-&(x_DWORD_E9C08x->dword_2[488])
+&(animations_E9C08x->dword_2[488])
 
 in init mao
 type_animations1* sub_721C0_initTmap(type_E9C08* a1x, int *a2, __int16 a3)//2531c0
@@ -8422,9 +8422,9 @@ versus
 versus
 0x30c4e0+0x4185(0x40)
 
-x_WORD_17B4E0 ?? 0xae5b0500
+rand2_17B4E0 ?? 0xae5b0500
 
-&x_WORD_17B4E0 34c4e0
+&rand2_17B4E0 34c4e0
 0x2368e2
 
 22743c
@@ -8482,7 +8482,7 @@ aa misto 01
 20c95d
 
 problem je zde
-a1x->dword_0x10_16 = *(unsigned __int16 *)(sub_724F0(x_DWORD_E9C08x, v5) + 16);
+a1x->dword_0x10_16 = *(unsigned __int16 *)(GetAnimationByIndex_724F0(animations_E9C08x, v5) + 16);
 
 x_DWORD_F66F0x[0x137]
 *(uint8_t * *)x_DWORD_F66F0x[0x137]
@@ -8519,7 +8519,7 @@ int sub_34910(type_str_0x6E8E* a1x)//215910
 
 test
 
-void sub_46570(uaxis_2d a1x, uaxis_2d a2x)//227570
+void AddBuildingToTerrain_46570(uaxis_2d a1x, uaxis_2d a2x)//227570
 
 2276b8
 
@@ -8617,7 +8617,7 @@ versus
 v41x.word = v37x.word;//adress 218389
 9b
 
-void sub_48B90(int a1)//229b90
+void SetHeightmapByBuilding_48B90(int a1)//229b90
 
 (uint8_t*)&x_BYTE_11B4E0_height+0xebe7 - 0x77
 versus
@@ -8693,7 +8693,7 @@ versus
 229c84 -95 9a a1 a1
         94 9a 9f a0
 		94 99 9d 9f
-void sub_48B90(uaxis_2d a1x)//229b90
+void SetHeightmapByBuilding_48B90(uaxis_2d a1x)//229b90
 
 00001C3D
 

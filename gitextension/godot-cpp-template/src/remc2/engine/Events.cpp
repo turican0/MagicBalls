@@ -364,11 +364,11 @@ void PrepareEvents_49540(Type_Level_2FECE* terrain, type_entity_0x30311* entity)
 						case 0x09:
 						case 0x0B:
 						case 0x0F: {
-							event->word_0x2A_42 = SPELLS_BEGIN_BUFFER_str[(unsigned __int8)sub_6E020(entity->subtype_0x30311)].subspell[entity->par1_14].dword_2;
+							event->subSpellIndex_0x2A_42 = SPELLS_BEGIN_BUFFER_str[GetSpellIndex_6E020(entity->subtype_0x30311)].subspell[entity->par1_14].subSpellIndex_2;
 							if (entity->subtype_0x30311 == 0x09)//9
-								event->maxLife_0x4 = SPELLS_BEGIN_BUFFER_str[(unsigned __int8)sub_6E020(entity->subtype_0x30311)].subspell[entity->par1_14].byte_0x1A;
+								event->maxLife_0x4 = SPELLS_BEGIN_BUFFER_str[GetSpellIndex_6E020(entity->subtype_0x30311)].subspell[entity->par1_14].life_0x1A;
 							else
-								event->life_0x8 = SPELLS_BEGIN_BUFFER_str[(unsigned __int8)sub_6E020(entity->subtype_0x30311)].subspell[entity->par1_14].byte_0x1A;
+								event->life_0x8 = SPELLS_BEGIN_BUFFER_str[GetSpellIndex_6E020(entity->subtype_0x30311)].subspell[entity->par1_14].life_0x1A;
 							break;
 						}
 						case 0x52:
@@ -380,13 +380,13 @@ void PrepareEvents_49540(Type_Level_2FECE* terrain, type_entity_0x30311* entity)
 						}
 						case 0x53:
 						{
-							event->word_0x9A_154x.x = entity->word_10;
+							event->axis_0x9A_154x.x = entity->word_10;
 							break;
 						}
 						case 0x54:
 						case 0x55:
 						{
-							event->word_0x9A_154x.x = entity->word_10;
+							event->axis_0x9A_154x.x = entity->word_10;
 							event->axis_0x4C_76.z = entity->par3_18;
 							break;
 						}
@@ -566,7 +566,7 @@ type_event_0x6E8E* NewEvent_4A050()//22b050
 		D41A0_0.pointers_0x246[D41A0_0.dword_0x35]->maxLife_0x4 = 300;
 		D41A0_0.pointers_0x246[D41A0_0.dword_0x35]->struct_byte_0xc_12_15.dword = 8;
 		D41A0_0.pointers_0x246[D41A0_0.dword_0x35]->actSpeed_0x82_130 = 16;
-		D41A0_0.pointers_0x246[D41A0_0.dword_0x35]->word_0x2A_42 = 100;
+		D41A0_0.pointers_0x246[D41A0_0.dword_0x35]->subSpellIndex_0x2A_42 = 100;
 		D41A0_0.pointers_0x246[D41A0_0.dword_0x35]->id_0x1A_26 = D41A0_0.pointers_0x246[D41A0_0.dword_0x35] - D41A0_0.struct_0x6E8E;
 		D41A0_0.pointers_0x246[D41A0_0.dword_0x35]->xtype_0x41_65 = -1;
 		D41A0_0.pointers_0x246[D41A0_0.dword_0x35]->xsubtype_0x42_66 = -1;
@@ -592,7 +592,7 @@ type_event_0x6E8E* NewEvent_4A050()//22b050
 		D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6]->maxLife_0x4 = 300;
 		D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6]->struct_byte_0xc_12_15.dword = 8;
 		D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6]->actSpeed_0x82_130 = 16;
-		D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6]->word_0x2A_42 = 100;
+		D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6]->subSpellIndex_0x2A_42 = 100;
 		D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6]->id_0x1A_26 = D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6] - D41A0_0.struct_0x6E8E;
 		D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6]->xtype_0x41_65 = -1;
 		D41A0_0.dword_0x11EA[D41A0_0.dword_0x11e6]->xsubtype_0x42_66 = -1;
@@ -1023,7 +1023,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 		allert_error();
 		break;
 	case 0x1fc5f0: {
-		sub_1B5F0();
+		KillAllCreatures_1B5F0();
 		break;
 	}
 	case 0x1fc6b0: {
@@ -2669,7 +2669,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 		break;
 	}
 	case 0x219270: {
-		sub_38270(a1_6E8E);
+		GetRandManaSphere_38270(a1_6E8E);
 		break;
 	}
 
@@ -2678,7 +2678,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 		break;
 	}
 	case 0x2195c0: {
-		sub_385C0_remove_castle_stage(a1_6E8E);
+		RemoveCastleStage_385C0(a1_6E8E);
 		break;
 	}
 	case 0x2199f0: {//cast castleII 2
@@ -2787,7 +2787,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 #ifdef __linux__ // FIXME: types
 		std::cout << "FIXME: types @ function " << __FUNCTION__ << ", line " << __LINE__ << std::endl;
 #else
-		sub_52D70((unsigned short)a1_6E8E, 0);
+		ShowMessage_52D70((unsigned short)a1_6E8E, 0);
 		stub_fix_it();//bad retyping
 #endif
 		break;
@@ -2871,7 +2871,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 		break;
 	}
 	case 0x23f660: {
-		sub_5E660(a1_6E8E);
+		DisableEntitesDrawing_5E660(a1_6E8E);
 		break;
 	}
 	case 0x23f6c0: {
@@ -3815,7 +3815,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 		break;
 	}
 	case 0x24e830: {
-		sub_6D830(a1_6E8E, 0);
+		CopyAxisForSpellWithLife_6D830(a1_6E8E, 0);
 		break;
 	}
 	case 0x24e880: {
@@ -3872,7 +3872,7 @@ void pre_sub_4A190_0x6E8E(uint32_t adress, type_event_0x6E8E* a1_6E8E)//pre 22b1
 #ifdef __linux__ // FIXME: types
 		std::cout << "FIXME: types @ function " << __FUNCTION__ << ", line " << __LINE__ << std::endl;
 #else
-		sub_6E020((unsigned short)a1_6E8E);
+		GetSpellIndex_6E020((unsigned short)a1_6E8E);
 		stub_fix_it();//bad retyping
 #endif
 		break;
@@ -5688,7 +5688,7 @@ void sub_48930(uint16_t posX2, uint16_t posY2, uint16_t posX, uint16_t posY, uin
 		/* *(_DWORD*)(result + 154) = *(_DWORD*)&v8;
 		*(_WORD*)(result + 158) = v10;
 		*(_BYTE*)(result + 70) = a5;*/
-		result->word_0x9A_154x = v8x;
+		result->axis_0x9A_154x = v8x;
 		result->byte_0x46_70 = a5;
 	}
 }
