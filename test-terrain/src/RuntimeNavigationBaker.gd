@@ -7,7 +7,6 @@ signal bake_finished
 @export var travel_cost: float = 1.0 : set = set_travel_cost
 @export_flags_3d_navigation var navigation_layers: int = 1 : set = set_navigation_layers
 @export var template: NavigationMesh : set = set_template
-@export var terrain: Terrain3D
 @export var player: Node3D
 @export var mesh_size := Vector3(256, 512, 256)
 @export var min_rebake_distance: float = 64.0
@@ -123,12 +122,6 @@ func _task_bake(p_center: Vector3) -> void:
 	nav_mesh.filter_baking_aabb_offset = p_center
 	var source_geometry: NavigationMeshSourceGeometryData3D
 	source_geometry = _scene_geometry.duplicate()
-	
-	if terrain:
-		var aabb: AABB = nav_mesh.filter_baking_aabb
-		aabb.position += nav_mesh.filter_baking_aabb_offset
-		var faces: PackedVector3Array = terrain.generate_nav_mesh_source_geometry(aabb, false)
-		source_geometry.add_faces(faces, Transform3D.IDENTITY)
 	
 	if source_geometry.has_data():
 		NavigationServer3D.bake_from_source_geometry_data(nav_mesh, source_geometry)

@@ -11,13 +11,13 @@ var direction: Vector3 = Vector3.ZERO
 var last_position: Vector3
 var aplicated_tick: int = 0
 #var tick_queue: Array = []
-var terrain_ref: Terrain3D
 
 var begin_position: Vector3
 
 var first_run: bool = true
 
 func _ready() -> void:
+	pass
 	# Pro jistotu normalizujeme směr
 	#direction = direction.normalized()
 	#floor_snap_length = 0.0
@@ -25,7 +25,6 @@ func _ready() -> void:
 	#floor_max_angle = 0.0  # Nebere ohled na úhly podlahy
 	
 	#terrain_ref = get_node("/root/Demo/NavigationRegion3D/Terrain3D")
-	terrain_ref = get_parent().terrain
 	
 func _physics_process(delta: float) -> void:
 	if first_run:
@@ -44,7 +43,6 @@ func _physics_process(delta: float) -> void:
 	if distance_count > 0:		
 		for i in range(0, distance_count):
 			var point = last_position.lerp(global_position, i)
-			terrain_ref._apply_terrain_damage(point, damage_radius, damage_strength)
 		last_position = global_position
 			
 		# Konec životnosti

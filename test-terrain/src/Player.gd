@@ -8,8 +8,6 @@ extends CharacterBody3D
 @export var MANA: float = 0.0
 @export var JUMP_SPEED: float = 2.0
 
-@export var terrain: Terrain3D
-
 var min_player_height: float = 0.5;
 var max_speed:float = 10
 var accel_speed:float = 10

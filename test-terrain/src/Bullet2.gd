@@ -10,7 +10,6 @@ var direction: Vector3 = Vector3.ZERO
 var timer: float = 0.0
 var last_position: Vector3
 var tick_queue: Array = []
-var terrain_ref: Terrain3D
 
 var begin_position: Vector3
 
@@ -22,8 +21,6 @@ func _ready() -> void:
 	floor_snap_length = 0.0
 	floor_stop_on_slope = false
 	floor_max_angle = 0.0  # Nebere ohled na úhly podlahy
-	
-	terrain_ref = get_node("/root/Demo/NavigationRegion3D/Terrain3D")
 	
 func _physics_process(delta: float) -> void:
 	if first_run:
@@ -49,10 +46,6 @@ func _physics_process(delta: float) -> void:
 	# zpracování všech ticků ve frontě
 	while tick_queue.size() > 0:
 		var point = tick_queue.pop_front()
-		if terrain_ref:
-			terrain_ref._apply_terrain_damage(point, damage_radius, damage_strength)
-		else:
-			push_warning("Terrain3D reference not set! Skipping damage.")
 			
 		# Konec životnosti
 	var total_distance = global_position.distance_to(begin_position)
