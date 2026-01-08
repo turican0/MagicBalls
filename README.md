@@ -16,15 +16,21 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add terrain changes<br>
 -Add using mouse buttons<br>
 -Add select spells<br>
+
+---
+
+## Next version:
+-update UI
+
+## Version 260108:
+### Changes:
+-Create true model for building possession<br>
 -Add multimesh for objects(for corect visibility of objects)<br>
 -Fix water reflections<br>
 -Fix water waves<br>
 -Copy terrain modification<br>
 
----
-
-## Next version:
--Create true model for building possession
+https://github.com/turican0/MagicBalls/blob/wiki/MB-7.%20test.gif
 
 ## Version 260104:
 ### Changes:
