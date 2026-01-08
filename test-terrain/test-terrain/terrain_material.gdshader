@@ -41,12 +41,11 @@ void vertex() {
 	float t0 = textureLod(control_map, main_uv, 0.0).r;
     float t1 = textureLod(control_map, global_uv, 0.0).r;
     float t2 = textureLod(control_map, global_uv + vec2(0.0, -texel.y), 0.0).r;
-    float t3 = textureLod(control_map, global_uv + vec2(-texel.x, -texel.y), 0.0).r;
+    float t3 = textureLod(control_map, global_uv + vec2(-texel.x, 0.0), 0.0).r;
 	float t4 = textureLod(control_map, global_uv + vec2(-texel.x, -texel.y), 0.0).r;
 	v_texture_index1 = t0 * 255.0;
-    float mask = 0.0;
-    if (t1 < 0.001 && t2 < 0.001 && t3 < 0.001 && t4 < 0.001) mask = 1.0;
-    float v_final = mask;
+    float v_final = 0.0;
+    if (t1 < 0.001 && t2 < 0.001 && t3 < 0.001 && t4 < 0.001) v_final = 1.0;
 	
 	float row_float = textureLod(control_map, main_uv, 0.0).g;
 	row_index = int(round(row_float * 255.0));
@@ -83,6 +82,8 @@ void vertex() {
 	
 	// Data pro fragment
 	v_texture_index1 = textureLod(control_map, main_uv, 0.0).r * 255.0;
+	if (v_texture_index1 == 0.0)
+		NORMAL = vec3(0.0, 1.0, 0.0);
 	row_index = int(round(textureLod(control_map, main_uv, 0.0).g * 255.0));
 }
 
