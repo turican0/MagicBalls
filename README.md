@@ -31,8 +31,8 @@ I had to put most things into the shader. After a series of struggles, I created
 Thanks to this, I got up to 3-4 FPS.<br>
 Then all I had to do was rewrite the key parts of the code from GDSCRIPT to C++, and I got up to 60 FPS.<br>
 ### Changes:
--terrain rendering and updating moved to shader<br>
--terrain work moved to C++<br>
+-Terrain rendering and updating moved to shader<br>
+-Terrain work moved to C++<br>
 -Create true model for building possession<br>
 -Add multimesh for objects(for corect visibility of objects)<br>
 -Fix water reflections<br>
