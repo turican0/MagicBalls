@@ -43,109 +43,155 @@ void ExampleClass::set_mesh_instance(Node *p_node) {
 }
 
 void ExampleClass::initialize_grid_data() {
-	vertices.resize(VERTEX_COUNT * VERTEX_COUNT);
-	for (int x = 0; x < VERTEX_COUNT; x++) {
-		for (int y = 0; y < VERTEX_COUNT; y++) {
-			float height = (UtilityFunctions::randf() * 2.0f - 1.0f) * 0.5f;
-			vertices[y * VERTEX_COUNT + x] = Vector3(x * CELL_SCALE, height, y * CELL_SCALE);
-		}
-	}
-
-	texture_indices.resize(GRID_SIZE * GRID_SIZE);
-	for (int i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-		texture_indices[i] = UtilityFunctions::randi() % 25;
-	}
-
-	for (int y = 0; y < GRID_SIZE; y++) {
-		for (int x = 0; x < GRID_SIZE; x++) {
-			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
-			texture_indices[y * GRID_SIZE + x] = mapTerrainType_10B4E0[idx];
-		}
-	}
-
-	for (int y = 0; y < VERTEX_COUNT; y++) {
-		for (int x = 0; x < VERTEX_COUNT; x++) {
-			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
-			float h = mapHeightmap_11B4E0[idx] * 0.125f;
-			vertices[y * VERTEX_COUNT + x] = Vector3(x * CELL_SCALE, h, y * CELL_SCALE);
-		}
-	}
 }
 
 void ExampleClass::recalculate_mesh() {
 	surface_tool.instantiate();
 	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
 
-	std::vector<float> wave_scale(GRID_SIZE * GRID_SIZE, 0.0f);
-
-	// Výpočet wave_scale
 	for (int x = 0; x < GRID_SIZE; x++) {
 		for (int y = 0; y < GRID_SIZE; y++) {
-			int prev_x = (x + GRID_SIZE - 1) % GRID_SIZE;
-			int prev_y = (y + GRID_SIZE - 1) % GRID_SIZE;
+			//int angle_idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
+			//int textUV_42 = (mapAngle_13B4E0[angle_idx] >> 2) & 0x1C;
 
-			if (texture_indices[y * GRID_SIZE + x] == 0 &&
-					texture_indices[y * GRID_SIZE + prev_x] == 0 &&
-					texture_indices[prev_y * GRID_SIZE + x] == 0 &&
-					texture_indices[prev_y * GRID_SIZE + prev_x] == 0) {
-				wave_scale[y * GRID_SIZE + x] = 1.0f;
-			}
-		}
-	}
+			Vector2 rPoint1 = Vector2(0, 0);
+			Vector2 rPoint2 = Vector2(1, 0);
+			Vector2 rPoint3 = Vector2(1, 1);
+			Vector2 rPoint4 = Vector2(0, 1);
 
-	// Poznámka: Zde předpokládám existenci uv_table_d4350 a mapAngle_13B4E0 ve vašem C++ kódu
-	// nebo přístup přes get_parent(). Nahraďte logikou dle vašeho projektu.
+			Vector3 v1 = Vector3(x * CELL_SCALE, 0, y * CELL_SCALE);
+			Vector3 v2 = Vector3((x + 1) * CELL_SCALE, 0, y * CELL_SCALE);
+			Vector3 v3 = Vector3((x + 1) * CELL_SCALE, 0, (y + 1) * CELL_SCALE);
+			Vector3 v4 = Vector3(x * CELL_SCALE, 0, (y + 1) * CELL_SCALE);
 
-	for (int x = 0; x < GRID_SIZE; x++) {
-		for (int y = 0; y < GRID_SIZE; y++) {
-			int angle_idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
-			int textUV_42 = (mapAngle_13B4E0[angle_idx] >> 2) & 0x1C;
-
-			Vector2 rP1 = Vector2(UVTable_D4350[textUV_42][0] > 0 ? 1.0f : 0.0f, UVTable_D4350[textUV_42][1] > 0 ? 1.0f : 0.0f);
-			Vector2 rP2 = Vector2(UVTable_D4350[textUV_42][2] > 0 ? 1.0f : 0.0f, UVTable_D4350[textUV_42][3] > 0 ? 1.0f : 0.0f);
-			Vector2 rP3 = Vector2(UVTable_D4350[textUV_42][4] > 0 ? 1.0f : 0.0f, UVTable_D4350[textUV_42][5] > 0 ? 1.0f : 0.0f);
-			Vector2 rP4 = Vector2(UVTable_D4350[textUV_42][6] > 0 ? 1.0f : 0.0f, UVTable_D4350[textUV_42][7] > 0 ? 1.0f : 0.0f);
-
-			Vector3 v1 = vertices[y * VERTEX_COUNT + x];
-			Vector3 v2 = vertices[y * VERTEX_COUNT + (x + 1)];
-			Vector3 v3 = vertices[(y + 1) * VERTEX_COUNT + (x + 1)];
-			Vector3 v4 = vertices[(y + 1) * VERTEX_COUNT + x];
-
-			float waves1 = wave_scale[y * GRID_SIZE + x];
-			float waves2 = wave_scale[y * GRID_SIZE + ((x + 1) % GRID_SIZE)];
-			float waves3 = wave_scale[((y + 1) % GRID_SIZE) * GRID_SIZE + ((x + 1) % GRID_SIZE)];
-			float waves4 = wave_scale[((y + 1) % GRID_SIZE) * GRID_SIZE + x];
-
-			int texture_index = texture_indices[y * GRID_SIZE + x];
+			Vector2 g1 = Vector2(x, y);
+			Vector2 g2 = Vector2(x + 1, y);
+			Vector2 g3 = Vector2(x + 1, y + 1);
+			Vector2 g4 = Vector2(x, y + 1);
 
 			if ((x + y + 1) & 1) {
-				add_triangle(v1, v2, v3, texture_index, texture_index, 0.0f, rP1, rP2, rP3, waves1, waves2, waves3, waves1, waves2, waves3);
-				add_triangle(v1, v3, v4, texture_index, texture_index, 0.0f, rP1, rP3, rP4, waves1, waves3, waves4, waves1, waves3, waves4);
+				add_triangle(v1, v2, v3, rPoint1, rPoint2, rPoint3, g1, g2, g3, g1);
+				add_triangle(v1, v3, v4, rPoint1, rPoint3, rPoint4, g1, g3, g4, g1);
 			} else {
-				add_triangle(v2, v3, v4, texture_index, texture_index, 0.0f, rP2, rP3, rP4, waves2, waves3, waves4, waves2, waves3, waves4);
-				add_triangle(v2, v4, v1, texture_index, texture_index, 0.0f, rP2, rP4, rP1, waves2, waves4, waves1, waves2, waves4, waves1);
+				add_triangle(v2, v3, v4, rPoint2, rPoint3, rPoint4, g2, g3, g4, g1);
+				add_triangle(v2, v4, v1, rPoint2, rPoint4, rPoint1, g2, g4, g1, g1);
 			}
 		}
 	}
 
-	surface_tool->generate_normals();
+	//surface_tool->generate_normals();
 	surface_tool->index();
 	mesh_instance->set_mesh(surface_tool->commit());
+	renew_terrain();
 }
 
-void ExampleClass::add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, int idx1, int idx2, float weight,
-		Vector2 uv1, Vector2 uv2, Vector2 uv3,
-		float w1_1, float w1_2, float w1_3,
-		float w2_1, float w2_2, float w2_3) {
+void ExampleClass::renew_terrain() {
+	if (height_image.is_null())
+		initialize_heightmap();
+	if (control_image.is_null())
+		initialize_controlmap();
+
+	if (control_data.size() != GRID_SIZE * GRID_SIZE * 4) {
+		control_data.resize(GRID_SIZE * GRID_SIZE * 4);
+	}
+	uint8_t *cd_ptr = control_data.ptrw();
+
+	for (int y = 0; y < GRID_SIZE; ++y) {
+		for (int x = 0; x < GRID_SIZE; ++x) {
+			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
+			int final_c = mapTerrainType_10B4E0[idx];
+			int textUV_42 = (mapAngle_13B4E0[idx] >> 2) & 0x1C;
+			int write_idx = (y * GRID_SIZE + x) * 4;
+			cd_ptr[write_idx + 0] = (uint8_t)final_c;
+			cd_ptr[write_idx + 1] = (uint8_t)textUV_42;
+			cd_ptr[write_idx + 2] = 0;
+			cd_ptr[write_idx + 3] = 0;
+		}
+	}
+
+	// 3. Aktualizace Height dat pro GPU
+	height_data.resize(GRID_SIZE * GRID_SIZE);
+	for (int y = 0; y < GRID_SIZE; ++y) {
+		for (int x = 0; x < GRID_SIZE; ++x) {
+			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
+			height_data[y * GRID_SIZE + x] = (float)mapHeightmap_11B4E0[idx] * 0.125f * 0.1f;
+		}
+	}
+
+	update_gpu_heightmap();
+	update_gpu_controlmap();
+}
+
+void ExampleClass::update_gpu_heightmap() {
+	if (height_image.is_null())
+		initialize_heightmap();
+
+	// Převod float vektoru na PackedByteArray pro Godot Image (Format RF)
+	PackedByteArray byte_array;
+	byte_array.resize(height_data.size() * sizeof(float));
+	memcpy(byte_array.ptrw(), height_data.data(), byte_array.size());
+
+	height_image->set_data(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF, byte_array);
+	height_texture->update(height_image);
+}
+
+void ExampleClass::update_gpu_controlmap() {
+	control_image->set_data(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8, control_data);
+	control_texture->update(control_image);
+}
+
+void ExampleClass::initialize_controlmap() {
+	// Vytvoření nového Image objektu (RGBA8 pro barevné/indexové mapy)
+	control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
+
+	// Vytvoření textury z image
+	control_texture = ImageTexture::create_from_image(control_image);
+
+	// Získání materiálu z MeshInstance3D
+	// Předpokládám, že mesh_instance je pointer uložený ve třídě
+	if (mesh_instance) {
+		Ref<ShaderMaterial> mat = mesh_instance->get_material_override();
+		if (mat.is_valid()) {
+			mat->set_shader_parameter("control_map", control_texture);
+		}
+	}
+}
+
+void ExampleClass::initialize_heightmap() {
+	// Inicializace lokálního pole (vektoru)
+	height_data.assign(GRID_SIZE * GRID_SIZE, 0.0f);
+
+	// Vytvoření Image objektu (RF = R channel Float, ideální pro heightmapy)
+	height_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
+
+	// Inicializace textury
+	height_texture = ImageTexture::create_from_image(height_image);
+
+	if (mesh_instance) {
+		Ref<ShaderMaterial> mat = mesh_instance->get_material_override();
+		if (mat.is_valid()) {
+			mat->set_shader_parameter("height_map", height_texture);
+		}
+	}
+}
+
+void ExampleClass::add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, Vector2 uv1, Vector2 uv2, Vector2 uv3,
+	Vector2 grid_p1, Vector2 grid_p2, Vector2 grid_p3, Vector2 main_p)
+{
 	Vector3 verts[] = { p1, p2, p3 };
 	Vector2 uvs[] = { uv1, uv2, uv3 };
-	float ws1[] = { w1_1, w1_2, w1_3 };
-	float ws2[] = { w2_1, w2_2, w2_3 };
+
+	Vector2 global_uvs[] = {
+		grid_p1 / float(GRID_SIZE),
+		grid_p2 / float(GRID_SIZE),
+		grid_p3 / float(GRID_SIZE)
+	};
+
+	Vector2 main_uvs = main_p / float(GRID_SIZE);
 
 	for (int i = 0; i < 3; i++) {
-		surface_tool->set_color(Color(weight, ws1[i], ws2[i]));
 		surface_tool->set_uv(uvs[i]);
-		surface_tool->set_uv2(Vector2(idx1, idx2));
+		surface_tool->set_custom(0, Color(global_uvs[i].x, global_uvs[i].y, main_uvs.x, main_uvs.y));
 		surface_tool->add_vertex(verts[i]);
 	}
 }

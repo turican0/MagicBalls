@@ -13,6 +13,13 @@
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/variant/vector2.hpp>
 
+#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/image.hpp>
+#include <godot_cpp/classes/image_texture.hpp>
+#include <godot_cpp/variant/packed_byte_array.hpp>
+
+#include <godot_cpp/classes/shader_material.hpp>
+
 using namespace godot;
 
 class ExampleClass : public RefCounted {
@@ -24,17 +31,24 @@ private:
 	Ref<SurfaceTool> surface_tool;
 
 	// Data gridu (doporučeno použít 1D pole pro výkon)
-	std::vector<Vector3> vertices;
-	std::vector<int> texture_indices;
+	//std::vector<Vector3> vertices;
+	//std::vector<int> texture_indices;
 
-	int GRID_SIZE = 256;
+	static const int GRID_SIZE = 256;
 	int VERTEX_COUNT = GRID_SIZE + 1;
 	float CELL_SCALE = 1.0f;
 
-	void add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, int idx1, int idx2, float weight,
-			Vector2 uv1, Vector2 uv2, Vector2 uv3,
-			float w1_1, float w1_2, float w1_3,
-			float w2_1, float w2_2, float w2_3);
+	PackedByteArray control_data;
+	std::vector<float> height_data;
+	int texture_indices[GRID_SIZE][GRID_SIZE];
+
+	Ref<Image> height_image;
+	Ref<ImageTexture> height_texture;
+	Ref<Image> control_image;
+	Ref<ImageTexture> control_texture;
+
+	void add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, Vector2 uv1, Vector2 uv2, Vector2 uv3,
+			Vector2 grid_p1, Vector2 grid_p2, Vector2 grid_p3, Vector2 main_p);
 
 protected:
 	static void _bind_methods();
@@ -59,4 +73,9 @@ public:
 	void set_mesh_instance(Node *p_node);
 	void initialize_grid_data();
 	void recalculate_mesh();
+	void renew_terrain();
+	void update_gpu_heightmap();
+	void update_gpu_controlmap();
+	void initialize_controlmap();
+	void initialize_heightmap();
 };

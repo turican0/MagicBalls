@@ -20,18 +20,12 @@ func _ready():
 	initialize_nodes()
 	
 	# 2. Inicializace dat sítě (vrcholy a textury)
-	initialize_grid_data()
+	#initialize_grid_data()
 	
 	# 3. Generování a vykreslení sítě
 	get_parent().get_node("DecodeLevel").init()
 	#recalculate_mesh()	
-	for y in range(GRID_SIZE):
-		for x in range(GRID_SIZE):
-			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-	for y in range(VERTEX_COUNT):
-		for x in range(VERTEX_COUNT):
-			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.125
-	recalculate_mesh()
+	#recalculate_mesh()
 	
 	#begin of Multimesh
 	var mmi:MultiMeshInstance3D = get_parent().get_node("MultiMeshInstance3D")
@@ -101,6 +95,13 @@ func initialize_grid_data():
 var wave_scale: Array = []
 
 func recalculate_mesh():
+	for y in range(GRID_SIZE):
+		for x in range(GRID_SIZE):
+			texture_indices[x][y]=get_parent().get_node("DecodeLevel").mapTerrainType_10B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+	for y in range(VERTEX_COUNT):
+		for x in range(VERTEX_COUNT):
+			vertices[x][y].y=get_parent().get_node("DecodeLevel").mapHeightmap_11B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]*0.125
+			
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
@@ -205,8 +206,6 @@ func renew_terrain():
 			control_data[(y * GRID_SIZE + x)*4 + 1] = textUV_42
 			control_data[(y * GRID_SIZE + x)*4 + 2] = 0
 			control_data[(y * GRID_SIZE + x)*4 + 3] = 0
-			if(textUV_42>32):
-				textUV_42=+0
 	for y in range(VERTEX_COUNT):
 		for x in range(VERTEX_COUNT):
 			var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]

@@ -304,6 +304,9 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	#MBEX.initialize_grid_data()
 	#MBEX.recalculate_mesh()
 	
+	get_parent().get_node("Node3D-testTerrain").initialize_grid_data()
+	get_parent().get_node("Node3D-testTerrain").recalculate_mesh()
+	
 	return true
 	
 func getPlayerPosRot() -> Dictionary:
