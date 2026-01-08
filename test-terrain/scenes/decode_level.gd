@@ -300,12 +300,14 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()
 	mapAngle_13B4E0 = MBEX.TerrainGetAngle()
 	
-	#MBEX.set_mesh_instance(get_parent().get_node("Node3D-testTerrain").mesh_instance)
-	#MBEX.initialize_grid_data()
-	#MBEX.recalculate_mesh()
+	MBEX.set_mesh_instance(get_parent().get_node("Node3D-testTerrain").mesh_instance)
+	MBEX.initialize_grid_data()
+	MBEX.recalculate_mesh()
+	MBEX.renew_terrain()
 	
-	get_parent().get_node("Node3D-testTerrain").initialize_grid_data()
-	get_parent().get_node("Node3D-testTerrain").recalculate_mesh()
+	#get_parent().get_node("Node3D-testTerrain").initialize_grid_data()
+	#get_parent().get_node("Node3D-testTerrain").recalculate_mesh()
+	#get_parent().get_node("Node3D-testTerrain").renew_terrain()
 	
 	return true
 	

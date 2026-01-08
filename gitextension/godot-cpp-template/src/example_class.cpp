@@ -26,6 +26,7 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D"), &ExampleClass::set_mesh_instance);
 	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &ExampleClass::initialize_grid_data);
 	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh"), &ExampleClass::recalculate_mesh);
+	godot::ClassDB::bind_method(D_METHOD("renew_terrain"), &ExampleClass::renew_terrain);
 }
 
 void ExampleClass::set_mesh_instance(Node *p_node) {
@@ -46,8 +47,9 @@ void ExampleClass::initialize_grid_data() {
 }
 
 void ExampleClass::recalculate_mesh() {
-	surface_tool.instantiate();
+	surface_tool.instantiate();	
 	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
+	surface_tool->set_custom_format(0, SurfaceTool::CUSTOM_RGBA_FLOAT);
 
 	for (int x = 0; x < GRID_SIZE; x++) {
 		for (int y = 0; y < GRID_SIZE; y++) {
@@ -79,10 +81,10 @@ void ExampleClass::recalculate_mesh() {
 		}
 	}
 
-	//surface_tool->generate_normals();
+	surface_tool->generate_normals();
 	surface_tool->index();
 	mesh_instance->set_mesh(surface_tool->commit());
-	renew_terrain();
+	//renew_terrain();
 }
 
 void ExampleClass::renew_terrain() {
@@ -114,7 +116,7 @@ void ExampleClass::renew_terrain() {
 	for (int y = 0; y < GRID_SIZE; ++y) {
 		for (int x = 0; x < GRID_SIZE; ++x) {
 			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
-			height_data[y * GRID_SIZE + x] = (float)mapHeightmap_11B4E0[idx] * 0.125f * 0.1f;
+			height_data[y * GRID_SIZE + x] = (float)mapHeightmap_11B4E0[idx] * 0.125f;
 		}
 	}
 
@@ -125,8 +127,6 @@ void ExampleClass::renew_terrain() {
 void ExampleClass::update_gpu_heightmap() {
 	if (height_image.is_null())
 		initialize_heightmap();
-
-	// Převod float vektoru na PackedByteArray pro Godot Image (Format RF)
 	PackedByteArray byte_array;
 	byte_array.resize(height_data.size() * sizeof(float));
 	memcpy(byte_array.ptrw(), height_data.data(), byte_array.size());
@@ -141,14 +141,8 @@ void ExampleClass::update_gpu_controlmap() {
 }
 
 void ExampleClass::initialize_controlmap() {
-	// Vytvoření nového Image objektu (RGBA8 pro barevné/indexové mapy)
 	control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
-
-	// Vytvoření textury z image
 	control_texture = ImageTexture::create_from_image(control_image);
-
-	// Získání materiálu z MeshInstance3D
-	// Předpokládám, že mesh_instance je pointer uložený ve třídě
 	if (mesh_instance) {
 		Ref<ShaderMaterial> mat = mesh_instance->get_material_override();
 		if (mat.is_valid()) {
@@ -158,15 +152,9 @@ void ExampleClass::initialize_controlmap() {
 }
 
 void ExampleClass::initialize_heightmap() {
-	// Inicializace lokálního pole (vektoru)
 	height_data.assign(GRID_SIZE * GRID_SIZE, 0.0f);
-
-	// Vytvoření Image objektu (RF = R channel Float, ideální pro heightmapy)
 	height_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
-
-	// Inicializace textury
 	height_texture = ImageTexture::create_from_image(height_image);
-
 	if (mesh_instance) {
 		Ref<ShaderMaterial> mat = mesh_instance->get_material_override();
 		if (mat.is_valid()) {

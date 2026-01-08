@@ -132,7 +132,7 @@ func recalculate_mesh():
 	surface_tool.generate_normals()
 	surface_tool.index()
 	mesh_instance.mesh = surface_tool.commit()
-	renew_terrain()
+	#renew_terrain()
 
 func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, uv1: Vector2, uv2: Vector2, uv3: Vector2, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2, main_p: Vector2):
 	var verts = [p1, p2, p3]
@@ -215,7 +215,7 @@ func renew_terrain():
 	for y in range(GRID_SIZE):
 		for x in range(GRID_SIZE):
 			var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-			var final_h = raw_h * 0.125*0.1
+			var final_h = raw_h * 0.125
 			height_data[y * GRID_SIZE + x] = final_h
 	update_gpu_heightmap()
 	update_gpu_controlmap()

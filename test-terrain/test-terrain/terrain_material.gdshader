@@ -2,7 +2,7 @@ shader_type spatial;
 
 uniform sampler2D height_map: filter_nearest, repeat_enable;
 uniform sampler2D control_map : filter_nearest, repeat_enable;
-uniform float height_scale : hint_range(0.0, 100.0) = 10.0;
+uniform float height_scale : hint_range(0.0, 100.0) = 1.0;
 
 uniform sampler2D atlas_texture : source_color;
 uniform sampler2D reflect_texture : source_color;
