@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://domhm87hbhbg1"]
+[gd_scene load_steps=7 format=3 uid="uid://domhm87hbhbg1"]
 
 [ext_resource type="Script" uid="uid://dajlr3n5wjwmb" path="res://src/Player.gd" id="1_nm1yx"]
 [ext_resource type="Script" uid="uid://b62ppvc03a6b1" path="res://src/CameraManager.gd" id="2_loos7"]
@@ -7,11 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://b7fps2taalaix" path="res://assets/cat/sketchfab_scene.tscn" id="5_7x12g"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_smq6u"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lwhhq"]
-height = 1.5
-
-[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_twc2s"]
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
@@ -33,15 +28,13 @@ unique_name_in_owner = true
 near = 0.25
 far = 16384.0
 
-[node name="CollisionShapeBody" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
-shape = SubResource("CapsuleShape3D_lwhhq")
-
-[node name="CollisionShapeRay" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0)
-shape = SubResource("SeparationRayShape3D_twc2s")
-
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("4_ops02")]
+visible = false
 
 [node name="Sketchfab_Scene3" parent="." instance=ExtResource("5_7x12g")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.85, 0)
+visible = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+current = true
