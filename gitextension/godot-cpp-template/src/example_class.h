@@ -79,4 +79,5 @@ public:
 	void initialize_controlmap();
 	void initialize_heightmap();
 	Array getActiveSpells();
+	Array getSelectedSpells();
 	};

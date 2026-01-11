@@ -185,9 +185,10 @@ script = ExtResource("1_h7vyv")
 
 [node name="UI" parent="." instance=ExtResource("4_x5ge4")]
 
-[node name="CanvasUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("spell_grid")]
+[node name="CanvasUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("spell_grid", "spell_grid_selected")]
 script = ExtResource("10_xkkgk")
 spell_grid = NodePath("GridContainer")
+spell_grid_selected = NodePath("GridContainer2")
 
 [node name="GridContainer" type="GridContainer" parent="CanvasUI"]
 anchors_preset = 12
@@ -203,6 +204,7 @@ columns = 13
 offset_left = 1027.0
 offset_right = 1154.0
 offset_bottom = 85.0
+columns = 2
 
 [node name="Sky3D" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qgmqs")

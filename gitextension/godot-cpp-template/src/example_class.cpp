@@ -10,6 +10,7 @@
 #include "remc2/engine/ReadAndDecompress.h"
 #include "remc2/engine/MenusAndIntros.h"
 #include "remc2/engine/Basic.h"
+#include "remc2/engine/GameUI.h"
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
@@ -28,6 +29,82 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh"), &ExampleClass::recalculate_mesh);
 	godot::ClassDB::bind_method(D_METHOD("renew_terrain"), &ExampleClass::renew_terrain);
 	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &ExampleClass::getActiveSpells);
+	godot::ClassDB::bind_method(D_METHOD("getSelectedSpells"), &ExampleClass::getSelectedSpells);
+}
+
+typedef struct {
+	int spellIndex;
+	bool glow;
+	int spellLevel;
+	int mana1;
+	int mana2;
+} drawSpellInfoType;
+
+drawSpellInfoType getDraWSpellInfo(type_event_0x6E8E *playerEvent) //20f260
+{
+	drawSpellInfoType result;
+	result.spellIndex = -1;
+	if (playerEvent > ENTITY_EA3E4[0]) {
+		GetFont_6FC50(FontType_D419D);
+		type_event_0x6E8E *parentEvent = ENTITY_EA3E4[playerEvent->parentId_0x28_40];
+		if (parentEvent > ENTITY_EA3E4[0]) {
+			uint8_t color0 = playersColors_E88E0x[GetTrueWizardNumber_61790(parentEvent->dword_0xA4_164x->playerColorIndex_0x38_56)][0];
+			uint8_t color1 = playersColors_E88E0x[GetTrueWizardNumber_61790(parentEvent->dword_0xA4_164x->playerColorIndex_0x38_56)][1];
+			if (!(SPELLS_BEGIN_BUFFER_str[playerEvent->model_0x40_64].isEnabled_1 & 4) || playerEvent->word_0x2E_46 <= 0 || playerEvent->word_0x2E_46 >= 32 || !x_D41A0_BYTEARRAY_4_struct.colorIndex_121[1]) {
+				if (playerEvent->word_0x2E_46)
+					result.glow = true;
+				else
+					result.glow = false;
+				result.spellIndex = playerEvent->model_0x40_64;
+				result.spellLevel = playerEvent->byte_0x46_70;
+				result.mana1 = 0;
+				result.mana2 = 0;
+
+				if (playerEvent->maxMana_0x8C_140) {
+					result.mana1 = (parentEvent->mana_0x90_144 % playerEvent->maxMana_0x8C_140) / playerEvent->maxMana_0x8C_140;
+					result.mana2 = parentEvent->mana_0x90_144 / playerEvent->maxMana_0x8C_140;
+				}
+				/*
+				if (playerEvent->manaRegen_0x88_136)
+					if (!parentEvent->dword_0xA4_164x->word_0x3A_58 || playerEvent->manaRegen_0x88_136 > ENTITY_EA3E4[parentEvent->dword_0xA4_164x->word_0x3A_58]->mana_0x90_144)
+						if (D41A0_0.terrain_2FECE.MapType != MapType_t::Day)
+							DrawSquareByColor_2E850(posX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOPTILE_BAR].width_4 * scale, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOPTILE_BAR].height_5 * scale, 16);
+						else
+							DrawSquareByColor_2E850(posX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOPTILE_BAR].width_4 * scale, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOPTILE_BAR].height_5 * scale, 48);
+							*/
+			}
+		}
+	}
+	return result;
+}
+
+Array ExampleClass::getSelectedSpells() {
+	Array result;
+	drawSpellInfoType spellIndex;
+	type_event_0x6E8E* playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+	//if (x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400) {
+	spellIndex = getDraWSpellInfo(ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105]]);
+	Dictionary dl;
+	dl["spellIndex"] = spellIndex.spellIndex;
+	dl["glow"] = spellIndex.glow;
+	dl["spellLevel"] = spellIndex.spellLevel;
+	dl["glow"] = spellIndex.glow;
+	dl["mana1"] = spellIndex.mana1;
+	dl["mana2"] = spellIndex.mana2;
+		result.append(dl);
+	//}
+	//if (x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401) {
+		spellIndex = getDraWSpellInfo(ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107]]);
+		Dictionary dr;
+		dr["spellIndex"] = spellIndex.spellIndex;
+		dr["glow"] = spellIndex.glow;
+		dr["spellLevel"] = spellIndex.spellLevel;
+		dr["glow"] = spellIndex.glow;
+		dr["mana1"] = spellIndex.mana1;
+		dr["mana2"] = spellIndex.mana2;
+		result.append(dr);
+	//}
+	return result;
 }
 
 Array ExampleClass::getActiveSpells() {

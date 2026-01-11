@@ -93,6 +93,7 @@ func _physics_process(p_delta) -> void:
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
 	renderEntites(newEntites)
 	get_parent().get_node("CanvasUI").updateSpells(MBEX.getActiveSpells())
+	get_parent().get_node("CanvasUI").updateSelectedSpells(MBEX.getSelectedSpells())
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var stride = 29
