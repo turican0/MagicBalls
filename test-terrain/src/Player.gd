@@ -1,4 +1,4 @@
-extends CharacterBody3D
+extends Node3D
 
 @export var bullet_scene: PackedScene
 
@@ -29,18 +29,6 @@ var remove_rot:float = 0.5
 		else:
 			#$Body.visible = true
 			create_tween().tween_property($CameraManager/Arm, "spring_length", 6.0, .33)
-
-@export var gravity_enabled: bool = true :
-	set(p_value):
-		gravity_enabled = p_value
-		if not gravity_enabled:
-			velocity.y = 0
-			
-@export var collision_enabled: bool = true :
-	set(p_value):
-		collision_enabled = p_value
-		$CollisionShapeBody.disabled = ! collision_enabled
-		$CollisionShapeRay.disabled = ! collision_enabled
 
 ##var speed: float = 0
 #var direction2: Vector3 = Vector3(1,0,0)
