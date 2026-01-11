@@ -27,7 +27,83 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &ExampleClass::initialize_grid_data);
 	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh"), &ExampleClass::recalculate_mesh);
 	godot::ClassDB::bind_method(D_METHOD("renew_terrain"), &ExampleClass::renew_terrain);
+	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &ExampleClass::getActiveSpells);
 }
+
+Array ExampleClass::getActiveSpells() {
+	unsigned __int16 entityIndex;
+	type_event_0x6E8E *playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+	uint8 color0 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][0];
+	uint8 color1 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][1];
+	int spellIconIndex = 0;
+	Array result;
+	while (spellIconIndex < 26) {
+		uint8_t spell_state=0;
+		uint32_t spell_mana=0;
+		int spellIndex2 = spellIndex_D94FF[spellIconIndex];
+		if (SPELLS_BEGIN_BUFFER_str[spellIndex_D94FF[spellIconIndex]].byte_0 && !(!isCaveLevel_D41B6 && spellIndex2 == 25)) {
+			type_event_0x6E8E *spellEntity = ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[spellIndex_D94FF[spellIconIndex]]];
+			if (spellEntity > ENTITY_EA3E4[0])
+			{
+				int subSpellIndex;
+				if (spellIconIndex == playerEntity->dword_0xA4_164x->str_611.spellIndex_0x458_1112) {
+					x_D41A0_BYTEARRAY_4_struct.byteindex_50 = spellIconIndex;
+					subSpellIndex = playerEntity->dword_0xA4_164x->str_611.subSpellIndex_0x459_1113;
+				} else {
+					subSpellIndex = playerEntity->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[spellIndex_D94FF[spellIconIndex]];
+				}
+				bool skipToLabel43 = false;
+				if (SPELLS_BEGIN_BUFFER_str[spellEntity->model_0x40_64].isEnabled_1 & 4) {
+					if (spellEntity->word_0x2E_46 > 0 && spellEntity->word_0x2E_46 < 32 && x_D41A0_BYTEARRAY_4_struct.colorIndex_121[1]) {
+						skipToLabel43 = true;
+					}
+				}
+				if (!skipToLabel43) {
+					bool canSummon = false;
+					if (!SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIndex].maxManaLimit_A || ((entityIndex = playerEntity->dword_0xA4_164x->word_0x3A_58) != 0 && SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIndex].maxManaLimit_A <= ENTITY_EA3E4[entityIndex]->mana_0x90_144)) {
+						canSummon = true;
+					}
+					if (canSummon /* && x_D41A0_BYTEARRAY_4_struct.byteindex_50 == spellIconIndex*/) {
+						int manaCost = GetSpellManaCost_6D710(playerEntity, spellIndex2, subSpellIndex);
+						if (manaCost > 0) {
+							//DrawBitmap_2BB40(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_BAR], scale);
+							//DrawLine_2BC80(posX + posIconsX + (6 * scale), posIconsY + (28 * scale), (36 * scale) * (playerEntity->mana_0x90_144 % manaCost) / manaCost, (4 * scale), color1);
+							//drawline color1-!!!!
+							int manaPosX = playerEntity->mana_0x90_144 / manaCost;
+							spell_mana = manaPosX;
+							//draw manaPosX color0-!!!!
+							/*
+							for (int x = 0; x < 36 && manaPosX > 0; x += 2) {
+								int y = 0;
+								while (y < 4 && manaPosX > 0) {
+									DrawLine_2BC80(x + posX + posIconsX + (6 * scale), y + posIconsY + (28 * scale), (2 * scale), (2 * scale), color0);
+									//drawline color0-!!!!
+									y += 2;
+									manaPosX--;
+								}
+							}
+							*/
+						}
+					}
+					if (canSummon)
+						spell_state=1; //draw standart - fireball
+					else
+						spell_state=2; //draw transaprent - fireball
+				}
+			} else {
+				spell_state = 3;
+				//draw spell icon colorized
+			}
+		}
+		Dictionary d;
+		d["spell_state"] = spell_state;
+		d["spell_mana"] = spell_mana;
+		result.append(d);
+		spellIconIndex++;
+	}
+	return result;
+}
+
 
 void ExampleClass::set_mesh_instance(Node *p_node) {
 	if (!p_node) {

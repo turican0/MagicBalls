@@ -92,8 +92,7 @@ func _physics_process(p_delta) -> void:
 	var roll = PI*playerPosRot.rotation.roll/(256*4)  # Rotace kolem osy Z
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
 	renderEntites(newEntites)
-	#get_parent().get_node("Node3D-testTerrain").renew_terrain()
-	#var terrainChanges=getTerrainChanges()
+	get_parent().get_node("CanvasUI").updateSpells(MBEX.getActiveSpells())
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var stride = 29

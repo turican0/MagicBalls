@@ -197,7 +197,7 @@ anchor_bottom = 1.0
 offset_top = -128.0
 grow_horizontal = 2
 grow_vertical = 0
-columns = 10
+columns = 13
 
 [node name="GridContainer2" type="GridContainer" parent="CanvasUI"]
 offset_left = 1027.0

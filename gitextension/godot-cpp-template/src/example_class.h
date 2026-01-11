@@ -78,4 +78,5 @@ public:
 	void update_gpu_controlmap();
 	void initialize_controlmap();
 	void initialize_heightmap();
-};
+	Array getActiveSpells();
+	};
