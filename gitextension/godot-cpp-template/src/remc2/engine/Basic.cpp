@@ -111,7 +111,7 @@ type_F2C20ar str_F2C20ar;
 int help_VGA_type_resolution = 0;
 
 int16_t x_WORD_180660_VGA_type_resolution; // weak
-uint8_t x_BYTE_E88E0x[32];
+uint8_t playersColors_E88E0x[8][3];
 uint8_t unk_F0A20x[1024];
 uint8_t keyColor1_D4B7C = 0xfe; // some key color?
 uint8_t keyColor2_D4B7E = 0x00; // some key color?
@@ -1174,7 +1174,7 @@ int sub_7FCB0_draw_text_with_border(/*int a1,*/ char* textString, int32_t a3, in
 //----- (0007C120) --------------------------------------------------------
 void sub_7C120_draw_bitmap_640(int16_t posx, int16_t posy, bitmap_pos_struct_t tempstr)//25d120
 {
-	sub_2BB40_draw_bitmap(posx, posy, tempstr);//ebp
+	DrawBitmap_2BB40(posx, posy, tempstr);//ebp
 }
 
 //----- (0005BE80) --------------------------------------------------------
@@ -1451,47 +1451,24 @@ uint8_t GetLetterHeight_6FC30()//250c30
 // EA3D4: using guessed type int x_DWORD_EA3D4;
 
 //----- (0002BB40) --------------------------------------------------------
-void sub_2BB40_draw_bitmap(int16_t posx, int16_t posy, bitmap_pos_struct_t tempposstr, uint8_t scale)//20cb40
+void DrawBitmap_2BB40(int16_t posx, int16_t posy, bitmap_pos_struct_t tempposstr, uint8_t scale)//20cb40
 {
-	//a3=48c80f-> 48ae47002633
-
-  //void (*v3)(__int16, __int16, Pathstruct); // eax
-  //int result; // eax
-	uint8_t* temp_screen_buffer; // edi
-  //int (*v6)(__int16, __int16, Pathstruct); // [esp+0h] [ebp-4h]
-//123 cd 48c80f
-
-  /*Pathstruct tempstruct;
-  uint8_t* tempcharstar;
-  tempstruct.colorPalette_var28 = &tempcharstar;//this fix
-  *tempstruct.colorPalette_var28 = bitmap;//this fix */ //fix this
-
-  //push [ebp+18] -cd- pote ecx
-  //push [ebp+14] -123- pote ebx
-
+	uint8_t* temp_screen_buffer;
 	if (x_WORD_180660_VGA_type_resolution & 1)
-		sub_8F8B0_draw_bitmap320(posx, posy, tempposstr);
+		drawBitmap320_8F8B0(posx, posy, tempposstr);
 	else
-		sub_8F8E8_draw_bitmap640(posx, posy, tempposstr, scale);
-	//v6 = v3;
-	//v3(a1, a2, a3);
-	//result = (int)x_D41A0_BYTEARRAY_0;
+		drawBitmap640_8F8E8(posx, posy, tempposstr, scale);
 	if (D41A0_0.m_GameSettings.m_Display.m_uiScreenSize == 1)
 	{
 		temp_screen_buffer = pdwScreenBuffer_351628;
 		pdwScreenBuffer_351628 = x_DWORD_E9C3C;
 		if (x_WORD_180660_VGA_type_resolution & 1)
-			sub_8F8B0_draw_bitmap320(posx, posy, tempposstr);
+			drawBitmap320_8F8B0(posx, posy, tempposstr);
 		else
-			sub_8F8E8_draw_bitmap640(posx, posy, tempposstr, scale);
+			drawBitmap640_8F8E8(posx, posy, tempposstr, scale);
 		pdwScreenBuffer_351628 = temp_screen_buffer;
 	}
-	//return result;
 }
-// D41A0: using guessed type int x_D41A0_BYTEARRAY_0;
-// E9C3C: using guessed type int x_DWORD_E9C3C;
-// 180628: using guessed type int pdwScreenBuffer_351628;
-// 180660: using guessed type __int16 x_WORD_180660_VGA_type_resolution;
 
 //----- (00075D70) --------------------------------------------------------
 void sub_75D70(uint8_t* a1y, uint32_t a2)//256d70
@@ -1584,7 +1561,7 @@ void VGA_CalculateAndPrintFps(int x, int y, float timeDelta)
 
 void VGA_DrawPlayerCoordData(int x, int y)
 {
-	if (ENTITY_EA3E4 != nullptr && ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240] != nullptr) {
+	if (ENTITY_EA3E4 != nullptr && ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240] != nullptr) {
 
 		int16_t index = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1;
 		axis_3d axisData = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[index].axis_2BDE_11695;
@@ -1800,8 +1777,8 @@ void sub_8CACD_draw_cursor2()//26dacd
 // E3768: using guessed type int x_DWORD_E3768;
 
 //----- (0008F8B0) --------------------------------------------------------
-//void sub_8F8B0_draw_bitmap320(__int16 a1, __int16 a2, Pathstruct a3)//2708B0
-void sub_8F8B0_draw_bitmap320(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr, uint8_t scale)//2708B0
+//void drawBitmap320_8F8B0(__int16 a1, __int16 a2, Pathstruct a3)//2708B0
+void drawBitmap320_8F8B0(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr, uint8_t scale)//2708B0
 {
 	//int v4; // [esp+4h] [ebp-4h]
 
@@ -1815,8 +1792,8 @@ void sub_8F8B0_draw_bitmap320(int16_t posx, int16_t posy, bitmap_pos_struct_t te
 // 180628: using guessed type int pdwScreenBuffer_351628;
 
 //----- (0008F8E8) --------------------------------------------------------
-//void sub_8F8E8_draw_bitmap640(__int16 a1, __int16 a2, uint8_t* a3)//2708e8
-void sub_8F8E8_draw_bitmap640(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr, uint8_t scale)//2708e8
+//void drawBitmap640_8F8E8(__int16 a1, __int16 a2, uint8_t* a3)//2708e8
+void drawBitmap640_8F8E8(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr, uint8_t scale)//2708e8
 {
 	//int v4; // [esp+4h] [ebp-4h]
 

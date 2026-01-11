@@ -1003,8 +1003,8 @@ void sub_8CB1F();
 void UpdateMouseEventData_8CB3A(uint32_t mouse_states, int32_t mouse_posx, int32_t mouse_posy);
 // int sub_8D12F_set_mouse_viewport();
 //-------------
-//void sub_8F8B0_draw_bitmap320(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr);
-//void sub_8F8E8_draw_bitmap640(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr);
+//void drawBitmap320_8F8B0(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr);
+//void drawBitmap640_8F8E8(int16_t posx, int16_t posy, bitmap_pos_struct_t temppstr);
 // void sub_8F920(__int16 a1, signed int a2, int a3, char *a4, unsigned __int8 a5, char a6);
 // void sub_8F935_bitmap_draw_final(__int16 a1, signed int a2, int a3, char *a4, unsigned __int8 a5, char a6);
 //void sub_90164(int16_t a1, int16_t a2, int16_t a3, int16_t a4, uint8_t a5);
@@ -8798,7 +8798,7 @@ LABEL_12:
 			if (v10 <= 1u)
 			{
 				PrepareEventSound_6E450(
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240,
 					D41A0_0.LevelIndex_0xc,
 					8);
 				sub_6E150();
@@ -8843,14 +8843,14 @@ void KillAllCreatures_1B5F0()//1fc5f0
 				for (type_event_0x6E8E* entity = x_D41A0_BYTEARRAY_4_struct.bytearray_38403x[27]; entity > ENTITY_EA3E4[0]; entity = entity->next_0)
 				{
 					entity->actionIndex_0x45_69 = 221;
-					entity->word_0x24_36 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240;
+					entity->word_0x24_36 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240;
 				}
 				break;
 			default:
 				for (type_event_0x6E8E* entity = x_D41A0_BYTEARRAY_4_struct.bytearray_38403x[index]; entity > ENTITY_EA3E4[0]; entity = entity->next_0)
 				{
 					entity->life_0x8 = -1;
-					entity->word_0x24_36 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240;
+					entity->word_0x24_36 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240;
 				}
 				break;
 		}
@@ -12844,7 +12844,7 @@ void sub_21030(type_event_0x6E8E* a1x)//202030
 
 	v24 = 0;
 	sub_223E0();
-	v1x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	v1x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	if (sub_21F60(a1x))
 		a1x->subSpellIndex_0x2A_42 |= 1u;
 	v2 = a1x->byte_0x46_70;
@@ -12860,7 +12860,7 @@ void sub_21030(type_event_0x6E8E* a1x)//202030
 		a1x->dword_0x10_16 = 15;
 		//LOWORD(v3) = *(x_WORD *)(2124 * *(signed __int16 *)(x_D41A0_BYTEARRAY_0 + 12) + x_D41A0_BYTEARRAY_0 + 11240);
 		a1x->word_0x2C_44 = 22;
-		a1x->word_0x96_150 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240;
+		a1x->word_0x96_150 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240;
 		//*(int16_t*)& x_DWORD_D9F50ar[0x800+0x7a] = 60;
 		*(int16_t*)&x_BYTE_D9F50[0x87a] = 60;
 		sub_22490(a1x);
@@ -13174,7 +13174,7 @@ char sub_21490(type_event_0x6E8E* a1x)//202490
 		}
 		else if (v1 & 0x40)
 		{
-			if (Maths::sub_58490_radix_3d_2(&ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240]->axis_0x4C_76,
+			if (Maths::sub_58490_radix_3d_2(&ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]->axis_0x4C_76,
 				&a1x->axis_0x4C_76) >= 0xA00)
 			{
 				a1x->subSpellIndex_0x2A_42 &= 0xBFu;
@@ -13475,7 +13475,7 @@ void sub_21AB0(type_event_0x6E8E* a1x)//202ab0
 	v35x = 0;
 	//v1 = 2124 * D41A0_0.LevelIndex_0xc;
 	v34 = -1;
-	v2x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	v2x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	v31x = v2x;
 	if (v2x > ENTITY_EA3E4[0] && v2x->life_0x8 >= 0 && !(v2x->struct_byte_0xc_12_15.byte[1] & 4))
 	{
@@ -13576,7 +13576,7 @@ void sub_21AB0(type_event_0x6E8E* a1x)//202ab0
 					}
 					//v11 = x_D41A0_BYTEARRAY_0;
 					v12x = v35x;
-					v35x->word_0x96_150 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240;
+					v35x->word_0x96_150 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240;
 					v12x->id_0x1A_26 = a1x->id_0x1A_26;
 					v13x = v35x;
 					v35x->StageVar2_0x49_73 = 17;
@@ -13703,7 +13703,7 @@ char sub_21F60(type_event_0x6E8E* a1x)//202f60
 	char v19; // [esp+24h] [ebp-4h]
 
 	v19 = 0;
-	v16x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	v16x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	v17 = a1x->class_0x3F_63 != 5 || a1x->model_0x40_64 != 10;
 	for (ix = x_D41A0_BYTEARRAY_4_struct.dword_38531; ix > ENTITY_EA3E4[0]; ix = ix->next_0)
 	{
@@ -13869,7 +13869,7 @@ void sub_222B0(type_event_0x6E8E* a1x)//2032b0
 	__int16 v5; // ax
 	//char v6; // ch
 
-	v1x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	v1x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	v2 = (((a1x->yaw_0x1C_28 - v1x->yaw_0x1C_28) >> 3) & 0xF0) >> 4;
 	v3 = 0;
 	if (v2 <= 2)
@@ -19353,13 +19353,13 @@ void sub_28EC0(type_event_0x6E8E* a1x)//209ec0
 {
 	if (a1x->byte_0x46_70)
 	{
-		if (a1x->word_0x24_36 == D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240)
+		if (a1x->word_0x24_36 == D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240)
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc + 1].dw_w_b_0_2BDE_11230.dword++;
 		KillEntity_1C930(a1x);
 	}
 	else
 	{
-		if (a1x->word_0x24_36 == D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240)
+		if (a1x->word_0x24_36 == D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240)
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc + 1].dw_w_b_0_2BDE_11230.dword++;
 		a1x->life_0x8 = -1;
 		DisableEntityDrawing04_57F10(a1x);
@@ -21660,28 +21660,12 @@ void debugtestscreen() {
 //----- (0002BE30) --------------------------------------------------------
 void DrawGameFrame_2BE30()//20CE30
 {
-	//char v0; // dl
-	void (*v1)(int16_t, int16_t, bitmap_pos_struct_t, uint8_t scale); // eax
-	char v2; // bh
-	type_event_0x6E8E* v3x; // esi
-	//signed int v6; // edi
-	__int16 v7; // bx
-	unsigned __int8 v13; // al
-	type_event_0x6E8E* v14x; // edi
-	signed int v28; // esi
-	int v29; // ebx
-	__int16 v30; // di
-	signed int v31; // esi
-	int v35; // [esp+8h] [ebp-18h]
-	signed __int16 v36; // [esp+Ch] [ebp-14h]
-	signed __int16 v37; // [esp+10h] [ebp-10h]
-	signed __int16 v38; // [esp+14h] [ebp-Ch]
-	signed __int16 v39; // [esp+18h] [ebp-8h]
-	__int16 v40; // [esp+1Ch] [ebp-4h]
-
 	int16_t spellLeftPosX = 510;
 	int16_t spellRightPosX = 574;
 	uint8_t scale = 1;
+
+	type_event_0x6E8E* playerEntity;
+	void (*drawBitmapFunction)(int16_t, int16_t, bitmap_pos_struct_t, uint8_t scale); // eax
 
 	SetTextBoxMinMaxForSetResolution();
 
@@ -21695,24 +21679,22 @@ void DrawGameFrame_2BE30()//20CE30
 		}
 	}
 
-	//v0 = x_D41A0_BYTEARRAY_4_struct.setting_byte1_22;
 	x_DWORD_D41C8 = 0;
 	if (D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198)
 	{
 		if (x_WORD_180660_VGA_type_resolution & 1)
-			v1 = sub_8F8B0_draw_bitmap320;//(0, 0, tempstruct);//this must fix
+			drawBitmapFunction = drawBitmap320_8F8B0;
 		else
-			v1 = sub_8F8E8_draw_bitmap640;//(0, 0, tempstruct);//this must fix
-		ptrDrawBitmap_F01E8 = v1;
+			drawBitmapFunction = drawBitmap640_8F8E8;
+		ptrDrawBitmap_F01E8 = drawBitmapFunction;
 	}
 	else
 	{
-		ptrDrawBitmap_F01E8 = GameBitmap::DrawTransparentBitmap_2DE80;//(0, 0, 0);
+		ptrDrawBitmap_F01E8 = GameBitmap::DrawTransparentBitmap_2DE80;
 	}
 	ptrDrawBitmap_F01EC = ptrDrawBitmap_F01E8;
-	v2 = x_D41A0_BYTEARRAY_4_struct.showHelp_10;
-	ptrDrawBitmap_F01E8 = sub_2BBB0;//(0, 0, 0);
-	if (v2)
+	ptrDrawBitmap_F01E8 = sub_2BBB0;
+	if (x_D41A0_BYTEARRAY_4_struct.showHelp_10)
 		sub_88580();
 	int actPlayerIndex = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244;
 
@@ -21729,7 +21711,7 @@ void DrawGameFrame_2BE30()//20CE30
 	case 9:
 	case 0xA:
 	case 0xD:
-		v3x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+		playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 		if (x_BYTE_D41C4 || D41A0_0.m_GameSettings.m_Graphics.m_wViewPortSize != x_BYTE_D41C6_old_graphics_mode)
 		{
 			x_BYTE_D41C4 = 0;
@@ -21752,7 +21734,6 @@ void DrawGameFrame_2BE30()//20CE30
 
 		viewPort.SetRenderViewPortSize_40C50(D41A0_0.m_GameSettings.m_Graphics.m_wViewPortSize);
 		m_ptrGameRender->DrawWorld_411A0(//draw terrain and particles
-			//pdwScreenBuffer_351628,
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.x,//position of player
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.y,//position of player
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw,//rotation of player z
@@ -21828,22 +21809,19 @@ void DrawGameFrame_2BE30()//20CE30
 			}
 		}
 
-		if (v3x->life_0x8 < 0)
+		if (playerEntity->life_0x8 < 0)
 		{
-			v13 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x3DF_2BE4_12221;
-			if (v13 < 0xAu)
+			int menuIndex = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x3DF_2BE4_12221;
+			if (menuIndex == 9)
 			{
-				if (v13 == 9)
-				{
-					DrawInGameOptionsMenu_30050(scale);
-					break;
-				}
+				DrawInGameOptionsMenu_30050(scale);
+				break;
 			}
-			else if (v13 <= 0xAu)
+			else if (menuIndex == 10)
 			{
 				DrawVolumeSettings_303D0();
 			}
-			else if (v13 == 13)
+			else if (menuIndex == 13)
 			{
 				DrawOkCancelMenu_30A60(6, 6, scale);
 				break;
@@ -21852,20 +21830,22 @@ void DrawGameFrame_2BE30()//20CE30
 		}
 		else
 		{
-			if (x_DWORD_D4188 && v3x->dword_0xA4_164x->mobilizeCounter_0x14E_334)
+			if (x_DWORD_D4188 && playerEntity->dword_0xA4_164x->mobilizeCounter_0x14E_334)
 			{
 				//Draw Spiders Web
 				int16_t offSetX = 0;
 				int16_t offSetY = 0;
+				int maxCountX;
+				int maxCountY;
 				if (x_WORD_180660_VGA_type_resolution & 1)
 				{
-					v39 = 2;
-					v37 = 4;
+					maxCountY = 2;
+					maxCountX = 4;
 				}
 				else
 				{
-					v39 = 4;
-					v37 = 6;
+					maxCountY = 4;
+					maxCountX = 6;
 				}
 				if (x_WORD_180660_VGA_type_resolution != 1)
 					if (!DefaultResolutions())
@@ -21874,23 +21854,23 @@ void DrawGameFrame_2BE30()//20CE30
 						offSetY = (screenHeight_180624 - 480) / 2;
 					}
 				actPlayerIndex = 1;
-				v38 = 0;
-				v40 = 0;
-				v7 = x_DWORD_D418C[1].height_5;
-				while (v38 < v39)
+				int countY = 0;
+				int y = 0;
+				int yAdd = x_DWORD_D418C[1].height_5;
+				while (countY < maxCountY)
 				{
-					v36 = 0;
-					v35 = 0;
-					while (v36 < v37)
+					int countX = 0;
+					int x = 0;
+					while (countX < maxCountX)
 					{
-						sub_2BB40_draw_bitmap(offSetX + v35, offSetY + v40, x_DWORD_D4188t_spritestr[actPlayerIndex]);
-						v36++;
+						DrawBitmap_2BB40(offSetX + x, offSetY + y, x_DWORD_D4188t_spritestr[actPlayerIndex]);
+						countX++;
 						actPlayerIndex++;
-						v35 += x_DWORD_D4188t_spritestr[actPlayerIndex].width_4;
-						v7 = x_DWORD_D4188t_spritestr[1].height_5;
+						x += x_DWORD_D4188t_spritestr[actPlayerIndex].width_4;
+						yAdd = x_DWORD_D4188t_spritestr[1].height_5;
 					}
-					v38++;
-					v40 += v7;
+					countY++;
+					y += yAdd;
 				}
 			}
 			if (D41A0_0.m_GameSettings.m_Display.m_wMiniMap)
@@ -21904,7 +21884,6 @@ void DrawGameFrame_2BE30()//20CE30
 					128 * scale,
 					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
 					256 / scale,
-					//x_DWORD_180648_map_resolution2_x - 2 * (x_DWORD_180648_map_resolution2_x / 5u),
 					0);
 				DrawMinimapEntites_61880(//draw entites in minimap
 					0,
@@ -21934,42 +21913,43 @@ void DrawGameFrame_2BE30()//20CE30
 				DrawSpellIcon_2E260(
 					spellLeftPosX,
 					2 * scale,
-					ENTITY_EA3E4[v3x->dword_0xA4_164x->str_611.array_0x333_819x.word[v3x->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105]],
-					0,
+					ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105]],
+					false,
 					scale);
 
 				//Right
 				DrawSpellIcon_2E260(
 					spellRightPosX,
 					2 * scale,
-					ENTITY_EA3E4[v3x->dword_0xA4_164x->str_611.array_0x333_819x.word[v3x->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107]],
-					0,
+					ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107]],
+					false,
 					scale);
 
-				DrawTopStatusBar_2D710(v3x, scale);
+				DrawTopStatusBar_2D710(playerEntity, scale);
 			}
 			switch (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x3DF_2BE4_12221)
 			{
 			case 3:
 				DrawChatMenu_2F6B0();
-				goto LABEL_41;
+				DrawPauseMenu_2FD90(scale);
+				break;
 			case 9:
 				DrawInGameOptionsMenu_30050(scale);
 				break;
 			case 10:
 				DrawVolumeSettings_303D0(scale);
-				goto LABEL_41;
+				DrawPauseMenu_2FD90(scale);
+				break;
 			case 13:
 				DrawOkCancelMenu_30A60(132, 50, scale);
 				break;
 			default:
-			LABEL_41:
 				DrawPauseMenu_2FD90(scale);
 				break;
 			}
 			DrawTextPauseEndOfLevel_2CE30(132 * scale, 50 * scale, scale);
 			if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x3DF_2BE4_12221 == 5)
-				DrawBottomMenu_2ECC0();
+				DrawBottomSpellsMenu_2ECC0();
 		}
 		break;
 	case 6:
@@ -21978,7 +21958,7 @@ void DrawGameFrame_2BE30()//20CE30
 	case 0xB:
 	case 0xC:
 	case 0xE:
-		v14x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+		playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 		if (x_WORD_180660_VGA_type_resolution & 1)
 			ClearGraphicsBuffer_72883((void*)pdwScreenBuffer_351628, 320, 200, uiBackGroundColorIdx_EB3A8);
 		else
@@ -22029,7 +22009,6 @@ void DrawGameFrame_2BE30()//20CE30
 			locMinimapHeight,
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw,
 			204 / scale,
-			//x_DWORD_180648_map_resolution2_x - 192,
 			1);
 
 		DrawMinimapEntites_61880(
@@ -22045,7 +22024,6 @@ void DrawGameFrame_2BE30()//20CE30
 		viewPort.SetRenderViewPortSize_40BF0(locViewportPosx, 0, locViewportWidth, locViewportHeight);
 
 		m_ptrGameRender->DrawWorld_411A0(
-			//pdwScreenBuffer_351628,
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.x,
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.y,
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw,
@@ -22139,19 +22117,19 @@ void DrawGameFrame_2BE30()//20CE30
 			break;
 		case 8:
 			DrawPauseMenu_2FD90(scale);
-			DrawBottomMenu_2ECC0();
+			DrawBottomSpellsMenu_2ECC0();
 			break;
 		case 0xB:
 			DrawInGameOptionsMenu_30050(scale);
 			break;
 		case 0xC:
 			DrawVolumeSettings_303D0();
-			goto LABEL_73;
+			DrawPauseMenu_2FD90(scale);
+			break;
 		case 0xE:
 			DrawOkCancelMenu_30A60(6, 6, scale);
 			break;
 		default:
-		LABEL_73:
 			DrawPauseMenu_2FD90(scale);
 			break;
 		}
@@ -22160,15 +22138,15 @@ void DrawGameFrame_2BE30()//20CE30
 			DrawSpellIcon_2E260(
 				spellLeftPosX,
 				2,
-				ENTITY_EA3E4[v14x->dword_0xA4_164x->str_611.array_0x333_819x.word[v14x->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105]],
-				0,
+				ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105]],
+				false,
 				scale);
 		if (x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401)
 			DrawSpellIcon_2E260(
 				spellRightPosX,
 				2,
-				ENTITY_EA3E4[v14x->dword_0xA4_164x->str_611.array_0x333_819x.word[v14x->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107]],
-				0,
+				ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107]],
+				false,
 				scale);
 		break;
 	default:
@@ -22220,27 +22198,26 @@ void DrawGameFrame_2BE30()//20CE30
 		x_D41A0_BYTEARRAY_4_struct.byteindex_210d = 50;
 		return;
 	}
-	v28 = 380;
-	v29 = 0;
-	while (*off_DB558[v29 + x_D41A0_BYTEARRAY_4_struct.byteindex_214w] != 33)
+	int height = 380;
+	int heightIndex = 0;
+	while (*off_DB558[heightIndex + x_D41A0_BYTEARRAY_4_struct.byteindex_214w] != 33)
 	{
-		v29++;
-		v28 -= GetLetterHeight_6FC30();
+		heightIndex++;
+		height -= GetLetterHeight_6FC30();
 	}
-	v30 = 0;
-	v31 = 8;
-	while (v29 > 0)
+	int index = 0;
+	int actHeight = 8;
+	while (heightIndex > 0)
 	{
-		if (v30)
-			DrawText_2BC10(off_DB558[v30 + x_D41A0_BYTEARRAY_4_struct.byteindex_214w], 8, v31, (*xadataclrd0dat.colorPalette_var28)[0]);
+		if (index)
+			DrawText_2BC10(off_DB558[index + x_D41A0_BYTEARRAY_4_struct.byteindex_214w], 8, actHeight, (*xadataclrd0dat.colorPalette_var28)[0]);
 		else
-			DrawText_2BC10(off_DB558[x_D41A0_BYTEARRAY_4_struct.byteindex_214w], 8, v31, (*xadataclrd0dat.colorPalette_var28)[4095]);
-		v29--;
-		v30++;
-		v31 += GetLetterHeight_6FC30();
+			DrawText_2BC10(off_DB558[x_D41A0_BYTEARRAY_4_struct.byteindex_214w], 8, actHeight, (*xadataclrd0dat.colorPalette_var28)[4095]);
+		heightIndex--;
+		index++;
+		actHeight += GetLetterHeight_6FC30();
 	}
 	x_D41A0_BYTEARRAY_4_struct.byteindex_210d--;
-	//return _wcpp_1_unwind_leave__62();
 }
 
 //----- (0002CE30) --------------------------------------------------------
@@ -22326,7 +22303,7 @@ void DrawTextPauseEndOfLevel_2CE30(int16_t posX, int16_t posY, uint8_t scale)//2
 					}
 					else
 					{
-						v14 = 4080 * x_D41A0_BYTEARRAY_4_struct.byteindex_121[2];
+						v14 = 4080 * x_D41A0_BYTEARRAY_4_struct.colorIndex_121[2];
 						v15 = (*xadataclrd0dat.colorPalette_var28)[256 * ((signed int)(v14 - (__CFSHL__(HIDWORD(v14), 8) + (HIDWORD(v14) << 8))) >> 8)];
 					}
 					DrawText_2BC10(printbuffer, textPosX, textPosY, v15, scale);
@@ -22361,7 +22338,7 @@ void DrawTextPauseEndOfLevel_2CE30(int16_t posX, int16_t posY, uint8_t scale)//2
 					else
 					{
 						sprintf(printbuffer, "[%s] %s", D41A0_0.array_0x2BDE[v7y].WizardName_0x39f_2BFA_12157, D41A0_0.array_0x2BDE[v7y].array_0x01c_2BFA_11258);
-						v18 = 4080 * x_D41A0_BYTEARRAY_4_struct.byteindex_121[2];
+						v18 = 4080 * x_D41A0_BYTEARRAY_4_struct.colorIndex_121[2];
 						DrawText_2BC10(printbuffer, textPosX, textPosY, (*xadataclrd0dat.colorPalette_var28)[16 * ((signed int)(v18 - (__CFSHL__(HIDWORD(v18), 8) + (HIDWORD(v18) << 8))) >> 8)]);
 						textPosX = posX;
 						LOWORD(v19) = GetLetterHeight_6FC30() * scale;
@@ -22444,8 +22421,8 @@ void DrawSorcererScores_2D1D0(uint8_t scale)//20e1d0
 		//v2 += 2124;
 		v2x++;
 	}
-	v3 = v1 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[85].height_5 * scale);
-	posX = (helpWidth - (v1 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86].width_4 * scale) + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[85].width_4) * scale)) / 2;
+	v3 = v1 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE].height_5 * scale);
+	posX = (helpWidth - (v1 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI].width_4 * scale) + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI].width_4) * scale)) / 2;
 	posY = (helpHeight - v3) / 2;
 	v25 = 0;
 	//i=x_D41A0_BYTEARRAY_0 + 11230
@@ -22455,17 +22432,17 @@ void DrawSorcererScores_2D1D0(uint8_t scale)//20e1d0
 		if (result <= v25)
 			break;
 		v6 = D41A0_0.array_0x2BDE[ix].byte_0x006_2BE4_11236;
-		v23x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[ix].word_0x00a_2BE4_11240];
+		v23x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[ix].playerIndex_0x00a_2BE4_11240];
 		if (v6 == 1)
 		{
-			textColourIdx = x_BYTE_E88E0x[1 + 3 * GetTrueWizardNumber_61790(v25)];
-			playerColourIdx = x_BYTE_E88E0x[3 * GetTrueWizardNumber_61790(v25)];
-			sub_2BB40_draw_bitmap(posX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[85], scale);
+			textColourIdx = playersColors_E88E0x[GetTrueWizardNumber_61790(v25)][1];
+			playerColourIdx = playersColors_E88E0x[GetTrueWizardNumber_61790(v25)][0];
+			DrawBitmap_2BB40(posX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE], scale);
 			DrawLine_2BC80(
 				posX + (4 * scale),
 				posY + (4 * scale),
-				((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[85].width_4 * scale) - (8 * scale),
-				((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[85].height_5 * scale) - (8 * scale),
+				((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE].width_4 * scale) - (8 * scale),
+				((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE].height_5 * scale) - (8 * scale),
 				playerColourIdx);
 			v22 = (signed __int16)(posX + (8 * scale));
 			DrawText_2BC10(D41A0_0.array_0x2BDE[ix].WizardName_0x39f_2BFA_12157, posX + (8 * scale), posY + (6 * scale), textColourIdx, scale);
@@ -22478,7 +22455,7 @@ void DrawSorcererScores_2D1D0(uint8_t scale)//20e1d0
 				str_unk_1804B0ar.word_0x98 = posY + (30 * scale);
 			}
 			//HIWORD(v11) = HIWORD(**filearray_2aa18c[6]);
-			blackBarX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[85].width_4 * scale) + posX;
+			blackBarX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE].width_4 * scale) + posX;
 			if (x_D41A0_BYTEARRAY_4_struct.showHelp_10 && D41A0_0.word_0xe > 1u && !str_unk_1804B0ar.byte_0xa8)
 			{
 				str_unk_1804B0ar.dword_0x82 = 9377 * str_unk_1804B0ar.dword_0x82 + 9439;
@@ -22505,24 +22482,24 @@ void DrawSorcererScores_2D1D0(uint8_t scale)//20e1d0
 					barY = posY + (4 * scale);
 					if (j == v25)
 					{
-						sub_2BB40_draw_bitmap(blackBarX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86], scale);
+						DrawBitmap_2BB40(blackBarX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI], scale);
 						DrawLine_2BC80(
 							barX,
 							barY,
-							((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86].width_4 * scale) - (8 * scale),
-							((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86].height_5 * scale) - (8 * scale),
+							((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI].width_4 * scale) - (8 * scale),
+							((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI].height_5 * scale) - (8 * scale),
 							(*xadataclrd0dat.colorPalette_var28)[0]);
 					}
 					else
 					{
-						textColourIdx = x_BYTE_E88E0x[1 + 3 * GetTrueWizardNumber_61790(j)];
-						playerColourIdx = x_BYTE_E88E0x[3 * GetTrueWizardNumber_61790(j)];
-						sub_2BB40_draw_bitmap(blackBarX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86], scale);
+						textColourIdx = playersColors_E88E0x[GetTrueWizardNumber_61790(j)][1];
+						playerColourIdx = playersColors_E88E0x[GetTrueWizardNumber_61790(j)][0];
+						DrawBitmap_2BB40(blackBarX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI], scale);
 						DrawLine_2BC80(
 							barX,
 							barY,
-							((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86].width_4 * scale) - (8 * scale),
-							((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86].height_5 * scale) - (8 * scale),
+							((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI].width_4 * scale) - (8 * scale),
+							((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI].height_5 * scale) - (8 * scale),
 							playerColourIdx);
 						sprintf(printbuffer, "%03d", v23x->dword_0xA4_164x->word_0x26_38[j]);
 						DrawText_2BC10(printbuffer, blackBarX + (8 * scale), posY + (10 * scale), textColourIdx, scale);
@@ -22533,11 +22510,11 @@ void DrawSorcererScores_2D1D0(uint8_t scale)//20e1d0
 						}
 					}
 					//HIWORD(v18) = HIWORD(**filearray_2aa18c[6]);
-					blackBarX += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86].width_4 * scale;
+					blackBarX += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI].width_4 * scale;
 				}
 			}
 			//HIWORD(v19) = HIWORD(**filearray_2aa18c[6]);
-			posY += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[86].height_5 * scale;
+			posY += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_MINI].height_5 * scale;
 		}
 		v25++;
 	}
@@ -22580,77 +22557,41 @@ void ColorizeScreen_2E790(int posX, int posY, int width, int height, uint8_t col
 	}
 }
 
-// spellbook menu
 //----- (0002ECC0) --------------------------------------------------------
-void DrawBottomMenu_2ECC0()//20fcc0
+void DrawBottomSpellsMenu_2ECC0()//20fcc0
 {
-	//char v0; // t0
-	//uint8_t* v1; // eax
-	//int v2; // eax
-	//char v3; // dh
-	__int16 posIconsY; // si
-	int16_t posIconsX; // di
-	char v8; // dl
-	type_event_0x6E8E* v9x; // edx
-	__int16 v10; // ax
-	__int16 v11; // ax
-	unsigned __int16 v12; // dx
-	bitmap_pos_struct_t v13; // eax
-	unsigned __int8 v14; // al
-	//int v15; // eax
-	int16_t selectedSpellIndex; // eax
-	unsigned __int8 v17; // dl
-	__int16 v18; // cx
-	int16_t posSubMenuSpellX; // esi
-	int v20; // ebx
-	//char *v21; // edi
-	int v22; // eax
-	unsigned __int16 v23; // cx
-	signed __int16 v24; // ax
-	__int16 v25; // cx
-	int v26; // eax
-	int v27; // eax
-	int v28; // ecx
-	int v29; // edx
-	int v30; // ecx
-	int v31; // eax
-	int v32; // edi
-	//__int16 result; // ax
-	int v34; // [esp+4h] [ebp-6Ch]
-	int v35; // [esp+Ch] [ebp-64h]
-	//type_str_611* v36x; // [esp+10h] [ebp-60h]
-	type_event_0x6E8E* v37x; // [esp+14h] [ebp-5Ch]
-	signed int i; // [esp+18h] [ebp-58h]
-	//char *v39; // [esp+24h] [ebp-4Ch]
-	signed int v40; // [esp+28h] [ebp-48h]
-	int16_t posIconsXStart; // [esp+2Ch] [ebp-44h]
-	int16_t spellIconWidth; // [esp+34h] [ebp-3Ch]
-	int16_t v43; // [esp+38h] [ebp-38h]
-	__int16 v44; // [esp+38h] [ebp-38h]
-	__int16 v45; // [esp+3Ch] [ebp-34h]
-	unsigned __int8 v46; // [esp+40h] [ebp-30h]
-	signed __int16 v47; // [esp+40h] [ebp-30h]
-	int16_t spellIconHeight; // [esp+44h] [ebp-2Ch]
-	//__int16 v49; // [esp+48h] [ebp-28h]
-	__int16 v50; // [esp+4Ch] [ebp-24h]
-	int v51; // [esp+50h] [ebp-20h]
-	int16_t posSubMenuIconWidth; // [esp+54h] [ebp-1Ch]
-	__int16 v53; // [esp+58h] [ebp-18h]
-	int16_t spellIconIndex; // [esp+5Ch] [ebp-14h]
-	char v55; // [esp+60h] [ebp-10h]
-	unsigned __int8 v56; // [esp+64h] [ebp-Ch]
-	unsigned __int8 v57; // [esp+68h] [ebp-8h]
-	char v58; // [esp+6Ch] [ebp-4h]
+	__int16 posIconsY;
+	int16_t posIconsX;
+	int16_t selectedSpellIndex;
+	int16_t posSubMenuSpellX;
+	int16_t posIconsXStart;
+	int16_t spellIconWidth;
+	int16_t spellIconHeight;
+	int16_t posSubMenuIconWidth;
+	int16_t spellIconIndex;
 
-	v37x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
-	v57 = x_BYTE_E88E0x[3 * GetTrueWizardNumber_61790(v37x->dword_0xA4_164x->playerColorIndex_0x38_56)];
-	v56 = x_BYTE_E88E0x[1 + 3 * GetTrueWizardNumber_61790(v37x->dword_0xA4_164x->playerColorIndex_0x38_56)];
+	int posIconsY2;
+	bool drawBitmap;
+	type_event_0x6E8E* spellEntity;
+	unsigned __int16 entityIndex;
+	bitmap_pos_struct_t bitmap;
+	uint8 spellIndex;
+	int xPosNext;
+	int xPos;
+	int xDiff;
+	int subSpellPos;
+	int16_t posEndX;
+	int manaCost;
+	__int16 spellIndex2;
+	__int16 xAdd2;
+	bool canSummon;
+	type_event_0x6E8E* playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+	uint8 color0 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][0];
+	uint8 color1 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][1];
 	x_D41A0_BYTEARRAY_4_struct.byteindex_50 = -1;
-
 	int16_t posX = 0;
 	int16_t posY = 0;
 	uint8_t scale = 1;
-
 	if (x_WORD_180660_VGA_type_resolution & 1)
 		posY = 400;
 	else
@@ -22662,19 +22603,15 @@ void DrawBottomMenu_2ECC0()//20fcc0
 			posX = (screenWidth_18062C - (640 * scale)) / 2;
 			posY = screenHeight_180624;
 		}
-
 	posIconsXStart = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[EDGE_PANEL].width_4 * scale;
 	spellIconHeight = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale;
-	v51 = posY - (2 * spellIconHeight);
+	posIconsY2 = posY - (2 * spellIconHeight);
 	spellIconWidth = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].width_4 * scale;
-
 	spellIconIndex = 0;
-	v45 = spellIconWidth - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[149].width_4 * scale);
+	xAdd2 = spellIconWidth - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOP_LEFT_CORNER].width_4 * scale);
 	posIconsY = posY - (2 * spellIconHeight);
-
 	uint8_t iconXIdx = 0;
 	uint8_t iconYIdx = 0;
-
 	while (iconYIdx < 2)
 	{
 		if (!iconYIdx)
@@ -22682,248 +22619,213 @@ void DrawBottomMenu_2ECC0()//20fcc0
 			//Draw left frame
 			ptrDrawBitmap_F01E8(posX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[EDGE_PANEL], scale);
 		}
-
 		posIconsX = posIconsXStart;
 		//Draw Spell Icons
 		iconXIdx = 0;
 		while (iconXIdx < 13)
 		{
-			v44 = spellIndex_D94FF[spellIconIndex];
-			v8 = 1;
-
-			if (!SPELLS_BEGIN_BUFFER_str[spellIndex_D94FF[spellIconIndex]].byte_0 || !isCaveLevel_D41B6 && v44 == 25)
-				v8 = 0;
-
-			if (!v8)
+			spellIndex2 = spellIndex_D94FF[spellIconIndex];
+			drawBitmap = true;
+			if (!SPELLS_BEGIN_BUFFER_str[spellIndex_D94FF[spellIconIndex]].byte_0 || (!isCaveLevel_D41B6 && spellIndex2 == 25))
+				drawBitmap = false;
+			if (!drawBitmap)
 			{
 				ptrDrawBitmap_F01E8(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL], scale);
-				goto LABEL_54;
 			}
-			v9x = ENTITY_EA3E4[v37x->dword_0xA4_164x->str_611.array_0x333_819x.word[spellIndex_D94FF[spellIconIndex]]];
-
-			if (v9x > ENTITY_EA3E4[0])
+			else
 			{
-				if (spellIconIndex == v37x->dword_0xA4_164x->str_611.byte_0x458_1112)
+				spellEntity = ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[spellIndex_D94FF[spellIconIndex]]];
+				if (spellEntity > ENTITY_EA3E4[0])
 				{
-					x_D41A0_BYTEARRAY_4_struct.byteindex_50 = spellIconIndex;
-					v10 = v37x->dword_0xA4_164x->str_611.byte_0x459_1113;
-				}
-				else
-				{
-					v10 = v37x->dword_0xA4_164x->str_611.array_0x437_1079x.byte[spellIndex_D94FF[spellIconIndex]];
-				}
-				v46 = v10;
-
-				if (SPELLS_BEGIN_BUFFER_str[v9x->model_0x40_64].isEnabled_1 & 4)
-				{
-					v11 = v9x->word_0x2E_46;
-					if (v11 > 0 && v11 < 32 && x_D41A0_BYTEARRAY_4_struct.byteindex_121[1])
-						goto LABEL_43;
-				}
-				v55 = 0;
-				if (!SPELLS_BEGIN_BUFFER_str[v44].subspell[v10].maxManaLimit_A
-					|| (v12 = v37x->dword_0xA4_164x->word_0x3A_58) != 0
-					&& SPELLS_BEGIN_BUFFER_str[v44].subspell[v10].maxManaLimit_A <= ENTITY_EA3E4[v12]->mana_0x90_144)
-				{
-					v55 = 1;
-				}
-				if (v55)
-				{
-					if (x_D41A0_BYTEARRAY_4_struct.byteindex_50 == spellIconIndex)
+					int subSpellIndex;
+					if (spellIconIndex == playerEntity->dword_0xA4_164x->str_611.byte_0x458_1112)
 					{
-						v35 = sub_6D710(v37x, v44, v46);
-						if (v35 > 0)
+						x_D41A0_BYTEARRAY_4_struct.byteindex_50 = spellIconIndex;
+						subSpellIndex = playerEntity->dword_0xA4_164x->str_611.byte_0x459_1113;
+					}
+					else
+					{
+						subSpellIndex = playerEntity->dword_0xA4_164x->str_611.array_0x437_1079x.byte[spellIndex_D94FF[spellIconIndex]];
+					}
+
+					bool skipToLabel43 = false;
+					if (SPELLS_BEGIN_BUFFER_str[spellEntity->model_0x40_64].isEnabled_1 & 4)
+					{
+						if (spellEntity->word_0x2E_46 > 0 && spellEntity->word_0x2E_46 < 32 && x_D41A0_BYTEARRAY_4_struct.colorIndex_121[1])
 						{
-							sub_2BB40_draw_bitmap(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[87], scale);//draw top 2 left frame
-							DrawLine_2BC80(posX + posIconsX + (6 * scale), posIconsY + (28 * scale), (36 * scale) * (v37x->mana_0x90_144 % v35) / v35, (4 * scale), v56);
-							v34 = v37x->mana_0x90_144 / v35;
-							for (i = 0; i < 36 && v34 > 0; i += 2)
+							skipToLabel43 = true;
+						}
+					}
+					if (!skipToLabel43)
+					{
+						canSummon = false;
+						if (!SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIndex].maxManaLimit_A
+							|| ((entityIndex = playerEntity->dword_0xA4_164x->word_0x3A_58) != 0
+								&& SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIndex].maxManaLimit_A <= ENTITY_EA3E4[entityIndex]->mana_0x90_144))
+						{
+							canSummon = true;
+						}
+						if (canSummon && x_D41A0_BYTEARRAY_4_struct.byteindex_50 == spellIconIndex)
+						{
+							manaCost = GetSpellManaCost_6D710(playerEntity, spellIndex2, subSpellIndex);
+							if (manaCost > 0)
 							{
-								v40 = 0;
-								while (v40 < 4 && v34 > 0)
+								DrawBitmap_2BB40(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_BAR], scale);
+								DrawLine_2BC80(posX + posIconsX + (6 * scale), posIconsY + (28 * scale), (36 * scale) * (playerEntity->mana_0x90_144 % manaCost) / manaCost, (4 * scale), color1);
+								int manaPosX = playerEntity->mana_0x90_144 / manaCost;
+								for (int x = 0; x < 36 && manaPosX > 0; x += 2)
 								{
-									DrawLine_2BC80(i + posX + posIconsX + (6 * scale), v40 + posIconsY + (28 * scale), (2 * scale), (2 * scale), v57);//mana fo top left 2 frame
-									v40 += 2;
-									v34--;
+									int y = 0;
+									while (y < 4 && manaPosX > 0)
+									{
+										DrawLine_2BC80(x + posX + posIconsX + (6 * scale), y + posIconsY + (28 * scale), (2 * scale), (2 * scale), color0);
+										y += 2;
+										manaPosX--;
+									}
 								}
 							}
 						}
-					LABEL_40:
-
-						if (v55)
-							sub_2BB40_draw_bitmap(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[v44 + 97], scale);//top left2 spell1 and top left5 spell2
 						else
-							GameBitmap::DrawTransparentBitmap_2DE80(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[v44 + 97], scale);
-					LABEL_43:
-						v14 = v37x->dword_0xA4_164x->str_611.array_0x3B5_949x.byte[v44];
-						if (v14 >= 1u)
 						{
-							if (v14 <= 1u)
-							{
-								GameBitmap::DrawTransparentBitmap_2DE80(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[149], scale);
-							}
-							else if (v14 == 2)
-							{
-								GameBitmap::DrawTransparentBitmap_2DE80(posX + posIconsX + v45, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[150], scale);
-							}
+							if (canSummon)
+								bitmap = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL];
+							else
+								bitmap = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL2];
+
+							ptrDrawBitmap_F01E8(posX + posIconsX, posIconsY, bitmap, scale);
 						}
-						goto LABEL_54;
+						if (canSummon)
+							DrawBitmap_2BB40(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[spellIndex2 + SPELL_FIREBALL_SMALL], scale);
+						else
+							GameBitmap::DrawTransparentBitmap_2DE80(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[spellIndex2 + SPELL_FIREBALL_SMALL], scale);
 					}
-					v13 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL];
+					if (skipToLabel43 || x_D41A0_BYTEARRAY_4_struct.byteindex_50 == spellIconIndex)
+					{
+						uint8_t bitmapType = playerEntity->dword_0xA4_164x->str_611.array_0x3B5_949x.byte[spellIndex2];
+						if (bitmapType == 1)
+							GameBitmap::DrawTransparentBitmap_2DE80(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOP_LEFT_CORNER], scale);
+						else if (bitmapType == 2)
+							GameBitmap::DrawTransparentBitmap_2DE80(posX + posIconsX + xAdd2, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOP_RIGHT_CORNER], scale);
+					}
 				}
 				else
 				{
-					v13 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[91];//FIX IT!
+					ptrDrawBitmap_F01E8(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL], scale);
+					if (playerEntity->dword_0xA4_164x->str_611.array_0x3E9_1001x.byte[spellIndex2] || playerEntity->dword_0xA4_164x->str_611.array_0x403_1027x.byte[spellIndex2])
+					{
+						GameBitmap::DrawColourizedBitmap(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[spellIndex2 + SPELL_FIREBALL_SMALL], 0xA6u, scale);
+					}
 				}
-				ptrDrawBitmap_F01E8(posX + posIconsX, posIconsY, v13, scale);
-				goto LABEL_40;
 			}
-
-			ptrDrawBitmap_F01E8(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL], scale);//top left 3 and 4 and 5 frame
-
-			if (v37x->dword_0xA4_164x->str_611.array_0x3E9_1001x.byte[v44] || v37x->dword_0xA4_164x->str_611.array_0x403_1027x.byte[v44])
-			{
-				//Draw disabled/stolen spells
-				GameBitmap::DrawColourizedBitmap(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[v44 + 97], 0xA6u, scale);
-			}
-
-		LABEL_54:
 			iconXIdx++;
 			posIconsX += spellIconWidth;
 			spellIconIndex++;
 		}
-
 		if (!iconYIdx)
 		{
 			//Draw right part for frame
 			ptrDrawBitmap_F01E8(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[EDGE_PANEL], scale);
 		}
-
 		posIconsY += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale;
 		iconYIdx++;
 	}
-
 	//Frame of selected spell
-	sub_2BB40_draw_bitmap(posX + posIconsXStart + spellIconWidth * (v37x->dword_0xA4_164x->str_611.byte_0x458_1112 % 13), v37x->dword_0xA4_164x->str_611.byte_0x458_1112 / 13 * spellIconHeight + v51, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME], scale);
-
+	DrawBitmap_2BB40(posX + posIconsXStart + spellIconWidth * (playerEntity->dword_0xA4_164x->str_611.byte_0x458_1112 % 13), playerEntity->dword_0xA4_164x->str_611.byte_0x458_1112 / 13 * spellIconHeight + posIconsY2, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME], scale);
 	//Draw spell selection
 	selectedSpellIndex = x_D41A0_BYTEARRAY_4_struct.byteindex_50;
 	if (selectedSpellIndex != -1)
 	{
-		v17 = spellIndex_D94FF[selectedSpellIndex];
-		v43 = v17;
-		v47 = v37x->dword_0xA4_164x->str_611.array_0x41D_1053z.byte[v17];
-		/*v18 = 3 * *(unsigned __int8 *)(**filearray_2aa18c[6] + 982);
-		v50 = v51 - *(unsigned __int8 *)(**filearray_2aa18c[6] + 983);*/
-		v18 = 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale);
-		v50 = v51 - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].height_5 * scale);
-		posSubMenuSpellX = spellIconWidth / 2 + spellIconWidth * (v37x->dword_0xA4_164x->str_611.byte_0x458_1112 % 13) + posIconsXStart - v18 / 2;
-		if ((signed __int16)posSubMenuSpellX <= (640 * scale) - v18)
+		spellIndex = spellIndex_D94FF[selectedSpellIndex];
+		signed __int16 spellIndex3 = playerEntity->dword_0xA4_164x->str_611.array_0x41D_1053z.byte[spellIndex];
+		__int16 xAdd = 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale);
+		__int16 posY2 = posIconsY2 - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].height_5 * scale);
+		posSubMenuSpellX = spellIconWidth / 2 + spellIconWidth * (playerEntity->dword_0xA4_164x->str_611.byte_0x458_1112 % 13) + posIconsXStart - xAdd / 2;
+		if (posSubMenuSpellX <= (640 * scale) - xAdd)
 		{
 			if ((posSubMenuSpellX & 0x8000u) != 0)
-				LOWORD(posSubMenuSpellX) = 0;
+				posSubMenuSpellX = 0;
 		}
 		else
 		{
-			LOWORD(posSubMenuSpellX) = (640 * scale) - v18;
+			posSubMenuSpellX = (640 * scale) - xAdd;
 		}
-		v20 = 0;
-
-		posSubMenuIconWidth = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale;
+		int subSpellIndex2 = 0;
+		posSubMenuIconWidth = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale;
 		while (2)
 		{
-			if ((signed __int16)v20 >= 3)
+			if (subSpellIndex2 >= 3)
 				break;
-			//v21 = (char*)&(*xadataspellsdat.colorPalette_var28)[80 * v43 + 2 + 26 * (signed __int16)v20];
-			//v21 = SPELLS_BEGIN_BUFFER_str[v43].subspell[v20].dword_2;
-			LOBYTE(v22) = 0;
-			v58 = 0;
-			if (!SPELLS_BEGIN_BUFFER_str[v43].subspell[v20].maxManaLimit_A
-				|| (v23 = v37x->dword_0xA4_164x->word_0x3A_58) != 0
-				&& SPELLS_BEGIN_BUFFER_str[v43].subspell[v20].maxManaLimit_A <= ENTITY_EA3E4[v23]->mana_0x90_144)
+			int manaPart = 0;
+			bool canSubSummon = false;
+			if (!SPELLS_BEGIN_BUFFER_str[spellIndex].subspell[subSpellIndex2].maxManaLimit_A
+				|| (entityIndex = playerEntity->dword_0xA4_164x->word_0x3A_58) != 0
+				&& SPELLS_BEGIN_BUFFER_str[spellIndex].subspell[subSpellIndex2].maxManaLimit_A <= ENTITY_EA3E4[entityIndex]->mana_0x90_144)
 			{
-				v58 = 1;
-				v22 = v37x->mana_0x90_144 / sub_6D710(v37x, v43, v20);
+				canSubSummon = true;
+				manaPart = playerEntity->mana_0x90_144 / GetSpellManaCost_6D710(playerEntity, spellIndex, subSpellIndex2);
 			}
-			if ((signed __int16)v20 > v47)
+			if (subSpellIndex2 > spellIndex3)
 			{
-				//sub_2BB40_draw_bitmap(v19, v50, (uint8_t**)(**filearray_2aa18c[6] + 978));
-				sub_2BB40_draw_bitmap(posX + posSubMenuSpellX, v50, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163], scale);
+				DrawBitmap_2BB40(posX + posSubMenuSpellX, posY2, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2], scale);
 			}
 			else
 			{
-				if (v58 && (x_BYTE)v22)
-					v24 = 161;
+				int bitmapIndex;
+				if (canSubSummon && manaPart)
+					bitmapIndex = SPELL_ICON2_PANEL2_WITH_FRAME;
 				else
-					v24 = 162;
-				/*sub_2BB40_draw_bitmap(v19, v50, (uint8_t**)(**filearray_2aa18c[6] + 6 * v24));
-				sub_2BB40_draw_bitmap(v19 + 6, v50 + 10, (uint8_t**)(**filearray_2aa18c[6] + 6 * (signed __int16)(v20 + 165)));*/
-				sub_2BB40_draw_bitmap(posX + posSubMenuSpellX, v50, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[v24], scale);
-				sub_2BB40_draw_bitmap(posX + posSubMenuSpellX + 6, v50 + 10, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[v20 + 165], scale);
-				v53 = posSubMenuSpellX + (18 * scale);
-				v25 = v50 + (6 * scale);
-				v26 = v20 + 3 * v43 + 179;
-				/*if ( v58 )
-					sub_2BB40_draw_bitmap(v53, v25, (uint8_t**)(**filearray_2aa18c[6] + 6 * (signed __int16)v26));
+					bitmapIndex = SPELL_ICON2_PANEL2_WITH_FRAME_DARK;
+				DrawBitmap_2BB40(posX + posSubMenuSpellX, posY2, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[bitmapIndex], scale);
+				DrawBitmap_2BB40(posX + posSubMenuSpellX + 6, posY2 + 10, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[subSpellIndex2 + SPELL_BACKGROUND_NUMBER1], scale);
+				int bitmapIndex2 = subSpellIndex2 + 3 * spellIndex + SPELL_SUB_FIREBALL1_SMALL;
+				if (canSubSummon)
+					DrawBitmap_2BB40(posX + posSubMenuSpellX + (18 * scale), posY2 + (6 * scale), (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[bitmapIndex2], scale);
 				else
-					sub_2DE80_draw_bitmapxx(v53, v25, (uint8_t**)(6 * (signed __int16)v26 + **filearray_2aa18c[6]));*/
-				if (v58)
-					sub_2BB40_draw_bitmap(posX + v53, v25, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[v26], scale);
-				else
-					GameBitmap::DrawTransparentBitmap_2DE80(posX + v53, v25, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[v26], scale);
+					GameBitmap::DrawTransparentBitmap_2DE80(posX + posSubMenuSpellX + (18 * scale), posY2 + (6 * scale), (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[bitmapIndex2], scale);
 			}
-			//if ( (x_WORD)v20 == *(char *)(v36 + 502) )
-			//sub_2BB40_draw_bitmap(v19, v50, (uint8_t**)(**filearray_2aa18c[6] + 984));
-			if ((x_WORD)v20 == v37x->dword_0xA4_164x->str_611.byte_0x459_1113)
-				sub_2BB40_draw_bitmap(posX + posSubMenuSpellX, v50, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[164], scale);
+			if (subSpellIndex2 == playerEntity->dword_0xA4_164x->str_611.byte_0x459_1113)
+				DrawBitmap_2BB40(posX + posSubMenuSpellX, posY2, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_GOLD_FRAME], scale);
 
-			if ((signed __int16)v20 <= v47 && (signed __int16)v20 < 2)
+			if (subSpellIndex2 <= spellIndex3 && subSpellIndex2 < 2)
 			{
-				if ((x_WORD)v20 == v47)
+				if (subSpellIndex2 == spellIndex3)
 				{
 					if (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10)
 					{
-						v27 = v43;
-						//v28 = *(x_DWORD *)(v21 + 42);
-						v28 = SPELLS_BEGIN_BUFFER_str[v43].subspell[v20 + 1].dword_0x12;
-						//v29 = *((x_DWORD *)v21 + 4);
-						v29 = SPELLS_BEGIN_BUFFER_str[v43].subspell[v20].dword_0x12;
+						xPosNext = SPELLS_BEGIN_BUFFER_str[spellIndex].subspell[subSpellIndex2 + 1].xpos2_0x12;
+						xPos = SPELLS_BEGIN_BUFFER_str[spellIndex].subspell[subSpellIndex2].xpos2_0x12;
 					}
 					else
 					{
-						v27 = v43;
-						//v28 = *(x_DWORD *)(v21 + 38);
-						v28 = SPELLS_BEGIN_BUFFER_str[v43].subspell[v20 + 1].dword_E;
-						//v29 = *((x_DWORD *)v21 + 3);
-						v29 = SPELLS_BEGIN_BUFFER_str[v43].subspell[v20].dword_E;
+						xPosNext = SPELLS_BEGIN_BUFFER_str[spellIndex].subspell[subSpellIndex2 + 1].xpos1_E;
+						xPos = SPELLS_BEGIN_BUFFER_str[spellIndex].subspell[subSpellIndex2].xpos1_E;
 					}
-					v30 = v28 - v29;
-					v31 = v37x->dword_0xA4_164x->str_611.array_0x263_611x.dword[v27] + v37x->dword_0xA4_164x->str_611.spellsExperience_0x2CB_715x.at(v27) - v29;
-					if (v30 > 0)
+
+					xDiff = xPosNext - xPos;
+					subSpellPos = playerEntity->dword_0xA4_164x->str_611.array_0x263_611x.dword[spellIndex] + playerEntity->dword_0xA4_164x->str_611.spellsExperience_0x2CB_715x.at(spellIndex) - xPos;
+					if (xDiff > 0)
 					{
-						v32 = 54 * v31 / v30;
-						goto LABEL_92;
+						posEndX = 54 * subSpellPos / xDiff;
 					}
-				LABEL_91:
-					LOWORD(v32) = 0;
+					else
+					{
+						posEndX = 0;
+					}
 				}
 				else
 				{
-					if ((signed __int16)v20 >= v47)
-						goto LABEL_91;
-					LOWORD(v32) = 54;
+					posEndX = 54;
 				}
-			LABEL_92:
-				if ((v32 & 0x8000u) != 0)
-					LOWORD(v32) = 0;
-				if ((signed __int16)v32 > 54)
-					LOWORD(v32) = 54;
-				DrawLine_2BC80(posX + posSubMenuSpellX + (6 * scale), v50 + (28 * scale), (54 * scale), (2 * scale), (*xadataclrd0dat.colorPalette_var28)[0]);
-				if ((x_WORD)v32)
-					DrawLine_2BC80(posX + posSubMenuSpellX + (6 * scale), v50 + (28 * scale), v32, (2 * scale), (*xadataclrd0dat.colorPalette_var28)[3840]);
+				if ((posEndX & 0x8000u) != 0)
+					posEndX = 0;
+				if (posEndX > 54)
+					posEndX = 54;
+				DrawLine_2BC80(posX + posSubMenuSpellX + (6 * scale), posY2 + (28 * scale), (54 * scale), (2 * scale), (*xadataclrd0dat.colorPalette_var28)[0]);
+				if (posEndX)
+					DrawLine_2BC80(posX + posSubMenuSpellX + (6 * scale), posY2 + (28 * scale), posEndX, (2 * scale), (*xadataclrd0dat.colorPalette_var28)[3840]);
 			}
-			v20++;
-			LOWORD(posSubMenuSpellX) = posSubMenuIconWidth + posSubMenuSpellX;
+			subSpellIndex2++;
+			posSubMenuSpellX += posSubMenuIconWidth;
 			continue;
 		}
 	}
@@ -22936,23 +22838,10 @@ void DrawBottomMenu_2ECC0()//20fcc0
 		|| unk_18058Cstr.x_WORD_1805C2_joystick == 11
 		|| unk_18058Cstr.x_WORD_1805C2_joystick == 5)
 	{
-		sub_2BB40_draw_bitmap(unk_18058Cstr.x_DWORD_1805B0_mouse.x, unk_18058Cstr.x_DWORD_1805B0_mouse.y, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[CursorGraphicsIndex_D419E]);
+		DrawBitmap_2BB40(unk_18058Cstr.x_DWORD_1805B0_mouse.x, unk_18058Cstr.x_DWORD_1805B0_mouse.y, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[CursorGraphicsIndex_D419E]);
 	}
 	set_scene(SCENE_SPELL_MENU);
 }
-// D419E: using guessed type char CursorGraphicsIndex_D419E;
-// D41A0: using guessed type int x_D41A0_BYTEARRAY_0;
-// D41A4: using guessed type int x_DWORD_D41A4;
-// D41B6: using guessed type char x_BYTE_D41B6;
-// E9800: using guessed type char x_BYTE_E9800;
-// EA3DC: using guessed type int **filearray_2aa18c[6];
-// EA3E4: using guessed type int ENTITY_EA3E4[];
-// EB394: using guessed type int **filearray_2aa18c[0];
-// F01E8: using guessed type int (*ptrDrawBitmap_F01E8)(x_DWORD, x_DWORD, x_DWORD);
-// 1805B0: using guessed type int x_DWORD_1805B0_mouse.x;
-// 1805B4: using guessed type int x_DWORD_1805B0_mouse.y;
-// 1805C2: using guessed type __int16 x_WORD_1805C2_joystick;
-// 180660: using guessed type __int16 x_WORD_180660_VGA_type_resolution;
 
 //----- (00030D50) --------------------------------------------------------
 void sub_30D50(type_event_0x6E8E* a1x)//211d50
@@ -24346,12 +24235,12 @@ void sub_32CF0(type_event_0x6E8E* a1x)//213cf0
 		while (v13 < 26)
 		{
 			//v14 = (*(x_DWORD *)(v12 + 66) - (__CFSHL__(*(x_DWORD *)(v12 + 66) >> 31, 9) + (*(x_DWORD *)(v12 + 66) >> 31 << 9))) >> 9;
-			v14 = (SPELLS_BEGIN_BUFFER_str[v12x].subspell[2].dword_E - (my_sign32(SPELLS_BEGIN_BUFFER_str[v12x].subspell[2].dword_E) << 9) + my_sign32(SPELLS_BEGIN_BUFFER_str[v12x].subspell[2].dword_E)) >> 9;
+			v14 = (SPELLS_BEGIN_BUFFER_str[v12x].subspell[2].xpos1_E - (my_sign32(SPELLS_BEGIN_BUFFER_str[v12x].subspell[2].xpos1_E) << 9) + my_sign32(SPELLS_BEGIN_BUFFER_str[v12x].subspell[2].xpos1_E)) >> 9;
 
 			v15 = v13++;
 			//v12 += 80;
 			v12x++;
-			sub_6D8B0(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240, v15, v14);
+			sub_6D8B0(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240, v15, v14);
 		}
 	}
 }
@@ -26054,8 +25943,8 @@ void sub_35390(type_event_0x6E8E* a1x)//216390
 			v9 = &a1x->axis_0x4C_76;
 			if (D41A0_0.word_0xe <= i)
 				break;
-			v4x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v3x].word_0x00a_2BE4_11240];
-			if (sub_106C0(a1x, ENTITY_EA3E4[D41A0_0.array_0x2BDE[v3x].word_0x00a_2BE4_11240]))
+			v4x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v3x].playerIndex_0x00a_2BE4_11240];
+			if (sub_106C0(a1x, ENTITY_EA3E4[D41A0_0.array_0x2BDE[v3x].playerIndex_0x00a_2BE4_11240]))
 			{
 				v5 = Maths::sub_581E0_maybe_tan2(&v4x->axis_0x4C_76, v9);
 				if ((unsigned __int16)sub_582B0(v4x->yaw_0x1C_28, v5) < 0xAAu)
@@ -31489,10 +31378,10 @@ void AddBuildingToTerrain_46570(uaxis_2d axis1, uaxis_2d axis2)//227570
 				axis2._axis_2d.x--;
 				buildingIndex += mapAngle_13B4E0[axis2.word] & 7;
 				axis2._axis_2d.y--;
-				mapTerrainType_10B4E0[axis2.word] = x_BYTE_F2CD0x[buildingIndex][0];
+				mapTerrainType_10B4E0[axis2.word] = building_F2CD0x[buildingIndex][0];
 				if (mapTerrainType_10B4E0[axis2.word] >= 8u)
 				{
-					mapAngle_13B4E0[axis2.word] = x_BYTE_F2CD0x[buildingIndex][1] + (mapAngle_13B4E0[axis2.word] & 0x87);
+					mapAngle_13B4E0[axis2.word] = building_F2CD0x[buildingIndex][1] + (mapAngle_13B4E0[axis2.word] & 0x87);
 				}
 				else
 				{
@@ -32562,76 +32451,79 @@ void sub_48120()//229120
 	{
 		if (result == MapType_t::Night)
 		{
-			x_BYTE_E88E0x[0] = 0xA4;
-			x_BYTE_E88E0x[1] = 0xAA;
-			x_BYTE_E88E0x[3] = 0x77;
-			x_BYTE_E88E0x[2] = 0x7B;
-			x_BYTE_E88E0x[4] = 0x7D;
-			x_BYTE_E88E0x[5] = 0x7B;
-			x_BYTE_E88E0x[7] = 0xC6;
-			x_BYTE_E88E0x[8] = 0x7B;
-			x_BYTE_E88E0x[6] = 0xC0;
-			x_BYTE_E88E0x[12] = 0x97;
-			x_BYTE_E88E0x[15] = 0xD7;
-			x_BYTE_E88E0x[11] = 0x7B;
-			x_BYTE_E88E0x[16] = 0xDD;
-			x_BYTE_E88E0x[9] = 0x58;
+			playersColors_E88E0x[0][0] = 0xA4;
+			playersColors_E88E0x[0][1] = 0xAA;
+			playersColors_E88E0x[0][2] = 0x7B;
+			playersColors_E88E0x[1][0] = 0x77;
+			playersColors_E88E0x[1][1] = 0x7D;
+			playersColors_E88E0x[1][2] = 0x7B;
+			playersColors_E88E0x[2][0] = 0xC0;
+			playersColors_E88E0x[2][1] = 0xC6;
+			playersColors_E88E0x[2][2] = 0x7B;
+			playersColors_E88E0x[3][0] = 0x58;
+			playersColors_E88E0x[3][2] = 0x7B;
+			playersColors_E88E0x[4][0] = 0x97;
+			playersColors_E88E0x[5][0] = 0xD7;
+			playersColors_E88E0x[5][1] = 0xDD;
+			
 		}
 		else // Cave
 		{
-			x_BYTE_E88E0x[0] = 0xE0;
-			x_BYTE_E88E0x[1] = 0x58;
-			x_BYTE_E88E0x[3] = 0x77;
-			x_BYTE_E88E0x[2] = 0x7B;
-			x_BYTE_E88E0x[4] = 0x7D;
-			x_BYTE_E88E0x[5] = 0x7B;
-			x_BYTE_E88E0x[7] = 0xC6;
-			x_BYTE_E88E0x[8] = 0x7B;
-			x_BYTE_E88E0x[9] = 0x58;
-			x_BYTE_E88E0x[6] = 0xC0;
-			x_BYTE_E88E0x[12] = 0x97;
-			x_BYTE_E88E0x[15] = 0xD7;
-			x_BYTE_E88E0x[11] = 0x7B;
-			x_BYTE_E88E0x[16] = 0xDD;
+			playersColors_E88E0x[0][0] = 0xE0;
+			playersColors_E88E0x[0][1] = 0x58;
+			playersColors_E88E0x[0][2] = 0x7B;
+			playersColors_E88E0x[1][0] = 0x77;
+			playersColors_E88E0x[1][1] = 0x7D;
+			playersColors_E88E0x[1][2] = 0x7B;
+			playersColors_E88E0x[2][0] = 0xC0;
+			playersColors_E88E0x[2][1] = 0xC6;
+			playersColors_E88E0x[2][2] = 0x7B;
+			playersColors_E88E0x[3][0] = 0x58;
+			playersColors_E88E0x[3][2] = 0x7B;
+			playersColors_E88E0x[4][0] = 0x97;
+			playersColors_E88E0x[5][0] = 0xD7;
+			playersColors_E88E0x[5][1] = 0xDD;
 		}
 		// shared between night and cave
-		x_BYTE_E88E0x[19] = 0x62;
-		x_BYTE_E88E0x[10] = 0x5D;
-		x_BYTE_E88E0x[17] = 0x7B;
-		x_BYTE_E88E0x[13] = 0x9D;
-		x_BYTE_E88E0x[14] = 0x7B;
-		x_BYTE_E88E0x[18] = 0x69;
-		x_BYTE_E88E0x[20] = 0x7B;
-		x_BYTE_E88E0x[21] = 0xC9;
-		x_BYTE_E88E0x[23] = 0x7B;
-		x_BYTE_E88E0x[22] = 0xCF;
+		playersColors_E88E0x[3][1] = 0x5D;
+		playersColors_E88E0x[4][1] = 0x9D;
+		playersColors_E88E0x[4][2] = 0x7B;
+		playersColors_E88E0x[5][2] = 0x7B;
+		playersColors_E88E0x[6][0] = 0x69;
+		playersColors_E88E0x[6][1] = 0x62;
+		playersColors_E88E0x[6][2] = 0x7B;
+		playersColors_E88E0x[7][0] = 0xC9;
+		playersColors_E88E0x[7][1] = 0xCF;
+		playersColors_E88E0x[7][2] = 0x7B;
+		
 	}
 	else // Day
 	{
-		x_BYTE_E88E0x[0] = 0x60;
-		x_BYTE_E88E0x[1] = 0x64;
-		x_BYTE_E88E0x[6] = 0x1C;
-		x_BYTE_E88E0x[2] = 0x7B;
-		x_BYTE_E88E0x[3] = 0x7B;
-		x_BYTE_E88E0x[5] = 0x7B;
-		x_BYTE_E88E0x[7] = 0x18;
-		x_BYTE_E88E0x[8] = 0x7B;
-		x_BYTE_E88E0x[13] = 0x97;
-		x_BYTE_E88E0x[4] = 0x77;
-		x_BYTE_E88E0x[9] = 0x5B;
-		x_BYTE_E88E0x[11] = 0x7B;
-		x_BYTE_E88E0x[15] = 0xDB;
-		x_BYTE_E88E0x[21] = 0x3D;
-		x_BYTE_E88E0x[10] = 0x57;
-		x_BYTE_E88E0x[12] = 0x9A;
-		x_BYTE_E88E0x[14] = 0x7B;
-		x_BYTE_E88E0x[16] = 0xD8;
-		x_BYTE_E88E0x[17] = 0x7B;
-		x_BYTE_E88E0x[22] = 0x3A;
-		x_BYTE_E88E0x[18] = 0x76;
-		x_BYTE_E88E0x[19] = 0xA0;
-		x_BYTE_E88E0x[23] = 0x7B;
-		x_BYTE_E88E0x[20] = 0x7B;
+		playersColors_E88E0x[0][0] = 0x60;
+		playersColors_E88E0x[0][1] = 0x64;
+		playersColors_E88E0x[0][2] = 0x7B;
+		playersColors_E88E0x[1][0] = 0x7B;
+		playersColors_E88E0x[1][1] = 0x77;
+		playersColors_E88E0x[1][2] = 0x7B;
+		playersColors_E88E0x[2][0] = 0x1C;
+		playersColors_E88E0x[2][1] = 0x18;
+		playersColors_E88E0x[2][2] = 0x7B;
+		playersColors_E88E0x[3][0] = 0x5B;
+		playersColors_E88E0x[3][1] = 0x57;
+		playersColors_E88E0x[3][2] = 0x7B;
+		playersColors_E88E0x[4][0] = 0x9A;
+		playersColors_E88E0x[4][1] = 0x97;
+		playersColors_E88E0x[4][2] = 0x7B;
+		playersColors_E88E0x[5][0] = 0xDB;
+		playersColors_E88E0x[5][1] = 0xD8;
+		playersColors_E88E0x[5][2] = 0x7B;
+		playersColors_E88E0x[6][0] = 0x76;
+		playersColors_E88E0x[6][1] = 0xA0;
+		playersColors_E88E0x[6][2] = 0x7B;
+		playersColors_E88E0x[7][0] = 0x3D;
+		playersColors_E88E0x[7][1] = 0x3A;
+		playersColors_E88E0x[7][2] = 0x7B;
+		
 	}
 }
 // D41A0: using guessed type int x_D41A0_BYTEARRAY_0;
@@ -37975,12 +37867,12 @@ void GameEvents_51BB0()//232bb0
 	//adress 232cd2
 	for (int i = 1; i < 16; i++)
 	{
-		x_D41A0_BYTEARRAY_4_struct.byteindex_121[i] = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dword_0x012_2BE0_11248 / i & 1;
+		x_D41A0_BYTEARRAY_4_struct.colorIndex_121[i] = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dword_0x012_2BE0_11248 / i & 1;
 	}
 	for (int i = 0; i < D41A0_0.word_0xe; i++)
 	{
 		//adress 233d56
-		actEvent = ENTITY_EA3E4[D41A0_0.array_0x2BDE[i].word_0x00a_2BE4_11240];
+		actEvent = ENTITY_EA3E4[D41A0_0.array_0x2BDE[i].playerIndex_0x00a_2BE4_11240];
 		if (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x20)
 		{
 			sub_53A40(&D41A0_0.array_0x6E3E[i]);
@@ -38418,10 +38310,10 @@ void GameEvents_51BB0()//232bb0
 						switch (D41A0_0.array_0x2BDE[i].byte_0x3E1_2BE4_12223)
 						{
 						case 0:
-							if (!(sub_61810(actEvent, ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240]) == 0))
+							if (!(sub_61810(actEvent, ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]) == 0))
 								bool1 = true;
 						case 1:
-							if (!(sub_61620(actEvent, ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240]) == 0))
+							if (!(sub_61620(actEvent, ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]) == 0))
 								bool1 = true;
 							break;
 						case 2:
@@ -38460,7 +38352,7 @@ void GameEvents_51BB0()//232bb0
 		actEvent->dword_0xA4_164x->entityIndex_0x0 = D41A0_0.array_0x6E3E[i].entityIndex_0x6E3E_byte5;
 		actEvent->dword_0xA4_164x->nextEntity_0x18_24 = D41A0_0.array_0x6E3E[i].nextEntity_0x6E3E_word6;
 		actEvent->dword_0xA4_164x->entityIndex2_0x1A_26 = D41A0_0.array_0x6E3E[i].entityIndex2_0x6E3E_word8;
-		sub_57B20(&D41A0_0.array_0x2BDE[i], ENTITY_EA3E4[D41A0_0.array_0x2BDE[i].word_0x00a_2BE4_11240]);
+		sub_57B20(&D41A0_0.array_0x2BDE[i], ENTITY_EA3E4[D41A0_0.array_0x2BDE[i].playerIndex_0x00a_2BE4_11240]);
 		if (D41A0_0.array_0x2BDE[i].byte_0x846_2BDE)
 			sub_55C60(&D41A0_0.array_0x2BDE[i]);
 		memset(&D41A0_0.array_0x6E3E[i], 0, 10);
@@ -39070,7 +38962,7 @@ void sub_54A50(int playerIndex2, int playerIndex)//235a50
 				if (tempByte0x360FB > 2)
 					tempByte0x360FB = 2;
 				D41A0_0.array_0x2BDE[playerIndex].dword_0x3E6_2BE4_12228.str_611.array_0x41D_1053z.byte[result] = tempByte0x360FB;
-				D41A0_0.array_0x2BDE[playerIndex].dword_0x3E6_2BE4_12228.str_611.array_0x263_611x.dword[result] = SPELLS_BEGIN_BUFFER_str[result].subspell[tempByte0x360FB].dword_0x12 + 1;
+				D41A0_0.array_0x2BDE[playerIndex].dword_0x3E6_2BE4_12228.str_611.array_0x263_611x.dword[result] = SPELLS_BEGIN_BUFFER_str[result].subspell[tempByte0x360FB].xpos2_0x12 + 1;
 			}
 		}
 		D41A0_0.array_0x2BDE[playerIndex].dword_0x3E6_2BE4_12228.str_611.array_0x39B_923x.byte[i] = -1;
@@ -39170,7 +39062,7 @@ bool SaveSMAPSLEVmovie_54D30(__int16 a1)//235d30 //in game load
 		DataFileIO::Read(savedfile, (uint8_t*)mapAngle_13B4E0, 0x10000);
 		DataFileIO::Read(savedfile, (uint8_t*)x_BYTE_14B4E0_second_heightmap, 0x10000);
 		DataFileIO::Read(savedfile, (uint8_t*)mapEntityIndex_15B4E0, 0x20000);
-		DataFileIO::Read(savedfile, (uint8_t*)x_BYTE_F2CD0x, 4802);
+		DataFileIO::Read(savedfile, (uint8_t*)building_F2CD0x, 4802);
 		DataFileIO::Close(savedfile);
 	}
 	sprintf(printbuffer, "%s/%s%03d.DAT", "MOVIE", "SLEV", a1);
@@ -39222,7 +39114,7 @@ bool SaveSMAPSLEVmovie2_54F00(__int16 a1)//235f00 //in game save
 		DataFileIO::WriteFile_98CAA(file, (uint8_t*)mapAngle_13B4E0, 0x10000);
 		DataFileIO::WriteFile_98CAA(file, (uint8_t*)x_BYTE_14B4E0_second_heightmap, 0x10000);
 		DataFileIO::WriteFile_98CAA(file, (uint8_t*)mapEntityIndex_15B4E0, 0x20000);
-		DataFileIO::WriteFile_98CAA(file, (uint8_t*)x_BYTE_F2CD0x, 4802);
+		DataFileIO::WriteFile_98CAA(file, (uint8_t*)building_F2CD0x, 4802);
 		DataFileIO::Close(file);
 	}
 	sub_55100(2);
@@ -39287,7 +39179,7 @@ void sub_55C60(type_str_0x2BDE* loc0x2BDE)//236c60
 			loc0x2BDE->word_0x848_2BDE = abs(loc0x2BDE->dword_0x3E6_2BE4_12228.roll_0x155_341);
 			loc0x2BDE->byte_0x846_2BDE++;
 			x_D41A0_BYTEARRAY_4_struct.byteindex_220 = x_WORD_E3760_mouse.x;
-			sub_55EB0(loc0x2BDE->word_0x00a_2BE4_11240);
+			sub_55EB0(loc0x2BDE->playerIndex_0x00a_2BE4_11240);
 		}
 		loc0x2BDE->word_0x848_2BDE += param1 * loc0x2BDE->word_0x84A_2BDE;
 		if (param2)
@@ -39313,7 +39205,7 @@ void sub_55C60(type_str_0x2BDE* loc0x2BDE)//236c60
 		loc0x2BDE->dword_0x3E6_2BE4_12228.rollDelta_0x4_4 = 0;
 		if (loc0x2BDE->byte_0x846_2BDE == 8)
 		{
-			sub_55EB0(loc0x2BDE->word_0x00a_2BE4_11240);
+			sub_55EB0(loc0x2BDE->playerIndex_0x00a_2BE4_11240);
 			loc0x2BDE->byte_0x846_2BDE = 0;
 		}
 		else
@@ -39712,7 +39604,7 @@ void ClearSettings_567C0()//2377c0 // clean level
 	memset(D41A0_0.struct_0x6E8E, 0, sizeof(type_event_0x6E8E) * 0x3e8);
 
 	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.byteindex_51), 0, 1);
-	memset((void*)(x_D41A0_BYTEARRAY_4_struct.byteindex_121), 0, 16);
+	memset((void*)(x_D41A0_BYTEARRAY_4_struct.colorIndex_121), 0, 16);
 	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.speedIndex), 0, 1);
 	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.byteindex_180), 0, 1);
 	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.str_index_242ar), 0, 14);
@@ -39867,7 +39759,7 @@ void sub_56D60(unsigned int a1, char a2)//237d60
 	sub_4A1E0(0, 1);
 	soundActive_E3799 = v2;
 	sub_53160();
-	//v5x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	//v5x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	sub_60F00();
 }
 // 8C250: using guessed type x_DWORD memset(x_DWORD, x_DWORD, x_DWORD);
@@ -40258,7 +40150,7 @@ void sub_574A0()//2384a0
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10))
 	{
 		memset(D41A0_0.str_0x364D2.dword_0x364D6, 0, 104);
-		type_str_611* tempStr611 = &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240]->dword_0xA4_164x->str_611;
+		type_str_611* tempStr611 = &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]->dword_0xA4_164x->str_611;
 		for (int index = 1; index < 0x4b0; index++)
 		{
 			if (D41A0_0.terrain_2FECE.entity_0x30311[index].type_0x30311 == 0x0F)
@@ -40658,7 +40550,7 @@ void sub_57B20(type_str_0x2BDE* a1x, type_event_0x6E8E* a2x)//238b20 //copy posi
 			- ((v4 - (__CFSHL__(v4 >> 31, 3) + 8 * (v4 >> 31))) >> 3);
 			*/
 		a1x->struct_0x1d1_2BDE_11695[a1x->word_0x010_2BDE_11246].rotation__2BDE_11701.pitch = a2x->dword_0xA4_164x->pitch_0x157_343 / 2
-			+ x_D41A0_BYTEARRAY_4_struct.byteindex_121[1]
+			+ x_D41A0_BYTEARRAY_4_struct.colorIndex_121[1]
 			* ((v4 - (my_sign32(v4) << 4) + my_sign32(v4)) >> 4)
 			- ((v4 - (my_sign32(v4) << 3) + my_sign32(v4)) >> 3);
 
@@ -40901,7 +40793,7 @@ LABEL_5:
 		v0 = 0;
 	if (v0)
 	{
-		v4x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v1].word_0x00a_2BE4_11240];
+		v4x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v1].playerIndex_0x00a_2BE4_11240];
 		v15x = v4x->axis_0x4C_76;
 		MoveEntity_57FA0(&v15x, v4x->yaw_0x1C_28, 0, 2560);
 		//LOBYTE(v5) = (unsigned __int16)(v15x.x + 128) >> 8;
@@ -41123,7 +41015,7 @@ void sub_58F00_game_objectives()//239f00
 				v3 = 0;
 				achievedGoal = false;
 				v23 = 0;
-				v17x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+				v17x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 				while (v3 < D41A0_0.stageIndex_0x36E01)
 				{
 					if (D41A0_0.stages_0x3654C[v3].str_3654D_byte1 & 2)
@@ -43819,7 +43711,7 @@ void sub_5C530()//23d530
 
 	v0x = 0;
 	v1 = 0;
-	v2x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	v2x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	for (i = 0; i < 26; i++)
 	{
 		v4x = v2x->dword_0xA4_164x;
@@ -43964,7 +43856,7 @@ void sub_5C870(type_event_0x6E8E* a1x)//23d870
 	//type_str_164* v2x; // esi
 	uint32_t index; // eax
 
-	v1x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	v1x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	//v2x = v1x->dword_0xA4_164x;
 	index = sub_583F0_distance_3d(&a1x->axis_0x4C_76, &v1x->axis_0x4C_76);
 	if (index <= v1x->dword_0xA4_164x->dword_0x19A_410)
@@ -43978,7 +43870,7 @@ void sub_5C870(type_event_0x6E8E* a1x)//23d870
 void SetMaxDistance_5C8D0(type_event_0x6E8E* event)//23d8d0
 {
 	uint32_t distance; // eax
-	type_event_0x6E8E* event2 = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	type_event_0x6E8E* event2 = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	distance = sub_583F0_distance_3d(&event->axis_0x4C_76, &event2->axis_0x4C_76);
 	if (distance <= event2->dword_0xA4_164x->maxDistance_0x19E_414)
 		event2->dword_0xA4_164x->maxDistance_0x19E_414 = distance;
@@ -44064,7 +43956,7 @@ void sub_5C950(type_str_0x2BDE* a1x, type_event_0x6E8E* a2x)//23d950
 		CopyEntityPosition_57CF0(a2x, &v35x);
 	}
 	//v7 = (int)x_D41A0_BYTEARRAY_0;
-	a1x->word_0x00a_2BE4_11240 = v2x - D41A0_0.struct_0x6E8E;
+	a1x->playerIndex_0x00a_2BE4_11240 = v2x - D41A0_0.struct_0x6E8E;
 	v2x->dword_0xA4_164x = &a1x->dword_0x3E6_2BE4_12228;
 	v2x->dword_0xA4_164x->playerColorIndex_0x38_56 = a1x - &D41A0_0.array_0x2BDE[0]; // FIXME: pointer arithmetic
 	v2x->dword_0xA4_164x->word_0x159_345 = 100;
@@ -44249,7 +44141,7 @@ void sub_6D9C0(type_str_611* a1x, type_SPELLS_BEGIN_BUFFER_str* a2x, __int16 a3,
 	do
 		v6--;
 	//while (v6 >= 0 && v7 < *(x_DWORD *)&a2[26 * v6 + 14]);
-	while (v6 >= 0 && v7 < a2x->subspell[v6].dword_E);
+	while (v6 >= 0 && v7 < a2x->subspell[v6].xpos1_E);
 	if (v6 < 0)
 		v6 = 0;
 	//v8 = a1 + a3;
@@ -44269,11 +44161,11 @@ void sub_6D9C0(type_str_611* a1x, type_SPELLS_BEGIN_BUFFER_str* a2x, __int16 a3,
 	if (v5 && a4)
 	{
 		//if (v7 >= *(x_DWORD *)(a2 + 66))
-		if (v7 >= a2x->subspell[2].dword_E)
+		if (v7 >= a2x->subspell[2].xpos1_E)
 		{
 			//result = *(x_DWORD *)(a2 + 66);
 			//a1x->array_0x263_611x.dword[a3] = *(x_DWORD*)(a2 + 66);
-			a1x->array_0x263_611x.dword[a3] = a2x->subspell[2].dword_E;
+			a1x->array_0x263_611x.dword[a3] = a2x->subspell[2].xpos1_E;
 		}
 		else
 		{
@@ -44300,11 +44192,11 @@ void sub_6DAD0(type_str_611* a1x, type_SPELLS_BEGIN_BUFFER_str* a2x, __int16 a3)
 			v3 = 0;
 		/*if (v3 > *(x_DWORD *)(a2 + 70) + 2)
 			v3 = *(x_DWORD *)(a2 + 70) + 2;*/
-		if (v3 > a2x->subspell[2].dword_0x12 + 2)
-			v3 = a2x->subspell[2].dword_0x12 + 2;
+		if (v3 > a2x->subspell[2].xpos2_0x12 + 2)
+			v3 = a2x->subspell[2].xpos2_0x12 + 2;
 		//v4 = a1 + a3;
 		//if (v3 >= *(x_DWORD *)&a2[26 * (a1x->array_0x41D_1053z.byte[a3] + 1) + 18])
-		if (v3 >= a2x->subspell[a1x->array_0x41D_1053z.byte[a3] + 1].dword_0x12)
+		if (v3 >= a2x->subspell[a1x->array_0x41D_1053z.byte[a3] + 1].xpos2_0x12)
 		{
 			a1x->array_0x41D_1053z.byte[a3]++;
 			sub_6DC40_improve_ability(a3);
@@ -44324,7 +44216,7 @@ void sub_6DB50(char a1, char a2)//24eb50
 	{
 		v3x = 0;
 		v4 = 0;
-		v5 = &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240]->dword_0xA4_164x->str_611;
+		v5 = &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]->dword_0xA4_164x->str_611;
 		while (v4 < 26)
 		{
 			v6 = v4++;
@@ -44348,7 +44240,7 @@ void sub_6DBD0()//24ebd0
 		//v0 = (unsigned __int8 *)*xadataspellsdat.colorPalette_var28;
 		v0x = 0;
 		v1 = 0;
-		v2 = &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240]->dword_0xA4_164x->str_611;
+		v2 = &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]->dword_0xA4_164x->str_611;
 		while (v1 < 26)
 		{
 			v3 = v1++;
@@ -44643,12 +44535,12 @@ void sub_6E0D0()//24f0d0
 	int v2; // ebx
 
 	v0 = 0;
-	v1x = &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240]->dword_0xA4_164x->str_611;
+	v1x = &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]->dword_0xA4_164x->str_611;
 	while (v0 < 26)
 	{
 		v1x->array_0x3E9_1001x.byte[v0] = 1;
 		//v2 = *(int32_t*)& SPELLS_BEGIN_BUFFER_DA818[0x42+4*20 * v0];
-		v2 = SPELLS_BEGIN_BUFFER_str[v0].subspell[2].dword_E;
+		v2 = SPELLS_BEGIN_BUFFER_str[v0].subspell[2].xpos1_E;
 		v1x->array_0x263_611x.dword[v0] = v2 + 1;
 		v0++;
 	}
@@ -49181,7 +49073,7 @@ void sub_872A0()//2682a0
 	}
 
 	v1 = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x3DF_2BE4_12221;
-	v2x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	v2x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	if (v1 < 6u || v1 > 8u)
 		str_unk_1804B0ar.PopupStatusByte_0x9e &= 0xFA;
 	else
@@ -49572,7 +49464,7 @@ void GetHelpPopupTextAndCoords_87CF0(uint8_t scale)//268cf0
 	v34 = 0;
 	v37 = -1;
 	v0 = -1;
-	v1x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	v1x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	v3 = v1x->dword_0xA4_164x->word_0x3A_58;
 	if (v3)
 		v5x = ENTITY_EA3E4[v3];
@@ -50238,7 +50130,7 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 	char typeB = 0;
 	int hintIndex = 0;
 	int typeC = 0;
-	type_event_0x6E8E* locEvent1 = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240];
+	type_event_0x6E8E* locEvent1 = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	if (locEvent1->dword_0xA4_164x->word_0x3A_58)
 		locEvent2 = ENTITY_EA3E4[locEvent1->dword_0xA4_164x->word_0x3A_58];
 	int countHints = 0;
@@ -50256,28 +50148,28 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 			if (!DefaultResolutions())
 				maxScreenHeight = screenHeight_180624;
 		}
-		sizeFromYEnd = maxScreenHeight - 2 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].height_5 * scale);
+		sizeFromYEnd = maxScreenHeight - 2 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale);
 		spellIndex = spellIndex_D94FF[locEvent1->dword_0xA4_164x->str_611.byte_0x458_1112];
 		isStandardSpell = locEvent1->dword_0xA4_164x->str_611.array_0x333_819x.word[spellIndex] != 0;
 		if (D41A0_0.terrain_2FECE.MapType != MapType_t::Cave && spellIndex == 25)
 			isStandardSpell = false;
 		spellType = locEvent1->dword_0xA4_164x->str_611.array_0x41D_1053z.byte[spellIndex];
 		spellPos = locEvent1->dword_0xA4_164x->str_611.byte_0x458_1112;
-		posX1 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].width_4 * scale) / 2 + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].width_4 * scale) * (spellPos % 13) + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[88].width_4 * scale);
-		sizeFromYEndPlus = sizeFromYEnd - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].height_5 * scale);
-		posY1 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].height_5 * scale) / 2 + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].height_5 * scale) * (spellPos / 13) + sizeFromYEnd;
-		posX2 = posX1 - 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale) / 2;
-		if (posX2 <= (640 * scale) - 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4) * scale)
+		posX1 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].width_4 * scale) / 2 + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].width_4 * scale) * (spellPos % 13) + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[EDGE_PANEL].width_4 * scale);
+		sizeFromYEndPlus = sizeFromYEnd - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].height_5 * scale);
+		posY1 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale) / 2 + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale) * (spellPos / 13) + sizeFromYEnd;
+		posX2 = posX1 - 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale) / 2;
+		if (posX2 <= (640 * scale) - 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4) * scale)
 		{
 			if (posX2 < 0)
 				posX2 = 0;
 		}
 		else
 		{
-			posX2 = (640 * scale) - 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale);
+			posX2 = (640 * scale) - 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale);
 		}
 		bool endLoop = 0;
-		int posX3 = posX2 + 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale) / 2;
+		int posX3 = posX2 + 3 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale) / 2;
 		if (!DefaultResolutions())
 		{
 			int xKoef = (screenWidth_18062C - (640 * scale)) / 2;
@@ -50289,7 +50181,7 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 		{
 			typeA = 2;
 			typeC = 1;
-			posY2 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].height_5 * scale) / 2 + sizeFromYEndPlus;
+			posY2 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].height_5 * scale) / 2 + sizeFromYEndPlus;
 			switch (str_unk_1804B0ar.byte_0xa4)
 			{
 			case 0: //Selected Spell Name
@@ -50315,7 +50207,7 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 					endLoop = true;
 					str_E2A74[SPELL_EXPERIENCE_POINTS].axis_2[3] = posX2 + (33 * scale);
 					if (spellType > 0)
-						str_E2A74[SPELL_EXPERIENCE_POINTS].axis_2[3] = posX2 + (33 * scale) + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale);
+						str_E2A74[SPELL_EXPERIENCE_POINTS].axis_2[3] = posX2 + (33 * scale) + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale);
 					str_E2A74[SPELL_EXPERIENCE_POINTS].axis_2[4] = sizeFromYEndPlus + (29 * scale);
 				}
 				break;
@@ -50328,9 +50220,9 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 						{
 							hintIndex = NOT_ENOUGH_CASTLED_MANA_TO_USE;
 							hintText[0] = str_E2A74[NOT_ENOUGH_CASTLED_MANA_TO_USE].axis_2[1];
-							str_E2A74[NOT_ENOUGH_CASTLED_MANA_TO_USE].axis_2[3] = posX2 + j * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale) + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale) / 2;
+							str_E2A74[NOT_ENOUGH_CASTLED_MANA_TO_USE].axis_2[3] = posX2 + j * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale) + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale) / 2;
 							endLoop = true;
-							str_E2A74[NOT_ENOUGH_CASTLED_MANA_TO_USE].axis_2[4] = sizeFromYEndPlus + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].height_5 * scale) / 2;
+							str_E2A74[NOT_ENOUGH_CASTLED_MANA_TO_USE].axis_2[4] = sizeFromYEndPlus + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].height_5 * scale) / 2;
 						}
 					}
 				}
@@ -50340,7 +50232,7 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 				{
 					hintIndex = ACHIEVED_SPELL_LEVEL;
 					hintText[0] = str_E2A74[ACHIEVED_SPELL_LEVEL].axis_2[1];
-					str_E2A74[ACHIEVED_SPELL_LEVEL].axis_2[3] = (((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale) / 2) + posX2 + spellType * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale);
+					str_E2A74[ACHIEVED_SPELL_LEVEL].axis_2[3] = (((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale) / 2) + posX2 + spellType * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale);
 					endLoop = true;
 					str_E2A74[ACHIEVED_SPELL_LEVEL].axis_2[4] = posY2;
 				}
@@ -50353,7 +50245,7 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 						hintIndex = SPELL_RECHARGE_AND_SHOTS;
 						hintText[0] = str_E2A74[SPELL_RECHARGE_AND_SHOTS].axis_2[1];
 						str_E2A74[SPELL_RECHARGE_AND_SHOTS].axis_2[3] = posX1;
-						str_E2A74[SPELL_RECHARGE_AND_SHOTS].axis_2[4] = posY1 + (((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].height_5 * scale) - (my_sign32(((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].height_5 * scale)) * 8)) >> 2;
+						str_E2A74[SPELL_RECHARGE_AND_SHOTS].axis_2[4] = posY1 + (((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale) - (my_sign32(((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale)) * 8)) >> 2;
 					}
 				}
 				break;
@@ -50362,7 +50254,7 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 				{
 					hintIndex = SELECTED_SPELL_LEVEL;
 					hintText[0] = str_E2A74[SELECTED_SPELL_LEVEL].axis_2[1];
-					str_E2A74[SELECTED_SPELL_LEVEL].axis_2[3] = (((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale) / 2) + posX2 + locEvent1->dword_0xA4_164x->str_611.byte_0x459_1113 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale);
+					str_E2A74[SELECTED_SPELL_LEVEL].axis_2[3] = (((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4 * scale) / 2) + posX2 + locEvent1->dword_0xA4_164x->str_611.byte_0x459_1113 * ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4 * scale);
 					endLoop = true;
 					str_E2A74[SELECTED_SPELL_LEVEL].axis_2[4] = posY2;
 				}
@@ -50386,7 +50278,7 @@ void SetSpellHelpPopupCoordinates_88D40(uint8_t scale)
 							hintIndex = NOT_ENOUGH_MANA_TO_CAST;
 							hintText[0] = str_E2A74[NOT_ENOUGH_MANA_TO_CAST].axis_2[1];
 							str_E2A74[NOT_ENOUGH_MANA_TO_CAST].axis_2[3] = posX1;
-							str_E2A74[NOT_ENOUGH_MANA_TO_CAST].axis_2[4] = posY1 + (((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].height_5 * scale) - (my_sign32(((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].height_5 * scale)) * 8)) >> 2;
+							str_E2A74[NOT_ENOUGH_MANA_TO_CAST].axis_2[4] = posY1 + (((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale) - (my_sign32(((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].height_5 * scale)) * 8)) >> 2;
 						}
 					}
 				}
@@ -50799,7 +50691,7 @@ int ReadGameUserInputs_89D10()//26ad10
 			{
 				if (v31 == 3)
 				{
-					if (82 - (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].width_4 <= unk_18058Cstr.x_DWORD_1805B0_mouse.x)
+					if (82 - (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].width_4 <= unk_18058Cstr.x_DWORD_1805B0_mouse.x)
 					{
 						if (unk_18058Cstr.x_DWORD_1805B0_mouse.x >= 384)
 						{
@@ -50809,16 +50701,16 @@ int ReadGameUserInputs_89D10()//26ad10
 								v49 = 480;
 							posY = v49 - 72;
 							if (v49 - 46 >= unk_18058Cstr.x_DWORD_1805B0_mouse.y)
-								v50 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[260].width_4;
+								v50 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL2].width_4;
 							else
-								v50 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[158].width_4;
+								v50 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_MINISQUARE1].width_4;
 							v42 = (signed int)v50 >> 2;
-							v9 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[158].height_5 >> 1) + posY + 26;
-							v51 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[260].height_5 >> 1) + 4 + posY;
+							v9 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_MINISQUARE1].height_5 >> 1) + posY + 26;
+							v51 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL2].height_5 >> 1) + 4 + posY;
 							posX = 0;
 							posY = v51;
 							v41 = screenWidth_18062C;
-							v43 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[260].height_5;
+							v43 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL2].height_5;
 						}
 						else
 						{
@@ -50827,13 +50719,13 @@ int ReadGameUserInputs_89D10()//26ad10
 							else
 								v47 = 480;
 							posY = v47 - 72;
-							v48 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[155].height_5 >> 1) + 32 + v47 - 72;
+							v48 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_MINISQUARE1_WITH_FRAME].height_5 >> 1) + 32 + v47 - 72;
 							posX = 0;
 							posY = v48;
 							v41 = screenWidth_18062C;
 							v9 = v48;
-							v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[155].width_4 >> 2;
-							v43 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[155].height_5 >> 1;
+							v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_MINISQUARE1_WITH_FRAME].width_4 >> 2;
+							v43 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_MINISQUARE1_WITH_FRAME].height_5 >> 1;
 						}
 					}
 					else
@@ -50843,14 +50735,14 @@ int ReadGameUserInputs_89D10()//26ad10
 						else
 							v44 = 480;
 						posY = v44 - 72;
-						v45 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].height_5 >> 1) + 28 + v44 - 72;
+						v45 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].height_5 >> 1) + 28 + v44 - 72;
 						posY = v45;
-						posX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].width_4 >> 1) + 4;
-						v46 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].height_5;
+						posX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].width_4 >> 1) + 4;
+						v46 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].height_5;
 						v9 = v45 + v46;
 						v43 = v46 >> 1;
-						v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].width_4 >> 2;
-						v41 = posX + screenWidth_18062C - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].width_4 >> 1);
+						v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].width_4 >> 2;
+						v41 = posX + screenWidth_18062C - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].width_4 >> 1);
 					}
 					goto LABEL_301;
 				}
@@ -50863,15 +50755,15 @@ int ReadGameUserInputs_89D10()//26ad10
 				{
 					if (v33 <= 2u)
 					{
-						height = 3 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[163].width_4;
+						height = 3 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL2].width_4;
 						v37 = v34->byte_0x458_1112;
 						if (v37 < 13)
 							v38 = v37;
 						else
 							v38 = v37 - 13;
-						v39 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].width_4
-							+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].width_4 * v38
-							+ ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].width_4 >> 1)
+						v39 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].width_4
+							+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].width_4 * v38
+							+ ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].width_4 >> 1)
 							- (height >> 1);
 						posX = v39;
 						if (screenWidth_18062C - height >= v39)
@@ -50889,11 +50781,11 @@ int ReadGameUserInputs_89D10()//26ad10
 						else
 							v40 = 480;
 						v9 = v40
-							- 2 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5
-							- ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5 >> 1);
+							- 2 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5
+							- ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5 >> 1);
 						posY = v9;
-						v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[164].width_4 >> 2;
-						v43 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[164].height_5 >> 1;
+						v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_GOLD_FRAME].width_4 >> 2;
+						v43 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_GOLD_FRAME].height_5 >> 1;
 					}
 					else
 					{
@@ -50913,25 +50805,25 @@ int ReadGameUserInputs_89D10()//26ad10
 						v35 = 400;
 					else
 						v35 = 480;
-					v9 = v35 - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5 >> 1);
+					v9 = v35 - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5 >> 1);
 					if (x_WORD_180660_VGA_type_resolution & 1)
 						v36 = 400;
 					else
 						v36 = 480;
-					posY = v36 - 2 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5;
-					posY += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5 >> 1;
-					v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].width_4 >> 2;
-					v43 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5 >> 1;
+					posY = v36 - 2 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5;
+					posY += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5 >> 1;
+					v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].width_4 >> 2;
+					v43 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5 >> 1;
 				}
 				goto LABEL_301;
 			}
 			if (x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546)
 			{
 				GetOkayCancelButtonPositions_30BE0(&posX, &posY);
-				posX += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[258].width_4 >> 1;
-				v52 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[258].height_5 >> 1) + posY;
+				posX += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL1].width_4 >> 1;
+				v52 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL1].height_5 >> 1) + posY;
 				posY = v52;
-				v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[258].width_4;
+				v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL1].width_4;
 				v9 = v52;
 				v41 = v42 + posX;
 				v43 = 0;
@@ -50960,18 +50852,18 @@ int ReadGameUserInputs_89D10()//26ad10
 			}
 			else if (x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1)
 			{
-				height = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[175].width_4;
-				width = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[179].height_5
-					+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[177].height_5
-					+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[176].height_5
-					+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[175].height_5;
-				posY = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[175].height_5 >> 1) + (400 - width) / 2 - 60;
-				posX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[175].width_4 >> 2) + (screenWidth_18062C - height) / 2;
-				v55 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[175].height_5;
+				height = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MENU_ICON_LOAD].width_4;
+				width = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_SUB_FIREBALL1_SMALL].height_5
+					+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MUSIC_ICON].height_5
+					+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SOUND_ICON].height_5
+					+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MENU_ICON_LOAD].height_5;
+				posY = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MENU_ICON_LOAD].height_5 >> 1) + (400 - width) / 2 - 60;
+				posX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MENU_ICON_LOAD].width_4 >> 2) + (screenWidth_18062C - height) / 2;
+				v55 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MENU_ICON_LOAD].height_5;
 				v9 = width + posY - v55;
 				v43 = v55 >> 2;
-				v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[175].width_4 >> 2;
-				v41 = height + posX - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[175].width_4 >> 1);
+				v42 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MENU_ICON_LOAD].width_4 >> 2;
+				v41 = height + posX - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MENU_ICON_LOAD].width_4 >> 1);
 			}
 			else
 			{
@@ -51127,7 +51019,7 @@ int ReadGameUserInputs_89D10()//26ad10
 		{
 			if (v3 == 3)
 			{
-				if (82 - (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].width_4 <= unk_18058Cstr.x_DWORD_1805B0_mouse.x) // fix it
+				if (82 - (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].width_4 <= unk_18058Cstr.x_DWORD_1805B0_mouse.x) // fix it
 				{
 					if (unk_18058Cstr.x_DWORD_1805B0_mouse.x >= 384)
 					{
@@ -51137,16 +51029,16 @@ int ReadGameUserInputs_89D10()//26ad10
 							v18 = 480;
 						posY = v18 - 72;
 						if (v18 - 46 >= unk_18058Cstr.x_DWORD_1805B0_mouse.y)
-							v19 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[260].width_4;
+							v19 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL2].width_4;
 						else
-							v19 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[158].width_4;
+							v19 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL1].width_4;
 						v11 = (signed int)v19 >> 2;
-						v9 = posY + 26 + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[158].height_5 >> 1);
-						v20 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[260].height_5 >> 1) + 4 + posY;
+						v9 = posY + 26 + ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL1].height_5 >> 1);
+						v20 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL2].height_5 >> 1) + 4 + posY;
 						posX = 0;
 						posY = v20;
 						v7 = screenWidth_18062C;
-						v12 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[260].height_5;
+						v12 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL2].height_5;
 					}
 					else
 					{
@@ -51155,12 +51047,12 @@ int ReadGameUserInputs_89D10()//26ad10
 						else
 							v17 = 480;
 						posY = v17 - 72;
-						v9 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[155].height_5 >> 1) + 32 + v17 - 72;
+						v9 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_MINISQUARE1_WITH_FRAME].height_5 >> 1) + 32 + v17 - 72;
 						posX = 0;
 						posY = v9;
 						v7 = screenWidth_18062C;
-						v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[155].width_4 >> 2;
-						v12 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[155].height_5 >> 1;
+						v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_MINISQUARE1_WITH_FRAME].width_4 >> 2;
+						v12 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_MINISQUARE1_WITH_FRAME].height_5 >> 1;
 					}
 				}
 				else
@@ -51170,13 +51062,13 @@ int ReadGameUserInputs_89D10()//26ad10
 					else
 						v15 = 480;
 					posY = v15 - 72;
-					posY = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].height_5 >> 1) + 28 + v15 - 72;
-					posX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].width_4 >> 1) + 4;
-					v16 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].height_5;
+					posY = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].height_5 >> 1) + 28 + v15 - 72;
+					posX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].width_4 >> 1) + 4;
+					v16 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].height_5;
 					v9 = posY + v16;
 					v12 = v16 >> 1;
-					v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].width_4 >> 2;
-					v7 = posX + screenWidth_18062C - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[156].width_4 >> 1);
+					v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].width_4 >> 2;
+					v7 = posX + screenWidth_18062C - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON2_PANEL_WITH_FRAME].width_4 >> 1);
 				}
 				goto LABEL_138;
 			}
@@ -51193,28 +51085,28 @@ int ReadGameUserInputs_89D10()//26ad10
 					v8 = 400;
 				else
 					v8 = 480;
-				v9 = v8 - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5 >> 1);
+				v9 = v8 - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5 >> 1);
 				if (x_WORD_180660_VGA_type_resolution & 1)
 					v10 = 400;
 				else
 					v10 = 480;
-				posY = v10 - 2 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5;
-				posY += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5 >> 1;
-				v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].width_4 >> 2;
-				v12 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5 >> 1;
+				posY = v10 - 2 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5;
+				posY += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5 >> 1;
+				v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].width_4 >> 2;
+				v12 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5 >> 1;
 				goto LABEL_138;
 			}
 			if (v6 <= 2u)
 			{
-				height = 3 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[164].width_4;
+				height = 3 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_GOLD_FRAME].width_4;
 				LOBYTE(v13) = v5->byte_0x458_1112;
 				if ((char)v13 < 13)
 					v13 = (char)v13;
 				else
 					v13 = (char)v13 - 13;
-				posX = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].width_4 * v13
-					+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[89].width_4
-					+ ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].width_4 >> 1)
+				posX = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].width_4 * v13
+					+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_PANEL].width_4
+					+ ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].width_4 >> 1)
 					- (height >> 1);
 				if (screenWidth_18062C - height >= posX)
 				{
@@ -51231,11 +51123,11 @@ int ReadGameUserInputs_89D10()//26ad10
 				else
 					v14 = 480;
 				v9 = v14
-					- 2 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5
-					- ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[90].height_5 >> 1);
+					- 2 * (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5
+					- ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME].height_5 >> 1);
 				posY = v9;
-				v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[164].width_4 >> 2;
-				v12 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[164].height_5 >> 1;
+				v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_GOLD_FRAME].width_4 >> 2;
+				v12 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_GOLD_FRAME].height_5 >> 1;
 				goto LABEL_138;
 			}
 			goto LABEL_137;
@@ -51243,10 +51135,10 @@ int ReadGameUserInputs_89D10()//26ad10
 		if (x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546)
 		{
 			GetOkayCancelButtonPositions_30BE0(&posX, &posY);
-			posX += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[258].width_4 >> 1;
-			v21 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[258].height_5 >> 1) + posY;
+			posX += (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL1].width_4 >> 1;
+			v21 = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL1].height_5 >> 1) + posY;
 			posY = v21;
-			v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[258].width_4;
+			v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_BUTTON_CANCEL1].width_4;
 			v9 = v21;
 			v7 = v11 + posX;
 			v12 = 0;
@@ -51278,18 +51170,18 @@ int ReadGameUserInputs_89D10()//26ad10
 		}
 		if (x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1)
 		{
-			height = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[175].width_4;
-			width = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[179].height_5
-				+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[177].height_5
-				+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[176].height_5
-				+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[179].height_5;
-			posY = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[179].height_5 >> 1) + (400 - width) / 2 - 60;
-			posX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[179].width_4 >> 2) + (screenWidth_18062C - height) / 2;
-			v24 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[179].height_5;
+			height = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MENU_ICON_LOAD].width_4;
+			width = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_SUB_FIREBALL1_SMALL].height_5
+				+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[MUSIC_ICON].height_5
+				+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SOUND_ICON].height_5
+				+ (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_SUB_FIREBALL1_SMALL].height_5;
+			posY = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_SUB_FIREBALL1_SMALL].height_5 >> 1) + (400 - width) / 2 - 60;
+			posX = ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_SUB_FIREBALL1_SMALL].width_4 >> 2) + (screenWidth_18062C - height) / 2;
+			v24 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_SUB_FIREBALL1_SMALL].height_5;
 			v9 = width + posY - v24;
 			v12 = v24 >> 2;
-			v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[179].width_4 >> 2;
-			v7 = height + posX - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[179].width_4 >> 1);
+			v11 = (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_SUB_FIREBALL1_SMALL].width_4 >> 2;
+			v7 = height + posX - ((*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_SUB_FIREBALL1_SMALL].width_4 >> 1);
 			goto LABEL_138;
 		}
 	LABEL_137:
@@ -55342,7 +55234,7 @@ type_event_0x6E8E* sub_6F8E0(type_event_0x6E8E* a1x, int a2)////2508e0
 	v3x = 0;
 	while (v2 < D41A0_0.word_0xe)
 	{
-		v4x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v3x].word_0x00a_2BE4_11240];
+		v4x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v3x].playerIndex_0x00a_2BE4_11240];
 		if (CompareAxisWithShift_10750(a1x, v4x) == a2)
 			return v4x;
 		//v3 += 2124;
@@ -56491,7 +56383,7 @@ int sub_68C70(type_event_0x6E8E* a1x)//249c70
 	else
 	{
 		if (sub_584D0_SQdistX_SQdistY(
-			&a1x->axis_0x4C_76, &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240]->axis_0x4C_76) < 0x2400000)
+			&a1x->axis_0x4C_76, &ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]->axis_0x4C_76) < 0x2400000)
 		{
 			v2 = a1x->word_0x34_52;
 			a1x->byte_0x39_57 = 16;
@@ -57949,7 +57841,7 @@ void sub_6AD60(type_event_0x6E8E* a1x)//24bd60
 								v15 = a1x->word_0x96_150 - 2;
 								if (v15 != v29x->dword_0xA4_164x->playerColorIndex_0x38_56 && v15 < D41A0_0.word_0xe)
 								{
-									v16x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v15].word_0x00a_2BE4_11240];
+									v16x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v15].playerIndex_0x00a_2BE4_11240];
 									if (v16x > ENTITY_EA3E4[0])
 									{
 										v12x = ENTITY_EA3E4[v16x->dword_0xA4_164x->word_0x3A_58];
@@ -59215,7 +59107,7 @@ void sub_6D8B0(unsigned __int16 a1, unsigned __int16 a2, __int16 a3)//24e8b0
 					SetSpell_6D5E0(ENTITY_EA3E4[v3x->dword_0xA4_164x->str_611.array_0x333_819x.word[2]], v3x->dword_0xA4_164x->str_611.array_0x437_1079x.byte[2]);
 				if (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10)
 				{
-					if (a1 == D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].word_0x00a_2BE4_11240)
+					if (a1 == D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240)
 						//sub_6DAD0(&v3x->dword_0xA4_164x->str_611, (unsigned __int8 *)&(*xadataspellsdat.colorPalette_var28)[80 * a2], a2);
 						sub_6DAD0(&v3x->dword_0xA4_164x->str_611, &SPELLS_BEGIN_BUFFER_str[a2], a2);
 				}
@@ -61038,7 +60930,7 @@ void sub_5E310_multiplayer_test_die(type_event_0x6E8E* a1x)//23f310
 	type_event_0x6E8E* v26x; // [esp+8h] [ebp-4h]
 
 	sub_5D530(a1x);
-	if (x_D41A0_BYTEARRAY_4_struct.byteindex_121[6])
+	if (x_D41A0_BYTEARRAY_4_struct.colorIndex_121[6])
 		sub_5C800(a1x, 7);
 	//v1 = 2124 * a1x->dword_0xA4_164x->word_0x38_56;
 	if (D41A0_0.array_0x2BDE[a1x->dword_0xA4_164x->playerColorIndex_0x38_56].byte_0x3DF_2BE4_12221)
@@ -62949,7 +62841,7 @@ void sub_60F00()//241f00
 	int v1index = 0;
 	while (v0 < D41A0_0.word_0xe)
 	{
-		v2x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v1index].word_0x00a_2BE4_11240];
+		v2x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v1index].playerIndex_0x00a_2BE4_11240];
 		v2x->maxMana_0x8C_140 = v2x->dword_0xA4_164x->byte_0x150_336;
 		//v1 += 2124;
 		v1index++;
@@ -63491,7 +63383,7 @@ void AddDolmen02_02_65080(type_event_0x6E8E* event)//246080
 {
 	for (int v2x = 0; v2x < D41A0_0.word_0xe; v2x++)
 	{
-		type_event_0x6E8E* event2 = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v2x].word_0x00a_2BE4_11240];
+		type_event_0x6E8E* event2 = ENTITY_EA3E4[D41A0_0.array_0x2BDE[v2x].playerIndex_0x00a_2BE4_11240];
 		if (event2->life_0x8 >= 0 && sub_106C0(event2, event))
 			event2->struct_byte_0xc_12_15.byte[1] |= 0x10u;
 	}
