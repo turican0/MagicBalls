@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bw82nedg1mvo6"]
 
-[ext_resource type="PackedScene" path="res://entites/archer-walk.glb" id="1_rxlho"]
+[ext_resource type="PackedScene" uid="uid://x2ldc4a22hka" path="res://entites/sources/archer-walk.glb" id="1_rxlho"]
 
 [node name="archer-walk" instance=ExtResource("1_rxlho")]
 
