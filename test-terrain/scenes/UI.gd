@@ -6,6 +6,8 @@ extends Control
 var player: Node
 var visible_mode: int = 1
 
+var Main_DecodeLevel
+
 # --- Nové proměnné pro logiku CTRL ---
 var is_ctrl_active: bool = false
 var old_is_ctrl_active: bool = false
@@ -159,8 +161,8 @@ func updateSpells(spells:Array):
 			btn.texture_normal = load("res://MC2FILES/HSPRN0-0-%03d-00.png" % (index+97))
 		btn.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		btn.tooltip_text = "fireball"#spell["id"]
-		btn.pressed.connect(Callable(self, "_on_spell_pressed").bind("fireball"))
-		btn.gui_input.connect(_on_slot_gui_input.bind(index, "fireball"))
+		#btn.pressed.connect(Callable(self, "on_spell_pressed").bind(index))
+		btn.gui_input.connect(on_slot_gui_input.bind(index))
 		slot.add_child(btn)
 		
 		var mana_bar = ProgressBar.new()
@@ -179,7 +181,6 @@ func updateSpells(spells:Array):
 		
 		var selection_rect = Panel.new()
 		selection_rect.name = "Highlight"
-		#selection_rect.color = Color(1, 0.95, 0, 1)
 		selection_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		selection_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		var style = StyleBoxFlat.new()
@@ -198,13 +199,12 @@ func updateSpells(spells:Array):
 		spell_grid.add_child(slot)
 		index+=1
 
-func _on_spell_pressed(spell_id):
-	if player:
-		player.select_spell(spell_id)
-		
-func _on_slot_gui_input(event: InputEvent, index: int, spell_id: String):
+func on_slot_gui_input(event: InputEvent, index: int):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			_on_spell_pressed(spell_id)
-			# Řekneme Godotu, že tento klik jsme zpracovali a nemá ho posílat dál
+			Main_DecodeLevel.setPlayerActiveSpell(index,0)
 			get_viewport().set_input_as_handled()
+		else:
+			if event.button_index == MOUSE_BUTTON_RIGHT:
+				Main_DecodeLevel.setPlayerActiveSpell(index,1)
+				get_viewport().set_input_as_handled()

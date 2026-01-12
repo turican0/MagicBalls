@@ -47,6 +47,7 @@ var library = {
 	#1: "res://components/gold_sphere.tscn",
 	#2: "res://components/gold_sphere.tscn",
 	Vector3i(10,8,0): "res://entites/object_8_10b.tscn",#fair
+	#Vector3i(10,48,0): "res://entites/object_59b.tscn",#nevim
 	Vector3i(9,144,0): "res://entites/object_54_9b.tscn",#select
 	Vector3i(9,55,0): "res://entites/object_55_9b.tscn",#fairball
 	#38: "res://entites/object_38b.tscn",
@@ -58,6 +59,7 @@ var library = {
 	Vector3i(10,63,0): "res://entites/object_63b.tscn",#smoke
 	Vector3i(2,75,0): "res://entites/object_75b.tscn",#tree
 	Vector3i(2,79,0): "res://entites/object_79b.tscn",#dolmen
+	Vector3i(3,88,0): "res://entites/object_88b.tscn",#ballon
 	Vector3i(2,87,0): "res://entites/object_75b.tscn",#tree
 	Vector3i(10,96,0): "res://entites/object_96b.tscn",#building
 	Vector3i(0,121,0): "res://entites/object_8b.tscn",#bowman
@@ -68,6 +70,9 @@ var library = {
 	Vector3i(5,183,0): "res://entites/object_155b.tscn",#people
 	#186: "res://entites/object_8b.tscn",
 	Vector3i(5,199,0): "res://entites/object_155b.tscn",#people
+	
+	Vector3i(11,8,0): "res://entites/object_59b.tscn",
+	
 	Vector3i(0,999,0): "res://entites/object_text.tscn"
 }
 
@@ -82,6 +87,11 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseMotion:
 		total_mouse_delta += event.relative
+		
+
+func setPlayerActiveSpell(spell_index: int,button:int):
+	MBEX.setPlayerActiveSpell(spell_index,button)
+
 
 func updatePlayer(playerPosRot) -> void:
 	Main_Player.position=playerPosRot.position/256
@@ -155,7 +165,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				if(actByte0&1):
 					isDraw = false
 				var tempModel
-				if(isDraw)&&((actClass==2)||(actClass==5)||(actClass==9)||(actClass==10)||(actClass==15)):
+				if(isDraw)&&((actClass==2)||(actClass==3)||(actClass==5)||(actClass==9)||(actClass==10)||(actClass==15)):
 					var key = Vector3i(actClass, modelIndex,0)
 					if library.has(key):
 						tempModel=library[key]
@@ -163,7 +173,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					else:
 						tempModel=library[Vector3i(0, 999, 0)]
 				else:
-					if(actClass==3)&&(modelIndex==0):#player
+					if((actClass==3)&&(modelIndex==0))||((actClass==11)&&(modelIndex==8)):#player/spell
 						var key = Vector3i(actClass, modelIndex,0)
 						tempModel=library[key]
 						fromlib=true

@@ -124,18 +124,3 @@ func get_camera_relative_input(p_delta):
 		## Else if up/down released
 		#elif p_event.keycode in [ KEY_Q, KEY_E, KEY_SPACE ]:
 			#velocity.y = 0
-			
-var spells = [
-	{"id": "fireball", "icon": preload("res://assets-2d/fireball64.png")},
-	{"id": "ice", "icon": preload("res://assets-2d/fireball64.png")},
-	{"id": "heal", "icon": preload("res://assets-2d/fireball64.png")}
-]
-
-var active_spell: String = ""
-
-func get_spells():
-	return spells
-
-func select_spell(id: String):
-	active_spell = id
-	print("Selected spell:", id)

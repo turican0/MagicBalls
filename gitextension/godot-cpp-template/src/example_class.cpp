@@ -30,6 +30,7 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("renew_terrain"), &ExampleClass::renew_terrain);
 	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &ExampleClass::getActiveSpells);
 	godot::ClassDB::bind_method(D_METHOD("getSelectedSpells"), &ExampleClass::getSelectedSpells);
+	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &ExampleClass::setPlayerActiveSpell);
 }
 
 typedef struct {
@@ -39,6 +40,29 @@ typedef struct {
 	int mana1;
 	int mana2;
 } drawSpellInfoType;
+
+void ExampleClass::setPlayerActiveSpell(int spell_index, int button) {
+	switch (button) {
+		case 0: //left
+		{
+			type_event_0x6E8E *actEvent = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+			actEvent->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105 = spell_index;
+			actEvent->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = actEvent->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[spell_index];
+			//actEvent->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
+			x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400 = 8;
+			break;
+		}
+		case 1: //right
+		{
+			type_event_0x6E8E *actEvent = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+			actEvent->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107 = spell_index;
+			actEvent->dword_0xA4_164x->str_611.rightSubSpellIndex_0x456_1110 = actEvent->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[spell_index];
+			//actEvent->dword_0xA4_164x->str_611.rightSubSpellIndex_0x456_1110 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
+			x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401 = 8;
+			break;
+		}
+	}
+}
 
 drawSpellInfoType getDraWSpellInfo(type_event_0x6E8E *playerEvent) //20f260
 {
@@ -124,7 +148,7 @@ Array ExampleClass::getActiveSpells() {
 			{
 				int subSpellIndex;
 				if (spellIconIndex == playerEntity->dword_0xA4_164x->str_611.spellIndex_0x458_1112) {
-					x_D41A0_BYTEARRAY_4_struct.byteindex_50 = spellIconIndex;
+					x_D41A0_BYTEARRAY_4_struct.spellOnCursor_50 = spellIconIndex;
 					subSpellIndex = playerEntity->dword_0xA4_164x->str_611.subSpellIndex_0x459_1113;
 				} else {
 					subSpellIndex = playerEntity->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[spellIndex_D94FF[spellIconIndex]];

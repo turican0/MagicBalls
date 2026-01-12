@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://cvjxh12y5xej4"]
 
-[ext_resource type="PackedScene" uid="uid://d1iy2tetnnpvc" path="res://entites/stylized_tresure_chest.glb" id="1_oc61b"]
+[ext_resource type="PackedScene" uid="uid://dcjnlknf4gji8" path="res://entites/sources/fantasy_scroll.glb" id="1_oc61b"]
 
 [node name="Node3D" type="Node3D"]
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_oc61b")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 0, 1.8, 0)
+[node name="Sketchfab_Scene2" parent="." instance=ExtResource("1_oc61b")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, -0.4542803, 0)

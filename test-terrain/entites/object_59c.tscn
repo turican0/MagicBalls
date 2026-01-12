@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://be8fgk5wvm038"]
+
+[ext_resource type="PackedScene" uid="uid://d1iy2tetnnpvc" path="res://entites/sources/stylized_tresure_chest.glb" id="1_ejfkd"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ejfkd")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 0, 1.8, 0)

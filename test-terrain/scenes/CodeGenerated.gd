@@ -10,5 +10,6 @@ func _ready() -> void:
 	Main_UI = get_node("UI")
 	Main_DecodeLevel.Main_Player = Main_Player
 	Main_DecodeLevel.Main_UI = Main_UI
+	Main_UI.Main_DecodeLevel = Main_DecodeLevel
 	$UI.player = $Player
 	#$CanvasUI.init()

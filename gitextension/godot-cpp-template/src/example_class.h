@@ -80,4 +80,5 @@ public:
 	void initialize_heightmap();
 	Array getActiveSpells();
 	Array getSelectedSpells();
+	void setPlayerActiveSpell(int spell_index, int button);
 	};
