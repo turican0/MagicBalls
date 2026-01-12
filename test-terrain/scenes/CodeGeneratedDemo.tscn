@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://src/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://components/Player.tscn" id="2_3v2uf"]
-[ext_resource type="PackedScene" uid="uid://c8qmn5knvo1qa" path="res://scenes/sky_3d.tscn" id="4_2gbss"]
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://components/UI.tscn" id="4_x5ge4"]
 [ext_resource type="Script" uid="uid://brh8x1wnycrl5" path="res://src/RuntimeNavigationBaker.gd" id="5_445ur"]
+[ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://test-sky/Sky3DDemo.tscn" id="9_2gbss"]
 [ext_resource type="Script" uid="uid://b6tagcoegkfid" path="res://scenes/canvas_ui.gd" id="10_xkkgk"]
 [ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
@@ -41,13 +41,6 @@ offset_right = 1154.0
 offset_bottom = 85.0
 columns = 2
 
-[node name="Sky3D" parent="." instance=ExtResource("4_2gbss")]
-editor_time_enabled = false
-game_time_enabled = false
-current_time = 10.0
-minutes_per_day = 10.0
-wind_direction = 2.35619451204804
-
 [node name="Player" parent="." instance=ExtResource("2_3v2uf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 
@@ -79,3 +72,5 @@ levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
+
+[node name="Main" parent="." instance=ExtResource("9_2gbss")]
