@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://cofnhdcclon1w"]
+[gd_scene load_steps=25 format=3 uid="uid://cofnhdcclon1w"]
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://src/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://components/Player.tscn" id="2_3v2uf"]
@@ -16,7 +16,6 @@
 [ext_resource type="Script" uid="uid://deo0gxkmk2ahd" path="res://addons/sky_3d/src/Sky3D.gd" id="14_6dc5f"]
 [ext_resource type="Script" uid="uid://b4tkplvh7fq40" path="res://addons/sky_3d/src/SkyDome.gd" id="15_f8b3d"]
 [ext_resource type="Script" uid="uid://cjmkcj8hwm7ts" path="res://addons/sky_3d/src/TimeOfDay.gd" id="16_cktu3"]
-[ext_resource type="Texture2D" uid="uid://d3wi5i11aq8nk" path="res://water/watertext/Water_N_A.png" id="24_6qqjn"]
 [ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
@@ -127,59 +126,6 @@ geometry_parsed_geometry_type = 1
 agent_height = 2.0
 agent_max_slope = 30.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvamp"]
-albedo_color = Color(0.19607843, 0.45882353, 0.56078434, 0.6627451)
-metallic = 0.5
-metallic_specular = 0.4
-roughness = 0.1
-normal_enabled = true
-normal_scale = 0.1
-normal_texture = ExtResource("24_6qqjn")
-uv1_scale = Vector3(100, 100, 100)
-proximity_fade_distance = 0.01
-
-[sub_resource type="QuadMesh" id="QuadMesh_jp8wu"]
-material = SubResource("StandardMaterial3D_dvamp")
-size = Vector2(10000, 10000)
-
-[sub_resource type="Animation" id="Animation_wbbke"]
-length = 0.001
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:mesh:material:uv1_offset")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_6qqjn"]
-resource_name = "move_water"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:mesh:material:uv1_offset")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.8, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.001, 0, 0), Vector3(0.001, 0.001, 0), Vector3(0, 0.001, 0), Vector3(0, 0, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_temtn"]
-_data = {
-&"RESET": SubResource("Animation_wbbke"),
-&"move_water": SubResource("Animation_6qqjn")
-}
-
 [node name="CodeGenerated" type="Node"]
 script = ExtResource("1_h7vyv")
 
@@ -263,18 +209,6 @@ fixed_size = true
 text = "Run This Scene"
 font_size = 64
 outline_size = 10
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.1, 0)
-visible = false
-mesh = SubResource("QuadMesh_jp8wu")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D"]
-libraries = {
-&"": SubResource("AnimationLibrary_temtn")
-}
-autoplay = "move_water"
-playback_auto_capture_transition_type = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("24_f8b3d")
