@@ -1,19 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://cofnhdcclon1w"]
+[gd_scene load_steps=9 format=3 uid="uid://cofnhdcclon1w"]
 
-[ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://src/CodeGenerated.gd" id="1_h7vyv"]
-[ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://components/Player.tscn" id="2_3v2uf"]
-[ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://components/UI.tscn" id="4_x5ge4"]
-[ext_resource type="Script" uid="uid://brh8x1wnycrl5" path="res://src/RuntimeNavigationBaker.gd" id="5_445ur"]
-[ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://test-sky/Sky3DDemo.tscn" id="9_2gbss"]
+[ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://scenes/CodeGenerated.gd" id="1_h7vyv"]
+[ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://scenes/Player.tscn" id="2_3v2uf"]
+[ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://scenes/UI.tscn" id="4_x5ge4"]
+[ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
 [ext_resource type="Script" uid="uid://b6tagcoegkfid" path="res://scenes/canvas_ui.gd" id="10_xkkgk"]
 [ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
-
-[sub_resource type="NavigationMesh" id="NavigationMesh_vs6am"]
-geometry_parsed_geometry_type = 1
-agent_height = 2.0
-agent_max_slope = 30.0
 
 [node name="CodeGenerated" type="Node"]
 script = ExtResource("1_h7vyv")
@@ -43,12 +37,6 @@ columns = 2
 
 [node name="Player" parent="." instance=ExtResource("2_3v2uf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
-
-[node name="RuntimeNavigationBaker" type="Node" parent="." node_paths=PackedStringArray("player")]
-script = ExtResource("5_445ur")
-enabled = false
-template = SubResource("NavigationMesh_vs6am")
-player = NodePath("../Player")
 
 [node name="RunThisSceneLabel3D" type="Label3D" parent="."]
 pixel_size = 0.001

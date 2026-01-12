@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cs4micnmlahie"
-path.s3tc="res://.godot/imported/textures.jpg-df76face1242878875a11739ecfc694e.s3tc.ctex"
+uid="uid://b2fgjtbqrhy3b"
+path.s3tc="res://.godot/imported/ProtGrid1.jpg-3feb13c3f190b5bdac85235e72124c84.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://test-terrain/textures.jpg"
-dest_files=["res://.godot/imported/textures.jpg-df76face1242878875a11739ecfc694e.s3tc.ctex"]
+source_file="res://Sky3D/assets/textures/ProtGrid1.jpg"
+dest_files=["res://.godot/imported/ProtGrid1.jpg-3feb13c3f190b5bdac85235e72124c84.s3tc.ctex"]
 
 [params]
 
@@ -22,9 +22,9 @@ compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=0
-compress/channel_pack=1
-mipmaps/generate=true
+compress/normal_map=2
+compress/channel_pack=0
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -32,10 +32,10 @@ process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2
 process/channel_remap/alpha=3
-process/fix_alpha_border=true
+process/fix_alpha_border=false
 process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

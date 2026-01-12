@@ -64,7 +64,7 @@ func initialize_nodes():
 	add_child(mesh_instance)
 	
 	# Zde načtěte váš ShaderMaterial (který odkazuje na Texture Atlas)
-	material = load("res://test-terrain/terrain_material.tres")
+	material = load("res://terrainMB/terrain_material.tres")
 	if material:
 		mesh_instance.material_override = material
 	else:

@@ -50,8 +50,8 @@ var library = {
 	#38: "res://entites/object_38b.tscn",
 	#54: "res://entites/object_38b.tscn",
 	Vector3i(10,57,0): "res://entites/object_63b.tscn",#smoke
-	Vector3i(10,58,0): "res://components/gold_sphere.tscn",
-	Vector3i(10,67,0): "res://components/white_sphere.tscn",
+	Vector3i(10,58,0): "res://entites/gold_sphere.tscn",
+	Vector3i(10,67,0): "res://entites/white_sphere.tscn",
 	Vector3i(0,59,0): "res://entites/object_59b.tscn",
 	Vector3i(10,63,0): "res://entites/object_63b.tscn",#smoke
 	Vector3i(2,75,0): "res://entites/object_75b.tscn",#tree

@@ -1,10 +1,10 @@
 [gd_scene load_steps=22 format=3 uid="uid://dipn6t27p0nap"]
 
-[ext_resource type="PackedScene" uid="uid://bjmikbn4ac2lu" path="res://demo/assets/scenes/BuildingBlocks.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://1ev4o7q8l4ey" path="res://demo/assets/meshes/Compass.tscn" id="2_gjkdl"]
-[ext_resource type="Texture2D" uid="uid://hl8w41k0t8ia" path="res://demo/assets/textures/ProtGrid0.jpg" id="8"]
-[ext_resource type="ArrayMesh" uid="uid://d137osfsks6c" path="res://demo/assets/meshes/Teapot.obj" id="9"]
-[ext_resource type="ArrayMesh" uid="uid://cr4asb0j76cfa" path="res://demo/assets/meshes/KnotTorus.obj" id="10"]
+[ext_resource type="PackedScene" uid="uid://bjmikbn4ac2lu" path="res://Sky3D/assets/scenes/BuildingBlocks.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://1ev4o7q8l4ey" path="res://Sky3D/assets/meshes/Compass.tscn" id="2_gjkdl"]
+[ext_resource type="Texture2D" uid="uid://hl8w41k0t8ia" path="res://Sky3D/assets/textures/ProtGrid0.jpg" id="8"]
+[ext_resource type="ArrayMesh" uid="uid://d137osfsks6c" path="res://Sky3D/assets/meshes/Teapot.obj" id="9"]
+[ext_resource type="ArrayMesh" uid="uid://cr4asb0j76cfa" path="res://Sky3D/assets/meshes/KnotTorus.obj" id="10"]
 
 [sub_resource type="StandardMaterial3D" id="1"]
 albedo_color = Color(0.396078, 0.396078, 0.396078, 1)

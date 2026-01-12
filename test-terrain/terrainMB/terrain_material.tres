@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bpnnts5lr0sif"]
 
-[ext_resource type="Shader" uid="uid://dkooe1gd4jufd" path="res://test-terrain/terrain_material.gdshader" id="1_1o8ll"]
+[ext_resource type="Shader" uid="uid://dkooe1gd4jufd" path="res://terrainMB/terrain_material.gdshader" id="1_1o8ll"]
 [ext_resource type="Texture2D" uid="uid://0p65wgos72xb" path="res://levels/tmaps/out-vert-border.png" id="2_c4wua"]
 [ext_resource type="Texture2D" uid="uid://cpcb4lpgqrshf" path="res://levels/tmaps/out-vert-refl-border.png" id="3_otvtb"]
 
