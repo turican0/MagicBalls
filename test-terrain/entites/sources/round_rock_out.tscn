@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://yntu0sqq48nu"]
+
+[ext_resource type="PackedScene" uid="uid://cibiw3p22sy21" path="res://entites/rock_2_default_0.tscn" id="1_asiht"]
+
+[node name="round_rock-out" type="Node3D"]
+
+[node name="rock2_Default_0" parent="." instance=ExtResource("1_asiht")]
+transform = Transform3D(0.0053, 0, 0, 0, 0.0052999994, 0, 0, 0, 0.0052999994, 0, 0, 0)
