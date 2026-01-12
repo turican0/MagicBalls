@@ -64,8 +64,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.43760496, 2.364e-05)
-shader_parameter/cirrus_position2 = Vector2(0.43760496, 2.364e-05)
+shader_parameter/cirrus_position1 = Vector2(0.8299828, 3.0484994e-06)
+shader_parameter/cirrus_position2 = Vector2(0.8299828, 3.0484994e-06)
 shader_parameter/cirrus_texture = ExtResource("6_1g8sw")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -75,7 +75,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(32.194103, 0.000118233576)
+shader_parameter/cumulus_position = Vector2(4.149729, 1.5243508e-05)
 shader_parameter/cumulus_texture = ExtResource("5_rt0jr")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -100,6 +100,7 @@ tonemap_mode = 3
 tonemap_white = 6.0
 fog_enabled = true
 fog_light_color = Color(0, 0, 0, 1)
+fog_sky_affect = 0.68
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_d0ed4"]
 
