@@ -22588,7 +22588,7 @@ void DrawBottomSpellsMenu_2ECC0()//20fcc0
 	type_event_0x6E8E* playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	uint8 color0 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][0];
 	uint8 color1 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][1];
-	x_D41A0_BYTEARRAY_4_struct.byteindex_50 = -1;
+	x_D41A0_BYTEARRAY_4_struct.spellOnCursor_50 = -1;
 	int16_t posX = 0;
 	int16_t posY = 0;
 	uint8_t scale = 1;
@@ -22640,7 +22640,7 @@ void DrawBottomSpellsMenu_2ECC0()//20fcc0
 					int subSpellIndex;
 					if (spellIconIndex == playerEntity->dword_0xA4_164x->str_611.spellIndex_0x458_1112)
 					{
-						x_D41A0_BYTEARRAY_4_struct.byteindex_50 = spellIconIndex;
+						x_D41A0_BYTEARRAY_4_struct.spellOnCursor_50 = spellIconIndex;
 						subSpellIndex = playerEntity->dword_0xA4_164x->str_611.subSpellIndex_0x459_1113;
 					}
 					else
@@ -22665,7 +22665,7 @@ void DrawBottomSpellsMenu_2ECC0()//20fcc0
 						{
 							canSummon = true;
 						}
-						if (canSummon && x_D41A0_BYTEARRAY_4_struct.byteindex_50 == spellIconIndex)
+						if (canSummon && x_D41A0_BYTEARRAY_4_struct.spellOnCursor_50 == spellIconIndex)
 						{
 							manaCost = GetSpellManaCost_6D710(playerEntity, spellIndex2, subSpellIndex);
 							if (manaCost > 0)
@@ -22699,7 +22699,7 @@ void DrawBottomSpellsMenu_2ECC0()//20fcc0
 						else
 							GameBitmap::DrawTransparentBitmap_2DE80(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[spellIndex2 + SPELL_FIREBALL_SMALL], scale);
 					}
-					if (skipToLabel43 || x_D41A0_BYTEARRAY_4_struct.byteindex_50 == spellIconIndex)
+					if (skipToLabel43 || x_D41A0_BYTEARRAY_4_struct.spellOnCursor_50 == spellIconIndex)
 					{
 						uint8_t bitmapType = playerEntity->dword_0xA4_164x->str_611.array_0x3B5_949x.subSpellIndex[spellIndex2];
 						if (bitmapType == 1)
@@ -22732,7 +22732,7 @@ void DrawBottomSpellsMenu_2ECC0()//20fcc0
 	//Frame of selected spell
 	DrawBitmap_2BB40(posX + posIconsXStart + spellIconWidth * (playerEntity->dword_0xA4_164x->str_611.spellIndex_0x458_1112 % 13), playerEntity->dword_0xA4_164x->str_611.spellIndex_0x458_1112 / 13 * spellIconHeight + posIconsY2, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_ICON_FRAME], scale);
 	//Draw spell selection
-	selectedSpellIndex = x_D41A0_BYTEARRAY_4_struct.byteindex_50;
+	selectedSpellIndex = x_D41A0_BYTEARRAY_4_struct.spellOnCursor_50;
 	if (selectedSpellIndex != -1)
 	{
 		spellIndex = spellIndex_D94FF[selectedSpellIndex];
@@ -38197,13 +38197,13 @@ void GameEvents_51BB0()//232bb0
 					if (D41A0_0.array_0x6E3E[i].str_0x6E3E_byte0 <= 0x1Fu)
 					{
 						actEvent->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105 = spellIndex;
-						actEvent->dword_0xA4_164x->str_611.byte_0x455_1109 = D41A0_0.array_0x6E3E[i].str_0x6E3E_byte2;
+						actEvent->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = D41A0_0.array_0x6E3E[i].str_0x6E3E_byte2;
 						x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400 = 8;
 					}
 					else if (D41A0_0.array_0x6E3E[i].str_0x6E3E_byte0 == 32)
 					{
 						actEvent->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107 = spellIndex;
-						actEvent->dword_0xA4_164x->str_611.byte_0x456_1110 = D41A0_0.array_0x6E3E[i].str_0x6E3E_byte2;
+						actEvent->dword_0xA4_164x->str_611.rightSubSpellIndex_0x456_1110 = D41A0_0.array_0x6E3E[i].str_0x6E3E_byte2;
 						x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401 = 8;
 					}
 				}
@@ -56601,12 +56601,12 @@ signed int sub_68FF0(type_event_0x6E8E* a1x, char a2, char a3)//249f00
 							if (v12)
 							{
 								ix->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105 = a1x->model_0x40_64;
-								ix->dword_0xA4_164x->str_611.byte_0x455_1109 = ix->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->model_0x40_64];
+								ix->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = ix->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->model_0x40_64];
 							}
 							else
 							{
 								ix->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107 = a1x->model_0x40_64;
-								ix->dword_0xA4_164x->str_611.byte_0x456_1110 = ix->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->model_0x40_64];
+								ix->dword_0xA4_164x->str_611.rightSubSpellIndex_0x456_1110 = ix->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->model_0x40_64];
 							}
 							SetSpell_6D5E0(a1x, ix->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->model_0x40_64]);
 							return 1;
@@ -60278,8 +60278,8 @@ void sub_5CF40(type_event_0x6E8E* a1x, char a2)//23df40
 		if (a1x->dword_0xA4_164x->str_611.array_0x333_819x.word[v7])
 			SetSpell_6D5E0(ENTITY_EA3E4[a1x->dword_0xA4_164x->str_611.array_0x333_819x.word[v7]], a1x->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[v7]);
 	}
-	a1x->dword_0xA4_164x->str_611.byte_0x455_1109 = a1x->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105];
-	a1x->dword_0xA4_164x->str_611.byte_0x456_1110 = a1x->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107];
+	a1x->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = a1x->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105];
+	a1x->dword_0xA4_164x->str_611.rightSubSpellIndex_0x456_1110 = a1x->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[a1x->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107];
 	sub_574A0();
 }
 // D41A0: using guessed type int x_D41A0_BYTEARRAY_0;
