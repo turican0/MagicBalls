@@ -474,7 +474,7 @@ func _initialize() -> void:
 		environment.tonemap_mode = Environment.TONE_MAPPER_ACES
 		environment.tonemap_white = 6
 		emit_signal("environment_changed", environment)
-#
+
 	# Setup Sky material & Upgrade old
 	if environment.sky == null or environment.sky.sky_material is PhysicalSkyMaterial:
 		environment.sky = Sky.new()
@@ -487,7 +487,7 @@ func _initialize() -> void:
 	# Create default camera attributes
 	if camera_attributes == null:
 		camera_attributes = CameraAttributesPractical.new()
-#
+
 	# Assign children nodes
 	
 	if has_node("SunLight"):
@@ -507,21 +507,21 @@ func _initialize() -> void:
 		add_child(moon, true)
 		moon.owner = get_tree().edited_scene_root
 		moon.shadow_enabled = true
-#
+
 	# DEPRECATED - Remove 2.2
 	if has_node("Skydome"):
 		$Skydome.name = "SkyDome"
-	#if has_node("SkyDome"):
-		#sky = $SkyDome
-		#sky.environment = environment
-	#elif is_inside_tree():
-		#sky = SkyDome.new()
-		#sky.name = "SkyDome"
-		#add_child(sky, true)
-		#sky.owner = get_tree().edited_scene_root
-		#sky.sun_light_path = "../SunLight"
-		#sky.moon_light_path = "../MoonLight"
-		#sky.environment = environment
+	if has_node("SkyDome"):
+		sky = $SkyDome
+		sky.environment = environment
+	elif is_inside_tree():
+		sky = SkyDome.new()
+		sky.name = "SkyDome"
+		add_child(sky, true)
+		sky.owner = get_tree().edited_scene_root
+		sky.sun_light_path = "../SunLight"
+		sky.moon_light_path = "../MoonLight"
+		sky.environment = environment
 
 	if has_node("TimeOfDay"):
 		tod = $TimeOfDay

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bbk7kcjidc724"]
 
-[ext_resource type="Texture2D" uid="uid://bbosjtsyvkx76" path="res://entites/TMAPS1-0-152-00.png" id="1_rugex"]
-[ext_resource type="PackedScene" uid="uid://cuyx6suytxgr6" path="res://entites/goat.tscn" id="2_t3yui"]
+[ext_resource type="Texture2D" uid="uid://bbosjtsyvkx76" path="res://entites/sources/TMAPS1-0-152-00.png" id="1_rugex"]
+[ext_resource type="PackedScene" uid="uid://cdvmxvsld75th" path="res://entites/sources/goat.tscn" id="2_t3yui"]
 
 [node name="Node3D" type="Node3D"]
 

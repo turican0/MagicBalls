@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://p4fjy4ori4lc"]
 
-[ext_resource type="PackedScene" path="res://entites/werewolf_walking_furry.glb" id="1_u2q0t"]
+[ext_resource type="PackedScene" uid="uid://cpsfypsnxeoim" path="res://entites/sources/werewolf_walking_furry.glb" id="1_u2q0t"]
 
 [node name="Sketchfab_Scene" instance=ExtResource("1_u2q0t")]
 transform = Transform3D(-0.02, 0, -1.7484555e-09, 0, 0.02, 0, 1.7484555e-09, 0, -0.02, 0, 0, 0)

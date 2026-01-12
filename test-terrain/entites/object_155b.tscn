@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ce02dktrnbgl2"]
 
-[ext_resource type="PackedScene" uid="uid://dwpgox62ox70v" path="res://entites/sketchfab_scene-werewolf.tscn" id="1_r6m8i"]
+[ext_resource type="PackedScene" uid="uid://p4fjy4ori4lc" path="res://entites/sources/sketchfab_scene-werewolf.tscn" id="1_r6m8i"]
 
 [node name="Node3D" type="Node3D"]
 

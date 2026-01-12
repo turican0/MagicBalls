@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=4 uid="uid://cdvmxvsld75th"]
 
-[ext_resource type="Texture2D" path="res://entites/animated_realistic_goat__3d_animal_model_0.png" id="1_4qrgq"]
+[ext_resource type="Texture2D" uid="uid://dquuyn6i8c2bw" path="res://entites/sources/animated_realistic_goat__3d_animal_model_0.png" id="1_4qrgq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lstk7"]
 resource_name = "Material"

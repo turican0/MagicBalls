@@ -1,7 +1,5 @@
 extends Node3D
 
-@export var bullet_scene: PackedScene
-
 @export var ROTATION_SPEED: float = 0.0
 @export var MOVE_SPEED: float = 0.0
 @export var LIFE: float = 0.0
