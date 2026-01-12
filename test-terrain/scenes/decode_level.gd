@@ -13,6 +13,7 @@ var cd_data_path: String = ""
 var direction2: Vector3 = Vector3(1,0,0)
 
 var Main_Player: Node
+var Main_UI: Node
 
 const KEY_INDEX := {
 	KEY_W: 0, # Forward
@@ -89,14 +90,25 @@ func updatePlayer(playerPosRot) -> void:
 	var roll = PI*playerPosRot.rotation.roll/(256*4)
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
 
-func _physics_process(_p_delta) -> void:
+func _process(_p_delta) -> void:
 	getInputs()
+	if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
+		if Main_UI.is_ctrl_active:
+			Main_UI.saved_mouse_pos = get_viewport().get_mouse_position()
+			var grid_rect = Main_UI.spell_grid.get_global_rect()
+			var center_pos = grid_rect.position + (grid_rect.size / 2.0)
+			get_viewport().warp_mouse(center_pos)
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			get_viewport().warp_mouse(Main_UI.saved_mouse_pos)
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active	
 	MBEX.RunGameStep(input_state)
 	MBEX.renew_terrain()
 	updatePlayer(getPlayerPosRot())
 	renderEntites(getEntites())
 	get_parent().get_node("UI").updateSpells(MBEX.getActiveSpells())
-	get_parent().get_node("UI").updateSelectedSpells(MBEX.getSelectedSpells())
+	get_parent().get_node("UI").updateSelectedSpells(MBEX.getSelectedSpells())	
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var stride = 29
@@ -172,10 +184,10 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		if current_node != null:
 			var base_pos = pos / 256.0
 			var camera = get_viewport().get_camera_3d()
-			var scale=1
+			var entityScale=1
 			if(actState==0x29)&&(actClass==0xA)&&(actModel==0x27):#manSphere
-				scale=pow(actMana, 1.0 / 3.0)*0.2
-			current_node.scale = Vector3(scale, scale, scale)
+				entityScale=pow(actMana, 1.0 / 3.0)*0.2
+			current_node.scale = Vector3(entityScale, entityScale, entityScale)
 			if camera:
 				var cam_pos = camera.global_position
 				var grid_size = 256.0
@@ -195,9 +207,11 @@ var last_mouse_buttons_state: Dictionary = {}
 var mouse_640: Vector2
 const SCREEN_WIDTH := 640
 const SCREEN_HEIGHT := 480
-	
+
 func getInputs():
-	var changes = []	
+	var changes = []
+	if(Main_UI.is_ctrl_active):
+		return
 	for keycode: int in KEY_INDEX:
 		var index: int = KEY_INDEX[keycode]
 		var is_pressed: bool = Input.is_key_pressed(keycode)
