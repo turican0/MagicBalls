@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://d2jihfohphuue"]
 
-[ext_resource type="Script" uid="uid://dne6na1m4xku8" path="res://src/UI.gd" id="1_why5e"]
+[ext_resource type="Script" uid="uid://dne6na1m4xku8" path="res://scenes/UI.gd" id="1_why5e"]
 
-[node name="UI" type="Control"]
+[node name="UI" type="Control" node_paths=PackedStringArray("spell_grid", "spell_grid_selected")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,6 +10,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_why5e")
+spell_grid = NodePath("CanvasUI/GridContainer")
+spell_grid_selected = NodePath("CanvasUI/GridContainer2")
 
 [node name="Label" type="Label" parent="."]
 unique_name_in_owner = true
@@ -64,3 +66,21 @@ offset_left = 6.0
 offset_top = 310.0
 offset_right = 246.0
 offset_bottom = 319.0
+
+[node name="CanvasUI" type="CanvasLayer" parent="."]
+
+[node name="GridContainer" type="GridContainer" parent="CanvasUI"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -128.0
+grow_horizontal = 2
+grow_vertical = 0
+columns = 13
+
+[node name="GridContainer2" type="GridContainer" parent="CanvasUI"]
+offset_left = 1027.0
+offset_right = 1154.0
+offset_bottom = 85.0
+columns = 2

@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cofnhdcclon1w"]
+[gd_scene load_steps=8 format=3 uid="uid://cofnhdcclon1w"]
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://scenes/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://scenes/Player.tscn" id="2_3v2uf"]
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://scenes/UI.tscn" id="4_x5ge4"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
-[ext_resource type="Script" uid="uid://b6tagcoegkfid" path="res://scenes/canvas_ui.gd" id="10_xkkgk"]
 [ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
@@ -14,44 +13,14 @@ script = ExtResource("1_h7vyv")
 
 [node name="UI" parent="." instance=ExtResource("4_x5ge4")]
 
-[node name="CanvasUI" type="CanvasLayer" parent="." node_paths=PackedStringArray("spell_grid", "spell_grid_selected")]
-script = ExtResource("10_xkkgk")
-spell_grid = NodePath("GridContainer")
-spell_grid_selected = NodePath("GridContainer2")
-
-[node name="GridContainer" type="GridContainer" parent="CanvasUI"]
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -128.0
-grow_horizontal = 2
-grow_vertical = 0
-columns = 13
-
-[node name="GridContainer2" type="GridContainer" parent="CanvasUI"]
-offset_left = 1027.0
-offset_right = 1154.0
-offset_bottom = 85.0
-columns = 2
-
 [node name="Player" parent="." instance=ExtResource("2_3v2uf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
-
-[node name="RunThisSceneLabel3D" type="Label3D" parent="."]
-pixel_size = 0.001
-billboard = 1
-no_depth_test = true
-fixed_size = true
-text = "Run This Scene"
-font_size = 64
-outline_size = 10
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("24_f8b3d")
 autoplay = true
 
-[node name="Node3D-testTerrain" type="Node3D" parent="."]
+[node name="TerrainMB" type="Node3D" parent="."]
 script = ExtResource("26_dvamp")
 
 [node name="DecodeLevel" type="Node3D" parent="."]

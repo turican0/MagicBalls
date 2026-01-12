@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://domhm87hbhbg1"]
+[gd_scene load_steps=6 format=3 uid="uid://domhm87hbhbg1"]
 
-[ext_resource type="Script" uid="uid://dajlr3n5wjwmb" path="res://src/Player.gd" id="1_nm1yx"]
-[ext_resource type="Script" uid="uid://b62ppvc03a6b1" path="res://src/CameraManager.gd" id="2_loos7"]
+[ext_resource type="Script" uid="uid://dajlr3n5wjwmb" path="res://scenes/Player.gd" id="1_nm1yx"]
+[ext_resource type="Script" uid="uid://b62ppvc03a6b1" path="res://scenes/CameraManager.gd" id="2_loos7"]
 [ext_resource type="PackedScene" uid="uid://c53w4arbuny7l" path="res://assets/carpets/sketchfab_scene.tscn" id="4_ops02"]
 [ext_resource type="PackedScene" uid="uid://b7fps2taalaix" path="res://assets/cat/sketchfab_scene.tscn" id="5_7x12g"]
 
@@ -22,6 +22,7 @@ margin = 0.5
 
 [node name="Camera3D" type="Camera3D" parent="CameraManager/Arm"]
 unique_name_in_owner = true
+current = true
 near = 0.25
 far = 16384.0
 
@@ -34,4 +35,3 @@ visible = false
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-current = true

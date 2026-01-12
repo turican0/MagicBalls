@@ -14,9 +14,6 @@ var max_rot:float = 10
 var accel_rot:float = 1
 var remove_rot:float = 0.5
 
-
-
-
 @export var first_person: bool = false : 
 	set(p_value):
 		first_person = p_value

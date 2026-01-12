@@ -41,6 +41,7 @@ var node_pool = []
 var pool_size = 1000
 # Katalog cest k tscn souborům podle ID typu
 var library = {
+	Vector3i(3,0,0): "res://entites/object_zero.tscn",#player
 	#0: "res://components/gold_sphere.tscn",
 	#1: "res://components/gold_sphere.tscn",
 	#2: "res://components/gold_sphere.tscn",
@@ -81,39 +82,28 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		total_mouse_delta += event.relative
 
-func _physics_process(p_delta) -> void:
-	getInputs()
-	runGameStep(input_state)
-	var playerPosRot=getPlayerPosRot()
-	var newEntites: PackedFloat32Array=getEntites()
+func updatePlayer(playerPosRot) -> void:
 	Main_Player.position=playerPosRot.position/256
-	var yaw = PI*playerPosRot.rotation.yaw/(256*4)   # Rotace kolem osy Y
-	var pitch = PI*playerPosRot.rotation.pitch/(256*4) # Rotace kolem osy X
-	var roll = PI*playerPosRot.rotation.roll/(256*4)  # Rotace kolem osy Z
+	var yaw = PI*playerPosRot.rotation.yaw/(256*4)
+	var pitch = PI*playerPosRot.rotation.pitch/(256*4)
+	var roll = PI*playerPosRot.rotation.roll/(256*4)
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
-	renderEntites(newEntites)
-	get_parent().get_node("CanvasUI").updateSpells(MBEX.getActiveSpells())
-	get_parent().get_node("CanvasUI").updateSelectedSpells(MBEX.getSelectedSpells())
+
+func _physics_process(_p_delta) -> void:
+	getInputs()
+	MBEX.RunGameStep(input_state)
+	MBEX.renew_terrain()
+	updatePlayer(getPlayerPosRot())
+	renderEntites(getEntites())
+	get_parent().get_node("UI").updateSpells(MBEX.getActiveSpells())
+	get_parent().get_node("UI").updateSelectedSpells(MBEX.getSelectedSpells())
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var stride = 29
-	var count = data_array.size() / stride
 	for i in range(pool_size):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
 		var rot = Vector3(data_array[offset+3], data_array[offset+4], data_array[offset+5])
-		
-		#write_ptr[idx++] = (float)actEntity->state_0x45_69; //7 = 0x29;
-		#write_ptr[idx++] = (float)actEntity->class_0x3F_63; //8 = 0xA;
-		#write_ptr[idx++] = (float)actEntity->model_0x40_64; //9 = 0x27;
-		#write_ptr[idx++] = (float)actEntity->xtype_0x41_65; //10 = 10;
-		#write_ptr[idx++] = (float)actEntity->xsubtype_0x42_66; //11 = 39;
-		#write_ptr[idx++] = (float)actEntity->word_0x2C_44; //12 = 128;
-		#write_ptr[idx++] = (float)actEntity->actSpeed_0x82_130; //13 = 32;
-		#write_ptr[idx++] = (float)actEntity->byte_0x38_56; //14 = 3;
-		#write_ptr[idx++] = (float)actEntity->byte_0x39_57; //15 = 128;
-		#write_ptr[idx++] = (float)actEntity->byte_0x3A_58; //16 = 0;
-		
 		var actState = int(data_array[offset+6])
 		var actClass = int(data_array[offset+7])
 		var actModel = int(data_array[offset+8])
@@ -124,7 +114,6 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actByte38 = int(data_array[offset+13])
 		var actByte39 = int(data_array[offset+14])
 		var actByte3A = int(data_array[offset+15])
-		
 		var actId = int(data_array[offset+16])
 		var actByte0 = int(data_array[offset+17])
 		var actByte1 = int(data_array[offset+18])
@@ -145,21 +134,9 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		
 		var current_node = node_pool[i]
 		
-		#if(modelIndex==67):
-			#actModel+=1
-			#actModel-=1
-			#if!(actByte0&1):
-				#if current_node != null:
-					#current_node.queue_free()
-			#if(actOwnerObject!=0):
-				#current_node.queue_free()
-		
 		if current_node == null or current_node.get_meta("id") != modelIndex*1024*1024+actId*1024+actByte0:
 			if current_node != null:
 				current_node.queue_free()
-			#if (1):
-			#if (actClass && actByte1 & 4):
-			#if (!(v3x->struct_byte_0xc_12_15.byte[0] & 0x21))
 			var fromlib=false
 			if !(actByte1 & 4):
 				var isDraw = true
@@ -174,7 +151,12 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					else:
 						tempModel=library[Vector3i(0, 999, 0)]
 				else:
-					tempModel=library[Vector3i(0, 999, 0)]
+					if(actClass==3)&&(modelIndex==0):#player
+						var key = Vector3i(actClass, modelIndex,0)
+						tempModel=library[key]
+						fromlib=true
+					else:
+						tempModel=library[Vector3i(0, 999, 0)]
 				var new_node = load(tempModel).instantiate()
 				
 				if !fromlib:
@@ -203,17 +185,10 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				current_node.global_position = Vector3(new_x, base_pos.y, new_z)
 			else:
 				current_node.position = base_pos
-			var yaw = PI*rot2.x/(256*4)   # Rotace kolem osy Y
-			var pitch = PI*rot2.y/(256*4) # Rotace kolem osy X
-			var roll = PI*rot2.z/(256*4)  # Rotace kolem osy Z
+			var yaw = PI*rot2.x/(256*4)
+			var pitch = PI*rot2.y/(256*4)
+			var roll = PI*rot2.z/(256*4)
 			current_node.rotation=Vector3(-pitch, -yaw, -roll)
-			
-			
-			#current_node.position=pos/256
-			#var yaw = PI*rot2.x/(256*4)   # Rotace kolem osy Y
-			#var pitch = PI*rot2.y/(256*4) # Rotace kolem osy X
-			#var roll = PI*rot2.z/(256*4)  # Rotace kolem osy Z
-			#current_node.rotation=Vector3(-pitch, -yaw, -roll)
 
 var last_keys_state: Dictionary = {}
 var last_mouse_buttons_state: Dictionary = {}
@@ -259,13 +234,11 @@ func getInputs():
 
 # Funkce, která by v Godotu volala ekvivalenty C-funkcí
 func init():
-	print("--- Start Godot Initialization Adaptace ---")
 	loadlevel(0)
-	
-	print("--- Inicializace dokončena. ---")
 
 func loadlevel(levelnumber: int):
 	sub_533B0_decompress_levels(levelnumber)
+
 func sub_533B0_decompress_levels(level_id: int) -> bool:
 	if level_id >= 1000:
 		return true
@@ -300,10 +273,10 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()
 	mapAngle_13B4E0 = MBEX.TerrainGetAngle()
 	
-	MBEX.set_mesh_instance(get_parent().get_node("Node3D-testTerrain").mesh_instance)
+	MBEX.set_mesh_instance(get_parent().get_node("TerrainMB").mesh_instance)
 	MBEX.initialize_grid_data()
 	MBEX.recalculate_mesh()
-	MBEX.renew_terrain()
+	#MBEX.renew_terrain()
 	
 	#get_parent().get_node("Node3D-testTerrain").initialize_grid_data()
 	#get_parent().get_node("Node3D-testTerrain").recalculate_mesh()
@@ -322,16 +295,6 @@ func getEntites() -> Array:
 func getTerrainChanges() -> Dictionary:
 	var result: Dictionary = MBEX.GetTerrainChanges()
 	return result
-
-func runGameStep0():
-	runGameStep(input_state)
-
-func runGameStep(inputs:Dictionary):
-	MBEX.RunGameStep(input_state)
-	#get_parent().get_node("Node3D-testTerrain").renew_terrain()
-	#MBEX.initialize_grid_data()
-	#MBEX.recalculate_mesh()
-	MBEX.renew_terrain()
 
 var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
 var mapHeightmap_11B4E0: PackedByteArray = PackedByteArray()
