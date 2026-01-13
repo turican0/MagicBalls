@@ -1,4 +1,4 @@
-#include <boost/algorithm/string/predicate.hpp>
+//#include "boost/algorithm/string/predicate.hpp"
 #include "fcaseopen.h"
 
 #ifdef __linux__
@@ -69,7 +69,7 @@ std::string casepath(const std::string &path)
 }
 #endif
 
-FILE* fcaseopen(char const* path, char const* mode)
+FILE* fcaseopenx(char const* path, char const* mode)
 {
     FILE* f = fopen(path, mode);
 #ifdef __linux__

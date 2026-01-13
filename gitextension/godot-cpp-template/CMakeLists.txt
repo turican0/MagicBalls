@@ -171,6 +171,8 @@ target_sources(${LIBNAME}
     src/remc2/engine/UVTable_D4350.h
     src/remc2/utilities/DataFileRNC.cpp
     src/remc2/utilities/DataFileRNC.h
+    src/remc2/portability/fcaseopen.cpp
+    src/remc2/portability/fcaseopen.h
     src/remc2/portability/port_filesystem.cpp
     src/remc2/portability/port_filesystem.h
     src/remc2/portability/port_time.cpp

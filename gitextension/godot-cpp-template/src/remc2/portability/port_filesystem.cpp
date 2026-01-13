@@ -1,4 +1,5 @@
 #include "port_filesystem.h"
+#include "fcaseopen.h"
 #include "../engine/CommandLineParser.h"
 #include <string>
 #include <vector>
@@ -145,7 +146,7 @@ bool file_exists(const char * filename) {
 }
 
 FILE* mycreate(const char* path, uint32_t  /*flags*/) {
-	FILE *fp = fcaseopen(path, "wb+");
+	FILE *fp = fcaseopenx(path, "wb+");
 	return fp;
 };
 

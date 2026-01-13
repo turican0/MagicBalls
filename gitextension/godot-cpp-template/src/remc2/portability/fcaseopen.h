@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-FILE* fcaseopen(char const* path, char const* mode);
+FILE* fcaseopenx(char const* path, char const* mode);
 
 std::vector<std::string> GetTokensFromPath(const std::string &path);
 #if !defined(_WIN32)
