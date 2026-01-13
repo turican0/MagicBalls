@@ -762,11 +762,11 @@ void AddBuildingToTerrain_46570(uaxis_2d axis1, uaxis_2d axis2);
 void sub_46820_simple_timer(uint32_t user);
 // int sub_46830_main_loop(signed __int16 *a1, signed int a2, unsigned __int16 a3);
 void sub_46F50_sound_proc7();
-// int sub_47320_in_game_loop(signed int a1);
+// int InGameLoop_47320(signed int a1);
 //void sub_473B0();
 //int sub_473E0();
 // void sub_47560_draw_and_events_in_game(int a1, int a2, x_BYTE *a3, signed int a4, __int16 a5);
-void PaletteChanges_47760(/*int a1,*/uint32_t user/* int a2, int a3*/);
+void PaletteChanges_47760();
 void sub_47FC0_load_screen(bool isSecretLevel);
 void sub_480A0_set_clear_Palette(/*int a1, int a2, int a3*/);
 void sub_48120();
@@ -860,7 +860,7 @@ void NetworkDisallocation2_5C450();
 void sub_5C490_testers_info();
 void sub_5C530();
 void sub_5C800(type_event_0x6E8E* a1, char a2);
-void sub_5C830(type_event_0x6E8E* a1, char a2, __int16 a3);
+void SetPaletteModification_5C830(type_event_0x6E8E* event, char paletteSubMod, __int16 PaletteCount);
 void sub_5C870(type_event_0x6E8E* a1);
 void SetMaxDistance_5C8D0(type_event_0x6E8E* a1);
 void sub_5C950(type_str_0x2BDE* a1, type_event_0x6E8E* a2);
@@ -962,7 +962,7 @@ void sub_86460(uint16_t a1);
 //void sub_86550();
 char sub_86780(unsigned __int16 a1, int a2, int a3);
 void sub_86A00_some_allocs();
-void sub_86EA0(/*int a1, int a2, int a3*/uint32_t user);
+void sub_86EA0();
 void sub_86F20(char a1);
 void sub_86F70_sound_proc12(unsigned __int8 a1, __int16 a2, __int16 a3);
 void sub_86FF0(unsigned __int8 a1, __int16 a2, __int16 a3);
@@ -2984,7 +2984,7 @@ type_x_BYTE_E25ED_2BB str_BYTE_E25ED_a3[3] = {//set joy
 { 0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000 }
 };
 
-int16_t x_WORD_E29D8 = 0; // weak//2b39d8
+MenuItem nextMenu_E29D8 = MenuItem::InitLanguage; // weak//2b39d8
 __int16 x_WORD_E29DA_type_resolution = 0; // weak
 int16_t m_ExitMenuLoop_E29DC = 0; // weak
 char x_BYTE_E29DF_skip_screen = 0; // weak
@@ -28552,36 +28552,28 @@ int sub_38E40(type_event_0x6E8E* a1x)//219e40
 }
 
 //----- (00038E70) --------------------------------------------------------
-int sub_38E70(type_event_0x6E8E* a1x)//219e70
+void sub_38E70(type_event_0x6E8E* event)//219e70
 {
-	type_event_0x6E8E* v1x; // ebx
-	//int v2; // eax
-	unsigned __int8 v3; // dh
-
-	if (a1x->word_0x96_150)
+	if (event->word_0x96_150)
 	{
-		v1x = ENTITY_EA3E4[a1x->word_0x96_150];
-		if (v1x->class_0x3F_63 == 3 && !v1x->model_0x40_64)
+		type_event_0x6E8E* event2 = ENTITY_EA3E4[event->word_0x96_150];
+		if (event2->class_0x3F_63 == 3 && !event2->model_0x40_64)
 		{
-			//v2 = v1x->dword_0xA4_164;
-			v3 = v1x->dword_0xA4_164x->moveSpeed_0x14C_332;
-			if (v3 < 3u)
+			if (event2->dword_0xA4_164x->moveSpeed_0x14C_332 < 3u)
 			{
-				if (!v3)
+				if (!event2->dword_0xA4_164x->moveSpeed_0x14C_332)
 				{
-					v1x->dword_0xA4_164x->moveBoost_0x1E_30 = -80;
-					a1x->rand_0x14_20 = 9377 * a1x->rand_0x14_20 + 9439;
-					PrepareEventSound_6E450(a1x->word_0x96_150, -1, (a1x->rand_0x14_20 & 3) + 54);
+					event2->dword_0xA4_164x->moveBoost_0x1E_30 = -80;
+					event->rand_0x14_20 = 9377 * event->rand_0x14_20 + 9439;
+					PrepareEventSound_6E450(event->word_0x96_150, -1, (event->rand_0x14_20 & 3) + 54);
 				}
-				sub_5C830(v1x, 3, 171 * ++v1x->dword_0xA4_164x->moveSpeed_0x14C_332 / 3 + 85);
+				SetPaletteModification_5C830(event2, 3, 171 * ++event2->dword_0xA4_164x->moveSpeed_0x14C_332 / 3 + 85);
 			}
-			v1x->dword_0xA4_164x->moveSpeedCounter_0x14D_333 = 8;
+			event2->dword_0xA4_164x->moveSpeedCounter_0x14D_333 = 8;
 		}
 	}
-	DisableEntityDrawing04_57F10(a1x);
-	return 1;
+	DisableEntityDrawing04_57F10(event);
 }
-// EA3E4: using guessed type int ENTITY_EA3E4[];
 
 //----- (00038F70) --------------------------------------------------------
 int sub_38F70(type_event_0x6E8E* a1x)//219f70
@@ -31583,7 +31575,7 @@ void sub_46830_main_loop(/*int16_t* a1, */signed int a2, unsigned __int16 a3)//2
 		*/
 		//!!!!test area1
 
-		MenusAndIntros_76930(v5, 0, skipMenus /*a1*/);//set language, intro, menu, atd. //257930
+		MenusAndIntros_76930(skipMenus);//set language, intro, menu, atd. //257930
 
 		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234)
 		{
@@ -31658,7 +31650,7 @@ void sub_46830_main_loop(/*int16_t* a1, */signed int a2, unsigned __int16 a3)//2
 						}
 					}
 				}
-				sub_47320_in_game_loop(a2);
+				InGameLoop_47320(a2);
 				if (m_ptrGameRender != nullptr)
 				{
 					delete m_ptrGameRender;
@@ -31739,7 +31731,7 @@ void sub_46830_main_loop(/*int16_t* a1, */signed int a2, unsigned __int16 a3)//2
 					break;//must be here
 				}
 			}
-			x_WORD_E29D8 = 4;
+			nextMenu_E29D8 = MenuItem::MainMenu;
 			skipMenus = false;
 			setLevel = -1;
 			customLevelPath = "";
@@ -31747,7 +31739,7 @@ void sub_46830_main_loop(/*int16_t* a1, */signed int a2, unsigned __int16 a3)//2
 
 		if (CommandLineParams.DoTestRenderers()) {
 			if (renderer_tests_quit) {
-				x_WORD_E29D8 = 5; // exit menu loop	
+				nextMenu_E29D8 = MenuItem::Exit; // exit menu loop	
 				break;
 			}
 		}
@@ -31771,13 +31763,8 @@ int debug_first_run = 0;
 int debugcounter_228320 = 0;
 
 //----- (00047320) --------------------------------------------------------
-void sub_47320_in_game_loop(signed int a1)//228320
+void InGameLoop_47320(signed int a1)//228320
 {
-	uint32_t v1; // ebx
-	int v2; // esi
-	unsigned int v3; // esi
-	//int v4; // edx
-	//uint8_t* index; // eax
 	/*
 	debugnextlevel++;
 
@@ -31799,8 +31786,8 @@ void sub_47320_in_game_loop(signed int a1)//228320
 
 	debugcounter_228320++;
 	*/
-	x_D41A0_BYTEARRAY_4_struct.byteindex_51 = 0;
-	v1 = 0;
+	x_D41A0_BYTEARRAY_4_struct.paletteMod_51 = 0;
+	uint32_t gameTurn = 0;
 	D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.word[1] = 0;
 	while (1)
 	{
@@ -31829,12 +31816,8 @@ void sub_47320_in_game_loop(signed int a1)//228320
 
 		//debug
 
-		//v4 = 2124 * D41A0_BYTESTR_0.word_0xc;
-		//index = 2124 * D41A0_BYTESTR_0.word_0xc + x_D41A0_BYTEARRAY_0;
 		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8)
-			break;
-		v2 = x_DWORD_17DB54_game_turn2;//0xded
-
+			break;//end level
 		/*
 		//savetext
 		FILE* filesavetext;
@@ -31845,16 +31828,13 @@ void sub_47320_in_game_loop(signed int a1)//228320
 		//savetext
 		*/
 
-		DrawAndEventsInGame_47560(/*2124 * D41A0_BYTESTR_0.word_0xc + x_D41A0_BYTEARRAY_0, 2124 * D41A0_BYTESTR_0.word_0xc,*/ v1, a1, x_DWORD_17DB54_game_turn2);
-		v3 = v2 + 5;
-		/*while (v3 > x_DWORD_17DB54_game_turn2)
-			;*/ // timer only for origin sound
-		if (v1 < 2)
+		DrawAndEventsInGame_47560(a1, x_DWORD_17DB54_game_turn2);
+		if (gameTurn < 2)
 		{
 			StopMusic_8E020();
-			if (v1 == 1)
+			if (gameTurn == 1)
 				StartMusic_8E160(D41A0_0.maptypeMusic_0x235, 0x7Fu);
-			v1++;
+			gameTurn++;
 		}
 
 		// force special settings for renderer tests			
@@ -31907,24 +31887,17 @@ void intervalsave(int index) {
 
 //long debugcounter_47560_2=0;
 //----- (00047560) --------------------------------------------------------
-void DrawAndEventsInGame_47560(/*uint8_t* a1, int a2, */uint32_t a3, signed int a4, __int16 a5)//228560
+void DrawAndEventsInGame_47560(signed int a4, __int16 a5)//228560
 {
-	uint8_t speed; // al
-	signed int j; // ebx
-	signed int i; // ebx
-
 	SetFrameStart(std::chrono::system_clock::now());
-
 	if ((CommandLineParams.DoDebugafterload() == 1) && (count_begin == 1))
 		debugcounter_47560++;
-
-	PaletteChanges_47760(/*a1, a2, (int)a3*/a3);
+	PaletteChanges_47760();
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1))
 	{
 		sub_715B0();//nothing draw //animate sprites
 	}
 	ReadGameUserInputs_89D10();//get keys
-
 	if (CommandLineParams.DoAutoChangeRes()) {
 		if ((windowResWidth >= 640) && (windowResHeight >= 480))
 			//if (true)
@@ -31952,9 +31925,7 @@ void DrawAndEventsInGame_47560(/*uint8_t* a1, int a2, */uint32_t a3, signed int 
 			}
 		}
 	}
-
 	MouseAndKeysEvents_17A00(a4, a5);
-
 	if (CommandLineParams.DoIntervalSave()) {
 		//save in interval
 		int interval = 1;
@@ -31971,7 +31942,7 @@ void DrawAndEventsInGame_47560(/*uint8_t* a1, int a2, */uint32_t a3, signed int 
 	//adress 228588
 	sub_848A0();//nothing draw
 	//adress 22858d
-	speed = x_D41A0_BYTEARRAY_4_struct.speedIndex;
+	uint8_t speed = x_D41A0_BYTEARRAY_4_struct.speedIndex;
 	if (speed == 0)
 	{
 		if (!speed)
@@ -31979,12 +31950,12 @@ void DrawAndEventsInGame_47560(/*uint8_t* a1, int a2, */uint32_t a3, signed int 
 	}
 	else if (speed == 1)
 	{
-		for (i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 			UpdateEntities_57730();
 	}
 	else if (speed == 2)
 	{
-		for (j = 0; j < 8; j++)
+		for (int j = 0; j < 8; j++)
 			UpdateEntities_57730();
 	}
 	sub_84B80();//prepare lightting
@@ -32019,7 +31990,6 @@ void DrawAndEventsInGame_47560(/*uint8_t* a1, int a2, */uint32_t a3, signed int 
 	if (x_D41A0_BYTEARRAY_4_struct.showHelp_10)
 		DrawHelpPopUps_871F0();
 	//adress 22860f
-
 	if (CommandLineParams.DoDetectDwordA()) {
 		for (int iii = 1; iii < 0x3E9; iii++)
 			if (ENTITY_EA3E4[iii]->oldMapEntity_0x16_22 == iii)
@@ -32031,73 +32001,34 @@ void DrawAndEventsInGame_47560(/*uint8_t* a1, int a2, */uint32_t a3, signed int 
 					allert_error();
 		}
 	}
-
 	x_D41A0_BYTEARRAY_4_struct.byteindex_196 = x_DWORD_17DB54_game_turn2 - x_D41A0_BYTEARRAY_4_struct.byteindex_196;
 	sub_6FEC0();
 	x_D41A0_BYTEARRAY_4_struct.byteindex_196 = x_DWORD_17DB54_game_turn2;
-
-	if (x_D41A0_BYTEARRAY_4_struct.byteindex_51 >= 3u)
+	if (x_D41A0_BYTEARRAY_4_struct.paletteMod_51 >= 3u)
 		sub_40F80();
 }
 
 //----- (00047760) --------------------------------------------------------
-void PaletteChanges_47760(/*int a1,*/uint32_t  /*user*//* int a2, int a3*/)//228760
+void PaletteChanges_47760()//228760
 {
-	//x_BYTE *v3; // eax
-	//unsigned __int8 v4; // dl
-	//uint8_t* v5; // ST00_4
-	//int v6; // edx
-	//unsigned __int8 v7; // al
-	//char* v8; // ST00_4
-	//char* v9; // ST00_4
-	//char* v10; // ST00_4
-	signed int v11; // eax
-	//int v12; // edx
-	signed int v13; // eax
-	//int v14; // ebx
-	//int v15; // ebx
-	//int v16; // ebx
-	signed int v17; // edx
-	//uint8_t* v18; // ebx
-	//int v19; // eax
-	//int v20; // ecx
-	signed int v21; // eax
-	//int v22; // ebx
-	signed int v23; // ebx
-	//int v24; // ecx
-	__int64 v25; // rtt
-	//char v26; // al
-	signed int v27; // eax
-	//int v28; // ebx
-
 	char dataPath[MAX_PATH];
-
 	TColor** DefaultPal = (TColor**)xadatapald0dat2.colorPalette_var28;
-
-	//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-	//v4 = x_D41A0_BYTEARRAY_4_struct.byteindex_51;
 	x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 0;
-	switch (x_D41A0_BYTEARRAY_4_struct.byteindex_51)
+	switch (x_D41A0_BYTEARRAY_4_struct.paletteMod_51)
 	{
 	case 0:
 	case 1: //Fade out loading screen
-		//if (x_D41A0_BYTEARRAY_4_struct.byteindex_51 < 2u)
 	{
-		sub_480A0_set_clear_Palette(/*(int)v3, v4, user*/);
-		//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-		x_D41A0_BYTEARRAY_4_struct.byteindex_51++;
+		sub_480A0_set_clear_Palette();
+		x_D41A0_BYTEARRAY_4_struct.paletteMod_51++;
 		break;
 	}
 	case 2:
-		//else if (x_D41A0_BYTEARRAY_4_struct.byteindex_51 <= 2u)
 	{
-		x_D41A0_BYTEARRAY_4_struct.byteindex_51++;
-		//v5 = *xadatapald0dat2.colorPalette_var28;
-		x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 1;
+		x_D41A0_BYTEARRAY_4_struct.paletteMod_51++;
+		x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
 		memset((void*)*DefaultPal, 0, 768);
 		sub_41A90_VGA_Palette_install(*DefaultPal);
-		//v6 = (int)x_D41A0_BYTEARRAY_0;
-		//v7 = D41A0_BYTESTR_0.str_2FECE.MapType;
 		switch (D41A0_0.terrain_2FECE.MapType)
 		{
 		case MapType_t::Day:
@@ -32134,224 +32065,179 @@ void PaletteChanges_47760(/*int a1,*/uint32_t  /*user*//* int a2, int a3*/)//228
 		}
 		}
 		qmemcpy((void*)x_DWORD_EA3B8x, (void*)*DefaultPal, 0x300u);
-		sub_47650(0x300/*, v6*/);
+		sub_47650(0x300);
 		sub_90D27();
-		uiBackGroundColorIdx_EB3A8 = (*DefaultPal)[0].red;//*DefaultPal[0].red
-		/*LOBYTE(v3) = */sub_57640();
+		uiBackGroundColorIdx_EB3A8 = (*DefaultPal)[0].red;
+		sub_57640();
 		break;
 	}
-	//else if (x_D41A0_BYTEARRAY_4_struct.byteindex_51 == 3)
 	case 3:
 	{
-		switch (x_D41A0_BYTEARRAY_4_struct.byteindex_180)
+		switch (x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180)
 		{
 		case 1:
 			//Fade back
-			//v8 = (char*)*xadatapald0dat2.colorPalette_var28;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
-			///*LOWORD(v3) = */sub_90B27_VGA_pal_fadein_fadeout((uint8_t*)v8, 4u, 1);
 			if (sub_90B27_VGA_pal_fadein_fadeout(*DefaultPal, 4u, 1, 0) == 4)
 			{
-				//LOBYTE(v3) = (uint8)x_D41A0_BYTEARRAY_4;
-				x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 0;
+				x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
 			}
 			break;
 		case 2:
 			//Hit (red flash)
-			v11 = 1;
-			while (v11 < 256)
+			for (int i = 1; i < 256; i++)
 			{
-				x_DWORD_F42A0 = (*DefaultPal)[v11].red + 40;//*(3 * v11 + *xadatapald0dat2.colorPalette_var28) + 40;
+				x_DWORD_F42A0 = (*DefaultPal)[i].red + 40;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v11].red = x_DWORD_F42A0;
-				x_DWORD_F42A0 = (*DefaultPal)[v11].green; //*(3 * v11 + *xadatapald0dat2.colorPalette_var28 + 1);
+				x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+				x_DWORD_F42A0 = (*DefaultPal)[i].green;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v11].green = x_DWORD_F42A0;
-				x_DWORD_F42A0 = (*DefaultPal)[v11].blue;//*(3 * v11 + *xadatapald0dat2.colorPalette_var28 + 2);
+				x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+				x_DWORD_F42A0 = (*DefaultPal)[i].blue;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v11].blue = x_DWORD_F42A0;
-				v11++;
+				x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
 			}
 			sub_90D27();
 			sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
-			//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-			x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 1;
+			x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
 			break;
 		case 3:
-			v13 = 1;
-			while (v13 < 256)
+			for (int i = 1; i < 256; i++)
 			{
-				//v14 = x_D41A0_BYTEARRAY_4_struct.byteindex_184;
-				x_DWORD_F42A0 = (*DefaultPal)[v13].red;//*(3 * v13 + *xadatapald0dat2.colorPalette_var28);
-				x_DWORD_F42A0 += -56 * x_D41A0_BYTEARRAY_4_struct.byteindex_184w >> 8;
+				x_DWORD_F42A0 = (*DefaultPal)[i].red;
+				x_DWORD_F42A0 += -56 * x_D41A0_BYTEARRAY_4_struct.paletteCount_184w >> 8;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v13].red = x_DWORD_F42A0;
-				x_DWORD_F42A0 = (*DefaultPal)[v13].green; //*(3 * v13 + *xadatapald0dat2.colorPalette_var28 + 1);
+				x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+				x_DWORD_F42A0 = (*DefaultPal)[i].green;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v13].green = x_DWORD_F42A0;
-				//v15 = x_D41A0_BYTEARRAY_4_struct.byteindex_184w;
-				x_DWORD_F42A0 = (*DefaultPal)[v13].blue;//*(3 * v13 + *xadatapald0dat2.colorPalette_var28 + 2);
-				x_DWORD_F42A0 += -56 * x_D41A0_BYTEARRAY_4_struct.byteindex_184w >> 8;
+				x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+				x_DWORD_F42A0 = (*DefaultPal)[i].blue;
+				x_DWORD_F42A0 += -56 * x_D41A0_BYTEARRAY_4_struct.paletteCount_184w >> 8;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v13].blue = x_DWORD_F42A0;
-				v13++;
+				x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
 			}
 			sub_90D27();
 			sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
-			//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-			x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 1;
+			x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
 			break;
 		case 4:
-			v17 = 1;
-			while (v17 < 256)
+			for (int i = 1; i < 256; i++)
 			{
-				//v18 = *xadatapald0dat2.colorPalette_var28;
-				//v19 = 3 * v17;
-				//v20 = *(*xadatapald0dat2.colorPalette_var28 + 3 * v17 + 2);
 				x_DWORD_F42A0 = 255;
-				x_BYTE_F3FA0arx[v17].red = (*DefaultPal)[v17].red;//*(x_BYTE*)(*xadatapald0dat2.colorPalette_var28 + 3 * v17);
-				x_BYTE_F3FA0arx[v17].green = (*DefaultPal)[v17].green;// *(x_BYTE*)(*xadatapald0dat2.colorPalette_var28 + 3 * v17++ + 1);
-				x_BYTE_F3FA0arx[v17].blue = 63;
-				v17++;
+				x_BYTE_F3FA0arx[i].red = (*DefaultPal)[i].red;
+				x_BYTE_F3FA0arx[i].green = (*DefaultPal)[i].green;
+				x_BYTE_F3FA0arx[i].blue = 63;
 			}
 			sub_90D27();
 			sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
-			//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-			x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 1;
+			x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
 			break;
 		case 5:
 			memset((void*)*xadatapald0dat2.colorPalette_var28, 0, 768);
-			//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-			x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 10;
+			x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 10;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
 			break;
 		case 6:
-			v21 = 1;
-			while (v21 < 256)
+			for (int i = 1; i < 256; i++)
 			{
-				x_DWORD_F42A0 = (*DefaultPal)[v21].blue + 48;//*(3 * v21 + *xadatapald0dat2.colorPalette_var28 + 2) + 48;
+				x_DWORD_F42A0 = (*DefaultPal)[i].blue + 48;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v21].red = x_DWORD_F42A0;
-				x_DWORD_F42A0 = (*DefaultPal)[v21].green + 32;//*(3 * v21 + *xadatapald0dat2.colorPalette_var28 + 1) + 32;
+				x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+				x_DWORD_F42A0 = (*DefaultPal)[i].green + 32;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v21].green = x_DWORD_F42A0;
-				x_DWORD_F42A0 = (*DefaultPal)[v21].blue + 32;//*(3 * v21 + *xadatapald0dat2.colorPalette_var28 + 2) + 32;
+				x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+				x_DWORD_F42A0 = (*DefaultPal)[i].blue + 32;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v21].blue = x_DWORD_F42A0;
-				v21++;
+				x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
 			}
 			sub_90D27();
 			sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
-			//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-			x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 1;
+			x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
 			break;
 		case 7:
 			//Black and White
-			v23 = 1;
-			while (v23 < 256)
+			for (int i = 1; i < 256; i++)
 			{
-				//v24 = 3 * v23;
-				/*v25 = *(3 * v23 + *xadatapald0dat2.colorPalette_var28)
-					+ *(3 * v23 + *xadatapald0dat2.colorPalette_var28 + 1)
-					+ *(3 * v23 + *xadatapald0dat2.colorPalette_var28 + 2);
-				x_DWORD_F42A0 = (*(3 * v23 + *xadatapald0dat2.colorPalette_var28)
-					+ *(3 * v23 + *xadatapald0dat2.colorPalette_var28 + 1)
-					+ *(3 * v23 + *xadatapald0dat2.colorPalette_var28 + 2))
-					/ 3;*/
-				v25 = (*DefaultPal)[v23].red + (*DefaultPal)[v23].green + (*DefaultPal)[v23].blue;
-				x_DWORD_F42A0 = v25 / 3;
-				//v26 = v25 / 3;
-				x_BYTE_F3FA0arx[v23].red = x_DWORD_F42A0;
-				x_BYTE_F3FA0arx[v23].green = x_DWORD_F42A0;
-				x_BYTE_F3FA0arx[v23].blue = x_DWORD_F42A0;
-				v23++;
+				x_DWORD_F42A0 = ((*DefaultPal)[i].red + (*DefaultPal)[i].green + (*DefaultPal)[i].blue) / 3;
+				x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+				x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+				x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
 			}
 			sub_90D27();
 			sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
-			//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-			x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 1;
+			x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
 			break;
 		case 8:
-			v27 = 1;
-			while (v27 < 256)
+			for (int i = 1; i < 256; i++)
 			{
-				x_DWORD_F42A0 = (*DefaultPal)[v27].red + 48;// *(3 * v27 + *xadatapald0dat2.colorPalette_var28) + 48;
+				x_DWORD_F42A0 = (*DefaultPal)[i].red + 48;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v27].red = x_DWORD_F42A0;
-				x_DWORD_F42A0 = (*DefaultPal)[v27].green + 48;//*(3 * v27 + *xadatapald0dat2.colorPalette_var28 + 1) + 48;
+				x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+				x_DWORD_F42A0 = (*DefaultPal)[i].green + 48;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				x_BYTE_F3FA0arx[v27].green = x_DWORD_F42A0;
-				x_DWORD_F42A0 = (*DefaultPal)[v27].blue + 48;//*(3 * v27 + *xadatapald0dat2.colorPalette_var28 + 2) + 48;
+				x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+				x_DWORD_F42A0 = (*DefaultPal)[i].blue + 48;
 				if (x_DWORD_F42A0 < 0)
 					x_DWORD_F42A0 = 0;
 				if (x_DWORD_F42A0 > 63)
 					x_DWORD_F42A0 = 63;
-				//v28 = 3 * v27++;
-				x_BYTE_F3FA0arx[v27].blue = x_DWORD_F42A0;
-				v27++;
+				x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
 			}
 			sub_90D27();
 			sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
-			//v3 = (x_BYTE *)x_D41A0_BYTEARRAY_4;
-			x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 9;
+			x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 9;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
 			break;
 		case 9:
-			//v9 = (char*)*xadatapald0dat2.colorPalette_var28;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
-			///*LOWORD(v3) = */sub_90B27_VGA_pal_fadein_fadeout((uint8_t*)v9, 0x10u, 1);
 			if (sub_90B27_VGA_pal_fadein_fadeout((TColor*)*xadatapald0dat2.colorPalette_var28, 0x10u, 1) == 16)
 			{
-				//LOBYTE(v3) = (uint8)x_D41A0_BYTEARRAY_4;
-				x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 0;
+				x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
 			}
 			break;
 		case 0xA:
-			//v10 = (char*)*xadatapald0dat2.colorPalette_var28;
 			x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
-			///*LOWORD(v3) = */sub_90B27_VGA_pal_fadein_fadeout((uint8_t*)v10, 0x1Cu, 1);
 			if (sub_90B27_VGA_pal_fadein_fadeout((TColor*)*xadatapald0dat2.colorPalette_var28, 0x1Cu, 1) == 28)
 			{
-				//LOBYTE(v3) = (uint8)x_D41A0_BYTEARRAY_4;
-				x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 0;
+				x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
 			}
 			break;
 		default:
@@ -38061,7 +37947,7 @@ void GameEvents_51BB0()//232bb0
 			strcpy(D41A0_0.array_0x2BDE[i].array_0x01c_2BFA_11258, x_DWORD_E9C4C_langindexbuffer[HAS_BEEN_BANISHED]);//has been banished from the realm.
 			D41A0_0.array_0x2BDE[i].word_0x04f_2C2D_11309 = 1;
 			D41A0_0.array_0x2BDE[i].word_0x04d_2C2B_11307 = 100;
-			D41A0_0.array_0x2BDE[i].dw_w_b_0_2BDE_11230.word[1] = 8;
+			D41A0_0.array_0x2BDE[i].dw_w_b_0_2BDE_11230.word[1] = 8;//SKIP FROM GAMELOOP
 			NetworkEvent_7373D(i);
 			D41A0_0.array_0x2BDE[i].byte_0x006_2BE4_11236 = 0;
 			if (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10)
@@ -39603,10 +39489,10 @@ void ClearSettings_567C0()//2377c0 // clean level
 	//memset((void*)(&x_D41A0_BYTEARRAY_0[28302]), 0, 168000);
 	memset(D41A0_0.struct_0x6E8E, 0, sizeof(type_event_0x6E8E) * 0x3e8);
 
-	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.byteindex_51), 0, 1);
+	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.paletteMod_51), 0, 1);
 	memset((void*)(x_D41A0_BYTEARRAY_4_struct.colorIndex_121), 0, 16);
 	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.speedIndex), 0, 1);
-	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.byteindex_180), 0, 1);
+	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180), 0, 1);
 	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.str_index_242ar), 0, 14);
 	memset((void*)(x_D41A0_BYTEARRAY_4_struct.bytearray_38403x), 0, sizeof(type_event_0x6E8E*) * 29);
 	memset((void*)(&x_D41A0_BYTEARRAY_4_struct.dword_38519), 0, sizeof(type_event_0x6E8E*));
@@ -41255,7 +41141,7 @@ void sub_59820()//23a820
 	}
 	if (x_D41A0_BYTEARRAY_4_struct.setting_38545 & 0x40 && sub_86180(x_WORD_1803EC) == 256)
 		sub_59AF0_sound_proc9();
-	if (x_D41A0_BYTEARRAY_4_struct.byteindex_51 >= 3u)
+	if (x_D41A0_BYTEARRAY_4_struct.paletteMod_51 >= 3u)
 	{
 		v3 = D41A0_0.byte_0x36E02;
 		if (v3)
@@ -41293,7 +41179,7 @@ void sub_59820()//23a820
 					D41A0_0.byte_0x36E02 = v3 + 1;
 					if (v4 & 1)
 					{
-						x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 8;
+						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 8;
 						sub_86F20(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x3E4_2BE4_12226);
 						sub_59A50_sound_proc8();
 						return;
@@ -41317,7 +41203,7 @@ void sub_59820()//23a820
 						{
 							v9 = D41A0_0.struct_0x3659C[D41A0_0.LevelIndex_0xc].substr_3659C.ObjectiveText_1 + 1;
 						LABEL_30:
-							x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 8;
+							x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 8;
 							sub_86EB0(v8, v9, 1);
 							sub_59A50_sound_proc8();
 							return;
@@ -41327,7 +41213,7 @@ void sub_59820()//23a820
 					goto LABEL_30;
 				}
 				D41A0_0.byte_0x36E02 = 8;
-				x_D41A0_BYTEARRAY_4_struct.byteindex_180 = 8;
+				x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 8;
 				goto LABEL_36;
 			}
 			D41A0_0.byte_0x36E02 = 0;
@@ -43554,7 +43440,7 @@ signed int sub_5C1B0_set_any_variables2()//23A05 - 23D1B0
 	//x_D41A0_BYTEARRAY_0[14] = 2;
 	D41A0_0.word_0xe = 2;;
 	strcpy(x_D41A0_BYTEARRAY_4_struct.byteindex_145ar, "NETHERW");
-	x_D41A0_BYTEARRAY_4_struct.byteindex_184w = 256;
+	x_D41A0_BYTEARRAY_4_struct.paletteCount_184w = 256;
 	//v5 = '\0';
 	x_D41A0_BYTEARRAY_4_struct.byteindex_218w = 25;
 	x_D41A0_BYTEARRAY_4_struct.player_name_57ar[0] = '\0';
@@ -43825,7 +43711,7 @@ void sub_5C800(type_event_0x6E8E* a1x, char a2)//23d800
 	if (D41A0_0.LevelIndex_0xc == a1x->dword_0xA4_164x->playerColorIndex_0x38_56)
 	{
 		//result = (short)x_D41A0_BYTEARRAY_4;
-		x_D41A0_BYTEARRAY_4_struct.byteindex_180 = a2;
+		x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = a2;
 	}
 	//return result;
 }
@@ -43833,21 +43719,14 @@ void sub_5C800(type_event_0x6E8E* a1x, char a2)//23d800
 // D41A4: using guessed type int x_DWORD_D41A4;
 
 //----- (0005C830) --------------------------------------------------------
-void sub_5C830(type_event_0x6E8E* a1x, char a2, __int16 a3)//23d830
+void SetPaletteModification_5C830(type_event_0x6E8E* event, char paletteSubMod, __int16 PaletteCount)//23d830
 {
-	//int v3; // eax
-
-	//LOWORD(v3) = D41A0_BYTESTR_0.word_0xc;
-	if (D41A0_0.LevelIndex_0xc == a1x->dword_0xA4_164x->playerColorIndex_0x38_56)
+	if (D41A0_0.LevelIndex_0xc == event->dword_0xA4_164x->playerColorIndex_0x38_56)
 	{
-		//v3 = (int)x_D41A0_BYTEARRAY_4;
-		x_D41A0_BYTEARRAY_4_struct.byteindex_180 = a2;
-		x_D41A0_BYTEARRAY_4_struct.byteindex_184w = a3;
+		x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = paletteSubMod;
+		x_D41A0_BYTEARRAY_4_struct.paletteCount_184w = PaletteCount;
 	}
-	//return v3;
 }
-// D41A0: using guessed type int x_D41A0_BYTEARRAY_0;
-// D41A4: using guessed type int x_DWORD_D41A4;
 
 //----- (0005C870) --------------------------------------------------------
 void sub_5C870(type_event_0x6E8E* a1x)//23d870
@@ -48823,9 +48702,9 @@ void sub_86BD0_freemem1()//267bd0
 // E2A70: using guessed type int x_DWORD_E2A70;
 
 //----- (00086EA0) --------------------------------------------------------
-void sub_86EA0(/*int a1, int a2, int a3*/ uint32_t user)//267ea0
+void sub_86EA0()//267ea0
 {
-	PaletteChanges_47760(/*a1, */user/*, a3*/);
+	PaletteChanges_47760();
 }
 
 //----- (00086EB0) --------------------------------------------------------
@@ -61377,7 +61256,7 @@ signed int sub_5E8C0_endGameSeq(type_event_0x6E8E* a1x)//23f8c0 //end game seque
 	LABEL_62:
 		//v19 = a1x->dword_0x10_16 - 1;
 		a1x->dword_0x10_16--;// = v19;
-		if (a1x->dword_0x10_16 && x_D41A0_BYTEARRAY_4_struct.byteindex_180)
+		if (a1x->dword_0x10_16 && x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180)
 		{
 			predictedAxis_EB398ar = a1x->axis_0x4C_76;
 			MoveEntity_57FA0(&predictedAxis_EB398ar, a1x->yaw_0x1C_28, 0, 2);
@@ -61525,7 +61404,7 @@ signed int sub_5EFA0(type_event_0x6E8E* a1x)//23ffa0
 			sub_61050(a1x);
 		//v7 = a1x->dword_0xA4_164;
 		if (a1x->dword_0xA4_164x->moveSpeed_0x14C_332 && x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181)
-			sub_5C830(a1x, 3, 171 * a1x->dword_0xA4_164x->moveSpeed_0x14C_332 / 3 + 85);
+			SetPaletteModification_5C830(a1x, 3, 171 * a1x->dword_0xA4_164x->moveSpeed_0x14C_332 / 3 + 85);
 		v8 = a1x->str_0x5E_94.word_0x62_98;
 		if (v8)
 		{
