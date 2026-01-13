@@ -145,7 +145,7 @@ bool file_exists(const char * filename) {
 }
 
 FILE* mycreate(const char* path, uint32_t  /*flags*/) {
-	FILE *fp;
+	FILE *fp = fcaseopen(path, "wb+");
 	return fp;
 };
 

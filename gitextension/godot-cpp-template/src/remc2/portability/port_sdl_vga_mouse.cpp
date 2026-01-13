@@ -111,14 +111,57 @@ uint8_t *VGA_Get_Palette() {
 uint16_t lastResHeight=0;
 
 void SetPalette(SDL_Color* colours) {
+	memcpy(m_currentPalletColours, colours, sizeof(SDL_Color) * 256);
+	/*
+	if (m_gamePalletisedSurface) {
+		SDL_SetPaletteColors(m_gamePalletisedSurface->format->palette, m_currentPalletColours, 0, 256);
+		//SubBlit(m_iOrigw, m_iOrigh);
+	}
+	*/
 }
 
 void Set_basic_Palette0() {
+	SDL_Color colors[256];
+	for (int i = 0; i < 256; i++) {
+		tempPalettebuffer[i * 3] = i / 4;
+		tempPalettebuffer[i * 3 + 1] = i / 4;
+		tempPalettebuffer[i * 3 + 2] = i / 4;
+		colors[i].r = tempPalettebuffer[i * 3];
+		colors[i].g = tempPalettebuffer[i * 3 + 1];
+		colors[i].b = tempPalettebuffer[i * 3 + 2];
+	}
+	SetPalette(colors);
 }
 void Set_basic_Palette1() {
+	SDL_Color colors[256];
+	for (int i = 0; i < 256; i++) {
+		if (i != 0) {
+			colors[i].r = 0;
+			colors[i].g = 0;
+			colors[i].b = 0;
+		} else {
+			colors[i].r = 255;
+			colors[i].g = 255;
+			colors[i].b = 255;
+		}
+		tempPalettebuffer[i * 3] = colors[i].r / 4;
+		tempPalettebuffer[i * 3 + 1] = colors[i].g / 4;
+		tempPalettebuffer[i * 3 + 2] = colors[i].b / 4;
+	}
+	SetPalette(colors);
 }
 
 void Set_basic_Palette3() {
+	SDL_Color colors[256];
+	for (int i = 0; i < 256; i++) {
+		tempPalettebuffer[i * 3] = i;
+		tempPalettebuffer[i * 3 + 1] = ((int)(i / 16)) * 16;
+		tempPalettebuffer[i * 3 + 2] = (i % 16) * 16;
+		colors[i].r = tempPalettebuffer[i * 3];
+		colors[i].g = tempPalettebuffer[i * 3 + 1];
+		colors[i].b = tempPalettebuffer[i * 3 + 2];
+	}
+	SetPalette(colors);
 }
 
 /*
@@ -189,6 +232,11 @@ void VGA_Resize(int width, int height) {
 FILE* fptpal;
 void SavePal(uint8* Palettebuffer, char* filename)
 {
+	/*
+	fptpal = fopen(filename, "wb");
+	fwrite(Palettebuffer, 768, 1, fptpal);
+	fclose(fptpal);
+	*/
 }
 
 void VGA_Set_file_Palette(char* filename) {
@@ -206,13 +254,49 @@ void VGA_Set_file_Palette(char* filename) {
 	SetPalette(colors);
 }
 
+/*
+Initialize->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+Initialize->sub_90D6E_VGA_set_video_mode_320x200_and_Palette->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+ShowWelcomeScreen_83850->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+PlayInfoFmv->sub_75E70->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+MenusAndIntros_76930->Intros_76D10->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+LoadAndSetGraphicsAndPalette_7AC00->sub_90E07_VGA_set_video_mode_640x480_and_Palette->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+MainMenu_76FA0->sub_7A110_load_hscreen->sub_7B5D0->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+MainMenu_76FA0->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+NewGameDialog_77350->sub_7A110_load_hscreen->sub_7B5D0->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+MainMenu_76FA0->DrawAndServe_7B250->DrawAndServe_pre_sub_7B250->NewGameDialog_77350->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+MainMenu_76FA0->DrawAndServe_7B250->DrawAndServe_pre_sub_7B250->NewGameDialog_77350->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+MenusAndIntros_76930->sub_7ADE0->sub_90D6E_VGA_set_video_mode_320x200_and_Palette->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+sub_46830_main_loop->sub_47FC0_load_screen->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install->VGA_Set_Palette
+DrawAndEventsInGame_47560->PaletteChanges_47760->sub_480A0_set_clear_Palette->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install
+
+*/
+
 void VGA_Set_Palette(uint8* Palettebuffer) {
+	memcpy(tempPalettebuffer, Palettebuffer, 768);
+	SDL_Color colors[256];
+	/* Fill colors with color information */
+	for (int i = 0; i < 256; i++) {
+		colors[i].r = 4 * Palettebuffer[i * 3];
+		colors[i].g = 4 * Palettebuffer[i * 3 + 1];
+		colors[i].b = 4 * Palettebuffer[i * 3 + 2];
+	}
+	SetPalette(colors);
 }
 
 void VGA_Set_Palette2(uint8* Palettebuffer) {
+	memcpy(tempPalettebuffer, Palettebuffer, 768);
+	SDL_Color colors[256];
+	for (int i = 0; i < 256; i++) {
+		colors[i].r = Palettebuffer[i * 3];
+		colors[i].g = Palettebuffer[i * 3 + 1];
+		colors[i].b = Palettebuffer[i * 3 + 2];
+	}
+	SetPalette(colors);
 }
 
 void VGA_Write_basic_Palette(uint8* Palettebuffer) {
+	memcpy(tempPalettebuffer, Palettebuffer, 768);
 }
 
 void VGA_test() {

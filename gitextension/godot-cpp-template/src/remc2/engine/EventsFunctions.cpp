@@ -766,7 +766,6 @@ void sub_46F50_sound_proc7();
 //void sub_473B0();
 //int sub_473E0();
 // void sub_47560_draw_and_events_in_game(int a1, int a2, x_BYTE *a3, signed int a4, __int16 a5);
-void PaletteChanges_47760();
 void sub_47FC0_load_screen(bool isSecretLevel);
 void sub_480A0_set_clear_Palette(/*int a1, int a2, int a3*/);
 void sub_48120();
@@ -878,7 +877,6 @@ void sub_6FE20();
 void sub_6FEC0();
 void sub_713A0();
 //int sub_71410_process_tmaps_process_tmaps();
-void sub_715B0();
 void sub_716C0(unsigned __int16 a1, unsigned __int16 a2, unsigned __int16 a3);
 void SetF5538ByStrTMAP00TAB_71730(unsigned __int16 a1);
 void sub_71780();
@@ -32064,7 +32062,7 @@ void PaletteChanges_47760()//228760
 			break;
 		}
 		}
-		qmemcpy((void*)x_DWORD_EA3B8x, (void*)*DefaultPal, 0x300u);
+		qmemcpy((void*)tempPalette_EA3B8x, (void*)*DefaultPal, 0x300u);
 		sub_47650(0x300);
 		sub_90D27();
 		uiBackGroundColorIdx_EB3A8 = (*DefaultPal)[0].red;

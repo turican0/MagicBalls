@@ -570,6 +570,11 @@ void ExampleClass::RunGameStep(Dictionary inputs) {
 	Vector2 mouse_pos = inputs["mouse_pos"];
 	MouseEvents(buttonresult, mouse_pos.x, 480-mouse_pos.y);
 
+	SetFrameStart(std::chrono::system_clock::now());
+	PaletteChanges_47760();
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1)) {
+		sub_715B0(); //nothing draw //animate sprites
+	}
 	ReadGameUserInputs_89D10(); //get keys
 	MouseAndKeysEvents_17A00(0, x_DWORD_17DB54_game_turn2);
 	GameEvents_51BB0();
@@ -604,7 +609,7 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 		return;
 	}
 
-	support_begin();
+	support_begin();	
 
 	Type_CompressedLevel_2FECE shadow_a2x;
 	qmemcpy(&shadow_a2x, (Type_CompressedLevel_2FECE *)(const void *)src, sizeof(Type_CompressedLevel_2FECE)); //0x6604
@@ -665,6 +670,8 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
 	//end - code from MainMenu
+
+	Set_basic_Palette1(); //sets palette for loading level
 
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;
 
