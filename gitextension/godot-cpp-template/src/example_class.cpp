@@ -636,13 +636,27 @@ Ref<Image> ExampleClass::getMinimap() {
 	return img;
 }
 
-Color ExampleClass::getPaletteModifications() {
+Array ExampleClass::getPaletteModifications() {
 	//E0
 	uint8_t *paletteBuffer = VGA_Get_Palette();
 	float r = paletteBuffer[0xE0 * 3 + 0] / 63.0f;
 	float g = paletteBuffer[0xE0 * 3 + 1] / 63.0f;
 	float b = paletteBuffer[0xE0 * 3 + 2] / 63.0f;
-	return Color(r, g, b);
+	Color target_white = Color(r, g, b); // Původně 255,255,255
+	float rb = paletteBuffer[0x40 * 3 + 0] / 63.0f;
+	float gb = paletteBuffer[0x40 * 3 + 1] / 63.0f;
+	float bb = paletteBuffer[0x40 * 3 + 2] / 63.0f;
+	Color target_black = Color(rb, gb, bb); // Původně 0,0,0
+
+	Color gain = Color(
+			target_white.r - target_black.r,
+			target_white.g - target_black.g,
+			target_white.b - target_black.b);
+	Color offset = target_black;
+	Array result;
+	result.push_back(gain);
+	result.push_back(offset);
+	return result;
 }
 
 void ExampleClass::RunGameStep(Dictionary inputs) {

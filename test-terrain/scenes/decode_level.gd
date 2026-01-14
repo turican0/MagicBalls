@@ -77,6 +77,10 @@ var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn"
 }
 
+var filter_material: ShaderMaterial
+var data_img: Image
+var data_tex: ImageTexture
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
@@ -100,6 +104,9 @@ func updatePlayer(playerPosRot) -> void:
 	var pitch = PI*playerPosRot.rotation.pitch/(256*4)
 	var roll = PI*playerPosRot.rotation.roll/(256*4)
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
+	
+var last_gain: Color
+var last_offset: Color
 
 func _process(_p_delta) -> void:
 	getInputs()
@@ -116,8 +123,25 @@ func _process(_p_delta) -> void:
 		Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active	
 	MBEX.RunGameStep(input_state)
 	MBEX.renew_terrain()
-	var color = MBEX.getPaletteModifications()
-	Main_Filter.color = color	
+	var mods = MBEX.getPaletteModifications()
+	var current_gain = mods[0]
+	var current_offset = mods[1]
+	if current_gain != last_gain or current_offset != last_offset:
+		if(!filter_material):
+			data_img = Image.create(2, 1, false, Image.FORMAT_RGB8)
+			data_tex = ImageTexture.create_from_image(data_img)
+			filter_material = Main_Filter.get_active_material(0) as ShaderMaterial
+			filter_material.set_shader_parameter("data_tex", data_tex)
+		var g_linear = Color(current_gain.r, current_gain.g, current_gain.b)
+		var o_linear = Color(current_offset.r, current_offset.g, current_offset.b)
+		filter_material.set_shader_parameter("MyGain", g_linear)
+		filter_material.set_shader_parameter("MyOffset", o_linear*20)
+		last_gain = current_gain
+		last_offset = current_offset
+	#var gain_vec = Vector3(gain_rgb.r, gain_rgb.g, gain_rgb.b)
+	#var offset_vec = Vector3(offset_rgb.r, offset_rgb.g, offset_rgb.b)	
+	#Main_Filter.material_override.set_shader_parameter("MyGain", gain_vec)
+	#Main_Filter.material_override.set_shader_parameter("MyOffset", offset_vec)
 	updatePlayer(getPlayerPosRot())
 	renderEntites(getEntites())
 	get_parent().get_node("UI").updateSpells(MBEX.getActiveSpells())

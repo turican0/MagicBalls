@@ -1,29 +1,26 @@
-[gd_scene load_steps=9 format=3 uid="uid://cofnhdcclon1w"]
+[gd_scene load_steps=11 format=3 uid="uid://cofnhdcclon1w"]
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://scenes/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://scenes/Player.tscn" id="2_3v2uf"]
+[ext_resource type="Shader" uid="uid://dq3ewfsioapsk" path="res://scenes/CodeGeneratedDemo.gdshader" id="2_pypg8"]
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://scenes/UI.tscn" id="4_x5ge4"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
 [ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3g81x"]
-blend_mode = 3
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pypg8"]
+render_priority = 0
+shader = ExtResource("2_pypg8")
+shader_parameter/MyGain = Vector3(0.365, 1, 1)
+shader_parameter/MyOffset = Vector3(0.635, 0, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_2gbss"]
+material = SubResource("ShaderMaterial_pypg8")
+size = Vector2(2, 2)
 
 [node name="CodeGenerated" type="Node"]
 script = ExtResource("1_h7vyv")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="ColorFilter" type="ColorRect" parent="CanvasLayer"]
-material = SubResource("CanvasItemMaterial_3g81x")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 0, 0, 1)
 
 [node name="UI" parent="." instance=ExtResource("4_x5ge4")]
 
@@ -45,3 +42,7 @@ levels_dat_path = "res://mclevels/LEVELS.DAT"
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
 
 [node name="Node-Sky3D" parent="." instance=ExtResource("9_2gbss")]
+
+[node name="Filter" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("QuadMesh_2gbss")
