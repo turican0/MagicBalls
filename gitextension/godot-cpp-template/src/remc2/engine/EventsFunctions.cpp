@@ -820,8 +820,6 @@ char sub_572C0(type_event_0x6E8E* a1, __int16 a2, __int16 a3, __int16 a4, char a
 void sub_57390(uaxis_2d a1, unsigned __int16 a2);
 char sub_57450(unsigned __int8 a1);
 void sub_574A0();
-void sub_57570();
-void sub_575C0();
 void sub_57640();
 void sub_57B20(type_str_0x2BDE* a1, type_event_0x6E8E* a2);
 void CopyEntityPosition_57CF0(type_event_0x6E8E* entity, axis_3d* position);
@@ -837,7 +835,6 @@ void sub_585A0(type_event_0x6E8E* a1);
 void sub_585D0();
 void sub_58630();
 void sub_58DA0(type_entity_0x30311* a1, type_event_0x6E8E* a2);
-void sub_58F00_game_objectives();
 void sub_59760(type_event_0x6E8E* a1, type_event_0x6E8E* a2);
 void sub_59820();
 int sub_59A50_sound_proc8();
@@ -943,7 +940,6 @@ void GetSystemSpeed();
 void AddEvent2_847D0(type_event_0x6E8E* a1, char a2, char a3, char a4);
 void sub_84880(type_str_0x3664C* a1);
 void sub_848A0();
-void sub_84B80();
 void sub_84EA0(uaxis_2d a1x, type_str_0x3664C* a2, char a3, __int16 a4);
 int sub_84FB0_3dim_scalar(axis_3d* a1, axis_3d* a2);
 int sub_85060(int a1);
@@ -31958,11 +31954,11 @@ void DrawAndEventsInGame_47560(signed int a4, __int16 a5)//228560
 	}
 	sub_84B80();//prepare lightting
 	sub_58F00_game_objectives();//nothing draw
-	sub_59820();//nothing draw-sounds
+	sub_59820();//nothing draw
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1))
 		sub_57570();//nothing draw
-	sub_575C0();//nothing draw-load level
-	sub_6E150();//nothing draw-sounds
+	sub_575C0();//nothing draw
+	sub_6E150();//nothing draw
 	DrawGameFrame_2BE30();
 	//adress 2285ff
 	//add_compare(0x002285FF, CommandLineParams.DoDebugafterload());
