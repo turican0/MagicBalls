@@ -121,7 +121,8 @@ func _process(_p_delta) -> void:
 	updatePlayer(getPlayerPosRot())
 	renderEntites(getEntites())
 	get_parent().get_node("UI").updateSpells(MBEX.getActiveSpells())
-	get_parent().get_node("UI").updateSelectedSpells(MBEX.getSelectedSpells())	
+	get_parent().get_node("UI").updateSelectedSpells(MBEX.getSelectedSpells())
+	get_parent().get_node("UI").updateMinimap(MBEX.getMinimap())
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var stride = 29

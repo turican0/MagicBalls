@@ -32,6 +32,7 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("getSelectedSpells"), &ExampleClass::getSelectedSpells);
 	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &ExampleClass::setPlayerActiveSpell);
 	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &ExampleClass::getPaletteModifications);
+	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &ExampleClass::getMinimap);
 }
 
 typedef struct {
@@ -503,6 +504,125 @@ PackedFloat32Array ExampleClass::GetEntites() {
 	return result;
 }
 
+Ref<Image> ExampleClass::getMinimap() {
+	int locViewportPosx;
+	int locViewportWidth;
+	int locViewportHeight;
+	int locMinimapHeight;
+	uint8_t scale = 1;
+
+	if (x_WORD_180660_VGA_type_resolution == 1) {
+		locViewportPosx = 384; //320x200
+		locViewportWidth = 256;
+		locViewportHeight = 400;
+		locMinimapHeight = 400;
+	} else {
+		locViewportPosx = 0.6 * screenWidth_18062C; //bigger than 320x200
+		if (locViewportPosx > 384)
+			locViewportPosx = 384;
+		locViewportWidth = screenWidth_18062C - locViewportPosx;
+		locViewportHeight = screenHeight_180624;
+		locMinimapHeight = screenHeight_180624;
+		if (locMinimapHeight > 400)
+			locMinimapHeight = 400;
+
+		if (scale > 1) {
+			locViewportPosx *= scale;
+			locMinimapHeight *= scale;
+			locViewportWidth = screenWidth_18062C - locViewportPosx;
+
+			if (locMinimapHeight > screenHeight_180624) {
+				locMinimapHeight = screenHeight_180624;
+			}
+		}
+	}
+	DrawMinimap_63600(
+			0,
+			0,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.x,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.y,
+			locViewportPosx - 2,
+			locMinimapHeight,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
+			204 / scale,
+			1);
+
+	DrawMinimapEntites_61880(
+			0,
+			0,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.x,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.y,
+			locViewportPosx - 2,
+			locMinimapHeight,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
+			204 / scale);
+
+	//second pass for marks
+	DrawMinimapMarks_644F0(
+			0,
+			0,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.x,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.y,
+			locViewportPosx - 2,
+			locMinimapHeight,
+			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
+			204 / scale);
+	/*
+					DrawMinimap_63600(//draw minimap
+					0,
+					0,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.x,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.y,
+					128 * scale,
+					128 * scale,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
+					256 / scale,
+					0);
+				DrawMinimapEntites_61880(//draw entites in minimap
+					0,
+					0,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.x,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.y,
+					128 * scale,
+					128 * scale,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
+					256 / scale);
+				DrawMinimapMarks_644F0(
+					0,
+					0,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.x,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.y,
+					128 * scale,
+					128 * scale,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
+					256 / scale);
+	*/
+	uint8_t *palette = VGA_Get_Palette();
+	int crop_x = 0;
+	int crop_y = 0;
+	int crop_w = 256;
+	int crop_h = 256;
+	PackedByteArray rgb_data;
+	rgb_data.resize(crop_w * crop_h * 3);
+	uint8_t *dest = rgb_data.ptrw();
+	for (int r = 0; r < crop_h; ++r) {
+		int row_offset = (crop_y + r) * screenWidth_18062C;
+		for (int c = 0; c < crop_w; ++c) {
+			uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
+			int pal_pos = color_idx * 3;
+			uint8_t red = palette[pal_pos + 0];
+			uint8_t green = palette[pal_pos + 1];
+			uint8_t blue = palette[pal_pos + 2];
+			int dest_pos = (r * crop_w + c) * 3;
+			dest[dest_pos + 0] = red;
+			dest[dest_pos + 1] = green;
+			dest[dest_pos + 2] = blue;
+		}
+	}
+	Ref<Image> img = Image::create_from_data(crop_w, crop_h, false, Image::FORMAT_RGB8, rgb_data);
+	return img;
+}
+
 Color ExampleClass::getPaletteModifications() {
 	//E0
 	uint8_t *paletteBuffer = VGA_Get_Palette();
@@ -636,6 +756,8 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 
 	x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = 0x140;
 	x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = 0xf0;
+
+	screenWidth_18062C = 640;
 
 	//begin - code from sub_main
 	initposistruct();

@@ -84,3 +84,9 @@ offset_left = 1027.0
 offset_right = 1154.0
 offset_bottom = 85.0
 columns = 2
+
+[node name="Minimap" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+stretch_mode = 3

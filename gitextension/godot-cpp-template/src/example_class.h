@@ -82,4 +82,5 @@ public:
 	Array getSelectedSpells();
 	void setPlayerActiveSpell(int spell_index, int button);
 	Color getPaletteModifications();
+	Ref<Image> getMinimap();
 	};

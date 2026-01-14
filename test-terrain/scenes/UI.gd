@@ -139,6 +139,11 @@ func updateSelectedSpells(spells:Array):
 		mana_bar.value = spell.mana1
 		slot.add_child(mana_bar)
 		spell_grid_selected.add_child(slot)
+		
+func updateMinimap(image:Image):
+	if image:
+		var tex = ImageTexture.create_from_image(image)
+		$Minimap.texture = tex
 
 func updateSpells(spells:Array):
 	for child in spell_grid.get_children():
