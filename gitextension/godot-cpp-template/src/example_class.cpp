@@ -31,6 +31,7 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &ExampleClass::getActiveSpells);
 	godot::ClassDB::bind_method(D_METHOD("getSelectedSpells"), &ExampleClass::getSelectedSpells);
 	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &ExampleClass::setPlayerActiveSpell);
+	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &ExampleClass::getPaletteModifications);
 }
 
 typedef struct {
@@ -502,6 +503,15 @@ PackedFloat32Array ExampleClass::GetEntites() {
 	return result;
 }
 
+Color ExampleClass::getPaletteModifications() {
+	//E0
+	uint8_t *paletteBuffer = VGA_Get_Palette();
+	float r = paletteBuffer[0xE0 * 3 + 0] / 63.0f;
+	float g = paletteBuffer[0xE0 * 3 + 1] / 63.0f;
+	float b = paletteBuffer[0xE0 * 3 + 2] / 63.0f;
+	return Color(r, g, b);
+}
+
 void ExampleClass::RunGameStep(Dictionary inputs) {
 
 	Array key_changes = inputs["key_changes"];
@@ -670,8 +680,6 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
 	//end - code from MainMenu
-
-	Set_basic_Palette1(); //sets palette for loading level
 
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;
 

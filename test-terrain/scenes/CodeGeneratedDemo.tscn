@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cofnhdcclon1w"]
+[gd_scene load_steps=9 format=3 uid="uid://cofnhdcclon1w"]
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://scenes/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://scenes/Player.tscn" id="2_3v2uf"]
@@ -8,8 +8,22 @@
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3g81x"]
+blend_mode = 3
+
 [node name="CodeGenerated" type="Node"]
 script = ExtResource("1_h7vyv")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorFilter" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("CanvasItemMaterial_3g81x")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 0, 1)
 
 [node name="UI" parent="." instance=ExtResource("4_x5ge4")]
 
@@ -30,4 +44,4 @@ levels_dat_path = "res://mclevels/LEVELS.DAT"
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
 
-[node name="Main" parent="." instance=ExtResource("9_2gbss")]
+[node name="Node-Sky3D" parent="." instance=ExtResource("9_2gbss")]

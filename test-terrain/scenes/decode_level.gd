@@ -14,6 +14,7 @@ var direction2: Vector3 = Vector3(1,0,0)
 
 var Main_Player: Node
 var Main_UI: Node
+var Main_Filter: Node
 
 const KEY_INDEX := {
 	KEY_W: 0, # Forward
@@ -115,6 +116,8 @@ func _process(_p_delta) -> void:
 		Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active	
 	MBEX.RunGameStep(input_state)
 	MBEX.renew_terrain()
+	var color = MBEX.getPaletteModifications()
+	Main_Filter.color = color	
 	updatePlayer(getPlayerPosRot())
 	renderEntites(getEntites())
 	get_parent().get_node("UI").updateSpells(MBEX.getActiveSpells())

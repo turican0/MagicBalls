@@ -81,4 +81,5 @@ public:
 	Array getActiveSpells();
 	Array getSelectedSpells();
 	void setPlayerActiveSpell(int spell_index, int button);
+	Color getPaletteModifications();
 	};
