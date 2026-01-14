@@ -536,6 +536,8 @@ Ref<Image> ExampleClass::getMinimap() {
 			}
 		}
 	}
+	memset(pdwScreenBuffer_351628, 0, 640 * 480);
+	//x_DWORD_180644_map_resolution2_y?
 	DrawMinimap_63600(
 			0,
 			0,
