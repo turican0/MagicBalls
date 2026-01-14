@@ -509,7 +509,7 @@ Ref<Image> ExampleClass::getMinimap() {
 	int locViewportWidth;
 	int locViewportHeight;
 	int locMinimapHeight;
-	uint8_t scale = 1;
+	uint8_t scale = 2;
 
 	if (x_WORD_180660_VGA_type_resolution == 1) {
 		locViewportPosx = 384; //320x200
@@ -538,6 +538,7 @@ Ref<Image> ExampleClass::getMinimap() {
 	}
 	memset(pdwScreenBuffer_351628, 0, 640 * 480);
 	//x_DWORD_180644_map_resolution2_y?
+	/*
 	DrawMinimap_63600(
 			0,
 			0,
@@ -558,7 +559,7 @@ Ref<Image> ExampleClass::getMinimap() {
 			locMinimapHeight,
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
 			204 / scale);
-
+	
 	//second pass for marks
 	DrawMinimapMarks_644F0(
 			0,
@@ -569,8 +570,9 @@ Ref<Image> ExampleClass::getMinimap() {
 			locMinimapHeight,
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
 			204 / scale);
-	/*
-					DrawMinimap_63600(//draw minimap
+			*/
+	
+				DrawMinimap_63600(//draw minimap
 					0,
 					0,
 					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].axis_2BDE_11695.x,
@@ -598,30 +600,39 @@ Ref<Image> ExampleClass::getMinimap() {
 					128 * scale,
 					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
 					256 / scale);
-	*/
+	
 	uint8_t *palette = VGA_Get_Palette();
 	int crop_x = 0;
 	int crop_y = 0;
-	int crop_w = 256;
-	int crop_h = 256;
-	PackedByteArray rgb_data;
-	rgb_data.resize(crop_w * crop_h * 3);
-	uint8_t *dest = rgb_data.ptrw();
+	int crop_w = 128 * scale;
+	int crop_h = 128 * scale;
+	PackedByteArray rgba_data;
+	rgba_data.resize(crop_w * crop_h * 4);
+	uint8_t *dest = rgba_data.ptrw();
 	for (int r = 0; r < crop_h; ++r) {
 		int row_offset = (crop_y + r) * screenWidth_18062C;
 		for (int c = 0; c < crop_w; ++c) {
 			uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
 			int pal_pos = color_idx * 3;
-			uint8_t red = palette[pal_pos + 0];
-			uint8_t green = palette[pal_pos + 1];
-			uint8_t blue = palette[pal_pos + 2];
-			int dest_pos = (r * crop_w + c) * 3;
-			dest[dest_pos + 0] = red;
-			dest[dest_pos + 1] = green;
-			dest[dest_pos + 2] = blue;
+			if (color_idx==0) {
+				int dest_pos = (r * crop_w + c) * 4;
+				dest[dest_pos + 0] = 0;
+				dest[dest_pos + 1] = 0;
+				dest[dest_pos + 2] = 0;
+				dest[dest_pos + 3] = 0;
+			} else {
+				uint8_t red = palette[pal_pos + 0] * 4;
+				uint8_t green = palette[pal_pos + 1] * 4;
+				uint8_t blue = palette[pal_pos + 2] * 4;
+				int dest_pos = (r * crop_w + c) * 4;
+				dest[dest_pos + 0] = red;
+				dest[dest_pos + 1] = green;
+				dest[dest_pos + 2] = blue;
+				dest[dest_pos + 3] = 255;
+			}
 		}
 	}
-	Ref<Image> img = Image::create_from_data(crop_w, crop_h, false, Image::FORMAT_RGB8, rgb_data);
+	Ref<Image> img = Image::create_from_data(crop_w, crop_h, false, Image::FORMAT_RGBA8, rgba_data);
 	return img;
 }
 
@@ -711,6 +722,13 @@ void ExampleClass::RunGameStep(Dictionary inputs) {
 	MouseAndKeysEvents_17A00(0, x_DWORD_17DB54_game_turn2);
 	GameEvents_51BB0();
 	UpdateEntities_57730();
+	sub_84B80(); //prepare lightting
+	sub_58F00_game_objectives(); //nothing draw
+	//sub_59820(); //nothing draw-sounds
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1))
+		sub_57570(); //nothing draw
+	sub_575C0(); //nothing draw-load level
+	//sub_6E150(); //nothing draw-sounds
 	x_DWORD_17DB54_game_turn2++;
 }
 
@@ -803,6 +821,9 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	x_WORD_180660_VGA_type_resolution = 8;
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
+
+	x_DWORD_180648_map_resolution2_x = 640;//fake resolution
+	x_DWORD_180644_map_resolution2_y = 480;
 	//end - code from MainMenu
 
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;

@@ -31958,11 +31958,11 @@ void DrawAndEventsInGame_47560(signed int a4, __int16 a5)//228560
 	}
 	sub_84B80();//prepare lightting
 	sub_58F00_game_objectives();//nothing draw
-	sub_59820();//nothing draw
+	sub_59820();//nothing draw-sounds
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1))
 		sub_57570();//nothing draw
-	sub_575C0();//nothing draw
-	sub_6E150();//nothing draw
+	sub_575C0();//nothing draw-load level
+	sub_6E150();//nothing draw-sounds
 	DrawGameFrame_2BE30();
 	//adress 2285ff
 	//add_compare(0x002285FF, CommandLineParams.DoDebugafterload());
