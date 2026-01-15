@@ -675,46 +675,19 @@ Array ExampleClass::getPaletteModifications() {
 			target_white.g - target_black.g,
 			target_white.b - target_black.b);
 	out_offset = Vector3(target_black.r, target_black.g, target_black.b);
-
-	float ref_min_r = 1.0f, ref_max_r = 0.0f;
-	float ref_min_g = 1.0f, ref_max_g = 0.0f;
-	float ref_min_b = 1.0f, ref_max_b = 0.0f;
-
-	float mod_min_r = 1.0f, mod_max_r = 0.0f;
-	float mod_min_g = 1.0f, mod_max_g = 0.0f;
-	float mod_min_b = 1.0f, mod_max_b = 0.0f;
 	float ref_max_sat = 0.0f;
-
 	for (int i = 0; i < 256; i++) {
 		Vector3 ref_col = get_color(ref_palette, i);
 		Vector3 mod_col = get_color(mod_palette, i);
-		ref_min_r = min(ref_min_r, ref_col.x);
-		ref_max_r = max(ref_max_r, ref_col.x);
-		ref_min_g = min(ref_min_g, ref_col.y);
-		ref_max_g = max(ref_max_g, ref_col.y);
-		ref_min_b = min(ref_min_b, ref_col.z);
-		ref_max_b = max(ref_max_b, ref_col.z);
-		mod_min_r = min(mod_min_r, mod_col.x);
-		mod_max_r = max(mod_max_r, mod_col.x);
-		mod_min_g = min(mod_min_g, mod_col.y);
-		mod_max_g = max(mod_max_g, mod_col.y);
-		mod_min_b = min(mod_min_b, mod_col.z);
-		mod_max_b = max(mod_max_b, mod_col.z);
 		ref_max_sat = max(ref_max_sat, get_saturation(ref_col));
-		Vector3 corrected = {
-			(mod_col.x + out_offset.x) * out_gain.x,
-			(mod_col.y + out_offset.y) * out_gain.y,
-			(mod_col.z + out_offset.z) * out_gain.z
-		};
+		Vector3 corrected = (mod_col + out_offset) * out_gain;
 		corrected.x = (corrected.x < 0.0f) ? 0.0f : (corrected.x > 1.0f) ? 1.0f : corrected.x;
 		corrected.y = (corrected.y < 0.0f) ? 0.0f : (corrected.y > 1.0f) ? 1.0f : corrected.y;
 		corrected.z = (corrected.z < 0.0f) ? 0.0f : (corrected.z > 1.0f) ? 1.0f : corrected.z;
 		float sat = get_saturation(corrected);
 		mod_max_sat_after_correction = max(mod_max_sat_after_correction, sat);
 	}
-	out_sat_multiplier = (mod_max_sat_after_correction > 0.0001f)
-			? ref_max_sat / mod_max_sat_after_correction
-			: 0.0f;
+	out_sat_multiplier = (ref_max_sat > 0.0001f) ? mod_max_sat_after_correction / ref_max_sat : 1.0f;
 	Array result;
 	result.push_back(out_gain);
 	result.push_back(out_offset);
