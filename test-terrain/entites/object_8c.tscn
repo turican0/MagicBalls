@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://dkmufr00xxvr7"]
 
-[ext_resource type="PackedScene" uid="uid://bw82nedg1mvo6" path="res://entites/sources/archer_walk2.tscn" id="1_ls061"]
+[ext_resource type="PackedScene" uid="uid://c6nui5damggeg" path="res://entites/sources/archer_shooting.tscn" id="1_ls061"]
 
 [node name="Node3D" type="Node3D"]
 
-[node name="archer-walk" parent="." instance=ExtResource("1_ls061")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 0, 0, 0)
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ls061")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)

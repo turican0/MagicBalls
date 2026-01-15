@@ -63,7 +63,23 @@ var library = {
 	Vector3i(3,88,0): "res://entites/object_88b.tscn",#ballon
 	Vector3i(2,87,0): "res://entites/object_75b.tscn",#tree
 	Vector3i(10,96,0): "res://entites/object_96b.tscn",#building
-	Vector3i(5,121,0): "res://entites/object_121b.tscn",#bowman
+	Vector3i(5,8,0): "res://entites/object_121b.tscn",#bowman
+	Vector3i(5,9,0): "res://entites/object_121b.tscn",#bowman
+	Vector3i(5,10,0): "res://entites/object_121b.tscn",#bowman
+	Vector3i(5,11,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,12,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,13,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,14,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,15,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,16,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,17,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,18,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,19,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,20,0): "res://entites/object_121c.tscn",#bowman-arrow
+	Vector3i(5,21,0): "res://entites/object_121c.tscn",#bowman-arrow	
+	Vector3i(5,121,0): "res://entites/object_121c.tscn",#bowman-na bobku
+	Vector3i(5,122,0): "res://entites/object_121c.tscn",#bowman-na bobku
+	Vector3i(5,123,0): "res://entites/object_121c.tscn",#bowman-na bobku
 	Vector3i(5,152,0): "res://entites/object_152b.tscn",#goat
 	#153: "res://entites/object_152b.tscn",
 	Vector3i(5,155,0): "res://entites/object_155b.tscn",#people
@@ -71,9 +87,10 @@ var library = {
 	Vector3i(5,183,0): "res://entites/object_155b.tscn",#people
 	#186: "res://entites/object_8b.tscn",
 	Vector3i(5,199,0): "res://entites/object_155b.tscn",#people
-	
+	Vector3i(9,105,0): "res://entites/object_105b.tscn",#arrow
+
 	#Vector3i(11,8,0): "res://entites/object_59b.tscn",
-	
+
 	Vector3i(0,999,0): "res://entites/object_text.tscn"
 }
 
@@ -92,9 +109,13 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseMotion:
 		total_mouse_delta += event.relative
-		
+
+var last_spell_index:int =-1
+var last_button:int =-1
 
 func setPlayerActiveSpell(spell_index: int,button:int):
+	last_spell_index = spell_index
+	last_button = button
 	MBEX.setPlayerActiveSpell(spell_index,button)
 
 
@@ -120,7 +141,12 @@ func _process(_p_delta) -> void:
 		else:
 			get_viewport().warp_mouse(Main_UI.saved_mouse_pos)
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active	
+		Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active
+	if(last_spell_index!=-1):
+		MBEX.setPlayerActiveSpell(last_spell_index,last_button)
+		last_spell_index = -1
+		last_button = -1
+	
 	MBEX.RunGameStep(input_state)
 	MBEX.renew_terrain()
 	var mods = MBEX.getPaletteModifications()
@@ -207,8 +233,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 							tempModel=library[Vector3i(0, 999, 0)]
 					else:
 						tempModel=library[Vector3i(0, 999, 0)]
-				#if(actState==34):
-					#actState+=0
+				if(actClass==9):
+					actState+=0
 				var new_node = load(tempModel).instantiate()
 				
 				if !fromlib:

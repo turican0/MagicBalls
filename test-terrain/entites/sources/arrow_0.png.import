@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcgv5ocn03jtr"
-path.s3tc="res://.godot/imported/Bow_DIFF.jpg-159f52eb99a5530578fc45b5381068da.s3tc.ctex"
+uid="uid://dqvx168j1av7n"
+path.s3tc="res://.godot/imported/arrow_0.png-d46a828d8aba2895ca883353843c60da.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "6c960aeb9db8a1df16cc8ed316fb3f57"
+}
 
 [deps]
 
-source_file="res://entites/sources/textures/Bow_DIFF.jpg"
-dest_files=["res://.godot/imported/Bow_DIFF.jpg-159f52eb99a5530578fc45b5381068da.s3tc.ctex"]
+source_file="res://entites/sources/arrow_0.png"
+dest_files=["res://.godot/imported/arrow_0.png-d46a828d8aba2895ca883353843c60da.s3tc.ctex"]
 
 [params]
 
