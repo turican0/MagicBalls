@@ -883,4 +883,9 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	//begin - sub_46830_main_loop
 	sub_47160();
 	//end - sub_46830_main_loop
+
+	char dataPath[MAX_PATH];
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
+	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0]);
 }
