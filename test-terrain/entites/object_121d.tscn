@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwp28b0myutwi"]
+
+[ext_resource type="PackedScene" uid="uid://nmo5m6tx7a1y" path="res://entites/sources/archer_crouch.tscn" id="1_ktloh"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="archer-crouch" parent="." instance=ExtResource("1_ktloh")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 0, 0)

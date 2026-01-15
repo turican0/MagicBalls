@@ -77,9 +77,9 @@ var library = {
 	Vector3i(5,19,0): "res://entites/object_121c.tscn",#bowman-arrow
 	Vector3i(5,20,0): "res://entites/object_121c.tscn",#bowman-arrow
 	Vector3i(5,21,0): "res://entites/object_121c.tscn",#bowman-arrow	
-	Vector3i(5,121,0): "res://entites/object_121c.tscn",#bowman-na bobku
-	Vector3i(5,122,0): "res://entites/object_121c.tscn",#bowman-na bobku
-	Vector3i(5,123,0): "res://entites/object_121c.tscn",#bowman-na bobku
+	Vector3i(5,121,0): "res://entites/object_121d.tscn",#bowman-crouch
+	Vector3i(5,122,0): "res://entites/object_121d.tscn",#bowman-crouch
+	Vector3i(5,123,0): "res://entites/object_121d.tscn",#bowman-crouch
 	Vector3i(5,152,0): "res://entites/object_152b.tscn",#goat
 	#153: "res://entites/object_152b.tscn",
 	Vector3i(5,155,0): "res://entites/object_155b.tscn",#people
@@ -88,6 +88,7 @@ var library = {
 	#186: "res://entites/object_8b.tscn",
 	Vector3i(5,199,0): "res://entites/object_155b.tscn",#people
 	Vector3i(9,105,0): "res://entites/object_105b.tscn",#arrow
+	Vector3i(5,279,0): "res://entites/object_279b.tscn",#beatle
 
 	#Vector3i(11,8,0): "res://entites/object_59b.tscn",
 
