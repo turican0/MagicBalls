@@ -1,3 +1,4 @@
+<img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-theme.%20test.gif>
 # MagicBalls
 Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and REMC2 engine [REMC2](https://github.com/turican0/remc2)
 
