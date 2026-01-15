@@ -42,6 +42,7 @@ const char* default_caption = "Magic Carpet 2 - Community Update";
 
 bool inited = false;
 uint8 tempPalettebuffer[768];
+uint8 tempPalettebufferWithoutModification[768];
 
 int oldWidth;
 
@@ -104,7 +105,9 @@ SDL_Rect FindDisplayByResolution(uint32_t width, uint32_t height)
 void VGA_Init(uint32_t /*flags*/, int windowWidth, int windowHeight, int gameResWidth, int gameResHeight, bool maintainAspectRatio, int displayIndex) {
 }
 
-uint8_t *VGA_Get_Palette() {
+uint8_t *VGA_Get_Palette(bool withoutModification) {
+	if (withoutModification)
+		return tempPalettebufferWithoutModification;
 	return tempPalettebuffer;
 }
 
@@ -112,6 +115,13 @@ uint16_t lastResHeight=0;
 
 void SetPalette(SDL_Color* colours) {
 	memcpy(m_currentPalletColours, colours, sizeof(SDL_Color) * 256);
+	if((tempPalettebuffer[0xE0 * 3 + 0] == 63)&&
+	(tempPalettebuffer[0xE0 * 3 + 1] == 63)&&
+	(tempPalettebuffer[0xE0 * 3 + 2] == 63)&&
+	(tempPalettebuffer[0x40 * 3 + 0] == 0)&&
+	(tempPalettebuffer[0x40 * 3 + 1] == 0)&&
+	(tempPalettebuffer[0x40 * 3 + 2] == 0))	
+		memcpy(tempPalettebufferWithoutModification, tempPalettebuffer, 3 * 256);
 	/*
 	if (m_gamePalletisedSurface) {
 		SDL_SetPaletteColors(m_gamePalletisedSurface->format->palette, m_currentPalletColours, 0, 256);

@@ -9,7 +9,7 @@ func _ready() -> void:
 	Main_DecodeLevel = get_node("DecodeLevel") 
 	Main_Player = get_node("Player")
 	Main_UI = get_node("UI")
-	Main_Filter = get_node("Filter")
+	Main_Filter = get_node("Filter").get_node("ColorRect")
 	Main_DecodeLevel.Main_Player = Main_Player
 	Main_DecodeLevel.Main_UI = Main_UI
 	Main_UI.Main_DecodeLevel = Main_DecodeLevel

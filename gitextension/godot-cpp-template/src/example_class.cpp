@@ -601,7 +601,7 @@ Ref<Image> ExampleClass::getMinimap() {
 					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
 					256 / scale);
 	
-	uint8_t *palette = VGA_Get_Palette();
+	uint8_t *palette = VGA_Get_Palette(true);
 	int crop_x = 0;
 	int crop_y = 0;
 	int crop_w = 128 * scale;

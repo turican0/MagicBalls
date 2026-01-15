@@ -105,8 +105,8 @@ func updatePlayer(playerPosRot) -> void:
 	var roll = PI*playerPosRot.rotation.roll/(256*4)
 	Main_Player.rotation=Vector3(-pitch, -yaw, -roll)
 	
-var last_gain: Color
-var last_offset: Color
+var last_gain: Vector3
+var last_offset: Vector3
 
 func _process(_p_delta) -> void:
 	getInputs()
@@ -124,18 +124,13 @@ func _process(_p_delta) -> void:
 	MBEX.RunGameStep(input_state)
 	MBEX.renew_terrain()
 	var mods = MBEX.getPaletteModifications()
-	var current_gain = mods[0]
-	var current_offset = mods[1]
+	var current_gain = Vector3(mods[0].r, mods[0].g, mods[0].b)
+	var current_offset = Vector3(mods[1].r, mods[1].g, mods[1].b)
 	if current_gain != last_gain or current_offset != last_offset:
 		if(!filter_material):
-			data_img = Image.create(2, 1, false, Image.FORMAT_RGB8)
-			data_tex = ImageTexture.create_from_image(data_img)
-			filter_material = Main_Filter.get_active_material(0) as ShaderMaterial
-			filter_material.set_shader_parameter("data_tex", data_tex)
-		var g_linear = Color(current_gain.r, current_gain.g, current_gain.b)
-		var o_linear = Color(current_offset.r, current_offset.g, current_offset.b)
-		filter_material.set_shader_parameter("MyGain", g_linear)
-		filter_material.set_shader_parameter("MyOffset", o_linear*20)
+			filter_material = Main_Filter.material as ShaderMaterial
+		filter_material.set_shader_parameter("MyGain", current_gain)
+		filter_material.set_shader_parameter("MyOffset", current_offset)
 		last_gain = current_gain
 		last_offset = current_offset
 	#var gain_vec = Vector3(gain_rgb.r, gain_rgb.g, gain_rgb.b)
@@ -284,7 +279,6 @@ func getInputs():
 	mouse_640.y = clamp(mouse_640.y, 0, SCREEN_HEIGHT)		
 	input_state["mouse_pos"] = mouse_640
 
-# Funkce, která by v Godotu volala ekvivalenty C-funkcí
 func init():
 	loadlevel(0)
 

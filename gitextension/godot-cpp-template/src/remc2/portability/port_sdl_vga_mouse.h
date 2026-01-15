@@ -50,7 +50,7 @@ void VGA_Set_Palette(uint8_t *Palettebuffer);
 void VGA_Set_Palette2(uint8_t *Palettebuffer);
 void SetPalette(SDL_Color* colors);
 void VGA_Write_basic_Palette(uint8_t *Palettebuffer);
-uint8_t *VGA_Get_Palette();
+uint8_t *VGA_Get_Palette(bool withoutModification=false);
 void VGA_Draw_string(char* wrstring);
 void VGA_Draw_stringXYtoBuffer(const char* wrstring, int x, int y, uint8_t* buffer, char fontSize = 'M');
 void Draw_letter(int letter_number, int pozx, int pozy);
