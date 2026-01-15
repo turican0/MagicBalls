@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7asv5mbtlfjf"]
+
+[ext_resource type="PackedScene" uid="uid://d3732u85ajthv" path="res://entites/sources/archer-walk3.glb" id="1_tbb66"]
+
+[node name="archer-walk3" instance=ExtResource("1_tbb66")]
+
+[node name="Skeleton3D" parent="." index="0"]
+bones/2/rotation = Quaternion(0.09616429, -0.026020167, 0.04102638, 0.9941792)
+bones/3/rotation = Quaternion(-0.0063374275, -0.0060792654, 0.010573303, 0.99990565)
+bones/4/rotation = Quaternion(0.022895537, -0.006080387, 0.010379755, 0.9996655)
+bones/5/rotation = Quaternion(-0.022775369, 0.016843524, 0.0024468715, 0.99959576)
+bones/6/rotation = Quaternion(0.000850818, -0.007329831, -0.034650035, 0.99937224)
+bones/10/rotation = Quaternion(-0.535207, 0.5182818, 0.5561369, -0.36830598)
+bones/11/rotation = Quaternion(0.5311471, 0.122669876, -0.16601583, 0.82175034)
+bones/12/rotation = Quaternion(0.0034821243, 0.2885018, 0.0003168872, 0.957473)
+bones/13/rotation = Quaternion(-0.021344475, -0.040157165, 0.20228669, 0.9782699)
+bones/14/rotation = Quaternion(0.1613694, 0.18611898, -0.030269986, 0.9687122)
+bones/15/rotation = Quaternion(0.00050095294, -0.20294765, -0.0014376604, 0.97918844)
+bones/16/rotation = Quaternion(-0.13695817, -0.058981284, 0.009983057, 0.988769)
+bones/18/rotation = Quaternion(0.09463359, -0.04523212, 0.006203391, 0.9944647)
+bones/19/rotation = Quaternion(0.13330643, -0.016472837, 9.176615e-05, 0.99093795)
+bones/20/rotation = Quaternion(0.13330768, -0.017425505, -0.000101129845, 0.9909215)
+bones/22/rotation = Quaternion(0.16221435, -0.052845936, 0.008940934, 0.9852989)
+bones/23/rotation = Quaternion(0.20050795, -0.025584534, 4.93931e-05, 0.97935796)
+bones/24/rotation = Quaternion(0.20050922, -0.024581358, -0.0001632666, 0.9793834)
+bones/26/rotation = Quaternion(0.23304044, -0.061372384, 0.011111817, 0.970465)
+bones/28/rotation = Quaternion(0.27072707, -0.032242056, -2.3299976e-06, 0.96211606)
+bones/30/rotation = Quaternion(0.2692897, -0.06533901, 0.012165605, 0.9607633)
+bones/31/rotation = Quaternion(0.3065826, -0.037379485, -1.1559893e-05, 0.9511098)
+bones/32/rotation = Quaternion(0.30658627, -0.037250698, 2.4292834e-05, 0.9511137)
+bones/34/rotation = Quaternion(0.5395776, 0.5367991, 0.46376306, -0.45346075)
+bones/37/rotation = Quaternion(0.5305834, -0.10857252, 0.04328046, 0.83953565)
+bones/38/rotation = Quaternion(0.0011058114, -0.17374639, -8.0669415e-05, 0.9847899)
+bones/39/rotation = Quaternion(-0.06840382, 0.059816256, 0.015101892, 0.9957484)
+bones/60/rotation = Quaternion(0.052163012, 0.9881675, -0.14353786, 0.014171874)
+bones/61/rotation = Quaternion(-0.47882465, -0.02621035, -0.040900845, 0.8765655)
+bones/62/rotation = Quaternion(0.46472114, -0.00724546, 0.0062424163, 0.8854055)
+bones/65/rotation = Quaternion(-0.055853393, 0.997601, -0.027102202, 0.0306306)
+bones/66/rotation = Quaternion(-0.24561505, 0.03874828, 0.04750504, 0.9674271)
+bones/67/rotation = Quaternion(0.54539526, -0.047709502, 0.019952029, 0.8365822)
+bones/68/rotation = Quaternion(0.34663904, 0.006884331, 0.0018610128, 0.93797153)
+
+[node name="__DEFAULT_CAMERA__" parent="." index="1"]
+visible = false

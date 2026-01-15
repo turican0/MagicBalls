@@ -56,14 +56,14 @@ var library = {
 	Vector3i(10,57,0): "res://entites/object_63b.tscn",#smoke
 	Vector3i(10,58,0): "res://entites/gold_sphere.tscn",
 	Vector3i(10,67,0): "res://entites/white_sphere.tscn",
-	Vector3i(0,59,0): "res://entites/object_59b.tscn",
+	#Vector3i(0,59,0): "res://entites/object_59b.tscn",
 	Vector3i(10,63,0): "res://entites/object_63b.tscn",#smoke
 	Vector3i(2,75,0): "res://entites/object_75b.tscn",#tree
 	Vector3i(2,79,0): "res://entites/object_79b.tscn",#dolmen
 	Vector3i(3,88,0): "res://entites/object_88b.tscn",#ballon
 	Vector3i(2,87,0): "res://entites/object_75b.tscn",#tree
 	Vector3i(10,96,0): "res://entites/object_96b.tscn",#building
-	Vector3i(0,121,0): "res://entites/object_8b.tscn",#bowman
+	Vector3i(5,121,0): "res://entites/object_121b.tscn",#bowman
 	Vector3i(5,152,0): "res://entites/object_152b.tscn",#goat
 	#153: "res://entites/object_152b.tscn",
 	Vector3i(5,155,0): "res://entites/object_155b.tscn",#people
@@ -72,7 +72,7 @@ var library = {
 	#186: "res://entites/object_8b.tscn",
 	Vector3i(5,199,0): "res://entites/object_155b.tscn",#people
 	
-	Vector3i(11,8,0): "res://entites/object_59b.tscn",
+	#Vector3i(11,8,0): "res://entites/object_59b.tscn",
 	
 	Vector3i(0,999,0): "res://entites/object_text.tscn"
 }
@@ -200,10 +200,15 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				else:
 					if((actClass==3)&&(modelIndex==0))||((actClass==11)&&(modelIndex==8)):#player/spell
 						var key = Vector3i(actClass, modelIndex,0)
-						tempModel=library[key]
-						fromlib=true
+						if library.has(key):
+							tempModel=library[key]
+							fromlib=true
+						else:
+							tempModel=library[Vector3i(0, 999, 0)]
 					else:
 						tempModel=library[Vector3i(0, 999, 0)]
+				#if(actState==34):
+					#actState+=0
 				var new_node = load(tempModel).instantiate()
 				
 				if !fromlib:
