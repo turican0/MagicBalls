@@ -15,21 +15,27 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add first-person/third-person camera options<br>
 -Integrate data copier from Magic Carpet 2<br>
 -Better terrain abilites(water/lava)<br>
--Add terrain changes<br>
--Add using mouse buttons<br>
--Add select spells<br>
 
 -Draw Terrain modification by fire<br>
 -Draw Spider Web<br>
--Draw Red blinking<br>
--Draw minimap<br>
 -Draw healt<br>
--Add Ballon 3d model<br>
 
 ---
 
 ## Next version:
--update UI
+-Update UI<br>
+-Add end of level 1<br>
+-Add some models<br>
+
+## Version 260115:
+-Draw minimap<br>
+-Update UI-particaly<br>
+-Add Ballon 3d model<br>
+-Implement palette modifications (red or grayscale)<br>
+-Add using mouse buttons<br>
+-Add select spells<br>
+-Add terrain changes<br>
+<img src="https://github.com/turican0/MagicBalls/blob/wiki/MB-8.%20test.gif" width="400">
 
 ## Version 260108:
 A lot has changed in this version. I found that copying terrain in every frame is extremely demanding.<br>
