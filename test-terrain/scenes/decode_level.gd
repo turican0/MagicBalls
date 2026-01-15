@@ -124,13 +124,15 @@ func _process(_p_delta) -> void:
 	MBEX.RunGameStep(input_state)
 	MBEX.renew_terrain()
 	var mods = MBEX.getPaletteModifications()
-	var current_gain = Vector3(mods[0].r, mods[0].g, mods[0].b)
-	var current_offset = Vector3(mods[1].r, mods[1].g, mods[1].b)
+	var current_gain = mods[0]
+	var current_offset = mods[1]
+	var curreny_saturation = mods[2]
 	if current_gain != last_gain or current_offset != last_offset:
 		if(!filter_material):
 			filter_material = Main_Filter.material as ShaderMaterial
 		filter_material.set_shader_parameter("MyGain", current_gain)
 		filter_material.set_shader_parameter("MyOffset", current_offset)
+		filter_material.set_shader_parameter("MySatMultiplier", curreny_saturation)
 		last_gain = current_gain
 		last_offset = current_offset
 	#var gain_vec = Vector3(gain_rgb.r, gain_rgb.g, gain_rgb.b)

@@ -13,6 +13,7 @@
 shader = ExtResource("9_vrj2c")
 shader_parameter/MyGain = Vector3(1, 1, 1)
 shader_parameter/MyOffset = Vector3(0, 0, 0)
+shader_parameter/MySatMultiplier = 1.0
 
 [node name="CodeGenerated" type="Node"]
 script = ExtResource("1_h7vyv")

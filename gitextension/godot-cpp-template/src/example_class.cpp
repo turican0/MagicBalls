@@ -636,26 +636,89 @@ Ref<Image> ExampleClass::getMinimap() {
 	return img;
 }
 
-Array ExampleClass::getPaletteModifications() {
-	//E0
-	uint8_t *paletteBuffer = VGA_Get_Palette();
-	float r = paletteBuffer[0xE0 * 3 + 0] / 63.0f;
-	float g = paletteBuffer[0xE0 * 3 + 1] / 63.0f;
-	float b = paletteBuffer[0xE0 * 3 + 2] / 63.0f;
-	Color target_white = Color(r, g, b); // Původně 255,255,255
-	float rb = paletteBuffer[0x40 * 3 + 0] / 63.0f;
-	float gb = paletteBuffer[0x40 * 3 + 1] / 63.0f;
-	float bb = paletteBuffer[0x40 * 3 + 2] / 63.0f;
-	Color target_black = Color(rb, gb, bb); // Původně 0,0,0
+Vector3 get_color(const uint8_t *pal, int index) {
+	return {
+		pal[index * 3 + 0] / 63.0f,
+		pal[index * 3 + 1] / 63.0f,
+		pal[index * 3 + 2] / 63.0f
+	};
+}
 
-	Color gain = Color(
+float get_saturation(const Vector3 &col) {
+	float cmax = col.x;
+	cmax = max(cmax, col.y);
+	cmax = max(cmax, col.z);
+	float cmin = col.x;
+	cmin = min(cmin, col.y);
+	cmin = min(cmin, col.z);
+	float chroma = cmax - cmin;
+	return (cmax > 0.001f) ? chroma / cmax : 0.0f;
+}
+
+Array ExampleClass::getPaletteModifications() {
+	Vector3 out_gain;
+	Vector3 out_offset;
+	float out_sat_multiplier;
+	float mod_max_sat_after_correction = 0.0f;
+	uint8_t *mod_palette = VGA_Get_Palette();
+	uint8_t *ref_palette = VGA_Get_Palette(true);
+	float r = mod_palette[0xE0 * 3 + 0] / 63.0f;
+	float g = mod_palette[0xE0 * 3 + 1] / 63.0f;
+	float b = mod_palette[0xE0 * 3 + 2] / 63.0f;
+	Color target_white = Color(r, g, b); // 63,63,63
+	float rb = mod_palette[0x40 * 3 + 0] / 63.0f;
+	float gb = mod_palette[0x40 * 3 + 1] / 63.0f;
+	float bb = mod_palette[0x40 * 3 + 2] / 63.0f;
+	Color target_black = Color(rb, gb, bb); // 0,0,0
+	out_gain = Vector3(
 			target_white.r - target_black.r,
 			target_white.g - target_black.g,
 			target_white.b - target_black.b);
-	Color offset = target_black;
+	out_offset = Vector3(target_black.r, target_black.g, target_black.b);
+
+	float ref_min_r = 1.0f, ref_max_r = 0.0f;
+	float ref_min_g = 1.0f, ref_max_g = 0.0f;
+	float ref_min_b = 1.0f, ref_max_b = 0.0f;
+
+	float mod_min_r = 1.0f, mod_max_r = 0.0f;
+	float mod_min_g = 1.0f, mod_max_g = 0.0f;
+	float mod_min_b = 1.0f, mod_max_b = 0.0f;
+	float ref_max_sat = 0.0f;
+
+	for (int i = 0; i < 256; i++) {
+		Vector3 ref_col = get_color(ref_palette, i);
+		Vector3 mod_col = get_color(mod_palette, i);
+		ref_min_r = min(ref_min_r, ref_col.x);
+		ref_max_r = max(ref_max_r, ref_col.x);
+		ref_min_g = min(ref_min_g, ref_col.y);
+		ref_max_g = max(ref_max_g, ref_col.y);
+		ref_min_b = min(ref_min_b, ref_col.z);
+		ref_max_b = max(ref_max_b, ref_col.z);
+		mod_min_r = min(mod_min_r, mod_col.x);
+		mod_max_r = max(mod_max_r, mod_col.x);
+		mod_min_g = min(mod_min_g, mod_col.y);
+		mod_max_g = max(mod_max_g, mod_col.y);
+		mod_min_b = min(mod_min_b, mod_col.z);
+		mod_max_b = max(mod_max_b, mod_col.z);
+		ref_max_sat = max(ref_max_sat, get_saturation(ref_col));
+		Vector3 corrected = {
+			(mod_col.x + out_offset.x) * out_gain.x,
+			(mod_col.y + out_offset.y) * out_gain.y,
+			(mod_col.z + out_offset.z) * out_gain.z
+		};
+		corrected.x = (corrected.x < 0.0f) ? 0.0f : (corrected.x > 1.0f) ? 1.0f : corrected.x;
+		corrected.y = (corrected.y < 0.0f) ? 0.0f : (corrected.y > 1.0f) ? 1.0f : corrected.y;
+		corrected.z = (corrected.z < 0.0f) ? 0.0f : (corrected.z > 1.0f) ? 1.0f : corrected.z;
+		float sat = get_saturation(corrected);
+		mod_max_sat_after_correction = max(mod_max_sat_after_correction, sat);
+	}
+	out_sat_multiplier = (mod_max_sat_after_correction > 0.0001f)
+			? ref_max_sat / mod_max_sat_after_correction
+			: 0.0f;
 	Array result;
-	result.push_back(gain);
-	result.push_back(offset);
+	result.push_back(out_gain);
+	result.push_back(out_offset);
+	result.push_back(out_sat_multiplier);
 	return result;
 }
 
@@ -842,6 +905,8 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;
 
+	InitLanguage_76A40();
+
 	//begin - code from LevelDecompress_533B0
 	//LevelInitGame_56A30(-1, "");
 	LevelInit_56C00(&D41A0_0.terrain_2FECE);
@@ -887,5 +952,7 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	char dataPath[MAX_PATH];
 	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
 	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
-	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0]);
+	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0],true);
+
+	//x_DWORD_E9C4C_langindexbuffer[374]
 }

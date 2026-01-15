@@ -115,13 +115,6 @@ uint16_t lastResHeight=0;
 
 void SetPalette(SDL_Color* colours) {
 	memcpy(m_currentPalletColours, colours, sizeof(SDL_Color) * 256);
-	if((tempPalettebuffer[0xE0 * 3 + 0] == 63)&&
-	(tempPalettebuffer[0xE0 * 3 + 1] == 63)&&
-	(tempPalettebuffer[0xE0 * 3 + 2] == 63)&&
-	(tempPalettebuffer[0x40 * 3 + 0] == 0)&&
-	(tempPalettebuffer[0x40 * 3 + 1] == 0)&&
-	(tempPalettebuffer[0x40 * 3 + 2] == 0))	
-		memcpy(tempPalettebufferWithoutModification, tempPalettebuffer, 3 * 256);
 	/*
 	if (m_gamePalletisedSurface) {
 		SDL_SetPaletteColors(m_gamePalletisedSurface->format->palette, m_currentPalletColours, 0, 256);
@@ -282,7 +275,7 @@ DrawAndEventsInGame_47560->PaletteChanges_47760->sub_480A0_set_clear_Palette->su
 
 */
 
-void VGA_Set_Palette(uint8* Palettebuffer) {
+void VGA_Set_Palette(uint8 *Palettebuffer, bool saveWithoutModification) {
 	memcpy(tempPalettebuffer, Palettebuffer, 768);
 	SDL_Color colors[256];
 	/* Fill colors with color information */
@@ -292,6 +285,8 @@ void VGA_Set_Palette(uint8* Palettebuffer) {
 		colors[i].b = 4 * Palettebuffer[i * 3 + 2];
 	}
 	SetPalette(colors);
+	if (saveWithoutModification)
+		memcpy(tempPalettebufferWithoutModification, tempPalettebuffer, 3 * 256);
 }
 
 void VGA_Set_Palette2(uint8* Palettebuffer) {

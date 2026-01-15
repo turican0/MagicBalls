@@ -46,7 +46,7 @@ void VGA_Resize(int width, int height);
 void VGA_Blit(uint8_t *srcBuffer);
 void SubBlit(uint16_t originalResWidth, uint16_t originalResHeight);
 void VGA_Debug_Blit(int width, int height, uint8_t *srcBuffer);
-void VGA_Set_Palette(uint8_t *Palettebuffer);
+void VGA_Set_Palette(uint8_t *Palettebuffer, bool saveWithoutModification = false);
 void VGA_Set_Palette2(uint8_t *Palettebuffer);
 void SetPalette(SDL_Color* colors);
 void VGA_Write_basic_Palette(uint8_t *Palettebuffer);
