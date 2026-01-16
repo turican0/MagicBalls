@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://x176j2i1rych"]
+
+[ext_resource type="PackedScene" uid="uid://bk7ridbjubuwy" path="res://entites/sources/turkish_old_villager_men_t-pose-Walking.blend" id="1_85oqq"]
+
+[node name="turkish_old_villager_men_t-pose-Walking" instance=ExtResource("1_85oqq")]
