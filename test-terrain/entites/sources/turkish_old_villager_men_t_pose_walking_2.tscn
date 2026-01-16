@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://drass40pljleh"]
+
+[ext_resource type="PackedScene" uid="uid://bk7ridbjubuwy" path="res://entites/sources/turkish_old_villager_men_t-pose-Walking.blend" id="1_cy5ho"]
+[ext_resource type="Texture2D" uid="uid://cqg7xmhdh68ss" path="res://entites/sources/textures/material_0_baseColor.jpg" id="2_e3rkk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_83kqa"]
+resource_name = "mat_0"
+cull_mode = 2
+albedo_texture = ExtResource("2_e3rkk")
+roughness = 0.5
+
+[node name="turkish_old_villager_men_t-pose-Walking2" instance=ExtResource("1_cy5ho")]
+
+[node name="Camera" parent="." index="0"]
+visible = false
+
+[node name="Light" parent="." index="1"]
+visible = false
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/0/position = Vector3(0.11130042, 0.83785856, -92.37823)
+bones/0/rotation = Quaternion(-0.7007766, 0.01004559, -0.022226593, 0.7129637)
+bones/1/rotation = Quaternion(-0.019115211, 0.0038525227, -0.002203175, 0.9998074)
+bones/2/rotation = Quaternion(0.0033856803, 0.0058406484, 0.004604469, 0.9999666)
+bones/3/rotation = Quaternion(0.0033856912, 0.005840652, 0.0046044653, 0.9999666)
+bones/4/rotation = Quaternion(0.020879, -0.0037584987, -0.010622915, 0.99971855)
+bones/5/rotation = Quaternion(0.023500571, -0.026805293, 0.016007349, 0.9992362)
+bones/7/rotation = Quaternion(-0.66886497, -0.33098307, 0.5204008, -0.4150337)
+bones/8/rotation = Quaternion(0.36045292, -0.074523814, -0.039150227, 0.928971)
+bones/9/rotation = Quaternion(0.09665152, 0.16350503, 0.26080343, 0.9465232)
+bones/10/rotation = Quaternion(-0.10240851, 0.1574176, 0.10183993, 0.9769139)
+bones/11/position = Vector3(2.3721734e-06, 13.720626, -7.011962e-06)
+bones/11/rotation = Quaternion(0.3683726, -0.0056601884, 0.0178661, 0.9294893)
+bones/12/rotation = Quaternion(0.5943146, -0.049496166, 0.061380867, 0.80035794)
+bones/13/position = Vector3(0.3238799, 3.0783017, 0.49605024)
+bones/13/rotation = Quaternion(-0.09232191, -0.003851089, 0.08417262, 0.9921577)
+bones/15/rotation = Quaternion(0.63844883, -0.35973647, 0.5624254, 0.38294965)
+bones/16/position = Vector3(-1.7461471e-07, 18.960123, 1.6993426e-05)
+bones/16/rotation = Quaternion(0.38267088, 0.08308475, 0.16052505, 0.90603065)
+bones/17/position = Vector3(-9.641769e-07, 17.925753, -7.1785835e-06)
+bones/17/rotation = Quaternion(0.1219133, -0.11811857, -0.19832161, 0.9653258)
+bones/18/rotation = Quaternion(-0.054393724, -0.19169675, -0.044111162, 0.97895247)
+bones/19/rotation = Quaternion(0.33856636, 0.023289578, 0.018601406, 0.9404704)
+bones/20/rotation = Quaternion(0.5196091, 0.050209433, -0.041247584, 0.8519296)
+bones/21/position = Vector3(-0.26345336, 3.2016106, 0.23860504)
+bones/21/rotation = Quaternion(0.031903844, 0.0017359342, 0.011940432, 0.99941814)
+bones/23/rotation = Quaternion(0.06087566, 0.18258013, 0.9812102, -0.013611646)
+bones/24/rotation = Quaternion(-0.5528406, 0.011054799, 0.051162776, 0.8316414)
+bones/25/rotation = Quaternion(0.5496113, -0.0626554, 0.05713953, 0.83110577)
+bones/26/rotation = Quaternion(0.36282286, -0.085321665, 0.0036856732, 0.92793655)
+bones/28/rotation = Quaternion(-0.07025898, 0.072682574, 0.99347645, -0.05277747)
+bones/29/rotation = Quaternion(-0.15414193, -0.066957034, -0.04440551, 0.9847768)
+bones/30/rotation = Quaternion(0.5572132, 0.037274994, -0.10162884, 0.8232835)
+bones/31/position = Vector3(-4.990318e-08, 20.739576, 1.0652448e-06)
+bones/31/rotation = Quaternion(0.29993987, 0.07675856, -0.021538006, 0.95062107)
+
+[node name="node_aa3cc44d_9c3a_4c41_9bf1_0e8361fac30b_mesh0" parent="Armature/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_83kqa")
+
+[node name="AnimationPlayer" parent="." index="4"]
+autoplay = "Armature|mixamo_com|Layer0"

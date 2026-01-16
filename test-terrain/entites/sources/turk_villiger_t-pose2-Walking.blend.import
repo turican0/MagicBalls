@@ -2095,6 +2095,24 @@ _subresources={
 "slice_99/start_frame": 0,
 "slices/amount": 0
 }
+},
+"materials": {
+"material_0": {
+"use_external/enabled": true,
+"use_external/fallback_path": "",
+"use_external/path": ""
+}
+},
+"meshes": {
+"turk_villiger_t-pose2-Walking_Mesh": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": false,
+"save_to_file/fallback_path": "",
+"save_to_file/path": ""
+}
 }
 }
 blender/nodes/visible=0

@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://n8e6j4n8esis"]
-
-[ext_resource type="PackedScene" uid="uid://c3b2juq643ghy" path="res://entites/sources/sareelady-Walking.blend" id="1_r0xwb"]
-
-[node name="sareelady-Walking" instance=ExtResource("1_r0xwb")]

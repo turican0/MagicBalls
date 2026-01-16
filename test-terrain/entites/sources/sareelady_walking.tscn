@@ -1,0 +1,74 @@
+[gd_scene load_steps=5 format=3 uid="uid://btqsg3ug2yn6n"]
+
+[ext_resource type="PackedScene" uid="uid://c3b2juq643ghy" path="res://entites/sources/sareelady-Walking.blend" id="1_nbcrm"]
+[ext_resource type="Texture2D" uid="uid://dln3513rrukbq" path="res://entites/sources/textures/Material_001_baseColor.png" id="2_gr7dk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_47o8x"]
+resource_name = "mat_0"
+cull_mode = 2
+albedo_texture = ExtResource("2_gr7dk")
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qk1wl"]
+resource_name = "mat_0"
+cull_mode = 2
+albedo_texture = ExtResource("2_gr7dk")
+roughness = 0.5
+
+[node name="sareelady-Walking" instance=ExtResource("1_nbcrm")]
+
+[node name="Camera" parent="." index="0"]
+visible = false
+
+[node name="Light" parent="." index="1"]
+visible = false
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/0/position = Vector3(0.048217613, -2.093067, -112.149315)
+bones/0/rotation = Quaternion(-0.7007214, 0.0088558635, -0.024241777, 0.7129681)
+bones/1/rotation = Quaternion(-0.016594956, 0.0032440617, 4.6585355e-05, 0.99985707)
+bones/2/rotation = Quaternion(0.0033856703, 0.005864669, 0.004573833, 0.9999666)
+bones/3/rotation = Quaternion(0.0033857082, 0.005864685, 0.0045738313, 0.9999666)
+bones/4/rotation = Quaternion(0.018262632, -0.0037862824, -0.010613042, 0.9997698)
+bones/5/rotation = Quaternion(0.023500567, -0.0268053, 0.016007349, 0.9992362)
+bones/7/rotation = Quaternion(-0.67231065, -0.32770774, 0.5302651, -0.3992806)
+bones/8/position = Vector3(-6.3346306e-07, 15.207872, 2.1463113e-05)
+bones/8/rotation = Quaternion(0.34488884, -0.07278472, -0.027971275, 0.93539923)
+bones/9/position = Vector3(-2.065397e-06, 26.210768, -1.2556584e-06)
+bones/9/rotation = Quaternion(0.22297908, -0.3777318, 0.1662535, 0.8831527)
+bones/10/rotation = Quaternion(0.05105672, 0.15832645, 0.13509959, 0.9767671)
+bones/11/position = Vector3(1.1694974e-05, 18.756308, -1.0159997e-06)
+bones/11/rotation = Quaternion(0.16975132, 0.0014181611, -0.32741892, 0.9295049)
+bones/12/rotation = Quaternion(0.08666391, 0.16400936, -0.6154293, 0.76605296)
+bones/13/rotation = Quaternion(0.077195734, -0.07272317, 0.13771644, 0.98477733)
+bones/14/position = Vector3(0.59971756, 2.914856, 1.2031121)
+bones/15/rotation = Quaternion(0.6490537, -0.3434614, 0.564656, 0.37673235)
+bones/16/position = Vector3(-1.5517917e-06, 15.207881, -5.5695273e-06)
+bones/16/rotation = Quaternion(0.36598477, 0.090622865, 0.16521055, 0.9113442)
+bones/17/rotation = Quaternion(0.20863894, 0.4151567, -0.10327019, 0.8794601)
+bones/18/rotation = Quaternion(0.016219268, -0.19138256, -0.068128064, 0.9790139)
+bones/19/position = Vector3(-5.5404507e-06, 19.646563, 7.927491e-06)
+bones/19/rotation = Quaternion(0.13221174, 0.015692335, 0.31223905, 0.9406278)
+bones/20/position = Vector3(5.3644453e-07, 1.9331439, -1.549728e-06)
+bones/20/rotation = Quaternion(0.14776331, -0.008322007, 0.40903524, 0.9004371)
+bones/21/position = Vector3(-0.58350724, 2.9672098, 0.7455697)
+bones/21/rotation = Quaternion(-0.057434287, -0.029031118, 0.070585296, 0.99542767)
+bones/23/rotation = Quaternion(0.07006425, 0.20087856, 0.97491056, -0.065485336)
+bones/24/rotation = Quaternion(-0.56534255, 0.012474611, -0.04408924, 0.8235827)
+bones/25/rotation = Quaternion(0.61138403, -0.19469284, 0.085593626, 0.7622191)
+bones/26/position = Vector3(1.8382616e-07, 14.379501, -1.3354629e-06)
+bones/26/rotation = Quaternion(0.07595335, 0.0028435476, 0.045592535, 0.9960644)
+bones/28/rotation = Quaternion(-0.07562853, 0.09908722, 0.9921911, -0.0043442734)
+bones/29/rotation = Quaternion(-0.19746959, -0.07118973, 0.06067955, 0.9758359)
+bones/30/rotation = Quaternion(0.6645091, 0.13041942, -0.1071795, 0.72796357)
+bones/31/position = Vector3(-9.1447424e-07, 16.654442, 5.62668e-08)
+bones/31/rotation = Quaternion(0.06949742, 0.019962896, -0.06812543, 0.99505305)
+
+[node name="node_0a377758_863e_4729_a735_00d5867bdb64_mesh0" parent="Armature/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_47o8x")
+
+[node name="node_c74ece34_d49b_4f14_8827_c060a3739958_mesh0" parent="Armature/Skeleton3D" index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_qk1wl")
+
+[node name="AnimationPlayer" parent="." index="4"]
+autoplay = "Armature|mixamo_com|Layer0"

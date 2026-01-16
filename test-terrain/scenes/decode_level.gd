@@ -83,9 +83,9 @@ var library = {
 	Vector3i(5,152,0): "res://entites/object_152b.tscn",#goat
 	#153: "res://entites/object_152b.tscn",
 	Vector3i(5,155,0): "res://entites/object_155b.tscn",#people1 155 156 157
-	Vector3i(5,180,0): "res://entites/object_155b.tscn",#people2 180 181 182
-	Vector3i(5,183,0): "res://entites/object_155b.tscn",#people3 183 184 185
-	Vector3i(5,199,0): "res://entites/object_155b.tscn",#people4 199 200 201
+	Vector3i(5,180,0): "res://entites/object_180b.tscn",#people2 180 181 182
+	Vector3i(5,183,0): "res://entites/object_183b.tscn",#people3 183 184 185
+	Vector3i(5,199,0): "res://entites/object_199b.tscn",#people4 199 200 201
 	#186: "res://entites/object_8b.tscn",
 	Vector3i(9,105,0): "res://entites/object_105b.tscn",#arrow
 	Vector3i(5,279,0): "res://entites/object_279b.tscn",#beatle

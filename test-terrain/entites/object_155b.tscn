@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://dnmw7kxhin8x6"]
 
-[ext_resource type="PackedScene" uid="uid://p4fjy4ori4lc" path="res://entites/sources/sketchfab_scene-werewolf.tscn" id="1_r6m8i"]
+[ext_resource type="PackedScene" uid="uid://btqsg3ug2yn6n" path="res://entites/sources/sareelady_walking.tscn" id="1_r6m8i"]
 
 [node name="Node3D" type="Node3D"]
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_r6m8i")]
-transform = Transform3D(-0.01, 0, -1.5099579e-09, 0, 0.01, 0, 1.5099579e-09, 0, -0.01, 0, 0, 0)
+[node name="sareelady-Walking" parent="." instance=ExtResource("1_r6m8i")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)

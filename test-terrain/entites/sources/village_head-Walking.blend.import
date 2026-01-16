@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bk7ridbjubuwy"
-path="res://.godot/imported/turkish_old_villager_men_t-pose-Walking.blend-90906211cc848044f7087c019dcbfdea.scn"
+uid="uid://1bjsihkbspis"
+path="res://.godot/imported/village_head-Walking.blend-d283e5bb1dffcd45a61cdabb6257ba26.scn"
 
 [deps]
 
-source_file="res://entites/sources/turkish_old_villager_men_t-pose-Walking.blend"
-dest_files=["res://.godot/imported/turkish_old_villager_men_t-pose-Walking.blend-90906211cc848044f7087c019dcbfdea.scn"]
+source_file="res://entites/sources/village_head-Walking.blend"
+dest_files=["res://.godot/imported/village_head-Walking.blend-d283e5bb1dffcd45a61cdabb6257ba26.scn"]
 
 [params]
 

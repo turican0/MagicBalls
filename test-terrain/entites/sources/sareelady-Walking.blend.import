@@ -2095,6 +2095,13 @@ _subresources={
 "slice_99/start_frame": 0,
 "slices/amount": 0
 }
+},
+"materials": {
+"mat_0": {
+"use_external/enabled": true,
+"use_external/fallback_path": "",
+"use_external/path": ""
+}
 }
 }
 blender/nodes/visible=0

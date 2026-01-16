@@ -1,5 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://5cky8un8lxdo"]
-
-[ext_resource type="PackedScene" uid="uid://dgu4j2mr2uad6" path="res://entites/sources/turk_villiger_t-pose2-Walking.blend" id="1_3k667"]
-
-[node name="turk_villiger_t-pose2-Walking" instance=ExtResource("1_3k667")]
