@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://degkdyov64k20"]
-
-[ext_resource type="PackedScene" uid="uid://dy3h3sqnn2wnb" path="res://entites/lowpoly_tree.glb" id="1_jujf5"]
-
-[node name="Node3D" type="Node3D"]
-
-[node name="Sketchfab_Scene2" parent="." instance=ExtResource("1_jujf5")]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)

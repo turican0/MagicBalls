@@ -43,56 +43,98 @@ var node_pool = []
 var pool_size = 1000
 # Katalog cest k tscn souborům podle ID typu
 var library = {
-	Vector3i(3,0,0): "res://entites/object_zero.tscn",#player
-	#0: "res://components/gold_sphere.tscn",
-	#1: "res://components/gold_sphere.tscn",
-	#2: "res://components/gold_sphere.tscn",
-	Vector3i(10,8,0): "res://entites/object_8_10b.tscn",#fair
-	#Vector3i(10,48,0): "res://entites/object_59b.tscn",#nevim
-	Vector3i(9,144,0): "res://entites/object_54_9b.tscn",#select
-	Vector3i(9,55,0): "res://entites/object_55_9b.tscn",#fairball
-	#38: "res://entites/object_38b.tscn",
-	#54: "res://entites/object_38b.tscn",
-	Vector3i(10,57,0): "res://entites/object_63b.tscn",#smoke
-	Vector3i(10,58,0): "res://entites/gold_sphere.tscn",
-	Vector3i(10,67,0): "res://entites/white_sphere.tscn",
-	#Vector3i(0,59,0): "res://entites/object_59b.tscn",
-	Vector3i(10,63,0): "res://entites/object_63b.tscn",#smoke
-	Vector3i(2,75,0): "res://entites/object_75b.tscn",#tree
-	Vector3i(2,79,0): "res://entites/object_79b.tscn",#dolmen
-	Vector3i(3,88,0): "res://entites/object_88b.tscn",#ballon
-	Vector3i(2,87,0): "res://entites/object_75b.tscn",#tree
-	Vector3i(10,96,0): "res://entites/object_96b.tscn",#building
-	Vector3i(5,8,0): "res://entites/object_121b.tscn",#bowman
-	Vector3i(5,9,0): "res://entites/object_121b.tscn",#bowman
-	Vector3i(5,10,0): "res://entites/object_121b.tscn",#bowman
-	Vector3i(5,11,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,12,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,13,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,14,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,15,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,16,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,17,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,18,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,19,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,20,0): "res://entites/object_121c.tscn",#bowman-arrow
-	Vector3i(5,21,0): "res://entites/object_121c.tscn",#bowman-arrow	
-	Vector3i(5,121,0): "res://entites/object_121d.tscn",#bowman-crouch
-	Vector3i(5,122,0): "res://entites/object_121d.tscn",#bowman-crouch
-	Vector3i(5,123,0): "res://entites/object_121d.tscn",#bowman-crouch
-	Vector3i(5,152,0): "res://entites/object_152b.tscn",#goat
-	#153: "res://entites/object_152b.tscn",
-	Vector3i(5,155,0): "res://entites/object_155b.tscn",#people1 155 156 157
-	Vector3i(5,180,0): "res://entites/object_180b.tscn",#people2 180 181 182
-	Vector3i(5,183,0): "res://entites/object_183b.tscn",#people3 183 184 185
-	Vector3i(5,199,0): "res://entites/object_199b.tscn",#people4 199 200 201
-	#186: "res://entites/object_8b.tscn",
-	Vector3i(9,105,0): "res://entites/object_105b.tscn",#arrow
-	Vector3i(5,279,0): "res://entites/object_279b.tscn",#beatle
+	Vector3i(0,999,0): "res://entites/object_text.tscn",
+	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree
+	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
+	Vector3i(2,87,0): "res://entites/object_2_75_tree.tscn",#tree2 - doplnit
+	Vector3i(3,0,0): "",#player1
+	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon
+	Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
+	Vector3i(5,9,0): "res://entites/object_5_8_bowman.tscn",#bowman
+	Vector3i(5,10,0): "res://entites/object_5_8_bowman.tscn",#bowman
+	Vector3i(5,11,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,12,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,13,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,14,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,15,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,16,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,17,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,18,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,19,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,20,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow	
+	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
+	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
+	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
+	Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat
+	Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157
+	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182
+	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185
+	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201
+	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle
+	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball
+	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow
+	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses
+	Vector3i(10,38,0): "",#end-of fair
+	Vector3i(10,54,0): "",#fair
+	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke
+	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",
+	Vector3i(10,63,0): "res://entites/object_10_57_smoke.tscn",#smoke
+	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",
+	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
+	Vector3i(10,186,0): "",#zblunk
+	Vector3i(15,59,0): "",#unknown-jar?
+}
 
-	#Vector3i(11,8,0): "res://entites/object_59b.tscn",
-
-	Vector3i(0,999,0): "res://entites/object_text.tscn"
+var library2 = {
+	Vector3i(0,999,0): "res://entites/object_text.tscn",
+	Vector3i(3,0,0): "",#unknown
+	Vector3i(0,8,0): "",#unknown
+	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
+	Vector3i(10,54,0): "",#fair
+	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
+	Vector3i(10,96,0): "",#building
+	Vector3i(11,8,0): "",#unknown
+	Vector3i(15,59,0): "",#unknown-jar?
+	#
+	#,
+	#Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree
+	#Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
+	#Vector3i(2,87,0): "res://entites/object_2_75_tree.tscn",#tree2 - doplnit
+	#Vector3i(3,0,0): "",#player
+	#Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon
+	#Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
+	#Vector3i(5,9,0): "res://entites/object_5_8_bowman.tscn",#bowman
+	#Vector3i(5,10,0): "res://entites/object_5_8_bowman.tscn",#bowman
+	#Vector3i(5,11,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,12,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,13,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,14,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,15,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,16,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,17,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,18,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,19,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,20,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
+	#Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow	
+	#Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
+	#Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
+	#Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
+	#Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat
+	#Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157
+	#Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182
+	#Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185
+	#Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201
+	#Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle
+	#Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball
+	#Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow
+	#Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses
+	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
+	#Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke
+	#Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",
+	#Vector3i(10,63,0): "res://entites/object_10_57_smoke.tscn",#smoke
+	#Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",
+	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn"#building
 }
 
 var filter_material: ShaderMaterial
@@ -225,26 +267,23 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					else:
 						tempModel=library[Vector3i(0, 999, 0)]
 				else:
-					if((actClass==3)&&(modelIndex==0))||((actClass==11)&&(modelIndex==8)):#player/spell
-						var key = Vector3i(actClass, modelIndex,0)
-						if library.has(key):
-							tempModel=library[key]
-							fromlib=true
-						else:
-							tempModel=library[Vector3i(0, 999, 0)]
+					#if((actClass==3)&&(modelIndex==0))||((actClass==11)&&(modelIndex==8)):#player/spell
+					var key = Vector3i(actClass, modelIndex,0)
+					if library2.has(key):
+						tempModel=library2[key]
+						fromlib=true
 					else:
-						tempModel=library[Vector3i(0, 999, 0)]
+						tempModel=library2[Vector3i(0, 999, 0)]
 				if(actClass==9):
 					actState+=0
-				var new_node = load(tempModel).instantiate()
-				
-				if !fromlib:
-					new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)
-					
-				add_child(new_node)
-				new_node.set_meta("id", modelIndex*1024*1024+actId*1024+actByte0) # Uložíme ID pro budoucí kontrolu
-				node_pool[i] = new_node
-				current_node = new_node
+				if(tempModel!=""):
+					var new_node = load(tempModel).instantiate()
+					if !fromlib:
+						new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)					
+					add_child(new_node)
+					new_node.set_meta("id", modelIndex*1024*1024+actId*1024+actByte0) # Uložíme ID pro budoucí kontrolu
+					node_pool[i] = new_node
+					current_node = new_node
 		else:
 			if (actByte1 & 4):
 				current_node.queue_free()
