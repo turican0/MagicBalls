@@ -1,0 +1,190 @@
+[gd_scene load_steps=19 format=3 uid="uid://bjqllnnikddlj"]
+
+[ext_resource type="Script" uid="uid://ci6dlshqfp770" path="res://entites/object_10_186_splash.gd" id="1_tkruv"]
+
+[sub_resource type="Curve" id="Curve_ex2xn"]
+_data = [Vector2(0, 0.5280899), 0.0, 0.0, 0, 0, Vector2(1, 0.22471917), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_be2hj"]
+curve = SubResource("Curve_ex2xn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ex2xn"]
+direction = Vector3(0, 1, 0)
+spread = 10.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -20, 0)
+scale_curve = SubResource("CurveTexture_be2hj")
+
+[sub_resource type="Gradient" id="Gradient_ex2xn"]
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_be2hj"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4dyyh"]
+noise = SubResource("FastNoiseLite_be2hj")
+color_ramp = SubResource("Gradient_ex2xn")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nxef6"]
+transparency = 1
+albedo_texture = SubResource("NoiseTexture2D_4dyyh")
+
+[sub_resource type="SphereMesh" id="SphereMesh_22ssb"]
+material = SubResource("StandardMaterial3D_nxef6")
+radius = 0.25
+height = 0.5
+
+[sub_resource type="Gradient" id="Gradient_tkruv"]
+offsets = PackedFloat32Array(0, 0.5466667, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.8745098, 0.8745098, 0.8745098, 0, 1, 1, 1, 0.24705882)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bjgqg"]
+frequency = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_omrf7"]
+noise = SubResource("FastNoiseLite_bjgqg")
+color_ramp = SubResource("Gradient_tkruv")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s04gc"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.9098039)
+albedo_texture = SubResource("NoiseTexture2D_omrf7")
+
+[sub_resource type="TorusMesh" id="TorusMesh_bjgqg"]
+material = SubResource("StandardMaterial3D_s04gc")
+inner_radius = 2.0
+outer_radius = 2.5
+
+[sub_resource type="Gradient" id="Gradient_05hk5"]
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_tkruv"]
+resource_name = "riple"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:mesh:inner_radius")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.2, 2.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:mesh:outer_radius")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.6, 2.5]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:mesh:material:albedo_texture:color_ramp")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [SubResource("Gradient_tkruv"), SubResource("Gradient_05hk5")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0.15, 0), Vector3(0, -0.2, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bjgqg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:mesh:inner_radius")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:mesh:outer_radius")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.5]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:mesh:material:albedo_texture:color_ramp")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("Gradient_tkruv")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.15, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_omrf7"]
+_data = {
+&"RESET": SubResource("Animation_bjgqg"),
+&"riple": SubResource("Animation_tkruv")
+}
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_tkruv")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+visible = false
+amount = 20
+lifetime = 0.25
+process_material = SubResource("ParticleProcessMaterial_ex2xn")
+draw_pass_1 = SubResource("SphereMesh_22ssb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+visible = false
+mesh = SubResource("TorusMesh_bjgqg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D"]
+libraries = {
+&"": SubResource("AnimationLibrary_omrf7")
+}
+autoplay = "riple"

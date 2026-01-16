@@ -72,7 +72,8 @@ var library = {
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle
-	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball
+	#Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball
+	Vector3i(9,55,0): "",#fireball
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses
 	Vector3i(10,38,0): "",#end-of fair
@@ -82,7 +83,8 @@ var library = {
 	Vector3i(10,63,0): "res://entites/object_10_57_smoke.tscn",#smoke
 	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
-	Vector3i(10,186,0): "",#zblunk
+	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#zblunk
+	#Vector3i(10,186,0): "",#zblunk
 	Vector3i(15,59,0): "",#unknown-jar?
 }
 
