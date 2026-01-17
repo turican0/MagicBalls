@@ -414,7 +414,7 @@ PackedByteArray ExampleClass::TerrainGetAngle() {
 PackedFloat32Array ExampleClass::GetEntites() {
 	PackedFloat32Array result;
 	int count = 1000;
-	result.resize(count * 29);
+	result.resize(count * 31);
 
 	float *write_ptr = result.ptrw();
 	int idx = 0;
@@ -445,7 +445,7 @@ PackedFloat32Array ExampleClass::GetEntites() {
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[1]; //19
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[2]; //20
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[3]; //21
-		write_ptr[idx++] = (float)str_WORD_D951C[actEntity->word_0x5A_90].word_0; //22
+		write_ptr[idx++] = (float)particlesParameters_D951C[actEntity->word_0x5A_90].word_0; //22
 		write_ptr[idx++] = (float)actEntity->yaw_0x1C_28; //23
 		write_ptr[idx++] = (float)actEntity->pitch_0x1E_30; //24
 		write_ptr[idx++] = (float)actEntity->mana_0x90_144; //25
@@ -453,13 +453,15 @@ PackedFloat32Array ExampleClass::GetEntites() {
 		write_ptr[idx++] = (float)actEntity->maxMana_0x8C_140; //27
 		write_ptr[idx++] = (float)actEntity->maxLife_0x4; //28
 		write_ptr[idx++] = (float)actEntity->playerEntityIndex_0x94_148; //29
+		write_ptr[idx++] = (float)particlesParameters_D951C[actEntity->word_0x5A_90].speed_6; //30
+		write_ptr[idx++] = (float)particlesParameters_D951C[actEntity->word_0x5A_90].rotSpeed_8; //31
 
 		//v7x = &str_WORD_D951C[str_F2C20ar.dword0x14x->word_0x5A_90];
 		//67
 
 		//v5x->str_0x5E_94.word_0x68_104 = a1x->id_0x1A_26;
 
-		int test=str_WORD_D951C[actEntity->word_0x5A_90].word_0;
+		int test = particlesParameters_D951C[actEntity->word_0x5A_90].word_0;
 		switch (test) {
 			case 0: //hrac0-ok
 				break;

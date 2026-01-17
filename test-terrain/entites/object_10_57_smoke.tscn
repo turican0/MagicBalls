@@ -4,5 +4,7 @@
 
 [node name="Node3D" type="Node3D"]
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_a76yj")]
+[node name="Scale" type="Node3D" parent="."]
+
+[node name="Sketchfab_Scene" parent="Scale" instance=ExtResource("1_a76yj")]
 transform = Transform3D(0.002, 0, 0, 0, 0.003, 0, 0, 0, 0.002, 0, -0.2, 0)

@@ -37,7 +37,7 @@ radius = 0.2
 material = SubResource("StandardMaterial3D_75a4v")
 
 [node name="CSGSphere3D2" type="CSGSphere3D" parent="."]
-transform = Transform3D(-0.034800384, -1.7645789, 0.35357055, 1.7357833, 0.060465306, 0.4726121, -0.47519168, 0.35009593, 1.7004669, 0, 0, 0)
+transform = Transform3D(-0.15482393, -0.527119, 0.87850726, 0.06472163, 0.88167495, 0.54042596, -1.0224679, 0.13562684, -0.09881651, 0, 0, 0)
 radius = 0.3
 material = SubResource("StandardMaterial3D_4pltj")
 script = ExtResource("1_je561")

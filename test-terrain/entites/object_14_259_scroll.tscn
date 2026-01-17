@@ -14,5 +14,5 @@ light_energy = 16.0
 light_specular = 5.0
 spot_range = 14.440466
 spot_attenuation = 0.55
-spot_angle = 25.0
+spot_angle = 10.0
 spot_angle_attenuation = 0.029157273

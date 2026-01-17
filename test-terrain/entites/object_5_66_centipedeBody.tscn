@@ -4,5 +4,7 @@
 
 [node name="Node3D" type="Node3D"]
 
-[node name="model_66" parent="." instance=ExtResource("1_8xd0q")]
+[node name="Scale" type="Node3D" parent="."]
+
+[node name="model_66" parent="Scale" instance=ExtResource("1_8xd0q")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 0, 0, 0)

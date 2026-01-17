@@ -48,7 +48,6 @@ var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree
 	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue
-	#2 78 statue
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
 	Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2 - doplnit
 	Vector3i(3,0,0): "",#player1
@@ -67,7 +66,7 @@ var library = {
 	Vector3i(5,18,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
 	Vector3i(5,19,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
 	Vector3i(5,20,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow	
+	Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
 	Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head
 	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body
 	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
@@ -113,8 +112,8 @@ var library2 = {
 	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
 	Vector3i(10,96,0): "",#building
 	Vector3i(11,8,0): "",#unknown
-	Vector3i(14,259,0): "",#scroll
-	Vector3i(14,461,0): "",#mouth-gate
+	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll
+	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate
 	Vector3i(15,59,0): "",#unknown-jar?
 	#
 	#,
@@ -243,7 +242,7 @@ func _process(_p_delta) -> void:
 	get_parent().get_node("UI").updateMinimap(MBEX.getMinimap())
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
-	var stride = 29
+	var stride = 31
 	for i in range(pool_size):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
@@ -272,6 +271,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actMaxMana = int(data_array[offset+26])
 		var actMaxLife = int(data_array[offset+27])
 		var actOwnerObject = int(data_array[offset+28])
+		var actBitmapScaleHelp = int(data_array[offset+29])
+		var actBitmapScale = int(data_array[offset+30])
 		
 		if(modelIndex==0)&&(actClass==3):
 			Main_Player.MOVE_SPEED=actSpeed
@@ -313,10 +314,10 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					var new_node = scene_to_instance.instantiate()
 					if !fromlib:
 						new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)					
-					if((actClass==10)&&(modelIndex==57)||(modelIndex==63)):
-						var scale_scene_node = new_node.get_node("Sketchfab_Scene")
-						var s = randf_range(0.6, 1.8)
-						scale_scene_node.scale *= s
+					#if((actClass==10)&&(modelIndex==57)||(modelIndex==63)):
+						#var scale_scene_node = new_node.get_node("Sketchfab_Scene")
+						#var s = randf_range(0.6, 1.8)
+						#scale_scene_node.scale *= s
 					add_child(new_node)
 					new_node.set_meta("id", modelIndex*1024*1024+actId*1024+actByte0) # Uložíme ID pro budoucí kontrolu
 					node_pool[i] = new_node
@@ -325,6 +326,12 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			if (actByte1 & 4):
 				current_node.queue_free()
 		if current_node != null:
+			if(actBitmapScaleHelp):
+				var scale_scene_node = current_node.get_node_or_null("Scale")
+				var s = actBitmapScale / 400.0
+				if(scale_scene_node):
+					scale_scene_node.scale = Vector3(s,s,s)
+						
 			var base_pos = pos / 256.0
 			var camera = get_viewport().get_camera_3d()
 			var entityScale=1
