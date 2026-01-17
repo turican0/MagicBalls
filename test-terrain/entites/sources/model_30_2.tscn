@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjw7am3bokely"]
+
+[ext_resource type="PackedScene" uid="uid://bpdluppxig15i" path="res://entites/sources/model_30_2.blend" id="1_3puk1"]
+
+[node name="model_30_2" instance=ExtResource("1_3puk1")]
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/1/rotation = Quaternion(0.08861131, -0.010035601, 0.039037805, 0.99525046)
+bones/2/rotation = Quaternion(-0.04184773, -0.12657152, -0.09278141, 0.98672193)
+bones/3/rotation = Quaternion(-0.12379436, -0.1100871, -0.24825995, 0.9544228)
+bones/7/rotation = Quaternion(0.08861131, 0.010035601, -0.039037805, 0.99525046)
+bones/8/rotation = Quaternion(-0.041847732, 0.12657152, 0.09278139, 0.98672193)
+bones/9/rotation = Quaternion(-0.12379436, 0.1100871, 0.24825995, 0.9544228)
+
+[node name="AnimationPlayer" parent="." index="2"]
+autoplay = "ArmatureAction"

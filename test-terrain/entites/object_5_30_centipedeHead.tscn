@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgw2j4did2vmc"]
+
+[ext_resource type="PackedScene" uid="uid://bjw7am3bokely" path="res://entites/sources/model_30_2.tscn" id="1_2xv7p"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="model_30_2" parent="." instance=ExtResource("1_2xv7p")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)

@@ -68,13 +68,15 @@ var library = {
 	Vector3i(5,19,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
 	Vector3i(5,20,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
 	Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow	
+	Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head
+	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body
 	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
 	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
 	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
-	Vector3i(5,132,0): "res://entites/object_5_155_people1.tscn",#people5 132 133 134-fix
-	Vector3i(5,135,0): "res://entites/object_5_155_people1.tscn",#people6 135 136 137-fix
-	Vector3i(5,138,0): "res://entites/object_5_155_people1.tscn",#people7 138 139 140-fix
-	Vector3i(5,141,0): "res://entites/object_5_155_people1.tscn",#people8 141 142 143-fix
+	Vector3i(5,132,0): "res://entites/object_5_132_people5.tscn",#people5 132 133 134
+	Vector3i(5,135,0): "res://entites/object_5_135_people6.tscn",#people6 135 136 137
+	Vector3i(5,138,0): "res://entites/object_5_138_people7.tscn",#people7 138 139 140
+	Vector3i(5,141,0): "res://entites/object_5_141_people8.tscn",#people8 141 142 143s
 	Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat
 	Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182
@@ -85,6 +87,7 @@ var library = {
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses
+	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball
 	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion
 	Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion
 	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1

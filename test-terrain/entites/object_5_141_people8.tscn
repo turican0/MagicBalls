@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ceshtuuocorw8"]
+
+[ext_resource type="PackedScene" uid="uid://lyh7ab5smsgu" path="res://entites/sources/sarah_1_walking.tscn" id="1_qr8u5"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="sarah-1-Walking" parent="." instance=ExtResource("1_qr8u5")]
+transform = Transform3D(-1.2, 0, -1.04907336e-07, 0, 1.2, 0, 1.04907336e-07, 0, -1.2, 0, 0, 0)
