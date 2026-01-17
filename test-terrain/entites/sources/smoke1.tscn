@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dp21ujtpv5jvl"]
+
+[ext_resource type="PackedScene" uid="uid://ciy44bwoveorq" path="res://entites/sources/clouds.glb" id="1_sm4np"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sm4np"]
+albedo_color = Color(1, 0.81960785, 0.8117647, 0.59607846)
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_sm4np")]
+
+[node name="Object_3" parent="Sketchfab_model/cloud_obj_cleaner_gles/Object_2" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_sm4np")

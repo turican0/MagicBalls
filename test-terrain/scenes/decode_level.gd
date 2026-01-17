@@ -42,13 +42,18 @@ var total_mouse_delta := Vector2.ZERO
 var node_pool = []
 var pool_size = 1000
 # Katalog cest k tscn souborům podle ID typu
+var library_scenes = {}
+var library2_scenes = {}
 var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree
+	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue
+	#2 78 statue
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
-	Vector3i(2,87,0): "res://entites/object_2_75_tree.tscn",#tree2 - doplnit
+	Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2 - doplnit
 	Vector3i(3,0,0): "",#player1
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon
+	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle
 	Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,9,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,10,0): "res://entites/object_5_8_bowman.tscn",#bowman
@@ -66,37 +71,47 @@ var library = {
 	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
 	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
 	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
+	Vector3i(5,132,0): "res://entites/object_5_155_people1.tscn",#people5 132 133 134-fix
+	Vector3i(5,135,0): "res://entites/object_5_155_people1.tscn",#people6 135 136 137-fix
+	Vector3i(5,138,0): "res://entites/object_5_155_people1.tscn",#people7 138 139 140-fix
+	Vector3i(5,141,0): "res://entites/object_5_155_people1.tscn",#people8 141 142 143-fix
 	Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat
 	Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle
-	#Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball
-	Vector3i(9,55,0): "",#fireball
+	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball
+	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses
-	Vector3i(10,38,0): "",#end-of fair
-	Vector3i(10,54,0): "",#fair
-	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke
+	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion
+	Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion
+	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1
 	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",
-	Vector3i(10,63,0): "res://entites/object_10_57_smoke.tscn",#smoke
+	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2
 	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
-	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#zblunk
-	#Vector3i(10,186,0): "",#zblunk
-	Vector3i(15,59,0): "",#unknown-jar?
+	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash
+	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll
+	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate
+	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar
 }
 
 var library2 = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(3,0,0): "",#unknown
 	Vector3i(0,8,0): "",#unknown
+	Vector3i(0,58,0): "",#unknown
+	Vector3i(0,67,0): "",#unknown
+	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	Vector3i(10,54,0): "",#fair
 	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
 	Vector3i(10,96,0): "",#building
 	Vector3i(11,8,0): "",#unknown
+	Vector3i(14,259,0): "",#scroll
+	Vector3i(14,461,0): "",#mouth-gate
 	Vector3i(15,59,0): "",#unknown-jar?
 	#
 	#,
@@ -143,10 +158,18 @@ var filter_material: ShaderMaterial
 var data_img: Image
 var data_tex: ImageTexture
 
+func _preload_library(source_dict: Dictionary, target_dict: Dictionary):
+	for key in source_dict:
+		var path = source_dict[key]
+		if path != "":
+			target_dict[key] = load(path)
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	# Inicializujeme pole s nulami (prázdná místa)
+	_preload_library(library, library_scenes)
+	_preload_library(library2, library2_scenes)
+	
 	node_pool.resize(pool_size)
 	for i in range(pool_size):
 		node_pool[i] = null
@@ -239,6 +262,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actByte3 = int(data_array[offset+20])
 		var modelIndex = int(data_array[offset+21])
 		var rot2 = Vector3(data_array[offset+22], 0, 0)
+		#if((actClass==10)&&(modelIndex==58)||(modelIndex==67)):
+			#rot2 = Vector3(data_array[offset+22], data_array[offset+23], data_array[offset+24])
 		var actMana = int(data_array[offset+24])
 		var actLife = int(data_array[offset+25])
 		var actMaxMana = int(data_array[offset+26])
@@ -254,34 +279,41 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		
 		if current_node == null or current_node.get_meta("id") != modelIndex*1024*1024+actId*1024+actByte0:
 			if current_node != null:
-				current_node.queue_free()
-			var fromlib=false
+				current_node.queue_free()			
 			if !(actByte1 & 4):
 				var isDraw = true
 				if(actByte0&1):
 					isDraw = false
-				var tempModel
-				if(isDraw)&&((actClass==2)||(actClass==3)||(actClass==5)||(actClass==9)||(actClass==10)||(actClass==15)):
+				var fromlib=false
+				var scene_to_instance = null
+				var default_key = Vector3i(0, 999, 0)
+				if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
 					var key = Vector3i(actClass, modelIndex,0)
-					if library.has(key):
-						tempModel=library[key]
+					if library_scenes.has(key):
+						scene_to_instance = library_scenes[key]
 						fromlib=true
 					else:
-						tempModel=library[Vector3i(0, 999, 0)]
+						if !library.has(key):
+							scene_to_instance = library_scenes.get(default_key)
 				else:
 					#if((actClass==3)&&(modelIndex==0))||((actClass==11)&&(modelIndex==8)):#player/spell
 					var key = Vector3i(actClass, modelIndex,0)
-					if library2.has(key):
-						tempModel=library2[key]
+					if library2_scenes.has(key):
+						scene_to_instance = library2_scenes[key]
 						fromlib=true
 					else:
-						tempModel=library2[Vector3i(0, 999, 0)]
+						if !library2.has(key):
+							scene_to_instance = library2_scenes.get(default_key)
 				if(actClass==9):
 					actState+=0
-				if(tempModel!=""):
-					var new_node = load(tempModel).instantiate()
+				if scene_to_instance != null:
+					var new_node = scene_to_instance.instantiate()
 					if !fromlib:
 						new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)					
+					if((actClass==10)&&(modelIndex==57)||(modelIndex==63)):
+						var scale_scene_node = new_node.get_node("Sketchfab_Scene")
+						var s = randf_range(0.6, 1.8)
+						scale_scene_node.scale *= s
 					add_child(new_node)
 					new_node.set_meta("id", modelIndex*1024*1024+actId*1024+actByte0) # Uložíme ID pro budoucí kontrolu
 					node_pool[i] = new_node

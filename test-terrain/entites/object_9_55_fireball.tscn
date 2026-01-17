@@ -27,6 +27,7 @@ billboard_mode = 1
 
 [sub_resource type="QuadMesh" id="QuadMesh_v5wgy"]
 material = SubResource("StandardMaterial3D_8b0wp")
+size = Vector2(0.7, 0.7)
 
 [sub_resource type="Gradient" id="Gradient_lvves"]
 colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0, 1)
@@ -51,4 +52,5 @@ draw_pass_1 = SubResource("QuadMesh_v5wgy")
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+radius = 0.3
 material = SubResource("StandardMaterial3D_75a4v")

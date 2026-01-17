@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://d03ywaknwhiiu"]
+
+[ext_resource type="PackedScene" uid="uid://b351v2xjjqylq" path="res://entites/sources/smoke2.tscn" id="1_dtb54"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_dtb54")]
+transform = Transform3D(0.002, 0, 0, 0, 0.003, 0, 0, 0, 0.002, 0, -0.2, 0)

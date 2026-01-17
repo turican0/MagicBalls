@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwk8tahnoqxo6"]
+
+[ext_resource type="Material" uid="uid://cxhaa6i7bto07" path="res://GodotExplosionVFX-master/GodotProject/ExplosionMaterial.tres" id="1_rv7f0"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h81u1"]
+angle_max = 1.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+angular_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -1.0
+linear_accel_max = -1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_2b1he"]
+size = Vector2(5, 5)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Explosion1" type="GPUParticles3D" parent="."]
+transform = Transform3D(-2.1855695e-07, 0, 5, 0, 5, 0, -5, 0, -2.1855695e-07, 0, 0, 0)
+material_override = ExtResource("1_rv7f0")
+amount = 20
+lifetime = 2.0
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_h81u1")
+draw_pass_1 = SubResource("QuadMesh_2b1he")

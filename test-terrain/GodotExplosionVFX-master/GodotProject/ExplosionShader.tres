@@ -1,0 +1,199 @@
+[gd_resource type="Shader" format=3 uid="uid://bfrlkbjyfakqt"]
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform float particle_h_frames = 8;
+uniform float particle_v_frames = 8;
+uniform bool particles_anim_loop = false;
+uniform float still_frame = -1;
+uniform sampler2D tex_frg_2;
+uniform sampler2D tex_frg_27 : source_color;
+uniform sampler2D tex_frg_24;
+uniform float Soft_limit = 0.10000000149012;
+uniform float blend_scale = 0.10000000149012;
+uniform float emission_falloff_multiplier = 1;
+uniform sampler2D tex_frg_25 : source_color;
+uniform sampler2D tex_frg_26 : source_color;
+uniform sampler2D tex_frg_16;
+uniform sampler2D tex_frg_17;
+uniform sampler2D depth_texture : source_color, hint_depth_texture;
+
+
+
+
+void vertex() {
+// Input:3
+	vec3 n_out3p0 = VERTEX;
+
+
+// FloatParameter:5
+	float n_out5p0 = particle_h_frames;
+
+
+// FloatParameter:6
+	float n_out6p0 = particle_v_frames;
+
+
+// BooleanParameter:7
+	bool n_out7p0 = particles_anim_loop;
+
+
+// Input:8
+	float n_out8p0 = TIME;
+
+
+// FloatParameter:10
+	float n_out10p0 = still_frame;
+
+
+	vec3 n_out2p0;
+// Expression:2
+	n_out2p0 = vec3(0.0, 0.0, 0.0);
+	{
+		mat4 mat_world = mat4(normalize(INV_VIEW_MATRIX[0])*length(MODEL_MATRIX[0]),normalize(INV_VIEW_MATRIX[1])*length(MODEL_MATRIX[0]),normalize(INV_VIEW_MATRIX[2])*length(MODEL_MATRIX[2]),MODEL_MATRIX[3]);
+		//mat_world = mat_world * mat4( vec4(cos(INSTANCE_CUSTOM.x),-sin(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(sin(INSTANCE_CUSTOM.x), cos(INSTANCE_CUSTOM.x), 0.0, 0.0),vec4(0.0, 0.0, 1.0, 0.0),vec4(0.0, 0.0, 0.0, 1.0));
+		MODELVIEW_MATRIX = VIEW_MATRIX * mat_world;
+
+		float h_frames = float(particle_h_frames);
+		float v_frames = float(particle_v_frames);
+		float particle_total_frames = float(particle_h_frames * particle_v_frames);
+		float particle_frame = floor(INSTANCE_CUSTOM.y * float(particle_total_frames));
+		if(still_frame > -0.01f){
+			particle_frame = floor(still_frame);
+		}else if (!particles_anim_loop) {
+			particle_frame = clamp(particle_frame, 0.0, particle_total_frames - 1.0);
+		} else {
+			particle_frame = mod(particle_frame, particle_total_frames);
+		}
+		UV /= vec2(h_frames, v_frames);
+		UV += vec2(mod(particle_frame, h_frames) / h_frames, floor(particle_frame / h_frames) / v_frames);
+				
+		n_out2p0=INSTANCE_CUSTOM.xyz;
+		
+	}
+
+
+// Output:0
+	COLOR.rgb = n_out2p0;
+
+
+}
+
+void fragment() {
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, UV);
+	float n_out2p4 = n_out2p0.a;
+
+
+	vec3 n_out10p0;
+// ColorFunc:10
+	{
+		vec3 c = vec3(n_out2p0.xyz);
+		float max1 = max(c.r, c.g);
+		float max2 = max(max1, c.b);
+		n_out10p0 = vec3(max2, max2, max2);
+	}
+
+
+// Texture2D:27
+	vec4 n_out27p0 = texture(tex_frg_27, vec2(n_out10p0.xy));
+
+
+// Texture2D:24
+	vec4 n_out24p0 = texture(tex_frg_24, vec2(n_out10p0.xy));
+
+
+// FloatParameter:22
+	float n_out22p0 = Soft_limit;
+
+
+// FloatParameter:23
+	float n_out23p0 = blend_scale;
+
+
+	float n_out19p0;
+// Expression:19
+	n_out19p0 = 0.0;
+	{
+		
+		
+		
+		//float depth = texture(depth_texture, SCREEN_UV, 0.0).r;
+		float depth = texture(depth_texture, SCREEN_UV).x;
+		
+		vec4 upos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
+		float pixel_position = upos.z / upos.w;
+		
+		vec4 zpos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, FRAGCOORD.z * 2.0 - 1.0, 1.0);
+		float cur_pos = zpos.z/zpos.w;
+		n_out22p0 = n_out22p0+(1.0-n_out24p0.x)*n_out23p0;
+		float help = clamp(abs(cur_pos-pixel_position)*(1.0/n_out22p0),0.0,1.0);
+		n_out19p0 = help;
+	}
+
+
+// FloatOp:20
+	float n_out20p0 = n_out2p4 * n_out19p0;
+
+
+// FloatParameter:15
+	float n_out15p0 = emission_falloff_multiplier;
+
+
+// Input:5
+	vec4 n_out5p0 = COLOR;
+
+
+	vec2 n_out6p0;
+// Expression:6
+	n_out6p0 = vec2(0.0, 0.0);
+	{
+		//n_out6p0.z = 0.0;
+		n_out6p0.xy = vec2(vec2(n_out5p0.xy).y);
+	}
+
+
+// Texture2D:25
+	vec4 n_out25p0 = texture(tex_frg_25, n_out6p0);
+
+
+// FloatOp:13
+	float n_out13p0 = n_out15p0 * n_out25p0.x;
+
+
+// FloatOp:14
+	float n_out14p0 = n_out10p0.x + n_out13p0;
+
+
+// Texture2D:26
+	vec4 n_out26p0 = texture(tex_frg_26, vec2(n_out14p0));
+
+
+// VectorOp:12
+	vec3 n_in12p1 = vec3(5.00000, 5.00000, 5.00000);
+	vec3 n_out12p0 = vec3(n_out26p0.xyz) * n_in12p1;
+
+
+// Texture2D:16
+	vec4 n_out16p0 = texture(tex_frg_16, UV);
+
+
+// Texture2D:17
+	vec4 n_out17p0 = texture(tex_frg_17, UV);
+
+
+// VectorOp:18
+	vec3 n_out18p0 = vec3(n_out16p0.xyz) - vec3(n_out17p0.xyz);
+
+
+// Output:0
+	ALBEDO = vec3(n_out27p0.xyz);
+	ALPHA = n_out20p0;
+	EMISSION = n_out12p0;
+	NORMAL = n_out18p0;
+
+
+}
+"

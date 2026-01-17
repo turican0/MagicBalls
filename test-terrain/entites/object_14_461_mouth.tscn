@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5y357hv3lhq2"]
+
+[ext_resource type="PackedScene" uid="uid://dpwp1xq4p5rhw" path="res://entites/sources/mouth_of_marrow_hollow_-_nightmare.glb" id="1_7etuu"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_7etuu")]
+transform = Transform3D(0.6470477, 0, 2.4148145, 0, 2.5, 0, -2.4148145, 0, 0.6470477, 0.15, 0, 0)

@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cvjxh12y5xej4"]
-
-[ext_resource type="PackedScene" uid="uid://dcjnlknf4gji8" path="res://entites/sources/fantasy_scroll.glb" id="1_oc61b"]
-
-[node name="Node3D" type="Node3D"]
-
-[node name="Sketchfab_Scene2" parent="." instance=ExtResource("1_oc61b")]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, -0.4542803, 0)

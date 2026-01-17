@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://ghrrtsno70o0"]
+
+[ext_resource type="Shader" uid="uid://t22ndsoocfpe" path="res://entites/object_10_57_smoke.gdshader" id="1_0vbhm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a76yj"]
+render_priority = 0
+shader = ExtResource("1_0vbhm")
+shader_parameter/scale = 0.5
+shader_parameter/tex_speed = Vector3(0, -2.2, 0.5)
+shader_parameter/mokomoko = Vector2(0.1, 0.1)
+shader_parameter/smoke_volume = 0.8
+shader_parameter/smoke_aperture = 0.28
+shader_parameter/smoke_color = Color(0.18431373, 0.18431373, 0.18431373, 0.105882354)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0o6ev"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+material_override = SubResource("ShaderMaterial_a76yj")
+billboard = 1
+texture = SubResource("NoiseTexture2D_0o6ev")

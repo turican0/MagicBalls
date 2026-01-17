@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cur2q1jtr15dy"]
+
+[ext_resource type="PackedScene" uid="uid://docxmger7goya" path="res://entites/sources/graveyard_angel_statue.glb" id="1_ger8s"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ger8s")]
+transform = Transform3D(-0.4, 0, -3.4969112e-08, 0, 0.4, 0, 3.4969112e-08, 0, -0.4, 0, 0, 0)

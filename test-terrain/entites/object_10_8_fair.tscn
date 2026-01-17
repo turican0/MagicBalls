@@ -1,15 +1,20 @@
 [gd_scene load_steps=6 format=3 uid="uid://cl4y2sfdgtua8"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7hled"]
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0, 0.5)
 direction = Vector3(0, 1, 0)
 spread = 30.0
-initial_velocity_min = 1.5
-initial_velocity_max = 3.0
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
 gravity = Vector3(0, 0, 0)
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 3.0
 
 [sub_resource type="Gradient" id="Gradient_fi65x"]
-offsets = PackedFloat32Array(0, 0.17351598, 0.42465752, 0.7351598, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 0, 1, 1, 0.4745098, 0.3647059, 1, 0.92156863, 0, 0, 0, 1, 1, 1, 0.12785387)
+offsets = PackedFloat32Array(0, 0.17351598, 0.42465752, 0.49295774, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 0, 1, 1, 0.4745098, 0.3647059, 1, 0.92156863, 0, 0, 0, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bjna2"]
 gradient = SubResource("Gradient_fi65x")
@@ -25,11 +30,11 @@ billboard_mode = 1
 
 [sub_resource type="QuadMesh" id="QuadMesh_v5wgy"]
 material = SubResource("StandardMaterial3D_8b0wp")
-size = Vector2(0.4, 0.4)
+size = Vector2(0.5, 0.5)
 
 [node name="Node3D" type="Node3D"]
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-amount = 200
+amount = 400
 process_material = SubResource("ParticleProcessMaterial_7hled")
 draw_pass_1 = SubResource("QuadMesh_v5wgy")

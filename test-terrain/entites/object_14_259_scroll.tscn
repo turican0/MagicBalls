@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cvjxh12y5xej4"]
+
+[ext_resource type="PackedScene" uid="uid://dcjnlknf4gji8" path="res://entites/sources/fantasy_scroll.glb" id="1_cq6en"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sketchfab_Scene2" parent="." instance=ExtResource("1_cq6en")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, -0.4542803, 0)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 11.983076, 0)
+light_color = Color(1, 0.49019608, 0, 1)
+light_energy = 16.0
+light_specular = 5.0
+spot_range = 14.440466
+spot_attenuation = 0.55
+spot_angle = 25.0
+spot_angle_attenuation = 0.029157273

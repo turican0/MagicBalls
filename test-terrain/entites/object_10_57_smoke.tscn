@@ -1,7 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://uj1oehe2lyyr"]
 
-[ext_resource type="Texture2D" uid="uid://dysjqq7rpfwyf" path="res://entites/TMAPS1-0-063-00.png" id="1_wdeks"]
+[ext_resource type="PackedScene" uid="uid://dp21ujtpv5jvl" path="res://entites/sources/smoke1.tscn" id="1_a76yj"]
 
-[node name="Sprite3D" type="Sprite3D"]
-billboard = 1
-texture = ExtResource("1_wdeks")
+[node name="Node3D" type="Node3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_a76yj")]
+transform = Transform3D(0.002, 0, 0, 0, 0.003, 0, 0, 0, 0.002, 0, -0.2, 0)
