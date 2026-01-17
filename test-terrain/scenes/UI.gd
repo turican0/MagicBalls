@@ -19,23 +19,15 @@ func _init() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.keycode == KEY_CTRL:
 		if event.pressed:
-			if not is_ctrl_active: 
-				activate_selection_mode(true)
+			if not is_ctrl_active:
+				spell_grid.show()
+				is_ctrl_active = true
 		else:
-			activate_selection_mode(false)
-			if hovered_index != -1:
-				_on_spell_selected_via_ctrl(hovered_index)
+			is_ctrl_active = false
+			hovered_index = -1
+			spell_grid.hide()
 
 var saved_mouse_pos: Vector2 = Vector2.ZERO
-
-func activate_selection_mode(active: bool):
-	is_ctrl_active = active
-	if active:
-		if player: player.set_process_input(false)
-	else:
-		#selection_rect.hide()
-		hovered_index = -1
-		if player: player.set_process_input(true)
 
 func update_hover_selection():
 	var mouse_pos = get_global_mouse_position()
@@ -44,11 +36,6 @@ func update_hover_selection():
 		if is_instance_valid(slot) and slot.get_global_rect().has_point(mouse_pos):
 			hovered_index = i
 			break
-
-func _on_spell_selected_via_ctrl(index: int):
-	print("Kouzlo s indexem ", index, " bylo vybráno přes CTRL.")
-	# Zde zavolej svoji funkci, např:
-	# if player: player.cast_spell(index)
 
 func _process(_p_delta) -> void:
 	$Label.text = "FPS: %d\n" % Engine.get_frames_per_second()

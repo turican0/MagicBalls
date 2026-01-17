@@ -5,12 +5,13 @@
 [node name="model_30_2" instance=ExtResource("1_3puk1")]
 
 [node name="Skeleton3D" parent="Armature" index="0"]
-bones/1/rotation = Quaternion(0.08861131, -0.010035601, 0.039037805, 0.99525046)
-bones/2/rotation = Quaternion(-0.04184773, -0.12657152, -0.09278141, 0.98672193)
-bones/3/rotation = Quaternion(-0.12379436, -0.1100871, -0.24825995, 0.9544228)
-bones/7/rotation = Quaternion(0.08861131, 0.010035601, -0.039037805, 0.99525046)
-bones/8/rotation = Quaternion(-0.041847732, 0.12657152, 0.09278139, 0.98672193)
-bones/9/rotation = Quaternion(-0.12379436, 0.1100871, 0.24825995, 0.9544228)
+bones/1/rotation = Quaternion(0.001185875, -0.058176503, -0.1705296, 0.9836329)
+bones/2/rotation = Quaternion(-0.08882703, -0.1529618, -0.17554528, 0.9684505)
+bones/3/rotation = Quaternion(-0.13564047, -0.11707077, -0.2641373, 0.947696)
+bones/7/rotation = Quaternion(0.0011858764, 0.058176488, 0.1705296, 0.9836329)
+bones/8/rotation = Quaternion(-0.088827014, 0.15296179, 0.17554525, 0.9684505)
+bones/9/rotation = Quaternion(-0.13564047, 0.11707078, 0.26413727, 0.947696)
 
 [node name="AnimationPlayer" parent="." index="2"]
 autoplay = "ArmatureAction"
+speed_scale = 3.0

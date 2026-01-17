@@ -203,11 +203,12 @@ func _process(_p_delta) -> void:
 	getInputs()
 	if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
 		if Main_UI.is_ctrl_active:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			Main_UI.saved_mouse_pos = get_viewport().get_mouse_position()
 			var grid_rect = Main_UI.spell_grid.get_global_rect()
 			var center_pos = grid_rect.position + (grid_rect.size / 2.0)
+			center_pos.x=50
 			get_viewport().warp_mouse(center_pos)
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
 			get_viewport().warp_mouse(Main_UI.saved_mouse_pos)
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -328,7 +329,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		if current_node != null:
 			if(actBitmapScaleHelp):
 				var scale_scene_node = current_node.get_node_or_null("Scale")
-				var s = actBitmapScale / 400.0
+				var s = actBitmapScale / 256.0
 				if(scale_scene_node):
 					scale_scene_node.scale = Vector3(s,s,s)
 						
