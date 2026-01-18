@@ -202,6 +202,7 @@ var last_offset: Vector3
 
 func _process(_p_delta) -> void:
 	getInputs()
+	MBEX.soundQueueClear()
 	if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
 		if Main_UI.is_ctrl_active:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -242,6 +243,8 @@ func _process(_p_delta) -> void:
 	get_parent().get_node("UI").updateSpells(MBEX.getActiveSpells())
 	get_parent().get_node("UI").updateSelectedSpells(MBEX.getSelectedSpells())
 	get_parent().get_node("UI").updateMinimap(MBEX.getMinimap())
+	Main_Sounds.updateSounds(MBEX.getPendingSoundActions())
+
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var stride = 31
@@ -439,6 +442,8 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 		MBEX.convertOriginalData()
 	
 	Main_Sounds.load_sounds_from_dir("user://convertdata/sounds/")
+	
+	Main_Sounds.init()
 	
 	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()

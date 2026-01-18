@@ -84,4 +84,6 @@ public:
 	Array getPaletteModifications();
 	Ref<Image> getMinimap();
 	void convertOriginalData();
+	Array getPendingSoundActions();
+	void soundQueueClear();
 	};

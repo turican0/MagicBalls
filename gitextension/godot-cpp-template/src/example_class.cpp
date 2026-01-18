@@ -12,6 +12,7 @@
 #include "remc2/engine/MenusAndIntros.h"
 #include "remc2/engine/Basic.h"
 #include "remc2/engine/GameUI.h"
+#include "remc2/portability/port_sdl_sound.h"
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
@@ -35,10 +36,31 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &ExampleClass::getPaletteModifications);
 	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &ExampleClass::getMinimap);
 	godot::ClassDB::bind_method(D_METHOD("convertOriginalData"), &ExampleClass::convertOriginalData);
+	godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
+	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &ExampleClass::getPendingSoundActions);
 }
 
 void ExampleClass::convertOriginalData() {
 	MBEXconvertData();
+}
+
+void ExampleClass::soundQueueClear() {
+	sound_queue_clear();
+}
+
+Array ExampleClass::getPendingSoundActions() {
+	Array result;
+	std::vector<SoundAction> pending = sound_queue_get_pending_actions();
+	for (size_t i = 0; i < pending.size(); ++i) {
+		const SoundAction &sa = pending[i];
+		Dictionary d;
+		d["action"] = String(sa.action.c_str());
+		d["p1"] = sa.p1;
+		d["p2"] = sa.p2;
+		result.append(d);
+	}
+	sound_queue_clear();
+	return result;
 }
 
 typedef struct {
@@ -935,9 +957,9 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
 	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0],true);
 
-	//soundActive_E3799 = true;
-	//soundAble_E3798 = true;
-	//InitSoundAndMusic_90FD0();
+	soundActive_E3799 = true;
+	soundAble_E3798 = true;
+	InitSoundAndMusic_90FD0();
 	//if ((x_D41A0_BYTEARRAY_4_struct.setting_byte4_25) & 0x40) InitMusicBank_8EAD0(1);
 
 	//x_DWORD_E9C4C_langindexbuffer[374]

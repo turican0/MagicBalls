@@ -330,15 +330,48 @@ void SOUND_set_master_volume(int32_t volume) {
 }
 
 void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
-	sound_queue_add_action("SOUND_set_sample_volume", 0, 0);
+	sound_queue_add_action("SOUND_set_sample_volume", S->index_sample, volume);
 }
 
 void SOUND_start_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_end_sample", 0, 0);
+	sound_queue_add_action("SOUND_start_sample", S->index_sample, 0);
 };
 
+//int num_channels = 8;
+
+int Mix_Playing(int which) {
+	int status = 0;
+	/*
+	status = 0;
+	if (which == -1) {
+		int i;
+
+		for (i = 0; i < num_channels; ++i) {
+			if ((mix_channel[i].playing > 0) ||
+					mix_channel[i].looping) {
+				++status;
+			}
+		}
+	} else if (which < num_channels) {
+		if ((mix_channel[which].playing > 0) ||
+				mix_channel[which].looping) {
+			++status;
+		}
+	}
+	*/
+	return (status);
+}
+
 uint32_t SOUND_sample_status(HSAMPLE S) {
-	sound_queue_add_action("SOUND_sample_status", 0, 0);
+	if (unitTests)
+		return 0;
+#ifdef SOUND_SDLMIXER
+	if (Mix_Playing(S->index_sample) == 0)
+		return 2;
+#endif //SOUND_SDLMIXER
+#ifdef SOUND_OPENAL
+	return 2;
+#endif //SOUND_SDLMIXER
 	return 0;
 }
 

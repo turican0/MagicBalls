@@ -254,6 +254,8 @@ Array get_pending_actions();
 void clean_actions();
 */
 void sound_queue_add_action(const std::string &action, int p1, int p2);
+void sound_queue_clear();
+std::vector<SoundAction> sound_queue_get_pending_actions();
 
 
 #endif //PORT_SDL_SOUND

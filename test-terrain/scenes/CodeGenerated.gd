@@ -19,6 +19,6 @@ func _ready() -> void:
 	Main_UI.Main_DecodeLevel = Main_DecodeLevel
 	Main_DecodeLevel.Main_Filter = Main_Filter
 	Main_DecodeLevel.Main_Sounds = Main_Sounds
-	$UI.player = $Player
+	$UI.player = $Player	
 	Main_TerrainMB.init()
 	#$CanvasUI.init()
