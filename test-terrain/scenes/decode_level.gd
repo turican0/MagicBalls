@@ -433,6 +433,9 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	MBEX = ExampleClass.new()
 	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
 	MBEX.TerrainMake(level_tab_data_unpacked)
+	
+	MBEX.convertOriginalData()
+	
 	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()
 	mapAngle_13B4E0 = MBEX.TerrainGetAngle()

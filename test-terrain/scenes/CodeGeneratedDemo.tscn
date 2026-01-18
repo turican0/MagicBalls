@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://cofnhdcclon1w"]
+[gd_scene load_steps=11 format=3 uid="uid://cofnhdcclon1w"]
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://scenes/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://scenes/Player.tscn" id="2_3v2uf"]
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://scenes/UI.tscn" id="4_x5ge4"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
+[ext_resource type="Script" uid="uid://cahajskbdcnlw" path="res://scenes/sounds.gd" id="9_kfkod"]
 [ext_resource type="Shader" uid="uid://diekk5uppuvq1" path="res://scenes/FilterColorRect.gdshader" id="9_vrj2c"]
 [ext_resource type="AudioStream" uid="uid://cs8m3465mhgas" path="res://music/music1.mp3" id="24_f8b3d"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
@@ -49,3 +50,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Sounds" type="Node3D" parent="."]
+script = ExtResource("9_kfkod")
