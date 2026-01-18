@@ -83,4 +83,5 @@ public:
 	void setPlayerActiveSpell(int spell_index, int button);
 	Array getPaletteModifications();
 	Ref<Image> getMinimap();
+	void convertOriginalData();
 	};

@@ -1,4 +1,5 @@
 #include "example_class.h"
+#include "MBEX/convertData.h"
 #include "remc2/utilities/DataFileRNC.h"
 #include "remc2/engine/Terrain.h"
 #include "remc2/engine/ConvertMapInfo.h"
@@ -33,6 +34,11 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &ExampleClass::setPlayerActiveSpell);
 	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &ExampleClass::getPaletteModifications);
 	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &ExampleClass::getMinimap);
+	godot::ClassDB::bind_method(D_METHOD("convertOriginalData"), &ExampleClass::convertOriginalData);
+}
+
+void ExampleClass::convertOriginalData() {
+	MBEXconvertData();
 }
 
 typedef struct {
