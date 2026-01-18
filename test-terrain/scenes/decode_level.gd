@@ -15,6 +15,7 @@ var direction2: Vector3 = Vector3(1,0,0)
 var Main_Player: Node
 var Main_UI: Node
 var Main_Filter: Node
+var Main_Sounds: Node
 
 const KEY_INDEX := {
 	KEY_W: 0, # Forward
@@ -434,7 +435,10 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
 	MBEX.TerrainMake(level_tab_data_unpacked)
 	
-	MBEX.convertOriginalData()
+	if not DirAccess.dir_exists_absolute("user://convertdata/sounds/"):
+		MBEX.convertOriginalData()
+	
+	Main_Sounds.load_sounds_from_dir("user://convertdata/sounds/")
 	
 	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()

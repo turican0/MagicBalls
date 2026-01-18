@@ -138,10 +138,12 @@ void SOUND_resume_sequence(int32_t  /*sequence_num*/) {
 };
 
 void SOUND_set_sequence_volume(int32_t volume, int32_t  milliseconds) {
+	return;
 }
 
 void SOUND_init_MIDI_sequence(uint8_t*  /*datax*/, type_E3808_music_header* headerx, int32_t track_number)
 {
+	return;
 }
 
 
@@ -260,6 +262,7 @@ void stopmusic1()
 */
 void playmusic2(int32_t track_number)
 {
+	return;
 }
 
 struct {
@@ -323,19 +326,24 @@ int32_t ac_sound_call_driver(AIL_DRIVER* drvr, int32_t fn, VDI_CALL* out) {
 };
 
 void SOUND_set_master_volume(int32_t volume) {
+	sound_queue_add_action("SOUND_set_master_volume", 0, 0);
 }
 
 void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
+	sound_queue_add_action("SOUND_set_sample_volume", 0, 0);
 }
 
 void SOUND_start_sample(HSAMPLE S) {
+	sound_queue_add_action("SOUND_end_sample", 0, 0);
 };
 
 uint32_t SOUND_sample_status(HSAMPLE S) {
+	sound_queue_add_action("SOUND_sample_status", 0, 0);
 	return 0;
 }
 
 void SOUND_end_sample(HSAMPLE  /*S*/) {
+	sound_queue_add_action("SOUND_end_sample", 0, 0);
 };
 
 void SOUND_finalize(int channel) {
@@ -354,6 +362,7 @@ void SOUND_finalize(int channel) {
 		S->vol_scale_18[0][2] = 0;
 		S->vol_scale_18[0][3] = 0;
 	}
+	sound_queue_add_action("SOUND_finalize", 0, 0);
 }
 
 int run();
@@ -840,3 +849,53 @@ int main(int argc, char** argv)
 	return 0;
 }
 */
+
+/*
+Array action_queue;
+
+void add_sound_action(String p_action, int p_p1, int p_p2) {
+	Dictionary d;
+	d.set(StringName("action"), Variant(p_action));
+	d.set(StringName("p1"), Variant(p_p1));
+	d.set(StringName("p2"), Variant(p_p2));
+	action_queue.append(d);
+}
+
+void clean_actions() {
+	action_queue.clear();
+}
+
+Array get_pending_actions() {
+	return action_queue;
+}
+*/
+
+std::vector<SoundAction> sound_queue;
+
+void sound_queue_add_action(const std::string &action, int p1, int p2) {
+	SoundAction sa;
+	sa.action = action;
+	sa.p1 = p1;
+	sa.p2 = p2;
+	sound_queue.push_back(sa);
+}
+
+void sound_queue_add_actionSA(const SoundAction &sa) {
+	sound_queue.push_back(sa);
+}
+
+std::vector<SoundAction> sound_queue_get_pending_actions() {
+	return sound_queue;
+}
+
+void sound_queue_clear() {
+	sound_queue.clear();
+}
+
+size_t sound_queue_size() {
+	return sound_queue.size();
+}
+
+bool sound_queue_empty() {
+	return sound_queue.empty();
+}

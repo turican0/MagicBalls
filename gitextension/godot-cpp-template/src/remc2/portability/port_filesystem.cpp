@@ -305,6 +305,7 @@ int DirExists(const char* path)
 
 FILE* myopent(char* path, char* type) {
 	FILE *fp;
+	fp = fcaseopen(path, type);
 	return fp;
 };
 

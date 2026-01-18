@@ -2,9 +2,6 @@ extends Node3D
 
 var sounds_map = {}
 
-func _ready():
-	load_sounds_from_dir("res://convertdata/sounds/")
-
 func load_sounds_from_dir(path: String):
 	var dir = DirAccess.open(path)
 	if dir:
@@ -19,7 +16,7 @@ func load_sounds_from_dir(path: String):
 					var sound_idx = parts[1].to_int()
 					var stream = load(path + file_name)
 					if not sounds_map.has(pack_idx):
-						sounds_map[pack_idx] = {}					
+						sounds_map[pack_idx] = {}
 					sounds_map[pack_idx][sound_idx] = stream
 					print("Načten zvuk: Pack ", pack_idx, " Index ", sound_idx)			
 			file_name = dir.get_next()
@@ -34,5 +31,3 @@ func playOrigSound(pack: int, index: int):
 		player.stream = stream
 		player.play()
 		player.finished.connect(player.queue_free)
-	else:
-		print("Zvuk s indexy ", pack, ":", index, " neexistuje.")

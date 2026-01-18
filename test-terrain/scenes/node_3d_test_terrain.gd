@@ -15,7 +15,7 @@ var texture_indices: Array[Array] = []
 var mesh_instance: MeshInstance3D
 var surface_tool: SurfaceTool
 
-func _ready():
+func init():
 	# 1. Inicializace a nastavení uzlů
 	initialize_nodes()
 	

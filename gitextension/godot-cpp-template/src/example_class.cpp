@@ -935,5 +935,10 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
 	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0],true);
 
+	//soundActive_E3799 = true;
+	//soundAble_E3798 = true;
+	//InitSoundAndMusic_90FD0();
+	//if ((x_D41A0_BYTEARRAY_4_struct.setting_byte4_25) & 0x40) InitMusicBank_8EAD0(1);
+
 	//x_DWORD_E9C4C_langindexbuffer[374]
 }
