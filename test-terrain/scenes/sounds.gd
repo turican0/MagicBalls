@@ -2,20 +2,26 @@ extends Node3D
 
 var sounds_map = {}
 
-func _load_wav_as_sample(file_path: String) -> AudioStream:
-	var file = FileAccess.open(file_path, FileAccess.READ)
-	if file == null:
-		push_error("Nelze otevřít soubor pro čtení: " + file_path)
-		return null
-	var bytes = file.get_buffer(file.get_length())
-	file.close()
-	var stream = AudioStreamWAV.new()
-	stream.format = AudioStreamWAV.FORMAT_8_BITS#.FORMAT_16_BITS  # nebo podle tvých WAV
-	stream.stereo = false  # nebo false pro mono
-	stream.mix_rate = 22050  # uprav podle tvých souborů
-	stream.data = bytes
-
-	return stream
+#func _load_wav_as_sample(file_path: String) -> AudioStream:
+	#var file = FileAccess.open(file_path, FileAccess.READ)
+	#if file == null:
+		#push_error("Nelze otevřít soubor pro čtení: " + file_path)
+		#return null
+	#var bytes = file.get_buffer(file.get_length())
+	#file.close()
+	#var stream = AudioStreamWAV.new()
+	#stream.format = AudioStreamWAV.FORMAT_8_BITS#.FORMAT_16_BITS  # nebo podle tvých WAV
+	#stream.stereo = false  # nebo false pro mono
+	#stream.mix_rate = 22050  # uprav podle tvých souborů
+	#stream.data = bytes
+	#return stream
+	
+func get_free_player_indices() -> Array:
+	var status = []
+	status.resize(sfx_players.size())	
+	for i in range(sfx_players.size()):
+		status[i] = sfx_players[i].playing
+	return status
 
 func load_sounds_from_dir(path: String):
 	var dir = DirAccess.open(path)
@@ -96,12 +102,15 @@ func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 	if not sounds_map[pack_idx].has(sound_idx):
 		push_warning("Zvuk index %d v packu %d neexistuje!" % [sound_idx, pack_idx])
 		return
+	if(sfx_players[player_index].playing):
+		return
 	var stream: AudioStream = sounds_map[pack_idx][sound_idx]
 	var player = sfx_players[player_index]
 	if player.playing:
 		player.stop()
 	player.stream = stream
 	player.play()
+	print("Playing stream:%d:%d" % [player_index, sound_idx])
 
 func stop_sound(index: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:

@@ -334,7 +334,7 @@ void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
 }
 
 void SOUND_start_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_start_sample", S->index_sample, S->vol_scale_18[0][0], S->volume_16);
+	sound_queue_add_action("SOUND_start_sample", S->index_sample, S->vol_scale_18_0_0, S->volume_16);
 
 	/*
 	S->flags_14 = flags;
@@ -347,26 +347,25 @@ void SOUND_start_sample(HSAMPLE S) {
 
 //int num_channels = 8;
 
-int Mix_Playing(int which) {
-	int status = 0;
-	/*
-	status = 0;
-	if (which == -1) {
-		int i;
+std::vector<int> playing_sound_now;
 
-		for (i = 0; i < num_channels; ++i) {
-			if ((mix_channel[i].playing > 0) ||
-					mix_channel[i].looping) {
+void sound_update_playing(const std::vector<int> &free_indices) {
+	playing_sound_now = free_indices;
+}
+
+int Mix_Playing(int which) {
+    int status = 0;
+	if (which == -1) {
+	for (int idx : playing_sound_now) {
+			if (idx > 0) {
 				++status;
 			}
 		}
-	} else if (which < num_channels) {
-		if ((mix_channel[which].playing > 0) ||
-				mix_channel[which].looping) {
+	} else if (which < 10) {
+		if (playing_sound_now[which] > 0) {
 			++status;
 		}
 	}
-	*/
 	return (status);
 }
 

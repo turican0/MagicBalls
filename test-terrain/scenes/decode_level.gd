@@ -203,6 +203,7 @@ var last_offset: Vector3
 func _process(_p_delta) -> void:
 	getInputs()
 	MBEX.soundQueueClear()
+	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
 		if Main_UI.is_ctrl_active:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

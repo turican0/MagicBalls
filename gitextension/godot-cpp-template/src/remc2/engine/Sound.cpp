@@ -5113,7 +5113,7 @@ void sub_8F100_sound_proc19(uint32_t flags, __int16 index, int volume, int volum
 			soundBuffer2 = nullptr;
 			for (int j = 0; j < x_DWORD_180B4C_end_sound_buffer3_endindex; j++)
 			{
-				if (SoundBuffer3_180750[j]->flags_14 == flags && SoundBuffer3_180750[j]->vol_scale_18[0][0] == index && AilSampleStatus_94010(SoundBuffer3_180750[j]) != 2)
+				if (SoundBuffer3_180750[j]->flags_14 == flags && SoundBuffer3_180750[j]->vol_scale_18[0][0] == index -1 && AilSampleStatus_94010(SoundBuffer3_180750[j]) != 2)
 				{
 					soundBuffer2 = &SoundBuffer3_180750[j];
 					break;
@@ -5138,7 +5138,7 @@ void sub_8F100_sound_proc19(uint32_t flags, __int16 index, int volume, int volum
 			bool1 = false;
 			for (int l = 0; l < x_DWORD_180B4C_end_sound_buffer3_endindex; l++)
 			{
-				if (SoundBuffer3_180750[l]->flags_14 == flags && SoundBuffer3_180750[l]->vol_scale_18[0][0] == index)
+				if (SoundBuffer3_180750[l]->flags_14 == flags && SoundBuffer3_180750[l]->vol_scale_18[0][0] == index -1)
 				{
 					soundBuffer1 = &SoundBuffer3_180750[l];
 					soundBuffer2 = nullptr;
@@ -5184,14 +5184,14 @@ void sub_8F100_sound_proc19(uint32_t flags, __int16 index, int volume, int volum
 		Logger->trace("sub_8F100_sound_proc19:44mhz:");
 		Logger->trace("sub_8F100_sound_proc19:rate:{}", (*soundBuffer1)->playback_rate_15);
 	}
-	
+	(*soundBuffer1)->vol_scale_18_0_0 = index-1;
+	AilStartSample_93B50(*soundBuffer1);
 	(*soundBuffer1)->flags_14 = flags;
-	(*soundBuffer1)->vol_scale_18[0][0] = index;
+	(*soundBuffer1)->vol_scale_18[0][0] = index-1;
 	(*soundBuffer1)->status_1 = volume;
 	(*soundBuffer1)->len_4_5[1] = volumePan;
 	(*soundBuffer1)->vol_scale_18[0][2] = 0;
 	(*soundBuffer1)->vol_scale_18[0][3] = 0;
-	AilStartSample_93B50(*soundBuffer1);
 }
 
 //----- (0008F420) --------------------------------------------------------
@@ -5201,7 +5201,7 @@ void sub_8F420_sound_proc20(int a1, __int16 a2)//270420
 	{
 		for (int i = 0; i < x_DWORD_180B4C_end_sound_buffer3_endindex; i++)
 		{
-			if (SoundBuffer3_180750[i]->flags_14 == a1 && SoundBuffer3_180750[i]->vol_scale_18[0][0] == a2 && AilSampleStatus_94010(SoundBuffer3_180750[i]) != 2)
+			if (SoundBuffer3_180750[i]->flags_14 == a1 && SoundBuffer3_180750[i]->vol_scale_18[0][0] == a2-1 && AilSampleStatus_94010(SoundBuffer3_180750[i]) != 2)
 			{
 				AilEndSample_93D00(SoundBuffer3_180750[i]);
 				return;
@@ -5217,7 +5217,7 @@ void sub_8F710_sound_proc21(int flags, __int16 index, int loopCount, unsigned __
 	{
 		for (int i = 0; i < x_DWORD_180B4C_end_sound_buffer3_endindex; i++)
 		{
-			if (SoundBuffer3_180750[i]->flags_14 == flags && SoundBuffer3_180750[i]->vol_scale_18[0][0] == index && AilSampleStatus_94010(SoundBuffer3_180750[i]) != 2)
+			if (SoundBuffer3_180750[i]->flags_14 == flags && SoundBuffer3_180750[i]->vol_scale_18[0][0] == index-1 && AilSampleStatus_94010(SoundBuffer3_180750[i]) != 2)
 			{
 				if (loopCount > 127)
 					loopCount = 127;

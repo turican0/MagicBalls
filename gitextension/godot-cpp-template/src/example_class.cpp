@@ -38,12 +38,22 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text"), &ExampleClass::convertOriginalData);
 	godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
 	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &ExampleClass::getPendingSoundActions);
+	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &ExampleClass::updateFreeSoundPlayers);
 }
 
 //PlayIntoSoundEvents_1B280
 //StopMusic_8E020();
 //InitMusicBank_8EAD0(pSoundEvent[x_WORD_D4004].index);
 //StartMusic_8E160(pSoundEvent[x_WORD_D4004].index, 0x64u);
+
+void ExampleClass::updateFreeSoundPlayers(const godot::Array &p_indices) {
+	std::vector<int> standard_vector;
+	standard_vector.reserve(p_indices.size());
+	for (int i = 0; i < p_indices.size(); i++) {
+		standard_vector.push_back(static_cast<int>(p_indices[i]));
+	}
+	sound_update_playing(standard_vector);
+}
 
 void ExampleClass::convertOriginalData(String path) {
 	MBEXconvertData(path);
@@ -814,7 +824,7 @@ void ExampleClass::RunGameStep(Dictionary inputs) {
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1))
 		sub_57570(); //nothing draw
 	sub_575C0(); //nothing draw-load level
-	//sub_6E150(); //nothing draw-sounds
+	sub_6E150(); //nothing draw-sounds
 	x_DWORD_17DB54_game_turn2++;
 }
 

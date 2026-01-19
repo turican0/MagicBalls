@@ -256,6 +256,7 @@ void clean_actions();
 */
 void sound_queue_add_action(const std::string &action, int p1, int p2, int p3);
 void sound_queue_clear();
+void sound_update_playing(const std::vector<int> &free_indices);
 std::vector<SoundAction> sound_queue_get_pending_actions();
 
 

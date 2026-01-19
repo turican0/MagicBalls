@@ -86,4 +86,5 @@ public:
 	void convertOriginalData(String path);
 	Array getPendingSoundActions();
 	void soundQueueClear();
+	void updateFreeSoundPlayers(const godot::Array &p_indices);
 	};
