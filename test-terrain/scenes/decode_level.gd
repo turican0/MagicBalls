@@ -438,12 +438,13 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
 	MBEX.TerrainMake(level_tab_data_unpacked)
 	
-	if not DirAccess.dir_exists_absolute("user://convertdata/sounds/"):
-		MBEX.convertOriginalData()
+	if not DirAccess.dir_exists_absolute("res://convertdata/sounds/"):
+		MBEX.convertOriginalData("res://convertdata/sounds")
 	
-	Main_Sounds.load_sounds_from_dir("user://convertdata/sounds/")
+	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")
 	
 	Main_Sounds.init()
+	Main_Sounds.setSoundBank(1)#Night
 	
 	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()

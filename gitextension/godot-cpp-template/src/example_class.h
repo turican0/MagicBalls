@@ -83,7 +83,7 @@ public:
 	void setPlayerActiveSpell(int spell_index, int button);
 	Array getPaletteModifications();
 	Ref<Image> getMinimap();
-	void convertOriginalData();
+	void convertOriginalData(String path);
 	Array getPendingSoundActions();
 	void soundQueueClear();
 	};

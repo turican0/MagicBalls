@@ -59,7 +59,6 @@ extern uint8_t* x_DWORD_1821D0[];
 extern uint8_t* x_DWORD_1821E8[];
 
 extern type_E37A0_sound_buffer2* soundIndex_E37A0;
-extern __int16 indexLoadedSound_180B50;
 
 void InitSound_8D290();
 void sub_8D800_sound_proc2();
@@ -137,7 +136,7 @@ int AilLockChannel_97F90(MDI_DRIVER* a1);
 void AilReleaseChannel_980D0(HMDIDRIVER mdi, int a2);
 void AilMapSequenceChannel_98170(HSEQUENCE a1, int a2, int a3);
 void AilSendChannelVoiceMessage_98360(HMDIDRIVER mdi, HSEQUENCE hSequence, int32_t status, int32_t data_1, int32_t data_2);
-bool LoadSound_84300(uint8_t soundIndex);
+bool LoadSounds_84300(uint8_t soundBank);
 void LoadSoundDataFromBuffer_844A0(uint16_t count);
 bool ReadAndDecompressSound(FILE* file, uint8_t soundIndex2);
 bool AilApiReadIni_9E3A0(AIL_INI* INI, char* filename);
@@ -260,7 +259,7 @@ void SetSoundFreq_9A230(int a1);
 void WriteWaveToFile(wav_t* wav, const char* name);
 void AIL_fix();
 const char* mygetenv(const char* a1);
-void PrepareEventSound_6E450(__int16 a1, __int16 a2, __int16 a3);
+void PrepareEventSound_6E450(__int16 entityIndex, __int16 a2, __int16 soundIndex);
 void ChangeSoundLevel_19CA0(uint8_t option);
 int sub_582B0(__int16 a1, __int16 a2);
 int sub_582F0(int a1, __int16 a2);

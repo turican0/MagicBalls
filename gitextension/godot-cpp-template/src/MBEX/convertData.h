@@ -44,7 +44,7 @@
 
 using namespace godot;
 
-void MBEXconvertData();
-void MBEXsoundConverts();
-bool MBEXsoundConvert(int i);
+void MBEXconvertData(String path);
+void MBEXsoundConverts(String path);
+bool MBEXsoundConvert(int i,String path);
 bool MBLoadSound(uint8_t soundIndex);

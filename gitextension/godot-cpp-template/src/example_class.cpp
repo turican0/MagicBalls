@@ -35,13 +35,18 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &ExampleClass::setPlayerActiveSpell);
 	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &ExampleClass::getPaletteModifications);
 	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &ExampleClass::getMinimap);
-	godot::ClassDB::bind_method(D_METHOD("convertOriginalData"), &ExampleClass::convertOriginalData);
+	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text"), &ExampleClass::convertOriginalData);
 	godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
 	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &ExampleClass::getPendingSoundActions);
 }
 
-void ExampleClass::convertOriginalData() {
-	MBEXconvertData();
+//PlayIntoSoundEvents_1B280
+//StopMusic_8E020();
+//InitMusicBank_8EAD0(pSoundEvent[x_WORD_D4004].index);
+//StartMusic_8E160(pSoundEvent[x_WORD_D4004].index, 0x64u);
+
+void ExampleClass::convertOriginalData(String path) {
+	MBEXconvertData(path);
 }
 
 void ExampleClass::soundQueueClear() {
@@ -57,6 +62,7 @@ Array ExampleClass::getPendingSoundActions() {
 		d["action"] = String(sa.action.c_str());
 		d["p1"] = sa.p1;
 		d["p2"] = sa.p2;
+		d["p3"] = sa.p3;
 		result.append(d);
 	}
 	sound_queue_clear();
@@ -896,7 +902,9 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	*/
 
 	//begin - code from MainMenu
-	// sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
+	//SetCenterScreenForFlyAssistant_6EDB0();
+	StopMusic_8E020(); //26f020
+	StartMusic_8E160(4, 0x7Fu); //26f160 //menu music
 	x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
 	x_WORD_180660_VGA_type_resolution = 8;
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);

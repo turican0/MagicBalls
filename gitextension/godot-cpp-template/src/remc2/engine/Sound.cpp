@@ -27,7 +27,7 @@ int numOfLoadedSounds_E37A4 = 0;
 //int8_t* str2_E37A4_sound_buffer3 = 0; // weak
 uint8_t* soundBuffer1_E37A8 = nullptr; // weak
 uint8_t defaultSoundIndex_E37AC = 0;
-int8_t actualSound_E37AD = -1; // weak
+int8_t actualSoundBank_E37AD = -1; // weak
 char x_BYTE_E37AE = 0; // weak
 int defaultVolume_E37B0 = 127; // weak
 __int16 soundFreqType2_E37B4 = 1644; // weak
@@ -562,7 +562,7 @@ void sub_8D800_sound_proc2()//26E800
 
 	while (runAgain)
 	{
-		runAgain = LoadSound_84300(defaultSoundIndex_E37AC);
+		runAgain = LoadSounds_84300(defaultSoundIndex_E37AC);
 		if (runAgain)
 		{
 			switch (soundFreqType_E37B6)
@@ -1765,15 +1765,15 @@ __int16 sub_98AE9(__int16* a1, int a2)//279ae9
 }
 
 //----- (00084300) --------------------------------------------------------
-bool LoadSound_84300(uint8_t soundIndex)//265300
+bool LoadSounds_84300(uint8_t soundBank)//265300
 {
 	FILE* file;
 	long sizeOfFile;
 	int16_t lastSoundBank[6];
 	int32_t lastSoundBankPos;
-	uint8_t soundIndex2 = 0;
+	uint8_t soundQuality = 0;
 
-	if (soundAble_E3798 && actualSound_E37AD != soundIndex)
+	if (soundAble_E3798 && actualSoundBank_E37AD != soundBank)
 	{
 		if (soundActiveH_E2A14)
 			EndSample_8D8F0();
@@ -1792,36 +1792,36 @@ bool LoadSound_84300(uint8_t soundIndex)//265300
 			switch (soundFreqType_E37B6)
 			{
 				case 800:
-					soundIndex2 = 5;//800
+					soundQuality = 5;//800
 					break;
 				case 811:
-					soundIndex2 = 4;//811
+					soundQuality = 4;//811
 					break;
 				case 822:
-					soundIndex2 = 3;//822
+					soundQuality = 3;//822
 					break;
 				case 1611:
-					soundIndex2 = 2;//1611
+					soundQuality = 2;//1611
 					break;
 				case 1622:
-					soundIndex2 = 1;//1622
+					soundQuality = 1;//1622
 					break;
 				case 1644:
-					soundIndex2 = 0;//1644
+					soundQuality = 0;//1644
 					break;
 			}
-			if ((soundIndex + 1) > lastSoundBank[soundIndex2])
+			if ((soundBank + 1) > lastSoundBank[soundQuality])
 			{
 				DataFileIO::Close(file);
 				return true;
 			}
-			DataFileIO::Seek(file, 96 * soundIndex, 1);//seek to finded sound
-			if (!ReadAndDecompressSound(file, soundIndex2))
+			DataFileIO::Seek(file, 96 * soundBank, 1);//seek to finded sound
+			if (!ReadAndDecompressSound(file, soundQuality))
 			{
 				DataFileIO::Close(file);
 				return true;
 			}
-			actualSound_E37AD = soundIndex;
+			actualSoundBank_E37AD = soundBank;
 			DataFileIO::Close(file);
 		}
 	}
@@ -1870,7 +1870,7 @@ bool ReadAndDecompressSound(FILE* file, uint8_t soundIndex2)//2654f0
 			FreeMem_83E80(soundBuffer1_E37A8);
 			FreeMem_83E80((uint8_t*)soundIndex_E37A0);
 			soundActiveL_E2A14 = 0;
-			actualSound_E37AD = -1;
+			actualSoundBank_E37AD = -1;
 			return false;
 		}
 		soundBufferLen_E2A18 = soundBank2[soundIndex2].dword_12 + 256;
@@ -5079,7 +5079,7 @@ int sub_8F0AB(FILE* a1, /*int a2,*/ int a3)//26f0ab
 //----- (0008F100) --------------------------------------------------------
 void sub_8F100_sound_proc19(uint32_t flags, __int16 index, int volume, int volumePan, unsigned __int16 playRate, char loopCount, unsigned __int8 playType)//270100
 {
-	bool bool1; // [esp+0h] [ebp-18h]
+	bool bool1;
 
 	HSAMPLE* soundBuffer1 = nullptr;
 	HSAMPLE* soundBuffer2 = nullptr;
@@ -5184,14 +5184,14 @@ void sub_8F100_sound_proc19(uint32_t flags, __int16 index, int volume, int volum
 		Logger->trace("sub_8F100_sound_proc19:44mhz:");
 		Logger->trace("sub_8F100_sound_proc19:rate:{}", (*soundBuffer1)->playback_rate_15);
 	}
-
-	AilStartSample_93B50(*soundBuffer1);
+	
 	(*soundBuffer1)->flags_14 = flags;
 	(*soundBuffer1)->vol_scale_18[0][0] = index;
 	(*soundBuffer1)->status_1 = volume;
 	(*soundBuffer1)->len_4_5[1] = volumePan;
 	(*soundBuffer1)->vol_scale_18[0][2] = 0;
 	(*soundBuffer1)->vol_scale_18[0][3] = 0;
+	AilStartSample_93B50(*soundBuffer1);
 }
 
 //----- (0008F420) --------------------------------------------------------
@@ -5523,9 +5523,8 @@ void WriteWaveToFile(wav_t* wav, const char* name)
 }
 
 //----- (0006E450) --------------------------------------------------------
-void PrepareEventSound_6E450(__int16 a1, __int16 a2, __int16 a3)//24f450
+void PrepareEventSound_6E450(__int16 entityIndex, __int16 a2, __int16 soundIndex)//24f450
 {
-	type_event_0x6E8E* v3x; // edx
 	axis_3d* v4x; // esi
 	unsigned int v5; // eax
 	__int16 v6; // ax
@@ -5536,11 +5535,8 @@ void PrepareEventSound_6E450(__int16 a1, __int16 a2, __int16 a3)//24f450
 	int v11; // edx
 	int v12; // edi
 	unsigned int v13; // eax
-	unsigned int v14; // edx
 	__int16 v21; // [esp+0h] [ebp-24h]
-	type_event_0x6E8E* v22x; // [esp+4h] [ebp-20h]
 	signed int v23; // [esp+8h] [ebp-1Ch]
-	int v24; // [esp+Ch] [ebp-18h]
 	unsigned int v25; // [esp+10h] [ebp-14h]
 	type_event_0x6E8E* v26x; // [esp+14h] [ebp-10h]
 	unsigned __int16 v27; // [esp+18h] [ebp-Ch]
@@ -5549,27 +5545,24 @@ void PrepareEventSound_6E450(__int16 a1, __int16 a2, __int16 a3)//24f450
 
 	v29 = 0;
 	v21 = 0;
-	v24 = D41A0_0.rand_0x8;
 	if (!soundActive_E3799 || !soundAble_E3798)
 		return;
-	v3x = ENTITY_EA3E4[a1];
-	v22x = v3x;
-	if (v3x <= ENTITY_EA3E4[0])
+	if (ENTITY_EA3E4[entityIndex] <= ENTITY_EA3E4[0])
 	{
 		v10 = 0x7FFF;
 		LOWORD(v12) = 0x7FFF;
 	}
 	else
 	{
-		if (v3x->struct_byte_0xc_12_15.byte[0] < 0)
+		if (ENTITY_EA3E4[entityIndex]->struct_byte_0xc_12_15.byte[0] < 0)
 			return;
-		v4x = &v3x->axis_0x4C_76;
+		v4x = &ENTITY_EA3E4[entityIndex]->axis_0x4C_76;
 		if ((unsigned int)sub_584D0_SQdistX_SQdistY(
 			&ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]->axis_0x4C_76,
-			&v3x->axis_0x4C_76) > 0x9000000)
+			&ENTITY_EA3E4[entityIndex]->axis_0x4C_76) > 0x9000000)
 			return;
 		v26x = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
-		v29 = v22x->id_0x1A_26;
+		v29 = ENTITY_EA3E4[entityIndex]->id_0x1A_26;
 		v5 = Maths::sub_58490_radix_3d_2(&v26x->axis_0x4C_76, v4x);
 		v25 = v5;
 		v23 = v5;
@@ -5600,64 +5593,51 @@ void PrepareEventSound_6E450(__int16 a1, __int16 a2, __int16 a3)//24f450
 		{
 			LOWORD(v12) = 0x7FFF;
 		}
-		if ((unsigned __int16)a3 >= 0x2Au)
+		if (soundIndex >= 0x2Au)
 		{
-			v13 = 9377 * v24 + 9439;
-			if ((unsigned __int16)a3 <= 0x2Cu)
+			v13 = 9377 * D41A0_0.rand_0x8 + 9439;
+			if (soundIndex <= 0x2Cu)
 			{
-				v14 = v13 % 0x1E - 15;
+				v21 = v13 % 0x1E - 15;
 			}
-			else
+			else if (soundIndex == 46)
 			{
-				if (a3 != 46)
-					goto LABEL_29;
-				v14 = v13 % 0x14;
-				if (v22x->actionIndex_0x45_69 == 14)
-					LOWORD(v14) = v14 + 10;
+				if (ENTITY_EA3E4[entityIndex]->actionIndex_0x45_69 == 14)
+					v21 = v13 % 0x14 + 10;
 				else
-					LOWORD(v14) = v14 - 10;
-			}
-			v21 = v14;
+					v21 = v13 % 0x14 - 10;				
+			}			
 		}
 	}
-LABEL_29:
-	if ((unsigned __int16)a3 < 0x2Au)
+	switch (soundIndex)
 	{
-		if ((unsigned __int16)a3 < 0x20u)
-		{
-			if (a3 != 7)
-				goto LABEL_46;
-			goto LABEL_45;
-		}
-		if ((unsigned __int16)a3 <= 0x20u || a3 == 38)
-		{
-		LABEL_45:
+		case 7:
+		case 32:
+		case 38:
+		case 42:
+		case 43:
+		case 44:
+		case 46:
+		case 47:
+		case 49:
+		case 50:
+		case 51:
+		case 52:
+		case 53:
+		case 58:
+		case 59:
+		case 62:
 			v29 = 0;
-			goto LABEL_46;
-		}
+			break;
 	}
-	else
-	{
-		if ((unsigned __int16)a3 <= 0x2Cu)
-			goto LABEL_45;
-		if ((unsigned __int16)a3 >= 0x31u)
-		{
-			if ((unsigned __int16)a3 > 0x35u && ((unsigned __int16)a3 < 0x3Au || (unsigned __int16)a3 > 0x3Bu && a3 != 62))
-				goto LABEL_46;
-			goto LABEL_45;
-		}
-		if ((unsigned __int16)a3 >= 0x2Eu && (unsigned __int16)a3 <= 0x2Fu)
-			goto LABEL_45;
-	}
-LABEL_46:
-	switch (a3)
+	switch (soundIndex)
 	{
 	case 1:
 	case 2:
 		if (a2 == D41A0_0.LevelIndex_0xc)
 		{
-			sub_8F100_sound_proc19(0, a3, 0, 64, 0x64u, -1, 2u);
-			sub_8F710_sound_proc21(0, a3, 70, 2u, 0);
+			sub_8F100_sound_proc19(0, soundIndex, 0, 64, 0x64u, -1, 2u);
+			sub_8F710_sound_proc21(0, soundIndex, 70, 2u, 0);
 		}
 		break;
 	case 3:
@@ -5691,20 +5671,20 @@ LABEL_46:
 	case 61:
 	case 63:
 	case 64:
-		if (sub_6EA90(v10, str_F4FE0[a3].word_2))
+		if (sub_6EA90(v10, str_F4FE0[soundIndex].word_2))
 		{
-			str_F4FE0[a3].word_2 = v10;
-			str_F4FE0[a3].word_1 = v12;
-			str_F4FE0[a3].word_5 = v21;
-			str_F4FE0[a3].word_0 = 1;
-			str_F4FE0[a3].word_3 = v29;
+			str_F4FE0[soundIndex].word_2 = v10;
+			str_F4FE0[soundIndex].word_1 = v12;
+			str_F4FE0[soundIndex].word_5 = v21;
+			str_F4FE0[soundIndex].word_0 = 1;
+			str_F4FE0[soundIndex].word_3 = v29;
 		}
 		break;
 	case 5:
 		if (a2 == D41A0_0.LevelIndex_0xc)
 		{
-			sub_8F100_sound_proc19(0, a3, 0, 64, 0x64u, -1, 2u);
-			sub_8F710_sound_proc21(0, a3, 120, 2u, 0);
+			sub_8F100_sound_proc19(0, soundIndex, 0, 64, 0x64u, -1, 2u);
+			sub_8F710_sound_proc21(0, soundIndex, 120, 2u, 0);
 		}
 		break;
 	case 7:
@@ -5725,76 +5705,76 @@ LABEL_46:
 	case 58:
 	case 59:
 	case 62:
-		if (sub_6EA90(v10, str_F4FE0[a3].word_2))
+		if (sub_6EA90(v10, str_F4FE0[soundIndex].word_2))
 		{
-			str_F4FE0[a3].word_2 = v10;
-			str_F4FE0[a3].word_1 = v12;
-			str_F4FE0[a3].word_5 = v21;
-			str_F4FE0[a3].word_0 = 3;
-			str_F4FE0[a3].word_3 = v29;
+			str_F4FE0[soundIndex].word_2 = v10;
+			str_F4FE0[soundIndex].word_1 = v12;
+			str_F4FE0[soundIndex].word_5 = v21;
+			str_F4FE0[soundIndex].word_0 = 3;
+			str_F4FE0[soundIndex].word_3 = v29;
 		}
 		break;
 	case 14:
 	case 29:
-		if (sub_6EA90(v10, str_F4FE0[a3].word_2))
+		if (sub_6EA90(v10, str_F4FE0[soundIndex].word_2))
 		{
 			if (a2 == D41A0_0.LevelIndex_0xc)
 			{
-				str_F4FE0[a3].word_2 = v10;
-				str_F4FE0[a3].word_1 = v12;
-				str_F4FE0[a3].word_5 = v21;
-				str_F4FE0[a3].word_3 = 0;
-				str_F4FE0[a3].word_0 = 1;
+				str_F4FE0[soundIndex].word_2 = v10;
+				str_F4FE0[soundIndex].word_1 = v12;
+				str_F4FE0[soundIndex].word_5 = v21;
+				str_F4FE0[soundIndex].word_3 = 0;
+				str_F4FE0[soundIndex].word_0 = 1;
 			}
 			else if (a2 == -1)
 			{
-				str_F4FE0[a3].word_2 = v10;
-				str_F4FE0[a3].word_1 = v12;
-				str_F4FE0[a3].word_5 = v21;
-				str_F4FE0[a3].word_3 = v29;
-				str_F4FE0[a3].word_0 = 1;
+				str_F4FE0[soundIndex].word_2 = v10;
+				str_F4FE0[soundIndex].word_1 = v12;
+				str_F4FE0[soundIndex].word_5 = v21;
+				str_F4FE0[soundIndex].word_3 = v29;
+				str_F4FE0[soundIndex].word_0 = 1;
 			}
 		}
 		break;
 	case 31:
 		if (a2 == D41A0_0.LevelIndex_0xc)
 		{
-			sub_8F100_sound_proc19(0, a3, 0, 64, 0x64u, -1, 2u);
-			sub_8F710_sound_proc21(0, a3, 85, 2u, 0);
+			sub_8F100_sound_proc19(0, soundIndex, 0, 64, 0x64u, -1, 2u);
+			sub_8F710_sound_proc21(0, soundIndex, 85, 2u, 0);
 		}
 		break;
 	case 47:
 	case 49:
-		if (sub_6EA90(v10, str_F4FE0[a3].word_2))
+		if (sub_6EA90(v10, str_F4FE0[soundIndex].word_2))
 		{
-			str_F4FE0[a3].word_2 = v10;
-			str_F4FE0[a3].word_1 = v12;
-			str_F4FE0[a3].word_5 = v21;
-			str_F4FE0[a3].word_3 = v29;
-			str_F4FE0[a3].word_0 = 4;
+			str_F4FE0[soundIndex].word_2 = v10;
+			str_F4FE0[soundIndex].word_1 = v12;
+			str_F4FE0[soundIndex].word_5 = v21;
+			str_F4FE0[soundIndex].word_3 = v29;
+			str_F4FE0[soundIndex].word_0 = 4;
 		}
 		break;
 	case 54:
 	case 55:
 	case 56:
 	case 57:
-		if (sub_6EA90(v10, str_F4FE0[a3].word_2))
+		if (sub_6EA90(v10, str_F4FE0[soundIndex].word_2))
 		{
 			if (a2 == D41A0_0.LevelIndex_0xc)
 			{
-				str_F4FE0[a3].word_2 = v10;
-				str_F4FE0[a3].word_1 = v12;
-				str_F4FE0[a3].word_5 = v21;
-				str_F4FE0[a3].word_3 = 0;
-				str_F4FE0[a3].word_0 = 3;
+				str_F4FE0[soundIndex].word_2 = v10;
+				str_F4FE0[soundIndex].word_1 = v12;
+				str_F4FE0[soundIndex].word_5 = v21;
+				str_F4FE0[soundIndex].word_3 = 0;
+				str_F4FE0[soundIndex].word_0 = 3;
 			}
 			else if (a2 == -1)
 			{
-				str_F4FE0[a3].word_2 = v10;
-				str_F4FE0[a3].word_1 = v12;
-				str_F4FE0[a3].word_5 = v21;
-				str_F4FE0[a3].word_3 = v29;
-				str_F4FE0[a3].word_0 = 3;
+				str_F4FE0[soundIndex].word_2 = v10;
+				str_F4FE0[soundIndex].word_1 = v12;
+				str_F4FE0[soundIndex].word_5 = v21;
+				str_F4FE0[soundIndex].word_3 = v29;
+				str_F4FE0[soundIndex].word_0 = 3;
 			}
 		}
 		break;
@@ -5803,11 +5783,11 @@ LABEL_46:
 	case 67:
 	case 68:
 	case 69:
-		str_F4FE0[a3].word_2 = v10;
-		str_F4FE0[a3].word_1 = v12;
-		str_F4FE0[a3].word_0 = 3;
-		str_F4FE0[a3].word_5 = v21;
-		str_F4FE0[a3].word_3 = v29;
+		str_F4FE0[soundIndex].word_2 = v10;
+		str_F4FE0[soundIndex].word_1 = v12;
+		str_F4FE0[soundIndex].word_0 = 3;
+		str_F4FE0[soundIndex].word_5 = v21;
+		str_F4FE0[soundIndex].word_3 = v29;
 		break;
 	default:
 		return;

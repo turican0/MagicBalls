@@ -6,6 +6,7 @@ struct SoundAction {
 	std::string action;
 	int p1 = 0;
 	int p2 = 0;
+	int p3 = 0;
 };
 
 //#include <godot_cpp/variant/string.hpp>
@@ -253,7 +254,7 @@ void add_sound_action(String p_action_name, int p_p1, int p_p2);
 Array get_pending_actions();
 void clean_actions();
 */
-void sound_queue_add_action(const std::string &action, int p1, int p2);
+void sound_queue_add_action(const std::string &action, int p1, int p2, int p3);
 void sound_queue_clear();
 std::vector<SoundAction> sound_queue_get_pending_actions();
 

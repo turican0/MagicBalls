@@ -28,15 +28,15 @@
 #define MKDIR(path) mkdir(path, 0755)
 #endif
 
-void MBEXconvertData() {
-	MBEXsoundConverts();
+void MBEXconvertData(String path) {
+	MBEXsoundConverts(path);
 }
 
-void MBEXsoundConverts() {
+void MBEXsoundConverts(String path) {
 	bool soundExists = true;
 	int i = 0;
 	while (soundExists) {
-		soundExists = MBEXsoundConvert(i);
+		soundExists = MBEXsoundConvert(i,path);
 		i++;
 	}
 }
@@ -66,9 +66,9 @@ bool make_dir_godot(const String &path) {
 	return err == OK;
 }
 
-bool MBEXsoundConvert(int index) {
+bool MBEXsoundConvert(int index, String path) {
 	bool result = false;
-	char* OUT_PATH = "user://convertdata/sounds";
+	char *OUT_PATH = (char*)path.utf8().get_data();
 	if (!MBLoadSound(index))
 		return false;
 	bool subSoundExists = true;
@@ -86,9 +86,9 @@ bool MBEXsoundConvert(int index) {
 			break;
 		}
 		String filename = String::utf8((const char *)filename_c);
-		String dir_path = "user://convertdata/sounds";
-		String full_path = dir_path + "/" + vformat("%03d_%03d_%s", index, j, filename);
-		if (!make_dir_godot(dir_path)) {
+		//String dir_path = "user://convertdata/sounds";
+		String full_path = path + "/" + vformat("%03d_%03d_%s", index, j, filename);
+		if (!make_dir_godot(path)) {
 			break;
 		}
 		Ref<FileAccess> file = FileAccess::open(full_path, FileAccess::WRITE);

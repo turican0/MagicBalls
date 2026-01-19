@@ -326,15 +326,23 @@ int32_t ac_sound_call_driver(AIL_DRIVER* drvr, int32_t fn, VDI_CALL* out) {
 };
 
 void SOUND_set_master_volume(int32_t volume) {
-	sound_queue_add_action("SOUND_set_master_volume", 0, 0);
+	sound_queue_add_action("SOUND_set_master_volume", 0, 0, 0);
 }
 
 void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
-	sound_queue_add_action("SOUND_set_sample_volume", S->index_sample, volume);
+	sound_queue_add_action("SOUND_set_sample_volume", S->index_sample, volume, 0);
 }
 
 void SOUND_start_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_start_sample", S->index_sample, 0);
+	sound_queue_add_action("SOUND_start_sample", S->index_sample, S->vol_scale_18[0][0], S->volume_16);
+
+	/*
+	S->flags_14 = flags;
+	S->vol_scale_18[0][0] = index;
+	S->status_1 = volume;
+	S->len_4_5[1] = volumePan;
+	S->vol_scale_18[0][2] = 0;
+	S->vol_scale_18[0][3] = 0;*/
 };
 
 //int num_channels = 8;
@@ -376,7 +384,7 @@ uint32_t SOUND_sample_status(HSAMPLE S) {
 }
 
 void SOUND_end_sample(HSAMPLE  /*S*/) {
-	sound_queue_add_action("SOUND_end_sample", 0, 0);
+	sound_queue_add_action("SOUND_end_sample", 0, 0, 0);
 };
 
 void SOUND_finalize(int channel) {
@@ -395,7 +403,7 @@ void SOUND_finalize(int channel) {
 		S->vol_scale_18[0][2] = 0;
 		S->vol_scale_18[0][3] = 0;
 	}
-	sound_queue_add_action("SOUND_finalize", 0, 0);
+	sound_queue_add_action("SOUND_finalize", 0, 0, 0);
 }
 
 int run();
@@ -905,11 +913,12 @@ Array get_pending_actions() {
 
 std::vector<SoundAction> sound_queue;
 
-void sound_queue_add_action(const std::string &action, int p1, int p2) {
+void sound_queue_add_action(const std::string &action, int p1, int p2, int p3) {
 	SoundAction sa;
 	sa.action = action;
 	sa.p1 = p1;
 	sa.p2 = p2;
+	sa.p3 = p3;
 	sound_queue.push_back(sa);
 }
 

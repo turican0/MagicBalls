@@ -30,17 +30,17 @@ func load_sounds_from_dir(path: String):
 					var pack_idx = parts[0].to_int()
 					var sound_idx = parts[1].to_int()
 					var full_path = path + file_name
-					var stream = _load_wav_as_sample(full_path)  
+					#var stream = _load_wav_as_sample(full_path)  
 					#var stream = ResourceLoader.load(full_path, "AudioStream", ResourceLoader.CACHE_MODE_REUSE)
-					#var stream = load(path + file_name)
+					var stream = load(path + file_name)
 					if not sounds_map.has(pack_idx):
 						sounds_map[pack_idx] = {}
 					sounds_map[pack_idx][sound_idx] = stream
 					print("Načten zvuk: Pack ", pack_idx, " Index ", sound_idx)			
 			file_name = dir.get_next()
 	else:
-		print("Chyba: Adresář nebyl nalezen.")
-		
+		print("Chyba: Adresář nebyl nalezen.")	
+
 func updateSounds(soundActions:Array):
 	for action_dict in soundActions:
 		if not action_dict is Dictionary:
@@ -48,10 +48,32 @@ func updateSounds(soundActions:Array):
 		var action: String = action_dict.get("action", "")
 		var p1: int = action_dict.get("p1", 0)
 		var p2: int = action_dict.get("p2", 0)
-
+		var p3: int = action_dict.get("p3", 0)
+		var matchok=false
 		match action:
 			"SOUND_start_sample":
-				play_sound(0, 0, 127, 0)
+				play_sound(soundBank, p1, p2)
+				set_volume(p1, p3)
+				matchok=true
+			"SOUND_set_sample_volume":
+				set_volume(p1, p2)
+				matchok=true
+		if(!matchok):
+			matchok=true
+var soundBank=0
+func setSoundBank(bank):
+	soundBank=bank
+#	0-DAY
+#	1-NIGHT
+#	2-CAVE
+#	3-VIDEO0
+#	4-VIDEO1
+#	5-VIDEO2
+#	6-VIDEO3
+#	7-VIDEO4
+#	8-VIDEO5
+#	9-VIDEO6
+
 
 const MAX_SIMULTANEOUS_SOUNDS := 10
 var sfx_players: Array[AudioStreamPlayer] = []
@@ -64,45 +86,28 @@ func init() -> void:
 		add_child(player)
 		sfx_players.append(player)
 
-func playOrigSound(pack: int, index: int):
-	if sounds_map.has(pack) and sounds_map[pack].has(index):
-		var stream = sounds_map[pack][index]
-		var player = AudioStreamPlayer.new()
-		add_child(player)
-		player.stream = stream
-		player.play()
-		player.finished.connect(player.queue_free)
-		
-func play_sound(pack_idx: int, sound_idx: int, volume_db: float = 0.0, pitch: float = 1.0) -> int:
+func play_sound(pack_idx: int, player_index: int, sound_idx: int):
+	if player_index < 0 or player_index >= MAX_SIMULTANEOUS_SOUNDS:
+		push_warning("Neplatný channel %d! Musí být 0-%d." % [player_index, MAX_SIMULTANEOUS_SOUNDS - 1])
+		return
 	if not sounds_map.has(pack_idx):
 		push_warning("Pack %d neexistuje!" % pack_idx)
-		return -1
+		return
 	if not sounds_map[pack_idx].has(sound_idx):
 		push_warning("Zvuk index %d v packu %d neexistuje!" % [sound_idx, pack_idx])
-		return -1
+		return
 	var stream: AudioStream = sounds_map[pack_idx][sound_idx]
-	var free_index := -1
-	for i in MAX_SIMULTANEOUS_SOUNDS:
-		if not sfx_players[i].playing:
-			free_index = i
-			break
-	if free_index == -1:
-		free_index = 0
-	var player: AudioStreamPlayer = sfx_players[free_index]
+	var player = sfx_players[player_index]
+	if player.playing:
+		player.stop()
 	player.stream = stream
-	player.volume_db = volume_db
-	player.pitch_scale = pitch
 	player.play()
-	return free_index
 
 func stop_sound(index: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
 		sfx_players[index].stop()
 
-func set_volume(index: int, volume_db: float) -> void:
+func set_volume(index: int, volume_int: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
-		sfx_players[index].volume_db = volume_db
-
-func set_pitch(index: int, pitch: float) -> void:
-	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
-		sfx_players[index].pitch_scale = pitch
+		var volume_linear: float = volume_int / 127.0
+		sfx_players[index].volume_db = linear_to_db(volume_linear)
