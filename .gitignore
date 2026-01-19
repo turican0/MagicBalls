@@ -25,3 +25,4 @@ gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debu
 *.tlog
 *.db
 gitextension/godot-cpp-template/build/
+/test-terrain/convertdata
