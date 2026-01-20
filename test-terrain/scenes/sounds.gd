@@ -102,8 +102,8 @@ func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 	if not sounds_map[pack_idx].has(sound_idx):
 		push_warning("Zvuk index %d v packu %d neexistuje!" % [sound_idx, pack_idx])
 		return
-	if(sfx_players[player_index].playing):
-		return
+	#if(sfx_players[player_index].playing):
+		#return
 	var stream: AudioStream = sounds_map[pack_idx][sound_idx]
 	var player = sfx_players[player_index]
 	if player.playing:

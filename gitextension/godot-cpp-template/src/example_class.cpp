@@ -46,6 +46,10 @@ void ExampleClass::_bind_methods() {
 //InitMusicBank_8EAD0(pSoundEvent[x_WORD_D4004].index);
 //StartMusic_8E160(pSoundEvent[x_WORD_D4004].index, 0x64u);
 
+//SetMusicVolume_98790
+//StopMusic_8E020
+//StartMusic_8E160
+
 void ExampleClass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 	std::vector<int> standard_vector;
 	standard_vector.reserve(p_indices.size());
