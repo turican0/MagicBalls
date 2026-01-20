@@ -13,6 +13,7 @@
 #include "remc2/engine/Basic.h"
 #include "remc2/engine/GameUI.h"
 #include "remc2/portability/port_sdl_sound.h"
+#include "remc2/engine/Sound.h"
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
@@ -745,6 +746,7 @@ Array ExampleClass::getPaletteModifications() {
 	return result;
 }
 
+uint32_t gameTurn = 0;
 void ExampleClass::RunGameStep(Dictionary inputs) {
 
 	Array key_changes = inputs["key_changes"];
@@ -829,6 +831,14 @@ void ExampleClass::RunGameStep(Dictionary inputs) {
 		sub_57570(); //nothing draw
 	sub_575C0(); //nothing draw-load level
 	sub_6E150(); //nothing draw-sounds
+
+	if (gameTurn < 2) {
+		StopMusic_8E020();
+		if (gameTurn == 1)
+			StartMusic_8E160(D41A0_0.maptypeMusic_0x235, 0x7Fu);
+		gameTurn++;
+	}
+
 	x_DWORD_17DB54_game_turn2++;
 }
 
@@ -900,6 +910,9 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
 	sub_101C0();
 	sub_8CEDF_install_mouse();
+
+	sub_46DD0_init_sound_and_music();
+	
 	//end - code from Initialize
 
 	//x_BYTE_F5538[str_TMAPS00TAB_BEGIN_BUFFER[str_WORD_D951C[a1].word_0].word_8]
@@ -917,8 +930,8 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 
 	//begin - code from MainMenu
 	//SetCenterScreenForFlyAssistant_6EDB0();
-	StopMusic_8E020(); //26f020
-	StartMusic_8E160(4, 0x7Fu); //26f160 //menu music
+	//StopMusic_8E020(); //26f020
+	//StartMusic_8E160(4, 0x7Fu); //26f160 //menu music
 	x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
 	x_WORD_180660_VGA_type_resolution = 8;
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
@@ -985,4 +998,18 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	//if ((x_D41A0_BYTEARRAY_4_struct.setting_byte4_25) & 0x40) InitMusicBank_8EAD0(1);
 
 	//x_DWORD_E9C4C_langindexbuffer[374]
+	if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
+		//v8 = x_D41A0_BYTEARRAY_0[196308];
+		switch (D41A0_0.terrain_2FECE.MapType) {
+			case MapType_t::Day:
+				D41A0_0.maptypeMusic_0x235 = 2;
+				break;
+			case MapType_t::Night:
+				D41A0_0.maptypeMusic_0x235 = 1;
+				break;
+			case MapType_t::Cave:
+				D41A0_0.maptypeMusic_0x235 = 3;
+				break;
+		}
+	}
 }
