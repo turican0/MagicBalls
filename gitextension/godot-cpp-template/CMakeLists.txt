@@ -191,6 +191,8 @@ target_sources(${LIBNAME}
     src/remc2/portability/port_sdl_sound.h
     src/MBEX/convertData.cpp
     src/MBEX/convertData.h
+    src/libxmi/xmi2mid.cpp
+    src/libxmi/xmi2mid.h
 )
 
 # Fetch a list of the xml files to use for documentation and add to our target

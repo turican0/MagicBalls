@@ -46,5 +46,7 @@ using namespace godot;
 
 void MBEXconvertData(String path);
 void MBEXsoundConverts(String path);
+void MBEXmusicConverts(String path);
 bool MBEXsoundConvert(int i,String path);
 bool MBLoadSound(uint8_t soundIndex);
+bool make_dir_godot(const String &path);

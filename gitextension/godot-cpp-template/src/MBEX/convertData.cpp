@@ -29,7 +29,37 @@
 #endif
 
 void MBEXconvertData(String path) {
-	MBEXsoundConverts(path);
+	MBEXsoundConverts(path + "/sounds");
+	MBEXmusicConverts(path + "/musics");
+}
+
+void MBEXmusicConverts(String path) {
+	for (int i = 1; i <= m_iNumberOfTracks; i++)
+	{
+		uint8_t *buffer = musicHeader_E3808->str_8.track_10[i - 1].xmiData_0;
+		int32_t size = musicHeader_E3808->str_8.track_10[i - 1].xmiSize_8;
+		int8_t *filename_c = musicHeader_E3808->str_8.track_10[i - 1].filename_14;
+		if (!buffer || size <= 0 || !filename_c) {
+			break;
+		}
+		String filename = String::utf8((const char *)filename_c);
+		String full_path = path + "/" + vformat("%03d_%s", i-1, filename);
+		if (!make_dir_godot(path)) {
+			break;
+		}
+		Ref<FileAccess> file = FileAccess::open(full_path, FileAccess::WRITE);
+		if (!file.is_valid()) {
+			break;
+		}
+		file->store_buffer(buffer, size);
+		Error err = file->get_error();
+		if (err != OK) {
+			UtilityFunctions::push_error(vformat("CHYBA při zápisu do souboru: %s (Error: %d, zapsáno před chybou)", full_path, (int)err));
+			break;
+		}
+		file->flush();
+		UtilityFunctions::print(vformat("Úspěšně zapsáno: %s (%d bajtů)", full_path, size));
+	}
 }
 
 void MBEXsoundConverts(String path) {

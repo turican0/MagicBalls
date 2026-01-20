@@ -118,5 +118,4 @@ func stop_sound(index: int) -> void:
 
 func set_volume(index: int, volume_int: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
-		var volume_linear: float = volume_int / 127.0
-		sfx_players[index].volume_db = linear_to_db(volume_linear)
+		sfx_players[index].volume_linear = float(volume_int) / 128.0
