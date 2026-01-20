@@ -64,3 +64,7 @@ draw_pass_1 = SubResource("QuadMesh_v5wgy")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 radius = 0.3
 material = SubResource("StandardMaterial3D_75a4v")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0506482, 0)
+light_energy = 8.0
