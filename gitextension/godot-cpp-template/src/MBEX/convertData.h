@@ -12,6 +12,7 @@
 #include "../remc2/engine/Basic.h"
 #include "../remc2/engine/GameUI.h"
 #include "../remc2/engine/Sound.h"
+#include "../libxmi/xmi2mid.h"
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>

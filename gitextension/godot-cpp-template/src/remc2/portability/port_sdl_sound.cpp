@@ -85,6 +85,7 @@ void test_midi_play(uint8_t*  /*data*/, uint8_t* header, int32_t track_number)
 }
 
 void SOUND_start_sequence(int32_t sequence_num) {
+	sound_queue_add_action("SOUND_start_sequence", sequence_num, 0, 0);
 	if (unitTests)return;
 	//3 - menu
 	//4 - intro
@@ -118,6 +119,7 @@ void SOUND_start_sequence(int32_t sequence_num) {
 };
 
 void SOUND_pause_sequence(int32_t  /*sequence_num*/) {
+	sound_queue_add_action("SOUND_pause_sequence", 0, 0, 0);
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_PauseMusic();
@@ -125,12 +127,14 @@ void SOUND_pause_sequence(int32_t  /*sequence_num*/) {
 };
 
 void SOUND_stop_sequence(int32_t  /*sequence_num*/) {
+	sound_queue_add_action("SOUND_stop_sequence", 0, 0, 0);
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_HaltMusic();
 #endif//SOUND_SDLMIXER
 };
 void SOUND_resume_sequence(int32_t  /*sequence_num*/) {
+	sound_queue_add_action("SOUND_resume_sequence", 0, 0, 0);
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_ResumeMusic();
@@ -138,7 +142,7 @@ void SOUND_resume_sequence(int32_t  /*sequence_num*/) {
 };
 
 void SOUND_set_sequence_volume(int32_t volume, int32_t  milliseconds) {
-	return;
+	sound_queue_add_action("SOUND_set_sequence_volume", volume, milliseconds, 0);
 }
 
 void SOUND_init_MIDI_sequence(uint8_t*  /*datax*/, type_E3808_music_header* headerx, int32_t track_number)

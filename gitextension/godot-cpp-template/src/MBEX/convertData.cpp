@@ -39,26 +39,54 @@ void MBEXmusicConverts(String path) {
 		uint8_t *buffer = musicHeader_E3808->str_8.track_10[i - 1].xmiData_0;
 		int32_t size = musicHeader_E3808->str_8.track_10[i - 1].xmiSize_8;
 		int8_t *filename_c = musicHeader_E3808->str_8.track_10[i - 1].filename_14;
+
 		if (!buffer || size <= 0 || !filename_c) {
 			break;
 		}
+
 		String filename = String::utf8((const char *)filename_c);
-		String full_path = path + "/" + vformat("%03d_%s", i-1, filename);
+
+		// Změna přípony na .mid (nebo přidej .mid k názvu, pokud chceš zachovat původní)
+		String midi_filename = filename.get_basename() + ".mid"; // nebo jen filename + ".mid"
+
+		String full_path = path + "/" + vformat("%03d_%s", i - 1, midi_filename);
+
 		if (!make_dir_godot(path)) {
 			break;
 		}
+
+		// Převod XMI → MIDI
+		size_t midi_size = 0;
+		unsigned char *midi_buffer = TranscodeXmiToMid(buffer, size, &midi_size);
+
+		if (!midi_buffer || midi_size == 0) {
+			UtilityFunctions::push_error(vformat("CHYBA při převodu XMI na MIDI pro track %d (%s)", i - 1, filename));
+			// Pokud převod selže, volitelně uložit původní XMI pro debugging
+			// free(midi_buffer); // pokud bylo alokováno
+			break;
+		}
+
 		Ref<FileAccess> file = FileAccess::open(full_path, FileAccess::WRITE);
 		if (!file.is_valid()) {
+			free(midi_buffer); // uvolnit alokovanou paměť
 			break;
 		}
-		file->store_buffer(buffer, size);
+
+		file->store_buffer(midi_buffer, midi_size);
+
 		Error err = file->get_error();
 		if (err != OK) {
-			UtilityFunctions::push_error(vformat("CHYBA při zápisu do souboru: %s (Error: %d, zapsáno před chybou)", full_path, (int)err));
+			UtilityFunctions::push_error(vformat("CHYBA při zápisu do souboru: %s (Error: %d)", full_path, (int)err));
+			free(midi_buffer);
 			break;
 		}
+
 		file->flush();
-		UtilityFunctions::print(vformat("Úspěšně zapsáno: %s (%d bajtů)", full_path, size));
+		file->close(); // dobrý zvyk
+
+		free(midi_buffer); // uvolnit paměť vrácenou TranscodeXmiToMid
+
+		UtilityFunctions::print(vformat("Úspěšně zapsáno MIDI: %s (%d bajtů z %d bajtů XMI)", full_path, midi_size, size));
 	}
 }
 
