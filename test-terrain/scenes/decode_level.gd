@@ -443,6 +443,7 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 		MBEX.convertOriginalData("res://convertdata")
 	
 	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")
+	Main_Sounds.load_musics_from_dir("res://convertdata/musics/")
 	
 	Main_Sounds.init()
 	Main_Sounds.setSoundBank(1)#Night

@@ -1,6 +1,9 @@
 extends Node3D
 
+var MainMusic:MidiPlayer
+
 var sounds_map = {}
+var music_map = {}
 
 #func _load_wav_as_sample(file_path: String) -> AudioStream:
 	#var file = FileAccess.open(file_path, FileAccess.READ)
@@ -22,6 +25,24 @@ func get_free_player_indices() -> Array:
 	for i in range(sfx_players.size()):
 		status[i] = sfx_players[i].playing
 	return status
+	
+func load_musics_from_dir(path: String):
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		
+		while file_name != "":
+			if !dir.current_is_dir() and file_name.ends_with(".mid"):
+				var parts = file_name.split("_")
+				if parts.size() >= 2:
+					var music_idx = parts[0].to_int()
+					var full_path = path + file_name
+					music_map[music_idx] = full_path
+					print("Hudba nacetna: ", music_idx)
+			file_name = dir.get_next()
+	else:
+		print("Chyba: Adresář nebyl nalezen.")	
 
 func load_sounds_from_dir(path: String):
 	var dir = DirAccess.open(path)
@@ -59,10 +80,19 @@ func updateSounds(soundActions:Array):
 		match action:
 			"SOUND_start_sample":
 				play_sound(soundBank, p1, p2)
-				set_volume(p1, p3)
+				set_sound_volume(p1, p3)
 				matchok=true
 			"SOUND_set_sample_volume":
-				set_volume(p1, p2)
+				set_sound_volume(p1, p2)
+				matchok=true
+			"SOUND_stop_sequence":
+				stop_music()
+				matchok=true
+			"SOUND_start_sequence":
+				start_music(p1)
+				matchok=true
+			"SOUND_set_sequence_volume":
+				set_music_volume(p1)
 				matchok=true
 		if(!matchok):
 			matchok=true
@@ -116,6 +146,16 @@ func stop_sound(index: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
 		sfx_players[index].stop()
 
-func set_volume(index: int, volume_int: int) -> void:
+func set_sound_volume(index: int, volume_int: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
 		sfx_players[index].volume_linear = float(volume_int) / 128.0
+
+func set_music_volume(volume_int: int) -> void:
+	MainMusic.volume_db = linear_to_db(float(volume_int) / 128.0)
+		
+func stop_music() -> void:
+	MainMusic.stop()
+		
+func start_music(index: int) -> void:
+	MainMusic.file = music_map[index]
+	MainMusic.play()

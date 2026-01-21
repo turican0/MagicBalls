@@ -50,10 +50,9 @@ mouse_filter = 2
 [node name="Sounds" type="Node3D" parent="."]
 script = ExtResource("9_kfkod")
 
-[node name="MidiPlayer" type="Node" parent="."]
+[node name="MidiPlayer" type="Node" parent="Sounds"]
 script = ExtResource("9_swd5f")
 file = "res://convertdata/musics/000_C2GAME1.mid"
-playing = true
-volume_db = 0.0
+volume_db = -80.0
 soundfont = "res://soundfont/GeneralUser GS v1.472.sf2"
 metadata/_custom_type_script = "uid://bf1vnufu7na6x"

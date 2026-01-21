@@ -6,12 +6,14 @@ var Main_UI
 var Main_Filter
 var Main_Sounds
 var Main_TerrainMB
+var MainMusic
 func _ready() -> void:
 	Engine.max_fps = 60	
 	Main_DecodeLevel = get_node("DecodeLevel") 
 	Main_Player = get_node("Player")
 	Main_UI = get_node("UI")
 	Main_Sounds = $Sounds
+	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
 	Main_Filter = get_node("Filter").get_node("ColorRect")
 	Main_TerrainMB = $TerrainMB
 	Main_DecodeLevel.Main_Player = Main_Player
