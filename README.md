@@ -27,6 +27,12 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add end of level 1<br>
 -Add some models<br>
 
+## Version 260121:
+-Add sounds
+-Add music
+-Add basic code to copy some data from original CD
+<a href="https://youtu.be/SaIr8dyr_Rc">First youtube video</a>
+
 ## Version 260115:
 -Draw minimap<br>
 -Update UI-particaly<br>
