@@ -31,7 +31,7 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 -Add sounds<br>
 -Add music<br>
 -Add basic code to copy some data from original CD<br>
-<a href="https://youtu.be/SaIr8dyr_Rc">First youtube video</a>
+[First youtube video](https://youtu.be/SaIr8dyr_Rc)
 
 ## Version 260115:
 -Draw minimap<br>
