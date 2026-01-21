@@ -439,7 +439,7 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
 	MBEX.TerrainMake(level_tab_data_unpacked)
 	
-	if not DirAccess.dir_exists_absolute("res://convertdata/musics/"):
+	if not DirAccess.dir_exists_absolute("res://convertdata/musicsX/"):
 		MBEX.convertOriginalData("res://convertdata")
 	
 	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")

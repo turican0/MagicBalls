@@ -31,6 +31,102 @@
 void MBEXconvertData(String path) {
 	MBEXsoundConverts(path + "/sounds");
 	MBEXmusicConverts(path + "/musics");
+	MBEXtexturesConverts(path + "/textures");
+}
+void MBEXtexturesConverts(String path) {
+	MBEXtextureConverts(path + "/day", 256, 608, "BLOCK32.DAT", "PALD-0.DAT");
+	MBEXtextureConverts(path + "/night", 256, 608, "BL32N0-0.DAT", "PALN-0.DAT");
+	MBEXtextureConverts(path + "/cave", 256, 608, "BL32C0-0.DAT", "PALC-0.DAT");
+	MBEXtextureConverts(path + "/final", 256, 608, "BL32F0-0.DAT", "PALF-0.DAT");
+}
+
+void MBEXtextureConverts(String path, int width, int height, String texture, String palette) {
+	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
+	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
+	String outPath = path + "/" + texture + ".bmp";
+	std::string stdOutPath = outPath.utf8().get_data();
+
+	if (!make_dir_godot(path)) {
+		return;
+	}
+
+// Načtení dat textury pomocí Godot FileAccess
+	Ref<FileAccess> texFile = FileAccess::open(String(textPath.c_str()), FileAccess::READ);
+	if (texFile.is_null())
+		return;
+	PackedByteArray rawPixels = texFile->get_buffer(texFile->get_length());
+
+	// Načtení dat palety
+	Ref<FileAccess> palFile = FileAccess::open(String(palettePath.c_str()), FileAccess::READ);
+	if (palFile.is_null())
+		return;
+	PackedByteArray rawPalette = palFile->get_buffer(palFile->get_length());
+
+	// Otevření souboru pro zápis (Godot si s res:// poradí sám)
+	Ref<FileAccess> bFile = FileAccess::open(outPath, FileAccess::WRITE);
+	if (bFile.is_null())
+		return;
+
+	// --- VÝPOČTY ---
+	int paddingSize = (4 - (width % 4)) % 4;
+	int rowSize = width + paddingSize;
+	int pixelDataSize = rowSize * height;
+	int paletteSize = 256 * 4;
+	int fileSize = 14 + 40 + paletteSize + pixelDataSize;
+
+	// --- BITMAP FILE HEADER (14 bytes) ---
+	bFile->store_8('B');
+	bFile->store_8('M');
+	bFile->store_32(fileSize);
+	bFile->store_32(0); // Reserved
+	bFile->store_32(14 + 40 + paletteSize); // Offset
+
+	// --- DIB HEADER (40 bytes) ---
+	bFile->store_32(40); // Header size
+	bFile->store_32(width);
+	bFile->store_32(height);
+	bFile->store_16(1); // Planes
+	bFile->store_16(8); // Bits per pixel
+	bFile->store_32(0); // Compression
+	bFile->store_32(pixelDataSize);
+	bFile->store_32(2835); // X ppm
+	bFile->store_32(2835); // Y ppm
+	bFile->store_32(256); // Colors used
+	bFile->store_32(0); // Important colors
+
+	// --- PALETTE (1024 bytes) ---
+	for (int i = 0; i < 256; i++) {
+		if (i * 3 + 2 < rawPalette.size()) {
+			bFile->store_8(rawPalette[i * 3 + 2]*4); // B
+			bFile->store_8(rawPalette[i * 3 + 1]*4); // G
+			bFile->store_8(rawPalette[i * 3]*4); // R
+			bFile->store_8(0); // Reserved
+		} else {
+			bFile->store_32(0); // Vyplnění prázdné palety
+		}
+	}
+
+	// --- PIXEL DATA (Bottom-up) ---
+	for (int y = height - 1; y >= 0; y--) {
+		int rowStart = y * width;
+		if (rowStart < rawPixels.size()) {
+			// Vezmeme pod-pole pro aktuální řádek a uložíme ho
+			PackedByteArray row = rawPixels.slice(rowStart, rowStart + width);
+			bFile->store_buffer(row);
+		} else {
+			// Padding pokud data chybí
+			for (int x = 0; x < width; x++)
+				bFile->store_8(0);
+		}
+
+		// Zápis paddingu na konci řádku
+		for (int p = 0; p < paddingSize; p++) {
+			bFile->store_8(0);
+		}
+	}
+
+	bFile->flush();
+	bFile->close();
 }
 
 void MBEXmusicConverts(String path) {

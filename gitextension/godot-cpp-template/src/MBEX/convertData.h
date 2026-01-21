@@ -51,3 +51,5 @@ void MBEXmusicConverts(String path);
 bool MBEXsoundConvert(int i,String path);
 bool MBLoadSound(uint8_t soundIndex);
 bool make_dir_godot(const String &path);
+void MBEXtextureConverts(String path, int width, int height, String texture, String palette);
+void MBEXtexturesConverts(String path);

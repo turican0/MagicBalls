@@ -55,7 +55,7 @@ func load_musics_hi_from_dir(path: String):
 		var file_name = dir.get_next()
 		
 		while file_name != "":
-			if !dir.current_is_dir() and file_name.ends_with(".mid"):
+			if !dir.current_is_dir() and file_name.ends_with(".ogg"):
 				var parts = file_name.split("_")
 				if parts.size() >= 2:
 					var music_idx = parts[0].to_int()
@@ -190,7 +190,7 @@ func start_music(index: int) -> void:
 	if(himusic):
 		if MainMusicHi.playing:
 			MainMusicHi.stop()
-		MainMusicHi.stream = music_hi_map[index]
+		MainMusicHi.stream = load(music_hi_map[index])
 		MainMusicHi.play()
 	else:
 		if MainMusic.playing:
