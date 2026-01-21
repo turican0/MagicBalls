@@ -11,10 +11,6 @@ const CAMERA_RATIO: float = .625
 @onready var _camera_pitch: Node3D = %Arm
 
 
-func _ready() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-
 func _input(p_event: InputEvent) -> void:
 	if p_event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotate_camera(p_event.relative)

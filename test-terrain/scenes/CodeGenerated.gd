@@ -8,7 +8,7 @@ var Main_Sounds
 var Main_TerrainMB
 var MainMusic
 func _ready() -> void:
-	Engine.max_fps = 60	
+	Engine.max_fps = 60
 	Main_DecodeLevel = get_node("DecodeLevel") 
 	Main_Player = get_node("Player")
 	Main_UI = get_node("UI")
@@ -22,6 +22,6 @@ func _ready() -> void:
 	Main_UI.Main_DecodeLevel = Main_DecodeLevel
 	Main_DecodeLevel.Main_Filter = Main_Filter
 	Main_DecodeLevel.Main_Sounds = Main_Sounds
-	$UI.player = $Player	
+	$UI.player = $Player
 	Main_TerrainMB.init()
 	#$CanvasUI.init()

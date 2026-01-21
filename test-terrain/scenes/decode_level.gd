@@ -167,12 +167,9 @@ func _preload_library(source_dict: Dictionary, target_dict: Dictionary):
 		if path != "":
 			target_dict[key] = load(path)
 
-func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+func _ready():	
 	_preload_library(library, library_scenes)
-	_preload_library(library2, library2_scenes)
-	
+	_preload_library(library2, library2_scenes)	
 	node_pool.resize(pool_size)
 	for i in range(pool_size):
 		node_pool[i] = null
@@ -200,7 +197,15 @@ func updatePlayer(playerPosRot) -> void:
 var last_gain: Vector3
 var last_offset: Vector3
 
+var runned: bool
+
+func SetRunned(sendRunned) -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	runned = sendRunned
+
 func _process(_p_delta) -> void:
+	if(!runned):
+		return
 	getInputs()
 	MBEX.soundQueueClear()
 	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
@@ -439,7 +444,7 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
 	MBEX.TerrainMake(level_tab_data_unpacked)
 	
-	if not DirAccess.dir_exists_absolute("res://convertdata/musicsX/"):
+	if not DirAccess.dir_exists_absolute("res://convertdata/musics/"):
 		MBEX.convertOriginalData("res://convertdata")
 	
 	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")

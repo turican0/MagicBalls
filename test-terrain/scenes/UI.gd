@@ -3,6 +3,8 @@ extends Control
 @export var spell_grid: Node
 @export var spell_grid_selected: Node
 
+@onready var start_button: Button = $StartButton
+
 var player: Node
 var visible_mode: int = 1
 
@@ -12,6 +14,13 @@ var Main_DecodeLevel
 var is_ctrl_active: bool = false
 var old_is_ctrl_active: bool = false
 var hovered_index: int = -1
+
+func _ready():
+	start_button.pressed.connect(_on_start_pressed)
+	
+func _on_start_pressed():
+	Main_DecodeLevel.SetRunned(true)
+	start_button.hide()
 
 func _init() -> void:
 	RenderingServer.set_debug_generate_wireframes(true)

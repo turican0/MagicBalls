@@ -15,6 +15,7 @@ spell_grid_selected = NodePath("CanvasUI/GridContainer2")
 
 [node name="Label" type="Label" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 offset_left = 5.0
 offset_top = 5.0
@@ -92,3 +93,18 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 stretch_mode = 3
+
+[node name="StartButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.5
+offset_top = -15.5
+offset_right = 19.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Run Game"
