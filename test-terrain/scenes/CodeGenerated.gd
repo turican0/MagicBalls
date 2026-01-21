@@ -14,6 +14,7 @@ func _ready() -> void:
 	Main_UI = get_node("UI")
 	Main_Sounds = $Sounds
 	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
+	Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
 	Main_Filter = get_node("Filter").get_node("ColorRect")
 	Main_TerrainMB = $TerrainMB
 	Main_DecodeLevel.Main_Player = Main_Player

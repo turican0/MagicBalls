@@ -1,9 +1,13 @@
 extends Node3D
 
 var MainMusic:MidiPlayer
+var MainMusicHi:AudioStreamPlayer
 
 var sounds_map = {}
 var music_map = {}
+var music_hi_map = {}
+
+var himusic = true
 
 #func _load_wav_as_sample(file_path: String) -> AudioStream:
 	#var file = FileAccess.open(file_path, FileAccess.READ)
@@ -42,7 +46,25 @@ func load_musics_from_dir(path: String):
 					print("Hudba nacetna: ", music_idx)
 			file_name = dir.get_next()
 	else:
-		print("Chyba: Adresář nebyl nalezen.")	
+		print("Chyba: Adresář nebyl nalezen.")
+		
+func load_musics_hi_from_dir(path: String):
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		
+		while file_name != "":
+			if !dir.current_is_dir() and file_name.ends_with(".mid"):
+				var parts = file_name.split("_")
+				if parts.size() >= 2:
+					var music_idx = parts[0].to_int()
+					var full_path = path + file_name
+					music_hi_map[music_idx] = full_path
+					print("Hudba nacetna: ", music_idx)
+			file_name = dir.get_next()
+	else:
+		print("Chyba: Adresář nebyl nalezen.")
 
 func load_sounds_from_dir(path: String):
 	var dir = DirAccess.open(path)
@@ -151,11 +173,27 @@ func set_sound_volume(index: int, volume_int: int) -> void:
 		sfx_players[index].volume_linear = float(volume_int) / 128.0
 
 func set_music_volume(volume_int: int) -> void:
-	MainMusic.volume_db = linear_to_db(float(volume_int) / 128.0)
-		
+	if(himusic):
+		MainMusicHi.volume_db = linear_to_db(float(volume_int) / 128.0)
+	else:
+		MainMusic.volume_db = linear_to_db(float(volume_int) / 128.0)
+			
 func stop_music() -> void:
-	MainMusic.stop()
-		
+	if(himusic):
+		if MainMusicHi.playing:
+			MainMusicHi.stop()
+	else:
+		if MainMusic.playing:
+			MainMusic.stop()
+
 func start_music(index: int) -> void:
-	MainMusic.file = music_map[index]
-	MainMusic.play()
+	if(himusic):
+		if MainMusicHi.playing:
+			MainMusicHi.stop()
+		MainMusicHi.stream = music_hi_map[index]
+		MainMusicHi.play()
+	else:
+		if MainMusic.playing:
+			MainMusic.stop()
+		MainMusic.file = music_map[index]
+		MainMusic.play()

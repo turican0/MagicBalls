@@ -56,3 +56,5 @@ file = "res://convertdata/musics/000_C2GAME1.mid"
 volume_db = -80.0
 soundfont = "res://soundfont/GeneralUser GS v1.472.sf2"
 metadata/_custom_type_script = "uid://bf1vnufu7na6x"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Sounds"]
