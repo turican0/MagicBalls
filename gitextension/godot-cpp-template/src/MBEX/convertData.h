@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../remc2/utilities/DataFileRNC.h"
 #include "../remc2/engine/Terrain.h"
 #include "../remc2/engine/ConvertMapInfo.h"
@@ -53,3 +54,6 @@ bool MBLoadSound(uint8_t soundIndex);
 bool make_dir_godot(const String &path);
 void MBEXtextureConverts(String path, int width, int height, String texture, String palette);
 void MBEXtexturesConverts(String path);
+void MBEXgraphicsConverts(String path);
+void MBEXwebConverts(String path);
+void MBEXsmatsConverts(String path);

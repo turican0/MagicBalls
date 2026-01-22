@@ -193,6 +193,7 @@ target_sources(${LIBNAME}
     src/MBEX/convertData.h
     src/libxmi/xmi2mid.cpp
     src/libxmi/xmi2mid.h
+    src/lib/stb_image_write.h
 )
 
 # Fetch a list of the xml files to use for documentation and add to our target

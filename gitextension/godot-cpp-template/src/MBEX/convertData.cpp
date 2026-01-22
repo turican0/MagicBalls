@@ -1,4 +1,7 @@
 #include "convertData.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "../lib/stb_image_write.h"
 /*
 #include "remc2/utilities/DataFileRNC.h"
 #include "remc2/engine/Terrain.h"
@@ -28,10 +31,381 @@
 #define MKDIR(path) mkdir(path, 0755)
 #endif
 
+using namespace godot;
+
+struct BMPData {
+	int width = 0;
+	int height = 0;
+	int channels = 0;
+	std::vector<unsigned char> pixels;
+};
+
+void save_bmp_godot(String p_path, int p_width, int p_height, int p_channels, const unsigned char *p_data) {
+	// Výpočet velikosti řádku s paddingem na 4 bajty (standard BMP)
+	int row_size = ((p_width * p_channels + 3) & ~3);
+	int image_size = row_size * p_height;
+	int file_size = 54 + image_size;
+
+	Ref<FileAccess> bFile = FileAccess::open(p_path, FileAccess::WRITE);
+	if (bFile.is_null()) {
+		// Chyba při otevírání
+		return;
+	}
+
+	// --- BITMAP FILE HEADER (14 bajtů) ---
+	bFile->store_16(0x4D42); // bfType: "BM"
+	bFile->store_32(file_size); // bfSize
+	bFile->store_16(0); // bfReserved1
+	bFile->store_16(0); // bfReserved2
+	bFile->store_32(54); // bfOffBits (hlavičky mají dohromady 54 bajtů)
+
+	// --- BITMAP INFO HEADER (40 bajtů) ---
+	bFile->store_32(40); // biSize
+	bFile->store_32(p_width); // biWidth
+	bFile->store_32(-p_height); // biHeight (záporné = shora dolů)
+	bFile->store_16(1); // biPlanes
+	bFile->store_16(p_channels * 8); // biBitCount (24 nebo 32)
+	bFile->store_32(0); // biCompression (BI_RGB = 0)
+	bFile->store_32(image_size); // biSizeImage
+	bFile->store_32(2835); // biXPelsPerMeter (72 DPI)
+	bFile->store_32(2835); // biYPelsPerMeter
+	bFile->store_32(0); // biClrUsed
+	bFile->store_32(0); // biClrImportant
+
+	// --- PIXEL DATA ---
+	for (int y = 0; y < p_height; ++y) {
+		// Zapíšeme data řádku
+		const unsigned char *row_ptr = &p_data[y * p_width * p_channels];
+		bFile->store_buffer(row_ptr, p_width * p_channels);
+
+		// Doplnění paddingu, aby délka řádku byla násobkem 4
+		int padding_bytes = row_size - (p_width * p_channels);
+		for (int p = 0; p < padding_bytes; ++p) {
+			bFile->store_8(0);
+		}
+	}
+
+	bFile->flush();
+	bFile->close();
+}
+
+BMPData load_bmp_godot(String p_path) {
+	BMPData result;
+	Ref<FileAccess> bFile = FileAccess::open(p_path, FileAccess::READ);
+
+	if (bFile.is_null())
+		return result;
+
+	bFile->get_16(); // "BM"
+	bFile->seek(10);
+	uint32_t data_offset = bFile->get_32();
+	uint32_t header_size = bFile->get_32();
+	result.width = bFile->get_32();
+	int32_t raw_height = bFile->get_32();
+	result.height = std::abs(raw_height);
+	bFile->get_16(); // Planes
+	uint16_t bit_count = bFile->get_16();
+
+	// Vynutíme 3 kanály pro výstup (převod z palety na RGB)
+	result.channels = 3;
+
+	// --- NAČTENÍ PALETY (pouze pro 8-bit) ---
+	std::vector<uint8_t> color_table;
+	if (bit_count == 8) {
+		// Paleta začíná hned po Info Headeru (v našem případě na offsetu 14 + header_size)
+		bFile->seek(14 + header_size);
+		// Standardní 8-bit BMP má 256 barev (každá má 4 bajty: B, G, R, Reserved)
+		color_table.resize(256 * 4);
+		PackedByteArray pal_buffer = bFile->get_buffer(256 * 4);
+		for (int i = 0; i < pal_buffer.size(); ++i)
+			color_table[i] = pal_buffer[i];
+	} else if (bit_count < 24) {
+		UtilityFunctions::print("Chyba: Podporujeme jen 8, 24 nebo 32 bit BMP.");
+		return result;
+	}
+
+	result.pixels.resize((size_t)result.width * result.height * 3);
+
+	// Padding v ZDROJOVÉM souboru (pro 8-bit je to šířka v bajtech zarovnaná na 4)
+	int src_channels = bit_count / 8;
+	int row_size_in_file = ((result.width * src_channels + 3) & ~3);
+	int file_padding = row_size_in_file - (result.width * src_channels);
+
+	bFile->seek(data_offset);
+
+	for (int y = 0; y < result.height; ++y) {
+		int target_y = (raw_height > 0) ? (result.height - 1 - y) : y;
+		PackedByteArray row_data = bFile->get_buffer(result.width * src_channels);
+
+		for (int x = 0; x < result.width; ++x) {
+			uint64_t out_pos = (uint64_t)(target_y * result.width + x) * 3;
+
+			if (bit_count == 8) {
+				// Převod indexu na RGB pomocí palety
+				uint8_t index = row_data[x];
+				result.pixels[out_pos + 0] = color_table[index * 4 + 0]; // B
+				result.pixels[out_pos + 1] = color_table[index * 4 + 1]; // G
+				result.pixels[out_pos + 2] = color_table[index * 4 + 2]; // R
+			} else {
+				// Klasické 24-bit/32-bit (jen kopírujeme první 3 kanály)
+				result.pixels[out_pos + 0] = row_data[x * src_channels + 0];
+				result.pixels[out_pos + 1] = row_data[x * src_channels + 1];
+				result.pixels[out_pos + 2] = row_data[x * src_channels + 2];
+			}
+		}
+		bFile->get_buffer(file_padding); // Přeskočit padding v souboru
+	}
+
+	bFile->close();
+	return result;
+}
+
 void MBEXconvertData(String path) {
 	MBEXsoundConverts(path + "/sounds");
 	MBEXmusicConverts(path + "/musics");
 	MBEXtexturesConverts(path + "/textures");
+	MBEXgraphicsConverts(path + "/HSPR");
+	MBEXwebConverts(path + "/web");
+	MBEXsmatsConverts(path + "/smat");
+}
+
+void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, String palette) {
+	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
+	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
+	String outPath = path + "/" + texture + ".bmp";
+	std::string stdOutPath = outPath.utf8().get_data();
+
+	if (!make_dir_godot(path)) {
+		return;
+	}
+
+	PackedByteArray palette_data;
+	Ref<FileAccess> palFile = FileAccess::open(String(palettePath.c_str()), FileAccess::READ);
+	if (palFile.is_valid()) {
+		palette_data = palFile->get_buffer(palFile->get_length());
+		palFile->close();
+	}
+
+	std::vector<uint8_t> palette_final;
+	if (palette_data.size() < 768 && !palette_data.is_empty()) {
+		// Paleta je komprimovaná RNC
+		std::vector<uint8_t> pal_dst(2048); // Paleta bývá malá, 2KB stačí
+		int pal_dec_size = DataFileRNC::Decompress((uint8_t *)palette_data.ptr(), pal_dst.data());
+		if (pal_dec_size >= 768) {
+			palette_final.assign(pal_dst.begin(), pal_dst.begin() + pal_dec_size);
+		}
+	} else {
+		// Paleta je už v surovém stavu
+		palette_final.assign(palette_data.ptr(), palette_data.ptr() + palette_data.size());
+	}
+
+	if (palette_final.size() < 768) {
+		UtilityFunctions::print("Chyba: Paletu se nepodarilo dekomprimovat nebo je poskozena.");
+		return;
+	}
+
+	PackedByteArray img_data;
+	Ref<FileAccess> imgFile = FileAccess::open(String(textPath.c_str()), FileAccess::READ);
+	if (imgFile.is_valid()) {
+		img_data = imgFile->get_buffer(imgFile->get_length());
+		imgFile->close();
+	}
+	std::vector<uint8_t> img_dst(5000000);
+	std::vector<uint8_t> img_final;
+	int img_dec_size = DataFileRNC::Decompress((uint8_t *)img_data.ptr(), img_dst.data());
+	img_final.assign(img_dst.begin(), img_dst.begin() + img_dec_size);
+
+	int data_start_offset = 0;
+	int expected_pixels = inWidth * inHeight;
+	if (img_dec_size < data_start_offset + expected_pixels) {
+		UtilityFunctions::print("Chyba: Data neobsahuji dostatek pixelu pro rozmery: ", inWidth, "x", inHeight);
+		return;
+	}
+	int p_channels = 3;
+	std::vector<unsigned char> rgb_data((size_t)inWidth * inHeight * p_channels);
+	const uint8_t *indices = img_final.data() + data_start_offset;
+	for (int i = 0; i < inWidth * inHeight; ++i) {
+		uint8_t index = indices[i];
+		int pal_idx = index * 3;
+
+		rgb_data[i * 3 + 0] = palette_final[pal_idx + 2]*4; // Blue
+		rgb_data[i * 3 + 1] = palette_final[pal_idx + 1]*4; // Green
+		rgb_data[i * 3 + 2] = palette_final[pal_idx + 0]*4; // Red
+	}
+	save_bmp_godot(outPath, inWidth, inHeight, p_channels, rgb_data.data());
+	UtilityFunctions::print("Ulozeno: ", outPath, " (", inWidth, "x", inHeight, ")");
+}
+
+#pragma pack(1)
+typedef struct {
+	uint32_t data;
+	uint8_t width_4;
+	uint8_t height_5;
+} bitmap_pos_struct_tm;
+#pragma pack(pop)
+
+void MBEXgraphicConverts(String path, String texture, String palette) {
+	std::string datPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
+	std::string tabPath = datPath.substr(0, datPath.length() - 3) + "TAB";
+	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());	
+
+	if (!make_dir_godot(path)) {
+		return;
+	}
+
+	PackedByteArray palette_data;
+	Ref<FileAccess> palFile = FileAccess::open(String(palettePath.c_str()), FileAccess::READ);
+	if (palFile.is_valid()) {
+		palette_data = palFile->get_buffer(palFile->get_length());
+		palFile->close();
+	}
+
+	std::vector<uint8_t> palette_final;
+	if (palette_data.size() < 768 && !palette_data.is_empty()) {
+		// Paleta je komprimovaná RNC
+		std::vector<uint8_t> pal_dst(2048); // Paleta bývá malá, 2KB stačí
+		int pal_dec_size = DataFileRNC::Decompress((uint8_t *)palette_data.ptr(), pal_dst.data());
+		if (pal_dec_size >= 768) {
+			palette_final.assign(pal_dst.begin(), pal_dst.begin() + pal_dec_size);
+		}
+	} else {
+		// Paleta je už v surovém stavu
+		palette_final.assign(palette_data.ptr(), palette_data.ptr() + palette_data.size());
+	}
+
+	if (palette_final.size() < 768) {
+		UtilityFunctions::print("Chyba: Paletu se nepodarilo dekomprimovat nebo je poskozena.");
+		return;
+	}
+
+	PackedByteArray fileDat_data;
+	Ref<FileAccess> datFile = FileAccess::open(String(datPath.c_str()), FileAccess::READ);
+	if (datFile.is_valid()) {
+		fileDat_data = datFile->get_buffer(datFile->get_length());
+		datFile->close();
+	}
+	//std::vector<uint8_t> dat_dst(5000000);
+	std::vector<uint8_t> dat_final;
+	/*
+	int dat_dec_size = DataFileRNC::Decompress((uint8_t *)fileDat_data.ptr(), dat_dst.data());
+	dat_final.assign(dat_dst.begin(), dat_dst.begin() + dat_dec_size);
+	*/
+
+	dat_final.assign(fileDat_data.ptr(), fileDat_data.ptr() + fileDat_data.size());
+
+	PackedByteArray fileTab_data;
+	
+	Ref<FileAccess> tabFile = FileAccess::open(String(tabPath.c_str()), FileAccess::READ);
+	if (tabFile.is_valid()) {
+		fileTab_data = tabFile->get_buffer(tabFile->get_length());
+		tabFile->close();
+	}
+	//std::vector<uint8_t> tab_dst(5000000);
+	std::vector<uint8_t> tab_final;
+	/*
+	int tab_dec_size = DataFileRNC::Decompress((uint8_t *)fileTab_data.ptr(), tab_dst.data());
+	tab_final.assign(tab_dst.begin(), tab_dst.begin() + tab_dec_size);
+	*/
+	tab_final.assign(fileTab_data.ptr(), fileTab_data.ptr() + fileTab_data.size());
+
+	bitmap_pos_struct_tm *contentTMAPStab = (bitmap_pos_struct_tm *)tab_final.data();
+	uint8_t *contentTMAPSdat = (uint8_t*)dat_final.data();
+
+	int count = fileTab_data.size() / sizeof(bitmap_pos_struct_t);
+
+	bool success = true;
+	for (int index = 0; index < count; index++) {
+		int begin = contentTMAPStab[index].data;
+		int end = contentTMAPStab[index + 1].data;
+		uint8_t* stmpdat = &contentTMAPSdat[begin];
+		int width = contentTMAPStab[index].width_4;
+		int height = contentTMAPStab[index].height_5;
+		int size = end - begin;
+
+		bitmap_pos_struct_t a3;
+		a3.data = (uint8 *)contentTMAPStab[index].data;
+		a3.width_4 = contentTMAPStab[index].width_4;
+		a3.height_5 = contentTMAPStab[index].height_5;
+		//GameBitmapDrawTransparentBitmap_2DE80(0, 0, a3, 0);//20ee80
+		memset(pdwScreenBuffer_351628, 0, 100000);
+		GameBitmap::DrawMenuGraphic(contentTMAPStab[index].width_4, contentTMAPStab[index].height_5, 1, stmpdat, pdwScreenBuffer_351628);
+
+		//--------------------------
+		int p_channels = 4;
+		std::vector<unsigned char> rgba_data((size_t)width * height * p_channels);
+		const uint8_t *indices = pdwScreenBuffer_351628;
+
+		for (int i = 0; i < width * height; ++i) {
+			uint8_t index = indices[i];
+			int pal_idx = index * 3;
+			int dest_idx = i * 4;
+
+			// Základní barvy (pozor na pořadí, PNG chce standardně RGB)
+			rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
+			rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
+			rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
+
+			// 2. Logika průhlednosti: pokud je index 0, alfa = 0 (průhledná), jinak 255 (neprůhledná)
+			if (index == 0) {
+				rgba_data[dest_idx + 3] = 0; // Průhledná
+			} else {
+				rgba_data[dest_idx + 3] = 255; // Neprůhledná
+			}
+		}
+		char buf[16];
+		snprintf(buf, sizeof(buf), "%03d", (int)index);
+		String outPath = path + "/" + texture + "_" + String(buf) + ".png";
+		// Otevření souboru přes Godot API
+		Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
+		if (f.is_valid()) {
+			// Volání STB s Lambda funkcí přímo v argumentu
+			stbi_write_png_to_func(
+					[](void *context, void *data, int size) {
+						// Context je náš FileAccess*
+						FileAccess *fa = static_cast<FileAccess *>(context);
+						fa->store_buffer(static_cast<const uint8_t *>(data), size);
+					},
+					(void *)f.ptr(), // Předání ukazatele na FileAccess objekt
+					width,
+					height,
+					p_channels,
+					rgba_data.data(),
+					width * p_channels);
+
+			f->flush();
+			f->close();
+			UtilityFunctions::print("PNG ulozeno (lambda): ", outPath);
+		}
+	}
+}
+
+//TABLES
+//SCREENS\HSCREEN0.DAT
+//BUTTON
+//CLR C/D/N
+//POINTERS
+//GTD
+//TITBASF
+
+
+void MBEXsmatsConverts(String path) {
+	MBEXsmatConverts(path + "", 320, 200, "SMALTIT.DAT", "SMALTIT.PAL");
+	MBEXsmatConverts(path + "", 320, 200, "SMATITL2.DAT", "SMATITL2.PAL");
+	MBEXsmatConverts(path + "", 320, 200, "SMATITLE.DAT", "SMATITLE.PAL");
+	MBEXtextureConverts(path + "", 320, 200, "TITLE3.DAT", "SMATITLE.PAL");
+	MBEXtextureConverts(path + "", 320, 200, "TITBASF.DAT", "SMATITLE.PAL");
+}
+
+void MBEXwebConverts(String path) {
+	MBEXgraphicConverts(path + "/web-day", "HWEBD0-0.DAT", "PALD-0.DAT");
+	MBEXgraphicConverts(path + "/web-night", "HWEBN0-0.DAT", "PALN-0.DAT");
+	MBEXgraphicConverts(path + "/web-cave", "HWEBC0-0.DAT", "PALC-0.DAT");
+}
+
+void MBEXgraphicsConverts(String path) {
+	MBEXgraphicConverts(path + "/HSPR-day", "HSPRD0-0.DAT", "PALD-0.DAT");
+	MBEXgraphicConverts(path + "/HSPR-night", "HSPRN0-0.DAT", "PALN-0.DAT");
+	MBEXgraphicConverts(path + "/HSPR-cave", "HSPRC0-0.DAT", "PALC-0.DAT");	
 }
 void MBEXtexturesConverts(String path) {
 	MBEXtextureConverts(path + "/day", 256, 608, "BLOCK32.DAT", "PALD-0.DAT");
@@ -40,10 +414,11 @@ void MBEXtexturesConverts(String path) {
 	MBEXtextureConverts(path + "/final", 256, 608, "BL32F0-0.DAT", "PALF-0.DAT");
 }
 
-void MBEXtextureConverts(String path, int width, int height, String texture, String palette) {
+void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture, String palette) {
 	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
 	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
 	String outPath = path + "/" + texture + ".bmp";
+	String outPath2 = path + "/" + texture + "-borders.bmp";
 	std::string stdOutPath = outPath.utf8().get_data();
 
 	if (!make_dir_godot(path)) {
@@ -68,9 +443,9 @@ void MBEXtextureConverts(String path, int width, int height, String texture, Str
 		return;
 
 	// --- VÝPOČTY ---
-	int paddingSize = (4 - (width % 4)) % 4;
-	int rowSize = width + paddingSize;
-	int pixelDataSize = rowSize * height;
+	int paddingSize = (4 - (inWidth % 4)) % 4;
+	int rowSize = inWidth + paddingSize;
+	int pixelDataSize = rowSize * inHeight;
 	int paletteSize = 256 * 4;
 	int fileSize = 14 + 40 + paletteSize + pixelDataSize;
 
@@ -83,8 +458,8 @@ void MBEXtextureConverts(String path, int width, int height, String texture, Str
 
 	// --- DIB HEADER (40 bytes) ---
 	bFile->store_32(40); // Header size
-	bFile->store_32(width);
-	bFile->store_32(height);
+	bFile->store_32(inWidth);
+	bFile->store_32(inHeight);
 	bFile->store_16(1); // Planes
 	bFile->store_16(8); // Bits per pixel
 	bFile->store_32(0); // Compression
@@ -107,15 +482,15 @@ void MBEXtextureConverts(String path, int width, int height, String texture, Str
 	}
 
 	// --- PIXEL DATA (Bottom-up) ---
-	for (int y = height - 1; y >= 0; y--) {
-		int rowStart = y * width;
+	for (int y = inHeight - 1; y >= 0; y--) {
+		int rowStart = y * inWidth;
 		if (rowStart < rawPixels.size()) {
 			// Vezmeme pod-pole pro aktuální řádek a uložíme ho
-			PackedByteArray row = rawPixels.slice(rowStart, rowStart + width);
+			PackedByteArray row = rawPixels.slice(rowStart, rowStart + inWidth);
 			bFile->store_buffer(row);
 		} else {
 			// Padding pokud data chybí
-			for (int x = 0; x < width; x++)
+			for (int x = 0; x < inWidth; x++)
 				bFile->store_8(0);
 		}
 
@@ -127,6 +502,54 @@ void MBEXtextureConverts(String path, int width, int height, String texture, Str
 
 	bFile->flush();
 	bFile->close();
+
+	//const char *input_path = "input.bmp";
+	//const char *output_path = "output.bmp";
+	const int TILE_SIZE = 32;
+	const int PADDING = 8;
+	const int NEW_TILE_SIZE = TILE_SIZE + (2 * PADDING);
+
+	BMPData input = load_bmp_godot(outPath);
+
+	if (input.pixels.empty()) {
+		std::cerr << "Chyba: Nepodarilo se nacist BMP ze souboru: " << outPath.utf8().get_data() << std::endl;
+		return;
+	}
+
+	int width = input.width;
+	int height = input.height;
+	int channels = input.channels;
+	unsigned char *img = input.pixels.data(); // Ukazatel na surová data uvnitř vektoru
+
+	int tiles_x = width / TILE_SIZE;
+	int tiles_y = height / TILE_SIZE;
+	int out_width = tiles_x * NEW_TILE_SIZE;
+	int out_height = tiles_y * NEW_TILE_SIZE;
+
+	std::vector<unsigned char> out_img(out_width * out_height * channels, 0);
+
+	for (int ty = 0; ty < tiles_y; ++ty) {
+		for (int tx = 0; tx < tiles_x; ++tx) {
+			for (int py = 0; py < NEW_TILE_SIZE; ++py) {
+				for (int px = 0; px < NEW_TILE_SIZE; ++px) {
+					int src_px = std::max(0, std::min(TILE_SIZE - 1, px - PADDING));
+					int src_py = std::max(0, std::min(TILE_SIZE - 1, py - PADDING));
+
+					int src_x = tx * TILE_SIZE + src_px;
+					int src_y = ty * TILE_SIZE + src_py;
+					int dst_x = tx * NEW_TILE_SIZE + px;
+					int dst_y = ty * NEW_TILE_SIZE + py;
+
+					for (int c = 0; c < channels; ++c) {
+						out_img[(dst_y * out_width + dst_x) * channels + c] =
+								img[(src_y * width + src_x) * channels + c];
+					}
+				}
+			}
+		}
+	}
+
+	save_bmp_godot(outPath2, out_width, out_height, channels, out_img.data());
 }
 
 void MBEXmusicConverts(String path) {
