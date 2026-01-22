@@ -167,7 +167,21 @@ void MBEXconvertData(String path) {
 	MBEXgraphicsConverts(path + "/HSPR");
 	MBEXwebConverts(path + "/web");
 	MBEXsmatsConverts(path + "/smat");
+	MBEXhscreenConverts(path + "/HSCREEN");
+	MBEXhtablesConverts(path + "/TABLES");
+	//MBEXhbuttonsConverts(path + "/BUTTONS");-only noise
+	MBEXcdrConverts(path + "/CDR");
+	MBEXpointersConverts(path + "/POINTERS");//-find true palette
+	MBEXgtdConverts(path + "/GTD");
 }
+
+//TABLES-ok
+//SCREENS\HSCREEN0.DAT-later
+//BUTTON-ok noise
+//CLR C/D/N-ok
+//POINTERS-ok
+//GTD-ok
+//TITBASF-ok
 
 void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, String palette) {
 	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
@@ -379,21 +393,204 @@ void MBEXgraphicConverts(String path, String texture, String palette) {
 	}
 }
 
-//TABLES
-//SCREENS\HSCREEN0.DAT
-//BUTTON
-//CLR C/D/N
-//POINTERS
-//GTD
-//TITBASF
+void MBEXtextureConvertsP(String path, int inWidth, int inHeight, String texture) {
+	MBEXtextureConverts(path + "/PALC", inWidth, inHeight, texture, "PALC-0.DAT", false);
+	MBEXtextureConverts(path + "/PALD", inWidth, inHeight, texture, "PALD-0.DAT", false);
+	MBEXtextureConverts(path + "/PALF", inWidth, inHeight, texture, "PALF-0.DAT", false);
+	MBEXtextureConverts(path + "/PALN", inWidth, inHeight, texture, "PALN-0.DAT", false);
+	MBEXtextureConverts(path + "/PALLOGO", inWidth, inHeight, texture, "PALLOGO.DAT", false);
+	MBEXtextureConverts(path + "/SMATITLE", inWidth, inHeight, texture, "PALETTE.DAT", false);
+	MBEXtextureConverts(path + "/PALTIT3", inWidth, inHeight, texture, "PALTIT3.DAT", false);
 
+	MBEXtextureConverts(path + "/SMALTITP", inWidth, inHeight, texture, "SMALTIT.PAL", false);
+	MBEXtextureConverts(path + "/SMATITL2P", inWidth, inHeight, texture, "SMATITL2.PAL", false);
+	MBEXtextureConverts(path + "/SMATITLEP", inWidth, inHeight, texture, "SMATITLE.PAL", false);
+}
+
+void MBEXhbuttonsConverts(String path) {
+	MBEXgraphicConverts(path + "", "BUTTON.DAT", "PALD-0.DAT");
+	MBEXtextureConvertsP(path + "", 256, 256, "BUTTON.DAT");
+}
+
+void MBEXgtdConverts(String path) {
+	MBEXtextureConverts(path + "", 256, 256, "GTDEFD.DAT", "PALD-0.DAT", false);
+	MBEXtextureConverts(path + "", 256, 256, "GTDEFN.DAT", "PALN-0.DAT", false);
+	MBEXtextureConverts(path + "", 256, 256, "GTDEFC.DAT", "PALC-0.DAT", false);
+}
+
+void MBEXpointersConverts(String path) {
+	MBEXgraphicConverts(path + "/PALLOGO", "POINTERS.DAT", "PALLOGO.DAT");
+	MBEXgraphicConverts(path + "/PALETTE", "POINTERS.DAT", "PALETTE.DAT");
+	MBEXgraphicConverts(path + "/PALTIT3", "POINTERS.DAT", "PALTIT3.DAT");
+	MBEXgraphicConverts(path + "/SMATITL2", "POINTERS.DAT", "SMATITL2.PAL");
+	MBEXgraphicConverts(path + "/SMATITLE", "POINTERS.DAT", "SMATITLE.PAL");
+}
+
+void MBEXcdrConverts(String path) {
+	MBEXtextureConverts(path + "/day", 16, 256, "CLRD-0.DAT", "PALD-0.DAT", false);
+	MBEXtextureConverts(path + "/night", 16, 256, "CLRN-0.DAT", "PALN-0.DAT", false);
+	MBEXtextureConverts(path + "/cave", 16, 256, "CLRC-0.DAT", "PALC-0.DAT", false);
+}
+
+void MBEXhtablesConverts(String path) {
+	MBEXtextureConverts(path + "/day", 256, 326, "TABLESD.DAT", "PALD-0.DAT", false);
+	MBEXtextureConverts(path + "/night", 256, 326, "TABLESN.DAT", "PALN-0.DAT", false);
+	MBEXtextureConverts(path + "/cave", 256, 326, "TABLESC.DAT", "PALC-0.DAT", false);
+	//MBEXtextureConverts(path + "/none", 256, 326, "TABLES.DAT", "PALF-0.DAT", false);-only noise
+}
+
+void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* palette) {
+	int inWidth = bitmap.width_4;
+	int inHeight = bitmap.height_5;
+	uint8_t* data = bitmap.data;
+	char pal[768];
+	for (int i=0;i<256;i++)
+		{
+		pal[i * 3 + 0] = palette[i].red; // R
+		pal[i * 3 + 1] = palette[i].green; // G
+		pal[i * 3 + 2] = palette[i].blue; // B
+	}
+	String outPath = path + "/" + vformat("%03d",i) + ".png";
+	std::string stdOutPath = outPath.utf8().get_data();
+
+	if (!make_dir_godot(path)) {
+		return;
+	}
+	std::vector<uint8_t> palette_final(768, 0);
+	memcpy(palette_final.data(), pal, 768);
+	memset(pdwScreenBuffer_351628, 0, 100000);
+	GameBitmap::DrawMenuGraphic(inWidth, inHeight, 1, data, pdwScreenBuffer_351628);
+
+	//--------------------------
+	int p_channels = 4;
+	std::vector<unsigned char> rgba_data((size_t)inWidth * inHeight * p_channels);
+	const uint8_t *indices = pdwScreenBuffer_351628;
+
+	for (int i = 0; i < inWidth * inHeight; ++i) {
+		uint8_t index = indices[i];
+		int pal_idx = index * 3;
+		int dest_idx = i * 4;
+
+		// Základní barvy (pozor na pořadí, PNG chce standardně RGB)
+		rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
+		rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
+		rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
+
+		// 2. Logika průhlednosti: pokud je index 0, alfa = 0 (průhledná), jinak 255 (neprůhledná)
+		if (index == 0) {
+			rgba_data[dest_idx + 3] = 0; // Průhledná
+		} else {
+			rgba_data[dest_idx + 3] = 255; // Neprůhledná
+		}
+	}
+
+	// Otevření souboru přes Godot API
+	Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
+	if (f.is_valid()) {
+		// Volání STB s Lambda funkcí přímo v argumentu
+		stbi_write_png_to_func(
+				[](void *context, void *data, int size) {
+					// Context je náš FileAccess*
+					FileAccess *fa = static_cast<FileAccess *>(context);
+					fa->store_buffer(static_cast<const uint8_t *>(data), size);
+				},
+				(void *)f.ptr(), // Předání ukazatele na FileAccess objekt
+				inWidth,
+				inHeight,
+				p_channels,
+				rgba_data.data(),
+				inWidth * p_channels);
+
+		f->flush();
+		f->close();
+		UtilityFunctions::print("PNG ulozeno (lambda): ", outPath);
+	}
+}
+
+void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette) {
+	int inWidth = width;
+	int inHeight = height;
+	char pal[768];
+	for (int i = 0; i < 256; i++) {
+		pal[i * 3 + 0] = palette[i].red; // R
+		pal[i * 3 + 1] = palette[i].green; // G
+		pal[i * 3 + 2] = palette[i].blue; // B
+	}
+	String outPath = path + "/" + name + ".png";
+	std::string stdOutPath = outPath.utf8().get_data();
+
+	if (!make_dir_godot(path)) {
+		return;
+	}
+	std::vector<uint8_t> palette_final(768, 0);
+	memcpy(palette_final.data(), pal, 768);
+	//memset(pdwScreenBuffer_351628, 0, 100000);
+	//GameBitmap::DrawMenuGraphic(inWidth, inHeight, 1, data, pdwScreenBuffer_351628);
+
+	//--------------------------
+	int p_channels = 4;
+	std::vector<unsigned char> rgba_data((size_t)inWidth * inHeight * p_channels);
+	const uint8_t *indices = data;
+
+	for (int i = 0; i < inWidth * inHeight; ++i) {
+		uint8_t index = indices[i];
+		int pal_idx = index * 3;
+		int dest_idx = i * 4;
+
+		// Základní barvy (pozor na pořadí, PNG chce standardně RGB)
+		rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
+		rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
+		rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
+
+		// 2. Logika průhlednosti: pokud je index 0, alfa = 0 (průhledná), jinak 255 (neprůhledná)
+		if (index == 0) {
+			rgba_data[dest_idx + 3] = 0; // Průhledná
+		} else {
+			rgba_data[dest_idx + 3] = 255; // Neprůhledná
+		}
+	}
+
+	// Otevření souboru přes Godot API
+	Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
+	if (f.is_valid()) {
+		// Volání STB s Lambda funkcí přímo v argumentu
+		stbi_write_png_to_func(
+				[](void *context, void *data, int size) {
+					// Context je náš FileAccess*
+					FileAccess *fa = static_cast<FileAccess *>(context);
+					fa->store_buffer(static_cast<const uint8_t *>(data), size);
+				},
+				(void *)f.ptr(), // Předání ukazatele na FileAccess objekt
+				inWidth,
+				inHeight,
+				p_channels,
+				rgba_data.data(),
+				inWidth * p_channels);
+
+		f->flush();
+		f->close();
+		UtilityFunctions::print("PNG ulozeno (lambda): ", outPath);
+	}
+}
+
+void MBEXhscreenConverts(String path) {
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);//4,6,7,12,14,15
+	//(TColor*)*xadatapald0dat2.colorPalette_var28 - animation
+	//unk_17D838x - animation2
+	//(TColor*)*xadatapald0dat2.colorPalette_var28
+	//x_DWORD_17DE38str.x_DWORD_17DE38x
+	for (int i = 0; i <= 312; i++)
+		MBEXsaveSprite(path, i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+	//xy_DWORD_17DED4_spritestr[39] - cursor
+	MBEXsaveBitmap(path, "x_DWORD_E9C38_smalltit", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28);
+}
 
 void MBEXsmatsConverts(String path) {
 	MBEXsmatConverts(path + "", 320, 200, "SMALTIT.DAT", "SMALTIT.PAL");
 	MBEXsmatConverts(path + "", 320, 200, "SMATITL2.DAT", "SMATITL2.PAL");
 	MBEXsmatConverts(path + "", 320, 200, "SMATITLE.DAT", "SMATITLE.PAL");
-	MBEXtextureConverts(path + "", 320, 200, "TITLE3.DAT", "SMATITLE.PAL");
-	MBEXtextureConverts(path + "", 320, 200, "TITBASF.DAT", "SMATITLE.PAL");
+	MBEXtextureConverts(path + "", 320, 200, "TITLE3.DAT", "PALTIT3.DAT", false);
+	//MBEXtextureConvertsP(path + "", 320, 200, "TITBASF.DAT");//palette not found
 }
 
 void MBEXwebConverts(String path) {
@@ -408,13 +605,13 @@ void MBEXgraphicsConverts(String path) {
 	MBEXgraphicConverts(path + "/HSPR-cave", "HSPRC0-0.DAT", "PALC-0.DAT");	
 }
 void MBEXtexturesConverts(String path) {
-	MBEXtextureConverts(path + "/day", 256, 608, "BLOCK32.DAT", "PALD-0.DAT");
-	MBEXtextureConverts(path + "/night", 256, 608, "BL32N0-0.DAT", "PALN-0.DAT");
-	MBEXtextureConverts(path + "/cave", 256, 608, "BL32C0-0.DAT", "PALC-0.DAT");
-	MBEXtextureConverts(path + "/final", 256, 608, "BL32F0-0.DAT", "PALF-0.DAT");
+	MBEXtextureConverts(path + "/day", 256, 608, "BLOCK32.DAT", "PALD-0.DAT", true);
+	MBEXtextureConverts(path + "/night", 256, 608, "BL32N0-0.DAT", "PALN-0.DAT", true);
+	MBEXtextureConverts(path + "/cave", 256, 608, "BL32C0-0.DAT", "PALC-0.DAT", true);
+	MBEXtextureConverts(path + "/final", 256, 608, "BL32F0-0.DAT", "PALF-0.DAT", true);
 }
 
-void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture, String palette) {
+void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture, String palette, bool makeBorders) {
 	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
 	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
 	String outPath = path + "/" + texture + ".bmp";
@@ -431,11 +628,31 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 		return;
 	PackedByteArray rawPixels = texFile->get_buffer(texFile->get_length());
 
-	// Načtení dat palety
+
+		PackedByteArray palette_data;
 	Ref<FileAccess> palFile = FileAccess::open(String(palettePath.c_str()), FileAccess::READ);
-	if (palFile.is_null())
+	if (palFile.is_valid()) {
+		palette_data = palFile->get_buffer(palFile->get_length());
+		palFile->close();
+	}
+
+	std::vector<uint8_t> palette_final;
+	if (palette_data.size() < 768 && !palette_data.is_empty()) {
+		// Paleta je komprimovaná RNC
+		std::vector<uint8_t> pal_dst(2048); // Paleta bývá malá, 2KB stačí
+		int pal_dec_size = DataFileRNC::Decompress((uint8_t *)palette_data.ptr(), pal_dst.data());
+		if (pal_dec_size >= 768) {
+			palette_final.assign(pal_dst.begin(), pal_dst.begin() + pal_dec_size);
+		}
+	} else {
+		// Paleta je už v surovém stavu
+		palette_final.assign(palette_data.ptr(), palette_data.ptr() + palette_data.size());
+	}
+
+	if (palette_final.size() < 768) {
+		UtilityFunctions::print("Chyba: Paletu se nepodarilo dekomprimovat nebo je poskozena.");
 		return;
-	PackedByteArray rawPalette = palFile->get_buffer(palFile->get_length());
+	}
 
 	// Otevření souboru pro zápis (Godot si s res:// poradí sám)
 	Ref<FileAccess> bFile = FileAccess::open(outPath, FileAccess::WRITE);
@@ -471,10 +688,10 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 
 	// --- PALETTE (1024 bytes) ---
 	for (int i = 0; i < 256; i++) {
-		if (i * 3 + 2 < rawPalette.size()) {
-			bFile->store_8(rawPalette[i * 3 + 2]*4); // B
-			bFile->store_8(rawPalette[i * 3 + 1]*4); // G
-			bFile->store_8(rawPalette[i * 3]*4); // R
+		if (i * 3 + 2 < palette_final.size()) {
+			bFile->store_8(palette_final[i * 3 + 2] * 4); // B
+			bFile->store_8(palette_final[i * 3 + 1] * 4); // G
+			bFile->store_8(palette_final[i * 3] * 4); // R
 			bFile->store_8(0); // Reserved
 		} else {
 			bFile->store_32(0); // Vyplnění prázdné palety
@@ -503,53 +720,55 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 	bFile->flush();
 	bFile->close();
 
-	//const char *input_path = "input.bmp";
-	//const char *output_path = "output.bmp";
-	const int TILE_SIZE = 32;
-	const int PADDING = 8;
-	const int NEW_TILE_SIZE = TILE_SIZE + (2 * PADDING);
+	if (makeBorders) {
+		//const char *input_path = "input.bmp";
+		//const char *output_path = "output.bmp";
+		const int TILE_SIZE = 32;
+		const int PADDING = 8;
+		const int NEW_TILE_SIZE = TILE_SIZE + (2 * PADDING);
 
-	BMPData input = load_bmp_godot(outPath);
+		BMPData input = load_bmp_godot(outPath);
 
-	if (input.pixels.empty()) {
-		std::cerr << "Chyba: Nepodarilo se nacist BMP ze souboru: " << outPath.utf8().get_data() << std::endl;
-		return;
-	}
+		if (input.pixels.empty()) {
+			std::cerr << "Chyba: Nepodarilo se nacist BMP ze souboru: " << outPath.utf8().get_data() << std::endl;
+			return;
+		}
 
-	int width = input.width;
-	int height = input.height;
-	int channels = input.channels;
-	unsigned char *img = input.pixels.data(); // Ukazatel na surová data uvnitř vektoru
+		int width = input.width;
+		int height = input.height;
+		int channels = input.channels;
+		unsigned char *img = input.pixels.data(); // Ukazatel na surová data uvnitř vektoru
 
-	int tiles_x = width / TILE_SIZE;
-	int tiles_y = height / TILE_SIZE;
-	int out_width = tiles_x * NEW_TILE_SIZE;
-	int out_height = tiles_y * NEW_TILE_SIZE;
+		int tiles_x = width / TILE_SIZE;
+		int tiles_y = height / TILE_SIZE;
+		int out_width = tiles_x * NEW_TILE_SIZE;
+		int out_height = tiles_y * NEW_TILE_SIZE;
 
-	std::vector<unsigned char> out_img(out_width * out_height * channels, 0);
+		std::vector<unsigned char> out_img(out_width * out_height * channels, 0);
 
-	for (int ty = 0; ty < tiles_y; ++ty) {
-		for (int tx = 0; tx < tiles_x; ++tx) {
-			for (int py = 0; py < NEW_TILE_SIZE; ++py) {
-				for (int px = 0; px < NEW_TILE_SIZE; ++px) {
-					int src_px = std::max(0, std::min(TILE_SIZE - 1, px - PADDING));
-					int src_py = std::max(0, std::min(TILE_SIZE - 1, py - PADDING));
+		for (int ty = 0; ty < tiles_y; ++ty) {
+			for (int tx = 0; tx < tiles_x; ++tx) {
+				for (int py = 0; py < NEW_TILE_SIZE; ++py) {
+					for (int px = 0; px < NEW_TILE_SIZE; ++px) {
+						int src_px = std::max(0, std::min(TILE_SIZE - 1, px - PADDING));
+						int src_py = std::max(0, std::min(TILE_SIZE - 1, py - PADDING));
 
-					int src_x = tx * TILE_SIZE + src_px;
-					int src_y = ty * TILE_SIZE + src_py;
-					int dst_x = tx * NEW_TILE_SIZE + px;
-					int dst_y = ty * NEW_TILE_SIZE + py;
+						int src_x = tx * TILE_SIZE + src_px;
+						int src_y = ty * TILE_SIZE + src_py;
+						int dst_x = tx * NEW_TILE_SIZE + px;
+						int dst_y = ty * NEW_TILE_SIZE + py;
 
-					for (int c = 0; c < channels; ++c) {
-						out_img[(dst_y * out_width + dst_x) * channels + c] =
-								img[(src_y * width + src_x) * channels + c];
+						for (int c = 0; c < channels; ++c) {
+							out_img[(dst_y * out_width + dst_x) * channels + c] =
+									img[(src_y * width + src_x) * channels + c];
+						}
 					}
 				}
 			}
 		}
-	}
 
-	save_bmp_godot(outPath2, out_width, out_height, channels, out_img.data());
+		save_bmp_godot(outPath2, out_width, out_height, channels, out_img.data());
+	}
 }
 
 void MBEXmusicConverts(String path) {

@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://w2bl0jsy84ei"]
+
+[ext_resource type="Script" uid="uid://chunf88gy7wda" path="res://scenes/main_menu.gd" id="1_0ykhv"]
+[ext_resource type="Texture2D" uid="uid://ogrwujbxnp3s" path="res://convertdata/HSCREEN/x_DWORD_E9C38_smalltit.png" id="1_yqorp"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0ykhv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_yqorp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="MainMenu" type="Node3D"]
+script = ExtResource("1_0ykhv")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="AnimatedSprite2D" parent="Control"]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_0ykhv")
