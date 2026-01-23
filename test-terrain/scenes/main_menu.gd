@@ -29,8 +29,25 @@ func load_custom_texture(path: String) -> ImageTexture:
 		return null        
 	var tex = ImageTexture.create_from_image(img)    
 	return tex
+	
+var fadeNode: Node3D
+func fadeInit():
+	if(!get_tree().root.get_node_or_null("FadeInOut")):
+		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")  # uprav cestu podle svého projektu
+		var new_layer = fade_layer_scene.instantiate()
+		fadeNode=new_layer
+		get_tree().root.add_child(new_layer)
+		new_layer.name = "FadeInOut"
+func addFadeIn():
+	fadeInit()
+	fadeNode.start_fade(1.0, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
+func addFadeOut():
+	fadeInit()
+	fadeNode.start_fade(1.0, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
 
 func _ready():
+	await get_tree().process_frame
+	addFadeOut()
 	var file_name_cur = "%03d.png" % 39
 	var file_path_cur = SPRITE_DIR + file_name_cur
 	var cursor_png = load_custom_texture(file_path_cur)
@@ -98,6 +115,7 @@ func _ready():
 			cfg2["node_ref"] = spr
 			
 func _input(event):
+	await get_tree().process_frame
 	var mouse_pos = $Control.get_local_mouse_position()
 	var any_hovered = false
 	for cfg2 in main_menu_selection:
@@ -113,10 +131,17 @@ func _input(event):
 			tooltip_label.position = Vector2(floor(mouse_pos.x + 10), floor(mouse_pos.y + 10))
 			
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-				if(cfg2["dword_0"]==0x00258350):
-					get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
+				var target_scene = ""
+				if cfg2["dword_0"] == 0x00258350:
+					target_scene = "res://scenes/CodeGeneratedDemo.tscn"
+				elif cfg2["dword_0"] == 0x00259E00:
+					target_scene = "res://scenes/PlayAnim.tscn"
+				if target_scene != "":
+					addFadeIn()
+					await fadeNode.fade_finished
+					get_tree().change_scene_to_file(target_scene)
 				else:
-					print("Kliknuto na: ", cfg2["dword_0"])
+					print("Kliknuto na: 0x%X" % cfg2["dword_0"])
 		else:
 			spr.hide()
 	if not any_hovered:
