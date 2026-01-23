@@ -113,7 +113,10 @@ func _input(event):
 			tooltip_label.position = Vector2(floor(mouse_pos.x + 10), floor(mouse_pos.y + 10))
 			
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-				print("Kliknuto na: ", cfg2["dword_0"])
+				if(cfg2["dword_0"]==0x00258350):
+					get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
+				else:
+					print("Kliknuto na: ", cfg2["dword_0"])
 		else:
 			spr.hide()
 	if not any_hovered:
