@@ -15,6 +15,8 @@
 #include "remc2/portability/port_sdl_sound.h"
 #include "remc2/engine/Sound.h"
 
+#include "remc2/engine/MenusAndIntros.h"
+
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
@@ -50,6 +52,35 @@ void ExampleClass::_bind_methods() {
 //SetMusicVolume_98790
 //StopMusic_8E020
 //StartMusic_8E160
+
+void ExampleClass::playAnim(int index) {
+	char dataPath[MAX_PATH];
+	switch(index)
+		{
+		case 0:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTEL.DAT");
+			PlayInfoFmv(1, 1, str_E17CC_0, dataPath);
+			break;
+		case 1:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
+			PlayInfoFmv(1, 1, str_E17CC_0, dataPath);
+			break;
+		case 2:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+			PlayInfoFmv(1, 1, str_E17CC_0, dataPath);
+			break;
+	}
+}
+
+Array ExampleClass::getTexts() {
+	Array result;
+	return result;
+}
+
+PackedByteArray ExampleClass::getVGABuffer() {
+	PackedByteArray result;
+	return result;
+}
 
 void ExampleClass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 	std::vector<int> standard_vector;
