@@ -507,7 +507,7 @@ void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* pale
 	}
 }
 
-void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette) {
+void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette, bool alpha) {
 	int inWidth = width;
 	int inHeight = height;
 	char pal[768];
@@ -541,12 +541,11 @@ void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *dat
 		rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
 		rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
 		rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
-
-		// 2. Logika průhlednosti: pokud je index 0, alfa = 0 (průhledná), jinak 255 (neprůhledná)
-		if (index == 0) {
-			rgba_data[dest_idx + 3] = 0; // Průhledná
-		} else {
-			rgba_data[dest_idx + 3] = 255; // Neprůhledná
+		rgba_data[dest_idx + 3] = 255;
+		if (alpha) {
+			if (index == 0) {
+				rgba_data[dest_idx + 3] = 0; // Průhledná
+			}
 		}
 	}
 
@@ -582,7 +581,7 @@ void MBEXhscreenConverts(String path) {
 	for (int i = 0; i <= 312; i++)
 		MBEXsaveSprite(path, i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
 	//xy_DWORD_17DED4_spritestr[39] - cursor
-	MBEXsaveBitmap(path, "x_DWORD_E9C38_smalltit", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28);
+	MBEXsaveBitmap(path, "x_DWORD_E9C38_smalltit", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
 }
 
 void MBEXsmatsConverts(String path) {
