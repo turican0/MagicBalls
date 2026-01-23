@@ -29,6 +29,10 @@ func _ready():
 	showMyImg(0)
 	
 func showMyImg(index):
+	var old_node = $Control.get_node_or_null("fullscrimg")
+	if old_node:
+		old_node.name = "old_fullscrimg" # Přejmenování pro jistotu před smazáním
+		old_node.queue_free()
 	const SPRITE_DIR = "res://convertdata/HSCREEN/"
 	var file_name_spr
 	if(index==0):

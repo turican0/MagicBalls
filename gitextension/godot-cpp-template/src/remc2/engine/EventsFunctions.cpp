@@ -851,7 +851,6 @@ void sub_5BC20();
 signed int sub_5C060();
 //signed int sub_5C1B0_set_any_variables2();
 void sub_5C330();
-signed int sub_5C3D0_file_decompress(uint8_t* a1, uint8_t* a2);
 void NetworkDisallocation2_5C450();
 void sub_5C490_testers_info();
 void sub_5C530();

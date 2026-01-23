@@ -582,6 +582,23 @@ void MBEXhscreenConverts(String path) {
 		MBEXsaveSprite(path, i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
 	//xy_DWORD_17DED4_spritestr[39] - cursor
 	MBEXsaveBitmap(path, "x_DWORD_E9C38_smalltit", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+
+	char dataPath[MAX_PATH];
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
+	Ref<FileAccess> file = FileAccess::open(dataPath, FileAccess::READ);
+	if (file.is_null()) {
+		UtilityFunctions::printerr("Failed to open file.");
+		return;
+	}
+	file->seek(0x178E5F);
+	PackedByteArray compressed_buffer = file->get_buffer(0x32B9);
+	file->seek(0x17C118);
+	PackedByteArray compressed_buffer2 = file->get_buffer(0x300);
+	file->close();
+	memcpy(x_DWORD_E9C38_smalltit, compressed_buffer.ptr(), 0x32B9);
+	sub_5C3D0_file_decompress(x_DWORD_E9C38_smalltit, x_DWORD_E9C38_smalltit);
+	memcpy(*xadatapald0dat2.colorPalette_var28, compressed_buffer2.ptr(), 0x300);
+	MBEXsaveBitmap(path, "welcome", 320, 200, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
 }
 
 void MBEXsmatsConverts(String path) {
