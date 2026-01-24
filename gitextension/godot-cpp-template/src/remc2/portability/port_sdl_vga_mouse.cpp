@@ -61,6 +61,8 @@ Uint32 blueMask = 0x00ff0000;
 Uint32 alphaMask = 0xff000000;
 #endif
 
+uint8_t tempVGABuffer[640 * 480];
+
 std::vector<SDL_Rect> GetDisplays()
 {
 	std::vector<SDL_Rect> displayBounds;
@@ -438,6 +440,10 @@ void VGA_Set_mouse(const int16_t x, const int16_t y) {
 };
 
 void VGA_Blit(uint8* srcBuffer) {
+	if (srcBuffer)
+		memcpy(tempVGABuffer, srcBuffer, 320 * 200);
+	else
+		memset(tempVGABuffer, 0, 320 * 200);
 }
 
 void SubBlit(uint16_t originalResWidth, uint16_t originalResHeight) {

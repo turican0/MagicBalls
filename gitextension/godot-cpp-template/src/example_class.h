@@ -90,4 +90,5 @@ public:
 	void playAnim(int index);
 	Array getTexts();
 	PackedByteArray getVGABuffer();
+	int playAnimStep(int run);
 	};

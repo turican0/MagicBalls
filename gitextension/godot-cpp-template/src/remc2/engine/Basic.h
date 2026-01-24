@@ -466,6 +466,8 @@ extern type_TMAPS00TAB_BEGIN_BUFFER* str_TMAPS00TAB_BEGIN_BUFFER;
 
 extern uint8_t* Zero_pointer;
 
+extern TColor unk_17D838x[];
+
 bool DefaultResolutions();
 
 void FreeMem_83E80(uint8_t* a1);

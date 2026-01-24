@@ -202,12 +202,24 @@ var runned: bool
 func SetRunned(sendRunned) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	runned = sendRunned
+	
+func playAnim(index:int):
+	#MBEX.soundQueueClear()
+	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	MBEX.playAnim(index)
+	
+func playAnimStep(endAnimIn:int) -> int:
+	#MBEX.soundQueueClear()
+	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	var endAnimOut=MBEX.playAnimStep(endAnimIn)	
+	Main_Sounds.updateSounds(MBEX.getPendingSoundActions())
+	return endAnimOut
 
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
 	getInputs()
-	MBEX.soundQueueClear()
+	#MBEX.soundQueueClear()
 	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
 		if Main_UI.is_ctrl_active:
@@ -409,11 +421,19 @@ func getInputs():
 
 func init():
 	loadlevel(0)
+	
+func setMesh():
+	MBEX.set_mesh_instance(get_parent().get_node("TerrainMB").mesh_instance)
+	MBEX.initialize_grid_data()
+	MBEX.recalculate_mesh()
 
 func loadlevel(levelnumber: int):
 	sub_533B0_decompress_levels(levelnumber)
 
-func sub_533B0_decompress_levels(level_id: int) -> bool:
+func getVGABuffer():
+	return MBEX.getVGABuffer()
+
+func sub_533B0_decompress_levels(level_id: int):
 	if level_id >= 1000:
 		return true
 	var level_dat_file: FileAccess = null
@@ -444,7 +464,7 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
 	MBEX.TerrainMake(level_tab_data_unpacked)
 	
-	if not DirAccess.dir_exists_absolute("res://convertdata/musicsX/"):
+	if not DirAccess.dir_exists_absolute("res://convertdata/musics/"):
 		MBEX.convertOriginalData("res://convertdata")
 	
 	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")
@@ -458,17 +478,7 @@ func sub_533B0_decompress_levels(level_id: int) -> bool:
 	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()
 	mapAngle_13B4E0 = MBEX.TerrainGetAngle()
 	
-	MBEX.set_mesh_instance(get_parent().get_node("TerrainMB").mesh_instance)
-	MBEX.initialize_grid_data()
-	MBEX.recalculate_mesh()
-	#MBEX.renew_terrain()
-	
-	#get_parent().get_node("Node3D-testTerrain").initialize_grid_data()
-	#get_parent().get_node("Node3D-testTerrain").recalculate_mesh()
-	#get_parent().get_node("Node3D-testTerrain").renew_terrain()
-	
-	return true
-	
+
 func getPlayerPosRot() -> Dictionary:
 	var playerPosRot: Dictionary = MBEX.GetPlayerPositionRotation()
 	return playerPosRot

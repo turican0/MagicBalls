@@ -42,6 +42,10 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
 	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &ExampleClass::getPendingSoundActions);
 	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &ExampleClass::updateFreeSoundPlayers);
+	godot::ClassDB::bind_method(D_METHOD("playAnim", "Int"), &ExampleClass::playAnim);
+	godot::ClassDB::bind_method(D_METHOD("playAnimStep", "Int"), &ExampleClass::playAnimStep);
+	godot::ClassDB::bind_method(D_METHOD("getTexts"), &ExampleClass::getTexts);
+	godot::ClassDB::bind_method(D_METHOD("getVGABuffer"), &ExampleClass::getVGABuffer);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -53,23 +57,90 @@ void ExampleClass::_bind_methods() {
 //StopMusic_8E020
 //StartMusic_8E160
 
+FILE *animTempfile;
+Type_SoundEvent_E17CC* tempPSoundEvent;
+void PlayInfoFmvBegin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent, char *path)
+{
+	tempPSoundEvent = pSoundEvent;
+	x_WORD_E12FC = a2;
+	x_WORD_D4004 = 0;
+	x_WORD_17DB58 = 0;
+	ActualKeyframe_17DB60 = 0;
+	x_DWORD_E12F4x = (TColor *)pdwScreenBuffer_351628;
+	animTempfile = DataFileIO::CreateOrOpenFile(path, 512);
+	x_DWORD_17DB38_intro_file_handle = animTempfile;
+	if (animTempfile) {
+		DataFileIO::Read(animTempfile, unk_17DB40, 12); //ecx=12
+		LastKeyframe_17DB46 = *(int16_t *)&unk_17DB40[6];
+		x_WORD_17DB48 = *(int16_t *)&unk_17DB40[8];
+		x_WORD_17DB4A = *(int16_t *)&unk_17DB40[10];
+
+		x_WORD_180744_mouse_right_button = 0;
+		x_WORD_180746_mouse_left_button = 0;
+		x_DWORD_E1300 += 12;
+		LastPressedKey_1806E4 = 0;
+		x_WORD_17DB5A = 0;
+		FlvInitSet_473B0(); //2283b0
+		x_WORD_17DB5C = a1;
+	}
+}
+
+bool endAnim = false;
+
+void PlayInfoFmvStep() {
+	if ((LastPressedKey_1806E4 != 1) && (!endAnim) && animTempfile)
+	{
+		SetFrameStart(std::chrono::system_clock::now());
+		if (x_WORD_17DB5A)
+			endAnim=true;
+		else {
+			if (ActualKeyframe_17DB60 >= LastKeyframe_17DB46 - 1) //34eb60 a 34eb46
+				endAnim = true;
+			else {
+				PlayIntoSoundEvents_1B280(tempPSoundEvent);
+				sub_75DB0();
+				sub_75E70();
+				ActualKeyframe_17DB60++;
+			}
+		}
+	} else
+		endAnim = true;
+}
+
+void PlayInfoFmvEnd() {
+	if (animTempfile) {
+		DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
+	}
+}
+
 void ExampleClass::playAnim(int index) {
 	char dataPath[MAX_PATH];
 	switch(index)
 		{
 		case 0:
 			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTEL.DAT");
-			PlayInfoFmv(1, 1, str_E17CC_0, dataPath);
+			PlayInfoFmvBegin(1, 1, str_E17CC_0, dataPath);
 			break;
 		case 1:
 			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
-			PlayInfoFmv(1, 1, str_E17CC_0, dataPath);
+			PlayInfoFmvBegin(1, 1, str_E17CC_0, dataPath);
 			break;
 		case 2:
 			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
-			PlayInfoFmv(1, 1, str_E17CC_0, dataPath);
+			PlayInfoFmvBegin(1, 1, str_E17CC_0, dataPath);
 			break;
 	}
+}
+
+int ExampleClass::playAnimStep(int run) {
+	if (run)
+		LastPressedKey_1806E4 = 20;
+	PlayInfoFmvStep();
+	if (endAnim) {
+		PlayInfoFmvEnd();
+		return 1;
+	}
+	return 0;
 }
 
 Array ExampleClass::getTexts() {
@@ -79,6 +150,15 @@ Array ExampleClass::getTexts() {
 
 PackedByteArray ExampleClass::getVGABuffer() {
 	PackedByteArray result;
+	result.resize(320 * 200 * 3);
+	uint8_t *write_ptr = result.ptrw();
+	TColor *ref_palette = (TColor *)VGA_Get_Palette(false);
+	for (int i = 0; i < 320 * 200; ++i) {
+		uint8_t index_value = tempVGABuffer[i];
+		write_ptr[i * 3 + 0] = ref_palette[index_value].red * 4; // R
+		write_ptr[i * 3 + 1] = ref_palette[index_value].green * 4; // G
+		write_ptr[i * 3 + 2] = ref_palette[index_value].blue * 4; // B
+	}
 	return result;
 }
 
