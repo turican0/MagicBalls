@@ -107,14 +107,48 @@ void PlayInfoFmvStep() {
 		endAnim = true;
 }
 
+int oldScreenWidth;
+int old_VGA_type_resolution;
+
 void PlayInfoFmvEnd() {
 	if (animTempfile) {
 		DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
 	}
+	screenWidth_18062C = oldScreenWidth;
+	x_WORD_180660_VGA_type_resolution = old_VGA_type_resolution;
 }
 
 void ExampleClass::playAnim(int index) {
+	old_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
+	oldScreenWidth = screenWidth_18062C;
+	screenWidth_18062C = 320;
+	x_WORD_180660_VGA_type_resolution = 1;
+	InitLanguage_76A40();
+
 	char dataPath[MAX_PATH];
+	x_DWORD_17DE38str.x_DWORD_17DE54 = &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787];
+	x_DWORD_17DE38str.x_DWORD_17DEC0 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[308527];
+	x_DWORD_17DE38str.x_DWORD_17DEC4 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[310159];
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
+	sub_7AA70_load_and_decompres_dat_file(dataPath, &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787], 0x164FCD, 0x35C);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DEC0, 0x165329, 0x224);
+	sub_7AA70_load_and_decompres_dat_file(0, 0, 0, 0);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+	else
+		sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+
+	sub_2EB40();
+	if (soundAble_E3798 && x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex == 2) {
+		x_BYTE_D41C1 = 0;
+		x_BYTE_D41C0 = 0;
+	} else {
+		x_BYTE_D41C0 = 1;
+		x_BYTE_D41C1 = 1;
+	}
+
+
+	//char dataPath[MAX_PATH];
 	switch(index)
 		{
 		case 0:
