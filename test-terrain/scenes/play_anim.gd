@@ -47,15 +47,15 @@ var runned = false
 var animIndex
 	
 func showMyImg(index):
-	var old_node = $Control.get_node_or_null("fullscrimg")
-	if old_node:
-		#old_node.name = "old_fullscrimg" # Přejmenování pro jistotu před smazáním
-		old_node.queue_free()
+	#var old_node = $Control.get_node_or_null("fullscrimg")
+	#if old_node:
+		##old_node.name = "old_fullscrimg" # Přejmenování pro jistotu před smazáním
+		#old_node.queue_free()
 	const SPRITE_DIR = "res://convertdata/HSCREEN/"
 	var file_name_spr
 	if(index==0):
 		file_name_spr="welcome.png"	
-	sprback.name = "fullscrimg"
+	#sprback.name = "fullscrimg"
 	var file_path_spr = SPRITE_DIR + file_name_spr
 	var tex2 = load_custom_texture(file_path_spr)
 	sprback.texture=tex2
@@ -70,7 +70,7 @@ func showMyImg(index):
 	# Pokud chceš roztáhnout bez ohledu na deformaci:
 	sprback.scale = scale_factor
 	
-	$Control.add_child(sprback)
+	#$Control.add_child(sprback)
 	sprback.show()
 	#playAnim(1)
 	waiting_for_input = true
