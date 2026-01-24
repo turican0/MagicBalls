@@ -57,6 +57,11 @@ void ExampleClass::_bind_methods() {
 //StopMusic_8E020
 //StartMusic_8E160
 
+void ChangeLanguage(int index) {
+	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
+	InitLanguage_76A40();
+}
+
 FILE *animTempfile;
 Type_SoundEvent_E17CC* tempPSoundEvent;
 void PlayInfoFmvBegin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent, char *path)
