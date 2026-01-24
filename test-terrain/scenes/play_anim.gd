@@ -1,6 +1,7 @@
 extends Node3D
 
 var sprback:Sprite2D
+var waiting_for_input = false
 
 func load_custom_texture(path: String) -> ImageTexture:#move to imports
 	var img = Image.load_from_file(path)
@@ -48,7 +49,7 @@ var animIndex
 func showMyImg(index):
 	var old_node = $Control.get_node_or_null("fullscrimg")
 	if old_node:
-		old_node.name = "old_fullscrimg" # Přejmenování pro jistotu před smazáním
+		#old_node.name = "old_fullscrimg" # Přejmenování pro jistotu před smazáním
 		old_node.queue_free()
 	const SPRITE_DIR = "res://convertdata/HSCREEN/"
 	var file_name_spr
@@ -71,7 +72,18 @@ func showMyImg(index):
 	
 	$Control.add_child(sprback)
 	sprback.show()
-	playAnim(1)
+	#playAnim(1)
+	waiting_for_input = true
+	
+func _input(event):
+	if waiting_for_input:
+		if event is InputEventKey or event is InputEventMouseButton:
+			if event.is_pressed():
+				waiting_for_input = false
+				addFadeIn()
+				await fadeNode.fade_finished
+				addFadeOut()
+				playAnim(1)
 	
 func playAnim(index:int):
 	animIndex=index
@@ -95,12 +107,27 @@ func animInit():
 			Main_Sounds.setSoundBank(4)
 	Main_DecodeLevel.playAnim(animIndex)
 	
+func endAnim():
+	runned=false
+	addFadeIn()
+	await fadeNode.fade_finished
+	get_tree().change_scene_to_file(Global.last_scene_path)
+	
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
-	var endAnim = Main_DecodeLevel.playAnimStep(0)#1 pokud je stisknuta klavesa
+	var is_skipping = Input.is_anything_pressed() or \
+					  Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or \
+					  Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
+	var endAnim
+	if(is_skipping):
+		endAnim = Main_DecodeLevel.playAnimStep(1)
+		Main_Sounds.stopAllSounds()
+		endAnim()
+	else:
+		endAnim = Main_DecodeLevel.playAnimStep(0)
 	if(endAnim):
-		runned=false
+		endAnim()
 	else:
 		animImage.set_data(animWidth, animHeight, false, Image.FORMAT_RGB8, Main_DecodeLevel.getVGABuffer())
 		animTextureRect.update(animImage)

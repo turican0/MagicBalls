@@ -141,6 +141,7 @@ func _input(event):
 				if target_scene != "":
 					addFadeIn()
 					await fadeNode.fade_finished
+					Global.last_scene_path = get_tree().current_scene.scene_file_path
 					get_tree().change_scene_to_file(target_scene)
 				else:
 					print("Kliknuto na: 0x%X" % cfg2["dword_0"])

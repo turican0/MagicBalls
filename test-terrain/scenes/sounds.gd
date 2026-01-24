@@ -143,6 +143,11 @@ func init() -> void:
 		player.bus = "SFX"
 		add_child(player)
 		sfx_players.append(player)
+		
+func stopAllSounds():
+	stop_music()
+	for i in MAX_SIMULTANEOUS_SOUNDS:
+		stop_sound(i)
 
 func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 	if player_index < 0 or player_index >= MAX_SIMULTANEOUS_SOUNDS:
