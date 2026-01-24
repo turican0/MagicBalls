@@ -47,32 +47,23 @@ var runned = false
 var animIndex
 	
 func showMyImg(index):
-	#var old_node = $Control.get_node_or_null("fullscrimg")
-	#if old_node:
-		##old_node.name = "old_fullscrimg" # Přejmenování pro jistotu před smazáním
-		#old_node.queue_free()
 	const SPRITE_DIR = "res://convertdata/HSCREEN/"
 	var file_name_spr
 	if(index==0):
-		file_name_spr="welcome.png"	
-	#sprback.name = "fullscrimg"
+		file_name_spr="welcomeScreen.png"
 	var file_path_spr = SPRITE_DIR + file_name_spr
 	var tex2 = load_custom_texture(file_path_spr)
 	sprback.texture=tex2
 	sprback.centered = true
 	var screen_size = get_viewport().get_visible_rect().size
-	sprback.position = screen_size / 2
-	
+	sprback.position = screen_size / 2	
 	var tex_size = tex2.get_size()
 	var scale_factor = Vector2(screen_size.x / tex_size.x, screen_size.y / tex_size.y)	
 	# Pokud chceš zachovat poměr stran a mít černé pruhy (fit):
 	# var final_scale = min(scale_factor.x, scale_factor.y)
 	# Pokud chceš roztáhnout bez ohledu na deformaci:
 	sprback.scale = scale_factor
-	
-	#$Control.add_child(sprback)
 	sprback.show()
-	#playAnim(1)
 	waiting_for_input = true
 	
 func _input(event):

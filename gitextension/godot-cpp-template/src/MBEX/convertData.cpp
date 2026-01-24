@@ -574,15 +574,34 @@ void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *dat
 
 void MBEXhscreenConverts(String path) {
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);//4,6,7,12,14,15
-	//(TColor*)*xadatapald0dat2.colorPalette_var28 - animation
-	//unk_17D838x - animation2
-	//(TColor*)*xadatapald0dat2.colorPalette_var28
-	//x_DWORD_17DE38str.x_DWORD_17DE38x
 	for (int i = 0; i <= 312; i++)
-		MBEXsaveSprite(path, i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
-	//xy_DWORD_17DED4_spritestr[39] - cursor
-	MBEXsaveBitmap(path, "x_DWORD_E9C38_smalltit", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+		MBEXsaveSprite(path + "/4", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
 
+	MBEXsaveBitmap(path, "manuBackground", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6); //4,6,7,12,14,15
+	for (int i = 0; i <= 312; i++)
+		MBEXsaveSprite(path + "/6", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+
+	MBEXsaveBitmap(path, "gameWorldMap", 1280, 960, x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 7); //4,6,7,12,14,15
+	for (int i = 0; i <= 32; i++)
+		MBEXsaveSprite(path + "/7", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+	/*
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 12); //4,6,7,12,14,15
+	for (int i = 0; i <= 312; i++)
+		MBEXsaveSprite(path + "/12", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 14); //4,6,7,12,14,15
+	for (int i = 0; i <= 312; i++)
+		MBEXsaveSprite(path + "/14", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 15); //4,6,7,12,14,15
+	for (int i = 0; i <= 312; i++)
+		MBEXsaveSprite(path + "/15", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+	*/
+	
 	char dataPath[MAX_PATH];
 	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
 	Ref<FileAccess> file = FileAccess::open(dataPath, FileAccess::READ);
@@ -598,7 +617,7 @@ void MBEXhscreenConverts(String path) {
 	memcpy(x_DWORD_E9C38_smalltit, compressed_buffer.ptr(), 0x32B9);
 	sub_5C3D0_file_decompress(x_DWORD_E9C38_smalltit, x_DWORD_E9C38_smalltit);
 	memcpy(*xadatapald0dat2.colorPalette_var28, compressed_buffer2.ptr(), 0x300);
-	MBEXsaveBitmap(path, "welcome", 320, 200, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+	MBEXsaveBitmap(path, "welcomeScreen", 320, 200, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
 }
 
 void MBEXsmatsConverts(String path) {

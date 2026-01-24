@@ -21,7 +21,7 @@ var main_menu_selection: Array[Dictionary] = [
 	{"help": "Set Joystick", "dword_0": 0x0025A160, "dword_4": 0, "selected_8": 0, "xmin_10": 0x00B9, "ymin_12": 0x00E8, "sizex_14": 0x003C, "sizey_16": 0x002C, "word_18": 0x019B, "byte_20": 0x42, "byte_21": 0x3A, "byte_22": 0x0D, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x004A, 0x00F6, 0, 0, 0x0064, 0, 0x019B, 0, 0x0003]}
 ]
 
-const SPRITE_DIR = "res://convertdata/HSCREEN/"
+const SPRITE_DIR = "res://convertdata/HSCREEN/4/"
 
 func load_custom_texture(path: String) -> ImageTexture:
 	var img = Image.load_from_file(path)
