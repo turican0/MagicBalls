@@ -88,33 +88,33 @@ func _ready():
 		$Control.add_child(ani)
 		ani.play("loop")
 		
-		for cfgback in main_menu_selection:
-			var sprback = Sprite2D.new()
-			var file_name_spr = "%03d.png" % (cfgback["byte_21"]+8)
-			sprback.name = file_name_spr
-			sprback.centered = false
-			sprback.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-			sprback.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
-			sprback.position = Vector2(cfgback["xmin_10"]-320, cfgback["ymin_12"]-240)
-			var file_path_spr = SPRITE_DIR + file_name_spr
-			var tex2 = load_custom_texture(file_path_spr)
-			sprback.texture=tex2
-			$Control.add_child(sprback)
-		
-		for cfg2 in main_menu_selection:
-			var spr = Sprite2D.new()
-			var file_name_spr = "%03d.png" % cfg2["byte_21"]
-			spr.name = file_name_spr
-			spr.centered = false
-			spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-			spr.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
-			spr.position = Vector2(cfg2["xmin_10"]-320, cfg2["ymin_12"]-240)
-			var file_path_spr = SPRITE_DIR + file_name_spr
-			var tex2 = load_custom_texture(file_path_spr)
-			spr.texture=tex2
-			spr.hide()
-			$Control.add_child(spr)
-			cfg2["node_ref"] = spr
+	for cfgback in main_menu_selection:
+		var sprback = Sprite2D.new()
+		var file_name_spr = "%03d.png" % (cfgback["byte_21"]+8)
+		sprback.name = file_name_spr
+		sprback.centered = false
+		sprback.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		sprback.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
+		sprback.position = Vector2(cfgback["xmin_10"]-320, cfgback["ymin_12"]-240)
+		var file_path_spr = SPRITE_DIR + file_name_spr
+		var tex2 = load_custom_texture(file_path_spr)
+		sprback.texture=tex2
+		$Control.add_child(sprback)
+	
+	for cfg2 in main_menu_selection:
+		var spr = Sprite2D.new()
+		var file_name_spr = "%03d.png" % cfg2["byte_21"]
+		spr.name = file_name_spr
+		spr.centered = false
+		spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		spr.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
+		spr.position = Vector2(cfg2["xmin_10"]-320, cfg2["ymin_12"]-240)
+		var file_path_spr = SPRITE_DIR + file_name_spr
+		var tex2 = load_custom_texture(file_path_spr)
+		spr.texture=tex2
+		spr.hide()
+		$Control.add_child(spr)
+		cfg2["node_ref"] = spr
 			
 func _input(event):
 	await get_tree().process_frame

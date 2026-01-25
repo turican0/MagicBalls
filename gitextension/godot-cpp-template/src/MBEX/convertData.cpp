@@ -414,7 +414,7 @@ void MBEXgraphicConverts(String path, String texture, String palette) {
 		a3.width_4 = contentTMAPStab[index].width_4;
 		a3.height_5 = contentTMAPStab[index].height_5;
 		//GameBitmapDrawTransparentBitmap_2DE80(0, 0, a3, 0);//20ee80
-		memset(pdwScreenBuffer_351628, 0, 100000);
+		memset(pdwScreenBuffer_351628, 0, 640*480);
 		GameBitmap::DrawMenuGraphic(contentTMAPStab[index].width_4, contentTMAPStab[index].height_5, 1, stmpdat, pdwScreenBuffer_351628);
 
 		//--------------------------
@@ -512,7 +512,7 @@ void MBEXhtablesConverts(String path) {
 	//MBEXtextureConverts(path + "/none", 256, 326, "TABLES.DAT", "PALF-0.DAT", false);-only noise
 }
 
-void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* palette) {
+void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* palette, bool alpha) {
 	int inWidth = bitmap.width_4;
 	int inHeight = bitmap.height_5;
 	uint8_t* data = bitmap.data;
@@ -531,7 +531,7 @@ void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* pale
 	}
 	std::vector<uint8_t> palette_final(768, 0);
 	memcpy(palette_final.data(), pal, 768);
-	memset(pdwScreenBuffer_351628, 0, 100000);
+	memset(pdwScreenBuffer_351628, 0, 640*480);
 	GameBitmap::DrawMenuGraphic(inWidth, inHeight, 1, data, pdwScreenBuffer_351628);
 
 	//--------------------------
@@ -548,12 +548,12 @@ void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* pale
 		rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
 		rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
 		rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
+		rgba_data[dest_idx + 3] = 255;
 
-		// 2. Logika průhlednosti: pokud je index 0, alfa = 0 (průhledná), jinak 255 (neprůhledná)
-		if (index == 0) {
-			rgba_data[dest_idx + 3] = 0; // Průhledná
-		} else {
-			rgba_data[dest_idx + 3] = 255; // Neprůhledná
+		if (alpha) {
+			if (index == 0) {
+				rgba_data[dest_idx + 3] = 0; // transparent
+			}
 		}
 	}
 
@@ -633,7 +633,7 @@ void MBEXsaveBitmapCrop(String path, char *name, int width, int height, uint8_t 
 	}
 }
 
-void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette, bool alpha) {
+void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette, bool alpha, int alphaIndex) {
 	int inWidth = width;
 	int inHeight = height;
 	char pal[768];
@@ -661,7 +661,7 @@ void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *dat
 		rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
 		rgba_data[dest_idx + 3] = 255;
 		if (alpha) {
-			if (index == 0) {
+			if (index == alphaIndex) {
 				rgba_data[dest_idx + 3] = 0; // transparent
 			}
 		}
@@ -689,19 +689,25 @@ void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *dat
 void MBEXhscreenConverts(String path) {
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);//4,6,7,12,14,15
 	for (int i = 0; i <= 312; i++)
-		MBEXsaveSprite(path + "/4", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+		MBEXsaveSprite(path + "/4", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28,true);
 
-	MBEXsaveBitmap(path, "manuBackground", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+	MBEXsaveBitmap(path, "menuBackground", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false,0);
 
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6); //4,6,7,12,14,15
 	for (int i = 0; i <= 312; i++)
-		MBEXsaveSprite(path + "/6", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+		if (i>=285&&i<=304)
+			MBEXsaveSprite(path + "/6", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+		else
+			MBEXsaveSprite(path + "/6", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
 
-	MBEXsaveBitmap(path, "gameWorldMap", 1280, 960, x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+	memset(pdwScreenBuffer_351628, 255, 640*480);
+	sub_85CC3_draw_round_frame((uint16_t *)x_DWORD_17DE38str.x_DWORD_17DE5C_border_bitmap);
+	MBEXsaveBitmap(path, "gameWorldMapForeground", 640, 480, pdwScreenBuffer_351628, (TColor *)*xadatapald0dat2.colorPalette_var28, true,255);
+	MBEXsaveBitmap(path, "gameWorldMap", 1280, 960, x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map, (TColor *)*xadatapald0dat2.colorPalette_var28, false,0);
 
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 7); //4,6,7,12,14,15
 	for (int i = 0; i <= 32; i++)
-		MBEXsaveSprite(path + "/7", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28);
+		MBEXsaveSprite(path + "/7", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28,true);
 	/*
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 12); //4,6,7,12,14,15
 	for (int i = 0; i <= 312; i++)
@@ -731,7 +737,7 @@ void MBEXhscreenConverts(String path) {
 	memcpy(x_DWORD_E9C38_smalltit, compressed_buffer.ptr(), 0x32B9);
 	sub_5C3D0_file_decompress(x_DWORD_E9C38_smalltit, x_DWORD_E9C38_smalltit);
 	memcpy(*xadatapald0dat2.colorPalette_var28, compressed_buffer2.ptr(), 0x300);
-	MBEXsaveBitmap(path, "welcomeScreen", 320, 200, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false);
+	MBEXsaveBitmap(path, "welcomeScreen", 320, 200, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false,0);
 }
 
 void MBEXsmatsConverts(String path) {

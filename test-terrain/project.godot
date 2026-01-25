@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="test terrain"
-run/main_scene="uid://cofnhdcclon1w"
+config/name="MagicBalls"
+run/main_scene="uid://cqs30dtci0jur"
 config/features=PackedStringArray("4.5")
 boot_splash/show_image=false
 config/icon="res://icon.svg"

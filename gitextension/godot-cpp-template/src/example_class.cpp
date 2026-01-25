@@ -55,6 +55,9 @@ void ExampleClass::_bind_methods() {
 //StopMusic_8E020
 //StartMusic_8E160
 
+//DrawAndSoundDragonAndFire_81EE0-clean
+//NewGameSubdraw_81760 - portals
+
 void ChangeLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
 	InitLanguage_76A40();

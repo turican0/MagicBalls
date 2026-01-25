@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6hjxjkqj1hpf" path="res://scenes/game_map.gd" id="1_ccdfn"]
 [ext_resource type="Texture2D" uid="uid://240c7rx26052" path="res://convertdata/HSCREEN/gameWorldMap.png" id="2_fy1o8"]
-[ext_resource type="Texture2D" uid="uid://dgmhl7in28gvp" path="res://convertdata/HSCREEN/6/001.png" id="3_5r7r6"]
+[ext_resource type="Texture2D" uid="uid://mvn8xwbhueww" path="res://convertdata/HSCREEN/gameWorldMapForeground.png" id="3_5r7r6"]
 
 [node name="GameMap" type="Node3D"]
 script = ExtResource("1_ccdfn")
@@ -14,10 +14,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.3, 1.3)
 
 [node name="GameMap" type="Sprite2D" parent="Control"]
+scale = Vector2(2, 2)
 texture = ExtResource("2_fy1o8")
 
-[node name="Foreground" type="Sprite2D" parent="Control"]
+[node name="Foreground" type="TextureRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("3_5r7r6")
