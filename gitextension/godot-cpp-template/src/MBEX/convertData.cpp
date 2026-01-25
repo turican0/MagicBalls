@@ -217,6 +217,35 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 		file_name = dir->get_next();
 	}
 	dir->list_dir_end();
+
+	char dataPath[MAX_PATH];
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DE38x, 0xB2947, 768);
+
+	dir = DirAccess::open(langPath);
+	if (dir.is_valid()) {
+		dir->list_dir_begin();
+		String f_name = dir->get_next();
+		while (f_name != "") {
+			if (f_name != "." && f_name != "..") {
+				if (f_name.begins_with("l")) {
+					String full_path = langPath.path_join(f_name);
+					CharString full_pathUtf = full_path.utf8();
+					Ref<FileAccess> file = FileAccess::open(full_path, FileAccess::READ);
+					if (file.is_valid()) {
+						uint64_t file_len = file->get_length();
+						PackedByteArray data = file->get_buffer(file_len);
+						memcpy(x_DWORD_E9C38_smalltit, data.ptr(), file_len);
+						MBEXsaveBitmapCrop(path, (char *)f_name.utf8().get_data(), 90, 53, x_DWORD_E9C38_smalltit + 1, (TColor *)x_DWORD_17DE38str.x_DWORD_17DE38x, 2);
+						UtilityFunctions::print("Soubor nacten a zpracovan: ", f_name);
+					} else {
+						UtilityFunctions::printerr("Nepodarilo se otevrit soubor: ", full_path);
+					}
+				}
+			}
+			f_name = dir->get_next();
+		}
+		dir->list_dir_end();
+	}
 }
 
 //TABLES-ok
@@ -551,6 +580,59 @@ void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* pale
 	}
 }
 
+void MBEXsaveBitmapCrop(String path, char *name, int width, int height, uint8_t *data, TColor *palette, int cropXmin) {
+	int inWidth = width;
+	int inHeight = height;
+	char pal[768];
+	for (int i = 0; i < 256; i++) {
+		pal[i * 3 + 0] = palette[i].red; // R
+		pal[i * 3 + 1] = palette[i].green; // G
+		pal[i * 3 + 2] = palette[i].blue; // B
+	}
+	String outPath = path + "/" + name + ".png";
+	std::string stdOutPath = outPath.utf8().get_data();
+	if (!make_dir_godot(path)) {
+		return;
+	}
+	std::vector<uint8_t> palette_final(768, 0);
+	memcpy(palette_final.data(), pal, 768);
+	int p_channels = 4;
+	std::vector<unsigned char> rgba_data((size_t)(inWidth - cropXmin) * inHeight * p_channels);
+	const uint8_t *indices = data;
+	//for (int i = 0; i < inWidth * inHeight; ++i)
+	for (int y = 0; y < inHeight; y++)
+	for (int x = 0; x < inWidth; x++)
+	{
+			if (x - cropXmin>=0) {
+				uint8_t index = indices[y * inWidth + x];
+				int pal_idx = index * 3;
+				int dest_idx = (y * (inWidth - cropXmin) + (x - cropXmin)) * 4;
+				rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
+				rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
+				rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
+				rgba_data[dest_idx + 3] = 255;
+			}
+	}
+	Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
+	if (f.is_valid()) {
+		stbi_write_png_to_func(
+				[](void *context, void *data, int size) {
+					FileAccess *fa = static_cast<FileAccess *>(context);
+					fa->store_buffer(static_cast<const uint8_t *>(data), size);
+				},
+				(void *)f.ptr(),
+				inWidth - cropXmin,
+				inHeight,
+				p_channels,
+				rgba_data.data(),
+				(inWidth - cropXmin) * p_channels);
+
+		f->flush();
+		f->close();
+		UtilityFunctions::print("PNG ulozeno (lambda): ", outPath);
+	}
+}
+
 void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette, bool alpha) {
 	int inWidth = width;
 	int inHeight = height;
@@ -562,48 +644,36 @@ void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *dat
 	}
 	String outPath = path + "/" + name + ".png";
 	std::string stdOutPath = outPath.utf8().get_data();
-
 	if (!make_dir_godot(path)) {
 		return;
 	}
 	std::vector<uint8_t> palette_final(768, 0);
 	memcpy(palette_final.data(), pal, 768);
-	//memset(pdwScreenBuffer_351628, 0, 100000);
-	//GameBitmap::DrawMenuGraphic(inWidth, inHeight, 1, data, pdwScreenBuffer_351628);
-
-	//--------------------------
 	int p_channels = 4;
 	std::vector<unsigned char> rgba_data((size_t)inWidth * inHeight * p_channels);
 	const uint8_t *indices = data;
-
 	for (int i = 0; i < inWidth * inHeight; ++i) {
 		uint8_t index = indices[i];
 		int pal_idx = index * 3;
 		int dest_idx = i * 4;
-
-		// Základní barvy (pozor na pořadí, PNG chce standardně RGB)
 		rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
 		rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
 		rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
 		rgba_data[dest_idx + 3] = 255;
 		if (alpha) {
 			if (index == 0) {
-				rgba_data[dest_idx + 3] = 0; // Průhledná
+				rgba_data[dest_idx + 3] = 0; // transparent
 			}
 		}
 	}
-
-	// Otevření souboru přes Godot API
 	Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
 	if (f.is_valid()) {
-		// Volání STB s Lambda funkcí přímo v argumentu
 		stbi_write_png_to_func(
 				[](void *context, void *data, int size) {
-					// Context je náš FileAccess*
 					FileAccess *fa = static_cast<FileAccess *>(context);
 					fa->store_buffer(static_cast<const uint8_t *>(data), size);
 				},
-				(void *)f.ptr(), // Předání ukazatele na FileAccess objekt
+				(void *)f.ptr(),
 				inWidth,
 				inHeight,
 				p_channels,
