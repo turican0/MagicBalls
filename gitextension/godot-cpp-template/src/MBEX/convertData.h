@@ -63,3 +63,4 @@ void MBEXhbuttonsConverts(String path);
 void MBEXcdrConverts(String path);
 void MBEXpointersConverts(String path);
 void MBEXgtdConverts(String path);
+void MBEXextractLang(String path, String langPath, String cdLangPath);

@@ -173,6 +173,50 @@ void MBEXconvertData(String path) {
 	MBEXcdrConverts(path + "/CDR");
 	MBEXpointersConverts(path + "/POINTERS");//-find true palette
 	MBEXgtdConverts(path + "/GTD");
+	MBEXextractLang(path + "/language", "res://hidata/language/", "/LANGUAGE/");
+}
+
+void MBEXextractLang(String path, String langPath, String cdLangPath) {
+	if (!make_dir_godot(path)) {
+		return;
+	}
+	String cdFullLangPath = String(cdFolder) + cdLangPath;
+	Ref<DirAccess> cleanup_dir = DirAccess::open(cdFullLangPath);
+	if (cleanup_dir.is_valid()) {
+		cleanup_dir->list_dir_begin();
+		String f_name = cleanup_dir->get_next();
+
+		while (f_name != "") {
+			if (f_name != "." && f_name != "..") {
+				cleanup_dir->remove(f_name);
+			}
+			f_name = cleanup_dir->get_next();
+		}
+		cleanup_dir->list_dir_end();
+	}
+	Ref<DirAccess> dir = DirAccess::open(langPath);
+	if (dir.is_null()) {
+		UtilityFunctions::printerr("MBEX: Nepodařilo se otevřít zdrojovou složku: ", langPath);
+		return;
+	}
+	dir->list_dir_begin();
+	String file_name = dir->get_next();
+	while (file_name != "") {
+		if (file_name != "." && file_name != "..") {
+			if (!dir->current_is_dir()) {
+				String source_file = langPath.path_join(file_name);
+				String dest_file = cdFullLangPath.path_join(file_name);
+
+				Error err = dir->copy(source_file, dest_file);
+
+				if (err != OK) {
+					UtilityFunctions::printerr("MBEX: Chyba při kopírování ", file_name);
+				}
+			}
+		}
+		file_name = dir->get_next();
+	}
+	dir->list_dir_end();
 }
 
 //TABLES-ok
