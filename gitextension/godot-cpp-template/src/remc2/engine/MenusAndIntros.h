@@ -8,9 +8,9 @@
 
 // types
 #pragma pack (1)
-typedef struct //lenght 50
+typedef struct //lenght 56
 {
-	uint32_t x_DWORD_17DB70; // weak
+	uint32_t time_17DB70; // weak
 	int16_t x_WORD_17DB74; // weak 4
 	int16_t unk_17DB76_posx; // weak 6
 	int16_t unk_17DB78_posy; // weak 8
@@ -26,9 +26,9 @@ typedef struct //lenght 50
 	int16_t x_WORD_17DB8C; // weak 28
 	int8_t x_BYTE_17DB8E; // weak 30
 	int8_t x_BYTE_17DB8F; // weak 31
-	int16_t unk_17DB90; // weak 32
-	std::array<uint8_t, 6> unk_17DB92; // weak 32
-	std::array<uint8_t, 16> fill3; // fill
+	type_animStruct unk_17DB90; // weak 32
+	//std::array<uint8_t, 6> unk_17DB92; // weak 32
+	//std::array<uint8_t, 16> fill3; // fill
 } type_x_DWORD_17DB70str;
 #pragma pack (16)
 
@@ -74,8 +74,6 @@ extern type_unk_18058Cstr unk_18058Cstr;
 
 extern int test_regression_level;
 
-extern Type_SoundEvent_E17CC str_E17CC_0[];
-
 // functions
 void MenusAndIntros_76930(bool skipMenus = false);
 void InitLanguage_76A40();
@@ -92,26 +90,26 @@ void DrawMenuAnimations_7AB00();
 void LoadAndSetGraphicsAndPalette_7AC00();
 void sub_7ADE0(char a1);
 void sub_7BEC0();
-void sub_7DA70(__int16 a1, __int16 a2, __int16 a3, __int16 a4, __int16 a5, __int16 a6);
+void SetAnimationVariables_7DA70(__int16 a1, __int16 a2, __int16 a3, __int16 a4, __int16 a5, __int16 a6);
 void sub_7DD70();
 int16_t TestMouseRegions_7E1F0();
 signed int sub_7E620(type_WORD_E1F84* a1x);
 char sub_7E800(type_WORD_E1F84* a1x);
 char sub_7E820(type_WORD_E1F84* a1x);
-int NewGameDraw_7EAE0(__int16* a1, __int16* a2, __int16* a3, __int16* a4, int8_t* a5, x_WORD* a6);
+int NewGameDraw_7EAE0(__int16* posx, __int16* posy, __int16* a3, __int16* a4, int8_t* a5, type_animStruct* animStruct);
 int LoadLanguageFile(bitmap_pos_struct2_t** a1x, bitmap_pos_struct2_t** a2x, uint8_t* a3, char* langfilename, bitmap_pos_struct_t* a3dattabindex);
 int sub_7F960(bitmap_pos_struct2_t* a1x, bitmap_pos_struct2_t* a2x, uint8_t* a3, char* langcountstring, bitmap_pos_struct_t* a3dattabindex);
 void DrawText_80C30(__int16 posX, __int16 posY, __int16 a3);
 bool sub_80D40_move_graphics_and_play_sounds(__int16 a2, __int16 a3, __int16 a4, __int16 a5, char a6);
-void NewGameSubdraw_81760(/*type_unk_E17CC_str_0x194* a1*/);
+void MapMenuPortalsDraw_81760();
 void WriteConfigDat_81DB0();
 void DrawAndSoundDragonAndFire_81EE0(__int16 a5, __int16 a6);
-Type_SecretMapScreenPortals_E2970* sub_824E0(__int16 a1);
+Type_SecretMapScreenPortals_E2970* GetSecretAndActivedPortal2_824E0(__int16 a1);
 void sub_82510(/*__int16 a1*//*, int *a2*/);
 void sub_82670();
 void DrawEndGameTable_82C20(__int16 a1);
 void PlayIntros_83250(char a1);
-void sub_833C0();
+void ShowEndCredits_833C0();
 void ShowWelcomeScreen_83850();
 void DrawNetGameMapBackground_85C8B(uint8_t* a1, uint8_t* a2, int a3, int a4, int a5, int a6);
 bool DrawAndServe_pre_sub_7B250(uint32_t var, type_WORD_E1F84* var2x);
@@ -146,5 +144,3 @@ void PaletteCopy_7C800(signed __int16 a1);
 void sub_85BF5(uint8_t* a1, uint8_t* a2, int a3, int a4, int a5, int a6);
 
 void sub_41BC0();
-
-void sub_2EB40();

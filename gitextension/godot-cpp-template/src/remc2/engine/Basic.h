@@ -52,10 +52,58 @@ typedef struct {
 	uint8_t data[];
 }TcolNext;
 
+#pragma pack (1)
+typedef struct //lenght 24
+{
+	int32_t field_0;
+	int16_t field_4;
+	int16_t field_6;
+	int16_t spriteIndex_8;
+	int8_t firstSpriteIndex_10;
+	int8_t lastSpriteIndex_11;
+} type_animStruct3;
+#pragma pack (16)
+
+#pragma pack (1)
+typedef struct //lenght 24
+{
+	int16_t diffX_0;
+	int16_t diffY_1;
+	int16_t absDiffX2_2;
+	int16_t absDiffY2_3;
+	int16_t maxX_4;
+	int16_t maxY_5;
+	int16_t beginX_6;
+	int16_t beginY_7;
+	int16_t secondAdd_8;
+	int16_t field_9;
+	int16_t stateX_10;
+	int16_t stateY_11;
+} type_animStruct;
+#pragma pack (16)
+
+#pragma pack (1)
+typedef struct //lenght 24
+{
+	int16_t actX_0;
+	int16_t actY_1;
+	int16_t beginX_2;
+	int16_t beginY_3;
+	int16_t maxX_4;
+	int16_t maxY_5;
+	int16_t begin_6;
+	int16_t act_7;
+	int16_t act2_8;
+	int16_t begin2_9;
+	int16_t stateX_10;
+	int16_t stateY_11;
+} type_animStruct2;
+#pragma pack (16)
+
 #pragma pack (push,1)
 typedef struct//lenght 613 // end 17E09D
 {
-	TColor* x_DWORD_17DE38x; // weak
+	TColor* palette_17DE38x; // weak
 	TcolNext* x_DWORD_17DE3C; // weak//1
 	uint8_t* x_DWORD_17DE40; // weak//2
 	uint8_t* x_DWORD_17DE44; // weak//3
@@ -118,19 +166,19 @@ typedef struct//lenght 613 // end 17E09D
 	//char x_BYTE_17DF3C[400]; // fix it -  weak//&x_BYTE_17DF14[40]
 	//char x_BYTE_17DF3D[400]; // fix it -  weak//&x_BYTE_17DF14[41]
 	//char x_BYTE_17DF3E[400]; // idb//&x_BYTE_17DF14[42]
-	__int16 x_WORD_17E06C; // weak
-	__int16 x_WORD_17E06E; // weak
+	__int16 x_17E06C; // weak
+	__int16 y_17E06E; // weak
 	__int16 x_WORD_17E070; // weak
 	__int16 x_WORD_17E072; // weak
-	__int16 x_WORD_17E074; // weak
-	__int16 x_WORD_17E076; // weak
-	int8_t unk_17E078x[12]; // weak [11]
+	__int16 x2_17E074; // weak
+	__int16 y2_17E076; // weak
+	type_animStruct3 unk_17E078x; // weak [11]
 	//__int16 x_WORD_17E07C; // weak unk_17E078x[4]
 	//__int16 x_WORD_17E07E; // weak unk_17E078x[6]
 	//__int16 x_WORD_17E080; // weak unk_17E078x[8]
 	//char x_BYTE_17E082; // weak unk_17E078x[10]
 	//char x_BYTE_17E083; // weak unk_17E078x[11]
-	int16_t unk_17E084x[12]; // weak [11]
+	type_animStruct unk_17E084x; // weak [11]
 	char x_BYTE_17E09C; // weak
 } type_x_DWORD_17DE38str;
 #pragma pack (pop)
@@ -465,8 +513,6 @@ extern __int16 x_WORD_E36D4; // weak
 extern type_TMAPS00TAB_BEGIN_BUFFER* str_TMAPS00TAB_BEGIN_BUFFER;
 
 extern uint8_t* Zero_pointer;
-
-extern TColor unk_17D838x[];
 
 bool DefaultResolutions();
 

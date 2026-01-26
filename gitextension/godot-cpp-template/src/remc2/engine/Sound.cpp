@@ -5086,7 +5086,7 @@ void sub_8F100_sound_proc19(uint32_t flags, __int16 index, int volume, int volum
 
 	if (!soundAble_E3798
 		|| !soundActive_E3799
-		|| index > (signed int)indexLoadedSound_180B50
+		|| index - 1 > (signed int)indexLoadedSound_180B50
 		|| !_stricmp((const char*)&soundIndex_E37A0->str_8.wavs_10[index -1].filename_0, "null.wav"))
 	{
 		return;
@@ -5138,7 +5138,7 @@ void sub_8F100_sound_proc19(uint32_t flags, __int16 index, int volume, int volum
 			bool1 = false;
 			for (int l = 0; l < x_DWORD_180B4C_end_sound_buffer3_endindex; l++)
 			{
-				if (SoundBuffer3_180750[l]->flags_14 == flags && SoundBuffer3_180750[l]->vol_scale_18[0][0] == index -1)
+				if (SoundBuffer3_180750[l]->flags_14 == flags && SoundBuffer3_180750[l]->vol_scale_18[0][0] == index - 1)
 				{
 					soundBuffer1 = &SoundBuffer3_180750[l];
 					soundBuffer2 = nullptr;
@@ -5201,7 +5201,7 @@ void sub_8F420_sound_proc20(int a1, __int16 a2)//270420
 	{
 		for (int i = 0; i < x_DWORD_180B4C_end_sound_buffer3_endindex; i++)
 		{
-			if (SoundBuffer3_180750[i]->flags_14 == a1 && SoundBuffer3_180750[i]->vol_scale_18[0][0] == a2-1 && AilSampleStatus_94010(SoundBuffer3_180750[i]) != 2)
+			if (SoundBuffer3_180750[i]->flags_14 == a1 && SoundBuffer3_180750[i]->vol_scale_18[0][0] == a2 && AilSampleStatus_94010(SoundBuffer3_180750[i]) != 2)
 			{
 				AilEndSample_93D00(SoundBuffer3_180750[i]);
 				return;
@@ -5217,7 +5217,7 @@ void sub_8F710_sound_proc21(int flags, __int16 index, int loopCount, unsigned __
 	{
 		for (int i = 0; i < x_DWORD_180B4C_end_sound_buffer3_endindex; i++)
 		{
-			if (SoundBuffer3_180750[i]->flags_14 == flags && SoundBuffer3_180750[i]->vol_scale_18[0][0] == index-1 && AilSampleStatus_94010(SoundBuffer3_180750[i]) != 2)
+			if (SoundBuffer3_180750[i]->flags_14 == flags && SoundBuffer3_180750[i]->vol_scale_18[0][0] == index && AilSampleStatus_94010(SoundBuffer3_180750[i]) != 2)
 			{
 				if (loopCount > 127)
 					loopCount = 127;

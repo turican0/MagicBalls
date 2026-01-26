@@ -235,7 +235,7 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 						uint64_t file_len = file->get_length();
 						PackedByteArray data = file->get_buffer(file_len);
 						memcpy(x_DWORD_E9C38_smalltit, data.ptr(), file_len);
-						MBEXsaveBitmapCrop(path, (char *)f_name.utf8().get_data(), 90, 53, x_DWORD_E9C38_smalltit + 1, (TColor *)x_DWORD_17DE38str.x_DWORD_17DE38x, 2);
+						MBEXsaveBitmapCrop(path, (char *)f_name.utf8().get_data(), 90, 53, x_DWORD_E9C38_smalltit + 1, (TColor *)x_DWORD_17DE38str.palette_17DE38x, 2);
 						UtilityFunctions::print("Soubor nacten a zpracovan: ", f_name);
 					} else {
 						UtilityFunctions::printerr("Nepodarilo se otevrit soubor: ", full_path);

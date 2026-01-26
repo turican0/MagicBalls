@@ -265,14 +265,14 @@ extern __int16 x_WORD_E29DA_type_resolution; // weak
 
 #pragma pack (1)
 typedef struct {//lenght 18
-	int16_t word_0;
-	int16_t word_2;
-	int16_t word_4;
-	int16_t word_6;
-	int16_t word_8;
+	int16_t textIndex_0;
+	int16_t minx2_2;
+	int16_t miny2_4;
+	int16_t minx_6;
+	int16_t miny_8;
 	int16_t word_10;
-	int16_t word_12;
-	int16_t word_14;
+	int16_t maxx_12;
+	int16_t maxy_14;
 	int8_t byte_16;
 	int8_t byte_17;
 }
@@ -504,16 +504,16 @@ int32_t /*__cdecl*/ signal(int32_t, int32_t);// weak
 void sub_753D0();
 void sub_7A110_load_hscreen(char a1, char a2);
 void ResetMouse_7B5A0();
-void sub_7B5D0();
+void FadeClearBlit_7B5D0();
 void ClearScrollDialogVars_7C020(type_str_word_26* a1x);
 char sub_7C200(uint8_t a1);
 void sub_7E840_draw_textbox_with_line(type_E24BCx* a1x, __int16 a2, __int16 a3);
-void sub_7E8D0(x_WORD* a1, __int16 a2, __int16 a3, __int16 a4, __int16 a5, __int16 a6, __int16 a7);
-bool sub_7E9D0(x_WORD* a1, x_WORD* a2, x_WORD* a3);
-void sub_81CA0(int a1, int a2, __int16 a3, __int16 a4, type_x_BYTE_E25ED_db_str* a5);
-signed int sub_7E5A0_pre_draw(int a1, int a2, __int16 a3, __int16 a4, uint8_t* a5, __int16 a6, __int16 a7);
-void sub_81260(int a1, int a2, int8_t* a3, __int16 a4, __int16 a5);
-int sub_812D0_drawDotBitmap(__int16 a1, __int16 a2);
+void CreateAnimObject_7E8D0(type_animStruct* animStruct, __int16 x1, __int16 y1, __int16 x2, __int16 y2, __int16 countX, __int16 countY);
+bool MoveAnimObject_7E9D0(x_WORD* x1, x_WORD* y1, type_animStruct* a3);
+void sub_81CA0(__int16 a3, __int16 a4, type_x_BYTE_E25ED_db_str* a5);
+bool DrawFrameAnim_7E5A0(__int16 posx, __int16 posy, Type_MapScreenPortals_E17CC* mapPortal, __int16 beginIndex, __int16 endIndex);
+void MoveAnimIndex_81260(type_animStruct3* animStruct, __int16 x1, __int16 y1);
+int DrawMapObject_812D0(__int16 a1, __int16 a2);
 signed __int16 sub_81EE0(int a1, int a2, int a3, signed __int16 a4, __int16 a5, __int16 a6);
 void sub_85CC3_draw_round_frame(/*unsigned int a1, int a2, */unsigned __int16* a3);
 void fix_sub_9A0FC_wait_to_screen_beam(int32_t delay = 10);
@@ -604,7 +604,7 @@ void sub_ACF1A(int8_t* a1, int a2, int* a3);
 void sub_B5F8F(__int16 a1, uint16_t* a2, int32_t a3, __int16* a4);
 int sub_BD320(int result, int8_t* a2, int8_t* a3, int a4, int a5, uint8_t* a6);
 void sub_B5EFA(__int16 a1, uint16_t* a2, int32_t a3, __int16* a4);
-Type_SecretMapScreenPortals_E2970* sub_824B0(__int16 a1);
+Type_SecretMapScreenPortals_E2970* GetSecretAndActivedPortal_824B0(__int16 actLevel);
 
 void sub_101C0();
 void sub_5BCC0_set_any_variables1();
@@ -1584,5 +1584,4 @@ void sub_84B80();
 void sub_58F00_game_objectives();
 void sub_57570();
 void sub_575C0();
-signed int sub_5C3D0_file_decompress(uint8_t *a1, uint8_t *a2);
 #endif
