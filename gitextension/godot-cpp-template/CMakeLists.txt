@@ -189,6 +189,8 @@ target_sources(${LIBNAME}
     src/remc2/portability/port_outputs.h
     src/remc2/portability/port_sdl_sound.cpp
     src/remc2/portability/port_sdl_sound.h
+    src/modified/remc2_mod.cpp
+    src/modified/remc2_mod.h
     src/MBEX/convertData.cpp
     src/MBEX/convertData.h
     src/libxmi/xmi2mid.cpp

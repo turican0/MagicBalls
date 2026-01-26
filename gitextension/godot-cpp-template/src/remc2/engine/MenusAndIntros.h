@@ -7,6 +7,19 @@
 #include "TypeConfigDat.h"
 
 // types
+
+#pragma pack(1)
+typedef struct // size 16
+{
+	uint32_t unk_17DBA8; // weak 40
+	uint32_t unk_17DBAC; //1(+4)
+	uint32_t unk_17DBB0; //2(+8)
+	uint16_t unk_17DBB4; //3(+12)
+	uint8_t x_BYTE_17DBB5; //(+14)
+	uint8_t x_BYTE_17DBB6; //(+15)
+} Type_unk_17DBA8str; //16
+#pragma pack(16)
+
 #pragma pack (1)
 typedef struct //lenght 56
 {
@@ -73,8 +86,10 @@ extern uint8_t unk_180560x[44];
 extern type_unk_18058Cstr unk_18058Cstr;
 
 extern int test_regression_level;
-
 extern Type_SoundEvent_E17CC str_E17CC_0[];
+extern bool map_not_moving_WORD_E29D6;
+extern Type_unk_17DBA8str unk_17DBA8str;
+extern type_x_DWORD_17DB70str x_DWORD_17DB70str;
 
 // functions
 void MenusAndIntros_76930(bool skipMenus = false);
@@ -93,7 +108,7 @@ void LoadAndSetGraphicsAndPalette_7AC00();
 void sub_7ADE0(char a1);
 void sub_7BEC0();
 void SetAnimationVariables_7DA70(__int16 a1, __int16 a2, __int16 a3, __int16 a4, __int16 a5, __int16 a6);
-void sub_7DD70();
+void PortalsUpdate_7DD70();
 int16_t TestMouseRegions_7E1F0();
 signed int sub_7E620(type_WORD_E1F84* a1x);
 char sub_7E800(type_WORD_E1F84* a1x);
