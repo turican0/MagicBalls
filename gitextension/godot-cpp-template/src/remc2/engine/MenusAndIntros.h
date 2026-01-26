@@ -74,6 +74,8 @@ extern type_unk_18058Cstr unk_18058Cstr;
 
 extern int test_regression_level;
 
+extern Type_SoundEvent_E17CC str_E17CC_0[];
+
 // functions
 void MenusAndIntros_76930(bool skipMenus = false);
 void InitLanguage_76A40();
