@@ -91,4 +91,6 @@ public:
 	Array getTexts();
 	PackedByteArray getVGABuffer();
 	int playAnimStep(int run);
+	void mapMenuInit();
+	int mapMenuStep(int run);
 	};

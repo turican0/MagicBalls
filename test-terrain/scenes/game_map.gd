@@ -3,8 +3,12 @@ extends Node3D
 @onready var gamemap = $Control/GameMap
 @onready var foreground = $Control/Foreground
 
+@onready var sprAnimations = $Control/Animation
+
 var scroll_speed = 2000.0
 var edge_margin = 50.0
+
+var runned = false
 
 #NewGameDialog_77350
 
@@ -200,7 +204,8 @@ const main_menu_animations = [
 ]
 
 #const TEXTURE_PATH = "res://convertdata/HSCREEN/6/%03d.png"
-const SPRITE_DIR = "res://convertdata/HSCREEN/6/"
+const SPRITE_DIR6 = "res://convertdata/HSCREEN/6/"
+const SPRITE_DIR = "res://convertdata/HSCREEN/"
 
 func load_custom_texture(path: String) -> ImageTexture:
 	var img = Image.load_from_file(path)
@@ -209,13 +214,73 @@ func load_custom_texture(path: String) -> ImageTexture:
 	var tex = ImageTexture.create_from_image(img)
 	return tex
 
+var fadeNode: Node3D
+func fadeInit():
+	if(!get_tree().root.get_node_or_null("FadeInOut")):
+		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")
+		var new_layer = fade_layer_scene.instantiate()
+		get_tree().root.add_child(new_layer)
+		new_layer.name = "FadeInOut"
+	if(!fadeNode):
+		fadeNode=get_tree().root.get_node_or_null("FadeInOut")
+func addFadeIn():
+	fadeInit()
+	fadeNode.start_fade(1.0, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
+func addFadeOut():
+	fadeInit()
+	fadeNode.start_fade(1.0, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
+
+var Main_DecodeLevel
+var Main_Sounds
+var MainMusic
 func _ready():
+	await get_tree().process_frame
 	var screen_size = get_viewport().get_visible_rect().size
 	#foreground.position = screen_size / 2
 	gamemap.position = screen_size / 2
 	setup_sprites()
 	setup_animations()
+	#Engine.max_fps = 60
+	Main_DecodeLevel = get_node("DecodeLevel")
+	Main_Sounds = $Sounds
+	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
+	Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
+	Main_DecodeLevel.Main_Sounds = Main_Sounds	
+	addFadeOut()
+	startMenuLoop()
+
+func startMenuLoop():
+	gamemap.texture=load_custom_texture(SPRITE_DIR + "gameWorldMap.png")
+	foreground.texture=load_custom_texture(SPRITE_DIR + "gameWorldMapForeground.png")
+	runned = true
+	menuInit()
 	
+func menuInit():
+	Main_DecodeLevel.init()
+	Main_Sounds.setSoundBank(3)
+	Main_DecodeLevel.mapMenuInit()
+	
+func endAnim():
+	runned=false
+	addFadeIn()
+	await fadeNode.fade_finished
+	get_tree().change_scene_to_file(Global.last_scene_path)
+
+func _process(delta) -> void:
+	mouseEvents(delta)
+	if(!runned):
+		return
+	var is_skipping = false
+	#var is_skipping = Input.is_anything_pressed() or \
+					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or \
+					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
+	if(is_skipping):
+		Main_DecodeLevel.mapMenuStep(1)
+		Main_Sounds.stopAllSounds()
+		endAnim()
+	else:
+		var mapMenuStruct = Main_DecodeLevel.mapMenuStep(0)
+
 func setup_animations():
 	for cfg in main_menu_animations:
 		var ani = AnimatedSprite2D.new()
@@ -229,7 +294,7 @@ func setup_animations():
 		frames.add_animation("loop")
 		for i in range(cfg["array_word_18"][8], cfg["array_word_18"][8]):
 			var file_name = "%03d.png" % i
-			var file_path = SPRITE_DIR + file_name
+			var file_path = SPRITE_DIR6 + file_name
 			var tex2 = load_custom_texture(file_path)
 			if tex2:
 				frames.add_frame("loop", tex2)
@@ -248,7 +313,7 @@ func setup_sprites():
 		var sprite_idx = data["index"]
 		var new_sprite = Sprite2D.new()
 		var file_name = "%03d.png" % sprite_idx
-		var file_path = SPRITE_DIR + file_name
+		var file_path = SPRITE_DIR6 + file_name
 		var tex = load_custom_texture(file_path)
 		new_sprite.centered = false
 		new_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -259,7 +324,7 @@ func setup_sprites():
 		$Control/GameMap.add_child(new_sprite)
 		new_sprite.name = "Sprite_" + str(sprite_idx)
 
-func _process(delta):
+func mouseEvents(delta):
 	var mouse_pos = get_viewport().get_mouse_position()
 	var screen_size = get_viewport().get_visible_rect().size
 	var move_vector = Vector2.ZERO

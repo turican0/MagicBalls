@@ -15,6 +15,8 @@
 #include "remc2/portability/port_sdl_sound.h"
 #include "remc2/engine/Sound.h"
 
+#include "modified/remc2_mod.h"
+
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
@@ -44,6 +46,9 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("playAnimStep", "Int"), &ExampleClass::playAnimStep);
 	godot::ClassDB::bind_method(D_METHOD("getTexts"), &ExampleClass::getTexts);
 	godot::ClassDB::bind_method(D_METHOD("getVGABuffer"), &ExampleClass::getVGABuffer);
+
+	godot::ClassDB::bind_method(D_METHOD("mapMenuInit"), &ExampleClass::mapMenuInit);
+	godot::ClassDB::bind_method(D_METHOD("mapMenuStep", "Int"), &ExampleClass::mapMenuStep);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -57,6 +62,18 @@ void ExampleClass::_bind_methods() {
 
 //DrawAndSoundDragonAndFire_81EE0-clean
 //NewGameSubdraw_81760 - portals
+
+void ExampleClass::mapMenuInit() {
+	NewGameDialog_77350_mod_Begin();
+}
+
+int ExampleClass::mapMenuStep(int run) {
+	if (run)
+		NewGameDialog_77350_mod_End();
+	else
+		NewGameDialog_77350_mod_Step();
+	return 0;
+}
 
 void ChangeLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;

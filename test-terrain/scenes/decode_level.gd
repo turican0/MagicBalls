@@ -203,13 +203,21 @@ func SetRunned(sendRunned) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	runned = sendRunned
 	
+func mapMenuInit():
+	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	MBEX.mapMenuInit()
+
+func mapMenuStep(endMapMenu:int):
+	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	var mapMenuOut=MBEX.mapMenuStep(endMapMenu)
+	Main_Sounds.updateSounds(MBEX.getPendingSoundActions())
+	return mapMenuOut
+	
 func playAnim(index:int):
-	#MBEX.soundQueueClear()
 	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	MBEX.playAnim(index)
 	
 func playAnimStep(endAnimIn:int) -> int:
-	#MBEX.soundQueueClear()
 	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
 	var endAnimOut=MBEX.playAnimStep(endAnimIn)	
 	Main_Sounds.updateSounds(MBEX.getPendingSoundActions())

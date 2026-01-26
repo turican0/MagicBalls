@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqs30dtci0jur"]
+[gd_scene load_steps=5 format=3 uid="uid://cqs30dtci0jur"]
 
 [ext_resource type="Script" uid="uid://6hjxjkqj1hpf" path="res://scenes/game_map.gd" id="1_ccdfn"]
-[ext_resource type="Texture2D" uid="uid://240c7rx26052" path="res://convertdata/HSCREEN/gameWorldMap.png" id="2_fy1o8"]
-[ext_resource type="Texture2D" uid="uid://mvn8xwbhueww" path="res://convertdata/HSCREEN/gameWorldMapForeground.png" id="3_5r7r6"]
+[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_jpp6x"]
+[ext_resource type="Script" uid="uid://cahajskbdcnlw" path="res://scenes/sounds.gd" id="3_lwssc"]
+[ext_resource type="Script" uid="uid://bf1vnufu7na6x" path="res://addons/midi/MidiPlayer.gd" id="4_tw830"]
 
 [node name="GameMap" type="Node3D"]
 script = ExtResource("1_ccdfn")
@@ -17,7 +18,10 @@ grow_vertical = 2
 
 [node name="GameMap" type="Sprite2D" parent="Control"]
 scale = Vector2(2, 2)
-texture = ExtResource("2_fy1o8")
+
+[node name="Animations" type="TextureRect" parent="Control/GameMap"]
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Foreground" type="TextureRect" parent="Control"]
 layout_mode = 1
@@ -26,4 +30,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_5r7r6")
+
+[node name="DecodeLevel" type="Node3D" parent="."]
+script = ExtResource("2_jpp6x")
+levels_tab_path = "res://mclevels/LEVELS.TAB"
+levels_dat_path = "res://mclevels/LEVELS.DAT"
+
+[node name="Sounds" type="Node3D" parent="."]
+script = ExtResource("3_lwssc")
+
+[node name="MidiPlayer" type="Node" parent="Sounds"]
+script = ExtResource("4_tw830")
+file = "res://convertdata/musics/000_C2GAME1.mid"
+volume_db = -80.0
+soundfont = "res://soundfont/GeneralUser GS v1.472.sf2"
+metadata/_custom_type_script = "uid://bf1vnufu7na6x"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Sounds"]

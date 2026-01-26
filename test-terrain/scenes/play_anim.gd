@@ -38,8 +38,7 @@ func _ready():
 	Main_Sounds = $Sounds
 	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
 	Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
-	Main_DecodeLevel.Main_Sounds = Main_Sounds
-	
+	Main_DecodeLevel.Main_Sounds = Main_Sounds	
 	addFadeOut()
 	showMyImg(0)
 	

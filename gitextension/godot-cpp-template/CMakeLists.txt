@@ -196,6 +196,9 @@ target_sources(${LIBNAME}
     src/libxmi/xmi2mid.cpp
     src/libxmi/xmi2mid.h
     src/lib/stb_image_write.h
+    src/lib/lib9660.cpp
+    src/lib/lib9660.h
+
 )
 
 # Fetch a list of the xml files to use for documentation and add to our target

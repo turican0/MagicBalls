@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../lib/lib9660.h"
+
 #include "../remc2/utilities/DataFileRNC.h"
 #include "../remc2/engine/Terrain.h"
 #include "../remc2/engine/ConvertMapInfo.h"
@@ -66,3 +68,4 @@ void MBEXgtdConverts(String path);
 void MBEXextractLang(String path, String langPath, String cdLangPath);
 void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette, bool alpha, int alphaIndex);
 void MBEXsaveBitmapCrop(String path, char *name, int width, int height, uint8_t *data, TColor *palette, int cropXmin);
+void MBEXcdExtract(char *pathCDFile);

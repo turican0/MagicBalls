@@ -161,6 +161,7 @@ BMPData load_bmp_godot(String p_path) {
 }
 
 void MBEXconvertData(String path) {
+	MBEXcdExtract("c:/Games/Magic Carpet 2/MC2.dat");
 	MBEXsoundConverts(path + "/sounds");
 	MBEXmusicConverts(path + "/musics");
 	MBEXtexturesConverts(path + "/textures");
@@ -1118,4 +1119,134 @@ bool MBLoadSound(uint8_t soundIndex) //265300
 		DataFileIO::Close(file);
 	}
 	return true;
+}
+
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <filesystem>
+//#include "lib9660.h"
+
+namespace fs = std::filesystem;
+
+// Globální stream pro přístup z callbacku
+std::ifstream g_image_file;
+const uint32_t G_OFFSET = 0x1310;
+
+// 1. CALLBACK: lib9660 volá tuto funkci, když potřebuje data
+// Zde implementujeme tvůj specifický offset
+bool read_sector_callback(l9660_fs *fs, void *buf, uint32_t sector) {
+	if (!g_image_file.is_open())
+		return false;
+
+	// Výpočet pozice: Offset hlavičky + (číslo sektoru * 2048)
+	std::streamoff target_pos = (std::streamoff)G_OFFSET + ((std::streamoff)sector * 2048);
+
+	g_image_file.seekg(target_pos, std::ios::beg);
+	g_image_file.read(static_cast<char *>(buf), 2048);
+
+	return g_image_file.good();
+}
+
+// 2. POMOCNÁ FUNKCE: Uložení souboru na disk
+void save_file_to_disk(l9660_file *l_file, const fs::path &dest_path) {
+	std::ofstream out(dest_path, std::ios::binary);
+	if (!out)
+		return;
+
+	char buffer[2048];
+	size_t read_bytes;
+
+	// Čteme, dokud nejsme na konci souboru v ISO
+	while (l_file->position < l_file->length) {
+		if (l9660_read(l_file, buffer, sizeof(buffer), &read_bytes) == L9660_OK) {
+			if (read_bytes == 0)
+				break;
+			out.write(buffer, read_bytes);
+		} else {
+			break;
+		}
+	}
+}
+
+// 3. REKURZE: Procházení adresářů
+void extract_recursive(l9660_fs *fs_ptr, l9660_dir *current_dir, const fs::path &current_local_path) {
+	l9660_dirent *dent;
+	l9660_status status;
+
+	// Resetujeme pozici v adresáři na začátek
+	l9660_seekdir(current_dir, 0);
+
+	while (true) {
+		status = l9660_readdir(current_dir, &dent);
+		if (status != L9660_OK || dent == nullptr)
+			break;
+
+		// Převedeme jméno z ISO na string a vyčistíme přípony ;1
+		std::string name(dent->name, dent->name_len);
+		size_t semi_pos = name.find(';');
+		if (semi_pos != std::string::npos)
+			name = name.substr(0, semi_pos);
+
+		// ISO9660 speciální znaky pro . a ..
+		if (name.length() == 1 && (name[0] == '\0' || name[0] == '\1'))
+			continue;
+
+		fs::path target_path = current_local_path / name;
+
+		// Kontrola bitu pro adresář (DENT_ISDIR = 1 << 1)
+		if (dent->flags & (1 << 1)) {
+			std::cout << "Adresar: " << target_path.string() << std::endl;
+			fs::create_directories(target_path);
+
+			l9660_dir sub_dir;
+			if (l9660_opendirat(&sub_dir, current_dir, name.c_str()) == L9660_OK) {
+				extract_recursive(fs_ptr, &sub_dir, target_path);
+			}
+		} else {
+			std::cout << "Soubor:  " << name << std::endl;
+			l9660_file l_file;
+			if (l9660_openat(&l_file, current_dir, name.c_str()) == L9660_OK) {
+				save_file_to_disk(&l_file, target_path);
+			}
+		}
+	}
+}
+
+void MBEXcdExtract(char *pathCDFile) {
+	const char *bin_path = pathCDFile;
+	const char *out_dir = "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/datab/";
+
+	uint64_t data_offset = 0x1310; // pro GOG .dat často stačí 0
+
+	std::string image_path = std::string(pathCDFile);
+	g_image_file.open(image_path, std::ios::binary);
+
+	if (!g_image_file) {
+		std::cerr << "Nelze otevrit soubor " << image_path << std::endl;
+		return;
+	}
+
+	l9660_fs fs_ctx;
+	l9660_dir root_dir;
+
+	// Otevřeme souborový systém (použije náš callback s offsetem)
+	if (l9660_openfs(&fs_ctx, read_sector_callback) != L9660_OK) {
+		std::cerr << "Chyba lib9660: Nelze najit PVD (spatny offset nebo format?)" << std::endl;
+		return;
+	}
+
+	// Otevřeme kořenový adresář
+	l9660_fs_open_root(&root_dir, &fs_ctx);
+
+	// Spustíme extrakci
+	fs::path output_path = "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/datab/";
+	fs::create_directories(output_path);
+
+	extract_recursive(&fs_ctx, &root_dir, output_path);
+
+	g_image_file.close();
+	std::cout << "\nHotovo!" << std::endl;
 }
