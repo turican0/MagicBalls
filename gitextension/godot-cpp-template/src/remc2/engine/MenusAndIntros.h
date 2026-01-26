@@ -146,3 +146,5 @@ void PaletteCopy_7C800(signed __int16 a1);
 void sub_85BF5(uint8_t* a1, uint8_t* a2, int a3, int a4, int a5, int a6);
 
 void sub_41BC0();
+
+void sub_2EB40();

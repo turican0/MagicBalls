@@ -219,7 +219,7 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 	dir->list_dir_end();
 
 	char dataPath[MAX_PATH];
-	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DE38x, 0xB2947, 768);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.palette_17DE38x, 0xB2947, 768);
 
 	dir = DirAccess::open(langPath);
 	if (dir.is_valid()) {
