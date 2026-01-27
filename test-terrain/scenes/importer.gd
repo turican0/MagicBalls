@@ -75,5 +75,7 @@ func _on_select_manual():
 
 func _on_file_dialog_dir_selected(dir):
 	Main_DecodeLevel.MBEXinit()
+	Main_DecodeLevel.MBEXextractCD("c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/", dir)
+	Main_DecodeLevel.init()
 	Main_DecodeLevel.MBEXconvert("res://convertdata",dir)
 	goFirstMenu()

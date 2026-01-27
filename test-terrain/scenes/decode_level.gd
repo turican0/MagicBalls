@@ -438,13 +438,15 @@ func loadlevel(levelnumber: int):
 func getVGABuffer():
 	return Global.MBEX.getVGABuffer()
 
-var MBEXinited = false
 func MBEXinit():
-	if !MBEXinited:
+	if !Global.MBEX:
 		Global.MBEX = ExampleClass.new()
-	
+
 func MBEXconvert(path, path2):
 	Global.MBEX.convertOriginalData(path,path2)
+
+func MBEXextractCD(path, path2):
+	Global.MBEX.convertOriginalDataExtractCD(path,path2)
 
 func sub_533B0_decompress_levels(level_id: int):
 	if level_id >= 1000:
@@ -477,16 +479,18 @@ func sub_533B0_decompress_levels(level_id: int):
 	var level_tab_data_unpacked:PackedByteArray = Global.MBEX.deRNC(level_tab_data)
 	Global.MBEX.TerrainMake(level_tab_data_unpacked)
 	
-	if not DirAccess.dir_exists_absolute("res://convertdata/musics/"):
-		MBEXconvert("res://convertdata",null)
-	
+	#if not DirAccess.dir_exists_absolute("res://convertdata/musics/"):
+		#MBEXconvert("res://convertdata",null)
+		
+func initSound():
 	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")
 	Main_Sounds.load_musics_from_dir("res://convertdata/musics/")
 	Main_Sounds.load_musics_hi_from_dir("res://hidata/musics/")
 	
 	Main_Sounds.init()
 	Main_Sounds.setSoundBank(1)#Night
-	
+
+func initTerrainObsolette():
 	mapHeightmap_11B4E0 = Global.MBEX.TerrainGetMapHeight()
 	mapTerrainType_10B4E0 = Global.MBEX.TerrainGetMapTerrainType()
 	mapAngle_13B4E0 = Global.MBEX.TerrainGetAngle()

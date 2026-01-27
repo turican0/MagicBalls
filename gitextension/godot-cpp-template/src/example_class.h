@@ -84,6 +84,7 @@ public:
 	Array getPaletteModifications();
 	Ref<Image> getMinimap();
 	void convertOriginalData(String path, String path2);
+	void convertOriginalDataExtractCD(String path, String path2);
 	Array getPendingSoundActions();
 	void soundQueueClear();
 	void updateFreeSoundPlayers(const godot::Array &p_indices);

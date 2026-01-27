@@ -38,7 +38,8 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &ExampleClass::setPlayerActiveSpell);
 	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &ExampleClass::getPaletteModifications);
 	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &ExampleClass::getMinimap);
-	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text", "text2"), &ExampleClass::convertOriginalData);
+	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text", "text"), &ExampleClass::convertOriginalData);
+	godot::ClassDB::bind_method(D_METHOD("convertOriginalDataExtractCD", "text", "text"), &ExampleClass::convertOriginalDataExtractCD);
 	godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
 	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &ExampleClass::getPendingSoundActions);
 	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &ExampleClass::updateFreeSoundPlayers);
@@ -62,6 +63,11 @@ void ExampleClass::_bind_methods() {
 
 //DrawAndSoundDragonAndFire_81EE0-clean
 //NewGameSubdraw_81760 - portals
+
+void ExampleClass::convertOriginalDataExtractCD(String path, String path2) {
+	//MBEXcdExtract((char *)path2.utf8().get_data(), "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/"); //user some path
+	MBEXcdExtract((char *)path2.utf8().get_data(), (char *)path.utf8().get_data()); //user some path
+}
 
 void ExampleClass::mapMenuInit() {
 	NewGameDialog_77350_mod_Begin();
