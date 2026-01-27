@@ -16,7 +16,7 @@ shader_parameter/MyGain = Vector3(1, 1, 1)
 shader_parameter/MyOffset = Vector3(0, 0, 0)
 shader_parameter/MySatMultiplier = 1.0
 
-[node name="CodeGenerated" type="Node"]
+[node name="CodeGenerated" type="Node3D"]
 script = ExtResource("1_h7vyv")
 
 [node name="UI" parent="." instance=ExtResource("4_x5ge4")]

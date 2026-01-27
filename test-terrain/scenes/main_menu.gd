@@ -47,7 +47,7 @@ func addFadeOut():
 	fadeInit()
 	fadeNode.start_fade(1.0, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
 
-func _ready():
+func _ready():	
 	await get_tree().process_frame
 	addFadeOut()
 	var file_name_cur = "%03d.png" % 39
@@ -117,7 +117,7 @@ func _ready():
 		cfg2["node_ref"] = spr
 			
 func _input(event):
-	await get_tree().process_frame
+	await get_tree().process_frame	
 	var mouse_pos = $Control.get_local_mouse_position()
 	var any_hovered = false
 	for cfg2 in main_menu_selection:

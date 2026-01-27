@@ -425,6 +425,9 @@ func getInputs():
 	input_state["mouse_pos"] = mouse_640
 
 func init():
+	if(Global.terrainInited):
+		return
+	Global.terrainInited = true
 	loadlevel(0)
 	
 func setMesh():
@@ -483,6 +486,9 @@ func sub_533B0_decompress_levels(level_id: int):
 		#MBEXconvert("res://convertdata",null)
 		
 func initSound():
+	if(Global.soundInited):
+		return
+	Global.soundInited = true
 	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")
 	Main_Sounds.load_musics_from_dir("res://convertdata/musics/")
 	Main_Sounds.load_musics_hi_from_dir("res://hidata/musics/")

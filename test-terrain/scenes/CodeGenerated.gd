@@ -1,4 +1,4 @@
-extends Node
+extends Node3D
 
 var fadeNode: Node3D
 func fadeInit():
@@ -24,6 +24,8 @@ var Main_Sounds
 var Main_TerrainMB
 var MainMusic
 func _ready() -> void:
+	await get_tree().process_frame
+	addFadeOut()
 	Engine.max_fps = 60
 	Main_DecodeLevel = get_node("DecodeLevel")
 	Main_Player = get_node("Player")
