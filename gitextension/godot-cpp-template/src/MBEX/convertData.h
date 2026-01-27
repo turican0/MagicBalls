@@ -48,7 +48,7 @@
 
 using namespace godot;
 
-void MBEXconvertData(String path);
+void MBEXconvertData(String path, String path2);
 void MBEXsoundConverts(String path);
 void MBEXmusicConverts(String path);
 bool MBEXsoundConvert(int i,String path);
@@ -68,4 +68,4 @@ void MBEXgtdConverts(String path);
 void MBEXextractLang(String path, String langPath, String cdLangPath);
 void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette, bool alpha, int alphaIndex);
 void MBEXsaveBitmapCrop(String path, char *name, int width, int height, uint8_t *data, TColor *palette, int cropXmin);
-void MBEXcdExtract(char *pathCDFile);
+void MBEXcdExtract(char *pathGOG, char *pathOut);

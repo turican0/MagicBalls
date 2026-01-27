@@ -160,8 +160,10 @@ BMPData load_bmp_godot(String p_path) {
 	return result;
 }
 
-void MBEXconvertData(String path) {
-	MBEXcdExtract("c:/Games/Magic Carpet 2/MC2.dat");
+void MBEXconvertData(String path, String path2) {
+	//MBEXcdExtract("c:/Games/Magic Carpet 2/MC2.dat");
+	MBEXcdExtract((char *)path2.utf8().get_data(), "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/"); //user some path
+	//MBEXcdExtract("C:/prenos/bcc/disk/BCPP502.ISO");
 	MBEXsoundConverts(path + "/sounds");
 	MBEXmusicConverts(path + "/musics");
 	MBEXtexturesConverts(path + "/textures");
@@ -1122,44 +1124,59 @@ bool MBLoadSound(uint8_t soundIndex) //265300
 }
 
 
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
 #include <filesystem>
-//#include "lib9660.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace fs = std::filesystem;
 
 // Globální stream pro přístup z callbacku
 std::ifstream g_image_file;
-const uint32_t G_OFFSET = 0x1310;
+
+/**
+ * KONSTANTY PRO RAW (.bin) FORMÁT
+ * BIN_SECTOR_SIZE: Fyzická velikost sektoru na CD (2352 bajtů)
+ * BIN_DATA_OFFSET: Synchronizace (12b) + Header (4b) = 16b
+ * ISO_DATA_SIZE: Čistá datová část, kterou očekává knihovna (2048b)
+ */
+const uint32_t BIN_SECTOR_SIZE = 2352;
+const uint32_t BIN_DATA_OFFSET = 16;
+const uint32_t ISO_DATA_SIZE = 2048;
+
+// Tvůj specifický offset (pokud image nezačíná sektorem 0, např. MC2)
+const uint32_t G_BASE_START = 0;
 
 // 1. CALLBACK: lib9660 volá tuto funkci, když potřebuje data
-// Zde implementujeme tvůj specifický offset
 bool read_sector_callback(l9660_fs *fs, void *buf, uint32_t sector) {
 	if (!g_image_file.is_open())
 		return false;
 
-	// Výpočet pozice: Offset hlavičky + (číslo sektoru * 2048)
-	std::streamoff target_pos = (std::streamoff)G_OFFSET + ((std::streamoff)sector * 2048);
+	/**
+	 * KLÍČOVÁ OPRAVA:
+	 * U .bin souboru nemůžeme jen násobit sector * 2048.
+	 * Musíme skákat po 2352 bajtech a pokaždé přeskočit 16 bajtů hlavičky sektoru.
+	 */
+	std::streamoff target_pos = (std::streamoff)G_BASE_START +
+			((std::streamoff)sector * BIN_SECTOR_SIZE) +
+			BIN_DATA_OFFSET;
 
 	g_image_file.seekg(target_pos, std::ios::beg);
-	g_image_file.read(static_cast<char *>(buf), 2048);
+	g_image_file.read(static_cast<char *>(buf), ISO_DATA_SIZE);
 
 	return g_image_file.good();
 }
 
-// 2. POMOCNÁ FUNKCE: Uložení souboru na disk
+// 2. POMOCNÁ FUNKCE: Uložení souboru na disk (zůstává stejná)
 void save_file_to_disk(l9660_file *l_file, const fs::path &dest_path) {
 	std::ofstream out(dest_path, std::ios::binary);
 	if (!out)
 		return;
 
-	char buffer[2048];
+	char buffer[ISO_DATA_SIZE];
 	size_t read_bytes;
 
-	// Čteme, dokud nejsme na konci souboru v ISO
 	while (l_file->position < l_file->length) {
 		if (l9660_read(l_file, buffer, sizeof(buffer), &read_bytes) == L9660_OK) {
 			if (read_bytes == 0)
@@ -1171,12 +1188,11 @@ void save_file_to_disk(l9660_file *l_file, const fs::path &dest_path) {
 	}
 }
 
-// 3. REKURZE: Procházení adresářů
+// 3. REKURZE: Procházení adresářů (zůstává stejná)
 void extract_recursive(l9660_fs *fs_ptr, l9660_dir *current_dir, const fs::path &current_local_path) {
 	l9660_dirent *dent;
 	l9660_status status;
 
-	// Resetujeme pozici v adresáři na začátek
 	l9660_seekdir(current_dir, 0);
 
 	while (true) {
@@ -1184,20 +1200,17 @@ void extract_recursive(l9660_fs *fs_ptr, l9660_dir *current_dir, const fs::path 
 		if (status != L9660_OK || dent == nullptr)
 			break;
 
-		// Převedeme jméno z ISO na string a vyčistíme přípony ;1
 		std::string name(dent->name, dent->name_len);
 		size_t semi_pos = name.find(';');
 		if (semi_pos != std::string::npos)
 			name = name.substr(0, semi_pos);
 
-		// ISO9660 speciální znaky pro . a ..
 		if (name.length() == 1 && (name[0] == '\0' || name[0] == '\1'))
 			continue;
 
 		fs::path target_path = current_local_path / name;
 
-		// Kontrola bitu pro adresář (DENT_ISDIR = 1 << 1)
-		if (dent->flags & (1 << 1)) {
+		if (dent->flags & (1 << 1)) { // DENT_ISDIR
 			std::cout << "Adresar: " << target_path.string() << std::endl;
 			fs::create_directories(target_path);
 
@@ -1215,38 +1228,57 @@ void extract_recursive(l9660_fs *fs_ptr, l9660_dir *current_dir, const fs::path 
 	}
 }
 
-void MBEXcdExtract(char *pathCDFile) {
-	const char *bin_path = pathCDFile;
-	const char *out_dir = "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/datab/";
+void MBEXcdExtract(char* pathGOG, char* pathOut) {
+	std::string biggestFilePath;
+	try {
+		fs::path src(pathGOG);
+		fs::path dest(pathOut);
+		fs::create_directories(pathOut);
+		fs::path gameFolder = src / "GAME";
+		if (fs::exists(gameFolder) && fs::is_directory(gameFolder)) {
+			fs::copy(gameFolder, dest / "GAME", fs::copy_options::recursive | fs::copy_options::overwrite_existing);
+			std::cout << "Slozka GAME byla uspesne zkopirovana.\n";
+		} else {
+			std::cerr << "Slozka GAME v umisteni nenalezena!\n";
+		}
 
-	uint64_t data_offset = 0x1310; // pro GOG .dat často stačí 0
-
-	std::string image_path = std::string(pathCDFile);
-	g_image_file.open(image_path, std::ios::binary);
-
-	if (!g_image_file) {
-		std::cerr << "Nelze otevrit soubor " << image_path << std::endl;
-		return;
+		uintmax_t max_size = 0;
+		fs::path tempPath;
+		for (const auto &entry : fs::recursive_directory_iterator(src)) {
+			if (fs::is_regular_file(entry)) {
+				uintmax_t current_size = fs::file_size(entry);
+				if (current_size > max_size) {
+					max_size = current_size;
+					tempPath = entry.path();
+				}
+			}
+		}
+		if (!tempPath.empty()) {
+			biggestFilePath = tempPath.string();
+		} else {
+			biggestFilePath = "";
+		}
+	} catch (const fs::filesystem_error &e) {
+		std::cerr << "Chyba pri praci se soubory: " << e.what() << std::endl;
 	}
 
+	g_image_file.open(biggestFilePath, std::ios::binary);
+	if (!g_image_file) {
+		std::cerr << "Nelze otevrit soubor " << biggestFilePath << std::endl;
+		return;
+	}
 	l9660_fs fs_ctx;
 	l9660_dir root_dir;
-
-	// Otevřeme souborový systém (použije náš callback s offsetem)
 	if (l9660_openfs(&fs_ctx, read_sector_callback) != L9660_OK) {
-		std::cerr << "Chyba lib9660: Nelze najit PVD (spatny offset nebo format?)" << std::endl;
+		std::cerr << "Chyba lib9660: Nelze najit PVD. Zkontrolujte G_BASE_START!" << std::endl;
+		g_image_file.close();
 		return;
 	}
-
-	// Otevřeme kořenový adresář
 	l9660_fs_open_root(&root_dir, &fs_ctx);
-
-	// Spustíme extrakci
-	fs::path output_path = "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/datab/";
+	//fs::path output_path = "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/datab/";
+	fs::path output_path = pathOut + std::string("CD_Files/");
 	fs::create_directories(output_path);
-
 	extract_recursive(&fs_ctx, &root_dir, output_path);
-
 	g_image_file.close();
 	std::cout << "\nHotovo!" << std::endl;
 }

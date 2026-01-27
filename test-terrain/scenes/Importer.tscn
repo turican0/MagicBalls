@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkpm1emxwwamr"]
+[gd_scene load_steps=3 format=3 uid="uid://bkpm1emxwwamr"]
 
 [ext_resource type="Script" uid="uid://2yrfqycvjjrs" path="res://scenes/importer.gd" id="1_ikn2j"]
+[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_jt0sq"]
 
 [node name="Importer" type="Node3D"]
 script = ExtResource("1_ikn2j")
@@ -13,17 +14,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="Control"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -88.5
-offset_top = -11.5
-offset_right = 88.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Hledám data ve složce:"
+[node name="FileDialog" type="FileDialog" parent="Control"]
+oversampling_override = 1.0
+title = "Open a Directory"
+position = Vector2i(0, 36)
+size = Vector2i(800, 600)
+file_mode = 2
+display_mode = 1
+access = 2
+
+[node name="DecodeLevel" type="Node3D" parent="."]
+script = ExtResource("2_jt0sq")
+levels_tab_path = "res://mclevels/LEVELS.TAB"
+levels_dat_path = "res://mclevels/LEVELS.DAT"

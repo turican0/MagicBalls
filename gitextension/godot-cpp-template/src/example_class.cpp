@@ -38,7 +38,7 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &ExampleClass::setPlayerActiveSpell);
 	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &ExampleClass::getPaletteModifications);
 	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &ExampleClass::getMinimap);
-	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text"), &ExampleClass::convertOriginalData);
+	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text", "text2"), &ExampleClass::convertOriginalData);
 	godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
 	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &ExampleClass::getPendingSoundActions);
 	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &ExampleClass::updateFreeSoundPlayers);
@@ -228,8 +228,8 @@ void ExampleClass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 	sound_update_playing(standard_vector);
 }
 
-void ExampleClass::convertOriginalData(String path) {
-	MBEXconvertData(path);
+void ExampleClass::convertOriginalData(String path, String path2) {
+	MBEXconvertData(path, path2);
 }
 
 void ExampleClass::soundQueueClear() {

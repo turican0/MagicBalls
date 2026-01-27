@@ -3,9 +3,6 @@ extends Node3D
 @export_file("*.tab") var levels_tab_path: String = ""
 @export_file("*.dat") var levels_dat_path: String = ""
 
-var MBEX
-
-# Cesty (Godot standard)
 var game_data_path: String = ""
 var cd_data_path: String = ""
 
@@ -184,7 +181,7 @@ var last_button:int =-1
 func setPlayerActiveSpell(spell_index: int,button:int):
 	last_spell_index = spell_index
 	last_button = button
-	MBEX.setPlayerActiveSpell(spell_index,button)
+	Global.MBEX.setPlayerActiveSpell(spell_index,button)
 
 
 func updatePlayer(playerPosRot) -> void:
@@ -204,23 +201,23 @@ func SetRunned(sendRunned) -> void:
 	runned = sendRunned
 	
 func mapMenuInit():
-	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
-	MBEX.mapMenuInit()
+	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	Global.MBEX.mapMenuInit()
 
 func mapMenuStep(endMapMenu:int):
-	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
-	var mapMenuOut=MBEX.mapMenuStep(endMapMenu)
-	Main_Sounds.updateSounds(MBEX.getPendingSoundActions())
+	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	var mapMenuOut=Global.MBEX.mapMenuStep(endMapMenu)
+	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 	
 func playAnim(index:int):
-	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
-	MBEX.playAnim(index)
+	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	Global.MBEX.playAnim(index)
 	
 func playAnimStep(endAnimIn:int) -> int:
-	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
-	var endAnimOut=MBEX.playAnimStep(endAnimIn)	
-	Main_Sounds.updateSounds(MBEX.getPendingSoundActions())
+	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	var endAnimOut=Global.MBEX.playAnimStep(endAnimIn)	
+	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return endAnimOut
 
 func _process(_p_delta) -> void:
@@ -228,7 +225,7 @@ func _process(_p_delta) -> void:
 		return
 	getInputs()
 	#MBEX.soundQueueClear()
-	MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
 		if Main_UI.is_ctrl_active:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -242,13 +239,13 @@ func _process(_p_delta) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active
 	if(last_spell_index!=-1):
-		MBEX.setPlayerActiveSpell(last_spell_index,last_button)
+		Global.MBEX.setPlayerActiveSpell(last_spell_index,last_button)
 		last_spell_index = -1
 		last_button = -1
 	
-	MBEX.RunGameStep(input_state)
-	MBEX.renew_terrain()
-	var mods = MBEX.getPaletteModifications()
+	Global.MBEX.RunGameStep(input_state)
+	Global.MBEX.renew_terrain()
+	var mods = Global.MBEX.getPaletteModifications()
 	var current_gain = mods[0]
 	var current_offset = mods[1]
 	var curreny_saturation = mods[2]
@@ -266,10 +263,10 @@ func _process(_p_delta) -> void:
 	#Main_Filter.material_override.set_shader_parameter("MyOffset", offset_vec)
 	updatePlayer(getPlayerPosRot())
 	renderEntites(getEntites())
-	get_parent().get_node("UI").updateSpells(MBEX.getActiveSpells())
-	get_parent().get_node("UI").updateSelectedSpells(MBEX.getSelectedSpells())
-	get_parent().get_node("UI").updateMinimap(MBEX.getMinimap())
-	Main_Sounds.updateSounds(MBEX.getPendingSoundActions())
+	get_parent().get_node("UI").updateSpells(Global.MBEX.getActiveSpells())
+	get_parent().get_node("UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
+	get_parent().get_node("UI").updateMinimap(Global.MBEX.getMinimap())
+	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
@@ -431,15 +428,23 @@ func init():
 	loadlevel(0)
 	
 func setMesh():
-	MBEX.set_mesh_instance(get_parent().get_node("TerrainMB").mesh_instance)
-	MBEX.initialize_grid_data()
-	MBEX.recalculate_mesh()
+	Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainMB").mesh_instance)
+	Global.MBEX.initialize_grid_data()
+	Global.MBEX.recalculate_mesh()
 
 func loadlevel(levelnumber: int):
 	sub_533B0_decompress_levels(levelnumber)
 
 func getVGABuffer():
-	return MBEX.getVGABuffer()
+	return Global.MBEX.getVGABuffer()
+
+var MBEXinited = false
+func MBEXinit():
+	if !MBEXinited:
+		Global.MBEX = ExampleClass.new()
+	
+func MBEXconvert(path, path2):
+	Global.MBEX.convertOriginalData(path,path2)
 
 func sub_533B0_decompress_levels(level_id: int):
 	if level_id >= 1000:
@@ -468,12 +473,12 @@ func sub_533B0_decompress_levels(level_id: int):
 	var level_tab_data: PackedByteArray = level_dat_file.get_buffer(compressed_size)
 	level_dat_file.close()
 	
-	MBEX = ExampleClass.new()
-	var level_tab_data_unpacked:PackedByteArray = MBEX.deRNC(level_tab_data)
-	MBEX.TerrainMake(level_tab_data_unpacked)
+	MBEXinit()
+	var level_tab_data_unpacked:PackedByteArray = Global.MBEX.deRNC(level_tab_data)
+	Global.MBEX.TerrainMake(level_tab_data_unpacked)
 	
-	if not DirAccess.dir_exists_absolute("res://convertdata/musicsX/"):
-		MBEX.convertOriginalData("res://convertdata")
+	if not DirAccess.dir_exists_absolute("res://convertdata/musics/"):
+		MBEXconvert("res://convertdata",null)
 	
 	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")
 	Main_Sounds.load_musics_from_dir("res://convertdata/musics/")
@@ -482,21 +487,21 @@ func sub_533B0_decompress_levels(level_id: int):
 	Main_Sounds.init()
 	Main_Sounds.setSoundBank(1)#Night
 	
-	mapHeightmap_11B4E0 = MBEX.TerrainGetMapHeight()
-	mapTerrainType_10B4E0 = MBEX.TerrainGetMapTerrainType()
-	mapAngle_13B4E0 = MBEX.TerrainGetAngle()
+	mapHeightmap_11B4E0 = Global.MBEX.TerrainGetMapHeight()
+	mapTerrainType_10B4E0 = Global.MBEX.TerrainGetMapTerrainType()
+	mapAngle_13B4E0 = Global.MBEX.TerrainGetAngle()
 	
 
 func getPlayerPosRot() -> Dictionary:
-	var playerPosRot: Dictionary = MBEX.GetPlayerPositionRotation()
+	var playerPosRot: Dictionary = Global.MBEX.GetPlayerPositionRotation()
 	return playerPosRot
 	
 func getEntites() -> Array:
-	var result: Array = MBEX.GetEntites()
+	var result: Array = Global.MBEX.GetEntites()
 	return result
 	
 func getTerrainChanges() -> Dictionary:
-	var result: Dictionary = MBEX.GetTerrainChanges()
+	var result: Dictionary = Global.MBEX.GetTerrainChanges()
 	return result
 
 var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
