@@ -108,6 +108,9 @@ extern bool map_not_moving_WORD_E29D6;
 extern Type_unk_17DBA8str unk_17DBA8str;
 extern type_x_DWORD_17DB70str x_DWORD_17DB70str;
 
+extern type_x_BYTE_E25ED_db_str x_BYTE_E26C8_str[];
+extern type_E24BCx str_E24F2[];
+
 // functions
 void MenusAndIntros_76930(bool skipMenus = false);
 void InitLanguage_76A40();
