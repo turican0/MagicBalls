@@ -7,6 +7,9 @@ bool NewGameDialog_77350_mod_Begin()
 
 	bool result = false;
 
+	StopMusic_8E020(); //26f020 //!!!!!!!!ADDED
+	StartMusic_8E160(4, 0x7Fu); //26f160 //!!!!!!!!ADDED
+
 	NewGameDialog_endAction_mod = 0;
 	map_not_moving_WORD_E29D6 = false;
 	if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w == 24) {

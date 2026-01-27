@@ -199,7 +199,7 @@ var runned: bool
 func SetRunned(sendRunned) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	runned = sendRunned
-	
+
 func mapMenuInit():
 	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	Global.MBEX.mapMenuInit()

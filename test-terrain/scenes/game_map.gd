@@ -257,7 +257,8 @@ func startMenuLoop():
 	
 func menuInit():
 	Main_DecodeLevel.init()
-	Main_Sounds.setSoundBank(3)
+	Main_DecodeLevel.initSound()
+	Main_Sounds.setSoundBank(0)
 	Main_DecodeLevel.mapMenuInit()
 	
 func endAnim():

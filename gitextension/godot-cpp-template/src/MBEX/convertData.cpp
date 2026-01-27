@@ -23,6 +23,12 @@
 #include <errno.h>
 #include <string.h>
 
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+
 #if defined(_WIN32)
 #include <direct.h>
 #define MKDIR(path) _wmkdir(path)
@@ -32,6 +38,7 @@
 #endif
 
 using namespace godot;
+namespace fs = std::filesystem;
 
 struct BMPData {
 	int width = 0;
@@ -1061,15 +1068,6 @@ bool MBLoadSound(uint8_t soundIndex) //265300
 	}
 	return true;
 }
-
-
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
-
-namespace fs = std::filesystem;
 
 std::ifstream g_image_file;
 
