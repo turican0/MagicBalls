@@ -60,8 +60,8 @@ func _on_select_manual():
 	else:
 		starting_path = "/"
 	var paths_to_try = [
-		"C:/GAMES/Magic carpet 2",
-		"C:/HRY/Magic carpet 2"
+		"C:/GAMES/Magic Carpet 2",
+		"C:/HRY/Magic Carpet 2"
 	]
 	for path in paths_to_try:
 		if DirAccess.dir_exists_absolute(path):

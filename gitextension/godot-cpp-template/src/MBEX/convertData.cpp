@@ -197,7 +197,7 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 	}
 	Ref<DirAccess> dir = DirAccess::open(langPath);
 	if (dir.is_null()) {
-		UtilityFunctions::printerr("MBEX: Nepodařilo se otevřít zdrojovou složku: ", langPath);
+		UtilityFunctions::printerr("MBEX: Failed to open source folder: ", langPath);
 		return;
 	}
 	dir->list_dir_begin();
@@ -211,7 +211,7 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 				Error err = dir->copy(source_file, dest_file);
 
 				if (err != OK) {
-					UtilityFunctions::printerr("MBEX: Chyba při kopírování ", file_name);
+					UtilityFunctions::printerr("MBEX: Error while copying ", file_name);
 				}
 			}
 		}
@@ -237,9 +237,9 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 						PackedByteArray data = file->get_buffer(file_len);
 						memcpy(x_DWORD_E9C38_smalltit, data.ptr(), file_len);
 						MBEXsaveBitmapCrop(path, (char *)f_name.utf8().get_data(), 90, 53, x_DWORD_E9C38_smalltit + 1, (TColor *)x_DWORD_17DE38str.palette_17DE38x, 2);
-						UtilityFunctions::print("Soubor nacten a zpracovan: ", f_name);
+						UtilityFunctions::print("File read and processed: ", f_name);
 					} else {
-						UtilityFunctions::printerr("Nepodarilo se otevrit soubor: ", full_path);
+						UtilityFunctions::printerr("Failed to open file: ", full_path);
 					}
 				}
 			}
@@ -288,7 +288,7 @@ void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, St
 	}
 
 	if (palette_final.size() < 768) {
-		UtilityFunctions::print("Chyba: Paletu se nepodarilo dekomprimovat nebo je poskozena.");
+		UtilityFunctions::print("Error: The palette could not be decompressed or is damaged.");
 		return;
 	}
 
@@ -306,7 +306,7 @@ void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, St
 	int data_start_offset = 0;
 	int expected_pixels = inWidth * inHeight;
 	if (img_dec_size < data_start_offset + expected_pixels) {
-		UtilityFunctions::print("Chyba: Data neobsahuji dostatek pixelu pro rozmery: ", inWidth, "x", inHeight);
+		UtilityFunctions::print("Error: Data does not contain enough pixels for dimensions: ", inWidth, "x", inHeight);
 		return;
 	}
 	int p_channels = 3;
@@ -321,7 +321,7 @@ void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, St
 		rgb_data[i * 3 + 2] = palette_final[pal_idx + 0]*4; // Red
 	}
 	save_bmp_godot(outPath, inWidth, inHeight, p_channels, rgb_data.data());
-	UtilityFunctions::print("Ulozeno: ", outPath, " (", inWidth, "x", inHeight, ")");
+	UtilityFunctions::print("Saved: ", outPath, " (", inWidth, "x", inHeight, ")");
 }
 
 #pragma pack(1)
@@ -350,19 +350,17 @@ void MBEXgraphicConverts(String path, String texture, String palette) {
 
 	std::vector<uint8_t> palette_final;
 	if (palette_data.size() < 768 && !palette_data.is_empty()) {
-		// Paleta je komprimovaná RNC
-		std::vector<uint8_t> pal_dst(2048); // Paleta bývá malá, 2KB stačí
+		std::vector<uint8_t> pal_dst(2048);
 		int pal_dec_size = DataFileRNC::Decompress((uint8_t *)palette_data.ptr(), pal_dst.data());
 		if (pal_dec_size >= 768) {
 			palette_final.assign(pal_dst.begin(), pal_dst.begin() + pal_dec_size);
 		}
 	} else {
-		// Paleta je už v surovém stavu
 		palette_final.assign(palette_data.ptr(), palette_data.ptr() + palette_data.size());
 	}
 
 	if (palette_final.size() < 768) {
-		UtilityFunctions::print("Chyba: Paletu se nepodarilo dekomprimovat nebo je poskozena.");
+		UtilityFunctions::print("Error: The palette could not be decompressed or is damaged.");
 		return;
 	}
 
@@ -462,7 +460,7 @@ void MBEXgraphicConverts(String path, String texture, String palette) {
 
 			f->flush();
 			f->close();
-			UtilityFunctions::print("PNG ulozeno (lambda): ", outPath);
+			UtilityFunctions::print("PNG saved (lambda): ", outPath);
 		}
 	}
 }
@@ -544,31 +542,24 @@ void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* pale
 		uint8_t index = indices[i];
 		int pal_idx = index * 3;
 		int dest_idx = i * 4;
-
-		// Základní barvy (pozor na pořadí, PNG chce standardně RGB)
 		rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
 		rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
 		rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
 		rgba_data[dest_idx + 3] = 255;
-
 		if (alpha) {
 			if (index == 0) {
 				rgba_data[dest_idx + 3] = 0; // transparent
 			}
 		}
 	}
-
-	// Otevření souboru přes Godot API
 	Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
 	if (f.is_valid()) {
-		// Volání STB s Lambda funkcí přímo v argumentu
 		stbi_write_png_to_func(
 				[](void *context, void *data, int size) {
-					// Context je náš FileAccess*
 					FileAccess *fa = static_cast<FileAccess *>(context);
 					fa->store_buffer(static_cast<const uint8_t *>(data), size);
 				},
-				(void *)f.ptr(), // Předání ukazatele na FileAccess objekt
+				(void *)f.ptr(),
 				inWidth,
 				inHeight,
 				p_channels,
@@ -600,7 +591,6 @@ void MBEXsaveBitmapCrop(String path, char *name, int width, int height, uint8_t 
 	int p_channels = 4;
 	std::vector<unsigned char> rgba_data((size_t)(inWidth - cropXmin) * inHeight * p_channels);
 	const uint8_t *indices = data;
-	//for (int i = 0; i < inWidth * inHeight; ++i)
 	for (int y = 0; y < inHeight; y++)
 	for (int x = 0; x < inWidth; x++)
 	{
@@ -778,14 +768,12 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 		return;
 	}
 
-// Načtení dat textury pomocí Godot FileAccess
 	Ref<FileAccess> texFile = FileAccess::open(String(textPath.c_str()), FileAccess::READ);
 	if (texFile.is_null())
 		return;
 	PackedByteArray rawPixels = texFile->get_buffer(texFile->get_length());
 
-
-		PackedByteArray palette_data;
+    PackedByteArray palette_data;
 	Ref<FileAccess> palFile = FileAccess::open(String(palettePath.c_str()), FileAccess::READ);
 	if (palFile.is_valid()) {
 		palette_data = palFile->get_buffer(palFile->get_length());
@@ -794,80 +782,61 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 
 	std::vector<uint8_t> palette_final;
 	if (palette_data.size() < 768 && !palette_data.is_empty()) {
-		// Paleta je komprimovaná RNC
-		std::vector<uint8_t> pal_dst(2048); // Paleta bývá malá, 2KB stačí
+		std::vector<uint8_t> pal_dst(2048);
 		int pal_dec_size = DataFileRNC::Decompress((uint8_t *)palette_data.ptr(), pal_dst.data());
 		if (pal_dec_size >= 768) {
 			palette_final.assign(pal_dst.begin(), pal_dst.begin() + pal_dec_size);
 		}
 	} else {
-		// Paleta je už v surovém stavu
 		palette_final.assign(palette_data.ptr(), palette_data.ptr() + palette_data.size());
 	}
-
 	if (palette_final.size() < 768) {
 		UtilityFunctions::print("Chyba: Paletu se nepodarilo dekomprimovat nebo je poskozena.");
 		return;
 	}
-
-	// Otevření souboru pro zápis (Godot si s res:// poradí sám)
 	Ref<FileAccess> bFile = FileAccess::open(outPath, FileAccess::WRITE);
 	if (bFile.is_null())
 		return;
-
-	// --- VÝPOČTY ---
 	int paddingSize = (4 - (inWidth % 4)) % 4;
 	int rowSize = inWidth + paddingSize;
 	int pixelDataSize = rowSize * inHeight;
 	int paletteSize = 256 * 4;
 	int fileSize = 14 + 40 + paletteSize + pixelDataSize;
-
-	// --- BITMAP FILE HEADER (14 bytes) ---
 	bFile->store_8('B');
 	bFile->store_8('M');
 	bFile->store_32(fileSize);
-	bFile->store_32(0); // Reserved
-	bFile->store_32(14 + 40 + paletteSize); // Offset
-
-	// --- DIB HEADER (40 bytes) ---
-	bFile->store_32(40); // Header size
+	bFile->store_32(0);
+	bFile->store_32(14 + 40 + paletteSize); 
+	bFile->store_32(40);
 	bFile->store_32(inWidth);
 	bFile->store_32(inHeight);
-	bFile->store_16(1); // Planes
-	bFile->store_16(8); // Bits per pixel
-	bFile->store_32(0); // Compression
+	bFile->store_16(1);
+	bFile->store_16(8);
+	bFile->store_32(0);
 	bFile->store_32(pixelDataSize);
-	bFile->store_32(2835); // X ppm
-	bFile->store_32(2835); // Y ppm
-	bFile->store_32(256); // Colors used
-	bFile->store_32(0); // Important colors
-
-	// --- PALETTE (1024 bytes) ---
+	bFile->store_32(2835);
+	bFile->store_32(2835);
+	bFile->store_32(256);
+	bFile->store_32(0);
 	for (int i = 0; i < 256; i++) {
 		if (i * 3 + 2 < palette_final.size()) {
 			bFile->store_8(palette_final[i * 3 + 2] * 4); // B
 			bFile->store_8(palette_final[i * 3 + 1] * 4); // G
 			bFile->store_8(palette_final[i * 3] * 4); // R
-			bFile->store_8(0); // Reserved
+			bFile->store_8(0);
 		} else {
-			bFile->store_32(0); // Vyplnění prázdné palety
+			bFile->store_32(0);
 		}
 	}
-
-	// --- PIXEL DATA (Bottom-up) ---
 	for (int y = inHeight - 1; y >= 0; y--) {
 		int rowStart = y * inWidth;
 		if (rowStart < rawPixels.size()) {
-			// Vezmeme pod-pole pro aktuální řádek a uložíme ho
 			PackedByteArray row = rawPixels.slice(rowStart, rowStart + inWidth);
 			bFile->store_buffer(row);
 		} else {
-			// Padding pokud data chybí
 			for (int x = 0; x < inWidth; x++)
 				bFile->store_8(0);
 		}
-
-		// Zápis paddingu na konci řádku
 		for (int p = 0; p < paddingSize; p++) {
 			bFile->store_8(0);
 		}
@@ -877,43 +846,33 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 	bFile->close();
 
 	if (makeBorders) {
-		//const char *input_path = "input.bmp";
-		//const char *output_path = "output.bmp";
 		const int TILE_SIZE = 32;
 		const int PADDING = 8;
 		const int NEW_TILE_SIZE = TILE_SIZE + (2 * PADDING);
-
 		BMPData input = load_bmp_godot(outPath);
-
 		if (input.pixels.empty()) {
 			std::cerr << "Chyba: Nepodarilo se nacist BMP ze souboru: " << outPath.utf8().get_data() << std::endl;
 			return;
 		}
-
 		int width = input.width;
 		int height = input.height;
 		int channels = input.channels;
-		unsigned char *img = input.pixels.data(); // Ukazatel na surová data uvnitř vektoru
-
+		unsigned char *img = input.pixels.data();
 		int tiles_x = width / TILE_SIZE;
 		int tiles_y = height / TILE_SIZE;
 		int out_width = tiles_x * NEW_TILE_SIZE;
 		int out_height = tiles_y * NEW_TILE_SIZE;
-
 		std::vector<unsigned char> out_img(out_width * out_height * channels, 0);
-
 		for (int ty = 0; ty < tiles_y; ++ty) {
 			for (int tx = 0; tx < tiles_x; ++tx) {
 				for (int py = 0; py < NEW_TILE_SIZE; ++py) {
 					for (int px = 0; px < NEW_TILE_SIZE; ++px) {
 						int src_px = std::max(0, std::min(TILE_SIZE - 1, px - PADDING));
 						int src_py = std::max(0, std::min(TILE_SIZE - 1, py - PADDING));
-
 						int src_x = tx * TILE_SIZE + src_px;
 						int src_y = ty * TILE_SIZE + src_py;
 						int dst_x = tx * NEW_TILE_SIZE + px;
 						int dst_y = ty * NEW_TILE_SIZE + py;
-
 						for (int c = 0; c < channels; ++c) {
 							out_img[(dst_y * out_width + dst_x) * channels + c] =
 									img[(src_y * width + src_x) * channels + c];
@@ -922,7 +881,6 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 				}
 			}
 		}
-
 		save_bmp_godot(outPath2, out_width, out_height, channels, out_img.data());
 	}
 }
@@ -933,53 +891,36 @@ void MBEXmusicConverts(String path) {
 		uint8_t *buffer = musicHeader_E3808->str_8.track_10[i - 1].xmiData_0;
 		int32_t size = musicHeader_E3808->str_8.track_10[i - 1].xmiSize_8;
 		int8_t *filename_c = musicHeader_E3808->str_8.track_10[i - 1].filename_14;
-
 		if (!buffer || size <= 0 || !filename_c) {
 			break;
 		}
-
 		String filename = String::utf8((const char *)filename_c);
-
-		// Změna přípony na .mid (nebo přidej .mid k názvu, pokud chceš zachovat původní)
-		String midi_filename = filename.get_basename() + ".mid"; // nebo jen filename + ".mid"
-
+		String midi_filename = filename.get_basename() + ".mid";
 		String full_path = path + "/" + vformat("%03d_%s", i - 1, midi_filename);
-
 		if (!make_dir_godot(path)) {
 			break;
 		}
-
-		// Převod XMI → MIDI
 		size_t midi_size = 0;
 		unsigned char *midi_buffer = TranscodeXmiToMid(buffer, size, &midi_size);
-
 		if (!midi_buffer || midi_size == 0) {
-			UtilityFunctions::push_error(vformat("CHYBA při převodu XMI na MIDI pro track %d (%s)", i - 1, filename));
-			// Pokud převod selže, volitelně uložit původní XMI pro debugging
-			// free(midi_buffer); // pokud bylo alokováno
+			UtilityFunctions::push_error(vformat("ERROR converting XMI to MIDI for track %d (%s)", i - 1, filename));
 			break;
 		}
-
 		Ref<FileAccess> file = FileAccess::open(full_path, FileAccess::WRITE);
 		if (!file.is_valid()) {
-			free(midi_buffer); // uvolnit alokovanou paměť
+			free(midi_buffer);
 			break;
 		}
-
 		file->store_buffer(midi_buffer, midi_size);
-
 		Error err = file->get_error();
 		if (err != OK) {
 			UtilityFunctions::push_error(vformat("CHYBA při zápisu do souboru: %s (Error: %d)", full_path, (int)err));
 			free(midi_buffer);
 			break;
 		}
-
 		file->flush();
-		file->close(); // dobrý zvyk
-
-		free(midi_buffer); // uvolnit paměť vrácenou TranscodeXmiToMid
-
+		file->close();
+		free(midi_buffer);
 		UtilityFunctions::print(vformat("Úspěšně zapsáno MIDI: %s (%d bajtů z %d bajtů XMI)", full_path, midi_size, size));
 	}
 }

@@ -90,6 +90,7 @@ func animInit():
 	animTextureRect = ImageTexture.create_from_image(animImage)
 	sprback.texture = animTextureRect
 	Main_DecodeLevel.init()
+	Main_DecodeLevel.initSound()
 	match animIndex:
 		0:
 			Main_Sounds.setSoundBank(3)
