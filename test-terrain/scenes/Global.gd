@@ -6,7 +6,7 @@ var terrainInited:bool = false
 var soundInited:bool = false
 
 var cdPath:String="user://CDdata/"
-var convertdata:String="res://convertdata/"
+var convertdata:String="user://convertdata/"
 var hidata:String="res://hidata/"
 
 func fadeInit(fadeNode):
@@ -34,3 +34,27 @@ func load_custom_texture(path: String) -> ImageTexture:
 		return null
 	var tex = ImageTexture.create_from_image(img)
 	return tex
+
+func load_external_audio(file_path: String) -> AudioStream:
+	if not FileAccess.file_exists(file_path):
+		print("Soubor neexistuje: ", file_path)
+		return null
+
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	var buffer = file.get_buffer(file.get_length())
+	var stream: AudioStream
+
+	# Rozlišení formátu podle koncovky
+	if file_path.ends_with(".mp3"):
+		stream = AudioStreamMP3.new()
+		stream.data = buffer
+	elif file_path.ends_with(".ogg"):
+		stream = AudioStreamOggVorbis.load_from_buffer(buffer)
+	elif file_path.ends_with(".wav"):
+		stream = AudioStreamWAV.new()
+		stream.data = buffer
+	else:
+		print("Nepodporovaný formát zvuku")
+		return null
+
+	return stream

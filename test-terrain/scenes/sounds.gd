@@ -81,7 +81,7 @@ func load_sounds_from_dir(path: String):
 					var full_path = path + file_name
 					#var stream = _load_wav_as_sample(full_path)  
 					#var stream = ResourceLoader.load(full_path, "AudioStream", ResourceLoader.CACHE_MODE_REUSE)
-					var stream = load(path + file_name)
+					var stream = Global.load_external_audio(path + file_name)
 					if not sounds_map.has(pack_idx):
 						sounds_map[pack_idx] = {}
 					sounds_map[pack_idx][sound_idx] = stream
@@ -195,7 +195,7 @@ func start_music(index: int) -> void:
 	if(himusic):
 		if MainMusicHi.playing:
 			MainMusicHi.stop()
-		MainMusicHi.stream = load(music_hi_map[index])
+		MainMusicHi.stream = Global.load_external_audio(music_hi_map[index])
 		MainMusicHi.play()
 	else:
 		if MainMusic.playing:
