@@ -2524,7 +2524,7 @@ void SetAnimationVariables_7DA70(__int16 x1, __int16 y1, __int16 x2, __int16 y2,
 }
 
 //----- (0007E320) --------------------------------------------------------
-signed int sub_7E320_draw_bitmaps_and_play_sounds()//25f320
+signed int sub_7E320_draw_bitmaps_and_play_sounds(/*__int16 a1, int a2*/)//25f320
 {
 	int ix;
 	int v3x;
@@ -2980,10 +2980,10 @@ void DrawAnimTextsAndPlaySounds_7D400(__int16 posx, __int16 posy, char a4)//25e4
 	int index2 = -1;
 	int index3 = -1;
 	int time = j___clock();
-	for (int i = 0; x_BYTE_E26C8_str[i].word_8; i++)
+	for (int i = 0; x_BYTE_E26C8_str[i].x1_8; i++)
 	{
-		if (mapScreenPortals_E17CC[24].activated_18 != 1 || x_BYTE_E26C8_str[i].word_12 != 85 && x_BYTE_E26C8_str[i].word_12 != 86)
-			sub_81CA0(posx, posy, &x_BYTE_E26C8_str[i]);		
+		if (mapScreenPortals_E17CC[24].activated_18 != 1 || x_BYTE_E26C8_str[i].firstFrame_12 != 85 && x_BYTE_E26C8_str[i].firstFrame_12 != 86)
+			DrawAnimSprite_81CA0(posx, posy, &x_BYTE_E26C8_str[i]);		
 	}
 	//VGA_Debug_Blit(640, 480, pdwScreenBuffer_351628);
 	for (int i = 0; mapScreenPortals_E17CC[i].viewPortPosX_4; i++)//draw new game flag
@@ -5113,22 +5113,17 @@ void DrawEndGameTable_82C20(__int16 a1)//263c20
 }
 
 //----- (00085C8B) --------------------------------------------------------
-void DrawNetGameMapBackground_85C8B(uint8_t* a1, uint8_t* a2, int a3, int a4, int a5, int a6)//266c8b
+void DrawNetGameMapBackground_85C8B(uint8_t* source, uint8_t* dest, int beginX, int beginY, int width, int height)//266c8b
 {
-	int v6; // edx
-	char* v7; // edi
-	char* v8; // esi
-
-	v6 = a6;
-	v7 = (char*)a2;
-	v8 = (char*)(a3 + 1280 * a4 + a1);
+	int destIndex = 0;
+	int sourceIndex = beginX + 1280 * beginY;
 	do
 	{
-		qmemcpy(v7, v8, 4 * a5);
-		v7 += 4 * a5;
-		v8 += 4 * a5 + 640;
-		--v6;
-	} while (v6);
+		qmemcpy(&dest[destIndex], &source[sourceIndex], 4 * width);
+		destIndex += 4 * width;
+		sourceIndex += 4 * width + 640;
+		height--;
+	} while (height);
 }
 
 bool DrawAndServe_pre_sub_7B250(uint32_t var, type_WORD_E1F84* var2x)
