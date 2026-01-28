@@ -18,21 +18,6 @@ var fadeNode: Node3D
 
 #NewGameDialog_77350
 
-const SPRITE_DATA_END = [
-	{"pos_x": 518, "pos_y": 17, "index": 285},
-	{"pos_x": 583, "pos_y": 17, "index": 286},
-	{"pos_x": 657, "pos_y": 17, "index": 287},
-	{"pos_x": 696, "pos_y": 17, "index": 288},
-	{"pos_x": 518, "pos_y": 88, "index": 289},
-	{"pos_x": 574, "pos_y": 88, "index": 290},
-	{"pos_x": 657, "pos_y": 88, "index": 291},
-	{"pos_x": 706, "pos_y": 88, "index": 292},
-	{"pos_x": 518, "pos_y": 156, "index": 293},
-	{"pos_x": 582, "pos_y": 156, "index": 294},
-	{"pos_x": 657, "pos_y": 156, "index": 295},
-	{"pos_x": 703, "pos_y": 156, "index": 296}
-]
-
 var SPRITE_DIR6 = Global.convertdata+"HSCREEN/6/"
 var SPRITE_DIR = Global.convertdata+"HSCREEN/"
 
@@ -40,12 +25,14 @@ var Main_DecodeLevel
 var Main_Sounds
 var MainMusic
 func _ready():
+#	545 54 116 478
+#	999 -312
 	await get_tree().process_frame
 	Engine.max_fps = 60
 	var screen_size = get_viewport().get_visible_rect().size
-	#foreground.position = screen_size / 2
 	gamemap.position = screen_size / 2
-	#setup_sprites()#remove it
+	var centerPos=Vector2((640/2-116)*-1,(480/2-478)*-1)
+	gamemap.position-=centerPos*$Control/GameMap.scale
 	_init_sprite_pool()
 	Main_DecodeLevel = get_node("DecodeLevel")
 	Main_Sounds = $Sounds
@@ -123,6 +110,7 @@ func updateSprites(graphicsActions:Array):
 			matchok=true
 
 func _process(delta) -> void:
+	#print("Map.Pos:%d:%d" % [gamemap.position.x, gamemap.position.y])
 	mouseEvents(delta)
 	if(!runned):
 		return
@@ -138,24 +126,6 @@ func _process(delta) -> void:
 		var mapMenuStruct = Main_DecodeLevel.mapMenuStep(0)
 		updateSprites(Main_DecodeLevel.getSpritesActions())
 		endSpritesrender()
-
-func setup_sprites():
-	for data in SPRITE_DATA_END:#for end game vulcan if (mapScreenPortals_E17CC[24].activated_18 == 1)
-		var pos_x = data["pos_x"]
-		var pos_y = data["pos_y"]
-		var sprite_idx = data["index"]
-		var new_sprite = Sprite2D.new()
-		var file_name = "%03d.png" % sprite_idx
-		var file_path = SPRITE_DIR6 + file_name
-		var tex = Global.load_custom_texture(file_path)
-		new_sprite.centered = false
-		new_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		new_sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
-		new_sprite.texture = tex
-		new_sprite.position = Vector2(pos_x-640, pos_y-480)
-		new_sprite.centered = false
-		$Control/GameMap.add_child(new_sprite)
-		new_sprite.name = "Sprite_" + str(sprite_idx)
 
 func mouseEvents(delta):
 	var mouse_pos = get_viewport().get_mouse_position()
@@ -176,9 +146,9 @@ func mouseEvents(delta):
 func _check_map_limits(screen_size):
 	var visible_map_width = screen_size.x / $Control.scale.x
 	var visible_map_height = screen_size.y / $Control.scale.y
-	var max_x = 640.0 * 2
-	var min_x = visible_map_width - 640.0 * 2
-	var max_y = 480.0 * 2
-	var min_y = visible_map_height - 480.0 * 2
+	var max_x = 640.0 * $Control/GameMap.scale.x
+	var min_x = visible_map_width - 640.0 * $Control/GameMap.scale.x
+	var max_y = 480.0 * $Control/GameMap.scale.y
+	var min_y = visible_map_height - 480.0 * $Control/GameMap.scale.y
 	gamemap.position.x = clamp(gamemap.position.x, min_x, max_x)
 	gamemap.position.y = clamp(gamemap.position.y, min_y, max_y)
