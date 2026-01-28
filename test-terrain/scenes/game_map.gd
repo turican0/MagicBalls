@@ -45,9 +45,8 @@ func _ready():
 	var screen_size = get_viewport().get_visible_rect().size
 	#foreground.position = screen_size / 2
 	gamemap.position = screen_size / 2
-	setup_sprites()
+	#setup_sprites()#remove it
 	_init_sprite_pool()
-	#Engine.max_fps = 60
 	Main_DecodeLevel = get_node("DecodeLevel")
 	Main_Sounds = $Sounds
 	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
