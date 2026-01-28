@@ -37,24 +37,52 @@ func load_custom_texture(path: String) -> ImageTexture:
 
 func load_external_audio(file_path: String) -> AudioStream:
 	if not FileAccess.file_exists(file_path):
-		print("Soubor neexistuje: ", file_path)
+		print("Error: File not found at ", file_path)
 		return null
-
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	var buffer = file.get_buffer(file.get_length())
-	var stream: AudioStream
+	var ext = file_path.get_extension().to_lower()
+	match ext:
+		"mp3":
+			var stream = AudioStreamMP3.new()
+			stream.data = buffer
+			return stream			
+		"ogg":
+			return AudioStreamOggVorbis.load_from_buffer(buffer)			
+		"wav":
+			return _parse_wav(buffer)
+		_:
+			print("Error: Unsupported audio format: ", ext)
+			return null
 
-	# Rozlišení formátu podle koncovky
-	if file_path.ends_with(".mp3"):
-		stream = AudioStreamMP3.new()
-		stream.data = buffer
-	elif file_path.ends_with(".ogg"):
-		stream = AudioStreamOggVorbis.load_from_buffer(buffer)
-	elif file_path.ends_with(".wav"):
-		stream = AudioStreamWAV.new()
-		stream.data = buffer
-	else:
-		print("Nepodporovaný formát zvuku")
+func _parse_wav(buffer: PackedByteArray) -> AudioStreamWAV:
+	if buffer.slice(0, 4).get_string_from_ascii() != "RIFF" or buffer.slice(8, 12).get_string_from_ascii() != "WAVE":
+		print("Error: Not a valid WAV file")
 		return null
-
+	var stream = AudioStreamWAV.new()
+	var channels = buffer.decode_u16(22)
+	stream.stereo = (channels == 2)
+	var sample_rate = buffer.decode_u32(24)
+	stream.mix_rate = sample_rate
+	var bits_per_sample = buffer.decode_u16(34)
+	if bits_per_sample == 8:
+		stream.format = AudioStreamWAV.FORMAT_8_BITS
+	elif bits_per_sample == 16:
+		stream.format = AudioStreamWAV.FORMAT_16_BITS
+	else:
+		print("Error: Unsupported WAV bit depth: ", bits_per_sample)
+		return null
+	var pos = 12
+	var data_found = false
+	while pos < buffer.size() - 8:
+		var chunk_id = buffer.slice(pos, pos + 4).get_string_from_ascii()
+		var chunk_size = buffer.decode_u32(pos + 4)		
+		if chunk_id == "data":
+			stream.data = buffer.slice(pos + 8, pos + 8 + chunk_size)
+			data_found = true
+			break
+		pos += 8 + chunk_size	
+	if not data_found:
+		print("Error: Could not find 'data' chunk in WAV")
+		return null		
 	return stream
