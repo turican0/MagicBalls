@@ -936,7 +936,7 @@ std::vector<SoundAction> sound_queue_get_pending_actions() {
 void sound_queue_clear() {
 	sound_queue.clear();
 }
-
+/*
 size_t sound_queue_size() {
 	return sound_queue.size();
 }
@@ -944,3 +944,4 @@ size_t sound_queue_size() {
 bool sound_queue_empty() {
 	return sound_queue.empty();
 }
+*/

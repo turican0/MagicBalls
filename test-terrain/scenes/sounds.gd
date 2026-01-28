@@ -118,6 +118,7 @@ func updateSounds(soundActions:Array):
 				matchok=true
 		if(!matchok):
 			matchok=true
+
 var soundBank=0
 func setSoundBank(bank):
 	soundBank=bank

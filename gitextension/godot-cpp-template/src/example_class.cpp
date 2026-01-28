@@ -40,8 +40,9 @@ void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &ExampleClass::getMinimap);
 	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text", "text"), &ExampleClass::convertOriginalData);
 	godot::ClassDB::bind_method(D_METHOD("convertOriginalDataExtractCD", "text", "text"), &ExampleClass::convertOriginalDataExtractCD);
-	godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
+	//godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
 	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &ExampleClass::getPendingSoundActions);
+	godot::ClassDB::bind_method(D_METHOD("getPendingGraphicsActions"), &ExampleClass::getPendingGraphicsActions);
 	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &ExampleClass::updateFreeSoundPlayers);
 	godot::ClassDB::bind_method(D_METHOD("playAnim", "Int"), &ExampleClass::playAnim);
 	godot::ClassDB::bind_method(D_METHOD("playAnimStep", "Int"), &ExampleClass::playAnimStep);
@@ -239,20 +240,38 @@ void ExampleClass::convertOriginalData(String path, String path2) {
 	MBEXconvertData(path, path2);
 }
 
+/*
 void ExampleClass::soundQueueClear() {
 	sound_queue_clear();
 }
+*/
 
 Array ExampleClass::getPendingSoundActions() {
 	Array result;
 	std::vector<SoundAction> pending = sound_queue_get_pending_actions();
-	for (size_t i = 0; i < pending.size(); ++i) {
+	for (size_t i = 0; i < pending.size(); i++) {
 		const SoundAction &sa = pending[i];
 		Dictionary d;
 		d["action"] = String(sa.action.c_str());
 		d["p1"] = sa.p1;
 		d["p2"] = sa.p2;
 		d["p3"] = sa.p3;
+		result.append(d);
+	}
+	sound_queue_clear();
+	return result;
+}
+
+Array ExampleClass::getPendingGraphicsActions() {
+	Array result;
+	std::vector<GraphicsAction> pending = graphics_queue_get_pending_actions();
+	for (size_t i = 0; i < pending.size(); i++) {
+		const GraphicsAction &ga = pending[i];
+		Dictionary d;
+		d["action"] = String(ga.action.c_str());
+		d["posx"] = ga.x;
+		d["posy"] = ga.y;
+		d["index"] = ga.index;
 		result.append(d);
 	}
 	sound_queue_clear();

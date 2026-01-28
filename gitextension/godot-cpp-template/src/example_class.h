@@ -86,7 +86,8 @@ public:
 	void convertOriginalData(String path, String path2);
 	void convertOriginalDataExtractCD(String path, String path2);
 	Array getPendingSoundActions();
-	void soundQueueClear();
+	Array getPendingGraphicsActions();
+	//void soundQueueClear();
 	void updateFreeSoundPlayers(const godot::Array &p_indices);
 	void playAnim(int index);
 	Array getTexts();

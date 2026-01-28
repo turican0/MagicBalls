@@ -60,6 +60,30 @@ typedef struct //lenght 13
 } Type_DWORD_17DE28str;
 #pragma pack(16)
 
+#pragma pack (1)
+typedef struct {//lenght 69
+	int32_t time_0;//0
+	uint8_t stub_4;//4
+	uint8_t stub_5;//5
+	uint8_t stub_6;//6
+	uint8_t stub_7;//7
+	uint8_t stub_8;//8
+	uint8_t stub_9;//9
+	int16_t word_10;//10	
+	int8_t byte_12;//12
+	uint8_t stub_13;//13
+	int16_t word_14;//14	
+	int8_t byte_16;//16
+	uint8_t stub_17;//17
+	type_animStruct2 array_word_18;////18
+	int8_t byte_42;//42
+	int8_t byte_43;//43
+	uint8_t byte_44;//44
+	type_animStruct array_word_45;//45
+}
+type_WORD_E20A4;
+#pragma pack (16)
+
 enum class MenuItem : int {
 	InitLanguage = 0,
 	SetToIntro = 1,
@@ -110,6 +134,7 @@ extern type_x_BYTE_E25ED_db_str x_BYTE_E26C8_str[];
 extern type_E24BCx str_E24F2[];
 
 extern Type_DWORD_17DE28str x_DWORD_17DE28str;
+extern type_WORD_E20A4 str_WORD_E20A4[];
 
 // functions
 void MenusAndIntros_76930(bool skipMenus = false);
@@ -131,8 +156,8 @@ void SetAnimationVariables_7DA70(__int16 a1, __int16 a2, __int16 a3, __int16 a4,
 void PortalsUpdate_7DD70();
 int16_t TestMouseRegions_7E1F0();
 signed int sub_7E620(type_WORD_E1F84* a1x);
-char sub_7E800(type_WORD_E1F84* a1x);
-char sub_7E820(type_WORD_E1F84* a1x);
+char SaveGameDialog_7E800(type_WORD_E1F84* a1x);
+char LoadGameDialog_7E820(type_WORD_E1F84* a1x);
 int NewGameDraw_7EAE0(__int16* posx, __int16* posy, __int16* a3, __int16* a4, int8_t* a5, type_animStruct* animStruct);
 int LoadLanguageFile(bitmap_pos_struct2_t** a1x, bitmap_pos_struct2_t** a2x, uint8_t* a3, char* langfilename, bitmap_pos_struct_t* a3dattabindex);
 int sub_7F960(bitmap_pos_struct2_t* a1x, bitmap_pos_struct2_t* a2x, uint8_t* a3, char* langcountstring, bitmap_pos_struct_t* a3dattabindex);
@@ -182,4 +207,5 @@ void sub_85BF5(uint8_t* a1, uint8_t* a2, int a3, int a4, int a5, int a6);
 void sub_41BC0();
 void sub_2EB40();
 void DrawAnimTextsAndPlaySounds_7D400(__int16 posx, __int16 posy, char a4);
-signed int sub_7E320_draw_bitmaps_and_play_sounds();
+signed int DrawBitmapAndPlaySound_7E320();
+int GetMapMenuDialogIndex_7E320(uint32_t adress, type_WORD_E1F84 *a1x);

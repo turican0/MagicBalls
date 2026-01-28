@@ -421,6 +421,8 @@ extern POSITION x_DWORD_F4720;
 extern char x_BYTE_D4B50;
 extern char x_BYTE_D4B51;
 extern char x_BYTE_DB734;
+extern type_WORD_E1F84 str_E23E0[];
+extern type_E24BCx str_E2516[];
 
 void sub_86BD0_freemem1();
 void j___delay(x_DWORD); // weak

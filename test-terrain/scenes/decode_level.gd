@@ -210,6 +210,9 @@ func mapMenuStep(endMapMenu:int):
 	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 	
+func getSpritesActions():
+	return Global.MBEX.getPendingGraphicsActions()
+	
 func playAnim(index:int):
 	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	Global.MBEX.playAnim(index)

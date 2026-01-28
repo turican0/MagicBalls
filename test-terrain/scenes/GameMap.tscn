@@ -1,14 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://cqs30dtci0jur"]
+[gd_scene format=3 uid="uid://cqs30dtci0jur"]
 
 [ext_resource type="Script" uid="uid://6hjxjkqj1hpf" path="res://scenes/game_map.gd" id="1_ccdfn"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_jpp6x"]
 [ext_resource type="Script" uid="uid://cahajskbdcnlw" path="res://scenes/sounds.gd" id="3_lwssc"]
 [ext_resource type="Script" uid="uid://bf1vnufu7na6x" path="res://addons/midi/MidiPlayer.gd" id="4_tw830"]
 
-[node name="GameMap" type="Node3D"]
+[node name="GameMap" type="Node3D" unique_id=1941747587]
 script = ExtResource("1_ccdfn")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=1475894817]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,14 +16,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GameMap" type="Sprite2D" parent="Control"]
+[node name="GameMap" type="Sprite2D" parent="Control" unique_id=1292979862]
 scale = Vector2(2, 2)
 
-[node name="Animations" type="TextureRect" parent="Control/GameMap"]
+[node name="Animations" type="TextureRect" parent="Control/GameMap" unique_id=1941989428]
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Foreground" type="TextureRect" parent="Control"]
+[node name="Foreground" type="TextureRect" parent="Control" unique_id=1924248961]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,19 +31,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="DecodeLevel" type="Node3D" parent="."]
+[node name="DecodeLevel" type="Node3D" parent="." unique_id=516358933]
 script = ExtResource("2_jpp6x")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"
 
-[node name="Sounds" type="Node3D" parent="."]
+[node name="Sounds" type="Node3D" parent="." unique_id=341905445]
 script = ExtResource("3_lwssc")
 
-[node name="MidiPlayer" type="Node" parent="Sounds"]
+[node name="MidiPlayer" type="Node" parent="Sounds" unique_id=835791822]
 script = ExtResource("4_tw830")
 file = "res://convertdata/musics/000_C2GAME1.mid"
 volume_db = -80.0
 soundfont = "res://soundfont/GeneralUser GS v1.472.sf2"
 metadata/_custom_type_script = "uid://bf1vnufu7na6x"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Sounds"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Sounds" unique_id=1660980216]
