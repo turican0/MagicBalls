@@ -3,29 +3,7 @@ extends Node3D
 var sprback:Sprite2D
 var waiting_for_input = false
 
-func load_custom_texture(path: String) -> ImageTexture:#move to imports
-	var img = Image.load_from_file(path)
-	if img == null:
-		return null        
-	var tex = ImageTexture.create_from_image(img)    
-	return tex
-
-
 var fadeNode: Node3D
-func fadeInit():
-	if(!get_tree().root.get_node_or_null("FadeInOut")):
-		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")
-		var new_layer = fade_layer_scene.instantiate()
-		get_tree().root.add_child(new_layer)
-		new_layer.name = "FadeInOut"
-	if(!fadeNode):
-		fadeNode=get_tree().root.get_node_or_null("FadeInOut")
-func addFadeIn():
-	fadeInit()
-	fadeNode.start_fade(1.0, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
-func addFadeOut():
-	fadeInit()
-	fadeNode.start_fade(1.0, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
 
 var Main_DecodeLevel
 var Main_Sounds
@@ -39,7 +17,7 @@ func _ready():
 	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
 	Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
 	Main_DecodeLevel.Main_Sounds = Main_Sounds	
-	addFadeOut()
+	fadeNode = Global.addFadeOut(fadeNode)
 	showMyImg(0)
 	
 var runned = false
@@ -51,7 +29,7 @@ func showMyImg(index):
 	if(index==0):
 		file_name_spr="welcomeScreen.png"
 	var file_path_spr = SPRITE_DIR + file_name_spr
-	var tex2 = load_custom_texture(file_path_spr)
+	var tex2 = Global.load_custom_texture(file_path_spr)
 	sprback.texture=tex2
 	sprback.centered = true
 	var screen_size = get_viewport().get_visible_rect().size
@@ -70,9 +48,9 @@ func _input(event):
 		if event is InputEventKey or event is InputEventMouseButton:
 			if event.is_pressed():
 				waiting_for_input = false
-				addFadeIn()
+				fadeNode=Global.addFadeIn(fadeNode)
 				await fadeNode.fade_finished
-				addFadeOut()
+				fadeNode=Global.addFadeOut(fadeNode)
 				playAnim(1)
 	
 func playAnim(index:int):
@@ -100,7 +78,7 @@ func animInit():
 	
 func endAnim():
 	runned=false
-	addFadeIn()
+	fadeNode = Global.addFadeIn(fadeNode)
 	await fadeNode.fade_finished
 	get_tree().change_scene_to_file(Global.last_scene_path)
 	

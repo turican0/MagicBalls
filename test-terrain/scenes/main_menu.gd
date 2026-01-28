@@ -2,6 +2,8 @@ extends Node3D
 
 var tooltip_label: Label
 
+var fadeNode: Node3D
+
 var main_menu_animations = [
 	{"name": "FireLeft","pos_x": 17,  "pos_y": 159, "first_sprite": 1,  "last_sprite": 8}, # left fire
 	{"name": "FireRight","pos_x": 531, "pos_y": 156, "first_sprite": 9,  "last_sprite": 16}, # right fire
@@ -23,36 +25,12 @@ var main_menu_selection: Array[Dictionary] = [
 
 const SPRITE_DIR = "res://convertdata/HSCREEN/4/"
 
-func load_custom_texture(path: String) -> ImageTexture:
-	var img = Image.load_from_file(path)
-	if img == null:
-		return null
-	var tex = ImageTexture.create_from_image(img)
-	return tex
-	
-var fadeNode: Node3D
-func fadeInit():
-	if(!get_tree().root.get_node_or_null("FadeInOut")):
-		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")
-		var new_layer = fade_layer_scene.instantiate()
-		fadeNode=new_layer
-		get_tree().root.add_child(new_layer)
-		new_layer.name = "FadeInOut"
-	if(!fadeNode):
-		fadeNode=get_tree().root.get_node_or_null("FadeInOut")
-func addFadeIn():
-	fadeInit()
-	fadeNode.start_fade(1.0, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
-func addFadeOut():
-	fadeInit()
-	fadeNode.start_fade(1.0, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
-
-func _ready():	
+func _ready():
 	await get_tree().process_frame
-	addFadeOut()
+	fadeNode = Global.addFadeOut(fadeNode)
 	var file_name_cur = "%03d.png" % 39
 	var file_path_cur = SPRITE_DIR + file_name_cur
-	var cursor_png = load_custom_texture(file_path_cur)
+	var cursor_png = Global.load_custom_texture(file_path_cur)
 	if cursor_png:
 		Input.set_custom_mouse_cursor(cursor_png, Input.CURSOR_ARROW, Vector2(0, 0))
 	
@@ -77,7 +55,7 @@ func _ready():
 		for i in range(cfg["first_sprite"], cfg["last_sprite"] + 1):
 			var file_name = "%03d.png" % i
 			var file_path = SPRITE_DIR + file_name
-			var tex2 = load_custom_texture(file_path)
+			var tex2 = Global.load_custom_texture(file_path)
 			if tex2:
 				frames.add_frame("loop", tex2)
 			else:
@@ -97,7 +75,7 @@ func _ready():
 		sprback.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
 		sprback.position = Vector2(cfgback["xmin_10"]-320, cfgback["ymin_12"]-240)
 		var file_path_spr = SPRITE_DIR + file_name_spr
-		var tex2 = load_custom_texture(file_path_spr)
+		var tex2 = Global.load_custom_texture(file_path_spr)
 		sprback.texture=tex2
 		$Control.add_child(sprback)
 	
@@ -110,7 +88,7 @@ func _ready():
 		spr.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
 		spr.position = Vector2(cfg2["xmin_10"]-320, cfg2["ymin_12"]-240)
 		var file_path_spr = SPRITE_DIR + file_name_spr
-		var tex2 = load_custom_texture(file_path_spr)
+		var tex2 = Global.load_custom_texture(file_path_spr)
 		spr.texture=tex2
 		spr.hide()
 		$Control.add_child(spr)
@@ -139,7 +117,7 @@ func _input(event):
 				elif cfg2["dword_0"] == 0x00259E00:
 					target_scene = "res://scenes/PlayAnim.tscn"
 				if target_scene != "":
-					addFadeIn()
+					fadeNode = Global.addFadeIn(fadeNode)
 					await fadeNode.fade_finished
 					Global.last_scene_path = get_tree().current_scene.scene_file_path
 					get_tree().change_scene_to_file(target_scene)

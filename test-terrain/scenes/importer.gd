@@ -3,27 +3,12 @@ extends Node3D
 @onready var file_dialog = $Control/FileDialog
 
 var fadeNode: Node3D
-func fadeInit():
-	if(!get_tree().root.get_node_or_null("FadeInOut")):
-		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")
-		var new_layer = fade_layer_scene.instantiate()
-		fadeNode=new_layer
-		get_tree().root.add_child(new_layer)
-		new_layer.name = "FadeInOut"
-	if(!fadeNode):
-		fadeNode=get_tree().root.get_node_or_null("FadeInOut")
-func addFadeIn():
-	fadeInit()
-	fadeNode.start_fade(1.0, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
-func addFadeOut():
-	fadeInit()
-	fadeNode.start_fade(1.0, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
 
 var Main_DecodeLevel
 func _ready() -> void:
 	Main_DecodeLevel = get_node("DecodeLevel")
 	await get_tree().process_frame
-	addFadeOut()
+	fadeNode=Global.addFadeOut(fadeNode)
 	if !check_existing_data():
 		file_dialog.dir_selected.connect(_on_file_dialog_dir_selected)
 		show_default_dialog()
@@ -31,7 +16,7 @@ func _ready() -> void:
 		goFirstMenu()
 
 func goFirstMenu():
-	addFadeIn()
+	fadeNode=Global.addFadeIn(fadeNode)
 	await fadeNode.fade_finished
 	Global.last_scene_path = "res://scenes/MainMenu.tscn"
 	get_tree().change_scene_to_file("res://scenes/PlayAnim.tscn")

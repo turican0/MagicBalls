@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="MagicBalls"
-run/main_scene="uid://cqs30dtci0jur"
+run/main_scene="uid://bkpm1emxwwamr"
 config/features=PackedStringArray("4.5")
 boot_splash/show_image=false
 config/icon="res://icon.svg"

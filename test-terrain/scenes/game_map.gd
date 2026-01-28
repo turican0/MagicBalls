@@ -10,6 +10,8 @@ var edge_margin = 50.0
 
 var runned = false
 
+var fadeNode: Node3D
+
 #NewGameDialog_77350
 
 const SPRITE_DATA_END = [
@@ -207,29 +209,6 @@ const main_menu_animations = [
 const SPRITE_DIR6 = "res://convertdata/HSCREEN/6/"
 const SPRITE_DIR = "res://convertdata/HSCREEN/"
 
-func load_custom_texture(path: String) -> ImageTexture:
-	var img = Image.load_from_file(path)
-	if img == null:
-		return null
-	var tex = ImageTexture.create_from_image(img)
-	return tex
-
-var fadeNode: Node3D
-func fadeInit():
-	if(!get_tree().root.get_node_or_null("FadeInOut")):
-		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")
-		var new_layer = fade_layer_scene.instantiate()
-		get_tree().root.add_child(new_layer)
-		new_layer.name = "FadeInOut"
-	if(!fadeNode):
-		fadeNode=get_tree().root.get_node_or_null("FadeInOut")
-func addFadeIn():
-	fadeInit()
-	fadeNode.start_fade(1.0, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
-func addFadeOut():
-	fadeInit()
-	fadeNode.start_fade(1.0, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
-
 var Main_DecodeLevel
 var Main_Sounds
 var MainMusic
@@ -246,7 +225,7 @@ func _ready():
 	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
 	Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
 	Main_DecodeLevel.Main_Sounds = Main_Sounds	
-	addFadeOut()
+	Global.addFadeOut()
 	startMenuLoop()
 
 func startMenuLoop():
@@ -263,8 +242,8 @@ func menuInit():
 	
 func endAnim():
 	runned=false
-	addFadeIn()
-	await fadeNode.fade_finished
+	Global.addFadeIn()
+	await Global.fadeNode.fade_finished
 	get_tree().change_scene_to_file(Global.last_scene_path)
 
 func _process(delta) -> void:
