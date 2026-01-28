@@ -5,6 +5,10 @@ var MBEX = null
 var terrainInited:bool = false
 var soundInited:bool = false
 
+var cdPath:String="user://CDdata/"
+var convertdata:String="res://convertdata/"
+var hidata:String="res://hidata/"
+
 func fadeInit(fadeNode):
 	if(!get_tree().root.get_node_or_null("FadeInOut")):
 		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")

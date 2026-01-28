@@ -23,10 +23,11 @@ var main_menu_selection: Array[Dictionary] = [
 	{"help": "Set Joystick", "dword_0": 0x0025A160, "dword_4": 0, "selected_8": 0, "xmin_10": 0x00B9, "ymin_12": 0x00E8, "sizex_14": 0x003C, "sizey_16": 0x002C, "word_18": 0x019B, "byte_20": 0x42, "byte_21": 0x3A, "byte_22": 0x0D, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x004A, 0x00F6, 0, 0, 0x0064, 0, 0x019B, 0, 0x0003]}
 ]
 
-const SPRITE_DIR = "res://convertdata/HSCREEN/4/"
+var SPRITE_DIR = Global.convertdata + "HSCREEN/4/"
 
-func _ready():
+func _ready():	
 	await get_tree().process_frame
+	$Control/BackGround.texture = Global.load_custom_texture(Global.convertdata + "HSCREEN/menuBackground.png")
 	fadeNode = Global.addFadeOut(fadeNode)
 	var file_name_cur = "%03d.png" % 39
 	var file_path_cur = SPRITE_DIR + file_name_cur

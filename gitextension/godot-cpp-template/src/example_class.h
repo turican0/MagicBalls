@@ -58,9 +58,9 @@ public:
 	~ExampleClass() override = default;
 
 	PackedByteArray deRNC(PackedByteArray bytearray);
-	void MakeTerrain(PackedByteArray bytearray);
+	//void MakeTerrain(PackedByteArray bytearray);
 
-	void TerrainMake(PackedByteArray bytearray);
+	void TerrainMake(PackedByteArray bytearray, String cdPath);
 	void RunGameStep(Dictionary inputs);
 	Dictionary GetPlayerPositionRotation();
 	PackedFloat32Array GetEntites();

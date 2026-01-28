@@ -22,7 +22,7 @@ func goFirstMenu():
 	get_tree().change_scene_to_file("res://scenes/PlayAnim.tscn")
 	
 func check_existing_data() -> bool:
-	var music_path = "res://convertdata/musics/"
+	var music_path = Global.convertdata+"musics/"
 	if DirAccess.dir_exists_absolute(music_path):
 		return true
 	else:
@@ -60,7 +60,7 @@ func _on_select_manual():
 
 func _on_file_dialog_dir_selected(dir):
 	Main_DecodeLevel.MBEXinit()
-	Main_DecodeLevel.MBEXextractCD("c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/", dir)
+	Main_DecodeLevel.MBEXextractCD(Global.cdPath, dir)
 	Main_DecodeLevel.init()
-	Main_DecodeLevel.MBEXconvert("res://convertdata",dir)
+	Main_DecodeLevel.MBEXconvert(Global.convertdata,dir)
 	goFirstMenu()

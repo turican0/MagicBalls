@@ -22,7 +22,7 @@
 
 void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &ExampleClass::deRNC);
-	godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray"), &ExampleClass::TerrainMake);
+	godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray", "text"), &ExampleClass::TerrainMake);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight"), &ExampleClass::TerrainGetMapHeight);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &ExampleClass::TerrainGetMapTerrainType);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &ExampleClass::TerrainGetAngle);
@@ -65,8 +65,9 @@ void ExampleClass::_bind_methods() {
 //NewGameSubdraw_81760 - portals
 
 void ExampleClass::convertOriginalDataExtractCD(String path, String path2) {
-	//MBEXcdExtract((char *)path2.utf8().get_data(), "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/"); //user some path
-	MBEXcdExtract((char *)path2.utf8().get_data(), (char *)path.utf8().get_data()); //user some path
+	String real_path = ProjectSettings::get_singleton()->globalize_path(path);
+	String real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
+	MBEXcdExtract((char *)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
 }
 
 void ExampleClass::mapMenuInit() {
@@ -1037,7 +1038,9 @@ Dictionary ExampleClass::GetPlayerPositionRotation() {
 	return res;
 }
 
-void ExampleClass::TerrainMake(PackedByteArray bytearray) {
+void ExampleClass::TerrainMake(PackedByteArray bytearray, String cdPath) {
+	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+
 	const uint8_t *src = bytearray.ptr();
 	if (bytearray.size() < sizeof(Type_CompressedLevel_2FECE)) {
 		return;
@@ -1067,8 +1070,8 @@ void ExampleClass::TerrainMake(PackedByteArray bytearray) {
 	initposistruct();
 	//end - code from sub_main
 
-	sprintf(gameFolder, "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/GAME/NETHERW");
-	sprintf(cdFolder, "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/CD_Files");
+	sprintf(gameFolder, "%sGAME/NETHERW", real_cdPath.utf8().get_data());
+	sprintf(cdFolder, "%sCD_Files", real_cdPath.utf8().get_data());
 	gameDataPath = GetSubDirectoryPath(gameFolder);
 	cdDataPath = GetSubDirectoryPath(cdFolder);
 

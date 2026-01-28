@@ -205,9 +205,8 @@ const main_menu_animations = [
 	}
 ]
 
-#const TEXTURE_PATH = "res://convertdata/HSCREEN/6/%03d.png"
-const SPRITE_DIR6 = "res://convertdata/HSCREEN/6/"
-const SPRITE_DIR = "res://convertdata/HSCREEN/"
+var SPRITE_DIR6 = Global.convertdata+"HSCREEN/6/"
+var SPRITE_DIR = Global.convertdata+"HSCREEN/"
 
 var Main_DecodeLevel
 var Main_Sounds
@@ -225,12 +224,12 @@ func _ready():
 	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
 	Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
 	Main_DecodeLevel.Main_Sounds = Main_Sounds	
-	Global.addFadeOut()
+	fadeNode = Global.addFadeOut(fadeNode)
 	startMenuLoop()
 
 func startMenuLoop():
-	gamemap.texture=load_custom_texture(SPRITE_DIR + "gameWorldMap.png")
-	foreground.texture=load_custom_texture(SPRITE_DIR + "gameWorldMapForeground.png")
+	gamemap.texture=Global.load_custom_texture(SPRITE_DIR + "gameWorldMap.png")
+	foreground.texture=Global.load_custom_texture(SPRITE_DIR + "gameWorldMapForeground.png")
 	runned = true
 	menuInit()
 	
@@ -242,7 +241,7 @@ func menuInit():
 	
 func endAnim():
 	runned=false
-	Global.addFadeIn()
+	fadeNode = Global.addFadeIn(fadeNode)
 	await Global.fadeNode.fade_finished
 	get_tree().change_scene_to_file(Global.last_scene_path)
 
@@ -275,7 +274,7 @@ func setup_animations():
 		for i in range(cfg["array_word_18"][8], cfg["array_word_18"][8]):
 			var file_name = "%03d.png" % i
 			var file_path = SPRITE_DIR6 + file_name
-			var tex2 = load_custom_texture(file_path)
+			var tex2 = Global.load_custom_texture(file_path)
 			if tex2:
 				frames.add_frame("loop", tex2)
 			else:
@@ -294,7 +293,7 @@ func setup_sprites():
 		var new_sprite = Sprite2D.new()
 		var file_name = "%03d.png" % sprite_idx
 		var file_path = SPRITE_DIR6 + file_name
-		var tex = load_custom_texture(file_path)
+		var tex = Global.load_custom_texture(file_path)
 		new_sprite.centered = false
 		new_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		new_sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED

@@ -24,7 +24,7 @@ var runned = false
 var animIndex
 	
 func showMyImg(index):
-	const SPRITE_DIR = "res://convertdata/HSCREEN/"
+	var SPRITE_DIR = Global.convertdata+"HSCREEN/"
 	var file_name_spr
 	if(index==0):
 		file_name_spr="welcomeScreen.png"

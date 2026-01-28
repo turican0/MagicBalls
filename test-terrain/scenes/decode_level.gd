@@ -480,18 +480,16 @@ func sub_533B0_decompress_levels(level_id: int):
 	
 	MBEXinit()
 	var level_tab_data_unpacked:PackedByteArray = Global.MBEX.deRNC(level_tab_data)
-	Global.MBEX.TerrainMake(level_tab_data_unpacked)
+	Global.MBEX.TerrainMake(level_tab_data_unpacked,Global.cdPath)
 	
-	#if not DirAccess.dir_exists_absolute("res://convertdata/musics/"):
-		#MBEXconvert("res://convertdata",null)
-		
+
 func initSound():
 	if(Global.soundInited):
 		return
 	Global.soundInited = true
-	Main_Sounds.load_sounds_from_dir("res://convertdata/sounds/")
-	Main_Sounds.load_musics_from_dir("res://convertdata/musics/")
-	Main_Sounds.load_musics_hi_from_dir("res://hidata/musics/")
+	Main_Sounds.load_sounds_from_dir(Global.convertdata+"sounds/")
+	Main_Sounds.load_musics_from_dir(Global.convertdata+"musics/")
+	Main_Sounds.load_musics_hi_from_dir(Global.hidata+"musics/")
 	
 	Main_Sounds.init()
 	Main_Sounds.setSoundBank(1)#Night
