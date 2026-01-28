@@ -90,10 +90,14 @@ func load_sounds_from_dir(path: String):
 	else:
 		print("Chyba: Adresář nebyl nalezen.")	
 
+var maxSounds=6
 func updateSounds(soundActions:Array):
 	for action_dict in soundActions:
 		if not action_dict is Dictionary:
 			continue
+		if(maxSounds==0):
+			return
+		maxSounds-=1
 		var action: String = action_dict.get("action", "")
 		var p1: int = action_dict.get("p1", 0)
 		var p2: int = action_dict.get("p2", 0)

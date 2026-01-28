@@ -272,9 +272,10 @@ Array ExampleClass::getPendingGraphicsActions() {
 		d["posx"] = ga.x;
 		d["posy"] = ga.y;
 		d["index"] = ga.index;
+		d["type"] = ga.type;
 		result.append(d);
 	}
-	sound_queue_clear();
+	graphics_queue_clear();
 	return result;
 }
 

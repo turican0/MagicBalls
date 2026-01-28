@@ -2499,6 +2499,83 @@ void SetAnimationVariables_7DA70(__int16 x1, __int16 y1, __int16 x2, __int16 y2,
 		x_DWORD_17DE38str.y_17E06E - xy_DWORD_17DED4_spritestr[x_DWORD_17DE38str.unk_17E078x.spriteIndex_8].height_5 / 2 - a6);
 }
 
+//----- (0007E320) --------------------------------------------------------
+signed int DrawBitmapAndPlaySound_7E320()//25f320
+{
+	type_E24BCx textBoxStr[2];
+	for (int i = 0; str_E23E0[i].byte_25; i++) //draw buttons
+	{
+		if (str_E23E0[i].canSelect_23) {
+			sub_7C120_draw_bitmap_640(str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_21]);
+		}
+	}
+	if (x_DWORD_17DB70str.x_BYTE_17DB8E)
+		return 0;
+	int index = 0;
+	if (str_E23E0[index].byte_25) {
+		do //adress 25f57c
+		{
+			if (str_E23E0[index].selected_8 && str_E23E0[index].dword_0) {
+				uint8_t dialogIndex = GetMapMenuDialogIndex_7E320(str_E23E0[index].dword_0, &str_E23E0[index]);
+				if (!dialogIndex)//
+					return 1;
+				str_E23E0[index].selected_8 = 0;
+				ResetMouse_7B5A0();
+				return dialogIndex;
+			}
+			index++;
+		} while (str_E23E0[index].byte_25);
+	}
+	for (int i = 0; str_E23E0[i].byte_25; i++) {
+		if (str_E23E0[i].canSelect_23 && str_E23E0[i].gold_color_24)
+			sub_7C120_draw_bitmap_640(str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_20]);
+		str_E23E0[i].selected_8 = 0;
+		str_E23E0[i].gold_color_24 = 0;
+	}
+	for (int i = 0;; i++) {
+		if (!str_E23E0[i].byte_25) {
+			sub_82510();
+			return 0;
+		}
+		if (str_E23E0[i].canSelect_23) {
+			str_E23E0[i].sizex_14 = xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_20].width_4;
+			str_E23E0[i].sizey_16 = xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_20].height_5;
+			if (InRegion_7B200(&str_E23E0[i], x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx, x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony)) {
+				if (x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons & 1) {
+					str_E23E0[i].selected_8 = 1;
+					ResetMouse_7B5A0();
+					sub_8F100_sound_proc19(0, 14, 127, 64, 0x64u, 0, 3u);
+				}
+				else {
+					str_E23E0[i].gold_color_24 = 1;
+					if (x_D41A0_BYTEARRAY_4_struct.showHelp_10 != 1)
+						return 0;
+					int index2 = 0;
+					if (!str_E2516[index2].minx2_2)
+						return 0;
+					do //adress 25f4e7
+					{
+						if (str_E2516[index2].byte_17 == str_E23E0[i].byte_22) {
+							memset(textBoxStr, 0, 36);
+							textBoxStr[0] = str_E2516[index2];
+							bitmap_pos_struct_t* tempSpriteStr = xy_DWORD_17DEC0_spritestr;
+							bitmap_pos_struct2_t* tempx_DWORD_17DEC4 = x_DWORD_17DE38str.x_DWORD_17DEC4;
+							xy_DWORD_17DEC0_spritestr = xy_DWORD_17DEC8_spritestr;
+							x_DWORD_17DE38str.x_DWORD_17DEC4 = x_DWORD_17DE38str.x_DWORD_17DECC;
+							sub_7E840_draw_textbox_with_line(textBoxStr, 238, 264);
+							xy_DWORD_17DEC0_spritestr = tempSpriteStr;
+							x_DWORD_17DE38str.x_DWORD_17DEC4 = tempx_DWORD_17DEC4;
+							return 0;
+						}
+						index2++;
+					} while (str_E2516[index2].minx2_2);
+					return 0;
+				}
+			}
+		}
+	}
+}
+
 //----- (0007E800) --------------------------------------------------------
 char SaveGameDialog_7E800(type_WORD_E1F84* a1x)//25f800
 {
@@ -3604,61 +3681,39 @@ int sub_7F960(bitmap_pos_struct2_t* a1x, bitmap_pos_struct2_t* a2x, uint8_t* a3,
 // 180660: using guessed type __int16 x_WORD_180660_VGA_type_resolution;
 
 //----- (00080C30) --------------------------------------------------------
-void DrawText_80C30(__int16 posX, __int16 posY, __int16 a3)//261c30
+void DrawText_80C30(__int16 posX, __int16 posY, __int16 addWidth)//261c30
 {
-	signed int v3; // ebx
-	//char *v4; // eax
-	int v4x;
-	signed int v5; // edx
-	//int16_t* i; // eax
-	unsigned __int8 v7; // ST14_1
-	int v8; // ST08_4
-	__int16 v9; // ax
-
-	v3 = -1;
-	//v4 = (char *)unk_E17CC_0x194;
-	v4x = 0;
-	v5 = 0;
-	while (mapScreenPortals_E17CC[v4x].viewPortPosX_4)
+	int index2 = -1;
+	for (int i=0; mapScreenPortals_E17CC[i].viewPortPosX_4;i++)
 	{
-		if (mapScreenPortals_E17CC[v4x].activated_18 == 2)
+		if (mapScreenPortals_E17CC[i].activated_18 == 2)
 		{
-			v3 = v5;
+			index2 = i;
 			break;
 		}
-		//v4 += 22;
-		v4x++;
-		v5++;
 	}
 	if (posY + posX > 0)
 	{
-		//for (i = x_WORD_E2970; *(int32_t*)&i[6]; i = (x_WORD *)((char *)i + 17))
 		for (int ii = 0; secretMapScreenPortals_E2970[ii].activated_12; ii++)
 		{
-			if (secretMapScreenPortals_E2970[ii].activated_12 != 3 && v3 == secretMapScreenPortals_E2970[ii].index_4)
+			if (secretMapScreenPortals_E2970[ii].activated_12 != 3 && index2 == secretMapScreenPortals_E2970[ii].index_4)
 			{
 				x_DWORD_17DE28str.x_BYTE_17DE34 = 3;
 				return;
 			}
 		}
 		GetFont_6FC50(1);
-		v7 = getPaletteIndex_5BE80(x_DWORD_17DE38str.palette_17DE38x, 0x3Fu, 0x3Fu, 0x3Fu);
-		v8 = (signed __int16)(posX + a3 - 3 * GetLetterWidth_6FC10());
-		v9 = GetLetterWidth_6FC10();
-		sub_7FCB0_draw_text_with_border(/*v3,*/ x_DWORD_E9C4C_langindexbuffer[23 + v3], (signed __int16)(posX + 4 * v9), v8, posY, 5, v7, 1);
+		uint8_t colorIndex = getPaletteIndex_5BE80(x_DWORD_17DE38str.palette_17DE38x, 0x3Fu, 0x3Fu, 0x3Fu);
+		sub_7FCB0_draw_text_with_border(x_DWORD_E9C4C_langindexbuffer[23 + index2], posX + 4 * GetLetterWidth_6FC10(), posX + addWidth - 3 * GetLetterWidth_6FC10(), posY, 5, colorIndex, 1);
 		//"You must explore the outer Netherworlds while you learn its magic. Your first destination is the ancient city of Jahwl."+
 	}
 	if (x_DWORD_17DE28str.x_BYTE_17DE34 != 3 && x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 0x40 && !x_BYTE_17E09D)
 	{
 		x_BYTE_17E09D = 1;
-		if ((signed __int16)v3 != -1)
-			sub_86EB0(v3, 0, 0);
+		if (index2 != -1)
+			sub_86EB0(index2, 0, 0);
 	}
 }
-// D41A4: using guessed type int x_DWORD_D41A4;
-// 17DE34: using guessed type char x_BYTE_17DE34;
-// 17DE38: using guessed type int x_DWORD_17DE38;
-// 17E09D: using guessed type char x_BYTE_17E09D;
 
 //----- (00080D40) --------------------------------------------------------
 bool sub_80D40_move_graphics_and_play_sounds(__int16 a2, __int16 a3, __int16 a4, __int16 a5, char a6)//261d40

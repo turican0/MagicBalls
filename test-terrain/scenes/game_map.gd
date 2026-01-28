@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var sprite_pool_size := 20
+@export var sprite_pool_size := 200
 var sprite_pool: Array[Sprite2D] = []
 var used_count: int = 0
 
@@ -41,6 +41,7 @@ var Main_Sounds
 var MainMusic
 func _ready():
 	await get_tree().process_frame
+	Engine.max_fps = 60
 	var screen_size = get_viewport().get_visible_rect().size
 	#foreground.position = screen_size / 2
 	gamemap.position = screen_size / 2
@@ -84,19 +85,6 @@ func endAnim():
 	await Global.fadeNode.fade_finished
 	get_tree().change_scene_to_file(Global.last_scene_path)
 
-func render_sprites(data: Array):
-	var used := 0
-	for item in data:
-		if used >= sprite_pool.size():
-			break
-		var s := sprite_pool[used]
-		s.texture = item.texture
-		s.position = Vector2(item.x, item.y)
-		s.visible = true
-		used += 1
-	for i in range(used, sprite_pool.size()):
-		sprite_pool[i].visible = false
-
 func render_spriteB(posx: int, posy: int, index: int):
 	var file_name = "%03d.png" % index
 	var file_path = SPRITE_DIR6 + file_name
@@ -117,6 +105,7 @@ func endSpritesrender():
 		sprite_pool[i].visible = false
 
 func updateSprites(graphicsActions:Array):
+	used_count = 0
 	for action_dict in graphicsActions:
 		if not action_dict is Dictionary:
 			continue

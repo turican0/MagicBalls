@@ -260,11 +260,11 @@ bool NewGameDialog_77350_mod_Begin()
 
 
 
-void sub_7C120_draw_bitmap_640_mod(int16_t posx, int16_t posy, bitmap_pos_struct_t tempstr, __int16 posx2, __int16 posy2, int index) //25d120
+void sub_7C120_draw_bitmap_640_mod(int16_t posx, int16_t posy, bitmap_pos_struct_t tempstr, __int16 posx2, __int16 posy2, int index,int type=0) //25d120
 {
 	//DrawBitmap_2BB40(posx, posy, tempstr); //ebp
 	//save posx,posy,tempstr,posx2,posy2,index
-	graphics_queue_add_action("drawBitmap", posx2, posy2, index);
+	graphics_queue_add_action("drawBitmap", posx2, posy2, index,type);
 }
 
 void DrawAnimSprite_81CA0_mod(__int16 posx, __int16 posy, type_x_BYTE_E25ED_db_str *a5x) //262ca0
@@ -331,7 +331,7 @@ bool DrawFrameAnim_7E5A0_mod(__int16 posx, __int16 posy, Type_MapScreenPortals_E
 
 void sub_7E840_draw_textbox_with_line_mod(type_E24BCx *a1x, __int16 posx2, __int16 posy2) {
 	//save posx,posy,tempstr,posx2,pos2,index
-	graphics_queue_add_action("drawTextBox", posx2, posy2, a1x->textIndex_0);
+	graphics_queue_add_action("drawTextBox", posx2, posy2, a1x->textIndex_0,0);
 }
 
 void DrawAnimTextsAndPlaySounds_7D400_mod(__int16 posx, __int16 posy, char a4) //25e400
@@ -607,7 +607,7 @@ void DrawAndSoundDragonAndFire_81EE0_mod(__int16 a5, __int16 a6) //262ee0
 									str_WORD_E20A4[index].array_word_18.act2_8 = str_WORD_E20A4[index].array_word_18.begin_6;
 								str_WORD_E20A4[index].time_0 = time;
 							}
-							sub_7C120_draw_bitmap_640(str_WORD_E20A4[index].array_word_18.actX_0 - a5, str_WORD_E20A4[index].array_word_18.actY_1 - a6, xy_DWORD_17DED4_spritestr[str_WORD_E20A4[index].array_word_18.act2_8]);
+							sub_7C120_draw_bitmap_640_mod(str_WORD_E20A4[index].array_word_18.actX_0 - a5, str_WORD_E20A4[index].array_word_18.actY_1 - a6, xy_DWORD_17DED4_spritestr[str_WORD_E20A4[index].array_word_18.act2_8], str_WORD_E20A4[index].array_word_18.actX_0, str_WORD_E20A4[index].array_word_18.actY_1, str_WORD_E20A4[index].array_word_18.act2_8);
 							if (objectResult) {
 								str_WORD_E20A4[index].array_word_18.act2_8 = str_WORD_E20A4[index].array_word_18.begin2_9;
 								str_WORD_E20A4[index].time_0 = time;
@@ -627,7 +627,7 @@ void DrawAndSoundDragonAndFire_81EE0_mod(__int16 a5, __int16 a6) //262ee0
 								str_WORD_E20A4[index].time_0 = time;
 							}
 							if (!objectResult) {
-								sub_7C120_draw_bitmap_640(str_WORD_E20A4[index].array_word_18.actX_0 - a5, str_WORD_E20A4[index].array_word_18.actY_1 - a6, xy_DWORD_17DED4_spritestr[str_WORD_E20A4[index].array_word_18.act2_8]);
+								sub_7C120_draw_bitmap_640_mod(str_WORD_E20A4[index].array_word_18.actX_0 - a5, str_WORD_E20A4[index].array_word_18.actY_1 - a6, xy_DWORD_17DED4_spritestr[str_WORD_E20A4[index].array_word_18.act2_8], str_WORD_E20A4[index].array_word_18.actX_0, str_WORD_E20A4[index].array_word_18.actY_1, str_WORD_E20A4[index].array_word_18.act2_8);
 							} else {
 								str_WORD_E20A4[index].byte_43++;
 							}
@@ -678,14 +678,14 @@ void DrawAndSoundDragonAndFire_81EE0_mod(__int16 a5, __int16 a6) //262ee0
 						screenWidth_18062C = 1280;
 						x_DWORD_180644_map_resolution2_y = 960;
 						screenHeight_180624 = 960;
-						sub_7C120_draw_bitmap_640(str_WORD_E20A4[index].array_word_18.actX_0, str_WORD_E20A4[index].array_word_18.actY_1, xy_DWORD_17DED4_spritestr[str_WORD_E20A4[index].array_word_18.act2_8]);
+						sub_7C120_draw_bitmap_640_mod(str_WORD_E20A4[index].array_word_18.actX_0, str_WORD_E20A4[index].array_word_18.actY_1, xy_DWORD_17DED4_spritestr[str_WORD_E20A4[index].array_word_18.act2_8], str_WORD_E20A4[index].array_word_18.actX_0, str_WORD_E20A4[index].array_word_18.actY_1, str_WORD_E20A4[index].array_word_18.act2_8,1);
 						screenWidth_18062C = tempWidth;
 						screenHeight_180624 = tempHeight;
 						x_DWORD_180648_map_resolution2_x = tempWidth;
 						x_DWORD_180644_map_resolution2_y = tempHeight;
 						pdwScreenBuffer_351628 = temp_screen_buffer;
 					} else {
-						sub_7C120_draw_bitmap_640(str_WORD_E20A4[index].array_word_18.actX_0 - a5, str_WORD_E20A4[index].array_word_18.actY_1 - a6, xy_DWORD_17DED4_spritestr[str_WORD_E20A4[index].array_word_18.act2_8]);
+						sub_7C120_draw_bitmap_640_mod(str_WORD_E20A4[index].array_word_18.actX_0 - a5, str_WORD_E20A4[index].array_word_18.actY_1 - a6, xy_DWORD_17DED4_spritestr[str_WORD_E20A4[index].array_word_18.act2_8], str_WORD_E20A4[index].array_word_18.actX_0, str_WORD_E20A4[index].array_word_18.actY_1, str_WORD_E20A4[index].array_word_18.act2_8);
 					}
 				}
 			} else {
@@ -703,7 +703,7 @@ signed int DrawBitmapAndPlaySound_7E320_mod() //25f320
 	for (int i = 0; str_E23E0[i].byte_25; i++) //draw buttons
 	{
 		if (str_E23E0[i].canSelect_23) {
-			sub_7C120_draw_bitmap_640(str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_21]);
+			sub_7C120_draw_bitmap_640_mod(str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_21], str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, str_E23E0[i].byte_21,1);
 		}
 	}
 	if (x_DWORD_17DB70str.x_BYTE_17DB8E)
@@ -725,7 +725,7 @@ signed int DrawBitmapAndPlaySound_7E320_mod() //25f320
 	}
 	for (int i = 0; str_E23E0[i].byte_25; i++) {
 		if (str_E23E0[i].canSelect_23 && str_E23E0[i].gold_color_24)
-			sub_7C120_draw_bitmap_640(str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_20]);
+			sub_7C120_draw_bitmap_640_mod(str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_20], str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, str_E23E0[i].byte_20,1);
 		str_E23E0[i].selected_8 = 0;
 		str_E23E0[i].gold_color_24 = 0;
 	}
@@ -758,7 +758,7 @@ signed int DrawBitmapAndPlaySound_7E320_mod() //25f320
 							bitmap_pos_struct2_t *tempx_DWORD_17DEC4 = x_DWORD_17DE38str.x_DWORD_17DEC4;
 							xy_DWORD_17DEC0_spritestr = xy_DWORD_17DEC8_spritestr;
 							x_DWORD_17DE38str.x_DWORD_17DEC4 = x_DWORD_17DE38str.x_DWORD_17DECC;
-							sub_7E840_draw_textbox_with_line(textBoxStr, 238, 264);
+							sub_7E840_draw_textbox_with_line_mod(textBoxStr, 238, 264);
 							xy_DWORD_17DEC0_spritestr = tempSpriteStr;
 							x_DWORD_17DE38str.x_DWORD_17DEC4 = tempx_DWORD_17DEC4;
 							return 0;
@@ -769,6 +769,38 @@ signed int DrawBitmapAndPlaySound_7E320_mod() //25f320
 				}
 			}
 		}
+	}
+}
+
+void sub_7FCB0_draw_text_with_border_mod(char *textString, int32_t a3, int32_t a4, int a5, uint8_t a6, unsigned __int8 a7, uint32_t a8, int textIndex) {
+	graphics_queue_add_action("drawTextBox", a3, a5, textIndex, 1);
+}
+
+void DrawText_80C30_mod(__int16 posX, __int16 posY, __int16 addWidth) //261c30
+{
+	int index2 = -1;
+	for (int i = 0; mapScreenPortals_E17CC[i].viewPortPosX_4; i++) {
+		if (mapScreenPortals_E17CC[i].activated_18 == 2) {
+			index2 = i;
+			break;
+		}
+	}
+	if (posY + posX > 0) {
+		for (int ii = 0; secretMapScreenPortals_E2970[ii].activated_12; ii++) {
+			if (secretMapScreenPortals_E2970[ii].activated_12 != 3 && index2 == secretMapScreenPortals_E2970[ii].index_4) {
+				x_DWORD_17DE28str.x_BYTE_17DE34 = 3;
+				return;
+			}
+		}
+		GetFont_6FC50(1);
+		uint8_t colorIndex = getPaletteIndex_5BE80(x_DWORD_17DE38str.palette_17DE38x, 0x3Fu, 0x3Fu, 0x3Fu);
+		sub_7FCB0_draw_text_with_border_mod(x_DWORD_E9C4C_langindexbuffer[23 + index2], posX + 4 * GetLetterWidth_6FC10(), posX + addWidth - 3 * GetLetterWidth_6FC10(), posY, 5, colorIndex, 1, 23 + index2);
+		//"You must explore the outer Netherworlds while you learn its magic. Your first destination is the ancient city of Jahwl."+
+	}
+	if (x_DWORD_17DE28str.x_BYTE_17DE34 != 3 && x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 0x40 && !x_BYTE_17E09D) {
+		x_BYTE_17E09D = 1;
+		if (index2 != -1)
+			sub_86EB0(index2, 0, 0);
 	}
 }
 
@@ -1008,9 +1040,9 @@ int NewGameDraw_7EAE0_mod(int16_t *posx, int16_t *posy, __int16 *portPosX, __int
 						x_DWORD_17DE28str.x_BYTE_17DE34 = 2;
 					}
 					int textIndex = (x_DWORD_17DE28str.x_WORD_17DE32_posy < MOUSE_MAX_Y) ? 280 : 60;
-					DrawText_80C30(130, textIndex, 380);
+					DrawText_80C30_mod(130, textIndex, 380);
 				} else if (x_DWORD_17DE28str.x_BYTE_17DE34 <= 2u || x_DWORD_17DE28str.x_BYTE_17DE34 == 3) {
-					DrawText_80C30(0, 0, 0);
+					DrawText_80C30_mod(0, 0, 0);
 				}
 			}
 		}
@@ -1178,15 +1210,16 @@ std::vector<GraphicsAction> graphics_queue_get_pending_actions() {
 	return graphics_queue;
 }
 
-void graphics_queue_add_action(const std::string &action, int x, int y, int index) {
-	GraphicsAction sa;
-	sa.action = action;
-	sa.x = x;
-	sa.y = y;
-	sa.index = index;
-	graphics_queue.push_back(sa);
+void graphics_queue_add_action(const std::string &action, int x, int y, int index,int type) {
+	GraphicsAction ga;
+	ga.action = action;
+	ga.x = x;
+	ga.y = y;
+	ga.index = index;
+	ga.type = type;
+	graphics_queue.push_back(ga);
 }
-
+/*
 void graphics_queue_add_actionSA(const GraphicsAction &sa) {
 	graphics_queue.push_back(sa);
 }
@@ -1194,7 +1227,7 @@ void graphics_queue_add_actionSA(const GraphicsAction &sa) {
 void graphics_queue_add_action(const GraphicsAction &sa) {
 	graphics_queue.push_back(sa);
 }
-
+*/
 void graphics_queue_clear() {
 	graphics_queue.clear();
 }
