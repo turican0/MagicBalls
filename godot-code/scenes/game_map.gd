@@ -68,7 +68,7 @@ func _ready():
 	
 	for cfgback in map_menu_selection:
 		var sprback = Sprite2D.new()
-		var file_name_spr = "%03d.png" % (cfgback["byte_22"])
+		var file_name_spr = "%03d.png" % (cfgback["byte_21"])
 		sprback.name = file_name_spr
 		sprback.centered = false
 		sprback.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
