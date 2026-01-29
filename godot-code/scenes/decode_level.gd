@@ -224,7 +224,7 @@ func playAnimStep(endAnimIn:int) -> int:
 	return endAnimOut
 
 func changeLanguage(langIndex):
-	Global.MBEX.ChangeLanguage(langIndex)
+	Global.MBEX.changeLanguage(langIndex)
 
 func getLangTexts():
 	Global.langTexts=Global.MBEX.getLangTexts()

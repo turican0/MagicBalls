@@ -2,6 +2,84 @@
 
 int NewGameDialog_endAction_mod;
 
+void InitLanguage_76A40_mod_only_language() //257A40
+{
+	
+	//FILE *configdatfile;
+	FILE *langfile;
+	uint32_t filelenght;
+	//TypeConfigDat configDat;
+	/*
+	memset(printbuffer, 0, 80);
+	memset(&x_DWORD_17DE38str, 0, sizeof(type_x_DWORD_17DE38str));
+	x_DWORD_17DE38str.x_DWORD_17DEE0_filedesc = NULL;
+	memset(&configDat, 0, sizeof(TypeConfigDat));
+	sprintf(printbuffer, "%s/%s", gameDataPath.c_str(), "CONFIG.DAT");
+	configdatfile = DataFileIO::CreateOrOpenFile(printbuffer, 512);
+	if (configdatfile == NULL) //config is not found
+	{
+		LoadAndSetGraphicsAndPalette_7AC00(); //25BC00 //change screen radio
+		LanguageSettingDialog_779E0(0); //2589E0 //set language
+		sub_7ADE0(1);
+	} else {
+		DataFileIO::Read(configdatfile, (uint8_t *)&configDat.configDatSign_0, 4); //first dword
+		if (configDat.configDatSign_0 == 0xfffffff7) {
+			DataFileIO::Read(configdatfile, (uint8_t *)&configDat.langIndex_4, 28);
+
+			x_D41A0_BYTEARRAY_4_struct.configDatSign_0 = configDat.configDatSign_0;
+			x_D41A0_BYTEARRAY_4_struct.langIndex_4 = configDat.langIndex_4;
+			x_D41A0_BYTEARRAY_4_struct.soundVolume_6 = configDat.soundVolume_6;
+			x_D41A0_BYTEARRAY_4_struct.musicVolume_8 = configDat.musicVolume_8;
+			x_D41A0_BYTEARRAY_4_struct.showHelp_10 = configDat.showHelp_10;
+			x_D41A0_BYTEARRAY_4_struct.brightness_11 = configDat.brightness_11;
+			x_D41A0_BYTEARRAY_4_struct.brightness_12 = configDat.brightness_12;
+			x_D41A0_BYTEARRAY_4_struct.brightness_13 = configDat.brightness_13;
+			x_D41A0_BYTEARRAY_4_struct.wordindex_14 = configDat.wordindex_14;
+			x_D41A0_BYTEARRAY_4_struct.dwordindex_16 = configDat.dwordindex_16;
+			x_D41A0_BYTEARRAY_4_struct.stubb[0] = configDat.stubb[0];
+			x_D41A0_BYTEARRAY_4_struct.stubb[1] = configDat.stubb[1];
+
+			for (int i = 0; i < 10; i++)
+				x_BYTE_EB39E_keys[i] = configDat.keys[i];
+
+			DataFileIO::Close(configdatfile);
+			sub_8E470_sound_proc17_volume(x_D41A0_BYTEARRAY_4_struct.soundVolume_6);
+			sub_8E410_sound_proc16_xmidivolume(x_D41A0_BYTEARRAY_4_struct.musicVolume_8);
+			*/
+
+			sprintf(printbuffer, "%s/%s/L%d.TXT", cdDataPath.c_str(), "LANGUAGE", x_D41A0_BYTEARRAY_4_struct.langIndex_4);
+			for (int i = 0; i < 2; i++) {
+				x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex = x_D41A0_BYTEARRAY_4_struct.langIndex_4 & 0xff;
+				if (x_BYTE_E29E0 || x_DWORD_D41BC_langbuffer)
+					FreeMem_83E80((uint8_t *)x_DWORD_D41BC_langbuffer);
+				langfile = DataFileIO::CreateOrOpenFile(printbuffer, 512);
+
+				if (langfile != NULL) {
+					filelenght = DataFileIO::FileLengthBytes(langfile) - 4785;
+					x_DWORD_D41BC_langbuffer = (char *)Malloc_83CD0(filelenght);
+					if (x_DWORD_D41BC_langbuffer) {
+						DataFileIO::Seek(langfile, 4785, 0);
+						DataFileIO::Read(langfile, (uint8_t *)x_DWORD_D41BC_langbuffer, filelenght);
+					}
+					DataFileIO::Close(langfile);
+					sub_5B870_copy_sentence(x_DWORD_D41BC_langbuffer, x_DWORD_E9C4C_langindexbuffer, 471); //Exit Game
+					break;
+				}
+				sprintf(printbuffer, "%s/%s/L%d.TXT", cdDataPath.c_str(), "LANGUAGE", x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex);
+				
+			}/*
+		} else {
+			DataFileIO::Close(configdatfile);
+			LoadAndSetGraphicsAndPalette_7AC00();
+			LanguageSettingDialog_779E0(nullptr);
+			sub_7ADE0(1);
+		}
+	}
+	if (x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex != 2 || !soundAble_E3798)
+		x_BYTE_D41C0 = 1;
+	nextMenu_E29D8 = MenuItem::SetToIntro;*/
+}
+
 void sub_7A110_load_hscreen_mod(char a1, char a2) //25b110
 {
 	char dataPath[MAX_PATH];

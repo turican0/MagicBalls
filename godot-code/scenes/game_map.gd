@@ -120,6 +120,7 @@ func menuInit():
 	Main_DecodeLevel.initSound()
 	Main_Sounds.setSoundBank(0)
 	Main_DecodeLevel.mapMenuInit()
+	Main_DecodeLevel.changeLanguage(2)
 	Main_DecodeLevel.getLangTexts()
 	
 func endAnim():

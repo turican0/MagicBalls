@@ -51,6 +51,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("mapMenuInit"), &MBEXclass::mapMenuInit);
 	godot::ClassDB::bind_method(D_METHOD("mapMenuStep", "Int"), &MBEXclass::mapMenuStep);
 	godot::ClassDB::bind_method(D_METHOD("getLangTexts"), &MBEXclass::getLangTexts);
+	godot::ClassDB::bind_method(D_METHOD("changeLanguage", "Int"), &MBEXclass::changeLanguage);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -83,9 +84,9 @@ int MBEXclass::mapMenuStep(int run) {
 	return 0;
 }
 
-void ChangeLanguage(int index) {
+void MBEXclass::changeLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
-	InitLanguage_76A40();
+	InitLanguage_76A40_mod_only_language();
 }
 
 Dictionary MBEXclass::getLangTexts() {

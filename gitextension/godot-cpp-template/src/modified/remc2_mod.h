@@ -19,3 +19,4 @@ bool NewGameDialog_77350_mod_End();
 void graphics_queue_add_action(const std::string &action, int x, int y, int index, int type);
 std::vector<GraphicsAction> graphics_queue_get_pending_actions();
 void graphics_queue_clear();
+void InitLanguage_76A40_mod_only_language();

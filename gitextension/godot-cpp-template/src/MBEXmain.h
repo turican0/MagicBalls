@@ -95,4 +95,5 @@ public:
 	void mapMenuInit();
 	int mapMenuStep(int run);
 	Dictionary getLangTexts();
+	void changeLanguage(int index);
 	};
