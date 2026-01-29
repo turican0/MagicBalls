@@ -9,6 +9,8 @@ var cdPath:String="user://CDdata/"
 var convertdata:String="user://convertdata/"
 var hidata:String="res://hidata/"
 
+var langTexts:Dictionary
+
 func fadeInit(fadeNode):
 	if(!get_tree().root.get_node_or_null("FadeInOut")):
 		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")

@@ -223,6 +223,12 @@ func playAnimStep(endAnimIn:int) -> int:
 	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return endAnimOut
 
+func changeLanguage(langIndex):
+	Global.MBEX.ChangeLanguage(langIndex)
+
+func getLangTexts():
+	Global.langTexts=Global.MBEX.getLangTexts()
+
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
@@ -424,7 +430,7 @@ func getInputs():
 	mouse_640 = Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 	mouse_640 += total_mouse_delta*0.2
 	mouse_640.x = clamp(mouse_640.x, 0, SCREEN_WIDTH)
-	mouse_640.y = clamp(mouse_640.y, 0, SCREEN_HEIGHT)		
+	mouse_640.y = clamp(mouse_640.y, 0, SCREEN_HEIGHT)
 	input_state["mouse_pos"] = mouse_640
 
 func init():

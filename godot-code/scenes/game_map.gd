@@ -21,24 +21,21 @@ var fadeNode: Node3D
 var SPRITE_DIR6 = Global.convertdata+"HSCREEN/6/"
 var SPRITE_DIR = Global.convertdata+"HSCREEN/"
 
-var main_menu_selection: Array[Dictionary] = [
-	{"help": "New Game", "dword_0": 0x00258350, "dword_4": 0, "selected_8": 0, "xmin_10": 0x00CE, "ymin_12": 0x0043, "sizex_14": 0x0050, "sizey_16": 0x0050, "word_18": 0x019A, "byte_20": 0x3B, "byte_21": 0x33, "byte_22": 0x06, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x004E, 0x004E, 0, 0, 0x0050, 0, 0, 0, 0x0003]},
-	{"help": "Set Name", "dword_0": 0x00259E00, "dword_4": 0, "selected_8": 0, "xmin_10": 0x0119, "ymin_12": 0x0041, "sizex_14": 0x0050, "sizey_16": 0x0050, "word_18": 0x0194, "byte_20": 0x3C, "byte_21": 0x34, "byte_22": 0x0A, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x0164, 0x0070, 0, 0, 0x0050, 0, 0x01A4, 0, 0x0003]},
-	{"help": "Multiplayer", "dword_0": 0x0025EE80, "dword_4": 0, "selected_8": 0, "xmin_10": 0x016A, "ymin_12": 0x0048, "sizex_14": 0x0050, "sizey_16": 0x0050, "word_18": 0x0199, "byte_20": 0x3D, "byte_21": 0x35, "byte_22": 0x07, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x01AE, 0x004E, 0, 0, 0x0050, 0, 0x019C, 0, 0x0003]},
-	{"help": "Load Game", "dword_0": 0x00259730, "dword_4": 0, "selected_8": 0, "xmin_10": 0x00C8, "ymin_12": 0x009D, "sizex_14": 0x0050, "sizey_16": 0x0050, "word_18": 0x0196, "byte_20": 0x3E, "byte_21": 0x36, "byte_22": 0x09, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x004E, 0x00A0, 0, 0, 0x00C8, 0, 0x01A6, 0, 0x0003]},
-	{"help": "Set Control", "dword_0": 0x0025A610, "dword_4": 0, "selected_8": 0, "xmin_10": 0x0195, "ymin_12": 0x00E7, "sizex_14": 0x003C, "sizey_16": 0x002C, "word_18": 0x01CF, "byte_20": 0x6A, "byte_21": 0x6A, "byte_22": 0x0F, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x0160, 0x00AE, 0, 0, 0x0050, 0, 0, 0, 0x0003]},
-	{"help": "Save Game", "dword_0": 0x002590F0, "dword_4": 0, "selected_8": 0, "xmin_10": 0x0187, "ymin_12": 0x009E, "sizex_14": 0x0050, "sizey_16": 0x0050, "word_18": 0x0195, "byte_20": 0x3F, "byte_21": 0x37, "byte_22": 0x08, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x01C0, 0x00A0, 0, 0, 0x00C8, 0, 0x01A5, 0, 0x0003]},
-	{"help": "Exit", "dword_0": 0x00258980, "dword_4": 0, "selected_8": 0, "xmin_10": 0x0126, "ymin_12": 0x0019, "sizex_14": 0x0034, "sizey_16": 0x002C, "word_18": 0x0197, "byte_20": 0x40, "byte_21": 0x38, "byte_22": 0x0B, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x0160, 0x001A, 0, 0, 0x0050, 0, 0x0197, 0, 0x0003]},
-	{"help": "Set Language", "dword_0": 0x002589E0, "dword_4": 0, "selected_8": 0, "xmin_10": 0x0121, "ymin_12": 0x009B, "sizex_14": 0x003C, "sizey_16": 0x002C, "word_18": 0x0198, "byte_20": 0x41, "byte_21": 0x39, "byte_22": 0x0C, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x0160, 0x00AE, 0, 0, 0x0050, 0, 0, 0, 0x0003]},
-	{"help": "Set Joystick", "dword_0": 0x0025A160, "dword_4": 0, "selected_8": 0, "xmin_10": 0x00B9, "ymin_12": 0x00E8, "sizex_14": 0x003C, "sizey_16": 0x002C, "word_18": 0x019B, "byte_20": 0x42, "byte_21": 0x3A, "byte_22": 0x0D, "canSelect_23": 0x01, "gold_color_24": 0, "byte_25": 0, "str_26": [0x004A, 0x00F6, 0, 0, 0x0064, 0, 0x019B, 0, 0x0003]}
+var map_menu_selection: Array[Dictionary] = [
+	{"textIndex_0":"0x01D2", "help": "Exit", "dword_0": 0x0025F620, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0245, "ymin_12": 0x01AB, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0000, "byte_20": 0xF7, "byte_21": 0xF6, "byte_22": 0x0B, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0003]},
+	{"textIndex_0":"0x01D3", "help": "Restart Game", "dword_0": 0x0025F640, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0000, "ymin_12": 0x01AB, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0000, "byte_20": 0xF9, "byte_21": 0xF8, "byte_22": 0x10, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x0025, 0x015C, 0x0000, 0x0000, 0x003C, 0x0000, 0x01D3, 0x0000, 0x0003]},
+	{"textIndex_0":"0x0196", "help": "Load Game", "dword_0": 0x0025F800, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0000, "ymin_12": 0x0000, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0196, "byte_20": 0xFB, "byte_21": 0xFA, "byte_22": 0x09, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x001D, 0x003C, 0x0000, 0x0000, 0x00C8, 0x0000, 0x01A6, 0x0000, 0x0003]},
+	{"textIndex_0":"0x0195", "help": "Save Game", "dword_0": 0x0025F820, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0245, "ymin_12": 0x0000, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0195, "byte_20": 0xFD, "byte_21": 0xFC, "byte_22": 0x08, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x01FE, 0x003C, 0x0000, 0x0000, 0x00C8, 0x0000, 0x01A5, 0x0000, 0x0003]}
 ]
 
-var map_menu_selection: Array[Dictionary] = [
-	{"help": "Exit", "dword_0": 0x0025F620, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0245, "ymin_12": 0x01AB, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0000, "byte_20": 0xF7, "byte_21": 0xF6, "byte_22": 0x0B, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0003]},
-	{"help": "Restart Game", "dword_0": 0x0025F640, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0000, "ymin_12": 0x01AB, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0000, "byte_20": 0xF9, "byte_21": 0xF8, "byte_22": 0x10, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x0025, 0x015C, 0x0000, 0x0000, 0x003C, 0x0000, 0x01D3, 0x0000, 0x0003]},
-	{"help": "Load Game", "dword_0": 0x0025F800, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0000, "ymin_12": 0x0000, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0196, "byte_20": 0xFB, "byte_21": 0xFA, "byte_22": 0x09, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x001D, 0x003C, 0x0000, 0x0000, 0x00C8, 0x0000, 0x01A6, 0x0000, 0x0003]},
-	{"help": "Save Game", "dword_0": 0x0025F820, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0245, "ymin_12": 0x0000, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0195, "byte_20": 0xFD, "byte_21": 0xFC, "byte_22": 0x08, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x01FE, 0x003C, 0x0000, 0x0000, 0x00C8, 0x0000, 0x01A5, 0x0000, 0x0003]}
-]
+#type_E24BCx str_E2516[5] = {
+#{0x01D2,0x012F,0x0169,0x01DC,0x016A,0x0000,0x023C,0x01B8,0x02,0x0B},
+#{0x01D3,0x007F,0x0168,0x007B,0x0176,0x0000,0x0034,0x01B0,0x08,0x10},
+#{0x0196,0x007E,0x0041,0x007B,0x0052,0x0000,0x0037,0x001C,0x08,0x09},
+#{0x0195,0x015E,0x0041,0x0211,0x0052,0x0000,0x0254,0x001C,0x08,0x08},
+#{0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x00,0x00} };
+
+
 
 var Main_DecodeLevel
 var Main_Sounds
@@ -71,7 +68,7 @@ func _ready():
 	
 	for cfgback in map_menu_selection:
 		var sprback = Sprite2D.new()
-		var file_name_spr = "%03d.png" % (cfgback["byte_21"])
+		var file_name_spr = "%03d.png" % (cfgback["byte_22"])
 		sprback.name = file_name_spr
 		sprback.centered = false
 		sprback.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -123,6 +120,7 @@ func menuInit():
 	Main_DecodeLevel.initSound()
 	Main_Sounds.setSoundBank(0)
 	Main_DecodeLevel.mapMenuInit()
+	Main_DecodeLevel.getLangTexts()
 	
 func endAnim():
 	runned=false
@@ -216,12 +214,13 @@ func _input(event):
 			spr.show()
 			#tooltip_label.text = "ID: 0x%X" % cfg2["dword_0"]
 			tooltip_label.text = cfg2["help"]
+			tooltip_label.text = Global.langTexts[int(cfg2["textIndex_0"])]
 			tooltip_label.show()
 			tooltip_label.position = Vector2(floor(mouse_pos.x + 10), floor(mouse_pos.y + 10))
 			
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 				var target_scene = ""
-				if cfg2["dword_0"] == 0x00258350:
+				if cfg2["dword_0"] == 0x0025F640:
 					target_scene = "res://scenes/CodeGeneratedDemo.tscn"
 				elif cfg2["dword_0"] == 0x00259E00:
 					target_scene = "res://scenes/PlayAnim.tscn"

@@ -46,11 +46,11 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &MBEXclass::updateFreeSoundPlayers);
 	godot::ClassDB::bind_method(D_METHOD("playAnim", "Int"), &MBEXclass::playAnim);
 	godot::ClassDB::bind_method(D_METHOD("playAnimStep", "Int"), &MBEXclass::playAnimStep);
-	godot::ClassDB::bind_method(D_METHOD("getTexts"), &MBEXclass::getTexts);
 	godot::ClassDB::bind_method(D_METHOD("getVGABuffer"), &MBEXclass::getVGABuffer);
 
 	godot::ClassDB::bind_method(D_METHOD("mapMenuInit"), &MBEXclass::mapMenuInit);
 	godot::ClassDB::bind_method(D_METHOD("mapMenuStep", "Int"), &MBEXclass::mapMenuStep);
+	godot::ClassDB::bind_method(D_METHOD("getLangTexts"), &MBEXclass::getLangTexts);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -86,6 +86,16 @@ int MBEXclass::mapMenuStep(int run) {
 void ChangeLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
 	InitLanguage_76A40();
+}
+
+Dictionary MBEXclass::getLangTexts() {
+	Dictionary result;
+
+	for (int i = 0; i < 1000; i++) {
+		result[i] = String(x_DWORD_E9C4C_langindexbuffer[i]);
+	}
+
+	return result;
 }
 
 FILE *animTempfile;
@@ -206,11 +216,6 @@ int MBEXclass::playAnimStep(int run) {
 		return 1;
 	}
 	return 0;
-}
-
-Array MBEXclass::getTexts() {
-	Array result;
-	return result;
 }
 
 PackedByteArray MBEXclass::getVGABuffer() {

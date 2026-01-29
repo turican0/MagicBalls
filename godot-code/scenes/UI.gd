@@ -18,6 +18,20 @@ var hovered_index: int = -1
 func _ready():
 	start_button.pressed.connect(_on_start_pressed)
 	
+	var sb := StyleBoxTexture.new()
+	sb.texture = preload("res://tests/9slice.png")
+	sb.draw_center = true
+	sb.texture_margin_left = 16
+	sb.texture_margin_right = 16
+	sb.texture_margin_top = 16
+	sb.texture_margin_bottom = 16
+	sb.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	sb.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	$RefreshLevel.add_theme_stylebox_override("panel", sb)
+	$RefreshLevel.borderless = true
+	$RefreshLevel.popup_centered()
+	
+	
 func _on_start_pressed():
 	Main_DecodeLevel.SetRunned(true)
 	start_button.hide()

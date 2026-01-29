@@ -90,9 +90,9 @@ public:
 	//void soundQueueClear();
 	void updateFreeSoundPlayers(const godot::Array &p_indices);
 	void playAnim(int index);
-	Array getTexts();
 	PackedByteArray getVGABuffer();
 	int playAnimStep(int run);
 	void mapMenuInit();
 	int mapMenuStep(int run);
+	Dictionary getLangTexts();
 	};
