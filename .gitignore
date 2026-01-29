@@ -20,10 +20,12 @@ godot-code/addons/terrain_3d/bin/~libterrain.windows.debug.x86_64.dll
 *.ipch
 *.ilk
 *.tlog
-gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
+gitextension/godot-cpp-template/MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
 *.vsidx
 *.tlog
 *.db
 gitextension/godot-cpp-template/build/
 /test-terrain/convertdata
 /gitextension/godot-cpp-template/data
+gitextension/godot-cpp-template/MBEXout/bin/windows/~EXTENSION-NAME.windows.template_debug.x86_64.dll
+gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
