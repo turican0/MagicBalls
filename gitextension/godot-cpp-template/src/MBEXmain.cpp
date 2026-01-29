@@ -161,6 +161,8 @@ void PlayInfoFmvEnd() {
 }
 
 void MBEXclass::playAnim(int index) {
+	memset(pdwScreenBuffer_351628, 0, 640 * 480); //clear screen buffer
+
 	old_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
 	oldScreenWidth = screenWidth_18062C;
 	screenWidth_18062C = 320;
@@ -203,7 +205,7 @@ void MBEXclass::playAnim(int index) {
 			break;
 		case 2:
 			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
-			PlayInfoFmvBegin(1, 1, str_E17CC_0, dataPath);
+			PlayInfoFmvBegin(1, 1, str_E17CC_0x160, dataPath);
 			break;
 	}
 }

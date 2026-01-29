@@ -3,6 +3,8 @@ extends Node3D
 var sprback:Sprite2D
 var waiting_for_input = false
 
+signal video_finished
+
 var fadeNode: Node3D
 
 var Main_DecodeLevel
@@ -52,6 +54,13 @@ func _input(event):
 				await fadeNode.fade_finished
 				fadeNode=Global.addFadeOut(fadeNode)
 				playAnim(1)
+				await video_finished
+				playAnim(2)
+				await video_finished
+				runned=false
+				fadeNode = Global.addFadeIn(fadeNode)
+				await fadeNode.fade_finished
+				get_tree().change_scene_to_file(Global.last_scene_path)
 	
 func playAnim(index:int):
 	animIndex=index
@@ -74,13 +83,13 @@ func animInit():
 			Main_Sounds.setSoundBank(3)
 		1:
 			Main_Sounds.setSoundBank(4)
+		2:
+			Main_Sounds.setSoundBank(4)
 	Main_DecodeLevel.playAnim(animIndex)
 	
 func endAnim():
-	runned=false
-	fadeNode = Global.addFadeIn(fadeNode)
-	await fadeNode.fade_finished
-	get_tree().change_scene_to_file(Global.last_scene_path)
+	emit_signal("video_finished")
+
 	
 func _process(_p_delta) -> void:
 	if(!runned):
