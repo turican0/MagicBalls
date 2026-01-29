@@ -969,6 +969,9 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 			case 3:
 				setPress(is_pressed, 0x4d00);
 				break;
+			case 4:
+				setPress(is_pressed, 0x3920);
+				break;
 		}
 	}
 

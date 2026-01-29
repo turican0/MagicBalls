@@ -16,9 +16,10 @@ var Main_Sounds: Node
 
 const KEY_INDEX := {
 	KEY_W: 0, # Forward
-	KEY_S: 1,  # Backward
+	KEY_S: 1, # Backward
 	KEY_A: 2, # Left
-	KEY_D: 3 # Right
+	KEY_D: 3,  # Right
+	KEY_SPACE: 4 # SPACE
 }
 
 const MOUSE_BUTTON_INDEX := {
@@ -193,6 +194,7 @@ func updatePlayer(playerPosRot) -> void:
 	
 var last_gain: Vector3
 var last_offset: Vector3
+var last_saturation: float
 
 var runned: bool
 
@@ -257,15 +259,16 @@ func _process(_p_delta) -> void:
 	var mods = Global.MBEX.getPaletteModifications()
 	var current_gain = mods[0]
 	var current_offset = mods[1]
-	var curreny_saturation = mods[2]
-	if current_gain != last_gain or current_offset != last_offset:
+	var current_saturation = mods[2]
+	if current_gain != last_gain or current_offset != last_offset or current_saturation != last_saturation:
 		if(!filter_material):
 			filter_material = Main_Filter.material as ShaderMaterial
 		filter_material.set_shader_parameter("MyGain", current_gain)
 		filter_material.set_shader_parameter("MyOffset", current_offset)
-		filter_material.set_shader_parameter("MySatMultiplier", curreny_saturation)
+		filter_material.set_shader_parameter("MySatMultiplier", current_saturation)
 		last_gain = current_gain
 		last_offset = current_offset
+		last_saturation = current_saturation
 	#var gain_vec = Vector3(gain_rgb.r, gain_rgb.g, gain_rgb.b)
 	#var offset_vec = Vector3(offset_rgb.r, offset_rgb.g, offset_rgb.b)	
 	#Main_Filter.material_override.set_shader_parameter("MyGain", gain_vec)
