@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5friqigqdh4k"]
+[gd_scene format=3 uid="uid://c5friqigqdh4k"]
 
 [ext_resource type="Script" uid="uid://deo0gxkmk2ahd" path="res://addons/sky_3d/src/Sky3D.gd" id="2_cejat"]
 [ext_resource type="Script" uid="uid://cjmkcj8hwm7ts" path="res://addons/sky_3d/src/TimeOfDay.gd" id="3"]
@@ -64,8 +64,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.87563074, 0.00016873542)
-shader_parameter/cirrus_position2 = Vector2(0.87563074, 0.00016873542)
+shader_parameter/cirrus_position1 = Vector2(0.5427985, 3.1371354e-05)
+shader_parameter/cirrus_position2 = Vector2(0.5427985, 3.1371354e-05)
 shader_parameter/cirrus_texture = ExtResource("6_1g8sw")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -75,7 +75,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(228.82156, 0.00084373244)
+shader_parameter/cumulus_position = Vector2(42.72546, 0.00015683858)
 shader_parameter/cumulus_texture = ExtResource("5_rt0jr")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -100,8 +100,8 @@ tonemap_mode = 3
 tonemap_white = 6.0
 ssr_enabled = true
 ssr_max_steps = 512
-ssr_fade_in = 1e-05
-ssr_fade_out = 1e-05
+ssr_fade_in = 2.7321188e-05
+ssr_fade_out = 0.000121257945
 ssr_depth_tolerance = 50.01
 fog_enabled = true
 fog_light_color = Color(0, 0, 0, 1)
@@ -109,14 +109,14 @@ fog_sky_affect = 0.68
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_d0ed4"]
 
-[node name="Node-Sky3D" type="Node3D"]
+[node name="Node-Sky3D" type="Node3D" unique_id=747953695]
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=399103503]
 update_mode = 1
 size = Vector3(2000, 2000, 2000)
 origin_offset = Vector3(0, 5, 0)
 
-[node name="Sky3D" type="WorldEnvironment" parent="."]
+[node name="Sky3D" type="WorldEnvironment" parent="." unique_id=1204469949]
 environment = SubResource("Environment_1g8sw")
 camera_attributes = SubResource("CameraAttributesPractical_d0ed4")
 script = ExtResource("2_cejat")
@@ -128,20 +128,20 @@ wind_speed = 7.000000000000001
 wind_direction = 1.5708
 metadata/_custom_type_script = "uid://deo0gxkmk2ahd"
 
-[node name="SunLight" type="DirectionalLight3D" parent="Sky3D"]
+[node name="SunLight" type="DirectionalLight3D" parent="Sky3D" unique_id=1463374010]
 transform = Transform3D(0.8181686, 0.3906089, -0.4219299, 0, 0.73381865, 0.67934537, 0.5749784, -0.55581903, 0.6003874, -0.4219299, 0.67934537, 0.6003874)
 shadow_enabled = true
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 600.0
 
-[node name="MoonLight" type="DirectionalLight3D" parent="Sky3D"]
+[node name="MoonLight" type="DirectionalLight3D" parent="Sky3D" unique_id=39954044]
 transform = Transform3D(0, -0.63291067, 0.77422476, 0.2738083, 0.7446372, 0.6087236, -0.96178424, 0.21198916, 0.17329621, 0.77422476, 0.6087236, 0.17329621)
 light_color = Color(0.572549, 0.776471, 0.956863, 1)
 light_energy = 0.0
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 256.0
 
-[node name="SkyDome" type="Node" parent="Sky3D"]
+[node name="SkyDome" type="Node" parent="Sky3D" unique_id=1143476875]
 script = ExtResource("4")
 sun_azimuth = -3.7541704
 sun_altitude = -0.82392615
@@ -152,7 +152,7 @@ fog_density = 0.01
 wind_speed = 7.000000000000001
 wind_direction = 1.5708
 
-[node name="TimeOfDay" type="Node" parent="Sky3D"]
+[node name="TimeOfDay" type="Node" parent="Sky3D" unique_id=185055937]
 script = ExtResource("3")
 editor_time_enabled = false
 game_time_enabled = false

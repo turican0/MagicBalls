@@ -22,10 +22,10 @@ var SPRITE_DIR6 = Global.convertdata+"HSCREEN/6/"
 var SPRITE_DIR = Global.convertdata+"HSCREEN/"
 
 var map_menu_selection: Array[Dictionary] = [
-	{"textIndex_0":"0x01D2", "help": "Exit", "dword_0": 0x0025F620, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0245, "ymin_12": 0x01AB, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0000, "byte_20": 0xF7, "byte_21": 0xF6, "byte_22": 0x0B, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0003]},
-	{"textIndex_0":"0x01D3", "help": "Restart Game", "dword_0": 0x0025F640, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0000, "ymin_12": 0x01AB, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0000, "byte_20": 0xF9, "byte_21": 0xF8, "byte_22": 0x10, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x0025, 0x015C, 0x0000, 0x0000, 0x003C, 0x0000, 0x01D3, 0x0000, 0x0003]},
-	{"textIndex_0":"0x0196", "help": "Load Game", "dword_0": 0x0025F800, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0000, "ymin_12": 0x0000, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0196, "byte_20": 0xFB, "byte_21": 0xFA, "byte_22": 0x09, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x001D, 0x003C, 0x0000, 0x0000, 0x00C8, 0x0000, 0x01A6, 0x0000, 0x0003]},
-	{"textIndex_0":"0x0195", "help": "Save Game", "dword_0": 0x0025F820, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0245, "ymin_12": 0x0000, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0195, "byte_20": 0xFD, "byte_21": 0xFC, "byte_22": 0x08, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x01FE, 0x003C, 0x0000, 0x0000, 0x00C8, 0x0000, 0x01A5, 0x0000, 0x0003]}
+	{"textIndex_0":0x01D2, "help": "Exit", "dword_0": 0x0025F620, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0245, "ymin_12": 0x01AB, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0000, "byte_20": 0xF7, "byte_21": 0xF6, "byte_22": 0x0B, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0003]},
+	{"textIndex_0":0x01D3, "help": "Restart Game", "dword_0": 0x0025F640, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0000, "ymin_12": 0x01AB, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0000, "byte_20": 0xF9, "byte_21": 0xF8, "byte_22": 0x10, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x0025, 0x015C, 0x0000, 0x0000, 0x003C, 0x0000, 0x01D3, 0x0000, 0x0003]},
+	{"textIndex_0":0x0196, "help": "Load Game", "dword_0": 0x0025F800, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0000, "ymin_12": 0x0000, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0196, "byte_20": 0xFB, "byte_21": 0xFA, "byte_22": 0x09, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x001D, 0x003C, 0x0000, 0x0000, 0x00C8, 0x0000, 0x01A6, 0x0000, 0x0003]},
+	{"textIndex_0":0x0195, "help": "Save Game", "dword_0": 0x0025F820, "dword_4": 0x00000000, "selected_8": 0x0000, "xmin_10": 0x0245, "ymin_12": 0x0000, "sizex_14": 0x0028, "sizey_16": 0x0046, "word_18": 0x0195, "byte_20": 0xFD, "byte_21": 0xFC, "byte_22": 0x08, "canSelect_23": 0x01, "gold_color_24": 0x00, "byte_25": 0x01, "str_26": [0x01FE, 0x003C, 0x0000, 0x0000, 0x00C8, 0x0000, 0x01A5, 0x0000, 0x0003]}
 ]
 
 #type_E24BCx str_E2516[5] = {
@@ -215,7 +215,7 @@ func _input(event):
 			spr.show()
 			#tooltip_label.text = "ID: 0x%X" % cfg2["dword_0"]
 			tooltip_label.text = cfg2["help"]
-			tooltip_label.text = Global.langTexts[int(cfg2["textIndex_0"])]
+			tooltip_label.text = Global.langTexts[cfg2["textIndex_0"]]
 			tooltip_label.show()
 			tooltip_label.position = Vector2(floor(mouse_pos.x + 10), floor(mouse_pos.y + 10))
 			
