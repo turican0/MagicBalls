@@ -22,8 +22,8 @@
 
 using namespace godot;
 
-class ExampleClass : public RefCounted {
-	GDCLASS(ExampleClass, RefCounted)
+class MBEXclass : public RefCounted {
+	GDCLASS(MBEXclass, RefCounted)
 
 
 private:
@@ -54,8 +54,8 @@ protected:
 	static void _bind_methods();
 
 public:
-	ExampleClass() = default;
-	~ExampleClass() override = default;
+	MBEXclass() = default;
+	~MBEXclass() override = default;
 
 	PackedByteArray deRNC(PackedByteArray bytearray);
 	//void MakeTerrain(PackedByteArray bytearray);

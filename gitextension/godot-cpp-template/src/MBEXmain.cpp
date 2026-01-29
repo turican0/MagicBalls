@@ -1,4 +1,4 @@
-#include "example_class.h"
+#include "MBEXmain.h"
 #include "MBEX/convertData.h"
 #include "remc2/utilities/DataFileRNC.h"
 #include "remc2/engine/Terrain.h"
@@ -20,37 +20,37 @@
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
-void ExampleClass::_bind_methods() {
-	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &ExampleClass::deRNC);
-	godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray", "text"), &ExampleClass::TerrainMake);
-	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight"), &ExampleClass::TerrainGetMapHeight);
-	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &ExampleClass::TerrainGetMapTerrainType);
-	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &ExampleClass::TerrainGetAngle);
-	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &ExampleClass::RunGameStep);
-	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &ExampleClass::GetEntites);
-	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &ExampleClass::GetPlayerPositionRotation);
-	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D"), &ExampleClass::set_mesh_instance);
-	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &ExampleClass::initialize_grid_data);
-	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh"), &ExampleClass::recalculate_mesh);
-	godot::ClassDB::bind_method(D_METHOD("renew_terrain"), &ExampleClass::renew_terrain);
-	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &ExampleClass::getActiveSpells);
-	godot::ClassDB::bind_method(D_METHOD("getSelectedSpells"), &ExampleClass::getSelectedSpells);
-	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &ExampleClass::setPlayerActiveSpell);
-	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &ExampleClass::getPaletteModifications);
-	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &ExampleClass::getMinimap);
-	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text", "text"), &ExampleClass::convertOriginalData);
-	godot::ClassDB::bind_method(D_METHOD("convertOriginalDataExtractCD", "text", "text"), &ExampleClass::convertOriginalDataExtractCD);
-	//godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &ExampleClass::soundQueueClear);
-	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &ExampleClass::getPendingSoundActions);
-	godot::ClassDB::bind_method(D_METHOD("getPendingGraphicsActions"), &ExampleClass::getPendingGraphicsActions);
-	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &ExampleClass::updateFreeSoundPlayers);
-	godot::ClassDB::bind_method(D_METHOD("playAnim", "Int"), &ExampleClass::playAnim);
-	godot::ClassDB::bind_method(D_METHOD("playAnimStep", "Int"), &ExampleClass::playAnimStep);
-	godot::ClassDB::bind_method(D_METHOD("getTexts"), &ExampleClass::getTexts);
-	godot::ClassDB::bind_method(D_METHOD("getVGABuffer"), &ExampleClass::getVGABuffer);
+void MBEXclass::_bind_methods() {
+	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &MBEXclass::deRNC);
+	godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray", "text"), &MBEXclass::TerrainMake);
+	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight"), &MBEXclass::TerrainGetMapHeight);
+	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &MBEXclass::TerrainGetMapTerrainType);
+	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &MBEXclass::TerrainGetAngle);
+	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &MBEXclass::RunGameStep);
+	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &MBEXclass::GetEntites);
+	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &MBEXclass::GetPlayerPositionRotation);
+	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D"), &MBEXclass::set_mesh_instance);
+	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &MBEXclass::initialize_grid_data);
+	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh"), &MBEXclass::recalculate_mesh);
+	godot::ClassDB::bind_method(D_METHOD("renew_terrain"), &MBEXclass::renew_terrain);
+	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &MBEXclass::getActiveSpells);
+	godot::ClassDB::bind_method(D_METHOD("getSelectedSpells"), &MBEXclass::getSelectedSpells);
+	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &MBEXclass::setPlayerActiveSpell);
+	godot::ClassDB::bind_method(D_METHOD("getPaletteModifications"), &MBEXclass::getPaletteModifications);
+	godot::ClassDB::bind_method(D_METHOD("getMinimap"), &MBEXclass::getMinimap);
+	godot::ClassDB::bind_method(D_METHOD("convertOriginalData", "text", "text"), &MBEXclass::convertOriginalData);
+	godot::ClassDB::bind_method(D_METHOD("convertOriginalDataExtractCD", "text", "text"), &MBEXclass::convertOriginalDataExtractCD);
+	//godot::ClassDB::bind_method(D_METHOD("soundQueueClear"), &MBEXclass::soundQueueClear);
+	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &MBEXclass::getPendingSoundActions);
+	godot::ClassDB::bind_method(D_METHOD("getPendingGraphicsActions"), &MBEXclass::getPendingGraphicsActions);
+	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &MBEXclass::updateFreeSoundPlayers);
+	godot::ClassDB::bind_method(D_METHOD("playAnim", "Int"), &MBEXclass::playAnim);
+	godot::ClassDB::bind_method(D_METHOD("playAnimStep", "Int"), &MBEXclass::playAnimStep);
+	godot::ClassDB::bind_method(D_METHOD("getTexts"), &MBEXclass::getTexts);
+	godot::ClassDB::bind_method(D_METHOD("getVGABuffer"), &MBEXclass::getVGABuffer);
 
-	godot::ClassDB::bind_method(D_METHOD("mapMenuInit"), &ExampleClass::mapMenuInit);
-	godot::ClassDB::bind_method(D_METHOD("mapMenuStep", "Int"), &ExampleClass::mapMenuStep);
+	godot::ClassDB::bind_method(D_METHOD("mapMenuInit"), &MBEXclass::mapMenuInit);
+	godot::ClassDB::bind_method(D_METHOD("mapMenuStep", "Int"), &MBEXclass::mapMenuStep);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -65,17 +65,17 @@ void ExampleClass::_bind_methods() {
 //DrawAndSoundDragonAndFire_81EE0-clean
 //NewGameSubdraw_81760 - portals
 
-void ExampleClass::convertOriginalDataExtractCD(String path, String path2) {
+void MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 	String real_path = ProjectSettings::get_singleton()->globalize_path(path);
 	String real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
 	MBEXcdExtract((char *)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
 }
 
-void ExampleClass::mapMenuInit() {
+void MBEXclass::mapMenuInit() {
 	NewGameDialog_77350_mod_Begin();
 }
 
-int ExampleClass::mapMenuStep(int run) {
+int MBEXclass::mapMenuStep(int run) {
 	if (run)
 		NewGameDialog_77350_mod_End();
 	else
@@ -149,7 +149,7 @@ void PlayInfoFmvEnd() {
 	x_WORD_180660_VGA_type_resolution = old_VGA_type_resolution;
 }
 
-void ExampleClass::playAnim(int index) {
+void MBEXclass::playAnim(int index) {
 	old_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
 	oldScreenWidth = screenWidth_18062C;
 	screenWidth_18062C = 320;
@@ -197,7 +197,7 @@ void ExampleClass::playAnim(int index) {
 	}
 }
 
-int ExampleClass::playAnimStep(int run) {
+int MBEXclass::playAnimStep(int run) {
 	if (run)
 		LastPressedKey_1806E4 = 20;
 	PlayInfoFmvStep();
@@ -208,12 +208,12 @@ int ExampleClass::playAnimStep(int run) {
 	return 0;
 }
 
-Array ExampleClass::getTexts() {
+Array MBEXclass::getTexts() {
 	Array result;
 	return result;
 }
 
-PackedByteArray ExampleClass::getVGABuffer() {
+PackedByteArray MBEXclass::getVGABuffer() {
 	PackedByteArray result;
 	result.resize(320 * 200 * 3);
 	uint8_t *write_ptr = result.ptrw();
@@ -227,7 +227,7 @@ PackedByteArray ExampleClass::getVGABuffer() {
 	return result;
 }
 
-void ExampleClass::updateFreeSoundPlayers(const godot::Array &p_indices) {
+void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 	std::vector<int> standard_vector;
 	standard_vector.reserve(p_indices.size());
 	for (int i = 0; i < p_indices.size(); i++) {
@@ -236,7 +236,7 @@ void ExampleClass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 	sound_update_playing(standard_vector);
 }
 
-void ExampleClass::convertOriginalData(String path, String path2) {
+void MBEXclass::convertOriginalData(String path, String path2) {
 	MBEXconvertData(path, path2);
 }
 
@@ -246,7 +246,7 @@ void ExampleClass::soundQueueClear() {
 }
 */
 
-Array ExampleClass::getPendingSoundActions() {
+Array MBEXclass::getPendingSoundActions() {
 	Array result;
 	std::vector<SoundAction> pending = sound_queue_get_pending_actions();
 	for (size_t i = 0; i < pending.size(); i++) {
@@ -262,7 +262,7 @@ Array ExampleClass::getPendingSoundActions() {
 	return result;
 }
 
-Array ExampleClass::getPendingGraphicsActions() {
+Array MBEXclass::getPendingGraphicsActions() {
 	Array result;
 	std::vector<GraphicsAction> pending = graphics_queue_get_pending_actions();
 	for (size_t i = 0; i < pending.size(); i++) {
@@ -287,7 +287,7 @@ typedef struct {
 	int mana2;
 } drawSpellInfoType;
 
-void ExampleClass::setPlayerActiveSpell(int spell_index, int button) {
+void MBEXclass::setPlayerActiveSpell(int spell_index, int button) {
 	switch (button) {
 		case 0: //left
 		{
@@ -348,7 +348,7 @@ drawSpellInfoType getDraWSpellInfo(type_event_0x6E8E *playerEvent) //20f260
 	return result;
 }
 
-Array ExampleClass::getSelectedSpells() {
+Array MBEXclass::getSelectedSpells() {
 	Array result;
 	drawSpellInfoType spellIndex;
 	type_event_0x6E8E* playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
@@ -377,7 +377,7 @@ Array ExampleClass::getSelectedSpells() {
 	return result;
 }
 
-Array ExampleClass::getActiveSpells() {
+Array MBEXclass::getActiveSpells() {
 	unsigned __int16 entityIndex;
 	type_event_0x6E8E *playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	uint8 color0 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][0];
@@ -452,7 +452,7 @@ Array ExampleClass::getActiveSpells() {
 }
 
 
-void ExampleClass::set_mesh_instance(Node *p_node) {
+void MBEXclass::set_mesh_instance(Node *p_node) {
 	if (!p_node) {
 		mesh_instance = nullptr;
 		return;
@@ -466,10 +466,10 @@ void ExampleClass::set_mesh_instance(Node *p_node) {
 	}
 }
 
-void ExampleClass::initialize_grid_data() {
+void MBEXclass::initialize_grid_data() {
 }
 
-void ExampleClass::recalculate_mesh() {
+void MBEXclass::recalculate_mesh() {
 	surface_tool.instantiate();	
 	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
 	surface_tool->set_custom_format(0, SurfaceTool::CUSTOM_RGBA_FLOAT);
@@ -510,7 +510,7 @@ void ExampleClass::recalculate_mesh() {
 	//renew_terrain();
 }
 
-void ExampleClass::renew_terrain() {
+void MBEXclass::renew_terrain() {
 	if (height_image.is_null())
 		initialize_heightmap();
 	if (control_image.is_null())
@@ -547,7 +547,7 @@ void ExampleClass::renew_terrain() {
 	update_gpu_controlmap();
 }
 
-void ExampleClass::update_gpu_heightmap() {
+void MBEXclass::update_gpu_heightmap() {
 	if (height_image.is_null())
 		initialize_heightmap();
 	PackedByteArray byte_array;
@@ -558,12 +558,12 @@ void ExampleClass::update_gpu_heightmap() {
 	height_texture->update(height_image);
 }
 
-void ExampleClass::update_gpu_controlmap() {
+void MBEXclass::update_gpu_controlmap() {
 	control_image->set_data(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8, control_data);
 	control_texture->update(control_image);
 }
 
-void ExampleClass::initialize_controlmap() {
+void MBEXclass::initialize_controlmap() {
 	control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
 	control_texture = ImageTexture::create_from_image(control_image);
 	if (mesh_instance) {
@@ -574,7 +574,7 @@ void ExampleClass::initialize_controlmap() {
 	}
 }
 
-void ExampleClass::initialize_heightmap() {
+void MBEXclass::initialize_heightmap() {
 	height_data.assign(GRID_SIZE * GRID_SIZE, 0.0f);
 	height_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
 	height_texture = ImageTexture::create_from_image(height_image);
@@ -586,7 +586,7 @@ void ExampleClass::initialize_heightmap() {
 	}
 }
 
-void ExampleClass::add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, Vector2 uv1, Vector2 uv2, Vector2 uv3,
+void MBEXclass::add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, Vector2 uv1, Vector2 uv2, Vector2 uv3,
 	Vector2 grid_p1, Vector2 grid_p2, Vector2 grid_p3, Vector2 main_p)
 {
 	Vector3 verts[] = { p1, p2, p3 };
@@ -607,7 +607,7 @@ void ExampleClass::add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, Vector2 uv1,
 	}
 }
 
-PackedByteArray ExampleClass::deRNC(PackedByteArray bytearray) {
+PackedByteArray MBEXclass::deRNC(PackedByteArray bytearray) {
 	int input_size = bytearray.size();
 	std::vector<uint8_t> src(input_size);
 	for (int i = 0; i < input_size; ++i)
@@ -622,40 +622,40 @@ PackedByteArray ExampleClass::deRNC(PackedByteArray bytearray) {
 	return result;
 }
 
-uint8_t ExampleClass::TerrainGetTileTerrainType(int index) {
+uint8_t MBEXclass::TerrainGetTileTerrainType(int index) {
 	if (index < 0 || index >= 65536)
 		return 0;
 	return mapTerrainType_10B4E0[index];
 }
 
-void ExampleClass::TerrainSetTileTerrainType(int index, uint8_t value) {
+void MBEXclass::TerrainSetTileTerrainType(int index, uint8_t value) {
 	if (index < 0 || index >= 65536)
 		return;
 	mapTerrainType_10B4E0[index] = value;
 }
 
-PackedByteArray ExampleClass::TerrainGetMapTerrainType() {
+PackedByteArray MBEXclass::TerrainGetMapTerrainType() {
 	PackedByteArray arr;
 	arr.resize(65536);
 	memcpy(arr.ptrw(), mapTerrainType_10B4E0, 65536);
 	return arr;
 }
 
-PackedByteArray ExampleClass::TerrainGetMapHeight() {
+PackedByteArray MBEXclass::TerrainGetMapHeight() {
 	PackedByteArray arr;
 	arr.resize(65536);
 	memcpy(arr.ptrw(), mapHeightmap_11B4E0, 65536);
 	return arr;
 }
 
-PackedByteArray ExampleClass::TerrainGetAngle() {
+PackedByteArray MBEXclass::TerrainGetAngle() {
 	PackedByteArray arr;
 	arr.resize(65536);
 	memcpy(arr.ptrw(), mapAngle_13B4E0, 65536);
 	return arr;
 }
 
-PackedFloat32Array ExampleClass::GetEntites() {
+PackedFloat32Array MBEXclass::GetEntites() {
 	PackedFloat32Array result;
 	int count = 1000;
 	result.resize(count * 31);
@@ -750,7 +750,7 @@ PackedFloat32Array ExampleClass::GetEntites() {
 	return result;
 }
 
-Ref<Image> ExampleClass::getMinimap() {
+Ref<Image> MBEXclass::getMinimap() {
 	int locViewportPosx;
 	int locViewportWidth;
 	int locViewportHeight;
@@ -901,7 +901,7 @@ float get_saturation(const Vector3 &col) {
 	return (cmax > 0.001f) ? chroma / cmax : 0.0f;
 }
 
-Array ExampleClass::getPaletteModifications() {
+Array MBEXclass::getPaletteModifications() {
 	Vector3 out_gain;
 	Vector3 out_offset;
 	float out_sat_multiplier;
@@ -942,7 +942,7 @@ Array ExampleClass::getPaletteModifications() {
 }
 
 uint32_t gameTurn = 0;
-void ExampleClass::RunGameStep(Dictionary inputs) {
+void MBEXclass::RunGameStep(Dictionary inputs) {
 
 	Array key_changes = inputs["key_changes"];
 	for (int i = 0; i < key_changes.size(); i++) {
@@ -1037,7 +1037,7 @@ void ExampleClass::RunGameStep(Dictionary inputs) {
 	x_DWORD_17DB54_game_turn2++;
 }
 
-Dictionary ExampleClass::GetPlayerPositionRotation() {
+Dictionary MBEXclass::GetPlayerPositionRotation() {
 	type_struct_0x1d1_2BDE_11695 raw_data = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1];
 	Dictionary res;
 
@@ -1058,7 +1058,7 @@ Dictionary ExampleClass::GetPlayerPositionRotation() {
 	return res;
 }
 
-void ExampleClass::TerrainMake(PackedByteArray bytearray, String cdPath) {
+void MBEXclass::TerrainMake(PackedByteArray bytearray, String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
 	const uint8_t *src = bytearray.ptr();

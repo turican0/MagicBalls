@@ -6,7 +6,7 @@ if(CMAKE_C_COMPILER)
 endif()
 
 set(LIBNAME "EXTENSION-NAME" CACHE STRING "The name of the library")
-set(GODOT_PROJECT_DIR "demo" CACHE STRING "The directory of a Godot project folder")
+set(GODOT_PROJECT_DIR "MBEXout" CACHE STRING "The directory of a Godot project folder")
 
 # Make sure all the dependencies are satisfied
 find_package(Python3 3.4 REQUIRED)
@@ -47,8 +47,8 @@ add_library(${LIBNAME} SHARED)
 
 target_sources(${LIBNAME}
     PRIVATE
-    src/example_class.cpp
-    src/example_class.h
+    src/MBEXmain.cpp
+    src/MBEXmain.h
     src/register_types.cpp
     src/register_types.h
     src/remc2/engine/Animation.cpp

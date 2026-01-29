@@ -446,7 +446,7 @@ func getVGABuffer():
 
 func MBEXinit():
 	if !Global.MBEX:
-		Global.MBEX = ExampleClass.new()
+		Global.MBEX = MBEXclass.new()
 
 func MBEXconvert(path, path2):
 	Global.MBEX.convertOriginalData(path,path2)
