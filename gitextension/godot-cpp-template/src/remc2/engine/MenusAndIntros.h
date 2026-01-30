@@ -136,6 +136,8 @@ extern Type_DWORD_17DE28str x_DWORD_17DE28str;
 extern type_WORD_E20A4 str_WORD_E20A4[];
 extern type_WORD_E1F84 str_E23E0[];
 extern type_E24BCx str_E2516[];
+extern char x_BYTE_E29DE;
+extern char x_BYTE_E29E1;
 
 // functions
 void MenusAndIntros_76930(bool skipMenus = false);

@@ -60,7 +60,7 @@ public:
 	PackedByteArray deRNC(PackedByteArray bytearray);
 	//void MakeTerrain(PackedByteArray bytearray);
 
-	void TerrainMake(PackedByteArray bytearray, String cdPath);
+	//void TerrainMake(PackedByteArray bytearray, String cdPath);
 	void RunGameStep(Dictionary inputs);
 	Dictionary GetPlayerPositionRotation();
 	PackedFloat32Array GetEntites();
@@ -96,4 +96,18 @@ public:
 	int mapMenuStep(int run);
 	Dictionary getLangTexts();
 	void changeLanguage(int index);
+
+	void REMC2BeginGame(String cdPath);
+	void REMC2EndGame();
+	void REMC2BeginItem();
+	void REMC2EndItem();
+	void REMC2BeginAnim();
+	void REMC2EndAnim();
+	void REMC2CycleAnim();
+	void REMC2BeginMap();
+	void REMC2EndMap();
+	void REMC2CycleMap();
+	void REMC2BeginInGame();
+	void REMC2EndInGame();
+	void REMC2CycleInGame();
 	};

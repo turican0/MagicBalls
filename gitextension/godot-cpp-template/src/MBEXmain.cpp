@@ -22,7 +22,7 @@
 
 void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &MBEXclass::deRNC);
-	godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray", "text"), &MBEXclass::TerrainMake);
+	//godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray", "text"), &MBEXclass::TerrainMake);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight"), &MBEXclass::TerrainGetMapHeight);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &MBEXclass::TerrainGetMapTerrainType);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &MBEXclass::TerrainGetAngle);
@@ -52,6 +52,20 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("mapMenuStep", "Int"), &MBEXclass::mapMenuStep);
 	godot::ClassDB::bind_method(D_METHOD("getLangTexts"), &MBEXclass::getLangTexts);
 	godot::ClassDB::bind_method(D_METHOD("changeLanguage", "Int"), &MBEXclass::changeLanguage);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text"), &MBEXclass::REMC2BeginGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginItem"), &MBEXclass::REMC2BeginItem);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EndItem"), &MBEXclass::REMC2EndItem);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim"), &MBEXclass::REMC2BeginAnim);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EndAnim"), &MBEXclass::REMC2EndAnim);
+	godot::ClassDB::bind_method(D_METHOD("REMC2CycleAnim"), &MBEXclass::REMC2CycleAnim);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap"), &MBEXclass::REMC2BeginMap);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EndMap"), &MBEXclass::REMC2EndMap);
+	godot::ClassDB::bind_method(D_METHOD("REMC2CycleMap"), &MBEXclass::REMC2CycleMap);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2CycleInGame"), &MBEXclass::REMC2CycleInGame);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -1069,7 +1083,7 @@ Dictionary MBEXclass::GetPlayerPositionRotation() {
 	return res;
 }
 
-void TerrainMake_old(PackedByteArray bytearray, String cdPath) {
+void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
 	const uint8_t *src = bytearray.ptr();
@@ -1228,12 +1242,45 @@ void REMC2begin(String cdPath) {
 	sub_main_mod_begin((char*)real_cdPath.utf8().get_data());
 }
 
-void MBEXclass::TerrainMake(PackedByteArray bytearray, String cdPath) {
+void MBEXclass::REMC2BeginGame(String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 	REMC2begin(real_cdPath);
 }
 
-void REMC2end() {
+void MBEXclass::REMC2EndGame() {
 	sub_main_mod_end();
 	support_end();
+}
+
+void MBEXclass::REMC2BeginItem() {
+}
+
+void MBEXclass::REMC2EndItem() {
+}
+
+void MBEXclass::REMC2BeginAnim() {
+}
+
+void MBEXclass::REMC2EndAnim() {
+}
+
+void MBEXclass::REMC2CycleAnim() {
+}
+
+void MBEXclass::REMC2BeginMap() {
+}
+
+void MBEXclass::REMC2EndMap() {
+}
+
+void MBEXclass::REMC2CycleMap() {
+}
+
+void MBEXclass::REMC2BeginInGame() {
+}
+
+void MBEXclass::REMC2EndInGame() {
+}
+
+void MBEXclass::REMC2CycleInGame() {
 }
