@@ -1261,12 +1261,16 @@ void MBEXclass::REMC2EndGame() {
 	support_end();
 }
 
+bool inMenuItems = false;
+
 void MBEXclass::REMC2BeginItem() {
-	sub_46830_main_loop_mod_begin_cycle();
+	if (!inMenuItems)
+		sub_46830_main_loop_mod_begin_cycle();
 }
 
 void MBEXclass::REMC2EndItem() {
-	sub_46830_main_loop_mod_end_cycle();
+	inMenuItems = true;
+	//sub_46830_main_loop_mod_end_cycle();
 }
 
 void MBEXclass::REMC2BeginAnim(int animIndex) {

@@ -1521,7 +1521,7 @@ void sub_46830_main_loop_mod_end_cycle() //227830
   //graphics already inited
   //skip while (1) {
 		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
-		REMC2mod_isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
+			REMC2mod_isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
 			sub_47FC0_load_screen(REMC2mod_isSecretLevel); //vga smaltitle
 			Logger->debug("sub_46830_main_loop:load scr passed");
 			LevelInitGame_56A30(REMC2mod_setLevel, REMC2mod_customLevelPath);
@@ -1712,7 +1712,7 @@ support_begin();//game-REMC2BeginGame
 				PlayInfoFmv_mod_end()//action-anim-REMC2EndAnim
 			Intros_76D10_mod_end(int animIndex);//action-anim
 -------------------------------------------------------------------------
-		sub_46830_main_loop_mod_end_cycle();//action
+		sub_46830_main_loop_mod_end_cycle();//action - can run this
 -------------------------------------------------------------------------
 	sub_main_mod_end();//game-REMC2EndGame
 support_end();//game

@@ -436,7 +436,7 @@ func init():
 	
 func playAnim(index:int):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
-	#Global.MBEX.playAnim(index)	
+	#Global.MBEX.playAnim(index)
 	Global.MBEX.REMC2BeginItem()
 	Global.MBEX.REMC2BeginAnim(index)
 	changeLanguage(2)#only temporary fix
