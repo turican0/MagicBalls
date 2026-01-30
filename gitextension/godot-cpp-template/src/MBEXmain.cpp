@@ -1236,15 +1236,11 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	}
 }
 
-void REMC2begin(String cdPath) {
-	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
-	support_begin();
-	sub_main_mod_begin((char*)real_cdPath.utf8().get_data());
-}
-
 void MBEXclass::REMC2BeginGame(String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
-	REMC2begin(real_cdPath);
+
+	support_begin();
+	sub_main_mod_begin((char *)real_cdPath.utf8().get_data());
 }
 
 void MBEXclass::REMC2EndGame() {
@@ -1253,15 +1249,23 @@ void MBEXclass::REMC2EndGame() {
 }
 
 void MBEXclass::REMC2BeginItem() {
+	actAction_begin();
+	sub_46830_main_loop_mod_begin_cycle(signed int a2, unsigned __int16 a3);
+	MainMenu_76FA0_begin();
 }
 
 void MBEXclass::REMC2EndItem() {
+	MainMenu_76FA0_end();
+	sub_46830_main_loop_mod_end_cycle(signed int a2, unsigned __int16 a3);
+	actAction_end();
 }
 
 void MBEXclass::REMC2BeginAnim() {
+	Intro_begin();
 }
 
 void MBEXclass::REMC2EndAnim() {
+	Intro_end();
 }
 
 void MBEXclass::REMC2CycleAnim() {

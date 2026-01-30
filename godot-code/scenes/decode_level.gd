@@ -440,7 +440,16 @@ func init():
 	if(Global.terrainInited):
 		return
 	Global.terrainInited = true
-	loadlevel(0)
+	Global.MBEX.REMC2BeginGame(Global.cdPath)
+	Global.MBEX.REMC2BeginItem()
+	Global.MBEX.REMC2BeginAnim()
+	#loadlevel(0)
+
+func exitGame():
+	Global.MBEX.REMC2EndAnim()
+	Global.MBEX.REMC2EndItem()
+	Global.MBEX.REMC2EndGame()
+
 	
 func setMesh():
 	Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainMB").mesh_instance)
