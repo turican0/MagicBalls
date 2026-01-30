@@ -421,6 +421,7 @@ extern POSITION x_DWORD_F4720;
 extern char x_BYTE_D4B50;
 extern char x_BYTE_D4B51;
 extern char x_BYTE_DB734;
+extern int resindex_begin;
 
 void sub_86BD0_freemem1();
 void j___delay(x_DWORD); // weak
@@ -1585,4 +1586,10 @@ void sub_58F00_game_objectives();
 void sub_57570();
 void sub_575C0();
 signed int sub_5C3D0_file_decompress(uint8_t* a1, uint8_t* a2);
+void sub_48350();
+void sub_47FC0_load_screen(bool isSecretLevel);
+void sub_53CC0_close_movie();
+void sub_59BF0_sound_proc11_volume();
+void sub_5C530();
+void sub_713A0();
 #endif

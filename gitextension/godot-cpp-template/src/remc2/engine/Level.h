@@ -31,3 +31,4 @@ void sub_712F0();
 void sub_71A70_setTmaps(MapType_t a1);
 int GetSpellManaCost_6D710(type_event_0x6E8E* event, uint8 spellIndex, uint8 subSpellIndex);
 void sub_83CC0(char a1);
+void sub_47160();

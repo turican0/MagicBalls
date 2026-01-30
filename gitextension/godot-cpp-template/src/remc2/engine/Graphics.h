@@ -13,5 +13,7 @@ extern int16_t x_WORD_180662_graphics_handle;
 extern bitmap_pos_struct2_t* x_DWORD_D4188;
 extern bitmap_pos_struct2_t* x_DWORD_D418C;
 extern bitmap_pos_struct2_t* x_DWORD_D4190;
+extern GameRenderInterface *m_ptrGameRender;
 
 void sub_A0D50_set_viewport(uint16_t posX, uint16_t posY, uint16_t width, uint16_t height);
+

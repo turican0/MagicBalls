@@ -1,8 +1,10 @@
-grass shader omezit dle textury
-upravit vysku objektu dle terenu
-upravit mechches dle terenu
-upravit pohyb hrace
-pridat hranice
-zobrazit ruzna kouzla
-pridat kulicky start a cil
-pridat zvuky a finalni sekvenci
+-strech mainMenu
+-analyze seounds in game
+-remove all MC2 data from res
+-better REMC2 code using
+-add help text to mainMenu
+-add help text to mapMenu
+-add help text to game
+-add UI to game
+-add sound to mainMenu
+-add 

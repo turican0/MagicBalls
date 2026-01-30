@@ -1069,7 +1069,7 @@ Dictionary MBEXclass::GetPlayerPositionRotation() {
 	return res;
 }
 
-void MBEXclass::TerrainMake(PackedByteArray bytearray, String cdPath) {
+void TerrainMake_old(PackedByteArray bytearray, String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
 	const uint8_t *src = bytearray.ptr();
@@ -1220,4 +1220,20 @@ void MBEXclass::TerrainMake(PackedByteArray bytearray, String cdPath) {
 				break;
 		}
 	}
+}
+
+void REMC2begin(String cdPath) {
+	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+	support_begin();
+	sub_main_mod_begin((char*)real_cdPath.utf8().get_data());
+}
+
+void MBEXclass::TerrainMake(PackedByteArray bytearray, String cdPath) {
+	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+	REMC2begin(real_cdPath);
+}
+
+void REMC2end() {
+	sub_main_mod_end();
+	support_end();
 }

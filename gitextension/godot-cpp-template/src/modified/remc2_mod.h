@@ -5,6 +5,10 @@
 #include "../remc2/engine/PlayerInput.h"
 #include "../remc2/engine/DatTabIndexes.h"
 
+#include "../remc2/engine/Graphics.h"
+#include "../remc2/engine/Level.h"
+#include "../remc2/engine/Network.h"
+
 struct GraphicsAction {
 	std::string action;
 	int x = 0;
@@ -20,3 +24,6 @@ void graphics_queue_add_action(const std::string &action, int x, int y, int inde
 std::vector<GraphicsAction> graphics_queue_get_pending_actions();
 void graphics_queue_clear();
 void InitLanguage_76A40_mod_only_language();
+
+int sub_main_mod_begin(char *real_cdPathch);
+void sub_main_mod_end();
