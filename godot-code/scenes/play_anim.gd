@@ -88,6 +88,7 @@ func animInit():
 	Main_DecodeLevel.playAnim(animIndex)
 	
 func endAnim():
+	Main_DecodeLevel.playAnimEnd()
 	emit_signal("video_finished")
 
 	

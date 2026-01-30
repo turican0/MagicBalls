@@ -1,14 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://ci1vd6s1nadat"]
+[gd_scene format=3 uid="uid://ci1vd6s1nadat"]
 
 [ext_resource type="Script" uid="uid://udn2sfd371fu" path="res://scenes/play_anim.gd" id="1_b8mwy"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_tboif"]
 [ext_resource type="Script" uid="uid://cahajskbdcnlw" path="res://scenes/sounds.gd" id="3_tn81r"]
 [ext_resource type="Script" uid="uid://bf1vnufu7na6x" path="res://addons/midi/MidiPlayer.gd" id="4_3gbyg"]
 
-[node name="PlayAnim" type="Node3D"]
+[node name="PlayAnim" type="Node3D" unique_id=1484951253]
 script = ExtResource("1_b8mwy")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=399428067]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,21 +16,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="Control"]
+[node name="Sprite2D" type="Sprite2D" parent="Control" unique_id=1044138783]
 
-[node name="DecodeLevel" type="Node3D" parent="."]
+[node name="DecodeLevel" type="Node3D" parent="." unique_id=1278233267]
 script = ExtResource("2_tboif")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"
 
-[node name="Sounds" type="Node3D" parent="."]
+[node name="Sounds" type="Node3D" parent="." unique_id=1466550021]
 script = ExtResource("3_tn81r")
 
-[node name="MidiPlayer" type="Node" parent="Sounds"]
+[node name="MidiPlayer" type="Node" parent="Sounds" unique_id=854680923]
 script = ExtResource("4_3gbyg")
 file = "res://convertdata/musics/000_C2GAME1.mid"
 volume_db = -80.0
 soundfont = "res://soundfont/GeneralUser GS v1.472.sf2"
 metadata/_custom_type_script = "uid://bf1vnufu7na6x"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Sounds"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Sounds" unique_id=1734040972]

@@ -57,9 +57,9 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginItem"), &MBEXclass::REMC2BeginItem);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndItem"), &MBEXclass::REMC2EndItem);
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim"), &MBEXclass::REMC2BeginAnim);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim", "Int"), &MBEXclass::REMC2BeginAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndAnim"), &MBEXclass::REMC2EndAnim);
-	godot::ClassDB::bind_method(D_METHOD("REMC2CycleAnim"), &MBEXclass::REMC2CycleAnim);
+	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Int"), &MBEXclass::REMC2StepAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap"), &MBEXclass::REMC2BeginMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndMap"), &MBEXclass::REMC2EndMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2CycleMap"), &MBEXclass::REMC2CycleMap);
@@ -113,6 +113,7 @@ Dictionary MBEXclass::getLangTexts() {
 	return result;
 }
 
+/*
 FILE *animTempfile;
 Type_SoundEvent_E17CC* tempPSoundEvent;
 void PlayInfoFmvBegin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent, char *path)
@@ -140,7 +141,8 @@ void PlayInfoFmvBegin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent
 		x_WORD_17DB5C = a1;
 	}
 }
-
+*/
+/*
 bool endAnim = false;
 
 void PlayInfoFmvStep() {
@@ -162,19 +164,22 @@ void PlayInfoFmvStep() {
 	} else
 		endAnim = true;
 }
-
+*/
 int oldScreenWidth;
 int old_VGA_type_resolution;
 
 void PlayInfoFmvEnd() {
+	/*
 	if (animTempfile) {
 		DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
 	}
 	screenWidth_18062C = oldScreenWidth;
 	x_WORD_180660_VGA_type_resolution = old_VGA_type_resolution;
+	*/
 }
 
 void MBEXclass::playAnim(int index) {
+	/*
 	memset(pdwScreenBuffer_351628, 0, 640 * 480); //clear screen buffer
 
 	old_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
@@ -222,9 +227,11 @@ void MBEXclass::playAnim(int index) {
 			PlayInfoFmvBegin(1, 1, str_E17CC_0x160, dataPath);
 			break;
 	}
+	*/
 }
 
 int MBEXclass::playAnimStep(int run) {
+	/*
 	if (run)
 		LastPressedKey_1806E4 = 20;
 	PlayInfoFmvStep();
@@ -232,6 +239,7 @@ int MBEXclass::playAnimStep(int run) {
 		PlayInfoFmvEnd();
 		return 1;
 	}
+	*/
 	return 0;
 }
 
@@ -1239,8 +1247,13 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 void MBEXclass::REMC2BeginGame(String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
+	int argc = 1;
+	char *argv[] = { "game.exe", nullptr };
+
+	CommandLineParams.Init(argc, argv);
+
 	support_begin();
-	sub_main_mod_begin((char *)real_cdPath.utf8().get_data());
+	sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
 }
 
 void MBEXclass::REMC2EndGame() {
@@ -1249,26 +1262,50 @@ void MBEXclass::REMC2EndGame() {
 }
 
 void MBEXclass::REMC2BeginItem() {
-	actAction_begin();
-	sub_46830_main_loop_mod_begin_cycle(signed int a2, unsigned __int16 a3);
-	MainMenu_76FA0_begin();
+	sub_46830_main_loop_mod_begin_cycle();
 }
 
 void MBEXclass::REMC2EndItem() {
-	MainMenu_76FA0_end();
-	sub_46830_main_loop_mod_end_cycle(signed int a2, unsigned __int16 a3);
-	actAction_end();
+	sub_46830_main_loop_mod_end_cycle();
 }
 
-void MBEXclass::REMC2BeginAnim() {
-	Intro_begin();
+void MBEXclass::REMC2BeginAnim(int animIndex) {
+	Intros_76D10_mod_begin(0);
+
+	memset(pdwScreenBuffer_351628, 0, 640 * 480); //clear screen buffer
+	/*
+	old_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
+	oldScreenWidth = screenWidth_18062C;
+	screenWidth_18062C = 320;
+	x_WORD_180660_VGA_type_resolution = 1;
+	*/
+
+	char introPath[MAX_PATH];
+	if (animIndex == 0) {
+		sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTEL.DAT");
+		PlayInfoFmv_mod_begin(1, 1, str_E17CC_0, introPath);
+	}
+	else if (animIndex == 1) {
+		sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
+		PlayInfoFmv_mod_begin(1, 1, str_E17CC_0, introPath);
+	} else if (animIndex == 2) {
+		sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+		PlayInfoFmv_mod_begin(1, 1, str_E17CC_0x160, introPath);
+	}
 }
 
 void MBEXclass::REMC2EndAnim() {
-	Intro_end();
+	PlayInfoFmv_mod_end();
+	Intros_76D10_mod_end(0);
 }
 
-void MBEXclass::REMC2CycleAnim() {
+int MBEXclass::REMC2StepAnim(int run) {
+	if (run)
+		LastPressedKey_1806E4 = 20;
+	if (PlayInfoFmv_mod_step()) {
+		PlayInfoFmvEnd();
+		return 1;
+	}
 }
 
 void MBEXclass::REMC2BeginMap() {

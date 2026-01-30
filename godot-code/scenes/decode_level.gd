@@ -211,19 +211,9 @@ func mapMenuStep(endMapMenu:int):
 	var mapMenuOut=Global.MBEX.mapMenuStep(endMapMenu)
 	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
-	
+
 func getSpritesActions():
 	return Global.MBEX.getPendingGraphicsActions()
-	
-func playAnim(index:int):
-	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
-	Global.MBEX.playAnim(index)
-	
-func playAnimStep(endAnimIn:int) -> int:
-	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
-	var endAnimOut=Global.MBEX.playAnimStep(endAnimIn)	
-	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
-	return endAnimOut
 
 func changeLanguage(langIndex):
 	Global.MBEX.changeLanguage(langIndex)
@@ -439,15 +429,31 @@ func getInputs():
 func init():
 	if(Global.terrainInited):
 		return
+	MBEXinit()
 	Global.terrainInited = true
-	Global.MBEX.REMC2BeginGame(Global.cdPath)
-	Global.MBEX.REMC2BeginItem()
-	Global.MBEX.REMC2BeginAnim()
+	Global.MBEX.REMC2BeginGame(Global.cdPath)	
 	#loadlevel(0)
+	
+func playAnim(index:int):
+	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	#Global.MBEX.playAnim(index)	
+	Global.MBEX.REMC2BeginItem()
+	Global.MBEX.REMC2BeginAnim(index)
+	changeLanguage(2)#only temporary fix
 
-func exitGame():
+func playAnimStep(endAnimIn:int) -> int:
+	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	#var endAnimOut=Global.MBEX.playAnimStep(endAnimIn)
+	var endAnimOut=Global.MBEX.REMC2StepAnim(endAnimIn)
+	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	return endAnimOut
+	
+func playAnimEnd():
 	Global.MBEX.REMC2EndAnim()
 	Global.MBEX.REMC2EndItem()
+	
+
+func exitGame():	
 	Global.MBEX.REMC2EndGame()
 
 	

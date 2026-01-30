@@ -78,7 +78,7 @@ func load_sounds_from_dir(path: String):
 				if parts.size() >= 2:
 					var pack_idx = parts[0].to_int()
 					var sound_idx = parts[1].to_int()
-					var full_path = path + file_name
+					#var full_path = path + file_name
 					#var stream = _load_wav_as_sample(full_path)  
 					#var stream = ResourceLoader.load(full_path, "AudioStream", ResourceLoader.CACHE_MODE_REUSE)
 					var stream = Global.load_external_audio(path + file_name)

@@ -25,5 +25,13 @@ std::vector<GraphicsAction> graphics_queue_get_pending_actions();
 void graphics_queue_clear();
 void InitLanguage_76A40_mod_only_language();
 
-int sub_main_mod_begin(char *real_cdPathch);
+void sub_main_mod_begin(int argc, char **argv, char *real_cdPathch);
 void sub_main_mod_end();
+void sub_46830_main_loop_mod_begin_cycle();
+void sub_46830_main_loop_mod_end_cycle();
+void Intro_begin(int introType);
+void Intros_76D10_mod_begin(char introType);
+void PlayInfoFmv_mod_begin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent, char *path);
+void PlayInfoFmv_mod_end();
+void Intros_76D10_mod_end(char introType);
+bool PlayInfoFmv_mod_step();

@@ -1303,6 +1303,135 @@ void sub_46830_main_loop_mod_before_cycle(signed int a2, unsigned __int16 a3) //
 		REMC2mod_skipMenus = true;
 }
 
+bool endAnim = false;
+
+FILE *animTempfile;
+Type_SoundEvent_E17CC *tempPSoundEvent;
+void PlayInfoFmv_mod_begin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent, char *path) {
+	tempPSoundEvent = pSoundEvent;
+	x_WORD_E12FC = a2;
+	x_WORD_D4004 = 0;
+	x_WORD_17DB58 = 0;
+	ActualKeyframe_17DB60 = 0;
+	x_DWORD_E12F4x = (TColor *)pdwScreenBuffer_351628;
+	animTempfile = DataFileIO::CreateOrOpenFile(path, 512);
+	x_DWORD_17DB38_intro_file_handle = animTempfile;
+	if (animTempfile) {
+		DataFileIO::Read(animTempfile, unk_17DB40, 12); //ecx=12
+		LastKeyframe_17DB46 = *(int16_t *)&unk_17DB40[6];
+		x_WORD_17DB48 = *(int16_t *)&unk_17DB40[8];
+		x_WORD_17DB4A = *(int16_t *)&unk_17DB40[10];
+		x_WORD_180744_mouse_right_button = 0;
+		x_WORD_180746_mouse_left_button = 0;
+		x_DWORD_E1300 += 12;
+		LastPressedKey_1806E4 = 0;
+		x_WORD_17DB5A = 0;
+		FlvInitSet_473B0(); //2283b0
+		x_WORD_17DB5C = a1;
+	}
+}
+
+bool PlayInfoFmv_mod_step() {
+	if ((LastPressedKey_1806E4 != 1) && (!endAnim) && animTempfile) {
+		SetFrameStart(std::chrono::system_clock::now());
+		if (x_WORD_17DB5A)
+			endAnim = true;
+		else {
+			if (ActualKeyframe_17DB60 >= LastKeyframe_17DB46 - 1) //34eb60 a 34eb46
+				endAnim = true;
+			else {
+				PlayIntoSoundEvents_1B280(tempPSoundEvent);
+				sub_75DB0();
+				sub_75E70();
+				ActualKeyframe_17DB60++;
+			}
+		}
+	} else
+		endAnim = true;
+	return endAnim;
+}
+
+void PlayInfoFmv_mod_end() {
+	if (animTempfile) {
+		DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
+	}
+	//screenWidth_18062C = oldScreenWidth;
+	//x_WORD_180660_VGA_type_resolution = old_VGA_type_resolution;
+}
+
+void Intros_76D10_mod_begin(char introType) //257d10
+{
+	char dataPath[MAX_PATH];
+	x_DWORD_17DE38str.x_DWORD_17DE54 = &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787];
+	x_DWORD_17DE38str.x_DWORD_17DEC0 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[308527];
+	x_DWORD_17DE38str.x_DWORD_17DEC4 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[310159];
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
+	sub_7AA70_load_and_decompres_dat_file(dataPath, &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787], 0x164FCD, 0x35C);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DEC0, 0x165329, 0x224);
+	sub_7AA70_load_and_decompres_dat_file(0, 0, 0, 0);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+	else
+		sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+
+	sub_2EB40();
+	if (soundAble_E3798 && x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex == 2) {
+		x_BYTE_D41C1 = 0;
+		x_BYTE_D41C0 = 0;
+	} else {
+		x_BYTE_D41C0 = 1;
+		x_BYTE_D41C1 = 1;
+	}
+	sub_8CD27_set_cursor((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]);
+	/*skip
+	switch (introType) {
+		case 0:
+#ifndef debug_hide_graphics
+//skip		ShowWelcomeScreen_83850();//frog logo and wait
+#endif
+			PlayInfoFmv(1, 1, str_E17CC_0, introPath); //257160 intro .. 2b27cc
+			sub_2EB40();
+			x_BYTE_D41C1 = 0;
+			x_BYTE_D41C0 = 0;
+			while (sub_9A10A_check_keyboard()) {
+				LastPressedKey_1806E4 = 0;
+				sub_7A060_get_mouse_and_keyboard_events();
+			}
+			j___delay(50);
+			sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+			PlayInfoFmv(1, 1, str_E17CC_0x160, introPath); //E192C
+			break;
+		case 1:
+			PlayInfoFmv(1, 1, str_E17CC_0, introPath);
+			break;
+		case 2:
+			LastPressedKey_1806E4 = 0;
+			x_BYTE_D41C1 = 0;
+			x_BYTE_D41C0 = 0;
+			sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+			PlayInfoFmv(1, 1, str_E17CC_0x160, introPath); //E192C
+			break;
+	}
+*/
+}
+
+void Intros_76D10_mod_end(char introType) //257d10
+{	
+	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+	EndSample_8D8F0();
+	StopMusic_8E020();
+	FadeClearBlit_7B5D0();
+	nextMenu_E29D8 = MenuItem::MainMenu;
+	x_BYTE_D41C0 = 0;
+	x_BYTE_D41C1 = 0;
+	if (sub_9A10A_check_keyboard())
+		sub_7A060_get_mouse_and_keyboard_events();
+	x_DWORD_17DE38str.x_BYTE_17DF11_last_key_status = 0;
+	x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
+	if (!introType)
+		LoadAndSetGraphicsAndPalette_7AC00();
+}
+
 void MenusAndIntros_76930_mod_begin(bool skipMenus) //257930
 {
 	//1 -351660
@@ -1327,7 +1456,10 @@ void MenusAndIntros_76930_mod_begin(bool skipMenus) //257930
 	sub_7BEC0(); //25CEC0
 	SetCenterScreenForFlyAssistant_6EDB0(); //24FDB0
 	WriteConfigDat_81DB0(); //262DB0
-/*
+
+	InitLanguage_76A40();
+	SetToIntro_76CF0();
+	/*
 	do {
 		//skip g_state_monitor.Update();
 		//2b39d8
@@ -1361,42 +1493,6 @@ void MenusAndIntros_76930_mod_begin(bool skipMenus) //257930
 */
 }
 
-void GameBegin() {
-}
-
-void GameEnd() {
-}
-
-void GameCycle() {
-}
-
-void MapMenuBegin() {
-	MainMenu_76FA0();
-}
-
-void MapMenuEnd() {
-}
-
-void MapMenuCycle() {
-}
-
-void MainMenu_76FA0_begin() {
-	MainMenu_76FA0();
-}
-
-void MainMenu_76FA0_end() {
-}
-
-void Intro_begin() {
-	Intros_76D10(0);
-}
-
-void Intro_end() {
-}
-
-void Intro_cycle() {
-}
-
 void MenusAndIntros_76930_mod_end(bool skipMenus) //257930
 {
 	sub_7ADE0(x_BYTE_E29DE);
@@ -1405,7 +1501,7 @@ void MenusAndIntros_76930_mod_end(bool skipMenus) //257930
 	WriteConfigDat_81DB0();
 }
 
-void sub_46830_main_loop_mod_begin_cycle(signed int a2, unsigned __int16 a3) //227830
+void sub_46830_main_loop_mod_begin_cycle() //227830
 { //graphics already inited
 	//skip while (1) {
 		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
@@ -1416,7 +1512,10 @@ void sub_46830_main_loop_mod_begin_cycle(signed int a2, unsigned __int16 a3) //2
 	//skip }
 }
 
-void sub_46830_main_loop_mod_end_cycle(signed int a2, unsigned __int16 a3) //227830
+int REMC2_tempa2;
+int REMC2_tempa3;
+
+void sub_46830_main_loop_mod_end_cycle() //227830
 {
   MenusAndIntros_76930_mod_end(REMC2mod_skipMenus); //added
   //graphics already inited
@@ -1460,7 +1559,7 @@ void sub_46830_main_loop_mod_end_cycle(signed int a2, unsigned __int16 a3) //227
 						}
 					}
 				}
-				InGameLoop_47320(a2);
+				InGameLoop_47320(REMC2_tempa2);
 				if (m_ptrGameRender != nullptr) {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
@@ -1487,7 +1586,7 @@ void sub_46830_main_loop_mod_end_cycle(signed int a2, unsigned __int16 a3) //227
 				}
 				sub_713A0();
 				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 4) {
-					sub_56D60(a3, 0);
+					sub_56D60(REMC2_tempa3, 0);
 					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] = 4;
 				} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
 					sub_5C530();
@@ -1497,18 +1596,17 @@ void sub_46830_main_loop_mod_end_cycle(signed int a2, unsigned __int16 a3) //227
 					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] |= 8;
 				}
 				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x10) {
-					a3 = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w;
-					if (a3 >= 0x18u) {
+					if (x_D41A0_BYTEARRAY_4_struct.levelnumber_43w >= 0x18u) {
 						if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2)
 							sub_5C530();
 						break;
 					}
 					if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
-						Type_SecretMapScreenPortals_E2970 *secretMapScreenPortal = GetSecretAndActivedPortal_824B0(a3);
+						Type_SecretMapScreenPortals_E2970 *secretMapScreenPortal = GetSecretAndActivedPortal_824B0(REMC2_tempa3);
 						if (secretMapScreenPortal) {
 							x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = secretMapScreenPortal->levelNumber_6;
 							sub_47FC0_load_screen(true);
-							LevelInitGame_56A30(a3);
+							LevelInitGame_56A30(REMC2_tempa3);
 							sub_47160();
 						}
 					}
@@ -1523,17 +1621,8 @@ void sub_46830_main_loop_mod_end_cycle(signed int a2, unsigned __int16 a3) //227
 		}
 	//skip}
 }
-int REMC2_tempa2;
-int REMC2_tempa3;
-void actAction_begin() {
-	sub_46830_main_loop_mod_begin_cycle(REMC2_tempa2, REMC2_tempa3);
-}
 
-void actAction_end() {
-	sub_46830_main_loop_mod_end_cycle(REMC2_tempa2, REMC2_tempa3);
-}
-
-int sub_main_mod_begin(char *real_cdPathch) {
+void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
 	begin_plugin();
 	preconvert(); //rewrite and remove it later
 	*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it
@@ -1542,8 +1631,8 @@ int sub_main_mod_begin(char *real_cdPathch) {
 	v3 = 0;
 	v4 = 0;
 	printf("Reading Ini file\n");
-	if (!readini())
-		exit(1);
+	//skip if (!readini())
+	//skip 	exit(1);
 	sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
 	sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
 	gameDataPath = GetSubDirectoryPath(gameFolder);//added
@@ -1569,8 +1658,6 @@ int sub_main_mod_begin(char *real_cdPathch) {
 	} else {
 	}
 	initposistruct();
-	int argc = 1;
-	char *argv[] = { "game.exe", nullptr };
 	sub_56210_process_command_line(argc, argv); //236FD4 - 237210
 	if (CommandLineParams.ModeTestNetwork()) {
 		if (Iam_server || Iam_client)
@@ -1596,6 +1683,40 @@ void sub_main_mod_end() {
 		}
 	}
 }
+
+void Intro_begin(int introType) {
+	Intros_76D10_mod_begin(0);
+
+	char introPath[MAX_PATH];
+	if (introType == 1) {
+		sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
+		PlayInfoFmv_mod_begin(1, 1, str_E17CC_0, introPath);
+	} else if (introType == 2) {
+		sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+		PlayInfoFmv_mod_begin(1, 1, str_E17CC_0x160, introPath);
+	}
+}
+
+/*
+structure for animation:
+support_begin();//game-REMC2BeginGame
+	sub_main_mod_begin((char *)real_cdPath.utf8().get_data());//game
+-------------------------------------------------------------------------
+		sub_46830_main_loop_mod_begin_cycle();//action-REMC2BeginItem
+-------------------------------------------------------------------------
+			Intros_76D10_mod_begin(int animIndex);//action-anim-REMC2BeginAnim
+				PlayInfoFmv_mod_begin(1, 1, str_E17CC_0, introPath);//action-anim
+-------------------------------------------------------------------------
+				PlayInfoFmv_mod_step();//action-anim-step
+-------------------------------------------------------------------------
+				PlayInfoFmv_mod_end()//action-anim-REMC2EndAnim
+			Intros_76D10_mod_end(int animIndex);//action-anim
+-------------------------------------------------------------------------
+		sub_46830_main_loop_mod_end_cycle();//action
+-------------------------------------------------------------------------
+	sub_main_mod_end();//game-REMC2EndGame
+support_end();//game
+*/
 
 std::vector<GraphicsAction> graphics_queue;
 

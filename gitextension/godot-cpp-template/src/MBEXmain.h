@@ -101,9 +101,9 @@ public:
 	void REMC2EndGame();
 	void REMC2BeginItem();
 	void REMC2EndItem();
-	void REMC2BeginAnim();
+	void REMC2BeginAnim(int animIndex);
 	void REMC2EndAnim();
-	void REMC2CycleAnim();
+	int REMC2StepAnim(int run);
 	void REMC2BeginMap();
 	void REMC2EndMap();
 	void REMC2CycleMap();
