@@ -270,18 +270,29 @@ void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 	sound_update_playing(standard_vector);
 }
 
-void convertMinimal() {
+int tempX_WORD_180660_VGA_type_resolution;
+int tempX_DWORD_180648_map_resolution2_x;
+int tempX_DWORD_180644_map_resolution2_y;
+void convertPre() {
+	tempX_WORD_180660_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
+	tempX_DWORD_180648_map_resolution2_x = x_DWORD_180648_map_resolution2_x;
+	tempX_DWORD_180644_map_resolution2_y = x_DWORD_180644_map_resolution2_y;
 	x_WORD_180660_VGA_type_resolution = 8;
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
-	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
-	x_DWORD_180648_map_resolution2_x = 640; //fake resolution
+	x_DWORD_180648_map_resolution2_x = 640;
 	x_DWORD_180644_map_resolution2_y = 480;
 	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
 }
+void convertPost() {
+	x_WORD_180660_VGA_type_resolution = tempX_WORD_180660_VGA_type_resolution;
+	x_DWORD_180648_map_resolution2_x = tempX_DWORD_180648_map_resolution2_x;
+	x_DWORD_180644_map_resolution2_y = tempX_DWORD_180644_map_resolution2_y;
+}
 
 void MBEXclass::convertOriginalData(String path, String path2) {
-	convertMinimal();
+	convertPre();
 	MBEXconvertData(path, path2);
+	convertPost();
 }
 
 /*
