@@ -106,7 +106,7 @@ public:
 	int REMC2StepAnim(int run);
 	void REMC2BeginMap();
 	void REMC2EndMap();
-	void REMC2StepMap();
+	int REMC2StepMap();
 	void REMC2BeginInGame();
 	void REMC2EndInGame();
 	void REMC2StepInGame();

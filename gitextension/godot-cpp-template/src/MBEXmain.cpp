@@ -1335,13 +1335,20 @@ int MBEXclass::REMC2StepAnim(int run) {
 void MBEXclass::REMC2BeginMap() {
 	if (MBEXstate == 1)
 		REMC2BeginItem();
-	Intros_76D10_mod_begin(0);
+	//Intros_76D10_mod_begin(0);
+	MainMenu_76FA0_mod_begin();
+	LoadAndSetGraphicsAndPalette_7AC00();
+	NewGameDialog_77350_mod_Begin();
 }
 
 void MBEXclass::REMC2EndMap() {
+	MainMenu_76FA0_mod_end();
+	NewGameDialog_77350_mod_End();
 }
 
-void MBEXclass::REMC2StepMap() {
+int MBEXclass::REMC2StepMap() {
+	NewGameDialog_77350_mod_Step();
+	return 0;
 }
 
 void MBEXclass::REMC2BeginInGame() {

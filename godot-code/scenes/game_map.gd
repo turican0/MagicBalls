@@ -177,11 +177,11 @@ func _process(delta) -> void:
 					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or \
 					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 	if(is_skipping):
-		Main_DecodeLevel.mapMenuStep(1)
+		Main_DecodeLevel.mapMenuEnd()
 		Main_Sounds.stopAllSounds()
 		endAnim()
 	else:
-		var mapMenuStruct = Main_DecodeLevel.mapMenuStep(0)
+		var mapMenuStruct = Main_DecodeLevel.mapMenuStep()
 		updateSprites(Main_DecodeLevel.getSpritesActions())
 		endSpritesrender()
 

@@ -442,14 +442,14 @@ func mapMenuBegin():
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	Global.MBEX.REMC2BeginMap()
 
-func mapMenuStep(endMapMenu:int):
+func mapMenuStep():
 	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
-	var mapMenuOut=Global.MBEX.mapMenuStep(endMapMenu)
+	var mapMenuOut=Global.MBEX.REMC2StepMap()
 	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 
 func mapMenuEnd():
-	pass
+	Global.MBEX.REMC2EndMap()
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
 	#var mapMenuOut=Global.MBEX.REMC2StepMap(endMapMenu)
 	#Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())

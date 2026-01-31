@@ -42,3 +42,6 @@ void Intros_76D10_mod_end(char introType);
 bool PlayInfoFmv_mod_step();
 
 void MenusAndIntros_76930_mod_end();
+
+void MainMenu_76FA0_mod_begin();
+void MainMenu_76FA0_mod_end();
