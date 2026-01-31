@@ -2,7 +2,12 @@ extends Node
 
 var last_scene_path: String = ""
 var MBEX = null
+
 var soundInited:bool = false
+var sounds_map = {}
+var music_map = {}
+var music_hi_map = {}
+var himusic = true
 
 var cdPath:String="user://CDdata/"
 var convertdata:String="user://convertdata/"

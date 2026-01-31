@@ -281,7 +281,7 @@ bool NewGameDialog_77350_mod_Begin()
 	StopMusic_8E020(); //26f020 //!!!!!!!!ADDED
 	StartMusic_8E160(4, 0x7Fu); //26f160 //!!!!!!!!ADDED
 
-	pdwScreenBuffer_351628 = NULL; //!!!!!!!!ADDED ONLY FOR TESTS
+	//pdwScreenBuffer_351628 = NULL; //!!!!!!!!ADDED ONLY FOR TESTS
 
 	NewGameDialog_endAction_mod = 0;
 	map_not_moving_WORD_E29D6 = false;

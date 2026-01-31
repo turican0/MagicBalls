@@ -3,12 +3,6 @@ extends Node3D
 var MainMusic:MidiPlayer
 var MainMusicHi:AudioStreamPlayer
 
-var sounds_map = {}
-var music_map = {}
-var music_hi_map = {}
-
-var himusic = true
-
 #func _load_wav_as_sample(file_path: String) -> AudioStream:
 	#var file = FileAccess.open(file_path, FileAccess.READ)
 	#if file == null:
@@ -42,7 +36,7 @@ func load_musics_from_dir(path: String):
 				if parts.size() >= 2:
 					var music_idx = parts[0].to_int()
 					var full_path = path + file_name
-					music_map[music_idx] = full_path
+					Global.music_map[music_idx] = full_path
 					print("Hudba nacetna: ", music_idx)
 			file_name = dir.get_next()
 	else:
@@ -60,7 +54,7 @@ func load_musics_hi_from_dir(path: String):
 				if parts.size() >= 2:
 					var music_idx = parts[0].to_int()
 					var full_path = path + file_name
-					music_hi_map[music_idx] = full_path
+					Global.music_hi_map[music_idx] = full_path
 					print("Hudba nacetna: ", music_idx)
 			file_name = dir.get_next()
 	else:
@@ -82,9 +76,9 @@ func load_sounds_from_dir(path: String):
 					#var stream = _load_wav_as_sample(full_path)  
 					#var stream = ResourceLoader.load(full_path, "AudioStream", ResourceLoader.CACHE_MODE_REUSE)
 					var stream = Global.load_external_audio(path + file_name)
-					if not sounds_map.has(pack_idx):
-						sounds_map[pack_idx] = {}
-					sounds_map[pack_idx][sound_idx] = stream
+					if not Global.sounds_map.has(pack_idx):
+						Global.sounds_map[pack_idx] = {}
+					Global.sounds_map[pack_idx][sound_idx] = stream
 					print("Načten zvuk: Pack ", pack_idx, " Index ", sound_idx)			
 			file_name = dir.get_next()
 	else:
@@ -154,15 +148,15 @@ func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 	if player_index < 0 or player_index >= MAX_SIMULTANEOUS_SOUNDS:
 		push_warning("Neplatný channel %d! Musí být 0-%d." % [player_index, MAX_SIMULTANEOUS_SOUNDS - 1])
 		return
-	if not sounds_map.has(pack_idx):
+	if not Global.sounds_map.has(pack_idx):
 		push_warning("Pack %d neexistuje!" % pack_idx)
 		return
-	if not sounds_map[pack_idx].has(sound_idx):
+	if not Global.sounds_map[pack_idx].has(sound_idx):
 		push_warning("Zvuk index %d v packu %d neexistuje!" % [sound_idx, pack_idx])
 		return
 	#if(sfx_players[player_index].playing):
 		#return
-	var stream: AudioStream = sounds_map[pack_idx][sound_idx]
+	var stream: AudioStream = Global.sounds_map[pack_idx][sound_idx]
 	var player = sfx_players[player_index]
 	if player.playing:
 		player.stop()
@@ -179,13 +173,13 @@ func set_sound_volume(index: int, volume_int: int) -> void:
 		sfx_players[index].volume_linear = float(volume_int) / 128.0
 
 func set_music_volume(volume_int: int) -> void:
-	if(himusic):
+	if(Global.himusic):
 		MainMusicHi.volume_db = linear_to_db(float(volume_int) / 128.0)
 	else:
 		MainMusic.volume_db = linear_to_db(float(volume_int) / 128.0)
 			
 func stop_music() -> void:
-	if(himusic):
+	if(Global.himusic):
 		if MainMusicHi.playing:
 			MainMusicHi.stop()
 	else:
@@ -193,13 +187,13 @@ func stop_music() -> void:
 			MainMusic.stop()
 
 func start_music(index: int) -> void:
-	if(himusic):
+	if(Global.himusic):
 		if MainMusicHi.playing:
 			MainMusicHi.stop()
-		MainMusicHi.stream = Global.load_external_audio(music_hi_map[index])
+		MainMusicHi.stream = Global.load_external_audio(Global.music_hi_map[index])
 		MainMusicHi.play()
 	else:
 		if MainMusic.playing:
 			MainMusic.stop()
-		MainMusic.file = music_map[index]
+		MainMusic.file = Global.music_map[index]
 		MainMusic.play()

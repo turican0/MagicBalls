@@ -1256,6 +1256,10 @@ int MBEXstate = 0;
 //4 - after REMC2EndAnim
 //5 - after REMC2EndItem
 //6 - after REMC2EndGame
+//7 - after REMC2BeginMap
+//8 - after REMC2EndMap
+//9 - after REMC2BeginInGame
+//10 - after REMC2EndInGame
 
 void MBEXclass::REMC2BeginGame(String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
@@ -1340,11 +1344,13 @@ void MBEXclass::REMC2BeginMap() {
 	MainMenu_76FA0_mod_begin();
 	LoadAndSetGraphicsAndPalette_7AC00();
 	NewGameDialog_77350_mod_Begin();
+	MBEXstate = 7;
 }
 
 void MBEXclass::REMC2EndMap() {
 	MainMenu_76FA0_mod_end();
 	NewGameDialog_77350_mod_End();
+	MBEXstate = 8;
 }
 
 int MBEXclass::REMC2StepMap() {
@@ -1362,11 +1368,13 @@ void MBEXclass::REMC2BeginInGame() {
 	sub_46830_main_loop_mod_end_cycle_part2();
 	//sub_46830_main_loop_mod_end_cycle_part3();
 	//sub_46830_main_loop_mod_end_cycle_part4();
+	MBEXstate = 9;
 }
 
 void MBEXclass::REMC2EndInGame() {
 	sub_46830_main_loop_mod_end_cycle_part3();
 	sub_46830_main_loop_mod_end_cycle_part4();
+	MBEXstate = 10;
 }
 
 void MBEXclass::REMC2StepInGame() {

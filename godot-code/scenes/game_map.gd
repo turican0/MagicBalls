@@ -123,11 +123,11 @@ func menuInit():
 	Main_DecodeLevel.changeLanguage(2)
 	Main_DecodeLevel.getLangTexts()
 	
-func endAnim():
-	runned=false
-	fadeNode = Global.addFadeIn(fadeNode)
-	await Global.fadeNode.fade_finished
-	get_tree().change_scene_to_file(Global.last_scene_path)
+#func endAnim():
+	#runned=false
+	#fadeNode = Global.addFadeIn(fadeNode)
+	#await Global.fadeNode.fade_finished
+	#get_tree().change_scene_to_file(Global.last_scene_path)
 
 func render_spriteB(posx: int, posy: int, index: int):
 	var file_name = "%03d.png" % index
@@ -144,9 +144,9 @@ func render_sprite(texture: Texture2D,pos: Vector2) -> void:
 	s.position = pos
 	s.visible = true
 
-func endSpritesrender():
-	for i in range(used_count, sprite_pool.size()):
-		sprite_pool[i].visible = false
+#func endSpritesrender():
+	#for i in range(used_count, sprite_pool.size()):
+		#sprite_pool[i].visible = false
 
 func updateSprites(graphicsActions:Array):
 	used_count = 0
@@ -172,18 +172,23 @@ func _process(delta) -> void:
 	mouseEvents(delta)
 	if(!runned):
 		return
-	var is_skipping = false
-	#var is_skipping = Input.is_anything_pressed() or \
-					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or \
-					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
-	if(is_skipping):
-		Main_DecodeLevel.mapMenuEnd()
-		Main_Sounds.stopAllSounds()
-		endAnim()
-	else:
-		var mapMenuStruct = Main_DecodeLevel.mapMenuStep()
-		updateSprites(Main_DecodeLevel.getSpritesActions())
-		endSpritesrender()
+	#var is_skipping = false
+	##var is_skipping = Input.is_anything_pressed() or \
+					  ##Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or \
+					  ##Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
+	#if(is_skipping):
+		#Main_DecodeLevel.mapMenuEnd()
+		#Main_Sounds.stopAllSounds()
+		#endAnim()
+	#else:
+	var mapMenuStruct = Main_DecodeLevel.mapMenuStep()
+	updateSprites(Main_DecodeLevel.getSpritesActions())
+		#endSpritesrender()
+		
+func endMapMenu():
+	Main_DecodeLevel.mapMenuEnd()
+	Main_Sounds.stopAllSounds()
+	#endAnim()
 
 func mouseEvents(delta):
 	var mouse_pos = get_viewport().get_mouse_position()
@@ -227,6 +232,7 @@ func _input(event):
 					target_scene = "res://scenes/PlayAnim.tscn"
 				if target_scene != "":
 					fadeNode = Global.addFadeIn(fadeNode)
+					endMapMenu()
 					await fadeNode.fade_finished
 					Global.last_scene_path = get_tree().current_scene.scene_file_path
 					get_tree().change_scene_to_file(target_scene)

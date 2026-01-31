@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6hjxjkqj1hpf" path="res://scenes/game_map.gd" id="1_ccdfn"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_jpp6x"]
-[ext_resource type="Script" uid="uid://cahajskbdcnlw" path="res://scenes/sounds.gd" id="3_lwssc"]
-[ext_resource type="Script" uid="uid://bf1vnufu7na6x" path="res://addons/midi/MidiPlayer.gd" id="4_tw830"]
+[ext_resource type="PackedScene" uid="uid://84v3q55l2pga" path="res://scenes/Sounds.tscn" id="3_5r7r6"]
 
 [node name="GameMap" type="Node3D" unique_id=1941747587]
 script = ExtResource("1_ccdfn")
@@ -36,14 +35,4 @@ script = ExtResource("2_jpp6x")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"
 
-[node name="Sounds" type="Node3D" parent="." unique_id=341905445]
-script = ExtResource("3_lwssc")
-
-[node name="MidiPlayer" type="Node" parent="Sounds" unique_id=835791822]
-script = ExtResource("4_tw830")
-file = "res://convertdata/musics/000_C2GAME1.mid"
-volume_db = -80.0
-soundfont = "res://soundfont/GeneralUser GS v1.472.sf2"
-metadata/_custom_type_script = "uid://bf1vnufu7na6x"
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Sounds" unique_id=1660980216]
+[node name="Sounds" parent="." unique_id=681772629 instance=ExtResource("3_5r7r6")]
