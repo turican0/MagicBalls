@@ -227,7 +227,7 @@ func _input(event):
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 				var target_scene = ""
 				if cfg2["dword_0"] == 0x0025F640:
-					target_scene = "res://scenes/CodeGeneratedDemo.tscn"
+					target_scene = "res://scenes/GameMap.tscn"
 				elif cfg2["dword_0"] == 0x00259E00:
 					target_scene = "res://scenes/PlayAnim.tscn"
 				if target_scene != "":

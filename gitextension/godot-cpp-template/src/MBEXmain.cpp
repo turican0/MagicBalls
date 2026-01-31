@@ -270,7 +270,146 @@ void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 	sound_update_playing(standard_vector);
 }
 
+void convertMinimal() {
+
+	support_begin();
+
+	uint8_t buffer[1000000];
+	pdwScreenBuffer_351628 = buffer;
+	x_BYTE_14B4E0_second_heightmap = new uint8_t[65536];
+	*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it 3x256 ?
+
+	x_DWORD_17DB54_game_turn2 = 0x40;
+	x_BYTE_E36D1 = 0x7;
+	unk_18058Cstr.x_WORD_1805C2_joystick = 0x7;
+
+	x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = 0x140;
+	x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = 0xf0;
+
+	screenWidth_18062C = 640;
+
+	//begin - code from sub_main
+	initposistruct();
+	//end - code from sub_main
+
+	//begin - code from Initialize
+	DataFileIO::SetCDFilePaths(cdDataPath.c_str(), pstr);
+	//---------------------
+	sub_5BCC0_set_any_variables1(); //23C9F2 - 23CCC0
+	if (!sub_5BF50_load_psxdata()) //23C9F7 - 23CF50 //something with files about their loading, or just a set of Palettes
+		exit(-1);
+	sub_5C1B0_set_any_variables2(); //23CA05 - 23D1B0
+	sub_71410_process_tmaps(); //252410
+	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_POINTERSDATTAB]); //24fb90
+	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
+	sub_101C0();
+	sub_8CEDF_install_mouse();
+
+	sub_46DD0_init_sound_and_music();
+
+	//end - code from Initialize
+
+	//x_BYTE_F5538[str_TMAPS00TAB_BEGIN_BUFFER[str_WORD_D951C[a1].word_0].word_8]
+	/*
+	fix this: !!!!!!
+	sub_712F0
+	void sub_712F0()//2522f0 - x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226
+	sub_7A110_load_hscreen -zkontroluj
+
+	x_DWORD_E9C28_str->str_8_data->word_8
+	//x_DWORD_E9C28_str = sub_71B40
+
+	x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226 --toto neni pripraveno
+	*/
+
+	//begin - code from MainMenu
+	//SetCenterScreenForFlyAssistant_6EDB0();
+	//StopMusic_8E020(); //26f020
+	//StartMusic_8E160(4, 0x7Fu); //26f160 //menu music
+	x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
+	x_WORD_180660_VGA_type_resolution = 8;
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
+
+	x_DWORD_180648_map_resolution2_x = 640; //fake resolution
+	x_DWORD_180644_map_resolution2_y = 480;
+	//end - code from MainMenu
+
+	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;
+
+	InitLanguage_76A40();
+
+	//begin - code from LevelDecompress_533B0
+	//LevelInitGame_56A30(-1, "");
+	LevelInit_56C00(&D41A0_0.terrain_2FECE);
+	SetLevelId_53590(&D41A0_0.terrain_2FECE);
+	//end - code from LevelDecompress_533B0
+
+	//begin - code from LevelInitGame_56A30
+	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
+	char temp_x_BYTE_E3799_sound_card = soundActive_E3799;
+	soundActive_E3799 = false;
+	ClearSettings_567C0();
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 8)) {
+		LevelDecompress_533B0(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, &D41A0_0.terrain_2FECE, "");
+	}
+	sub_54660_read_and_decompress_sky_and_blocks(D41A0_0.terrain_2FECE.MapType, x_BYTE_D41B5_texture_size); //235660
+	sub_54800_read_and_decompress_tables(D41A0_0.terrain_2FECE.MapType); //235800
+	//237ab3
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10))
+		D41A0_0.word_0xe = D41A0_0.terrain_2FECE.word_0x2FED7;
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
+		GenerateLevelMap_43830(&D41A0_0.terrain_2FECE);
+	sub_49F30(); //prepare events pointers
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
+		sub_49270_generate_level_features(&D41A0_0.terrain_2FECE);
+	memset(&predictedAxis_EB398ar, 0, 6);
+	sub_49F90();
+	D41A0_0.dword_0x11e6 = -1;
+	sub_71A70_setTmaps(D41A0_0.terrain_2FECE.MapType);
+	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4)) {
+		InitStages_58940();
+		InitStageVars_11EE0();
+		Init0x3664C_84790();
+	}
+	//sub_4A1E0(0, 1);
+	//sub_53160();
+	//sub_60F00();
+	//end - code from LevelInitGame_56A30
+
+	//begin - sub_46830_main_loop
+	//sub_47160();
+	//end - sub_46830_main_loop
+
+	char dataPath[MAX_PATH];
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
+	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0], true);
+
+	soundActive_E3799 = true;
+	soundAble_E3798 = true;
+	InitSoundAndMusic_90FD0();
+	//if ((x_D41A0_BYTEARRAY_4_struct.setting_byte4_25) & 0x40) InitMusicBank_8EAD0(1);
+
+	//x_DWORD_E9C4C_langindexbuffer[374]
+	if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
+		//v8 = x_D41A0_BYTEARRAY_0[196308];
+		switch (D41A0_0.terrain_2FECE.MapType) {
+			case MapType_t::Day:
+				D41A0_0.maptypeMusic_0x235 = 2;
+				break;
+			case MapType_t::Night:
+				D41A0_0.maptypeMusic_0x235 = 1;
+				break;
+			case MapType_t::Cave:
+				D41A0_0.maptypeMusic_0x235 = 3;
+				break;
+		}
+	}
+}
+
 void MBEXclass::convertOriginalData(String path, String path2) {
+	convertMinimal();
 	MBEXconvertData(path, path2);
 }
 

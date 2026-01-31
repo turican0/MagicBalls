@@ -22,7 +22,7 @@ func goFirstMenu():
 	get_tree().change_scene_to_file("res://scenes/PlayAnim.tscn")
 	
 func check_existing_data() -> bool:
-	var music_path = Global.convertdata+"musics/"
+	var music_path = Global.convertdata+"musicsX/"
 	if DirAccess.dir_exists_absolute(music_path):
 		return true
 	else:
@@ -59,8 +59,13 @@ func _on_select_manual():
 	file_dialog.popup_centered()
 
 func _on_file_dialog_dir_selected(dir):
-	Main_DecodeLevel.MBEXinit()
+	Global.MBEX = MBEXclass.new()
+	#Main_DecodeLevel.MBEXinit()
 	Main_DecodeLevel.MBEXextractCD(Global.cdPath, dir)
-	Main_DecodeLevel.init()
+	#Main_DecodeLevel.init()
+	Global.MBEX.REMC2BeginGame(Global.cdPath)
+	#Global.MBEX.REMC2BeginItem()
+	Global.MBEX.REMC2BeginInGame()
 	Main_DecodeLevel.MBEXconvert(Global.convertdata,dir)
+	#Global.MBEX.REMC2EndItem()
 	goFirstMenu()
