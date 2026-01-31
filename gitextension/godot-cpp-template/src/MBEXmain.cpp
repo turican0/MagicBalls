@@ -271,14 +271,6 @@ void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 }
 
 void convertMinimal() {
-	x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
-	x_WORD_180660_VGA_type_resolution = 8;
-	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
-	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
-	x_DWORD_180648_map_resolution2_x = 640; //fake resolution
-	x_DWORD_180644_map_resolution2_y = 480;
-	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;
-
 	InitLanguage_76A40();
 	LevelInit_56C00(&D41A0_0.terrain_2FECE);
 	SetLevelId_53590(&D41A0_0.terrain_2FECE);
