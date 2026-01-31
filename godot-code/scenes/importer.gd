@@ -65,7 +65,7 @@ func _on_file_dialog_dir_selected(dir):
 	#Main_DecodeLevel.init()
 	Global.MBEX.REMC2BeginGame(Global.cdPath)
 	#Global.MBEX.REMC2BeginItem()
-	Global.MBEX.REMC2BeginInGame()
+	#Global.MBEX.REMC2BeginInGame()
 	Main_DecodeLevel.MBEXconvert(Global.convertdata,dir)
 	#Global.MBEX.REMC2EndItem()
 	goFirstMenu()

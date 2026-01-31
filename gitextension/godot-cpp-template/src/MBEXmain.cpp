@@ -271,9 +271,8 @@ void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 }
 
 void convertMinimal() {
-
+	/*
 	support_begin();
-
 	uint8_t buffer[1000000];
 	pdwScreenBuffer_351628 = buffer;
 	x_BYTE_14B4E0_second_heightmap = new uint8_t[65536];
@@ -290,10 +289,8 @@ void convertMinimal() {
 
 	//begin - code from sub_main
 	initposistruct();
-	//end - code from sub_main
-
-	//begin - code from Initialize
 	DataFileIO::SetCDFilePaths(cdDataPath.c_str(), pstr);
+	*/
 	//---------------------
 	sub_5BCC0_set_any_variables1(); //23C9F2 - 23CCC0
 	if (!sub_5BF50_load_psxdata()) //23C9F7 - 23CF50 //something with files about their loading, or just a set of Palettes
@@ -304,28 +301,7 @@ void convertMinimal() {
 	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
 	sub_101C0();
 	sub_8CEDF_install_mouse();
-
 	sub_46DD0_init_sound_and_music();
-
-	//end - code from Initialize
-
-	//x_BYTE_F5538[str_TMAPS00TAB_BEGIN_BUFFER[str_WORD_D951C[a1].word_0].word_8]
-	/*
-	fix this: !!!!!!
-	sub_712F0
-	void sub_712F0()//2522f0 - x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226
-	sub_7A110_load_hscreen -zkontroluj
-
-	x_DWORD_E9C28_str->str_8_data->word_8
-	//x_DWORD_E9C28_str = sub_71B40
-
-	x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226 --toto neni pripraveno
-	*/
-
-	//begin - code from MainMenu
-	//SetCenterScreenForFlyAssistant_6EDB0();
-	//StopMusic_8E020(); //26f020
-	//StartMusic_8E160(4, 0x7Fu); //26f160 //menu music
 	x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
 	x_WORD_180660_VGA_type_resolution = 8;
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
@@ -333,19 +309,11 @@ void convertMinimal() {
 
 	x_DWORD_180648_map_resolution2_x = 640; //fake resolution
 	x_DWORD_180644_map_resolution2_y = 480;
-	//end - code from MainMenu
-
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;
 
 	InitLanguage_76A40();
-
-	//begin - code from LevelDecompress_533B0
-	//LevelInitGame_56A30(-1, "");
 	LevelInit_56C00(&D41A0_0.terrain_2FECE);
 	SetLevelId_53590(&D41A0_0.terrain_2FECE);
-	//end - code from LevelDecompress_533B0
-
-	//begin - code from LevelInitGame_56A30
 	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
 	char temp_x_BYTE_E3799_sound_card = soundActive_E3799;
 	soundActive_E3799 = false;
