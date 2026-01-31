@@ -271,35 +271,12 @@ void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 }
 
 void convertMinimal() {
-	InitLanguage_76A40();
-	LevelInit_56C00(&D41A0_0.terrain_2FECE);
-	SetLevelId_53590(&D41A0_0.terrain_2FECE);
+	x_WORD_180660_VGA_type_resolution = 8;
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
+	x_DWORD_180648_map_resolution2_x = 640; //fake resolution
+	x_DWORD_180644_map_resolution2_y = 480;
 	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
-	char temp_x_BYTE_E3799_sound_card = soundActive_E3799;
-	soundActive_E3799 = false;
-	ClearSettings_567C0();
-	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 8)) {
-		LevelDecompress_533B0(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, &D41A0_0.terrain_2FECE, "");
-	}
-	sub_54660_read_and_decompress_sky_and_blocks(D41A0_0.terrain_2FECE.MapType, x_BYTE_D41B5_texture_size); //235660
-	sub_54800_read_and_decompress_tables(D41A0_0.terrain_2FECE.MapType); //235800
-	//237ab3
-	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10))
-		D41A0_0.word_0xe = D41A0_0.terrain_2FECE.word_0x2FED7;
-	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
-		GenerateLevelMap_43830(&D41A0_0.terrain_2FECE);
-	sub_49F30(); //prepare events pointers
-	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
-		sub_49270_generate_level_features(&D41A0_0.terrain_2FECE);
-	memset(&predictedAxis_EB398ar, 0, 6);
-	sub_49F90();
-	D41A0_0.dword_0x11e6 = -1;
-	sub_71A70_setTmaps(D41A0_0.terrain_2FECE.MapType);
-	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4)) {
-		InitStages_58940();
-		InitStageVars_11EE0();
-		Init0x3664C_84790();
-	}
 }
 
 void MBEXclass::convertOriginalData(String path, String path2) {
