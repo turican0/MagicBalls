@@ -271,27 +271,6 @@ void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 }
 
 void convertMinimal() {
-	/*
-	support_begin();
-	uint8_t buffer[1000000];
-	pdwScreenBuffer_351628 = buffer;
-	x_BYTE_14B4E0_second_heightmap = new uint8_t[65536];
-	*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it 3x256 ?
-
-	x_DWORD_17DB54_game_turn2 = 0x40;
-	x_BYTE_E36D1 = 0x7;
-	unk_18058Cstr.x_WORD_1805C2_joystick = 0x7;
-
-	x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = 0x140;
-	x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = 0xf0;
-
-	screenWidth_18062C = 640;
-
-	//begin - code from sub_main
-	initposistruct();
-	DataFileIO::SetCDFilePaths(cdDataPath.c_str(), pstr);
-	*/
-	//---------------------
 	sub_5BCC0_set_any_variables1(); //23C9F2 - 23CCC0
 	if (!sub_5BF50_load_psxdata()) //23C9F7 - 23CF50 //something with files about their loading, or just a set of Palettes
 		exit(-1);
@@ -339,40 +318,6 @@ void convertMinimal() {
 		InitStages_58940();
 		InitStageVars_11EE0();
 		Init0x3664C_84790();
-	}
-	//sub_4A1E0(0, 1);
-	//sub_53160();
-	//sub_60F00();
-	//end - code from LevelInitGame_56A30
-
-	//begin - sub_46830_main_loop
-	//sub_47160();
-	//end - sub_46830_main_loop
-
-	char dataPath[MAX_PATH];
-	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
-	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
-	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0], true);
-
-	soundActive_E3799 = true;
-	soundAble_E3798 = true;
-	InitSoundAndMusic_90FD0();
-	//if ((x_D41A0_BYTEARRAY_4_struct.setting_byte4_25) & 0x40) InitMusicBank_8EAD0(1);
-
-	//x_DWORD_E9C4C_langindexbuffer[374]
-	if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
-		//v8 = x_D41A0_BYTEARRAY_0[196308];
-		switch (D41A0_0.terrain_2FECE.MapType) {
-			case MapType_t::Day:
-				D41A0_0.maptypeMusic_0x235 = 2;
-				break;
-			case MapType_t::Night:
-				D41A0_0.maptypeMusic_0x235 = 1;
-				break;
-			case MapType_t::Cave:
-				D41A0_0.maptypeMusic_0x235 = 3;
-				break;
-		}
 	}
 }
 
