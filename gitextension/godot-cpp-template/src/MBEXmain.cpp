@@ -279,9 +279,10 @@ void convertPre() {
 	tempX_DWORD_180644_map_resolution2_y = x_DWORD_180644_map_resolution2_y;
 	x_WORD_180660_VGA_type_resolution = 8;
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
-	x_DWORD_180648_map_resolution2_x = 640;
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
+	x_DWORD_180648_map_resolution2_x = 640; //fake resolution
 	x_DWORD_180644_map_resolution2_y = 480;
-	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
+	//CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
 }
 void convertPost() {
 	x_WORD_180660_VGA_type_resolution = tempX_WORD_180660_VGA_type_resolution;
