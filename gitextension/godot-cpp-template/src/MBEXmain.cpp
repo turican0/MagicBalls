@@ -1282,10 +1282,11 @@ void MBEXclass::REMC2BeginItem() {
 }
 
 void MBEXclass::REMC2EndItem() {
-	sub_46830_main_loop_mod_end_cycle_part1();
-	sub_46830_main_loop_mod_end_cycle_part2();
-	sub_46830_main_loop_mod_end_cycle_part3();
-	sub_46830_main_loop_mod_end_cycle_part4();
+	MenusAndIntros_76930_mod_end();
+	//sub_46830_main_loop_mod_end_cycle_part1();
+	//sub_46830_main_loop_mod_end_cycle_part2();
+	//sub_46830_main_loop_mod_end_cycle_part3();
+	//sub_46830_main_loop_mod_end_cycle_part4();
 	MBEXstate = 5;
 }
 
