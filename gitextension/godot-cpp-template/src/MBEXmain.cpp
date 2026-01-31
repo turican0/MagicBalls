@@ -48,8 +48,8 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("playAnimStep", "Int"), &MBEXclass::playAnimStep);
 	godot::ClassDB::bind_method(D_METHOD("getVGABuffer"), &MBEXclass::getVGABuffer);
 
-	godot::ClassDB::bind_method(D_METHOD("mapMenuInit"), &MBEXclass::mapMenuInit);
-	godot::ClassDB::bind_method(D_METHOD("mapMenuStep", "Int"), &MBEXclass::mapMenuStep);
+	//godot::ClassDB::bind_method(D_METHOD("mapMenuInit"), &MBEXclass::mapMenuInit);
+	//godot::ClassDB::bind_method(D_METHOD("mapMenuStep", "Int"), &MBEXclass::mapMenuStep);
 	godot::ClassDB::bind_method(D_METHOD("getLangTexts"), &MBEXclass::getLangTexts);
 	godot::ClassDB::bind_method(D_METHOD("changeLanguage", "Int"), &MBEXclass::changeLanguage);
 
@@ -62,10 +62,10 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Int"), &MBEXclass::REMC2StepAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap"), &MBEXclass::REMC2BeginMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndMap"), &MBEXclass::REMC2EndMap);
-	godot::ClassDB::bind_method(D_METHOD("REMC2CycleMap"), &MBEXclass::REMC2CycleMap);
+	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap"), &MBEXclass::REMC2StepMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
-	godot::ClassDB::bind_method(D_METHOD("REMC2CycleInGame"), &MBEXclass::REMC2CycleInGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame"), &MBEXclass::REMC2StepInGame);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -86,10 +86,13 @@ void MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 	MBEXcdExtract((char *)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
 }
 
+/*
 void MBEXclass::mapMenuInit() {
 	NewGameDialog_77350_mod_Begin();
 }
+*/
 
+/*
 int MBEXclass::mapMenuStep(int run) {
 	if (run)
 		NewGameDialog_77350_mod_End();
@@ -97,6 +100,7 @@ int MBEXclass::mapMenuStep(int run) {
 		NewGameDialog_77350_mod_Step();
 	return 0;
 }
+*/
 
 void MBEXclass::changeLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
@@ -1244,6 +1248,15 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	}
 }
 
+int MBEXstate = 0;
+//0 - beginGame - not initialized
+//1 - after REMC2BeginGame
+//2 - after REMC2BeginItem
+//3 - after REMC2BeginAnim
+//4 - after REMC2EndAnim
+//5 - after REMC2EndItem
+//6 - after REMC2EndGame
+
 void MBEXclass::REMC2BeginGame(String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
@@ -1254,26 +1267,31 @@ void MBEXclass::REMC2BeginGame(String cdPath) {
 
 	support_begin();
 	sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
+	MBEXstate = 1;
 }
 
 void MBEXclass::REMC2EndGame() {
 	sub_main_mod_end();
 	support_end();
+	MBEXstate = 6;
 }
 
-bool inMenuItems = false;
-
 void MBEXclass::REMC2BeginItem() {
-	if (!inMenuItems)
-		sub_46830_main_loop_mod_begin_cycle();
+	sub_46830_main_loop_mod_begin_cycle();
+	MBEXstate = 2;
 }
 
 void MBEXclass::REMC2EndItem() {
-	inMenuItems = true;
-	//sub_46830_main_loop_mod_end_cycle();
+	sub_46830_main_loop_mod_end_cycle_part1();
+	sub_46830_main_loop_mod_end_cycle_part2();
+	sub_46830_main_loop_mod_end_cycle_part3();
+	sub_46830_main_loop_mod_end_cycle_part4();
+	MBEXstate = 5;
 }
 
 void MBEXclass::REMC2BeginAnim(int animIndex) {
+	if (MBEXstate == 1)
+		REMC2BeginItem();
 	Intros_76D10_mod_begin(0);
 
 	memset(pdwScreenBuffer_351628, 0, 640 * 480); //clear screen buffer
@@ -1296,11 +1314,13 @@ void MBEXclass::REMC2BeginAnim(int animIndex) {
 		sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
 		PlayInfoFmv_mod_begin(1, 1, str_E17CC_0x160, introPath);
 	}
+	MBEXstate = 3;
 }
 
 void MBEXclass::REMC2EndAnim() {
 	PlayInfoFmv_mod_end();
 	Intros_76D10_mod_end(0);
+	MBEXstate = 4;
 }
 
 int MBEXclass::REMC2StepAnim(int run) {
@@ -1313,19 +1333,31 @@ int MBEXclass::REMC2StepAnim(int run) {
 }
 
 void MBEXclass::REMC2BeginMap() {
+	if (MBEXstate == 1)
+		REMC2BeginItem();
+	Intros_76D10_mod_begin(0);
 }
 
 void MBEXclass::REMC2EndMap() {
 }
 
-void MBEXclass::REMC2CycleMap() {
+void MBEXclass::REMC2StepMap() {
 }
 
 void MBEXclass::REMC2BeginInGame() {
+	if (MBEXstate == 1)
+		REMC2BeginItem();
+	if (MBEXstate == 2) {
+		MenusAndIntros_76930_mod_end();
+	}
+	sub_46830_main_loop_mod_end_cycle_part1();
+	sub_46830_main_loop_mod_end_cycle_part2();
+	sub_46830_main_loop_mod_end_cycle_part3();
+	sub_46830_main_loop_mod_end_cycle_part4();
 }
 
 void MBEXclass::REMC2EndInGame() {
 }
 
-void MBEXclass::REMC2CycleInGame() {
+void MBEXclass::REMC2StepInGame() {
 }

@@ -119,7 +119,7 @@ func menuInit():
 	Main_DecodeLevel.init()
 	Main_DecodeLevel.initSound()
 	Main_Sounds.setSoundBank(0)
-	Main_DecodeLevel.mapMenuInit()
+	Main_DecodeLevel.mapMenuBegin()
 	Main_DecodeLevel.changeLanguage(2)
 	Main_DecodeLevel.getLangTexts()
 	

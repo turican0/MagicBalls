@@ -8,6 +8,7 @@
 #include "../remc2/engine/Graphics.h"
 #include "../remc2/engine/Level.h"
 #include "../remc2/engine/Network.h"
+#include "../remc2/engine/GameUI.h"
 
 struct GraphicsAction {
 	std::string action;
@@ -28,10 +29,16 @@ void InitLanguage_76A40_mod_only_language();
 void sub_main_mod_begin(int argc, char **argv, char *real_cdPathch);
 void sub_main_mod_end();
 void sub_46830_main_loop_mod_begin_cycle();
-void sub_46830_main_loop_mod_end_cycle();
+//void sub_46830_main_loop_mod_end_cycle();
+bool sub_46830_main_loop_mod_end_cycle_part1();
+bool sub_46830_main_loop_mod_end_cycle_part2();
+bool sub_46830_main_loop_mod_end_cycle_part3();
+void sub_46830_main_loop_mod_end_cycle_part4();
 void Intro_begin(int introType);
 void Intros_76D10_mod_begin(char introType);
 void PlayInfoFmv_mod_begin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent, char *path);
 void PlayInfoFmv_mod_end();
 void Intros_76D10_mod_end(char introType);
 bool PlayInfoFmv_mod_step();
+
+void MenusAndIntros_76930_mod_end();

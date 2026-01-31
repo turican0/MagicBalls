@@ -202,16 +202,6 @@ func SetRunned(sendRunned) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	runned = sendRunned
 
-func mapMenuInit():
-	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
-	Global.MBEX.mapMenuInit()
-
-func mapMenuStep(endMapMenu:int):
-	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
-	var mapMenuOut=Global.MBEX.mapMenuStep(endMapMenu)
-	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
-	return mapMenuOut
-
 func getSpritesActions():
 	return Global.MBEX.getPendingGraphicsActions()
 
@@ -427,31 +417,44 @@ func getInputs():
 	input_state["mouse_pos"] = mouse_640
 
 func init():
-	if(Global.terrainInited):
-		return
 	MBEXinit()
-	Global.terrainInited = true
-	Global.MBEX.REMC2BeginGame(Global.cdPath)	
-	#loadlevel(0)
 	
-func playAnim(index:int):
+func anim1Begin(index:int):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	#Global.MBEX.playAnim(index)
-	Global.MBEX.REMC2BeginItem()
+	#Global.MBEX.REMC2BeginItem()
 	Global.MBEX.REMC2BeginAnim(index)
 	changeLanguage(2)#only temporary fix
 
-func playAnimStep(endAnimIn:int) -> int:
+func anim1Step(endAnimIn:int) -> int:
 	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
 	#var endAnimOut=Global.MBEX.playAnimStep(endAnimIn)
 	var endAnimOut=Global.MBEX.REMC2StepAnim(endAnimIn)
 	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return endAnimOut
 	
-func playAnimEnd():
+func anim1End():
 	Global.MBEX.REMC2EndAnim()
-	Global.MBEX.REMC2EndItem()
-	
+	#Global.MBEX.REMC2EndItem()
+
+
+func mapMenuBegin():
+	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	Global.MBEX.REMC2BeginMap()
+
+func mapMenuStep(endMapMenu:int):
+	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	var mapMenuOut=Global.MBEX.mapMenuStep(endMapMenu)
+	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	return mapMenuOut
+
+func mapMenuEnd():
+	pass
+	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	#var mapMenuOut=Global.MBEX.REMC2StepMap(endMapMenu)
+	#Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	#return mapMenuOut
+
 
 func exitGame():	
 	Global.MBEX.REMC2EndGame()
@@ -471,6 +474,7 @@ func getVGABuffer():
 func MBEXinit():
 	if !Global.MBEX:
 		Global.MBEX = MBEXclass.new()
+		Global.MBEX.REMC2BeginGame(Global.cdPath)
 
 func MBEXconvert(path, path2):
 	Global.MBEX.convertOriginalData(path,path2)

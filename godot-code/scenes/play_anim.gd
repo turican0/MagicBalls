@@ -85,13 +85,13 @@ func animInit():
 			Main_Sounds.setSoundBank(4)
 		2:
 			Main_Sounds.setSoundBank(4)
-	Main_DecodeLevel.playAnim(animIndex)
+	Main_DecodeLevel.anim1Begin(animIndex)
 	
 func endAnim():
-	Main_DecodeLevel.playAnimEnd()
+	Main_DecodeLevel.anim1End()
 	emit_signal("video_finished")
 
-	
+
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
@@ -100,11 +100,11 @@ func _process(_p_delta) -> void:
 					  Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 	var endAnim
 	if(is_skipping):
-		endAnim = Main_DecodeLevel.playAnimStep(1)
+		endAnim = Main_DecodeLevel.anim1Step(1)
 		Main_Sounds.stopAllSounds()
 		endAnim()
 	else:
-		endAnim = Main_DecodeLevel.playAnimStep(0)
+		endAnim = Main_DecodeLevel.anim1Step(0)
 	if(endAnim):
 		endAnim()
 	else:

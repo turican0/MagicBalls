@@ -92,8 +92,8 @@ public:
 	void playAnim(int index);
 	PackedByteArray getVGABuffer();
 	int playAnimStep(int run);
-	void mapMenuInit();
-	int mapMenuStep(int run);
+	//void mapMenuInit();
+	//int mapMenuStep(int run);
 	Dictionary getLangTexts();
 	void changeLanguage(int index);
 
@@ -106,8 +106,8 @@ public:
 	int REMC2StepAnim(int run);
 	void REMC2BeginMap();
 	void REMC2EndMap();
-	void REMC2CycleMap();
+	void REMC2StepMap();
 	void REMC2BeginInGame();
 	void REMC2EndInGame();
-	void REMC2CycleInGame();
+	void REMC2StepInGame();
 	};
