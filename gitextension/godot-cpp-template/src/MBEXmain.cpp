@@ -271,21 +271,10 @@ void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 }
 
 void convertMinimal() {
-	sub_5BCC0_set_any_variables1(); //23C9F2 - 23CCC0
-	if (!sub_5BF50_load_psxdata()) //23C9F7 - 23CF50 //something with files about their loading, or just a set of Palettes
-		exit(-1);
-	sub_5C1B0_set_any_variables2(); //23CA05 - 23D1B0
-	sub_71410_process_tmaps(); //252410
-	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_POINTERSDATTAB]); //24fb90
-	CreateIndexes_6EB90(&filearray_2aa18c[filearrayindex_BUILD00DATTAB]); //24fb90 adress 0x23ca2e
-	sub_101C0();
-	sub_8CEDF_install_mouse();
-	sub_46DD0_init_sound_and_music();
 	x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
 	x_WORD_180660_VGA_type_resolution = 8;
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
-
 	x_DWORD_180648_map_resolution2_x = 640; //fake resolution
 	x_DWORD_180644_map_resolution2_y = 480;
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = 1;
