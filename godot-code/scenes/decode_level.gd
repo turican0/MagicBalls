@@ -454,6 +454,10 @@ func mapMenuEnd():
 	#var mapMenuOut=Global.MBEX.REMC2StepMap(endMapMenu)
 	#Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	#return mapMenuOut
+	
+func inGameBegin():
+	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	Global.MBEX.REMC2BeginInGame()
 
 
 func exitGame():	

@@ -1359,11 +1359,13 @@ void MBEXclass::REMC2BeginInGame() {
 	}
 	sub_46830_main_loop_mod_end_cycle_part1();
 	sub_46830_main_loop_mod_end_cycle_part2();
-	sub_46830_main_loop_mod_end_cycle_part3();
-	sub_46830_main_loop_mod_end_cycle_part4();
+	//sub_46830_main_loop_mod_end_cycle_part3();
+	//sub_46830_main_loop_mod_end_cycle_part4();
 }
 
 void MBEXclass::REMC2EndInGame() {
+	sub_46830_main_loop_mod_end_cycle_part3();
+	sub_46830_main_loop_mod_end_cycle_part4();
 }
 
 void MBEXclass::REMC2StepInGame() {

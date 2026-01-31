@@ -25,6 +25,7 @@ func init():
 	# 3. Generování a vykreslení sítě
 	get_parent().get_node("DecodeLevel").init()
 	get_parent().get_node("DecodeLevel").initSound()
+	get_parent().get_node("DecodeLevel").inGameBegin()
 	get_parent().get_node("DecodeLevel").setMesh()
 	#recalculate_mesh()	
 	#recalculate_mesh()

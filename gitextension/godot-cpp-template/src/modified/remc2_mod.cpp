@@ -2056,7 +2056,7 @@ bool sub_46830_main_loop_mod_end_cycle_part2() //227830
 					}
 				}
 			}
-			InGameLoop_47320_mod(REMC2_tempa2);			
+			//InGameLoop_47320_mod(REMC2_tempa2);			
 			return true;
 	}
 	return false;
