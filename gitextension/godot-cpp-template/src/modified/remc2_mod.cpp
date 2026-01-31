@@ -2026,6 +2026,21 @@ bool sub_46830_main_loop_mod_end_cycle_part1() //227830
 
 bool sub_46830_main_loop_mod_end_cycle_part2() //227830
 {
+	char dataPath[MAX_PATH];//added
+	switch (D41A0_0.terrain_2FECE.MapType) { //added
+		case MapType_t::Day: //added
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALD-0.DAT"); //added
+			break; //added
+		case MapType_t::Night: //added
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT"); //added
+			break; //added
+		case MapType_t::Cave: //added
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALC-0.DAT"); //added
+			break; //added
+	} //added
+	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);//added
+	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0], true);//added
+
 	if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
 			if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
 				switch (D41A0_0.terrain_2FECE.MapType) {
