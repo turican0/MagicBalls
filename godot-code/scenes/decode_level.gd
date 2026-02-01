@@ -13,12 +13,16 @@ var Main_Player: Node
 var Main_UI: Node
 var Main_Filter: Node
 
+var fadeNode: Node3D
+
 const KEY_INDEX := {
 	KEY_W: 0, # Forward
 	KEY_S: 1, # Backward
 	KEY_A: 2, # Left
 	KEY_D: 3,  # Right
-	KEY_SPACE: 4 # SPACE
+	KEY_SPACE: 4, # SPACE
+	KEY_F5: 5, # F5
+	KEY_F9: 6 # F9
 }
 
 const MOUSE_BUTTON_INDEX := {
@@ -234,30 +238,42 @@ func _process(_p_delta) -> void:
 		last_button = -1
 	
 	var continueGame=Global.MBEX.REMC2StepInGame(input_state)
-	Global.MBEX.renew_terrain()
-	var mods = Global.MBEX.getPaletteModifications()
-	var current_gain = mods[0]
-	var current_offset = mods[1]
-	var current_saturation = mods[2]
-	if current_gain != last_gain or current_offset != last_offset or current_saturation != last_saturation:
-		if(!filter_material):
-			filter_material = Main_Filter.material as ShaderMaterial
-		filter_material.set_shader_parameter("MyGain", current_gain)
-		filter_material.set_shader_parameter("MyOffset", current_offset)
-		filter_material.set_shader_parameter("MySatMultiplier", current_saturation)
-		last_gain = current_gain
-		last_offset = current_offset
-		last_saturation = current_saturation
-	#var gain_vec = Vector3(gain_rgb.r, gain_rgb.g, gain_rgb.b)
-	#var offset_vec = Vector3(offset_rgb.r, offset_rgb.g, offset_rgb.b)	
-	#Main_Filter.material_override.set_shader_parameter("MyGain", gain_vec)
-	#Main_Filter.material_override.set_shader_parameter("MyOffset", offset_vec)
-	updatePlayer(getPlayerPosRot())
-	renderEntites(getEntites())
-	get_parent().get_node("UI").updateSpells(Global.MBEX.getActiveSpells())
-	get_parent().get_node("UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
-	get_parent().get_node("UI").updateMinimap(Global.MBEX.getMinimap())
-	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	if(continueGame):
+		Global.MBEX.renew_terrain()
+		var mods = Global.MBEX.getPaletteModifications()
+		var current_gain = mods[0]
+		var current_offset = mods[1]
+		var current_saturation = mods[2]
+		if current_gain != last_gain or current_offset != last_offset or current_saturation != last_saturation:
+			if(!filter_material):
+				filter_material = Main_Filter.material as ShaderMaterial
+			filter_material.set_shader_parameter("MyGain", current_gain)
+			filter_material.set_shader_parameter("MyOffset", current_offset)
+			filter_material.set_shader_parameter("MySatMultiplier", current_saturation)
+			last_gain = current_gain
+			last_offset = current_offset
+			last_saturation = current_saturation
+		#var gain_vec = Vector3(gain_rgb.r, gain_rgb.g, gain_rgb.b)
+		#var offset_vec = Vector3(offset_rgb.r, offset_rgb.g, offset_rgb.b)	
+		#Main_Filter.material_override.set_shader_parameter("MyGain", gain_vec)
+		#Main_Filter.material_override.set_shader_parameter("MyOffset", offset_vec)
+		updatePlayer(getPlayerPosRot())
+		renderEntites(getEntites())
+		get_parent().get_node("UI").updateSpells(Global.MBEX.getActiveSpells())
+		get_parent().get_node("UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
+		get_parent().get_node("UI").updateMinimap(Global.MBEX.getMinimap())
+		Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	else:
+		runned=false
+		call_deferred("_do_change_scene")
+
+func _do_change_scene():
+	Global.Main_Sounds.stopAllSounds()
+	fadeNode = Global.addFadeIn(fadeNode)
+	await fadeNode.fade_finished
+	Global.last_scene_path = get_tree().current_scene.scene_file_path
+	get_tree().change_scene_to_file("res://scenes/GameMap.tscn")
+		
 
 
 func renderEntites(data_array: PackedFloat32Array) -> void:

@@ -58,10 +58,9 @@ func _ready():
 	gamemap.position-=centerPos*$Control/GameMap.scale
 	_init_sprite_pool()
 	Main_DecodeLevel = get_node("DecodeLevel")
-	Main_Sounds = $Sounds
-	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
-	Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
-	Main_DecodeLevel.Main_Sounds = Main_Sounds	
+	Global.Main_Sounds = $Sounds
+	Global.Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
+	Global.Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
 	fadeNode = Global.addFadeOut(fadeNode)
 	
 	for cfgback in map_menu_selection:
@@ -115,8 +114,8 @@ func startMenuLoop():
 	
 func menuInit():
 	Main_DecodeLevel.init()
-	Main_DecodeLevel.initSound()
-	Main_Sounds.setSoundBank(0)
+	Global.initSound()
+	Global.Main_Sounds.setSoundBank(0)
 	Main_DecodeLevel.mapMenuBegin()
 	Main_DecodeLevel.changeLanguage(2)
 	Main_DecodeLevel.getLangTexts()
@@ -185,7 +184,7 @@ func _process(delta) -> void:
 		
 func endMapMenu():
 	Main_DecodeLevel.mapMenuEnd()
-	Main_Sounds.stopAllSounds()
+	Global.Main_Sounds.stopAllSounds()
 	#endAnim()
 
 func mouseEvents(delta):

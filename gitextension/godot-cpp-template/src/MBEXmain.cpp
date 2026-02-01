@@ -1008,19 +1008,34 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 		bool is_pressed = (action == "pressed");
 		switch (key_index) {
 			case 0:
-				setPress(is_pressed, 0x4800);
+				setPress(is_pressed, 0x4800);//UP
 				break;
 			case 1:
-				setPress(is_pressed, 0x5000);
+				setPress(is_pressed, 0x5000);//DOWN
 				break;
 			case 2:
-				setPress(is_pressed, 0x4b00);
+				setPress(is_pressed, 0x4b00);//LEFT
 				break;
 			case 3:
-				setPress(is_pressed, 0x4d00);
+				setPress(is_pressed, 0x4d00);//RIGHT
 				break;
 			case 4:
-				setPress(is_pressed, 0x3920);
+				setPress(is_pressed, 0x3920);//SPACE
+				break;
+			case 5:
+				if (is_pressed) {
+					SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
+					x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
+					x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
+					HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+				}
+				break;
+			case 6:
+				if (is_pressed) {
+					LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
+					x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
+					HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+				}
 				break;
 		}
 	}
