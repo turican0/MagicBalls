@@ -9,12 +9,35 @@ var music_map = {}
 var music_hi_map = {}
 var himusic = true
 
+var Main_Sounds: Node
+var Main_Music
+
 var cdPath:String="user://CDdata/"
 var convertdata:String="user://convertdata/"
 var hidata:String="res://hidata/"
 
 var langTexts:Dictionary
 
+func initSound():
+	if(soundInited):
+		return
+	if(!get_tree().root.get_node_or_null("Sounds")):
+		var sounds_scene = preload("res://scenes/Sounds.tscn")
+		var new_layer = sounds_scene.instantiate()
+		get_tree().root.add_child(new_layer)
+		new_layer.name = "Sounds"
+		Main_Sounds=get_tree().root.get_node_or_null("Sounds")
+	Main_Sounds.MainMusic = Main_Sounds.get_node("MidiPlayer")
+	Main_Sounds.MainMusicHi = Main_Sounds.get_node("AudioStreamPlayer")
+	
+	Main_Sounds.load_sounds_from_dir(Global.convertdata+"sounds/")
+	Main_Sounds.load_musics_from_dir(Global.convertdata+"musics/")
+	Main_Sounds.load_musics_hi_from_dir(Global.hidata+"musics/")	
+	Main_Sounds.init()
+	Main_Sounds.setSoundBank(1)#Night
+	Global.soundInited = true
+
+#FadeInOut
 func fadeInit(fadeNode):
 	if(!get_tree().root.get_node_or_null("FadeInOut")):
 		var fade_layer_scene = preload("res://scenes/FadeInOut.tscn")
@@ -23,7 +46,6 @@ func fadeInit(fadeNode):
 		get_tree().root.add_child(new_layer)
 		new_layer.name = "FadeInOut"
 	return get_tree().root.get_node_or_null("FadeInOut")
-	
 func addFadeIn(fadeNode):
 	fadeNode=fadeInit(fadeNode)
 	fadeNode.start_fade(1.0, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
@@ -40,7 +62,6 @@ func load_custom_texture(path: String) -> ImageTexture:
 		return null
 	var tex = ImageTexture.create_from_image(img)
 	return tex
-
 func load_external_audio(file_path: String) -> AudioStream:
 	if not FileAccess.file_exists(file_path):
 		print("Error: File not found at ", file_path)
@@ -60,7 +81,6 @@ func load_external_audio(file_path: String) -> AudioStream:
 		_:
 			print("Error: Unsupported audio format: ", ext)
 			return null
-
 func _parse_wav(buffer: PackedByteArray) -> AudioStreamWAV:
 	if buffer.slice(0, 4).get_string_from_ascii() != "RIFF" or buffer.slice(8, 12).get_string_from_ascii() != "WAVE":
 		print("Error: Not a valid WAV file")

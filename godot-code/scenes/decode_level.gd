@@ -12,7 +12,6 @@ var direction2: Vector3 = Vector3(1,0,0)
 var Main_Player: Node
 var Main_UI: Node
 var Main_Filter: Node
-var Main_Sounds: Node
 
 const KEY_INDEX := {
 	KEY_W: 0, # Forward
@@ -216,7 +215,7 @@ func _process(_p_delta) -> void:
 		return
 	getInputs()
 	#MBEX.soundQueueClear()
-	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
+	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())
 	if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
 		if Main_UI.is_ctrl_active:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -258,7 +257,7 @@ func _process(_p_delta) -> void:
 	get_parent().get_node("UI").updateSpells(Global.MBEX.getActiveSpells())
 	get_parent().get_node("UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
 	get_parent().get_node("UI").updateMinimap(Global.MBEX.getMinimap())
-	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
@@ -427,10 +426,10 @@ func anim1Begin(index:int):
 	changeLanguage(2)#only temporary fix
 
 func anim1Step(endAnimIn:int) -> int:
-	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
 	#var endAnimOut=Global.MBEX.playAnimStep(endAnimIn)
 	var endAnimOut=Global.MBEX.REMC2StepAnim(endAnimIn)
-	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return endAnimOut
 	
 func anim1End():
@@ -443,9 +442,9 @@ func mapMenuBegin():
 	Global.MBEX.REMC2BeginMap()
 
 func mapMenuStep():
-	Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
+	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
 	var mapMenuOut=Global.MBEX.REMC2StepMap()
-	Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 
 func mapMenuEnd():
@@ -517,17 +516,6 @@ func MBEXextractCD(path, path2):
 	#var level_tab_data_unpacked:PackedByteArray = Global.MBEX.deRNC(level_tab_data)
 	#Global.MBEX.TerrainMake(level_tab_data_unpacked,Global.cdPath)
 	
-
-func initSound():
-	if(Global.soundInited):
-		return
-	Global.soundInited = true
-	Main_Sounds.load_sounds_from_dir(Global.convertdata+"sounds/")
-	Main_Sounds.load_musics_from_dir(Global.convertdata+"musics/")
-	Main_Sounds.load_musics_hi_from_dir(Global.hidata+"musics/")
-	
-	Main_Sounds.init()
-	Main_Sounds.setSoundBank(1)#Night
 
 #func initTerrainObsolette():
 	#mapHeightmap_11B4E0 = Global.MBEX.TerrainGetMapHeight()

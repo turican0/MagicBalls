@@ -128,7 +128,7 @@ func setSoundBank(bank):
 #	9-VIDEO6
 
 
-const MAX_SIMULTANEOUS_SOUNDS := 1
+const MAX_SIMULTANEOUS_SOUNDS := 10
 var sfx_players: Array[AudioStreamPlayer] = []
 
 func init() -> void:

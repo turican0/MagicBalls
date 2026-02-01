@@ -8,8 +8,8 @@ signal video_finished
 var fadeNode: Node3D
 
 var Main_DecodeLevel
-var Main_Sounds
-var MainMusic
+#var Main_Sounds
+#var MainMusic
 func _ready():
 	await get_tree().process_frame
 	sprback = $Control/Sprite2D
