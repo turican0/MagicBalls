@@ -42,6 +42,7 @@ func _ready():
 #	545 54 116 478
 #	999 -312
 	await get_tree().process_frame
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Engine.max_fps = 60
 	
 	tooltip_label = Label.new()

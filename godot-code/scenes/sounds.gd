@@ -19,9 +19,9 @@ var MainMusicHi:AudioStreamPlayer
 	
 func get_free_player_indices() -> Array:
 	var status = []
-	status.resize(sfx_players.size())	
-	for i in range(sfx_players.size()):
-		status[i] = sfx_players[i].playing
+	status.resize(Global.sfx_players.size())	
+	for i in range(Global.sfx_players.size()):
+		status[i] = Global.sfx_players[i].playing
 	return status
 	
 func load_musics_from_dir(path: String):
@@ -129,7 +129,6 @@ func setSoundBank(bank):
 
 
 const MAX_SIMULTANEOUS_SOUNDS := 10
-var sfx_players: Array[AudioStreamPlayer] = []
 
 func init() -> void:
 	for i in MAX_SIMULTANEOUS_SOUNDS:
@@ -137,7 +136,7 @@ func init() -> void:
 		player.name = "SFXPlayer" + str(i)
 		player.bus = "SFX"
 		add_child(player)
-		sfx_players.append(player)
+		Global.sfx_players.append(player)
 		
 func stopAllSounds():
 	stop_music()
@@ -157,7 +156,7 @@ func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 	#if(sfx_players[player_index].playing):
 		#return
 	var stream: AudioStream = Global.sounds_map[pack_idx][sound_idx]
-	var player = sfx_players[player_index]
+	var player = Global.sfx_players[player_index]
 	if player.playing:
 		player.stop()
 	player.stream = stream
@@ -166,11 +165,11 @@ func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 
 func stop_sound(index: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
-		sfx_players[index].stop()
+		Global.sfx_players[index].stop()
 
 func set_sound_volume(index: int, volume_int: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
-		sfx_players[index].volume_linear = float(volume_int) / 128.0
+		Global.sfx_players[index].volume_linear = float(volume_int) / 128.0
 
 func set_music_volume(volume_int: int) -> void:
 	if(Global.himusic):

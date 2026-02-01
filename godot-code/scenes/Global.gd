@@ -8,6 +8,7 @@ var sounds_map = {}
 var music_map = {}
 var music_hi_map = {}
 var himusic = true
+var sfx_players: Array[AudioStreamPlayer] = []
 
 var Main_Sounds: Node
 var Main_Music

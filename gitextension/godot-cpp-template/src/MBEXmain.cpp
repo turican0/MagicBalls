@@ -1378,7 +1378,9 @@ void MBEXclass::REMC2BeginMap() {
 	if (MBEXstate == 1)
 		REMC2BeginItem();
 	//Intros_76D10_mod_begin(0);
+	x_BYTE_E29E1 = 1; //added
 	MainMenu_76FA0_mod_begin();
+	x_BYTE_E29E1 = 0; //added
 	LoadAndSetGraphicsAndPalette_7AC00();
 	NewGameDialog_77350_mod_Begin();
 	MBEXstate = 7;
@@ -1409,11 +1411,15 @@ void MBEXclass::REMC2BeginInGame() {
 	MBEXstate = 9;
 }
 
-void MBEXclass::REMC2EndInGame() {
+bool MBEXclass::REMC2EndInGame() {
 	InGameLoop_47320_mod_end();
-	sub_46830_main_loop_mod_end_cycle_part3();
+	if (!sub_46830_main_loop_mod_end_cycle_part3()) {
+		MBEXstate = 1;
+		return false;
+	}
 	sub_46830_main_loop_mod_end_cycle_part4();
-	MBEXstate = 10;
+	MBEXstate = 11;
+	return true;
 }
 
 bool MBEXclass::REMC2StepInGame(Dictionary inputs) {
