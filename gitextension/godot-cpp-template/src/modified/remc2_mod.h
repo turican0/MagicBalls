@@ -45,3 +45,5 @@ void MenusAndIntros_76930_mod_end();
 
 void MainMenu_76FA0_mod_begin();
 void MainMenu_76FA0_mod_end();
+void InGameLoop_47320_mod_begin();
+void InGameLoop_47320_mod_end();

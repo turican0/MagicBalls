@@ -234,7 +234,7 @@ func _process(_p_delta) -> void:
 		last_spell_index = -1
 		last_button = -1
 	
-	Global.MBEX.RunGameStep(input_state)
+	var continueGame=Global.MBEX.REMC2StepInGame(input_state)
 	Global.MBEX.renew_terrain()
 	var mods = Global.MBEX.getPaletteModifications()
 	var current_gain = mods[0]
@@ -469,8 +469,8 @@ func setMesh():
 	Global.MBEX.initialize_grid_data()
 	Global.MBEX.recalculate_mesh()
 
-func loadlevel(levelnumber: int):
-	sub_533B0_decompress_levels(levelnumber)
+#func loadlevel(levelnumber: int):
+	#sub_533B0_decompress_levels(levelnumber)
 
 func getVGABuffer():
 	return Global.MBEX.getVGABuffer()
@@ -486,36 +486,36 @@ func MBEXconvert(path, path2):
 func MBEXextractCD(path, path2):
 	Global.MBEX.convertOriginalDataExtractCD(path,path2)
 
-func sub_533B0_decompress_levels(level_id: int):
-	if level_id >= 1000:
-		return true
-	var level_dat_file: FileAccess = null
-	var level_tab_file: FileAccess = null
-	level_dat_file = FileAccess.open(levels_dat_path, FileAccess.READ)
-
-	if level_dat_file == null:
-		levels_dat_path = ProjectSettings.get_setting("global_paths/cd_folder") + "/LEVELS/LEVELS.DAT"
-		level_dat_file = FileAccess.open(levels_dat_path, FileAccess.READ)
-
-	if level_dat_file == null:
-		return false
-	level_tab_file = FileAccess.open(levels_tab_path, FileAccess.READ)
-	level_dat_file = FileAccess.open(levels_dat_path, FileAccess.READ)
-	
-	var level_tab_file_arr: Array[int] = []
-	while not level_tab_file.eof_reached():
-		level_tab_file_arr.append(level_tab_file.get_32())   # načte 4 byty jako int32
-	level_tab_file.close()
-	var level_start: int = level_tab_file_arr[level_id]
-	var compressed_size: int = level_tab_file_arr[level_id+1]-level_tab_file_arr[level_id]
-	
-	level_dat_file.seek(level_start)
-	var level_tab_data: PackedByteArray = level_dat_file.get_buffer(compressed_size)
-	level_dat_file.close()
-	
-	MBEXinit()
-	var level_tab_data_unpacked:PackedByteArray = Global.MBEX.deRNC(level_tab_data)
-	Global.MBEX.TerrainMake(level_tab_data_unpacked,Global.cdPath)
+#func sub_533B0_decompress_levels(level_id: int):
+	#if level_id >= 1000:
+		#return true
+	#var level_dat_file: FileAccess = null
+	#var level_tab_file: FileAccess = null
+	#level_dat_file = FileAccess.open(levels_dat_path, FileAccess.READ)
+#
+	#if level_dat_file == null:
+		#levels_dat_path = ProjectSettings.get_setting("global_paths/cd_folder") + "/LEVELS/LEVELS.DAT"
+		#level_dat_file = FileAccess.open(levels_dat_path, FileAccess.READ)
+#
+	#if level_dat_file == null:
+		#return false
+	#level_tab_file = FileAccess.open(levels_tab_path, FileAccess.READ)
+	#level_dat_file = FileAccess.open(levels_dat_path, FileAccess.READ)
+	#
+	#var level_tab_file_arr: Array[int] = []
+	#while not level_tab_file.eof_reached():
+		#level_tab_file_arr.append(level_tab_file.get_32())   # načte 4 byty jako int32
+	#level_tab_file.close()
+	#var level_start: int = level_tab_file_arr[level_id]
+	#var compressed_size: int = level_tab_file_arr[level_id+1]-level_tab_file_arr[level_id]
+	#
+	#level_dat_file.seek(level_start)
+	#var level_tab_data: PackedByteArray = level_dat_file.get_buffer(compressed_size)
+	#level_dat_file.close()
+	#
+	#MBEXinit()
+	#var level_tab_data_unpacked:PackedByteArray = Global.MBEX.deRNC(level_tab_data)
+	#Global.MBEX.TerrainMake(level_tab_data_unpacked,Global.cdPath)
 	
 
 func initSound():
@@ -529,10 +529,10 @@ func initSound():
 	Main_Sounds.init()
 	Main_Sounds.setSoundBank(1)#Night
 
-func initTerrainObsolette():
-	mapHeightmap_11B4E0 = Global.MBEX.TerrainGetMapHeight()
-	mapTerrainType_10B4E0 = Global.MBEX.TerrainGetMapTerrainType()
-	mapAngle_13B4E0 = Global.MBEX.TerrainGetAngle()
+#func initTerrainObsolette():
+	#mapHeightmap_11B4E0 = Global.MBEX.TerrainGetMapHeight()
+	#mapTerrainType_10B4E0 = Global.MBEX.TerrainGetMapTerrainType()
+	#mapAngle_13B4E0 = Global.MBEX.TerrainGetAngle()
 	
 
 func getPlayerPosRot() -> Dictionary:
@@ -543,9 +543,9 @@ func getEntites() -> Array:
 	var result: Array = Global.MBEX.GetEntites()
 	return result
 	
-func getTerrainChanges() -> Dictionary:
-	var result: Dictionary = Global.MBEX.GetTerrainChanges()
-	return result
+#func getTerrainChanges() -> Dictionary:
+	#var result: Dictionary = Global.MBEX.GetTerrainChanges()
+	#return result
 
 var mapTerrainType_10B4E0: PackedByteArray = PackedByteArray()
 var mapHeightmap_11B4E0: PackedByteArray = PackedByteArray()

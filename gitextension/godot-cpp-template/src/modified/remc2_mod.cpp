@@ -1988,15 +1988,16 @@ void sub_46830_main_loop_mod_begin_cycle() //227830
 int REMC2_tempa2;
 int REMC2_tempa3;
 
-void InGameLoop_47320_mod(signed int a1) //228320
+void InGameLoop_47320_mod_begin()
 {
 	x_D41A0_BYTEARRAY_4_struct.paletteMod_51 = 0;
 	uint32_t gameTurn = 0;
 	D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.word[1] = 0;
+	/*
 	while (1) {
 		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8)
 			break; //end level
-		DrawAndEventsInGame_47560(a1, x_DWORD_17DB54_game_turn2);
+		DrawAndEventsInGame_47560(REMC2_tempa2, x_DWORD_17DB54_game_turn2);
 		if (gameTurn < 2) {
 			StopMusic_8E020();
 			if (gameTurn == 1)
@@ -2004,6 +2005,28 @@ void InGameLoop_47320_mod(signed int a1) //228320
 			gameTurn++;
 		}
 	}
+	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
+	*/
+}
+
+void InGameLoop_47320_mod_end()
+{
+	/*
+	x_D41A0_BYTEARRAY_4_struct.paletteMod_51 = 0;
+	uint32_t gameTurn = 0;
+	D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.word[1] = 0;
+	while (1) {
+		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8)
+			break; //end level
+		DrawAndEventsInGame_47560(REMC2_tempa2, x_DWORD_17DB54_game_turn2);
+		if (gameTurn < 2) {
+			StopMusic_8E020();
+			if (gameTurn == 1)
+				StartMusic_8E160(D41A0_0.maptypeMusic_0x235, 0x7Fu);
+			gameTurn++;
+		}
+	}
+	*/
 	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
 }
 

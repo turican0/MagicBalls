@@ -109,5 +109,5 @@ public:
 	int REMC2StepMap();
 	void REMC2BeginInGame();
 	void REMC2EndInGame();
-	void REMC2StepInGame();
+	bool REMC2StepInGame(Dictionary inputs);
 	};

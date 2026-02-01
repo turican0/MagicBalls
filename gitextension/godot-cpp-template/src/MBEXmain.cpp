@@ -65,7 +65,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap"), &MBEXclass::REMC2StepMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
-	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame"), &MBEXclass::REMC2StepInGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary"), &MBEXclass::REMC2StepInGame);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -1388,16 +1388,24 @@ void MBEXclass::REMC2BeginInGame() {
 	}
 	sub_46830_main_loop_mod_end_cycle_part1();
 	sub_46830_main_loop_mod_end_cycle_part2();
+	InGameLoop_47320_mod_begin();
 	//sub_46830_main_loop_mod_end_cycle_part3();
 	//sub_46830_main_loop_mod_end_cycle_part4();
 	MBEXstate = 9;
 }
 
 void MBEXclass::REMC2EndInGame() {
+	InGameLoop_47320_mod_end();
 	sub_46830_main_loop_mod_end_cycle_part3();
 	sub_46830_main_loop_mod_end_cycle_part4();
 	MBEXstate = 10;
 }
 
-void MBEXclass::REMC2StepInGame() {
+bool MBEXclass::REMC2StepInGame(Dictionary inputs) {
+	if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8) {
+		REMC2EndInGame();
+		return false;
+	}
+	MBEXclass::RunGameStep(inputs);
+	return true;
 }
