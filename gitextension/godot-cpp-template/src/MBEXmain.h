@@ -20,6 +20,8 @@
 
 #include <godot_cpp/classes/shader_material.hpp>
 
+#include <godot_cpp/classes/texture_rect.hpp>
+
 using namespace godot;
 
 class MBEXclass : public RefCounted {
@@ -104,9 +106,9 @@ public:
 	void REMC2BeginAnim(int animIndex);
 	void REMC2EndAnim();
 	int REMC2StepAnim(int run);
-	void REMC2BeginMap();
+	void REMC2BeginMap(TextureRect* scrBufferRect);
 	void REMC2EndMap();
-	int REMC2StepMap();
+	int REMC2StepMap(Dictionary inputs);
 	void REMC2BeginInGame();
 	bool REMC2EndInGame();
 	bool REMC2StepInGame(Dictionary inputs);

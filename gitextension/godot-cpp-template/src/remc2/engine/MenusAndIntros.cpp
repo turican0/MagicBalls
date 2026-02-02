@@ -4807,20 +4807,20 @@ void DrawEndGameTable_82C20(__int16 a1) //263c20
 			int portalIndex = 0;
 			while (secretMapScreenPortals_E2970[portalIndex].activated_12) {
 				if (a1 == secretMapScreenPortals_E2970[portalIndex].levelNumber_6) {
-					v30x[2] = x_DWORD_17DDBCx[0 + 5 * portalIndex];
-					v30x[3] = x_DWORD_17DDBCx[1 + 5 * portalIndex];
-					v30x[4] = x_DWORD_17DDBCx[2 + 5 * portalIndex];
-					v30x[5] = x_DWORD_17DDBCx[3 + 5 * portalIndex];
-					v30x[6] = x_DWORD_17DDBCx[4 + 5 * portalIndex]; //time of game
+					v30x[2] = x_DWORD_17DDBCx[0 + 5 * portalIndex]; //Spells found
+					v30x[3] = x_DWORD_17DDBCx[1 + 5 * portalIndex]; //Accuracy
+					v30x[4] = x_DWORD_17DDBCx[2 + 5 * portalIndex]; //Creatures Killed
+					v30x[5] = x_DWORD_17DDBCx[3 + 5 * portalIndex]; //Mana
+					v30x[6] = x_DWORD_17DDBCx[4 + 5 * portalIndex]; //Time Taken
 				}
 				portalIndex++;
 			}
 		} else {
-			v30x[2] = x_DWORD_17DBC8x[0 + 5 * a1];
-			v30x[3] = x_DWORD_17DBC8x[1 + 5 * a1];
-			v30x[4] = x_DWORD_17DBC8x[2 + 5 * a1];
-			v30x[5] = x_DWORD_17DBC8x[3 + 5 * a1];
-			v30x[6] = x_DWORD_17DBC8x[4 + 5 * a1]; //time of game
+			v30x[2] = x_DWORD_17DBC8x[0 + 5 * a1]; //Spells found
+			v30x[3] = x_DWORD_17DBC8x[1 + 5 * a1]; //Accuracy
+			v30x[4] = x_DWORD_17DBC8x[2 + 5 * a1]; //Creatures Killed
+			v30x[5] = x_DWORD_17DBC8x[3 + 5 * a1]; //Mana
+			v30x[6] = x_DWORD_17DBC8x[4 + 5 * a1]; //Time Taken
 		}
 		int maxstrLen = strlen(texts[0]);
 		for (int i = 1; i < 6; i++) {
@@ -4859,7 +4859,6 @@ void DrawEndGameTable_82C20(__int16 a1) //263c20
 		int x3 = xy_DWORD_17DEC0_spritestr[65].width_4 + beginX;
 		sub_7FAE0_draw_text(texts[0], x3, frameWidth - xy_DWORD_17DEC0_spritestr[65].width_4 + x3, width4, 0);
 		width4 += 5;
-
 		int beginX2;
 		for (int k = 1; k < 5; k++) {
 			beginX2 = width4 + 2;

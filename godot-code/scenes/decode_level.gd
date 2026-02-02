@@ -395,7 +395,7 @@ const SCREEN_HEIGHT := 480
 
 func getInputs():
 	var changes = []
-	if(Main_UI.is_ctrl_active):
+	if Main_UI && Main_UI.is_ctrl_active:
 		return
 	for keycode: int in KEY_INDEX:
 		var index: int = KEY_INDEX[keycode]
@@ -429,7 +429,15 @@ func getInputs():
 	mouse_640 += total_mouse_delta*0.2
 	mouse_640.x = clamp(mouse_640.x, 0, SCREEN_WIDTH)
 	mouse_640.y = clamp(mouse_640.y, 0, SCREEN_HEIGHT)
+	
+	var real_mouse_pos = get_viewport().get_mouse_position()
+	var screen_size = get_viewport().get_visible_rect().size
+	var m_x = (real_mouse_pos.x / screen_size.x) * SCREEN_WIDTH
+	var m_y = (real_mouse_pos.y / screen_size.y) * SCREEN_HEIGHT
+	m_x = clamp(m_x, 0, SCREEN_WIDTH)
+	m_y = clamp(m_y, 0, SCREEN_HEIGHT)
 	input_state["mouse_pos"] = mouse_640
+	input_state["mouse_pos2"] = Vector2(m_x, m_y)
 
 func init():
 	MBEXinit()
@@ -453,13 +461,14 @@ func anim1End():
 	#Global.MBEX.REMC2EndItem()
 
 
-func mapMenuBegin():
+func mapMenuBegin(ScrBufferRect:TextureRect):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
-	Global.MBEX.REMC2BeginMap()
+	Global.MBEX.REMC2BeginMap(ScrBufferRect)
 
 func mapMenuStep():
+	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
-	var mapMenuOut=Global.MBEX.REMC2StepMap()
+	var mapMenuOut=Global.MBEX.REMC2StepMap(input_state)
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 

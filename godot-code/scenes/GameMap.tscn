@@ -16,6 +16,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GameMap" type="Sprite2D" parent="Control" unique_id=1292979862]
+visible = false
 scale = Vector2(1.5, 1.5)
 
 [node name="Animations" type="TextureRect" parent="Control/GameMap" unique_id=1941989428]

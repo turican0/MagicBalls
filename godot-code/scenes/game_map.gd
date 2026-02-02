@@ -117,7 +117,7 @@ func menuInit():
 	Main_DecodeLevel.init()
 	Global.initSound()
 	Global.Main_Sounds.setSoundBank(0)
-	Main_DecodeLevel.mapMenuBegin()
+	Main_DecodeLevel.mapMenuBegin($Control/Foreground)
 	Main_DecodeLevel.changeLanguage(2)
 	Main_DecodeLevel.getLangTexts()
 	

@@ -60,9 +60,9 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim", "Int"), &MBEXclass::REMC2BeginAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndAnim"), &MBEXclass::REMC2EndAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Int"), &MBEXclass::REMC2StepAnim);
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap"), &MBEXclass::REMC2BeginMap);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap", "TextureRect"), &MBEXclass::REMC2BeginMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndMap"), &MBEXclass::REMC2EndMap);
-	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap"), &MBEXclass::REMC2StepMap);
+	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap", "Dictionary"), &MBEXclass::REMC2StepMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary"), &MBEXclass::REMC2StepInGame);
@@ -997,9 +997,10 @@ Array MBEXclass::getPaletteModifications() {
 	return result;
 }
 
-uint32_t gameTurn = 0;
-void MBEXclass::RunGameStep(Dictionary inputs) {
-
+void handleInputs(Dictionary inputs,int type) {
+	LastPressedKey_1806E4 = 0;
+	//type==0 game
+	//type==1 mapmenu
 	Array key_changes = inputs["key_changes"];
 	for (int i = 0; i < key_changes.size(); i++) {
 		Dictionary change = key_changes[i];
@@ -1008,21 +1009,23 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 		bool is_pressed = (action == "pressed");
 		switch (key_index) {
 			case 0:
-				setPress(is_pressed, 0x4800);//UP
+				setPress(is_pressed, 0x4800); //UP
 				break;
 			case 1:
-				setPress(is_pressed, 0x5000);//DOWN
+				setPress(is_pressed, 0x5000); //DOWN
 				break;
 			case 2:
-				setPress(is_pressed, 0x4b00);//LEFT
+				setPress(is_pressed, 0x4b00); //LEFT
 				break;
 			case 3:
-				setPress(is_pressed, 0x4d00);//RIGHT
+				setPress(is_pressed, 0x4d00); //RIGHT
 				break;
 			case 4:
-				setPress(is_pressed, 0x3920);//SPACE
+				setPress(is_pressed, 0x3920); //SPACE
 				break;
 			case 5:
+				if (type != 0)
+					break;
 				if (is_pressed) {
 					SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
 					x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
@@ -1031,6 +1034,8 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 				}
 				break;
 			case 6:
+				if (type != 0)
+					break;
 				if (is_pressed) {
 					LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
 					x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
@@ -1048,25 +1053,25 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 		String action = change["action"];
 		bool is_pressed = (action == "pressed");
 		switch (button_index) {
-			case 0://MOUSE_BUTTON_LEFT
+			case 0: //MOUSE_BUTTON_LEFT
 				if (is_pressed)
 					buttonresult |= 0x2;
 				else
 					buttonresult |= 0x4;
 				break;
-			case 1://MOUSE_BUTTON_RIGHT
+			case 1: //MOUSE_BUTTON_RIGHT
 				if (is_pressed)
 					buttonresult |= 0x8;
 				else
 					buttonresult |= 0x10;
 				break;
-			case 2://MOUSE_BUTTON_MIDDLE
+			case 2: //MOUSE_BUTTON_MIDDLE
 				if (is_pressed)
 					buttonresult |= 0x20;
 				else
 					buttonresult |= 0x40;
 				break;
-			case 3://MOUSE_BUTTON_WHEEL_UP
+			case 3: //MOUSE_BUTTON_WHEEL_UP
 				/* if (is_pressed)
 					buttonresult |= 2;
 				else
@@ -1081,9 +1086,33 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 		}
 	}
 
-	Vector2 mouse_pos = inputs["mouse_pos"];
-	MouseEvents(buttonresult, mouse_pos.x, 480-mouse_pos.y);
+	Vector2 mouse_pos;
+	if (type == 0) {
+		mouse_pos = inputs["mouse_pos"];
+		MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y);
+	}
+	if (type == 1) {
+		mouse_pos = inputs["mouse_pos2"];
+		MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
+	}
 
+	x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons = 0;
+	if (x_WORD_180746_mouse_left_button)
+		x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 1;
+	if (x_WORD_180744_mouse_right_button)
+		x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 2;
+	x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = x_WORD_E3760_mouse.x; //2b4760
+	x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = x_WORD_E3760_mouse.y; //2b4762
+	//sub_7C050_get_keyboard_keys1();
+	//x_WORD_180744_mouse_right_button = 0;
+	//x_WORD_180746_mouse_left_button = 0;
+	//x_WORD_18074A_mouse_right2_button = 0;
+	//x_WORD_18074C_mouse_left2_button = 0;
+}
+
+uint32_t gameTurn = 0;
+void MBEXclass::RunGameStep(Dictionary inputs) {
+	handleInputs(inputs, 0);
 	SetFrameStart(std::chrono::system_clock::now());
 	PaletteChanges_47760();
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1)) {
@@ -1365,6 +1394,42 @@ void MBEXclass::REMC2EndAnim() {
 	MBEXstate = 4;
 }
 
+Ref<Image> getScrBufferImg() {
+	uint8_t *palette = VGA_Get_Palette();
+	int crop_x = 0;
+	int crop_y = 0;
+	int crop_w = 640;
+	int crop_h = 480;
+	PackedByteArray rgba_data;
+	rgba_data.resize(crop_w * crop_h * 4);
+	uint8_t *dest = rgba_data.ptrw();
+	for (int r = 0; r < crop_h; ++r) {
+		int row_offset = (crop_y + r) * screenWidth_18062C;
+		for (int c = 0; c < crop_w; ++c) {
+			uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
+			int pal_pos = color_idx * 3;
+			/* if (color_idx == 0) {
+				int dest_pos = (r * crop_w + c) * 4;
+				dest[dest_pos + 0] = 0;
+				dest[dest_pos + 1] = 0;
+				dest[dest_pos + 2] = 0;
+				dest[dest_pos + 3] = 0;
+			}  else {*/
+				uint8_t red = palette[pal_pos + 0] * 4;
+				uint8_t green = palette[pal_pos + 1] * 4;
+				uint8_t blue = palette[pal_pos + 2] * 4;
+				int dest_pos = (r * crop_w + c) * 4;
+				dest[dest_pos + 0] = red;
+				dest[dest_pos + 1] = green;
+				dest[dest_pos + 2] = blue;
+				dest[dest_pos + 3] = 255;
+			//}
+		}
+	}
+	Ref<Image> img = Image::create_from_data(crop_w, crop_h, false, Image::FORMAT_RGBA8, rgba_data);
+	return img;
+}
+
 int MBEXclass::REMC2StepAnim(int run) {
 	if (run)
 		LastPressedKey_1806E4 = 20;
@@ -1374,7 +1439,10 @@ int MBEXclass::REMC2StepAnim(int run) {
 	}
 }
 
-void MBEXclass::REMC2BeginMap() {
+godot::TextureRect *mainScrBufferRect = nullptr;
+
+void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
+	mainScrBufferRect = scrBufferRect;
 	if (MBEXstate == 1)
 		REMC2BeginItem();
 	//Intros_76D10_mod_begin(0);
@@ -1392,8 +1460,20 @@ void MBEXclass::REMC2EndMap() {
 	MBEXstate = 8;
 }
 
-int MBEXclass::REMC2StepMap() {
+Ref<ImageTexture> mainTexture;
+int MBEXclass::REMC2StepMap(Dictionary inputs) {
+	handleInputs(inputs, 1);
 	NewGameDialog_77350_mod_Step();
+	Ref<Image> img = getScrBufferImg();
+	if (img.is_null())
+		return 0;
+	if (mainTexture.is_null()) {
+		mainTexture = ImageTexture::create_from_image(img);
+		mainScrBufferRect->set_texture(mainTexture);
+	} else {
+		mainTexture->update(img);
+	}
+
 	return 0;
 }
 
