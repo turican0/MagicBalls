@@ -4786,244 +4786,165 @@ void DrawAndSoundDragonAndFire_81EE0(__int16 a5, __int16 a6)//262ee0
 }
 
 //----- (00082C20) --------------------------------------------------------
-void DrawEndGameTable_82C20(__int16 a1)//263c20
+void DrawEndGameTable_82C20(__int16 a1) //263c20
 {
-	//x_WORD *v1; // edx
 	__int16 v2; // si
-	//int v3; // ebx
-	signed __int16 v4; // bx
-	__int16 v5; // si
-	int v6; // edx
-	signed __int16 v7; // bx
-	unsigned int v8; // esi
+	//signed __int16 v4; // bx
+	//__int16 v5; // si
+	//int v6; // edx
+	//signed __int16 v7; // bx
+	//unsigned int v8; // esi
 	int v9; // edx
-	//int v10; // eax
 	int v11; // esi
 	int v12; // edi
 	signed __int16 i; // bx
-	//int v14; // eax
-	x_BYTE* v15; // ebx
-	__int16 v16; // ax
-	//unsigned __int16 v17; // dx
+	x_BYTE *v15; // ebx
+	//__int16 v16; // ax
 	signed __int16 j; // bx
-	//int v19; // eax
 	__int16 v20; // di
 	signed int v21; // ebx
 	int v22; // edx
-	//char v23; // [esp+0h] [ebp-12h]
-	char* v24x[6]; // [esp+28h] [ebp+16h] //v24x[0]
-	//char* v25_spell_found; // [esp+2Ch] [ebp+1Ah]//v24x[1]
-	//char* v26; // [esp+30h] [ebp+1Eh]//v24x[2]
-	//char* v27; // [esp+34h] [ebp+22h]//v24x[3]
-	//char* v28; // [esp+38h] [ebp+26h]//v24x[4]
-	//char* v29; // [esp+3Ch] [ebp+2Ah]//v24x[5]
+	char *texts[6]; // [esp+28h] [ebp+16h] //v24x[0]
 	int v30x[8]; // [esp+40h] [ebp+2Eh]//v30x[0]
-	//int v31x[7]; // [esp+44h] [ebp+32h]//v30x[1]
-	//int v32; // [esp+48h] [ebp+36h]//v30x[2]
-	//int v33; // [esp+4Ch] [ebp+3Ah]//v30x[3]
-	//int v34; // [esp+50h] [ebp+3Eh]//v30x[4]
-	//int v35; // [esp+54h] [ebp+42h]//v30x[5]
-	//int v36; // [esp+58h] [ebp+46h]//v30x[6]
-	//int v37; // [esp+5Ch] [ebp+4Ah]//v30x[7]
-	//int v38; // [esp+60h] [ebp+4Eh]
-	//int v39; // [esp+64h] [ebp+52h]
-	int v40; // [esp+68h] [ebp+56h]
+	//int v40; // [esp+68h] [ebp+56h]
 	int v41; // [esp+6Ch] [ebp+5Ah]
-	int v42; // [esp+70h] [ebp+5Eh]
+	int v42; // [esp+70h] [ebp+5Ee]
 	int v43; // [esp+74h] [ebp+62h]
-	int v44; // [esp+78h] [ebp+66h]
-	int v45; // [esp+7Ch] [ebp+6Ah]
+	//int v44; // [esp+78h] [ebp+66h]
+	//int y; // [esp+7Ch] [ebp+6Ah]
 	int v46; // [esp+80h] [ebp+6Eh]
 	int v47; // [esp+84h] [ebp+72h]
-	int v48; // [esp+88h] [ebp+76h]
+	int height; // [esp+88h] [ebp+76h]
 	int v49; // [esp+8Ch] [ebp+7Ah]
 
 	v42 = 50;
-	v48 = 50;
+	height = 50;
 	set_scene(SCENE_PREAMBLE_MENU);
-	if (a1 > -1)
-	{
-		v24x[0] = (char*)LevelsNames_D9204[a1];
-		v24x[1] = x_DWORD_E9C4C_langindexbuffer[386];//Spells found //fix it this variable not used
-		v24x[2] = x_DWORD_E9C4C_langindexbuffer[385];//Accuracy
-		v24x[3] = x_DWORD_E9C4C_langindexbuffer[384];//Creatures Killed
-		v24x[4] = x_DWORD_E9C4C_langindexbuffer[377];//Mana
-		v24x[5] = x_DWORD_E9C4C_langindexbuffer[394];//Time Taken
+	if (a1 > -1) {
+		texts[0] = (char *)LevelsNames_D9204[a1];
+		texts[1] = x_DWORD_E9C4C_langindexbuffer[386]; //Spells found
+		texts[2] = x_DWORD_E9C4C_langindexbuffer[385]; //Accuracy
+		texts[3] = x_DWORD_E9C4C_langindexbuffer[384]; //Creatures Killed
+		texts[4] = x_DWORD_E9C4C_langindexbuffer[377]; //Mana
+		texts[5] = x_DWORD_E9C4C_langindexbuffer[394]; //Time Taken
 		v30x[0] = 0;
 		v30x[1] = 0;
 		v30x[7] = 0;
-		if (a1 > 24)
-		{
-			//v1 = x_WORD_E2970;
-			//int v1i = 0;
+		if (a1 > 24) {
 			v2 = 0;
-			while (secretMapScreenPortals_E2970[v2].activated_12)
-			{
-				if (a1 == secretMapScreenPortals_E2970[v2].levelNumber_6)
-				{
-					//v3 = 5 * v2;
+			while (secretMapScreenPortals_E2970[v2].activated_12) {
+				if (a1 == secretMapScreenPortals_E2970[v2].levelNumber_6) {
 					v30x[2] = x_DWORD_17DDBCx[5 * v2];
 					v30x[3] = x_DWORD_17DDBCx[1 + 5 * v2];
 					v30x[4] = x_DWORD_17DDBCx[2 + 5 * v2];
 					v30x[5] = x_DWORD_17DDBCx[3 + 5 * v2];
 					v30x[6] = x_DWORD_17DDBCx[4 + 5 * v2];
 				}
-				//v1 = (x_WORD *)((char *)v1 + 17);
-				//v1i++;
 				v2++;
 			}
-		}
-		else
-		{
+		} else {
 			v30x[2] = x_DWORD_17DBC8x[5 * a1];
 			v30x[3] = x_DWORD_17DBC8x[1 + 5 * a1];
 			v30x[4] = x_DWORD_17DBC8x[2 + 5 * a1];
 			v30x[5] = x_DWORD_17DBC8x[3 + 5 * a1];
-			v30x[6] = x_DWORD_17DBC8x[4 + 5 * a1];//time of game
+			v30x[6] = x_DWORD_17DBC8x[4 + 5 * a1]; //time of game
 		}
-		v4 = 1;
-		v5 = strlen(v24x[0]);
-		while (v4 < 6)
-		{
-			v6 = v4;
-			if (strlen(v24x[v6]) > v5)
-				v5 = strlen(v24x[v6]);
-			v4++;
+		int maxstrLen = strlen(texts[0]);
+		for (int i = 1; i < 6; i++) {
+			unsigned int currentLen = strlen(texts[i]);
+			if (currentLen > maxstrLen) {
+				maxstrLen = currentLen;
+			}
 		}
-		v7 = 1;
-		v8 = strlen(v24x[0]);
-		while (v7 < 6)
-		{
-			v9 = v7;
-			if (strlen(v24x[v9]) > v8)
-				v8 = strlen(v24x[v9]);
-			v7++;
-		}
-		//HIWORD(v10) = HIWORD(x_DWORD_17DEC0);
-		//LOWORD(v10) = xy_DWORD_17DEC0_spritestr[65].width;
-		v11 = 2 * xy_DWORD_17DEC0_spritestr[65].width_4 * v8;
-		v12 = 320 - (signed __int16)v11 / 2;
-		v44 = xy_DWORD_17DED4_spritestr[275].width_4;
-		v40 = (unsigned __int8)v44;
-		if ((signed __int16)v11 % (signed int)(unsigned __int8)v44)
-			v11 = ((signed __int16)v11 / (signed int)(unsigned __int8)v44 + 1) * v44;
-		for (i = 0; i < (signed __int16)v11; i += v44)
-			sub_7C120_draw_bitmap_640(i + v12, v48, xy_DWORD_17DED4_spritestr[275]);
-		//HIWORD(v14) = HIWORD(x_DWORD_17DED4);
-		//LOWORD(v14) = xy_DWORD_17DED4_spritestr[275].height;
+		v11 = 2 * xy_DWORD_17DEC0_spritestr[65].width_4 * maxstrLen;
+		v12 = 320 - v11 / 2;
+		//4 = xy_DWORD_17DED4_spritestr[275].width_4;
+		//v40 = (unsigned __int8)v44;
+		if (v11 % xy_DWORD_17DED4_spritestr[275].width_4)
+			v11 = (v11 / xy_DWORD_17DED4_spritestr[275].width_4 + 1) * xy_DWORD_17DED4_spritestr[275].width_4;
+		for (i = 0; i < v11; i += xy_DWORD_17DED4_spritestr[275].width_4)
+			sub_7C120_draw_bitmap_640(i + v12, height, xy_DWORD_17DED4_spritestr[275]);
 		v49 = 0;
-		v48 += xy_DWORD_17DED4_spritestr[275].height_5;
-		do
-		{
+		height += xy_DWORD_17DED4_spritestr[275].height_5;
+		do {
 			v41 = (signed __int16)v12 + xy_DWORD_17DED4_spritestr[274].width_4;
-			//v39 = (signed __int16)v48;
-			v40 = (signed __int16)v48;
-			v15 = (x_BYTE*)(v41 + 640 * (signed __int16)v48 + pdwScreenBuffer_351628);
-			sub_7C120_draw_bitmap_640(v12, v48, xy_DWORD_17DED4_spritestr[274]);
-			sub_7C120_draw_bitmap_640(v11 + v12 - xy_DWORD_17DED4_spritestr[274].width_4, v40, xy_DWORD_17DED4_spritestr[274]);
-			v45 = 0;
-			while (xy_DWORD_17DED4_spritestr[274].height_5 > (signed __int16)v45)
-			{
-				v16 = 0;
-				while (v16 < v11 - 2 * xy_DWORD_17DED4_spritestr[274].width_4)
-				{
-					//HIBYTE(v17) = 15;
-					//LOBYTE(v17) = *v15;
-					//v41 = v17;
-					*v15 = x_DWORD_17DE38str.x_DWORD_17DE3C->data[*v15+0xc00];
+			//v40 = (signed __int16)v48;
+			v15 = (x_BYTE *)(v41 + 640 * height + pdwScreenBuffer_351628);
+			sub_7C120_draw_bitmap_640(v12, height, xy_DWORD_17DED4_spritestr[274]);
+			sub_7C120_draw_bitmap_640(v11 + v12 - xy_DWORD_17DED4_spritestr[274].width_4, height, xy_DWORD_17DED4_spritestr[274]);
+			for (int y = 0; xy_DWORD_17DED4_spritestr[274].height_5 > y; y++) {
+				int x;
+				for (int x = 0; x < v11 - 2 * xy_DWORD_17DED4_spritestr[274].width_4; x++) {
+					*v15 = x_DWORD_17DE38str.x_DWORD_17DE3C->data[*v15 + 0xc00];
 					v15++;
-					v16++;
-				}
-				v45++;
-				v15 += 640 - v16;
-				v48++;
+				}				
+				v15 += 640 - x;
+				height++;
 			}
 			v49++;
 		} while ((signed __int16)v49 < 12);
-		for (j = 0; j < (signed __int16)v11; j += v44)
-			sub_7C120_draw_bitmap_640(j + v12, v48, xy_DWORD_17DED4_spritestr[275]);
-		//HIWORD(v19) = HIWORD(x_DWORD_17DED4);//fix it
-		//LOWORD(v19) = xy_DWORD_17DED4_spritestr[274].width;
+		for (j = 0; j < (signed __int16)v11; j += xy_DWORD_17DED4_spritestr[275].width_4)
+			sub_7C120_draw_bitmap_640(j + v12, height, xy_DWORD_17DED4_spritestr[275]);
 		v47 = 2 * xy_DWORD_17DED4_spritestr[274].width_4 + v42;
-		//LOWORD(v19) = xy_DWORD_17DED4_spritestr[65].width;
 		v20 = xy_DWORD_17DEC0_spritestr[65].width_4 + v12;
-		sub_7FAE0_draw_text(v24x[0], v20, v11 - xy_DWORD_17DEC0_spritestr[65].width_4 + v20, v47, 0);
+		sub_7FAE0_draw_text(texts[0], v20, v11 - xy_DWORD_17DEC0_spritestr[65].width_4 + v20, v47, 0);
 		v21 = 1;
 		v47 += 5;
-		while (1)
-		{
+
+		while (v21 < 5) {
 			v46 = v47 + 2;
-			if ((signed __int16)v21 >= 5)
-			{
-				sub_7FB90_draw_text(
-					v24x[5],
-					(signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4),
-					//v46 + 5 * *(unsigned __int8 *)((int)x_DWORD_17DEC0 + 395) + *(unsigned __int8 *)((int)x_DWORD_17DEC0 + 395),
-					v46 + 6 * xy_DWORD_17DEC0_spritestr[v46].height_5,
-					0);
-				//v39 = 60;
-				v41 = v30x[6] % 3600 / 60;
-				//v38 = v30x[6] % 3600 / 60;
-				sprintf(printbuffer, "%02d:%02d:%02d", v30x[6] / 3600, v41, v30x[6] % 3600 % 60);
-				sub_7FB90_draw_text(
-					printbuffer,
-					(signed __int16)(v20 + v11 - 14 * xy_DWORD_17DEC0_spritestr[65].width_4),
-					//v46 + 5 * *(unsigned __int8 *)((int)x_DWORD_17DEC0 + 395) + *(unsigned __int8 *)((int)x_DWORD_17DEC0 + 395),
-					v46 + 6 * xy_DWORD_17DEC0_spritestr[v46].height_5,
-					0);
-				return;
-			}
 			v22 = (signed __int16)v21;
-			if (v24x[v22])
-				break;
-		LABEL_47:
+			if (texts[v22]) {
+				if (x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex != 2) {
+					v43 = v21 * xy_DWORD_17DEC0_spritestr[65].height_5;
+					sub_7FB90_draw_text(texts[v22], (signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4), v43 + v46, 0);
+				} else {
+					if ((unsigned __int16)v21 < 2u || ((x_WORD)v21 != 4 && (unsigned __int16)v21 > 2u)) {
+						sub_7FB90_draw_text(
+								texts[v21],
+								(signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4),
+								xy_DWORD_17DEC0_spritestr[65].height_5 * (x_WORD)v21 + v47 + 2,
+								0);
+					} else if ((unsigned __int16)v21 <= 2u) {
+						sub_7FB90_draw_text(
+								(char *)"Hit Accuracy",
+								(signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4),
+								v46 + v21 * xy_DWORD_17DEC0_spritestr[65].height_5,
+								0);
+					} else // v21 == 4
+					{
+						sub_7FB90_draw_text(
+								(char *)"Mana Collected",
+								(signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4),
+								v46 + 4 * xy_DWORD_17DEC0_spritestr[65].height_5,
+								0);
+					}
+				}
+
+				sprintf(printbuffer, "%3d%%", v30x[1 + v21]);
+				sub_7FB90_draw_text(
+						printbuffer,
+						(signed __int16)(v20 + v11 - 8 * xy_DWORD_17DEC0_spritestr[65].width_4),
+						v47 + 2 + v21 * xy_DWORD_17DEC0_spritestr[65].height_5,
+						0);
+			}
 			v21++;
 		}
-		if (x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex != 2)
-		{
-			v43 = v21 * xy_DWORD_17DEC0_spritestr[65].height_5;
-			sub_7FB90_draw_text(v24x[v22], (signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4), v43 + v46, 0);
-			goto LABEL_46;
-		}
-		if ((unsigned __int16)v21 < 2u)
-			goto LABEL_44;
-		if ((unsigned __int16)v21 <= 2u)
-		{
-			sub_7FB90_draw_text(
-				(char*)"Hit Accuracy",
-				(signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4),
-				v46 + v21 * xy_DWORD_17DEC0_spritestr[65].height_5,
-				0);
-		}
-		else
-		{
-			if ((x_WORD)v21 != 4)
-			{
-			LABEL_44:
-				sub_7FB90_draw_text(
-					v24x[v21],
-					(signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4),
-					xy_DWORD_17DEC0_spritestr[65].height_5 * (x_WORD)v21 + v47 + 2,
-					0);
-				goto LABEL_46;
-			}
-			sub_7FB90_draw_text(
-				(char*)"Mana Collected",
-				(signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4),
-				v46 + 4 * xy_DWORD_17DEC0_spritestr[65].height_5,
-				0);
-		}
-	LABEL_46:
-		sprintf(printbuffer, "%3d%%", v30x[1 + v21]);
+		v46 = v47 + 2;
 		sub_7FB90_draw_text(
-			printbuffer,
-			(signed __int16)(v20 + v11 - 8 * xy_DWORD_17DEC0_spritestr[65].width_4),
-			v47 + 2 + v21 * xy_DWORD_17DEC0_spritestr[65].height_5,
-			0);
-		goto LABEL_47;
+				texts[5],
+				(signed __int16)(v20 + 2 * xy_DWORD_17DEC0_spritestr[65].width_4),
+				v46 + 6 * xy_DWORD_17DEC0_spritestr[v46].height_5,
+				0);
+		v41 = v30x[6] % 3600 / 60;
+		sprintf(printbuffer, "%02d:%02d:%02d", v30x[6] / 3600, v41, v30x[6] % 3600 % 60);
+		sub_7FB90_draw_text(
+				printbuffer,
+				(signed __int16)(v20 + v11 - 14 * xy_DWORD_17DEC0_spritestr[65].width_4),
+				v46 + 6 * xy_DWORD_17DEC0_spritestr[v46].height_5,
+				0);
 	}
 }
-
 //----- (00085C8B) --------------------------------------------------------
 void DrawNetGameMapBackground_85C8B(uint8_t* source, uint8_t* dest, int beginX, int beginY, int width, int height)//266c8b
 {
