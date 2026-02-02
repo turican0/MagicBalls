@@ -15,10 +15,7 @@ func _ready():
 	sprback = $Control/Sprite2D
 	#Engine.max_fps = 60
 	Main_DecodeLevel = get_node("DecodeLevel")
-	Main_Sounds = $Sounds
-	Main_Sounds.MainMusic = get_node("Sounds").get_node("MidiPlayer")
-	Main_Sounds.MainMusicHi = get_node("Sounds").get_node("AudioStreamPlayer")
-	Main_DecodeLevel.Main_Sounds = Main_Sounds	
+	Global.initSound()
 	fadeNode = Global.addFadeOut(fadeNode)
 	showMyImg(0)
 	
@@ -77,14 +74,14 @@ func animInit():
 	animTextureRect = ImageTexture.create_from_image(animImage)
 	sprback.texture = animTextureRect
 	Main_DecodeLevel.init()
-	Main_DecodeLevel.initSound()
+	Global.initSound()
 	match animIndex:
 		0:
-			Main_Sounds.setSoundBank(3)
+			Global.Main_Sounds.setSoundBank(3)
 		1:
-			Main_Sounds.setSoundBank(4)
+			Global.Main_Sounds.setSoundBank(4)
 		2:
-			Main_Sounds.setSoundBank(4)
+			Global.Main_Sounds.setSoundBank(4)
 	Main_DecodeLevel.anim1Begin(animIndex)
 	
 func endAnim():
@@ -101,7 +98,7 @@ func _process(_p_delta) -> void:
 	var endAnim
 	if(is_skipping):
 		endAnim = Main_DecodeLevel.anim1Step(1)
-		Main_Sounds.stopAllSounds()
+		Global.Main_Sounds.stopAllSounds()
 		endAnim()
 	else:
 		endAnim = Main_DecodeLevel.anim1Step(0)
