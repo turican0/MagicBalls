@@ -3629,7 +3629,7 @@ char byte_17D711; // weak
 
 int32_t x_DWORD_17DBB8[4]; // weak//x_DWORD_17DBB8[0]
 char x_BYTE_17DBC6; // weak
-uint32_t x_DWORD_17DBC8x[125];
+uint32_t x_DWORD_17DBC8x[125];//5x25 //statistics
 
 uint32_t x_DWORD_17DDBCx[26];
 
