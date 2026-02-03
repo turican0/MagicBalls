@@ -58,6 +58,8 @@ func addFadeOut(fadeNode):
 
 #Imports
 func load_custom_texture(path: String) -> ImageTexture:
+	if(path=='user://convertdata/HSCREEN/4/114.png'):
+		pass
 	var img = Image.load_from_file(path)
 	if img == null:
 		return null

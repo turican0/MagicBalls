@@ -4,6 +4,10 @@ var tooltip_label: Label
 
 var fadeNode: Node3D
 
+var runned = false
+
+@onready var foreground = $Control/Foreground
+
 var main_menu_animations = [
 	{"name": "FireLeft","pos_x": 17,  "pos_y": 159, "first_sprite": 1,  "last_sprite": 8}, # left fire
 	{"name": "FireRight","pos_x": 531, "pos_y": 156, "first_sprite": 9,  "last_sprite": 16}, # right fire
@@ -25,10 +29,24 @@ var main_menu_selection: Array[Dictionary] = [
 
 var SPRITE_DIR = Global.convertdata + "HSCREEN/4/"
 
-func _ready():	
+var Main_DecodeLevel
+
+func menuInit():
+	Main_DecodeLevel.init()
+	Global.initSound()
+	Global.Main_Sounds.setSoundBank(0)
+	Main_DecodeLevel.changeLanguage(2)
+	Main_DecodeLevel.getLangTexts()
+
+func _ready():
 	await get_tree().process_frame
-	$Control/BackGround.texture = Global.load_custom_texture(Global.convertdata + "HSCREEN/menuBackground.png")
+	foreground.texture = Global.load_custom_texture(Global.convertdata + "HSCREEN/menuBackground.png")
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	Engine.max_fps = 60
+	
+	Main_DecodeLevel = get_node("DecodeLevel")
 	fadeNode = Global.addFadeOut(fadeNode)
+	
 	var file_name_cur = "%03d.png" % 39
 	var file_path_cur = SPRITE_DIR + file_name_cur
 	var cursor_png = Global.load_custom_texture(file_path_cur)
@@ -49,7 +67,8 @@ func _ready():
 		ani.centered = false
 		ani.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		ani.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
-		ani.position = Vector2(cfg["pos_x"]-320, cfg["pos_y"]-240)
+		ani.scale=$Control/Foreground.size/Vector2(640,480)
+		ani.position = Vector2(cfg["pos_x"]*ani.scale.x, cfg["pos_y"]*ani.scale.y)
 		var frames = SpriteFrames.new()
 		frames.remove_animation("default")
 		frames.add_animation("loop")
@@ -68,13 +87,16 @@ func _ready():
 		ani.play("loop")
 		
 	for cfgback in main_menu_selection:
+		if(cfgback["dword_0"]==0x0025A610):
+			continue
 		var sprback = Sprite2D.new()
-		var file_name_spr = "%03d.png" % (cfgback["byte_21"]+8)
+		var file_name_spr = "%03d.png" % (cfgback["byte_20"])
 		sprback.name = file_name_spr
 		sprback.centered = false
 		sprback.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		sprback.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
-		sprback.position = Vector2(cfgback["xmin_10"]-320, cfgback["ymin_12"]-240)
+		sprback.scale=$Control/Foreground.size/Vector2(640,480)
+		sprback.position = Vector2(cfgback["xmin_10"]*sprback.scale.x, cfgback["ymin_12"]*sprback.scale.y)
 		var file_path_spr = SPRITE_DIR + file_name_spr
 		var tex2 = Global.load_custom_texture(file_path_spr)
 		sprback.texture=tex2
@@ -87,14 +109,21 @@ func _ready():
 		spr.centered = false
 		spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		spr.texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
-		spr.position = Vector2(cfg2["xmin_10"]-320, cfg2["ymin_12"]-240)
+		spr.scale=$Control/Foreground.size/Vector2(640,480)
+		spr.position = Vector2(cfg2["xmin_10"]*spr.scale.x, cfg2["ymin_12"]*spr.scale.y)
 		var file_path_spr = SPRITE_DIR + file_name_spr
 		var tex2 = Global.load_custom_texture(file_path_spr)
 		spr.texture=tex2
 		spr.hide()
 		$Control.add_child(spr)
 		cfg2["node_ref"] = spr
-			
+		
+		startMenuLoop()
+
+func startMenuLoop():
+	runned = true
+	menuInit()
+
 func _input(event):
 	await get_tree().process_frame	
 	var mouse_pos = $Control.get_local_mouse_position()
@@ -114,7 +143,7 @@ func _input(event):
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 				var target_scene = ""
 				if cfg2["dword_0"] == 0x00258350:
-					target_scene = "res://scenes/CodeGeneratedDemo.tscn"
+					target_scene = "res://scenes/GameMap.tscn"
 				elif cfg2["dword_0"] == 0x00259E00:
 					target_scene = "res://scenes/PlayAnim.tscn"
 				if target_scene != "":
