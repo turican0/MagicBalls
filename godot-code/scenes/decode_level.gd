@@ -465,7 +465,7 @@ func mapMenuBegin(ScrBufferRect:TextureRect):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	Global.MBEX.REMC2BeginMap(ScrBufferRect)
 
-func mapMenuStep():
+func mapMenuStep() -> int:
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
 	var mapMenuOut=Global.MBEX.REMC2StepMap(input_state)

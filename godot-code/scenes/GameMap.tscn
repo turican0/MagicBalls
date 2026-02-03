@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://6hjxjkqj1hpf" path="res://scenes/game_map.gd" id="1_ccdfn"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_jpp6x"]
-[ext_resource type="PackedScene" uid="uid://84v3q55l2pga" path="res://scenes/Sounds.tscn" id="3_5r7r6"]
 
 [node name="GameMap" type="Node3D" unique_id=1941747587]
 script = ExtResource("1_ccdfn")
@@ -14,14 +13,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="GameMap" type="Sprite2D" parent="Control" unique_id=1292979862]
-visible = false
-scale = Vector2(1.5, 1.5)
-
-[node name="Animations" type="TextureRect" parent="Control/GameMap" unique_id=1941989428]
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="Foreground" type="TextureRect" parent="Control" unique_id=1924248961]
 layout_mode = 1
@@ -35,5 +26,3 @@ grow_vertical = 2
 script = ExtResource("2_jpp6x")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"
-
-[node name="Sounds" parent="." unique_id=681772629 instance=ExtResource("3_5r7r6")]

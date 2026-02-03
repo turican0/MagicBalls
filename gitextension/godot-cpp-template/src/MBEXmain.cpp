@@ -1475,8 +1475,7 @@ int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	} else {
 		mainTexture->update(img);
 	}
-
-	return 0;
+	return NewGameDialog_endAction_mod;
 }
 
 void MBEXclass::REMC2BeginInGame() {

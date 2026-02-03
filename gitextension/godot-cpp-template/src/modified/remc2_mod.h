@@ -18,6 +18,8 @@ struct GraphicsAction {
 	int type = 0;
 };
 
+extern int NewGameDialog_endAction_mod;
+
 bool NewGameDialog_77350_mod_Begin();
 void NewGameDialog_77350_mod_Step();
 bool NewGameDialog_77350_mod_End();
