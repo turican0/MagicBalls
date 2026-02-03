@@ -15,6 +15,8 @@ var Main_Filter: Node
 
 var fadeNode: Node3D
 
+var NodeSky3D: WorldEnvironment
+
 const KEY_INDEX := {
 	KEY_W: 0, # Forward
 	KEY_S: 1, # Backward
@@ -52,6 +54,7 @@ var library = {
 	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
 	Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2 - doplnit
+	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2
 	Vector3i(3,0,0): "",#player1
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle
@@ -203,6 +206,7 @@ var runned: bool
 
 func SetRunned(sendRunned) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	gameInit()
 	runned = sendRunned
 
 func getSpritesActions():
@@ -441,6 +445,23 @@ func getInputs():
 
 func init():
 	MBEXinit()
+	Global.initSound()
+
+func gameInit():
+	var levelType=Global.MBEX.REMC2getLevelType()
+	match levelType:
+		"Day":
+			Global.Main_Sounds.setSoundBank(0)
+			setTime(11.0)
+		"Night":
+			Global.Main_Sounds.setSoundBank(1)
+			setTime(8.0)
+		"Cave":
+			Global.Main_Sounds.setSoundBank(2)
+			setTime(11.0)
+			
+func setTime(time:int):
+	NodeSky3D.get_node("TimeOfDay").current_time=time
 	
 func anim1Begin(index:int):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())

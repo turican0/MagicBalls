@@ -112,4 +112,5 @@ public:
 	void REMC2BeginInGame();
 	bool REMC2EndInGame();
 	bool REMC2StepInGame(Dictionary inputs);
+	String REMC2getLevelType();
 	};

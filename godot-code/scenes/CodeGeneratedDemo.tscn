@@ -33,7 +33,7 @@ levels_dat_path = "res://mclevels/LEVELS.DAT"
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="." unique_id=1392388267]
 
-[node name="Node-Sky3D" parent="." unique_id=298907047 instance=ExtResource("9_2gbss")]
+[node name="NodeSky3D" parent="." unique_id=298907047 instance=ExtResource("9_2gbss")]
 
 [node name="Filter" type="CanvasLayer" parent="." unique_id=485850370]
 

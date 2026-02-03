@@ -66,6 +66,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary"), &MBEXclass::REMC2StepInGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2getLevelType"), &MBEXclass::REMC2getLevelType);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -101,6 +102,15 @@ int MBEXclass::mapMenuStep(int run) {
 	return 0;
 }
 */
+
+String MBEXclass::REMC2getLevelType() {
+	if (D41A0_0.terrain_2FECE.MapType == MapType_t::Day) {
+		return String("Day");
+	} else if (D41A0_0.terrain_2FECE.MapType == MapType_t::Night) {
+		return String("Night");
+	} else
+		return String("Cave");
+}
 
 void MBEXclass::changeLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;

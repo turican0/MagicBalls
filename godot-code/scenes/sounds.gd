@@ -82,7 +82,7 @@ func load_sounds_from_dir(path: String):
 					print("Načten zvuk: Pack ", pack_idx, " Index ", sound_idx)			
 			file_name = dir.get_next()
 	else:
-		print("Chyba: Adresář nebyl nalezen.")	
+		print("Chyba: Adresář nebyl nalezen.")
 
 func updateSounds(soundActions:Array):
 	for action_dict in soundActions:

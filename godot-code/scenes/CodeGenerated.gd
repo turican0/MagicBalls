@@ -22,6 +22,7 @@ func _ready() -> void:
 	Main_DecodeLevel.Main_UI = Main_UI
 	Main_UI.Main_DecodeLevel = Main_DecodeLevel
 	Main_DecodeLevel.Main_Filter = Main_Filter
+	Main_DecodeLevel.NodeSky3D = $NodeSky3D/Sky3D
 	$UI.player = $Player
 	Main_TerrainMB.init()	
 	#$CanvasUI.init()
