@@ -1096,18 +1096,20 @@ void handleInputs(Dictionary inputs,int type) {
 		MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
 	}
 
-	x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons = 0;
-	if (x_WORD_180746_mouse_left_button)
-		x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 1;
-	if (x_WORD_180744_mouse_right_button)
-		x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 2;
-	x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = x_WORD_E3760_mouse.x; //2b4760
-	x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = x_WORD_E3760_mouse.y; //2b4762
-	//sub_7C050_get_keyboard_keys1();
-	//x_WORD_180744_mouse_right_button = 0;
-	//x_WORD_180746_mouse_left_button = 0;
-	//x_WORD_18074A_mouse_right2_button = 0;
-	//x_WORD_18074C_mouse_left2_button = 0;
+	if (type == 1) {
+		x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons = 0;
+		if (x_WORD_180746_mouse_left_button)
+			x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 1;
+		if (x_WORD_180744_mouse_right_button)
+			x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 2;
+		x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = x_WORD_E3760_mouse.x; //2b4760
+		x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = x_WORD_E3760_mouse.y; //2b4762
+		//sub_7C050_get_keyboard_keys1();
+		x_WORD_180744_mouse_right_button = 0;
+		x_WORD_180746_mouse_left_button = 0;
+		x_WORD_18074A_mouse_right2_button = 0;
+		x_WORD_18074C_mouse_left2_button = 0;
+	}
 }
 
 uint32_t gameTurn = 0;
