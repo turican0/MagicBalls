@@ -486,7 +486,7 @@ func _update_moon_light_energy() -> void:
 	l *= _atm_moon_phases_mult()
 	
 	var fade: float = (1.0 - _sun_transform.origin.y) * 0.5
-	_moon_light_node.light_energy = l * SUN_MOON_CURVE.sample_baked(fade) * 4
+	_moon_light_node.light_energy = l * SUN_MOON_CURVE.sample_baked(fade) * 6
 	
 	if is_equal_approx(_moon_light_node.light_energy, 0.0) and _moon_light_node.shadow_enabled:
 		_moon_light_node.shadow_enabled = false

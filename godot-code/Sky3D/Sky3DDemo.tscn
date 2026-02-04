@@ -65,8 +65,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.2812301, 0.00018126615)
-shader_parameter/cirrus_position2 = Vector2(0.2812301, 0.00018126615)
+shader_parameter/cirrus_position1 = Vector2(0.10778253, 0.00019534572)
+shader_parameter/cirrus_position2 = Vector2(0.10778253, 0.00019534572)
 shader_parameter/cirrus_texture = ExtResource("6_1g8sw")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -76,7 +76,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(245.58224, 0.0009059868)
+shader_parameter/cumulus_position = Vector2(264.59964, 0.0009766233)
 shader_parameter/cumulus_texture = ExtResource("5_rt0jr")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -135,8 +135,7 @@ directional_shadow_max_distance = 600.0
 
 [node name="MoonLight" type="DirectionalLight3D" parent="Sky3D" unique_id=146066408]
 transform = Transform3D(0, -0.7478677, 0.66384774, 0.3203044, 0.6288727, 0.70846605, -0.9473147, 0.21263336, 0.23954532, 0.66384774, 0.70846605, 0.23954532)
-light_color = Color(0.572549, 0.776471, 0.956863, 1)
-light_energy = 0.8501593
+light_energy = 2.0
 shadow_enabled = true
 directional_shadow_blend_splits = true
 
@@ -146,7 +145,6 @@ sun_azimuth = -0.041706923
 sun_altitude = -2.5477247
 moon_azimuth = -1.9170986
 moon_altitude = -0.78347397
-moon_light_color = Color(0.572549, 0.776471, 0.956863, 1)
 fog_visible = false
 fog_density = 0.01
 wind_speed = 7.000000000000001
