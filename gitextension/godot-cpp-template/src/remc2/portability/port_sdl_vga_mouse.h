@@ -76,6 +76,7 @@ void Draw_black();
 //std::vector<SDL_Rect> GetDisplays();
 SDL_Rect GetDisplayByIndex(uint8_t index);
 SDL_Rect FindDisplayByResolution(uint32_t width, uint32_t height);
+void mainSetPress(bool locpressed, uint16_t loclastchar);
 
 extern uint8_t LastPressedKey_1806E4; // weak//3516e4
 extern int8_t pressedKeys_180664[128]; // idb

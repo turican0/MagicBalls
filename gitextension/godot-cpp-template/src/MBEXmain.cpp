@@ -1017,21 +1017,24 @@ void handleInputs(Dictionary inputs,int type) {
 		int key_index = change["key_index"];
 		String action = change["action"];
 		bool is_pressed = (action == "pressed");
+		if (type == 1) {
+			mainSetPress(is_pressed, key_index);
+		} else
 		switch (key_index) {
 			case 0x1177:
-				setPress(is_pressed, 0x4800); //UP
+				mainSetPress(is_pressed, 0x4800); //UP
 				break;
 			case 0x1f73:
-				setPress(is_pressed, 0x5000); //DOWN
+				mainSetPress(is_pressed, 0x5000); //DOWN
 				break;
 			case 0x1e61:
-				setPress(is_pressed, 0x4b00); //LEFT
+				mainSetPress(is_pressed, 0x4b00); //LEFT
 				break;
 			case 0x2064:
-				setPress(is_pressed, 0x4d00); //RIGHT
+				mainSetPress(is_pressed, 0x4d00); //RIGHT
 				break;
 			case 0x3920:
-				setPress(is_pressed, 0x3920); //SPACE
+				mainSetPress(is_pressed, 0x3920); //SPACE
 				break;
 			case 0x3f00://F5
 				if (type != 0)
@@ -1114,7 +1117,7 @@ void handleInputs(Dictionary inputs,int type) {
 			x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 2;
 		x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = x_WORD_E3760_mouse.x; //2b4760
 		x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = x_WORD_E3760_mouse.y; //2b4762
-		//sub_7C050_get_keyboard_keys1();
+		sub_7C050_get_keyboard_keys1();
 		x_WORD_180744_mouse_right_button = 0;
 		x_WORD_180746_mouse_left_button = 0;
 		x_WORD_18074A_mouse_right2_button = 0;

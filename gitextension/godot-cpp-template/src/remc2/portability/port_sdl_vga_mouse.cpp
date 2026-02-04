@@ -487,7 +487,24 @@ void VGA_cleanKeyBuffer() {
 }
 
 uint16_t VGA_read_char_from_buffer() {
-	return 0;
+	//bool locpressed = pressed;
+	uint16_t loclastchar = lastchar;
+	lastchar = 0;
+	loclastchar = fixchar(loclastchar);
+	return loclastchar;
+}
+
+void mainSetPress(bool locpressed, uint16_t loclastchar) {
+	if (locpressed) {
+		pressed = true;
+		lastchar = loclastchar;
+		//if (!handleSpecialKeys(event)) {
+			setPress(true, lastchar);
+		//}
+	} else {
+			lastchar = loclastchar;
+			setPress(false, lastchar);
+	}
 }
 
 void setPress(bool locpressed, uint16_t loclastchar) {

@@ -1592,4 +1592,5 @@ void sub_53CC0_close_movie();
 void sub_59BF0_sound_proc11_volume();
 void sub_5C530();
 void sub_713A0();
+signed int sub_7C050_get_keyboard_keys1();
 #endif

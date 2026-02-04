@@ -918,7 +918,6 @@ int sub_7677C();
 __int16 sub_7678D();
 int sub_76840();
 //char sub_7A060_get_mouse_and_keyboard_events();
-signed int /*__fastcall*/ sub_7C050_get_keyboard_keys1();
 //void sub_7C120_draw_bitmap_640(int16_t posx, int16_t posy, bitmap_pos_struct_t tempstr);
 //void sub_7C140_draw_text_background(int16_t a1, int16_t a2, int16_t a3, int16_t a4, uint8_t a5);
 //int32_t sub_A7C20_AIL_API_init_sequence(HSEQUENCE hSequence, void* start, int32_t sequence_num, uint32_t track);
