@@ -61,6 +61,7 @@ uniform sampler2D star_field_texture: source_color;
 uniform float star_scintillation = 0.75;
 uniform float star_scintillation_speed = 0.01;
 uniform sampler2D noise_tex: source_color;
+uniform float star_intensity_boost: hint_range(1.0, 50.0) = 15.0;
 
 /* Sky alignment values for a star map that is in galactic coordinates. Works for most star maps.
 X: 2.6555
@@ -394,6 +395,7 @@ vec3 render_sky(vec3 world_pos, vec3 clouds_pos, vec3 sun_pos, vec3 moon_pos, fl
 	star_field = clamp_rgb_to_unit(star_field.rgb);
 	//deep_space.rgb -= clamp_to_unit(star_field.r * 10.0);
 	deep_space.rgb += star_field.rgb * moonMask;
+	deep_space.rgb *= star_intensity_boost;
 	deep_space.rgb *= angle_mult.z;
 	col.rgb += sun_disk.rgb + deep_space.rgb * horizonBlend;
 
