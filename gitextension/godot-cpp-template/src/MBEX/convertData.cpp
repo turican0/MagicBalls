@@ -40,6 +40,7 @@
 using namespace godot;
 namespace fs = std::filesystem;
 
+/*
 struct BMPData {
 	int width = 0;
 	int height = 0;
@@ -166,6 +167,7 @@ BMPData load_bmp_godot(String p_path) {
 	bFile->close();
 	return result;
 }
+*/
 
 void MBEXconvertData(String path, String path2) {
 	//MBEXcdExtract((char *)path2.utf8().get_data(), "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/"); //user some path
@@ -267,7 +269,7 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, String palette) {
 	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
 	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
-	String outPath = path + "/" + texture + ".bmp";
+	String outPath = path + "/" + texture + ".png";
 	std::string stdOutPath = outPath.utf8().get_data();
 
 	if (!make_dir_godot(path)) {
@@ -327,8 +329,27 @@ void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, St
 		rgb_data[i * 3 + 1] = palette_final[pal_idx + 1]*4; // Green
 		rgb_data[i * 3 + 2] = palette_final[pal_idx + 0]*4; // Red
 	}
-	save_bmp_godot(outPath, inWidth, inHeight, p_channels, rgb_data.data());
-	UtilityFunctions::print("Saved: ", outPath, " (", inWidth, "x", inHeight, ")");
+
+	Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
+	if (f.is_valid()) {
+		stbi_write_png_to_func(
+				[](void *context, void *data, int size) {
+					FileAccess *fa = static_cast<FileAccess *>(context);
+					fa->store_buffer(static_cast<const uint8_t *>(data), size);
+				},
+				(void *)f.ptr(),
+				inWidth,
+				inHeight,
+				p_channels,
+				rgb_data.data(),
+				inWidth * p_channels);
+
+		f->flush();
+		f->close();
+		UtilityFunctions::print("Saved PNG: ", outPath, " (", inWidth, "x", inHeight, ")");
+	} else {
+		UtilityFunctions::printerr("Failed to open file for writing: ", outPath);
+	}
 }
 
 #pragma pack(1)
@@ -767,9 +788,9 @@ void MBEXtexturesConverts(String path) {
 void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture, String palette, bool makeBorders) {
 	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
 	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
-	String outPath = path + "/" + texture + ".bmp";
-	String outPath2 = path + "/" + texture + "-borders.bmp";
-	std::string stdOutPath = outPath.utf8().get_data();
+
+	String outPath = path + "/" + texture + ".png";
+	String outPath2 = path + "/" + texture + "-borders.png";
 
 	if (!make_dir_godot(path)) {
 		return;
@@ -779,8 +800,9 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 	if (texFile.is_null())
 		return;
 	PackedByteArray rawPixels = texFile->get_buffer(texFile->get_length());
+	texFile->close();
 
-    PackedByteArray palette_data;
+	PackedByteArray palette_data;
 	Ref<FileAccess> palFile = FileAccess::open(String(palettePath.c_str()), FileAccess::READ);
 	if (palFile.is_valid()) {
 		palette_data = palFile->get_buffer(palFile->get_length());
@@ -791,85 +813,51 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 	if (palette_data.size() < 768 && !palette_data.is_empty()) {
 		std::vector<uint8_t> pal_dst(2048);
 		int pal_dec_size = DataFileRNC::Decompress((uint8_t *)palette_data.ptr(), pal_dst.data());
-		if (pal_dec_size >= 768) {
-			palette_final.assign(pal_dst.begin(), pal_dst.begin() + pal_dec_size);
-		}
+		palette_final.assign(pal_dst.begin(), pal_dst.begin() + 768);
 	} else {
-		palette_final.assign(palette_data.ptr(), palette_data.ptr() + palette_data.size());
-	}
-	if (palette_final.size() < 768) {
-		UtilityFunctions::print("Chyba: Paletu se nepodarilo dekomprimovat nebo je poskozena.");
-		return;
-	}
-	Ref<FileAccess> bFile = FileAccess::open(outPath, FileAccess::WRITE);
-	if (bFile.is_null())
-		return;
-	int paddingSize = (4 - (inWidth % 4)) % 4;
-	int rowSize = inWidth + paddingSize;
-	int pixelDataSize = rowSize * inHeight;
-	int paletteSize = 256 * 4;
-	int fileSize = 14 + 40 + paletteSize + pixelDataSize;
-	bFile->store_8('B');
-	bFile->store_8('M');
-	bFile->store_32(fileSize);
-	bFile->store_32(0);
-	bFile->store_32(14 + 40 + paletteSize); 
-	bFile->store_32(40);
-	bFile->store_32(inWidth);
-	bFile->store_32(inHeight);
-	bFile->store_16(1);
-	bFile->store_16(8);
-	bFile->store_32(0);
-	bFile->store_32(pixelDataSize);
-	bFile->store_32(2835);
-	bFile->store_32(2835);
-	bFile->store_32(256);
-	bFile->store_32(0);
-	for (int i = 0; i < 256; i++) {
-		if (i * 3 + 2 < palette_final.size()) {
-			bFile->store_8(palette_final[i * 3 + 2] * 4); // B
-			bFile->store_8(palette_final[i * 3 + 1] * 4); // G
-			bFile->store_8(palette_final[i * 3] * 4); // R
-			bFile->store_8(0);
-		} else {
-			bFile->store_32(0);
-		}
-	}
-	for (int y = inHeight - 1; y >= 0; y--) {
-		int rowStart = y * inWidth;
-		if (rowStart < rawPixels.size()) {
-			PackedByteArray row = rawPixels.slice(rowStart, rowStart + inWidth);
-			bFile->store_buffer(row);
-		} else {
-			for (int x = 0; x < inWidth; x++)
-				bFile->store_8(0);
-		}
-		for (int p = 0; p < paddingSize; p++) {
-			bFile->store_8(0);
-		}
+		palette_final.assign(palette_data.ptr(), palette_data.ptr() + (palette_data.size() >= 768 ? 768 : palette_data.size()));
 	}
 
-	bFile->flush();
-	bFile->close();
+	int channels = 4;
+	std::vector<unsigned char> rgba_main((size_t)inWidth * inHeight * channels);
+	for (int i = 0; i < inWidth * inHeight; ++i) {
+		uint8_t index = (i < rawPixels.size()) ? rawPixels[i] : 0;
+		int pal_idx = index * 3;
+		rgba_main[i * 4 + 0] = palette_final[pal_idx + 0] * 4; // R
+		rgba_main[i * 4 + 1] = palette_final[pal_idx + 1] * 4; // G
+		rgba_main[i * 4 + 2] = palette_final[pal_idx + 2] * 4; // B
+		rgba_main[i * 4 + 3] = 255; // Alfa
+	}
+
+	auto save_to_png = [](String p_path, int w, int h, int ch, const unsigned char *data) {
+		Ref<FileAccess> f = FileAccess::open(p_path, FileAccess::WRITE);
+		if (f.is_valid()) {
+			stbi_write_png_to_func(
+					[](void *context, void *img_data, int size) {
+						FileAccess *fa = static_cast<FileAccess *>(context);
+						fa->store_buffer(static_cast<const uint8_t *>(img_data), size);
+					},
+					(void *)f.ptr(), w, h, ch, data, w * ch);
+			f->flush();
+			f->close();
+			UtilityFunctions::print("PNG uloženo: ", p_path);
+		}
+	};
+
+	save_to_png(outPath, inWidth, inHeight, channels, rgba_main.data());
 
 	if (makeBorders) {
 		const int TILE_SIZE = 32;
 		const int PADDING = 8;
 		const int NEW_TILE_SIZE = TILE_SIZE + (2 * PADDING);
-		BMPData input = load_bmp_godot(outPath);
-		if (input.pixels.empty()) {
-			std::cerr << "Chyba: Nepodarilo se nacist BMP ze souboru: " << outPath.utf8().get_data() << std::endl;
-			return;
-		}
-		int width = input.width;
-		int height = input.height;
-		int channels = input.channels;
-		unsigned char *img = input.pixels.data();
-		int tiles_x = width / TILE_SIZE;
-		int tiles_y = height / TILE_SIZE;
+
+		int tiles_x = inWidth / TILE_SIZE;
+		int tiles_y = inHeight / TILE_SIZE;
 		int out_width = tiles_x * NEW_TILE_SIZE;
 		int out_height = tiles_y * NEW_TILE_SIZE;
-		std::vector<unsigned char> out_img(out_width * out_height * channels, 0);
+
+		std::vector<unsigned char> out_img((size_t)out_width * out_height * channels, 0);
+
 		for (int ty = 0; ty < tiles_y; ++ty) {
 			for (int tx = 0; tx < tiles_x; ++tx) {
 				for (int py = 0; py < NEW_TILE_SIZE; ++py) {
@@ -882,13 +870,13 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 						int dst_y = ty * NEW_TILE_SIZE + py;
 						for (int c = 0; c < channels; ++c) {
 							out_img[(dst_y * out_width + dst_x) * channels + c] =
-									img[(src_y * width + src_x) * channels + c];
+									rgba_main[(src_y * inWidth + src_x) * channels + c];
 						}
 					}
 				}
 			}
 		}
-		save_bmp_godot(outPath2, out_width, out_height, channels, out_img.data());
+		save_to_png(outPath2, out_width, out_height, channels, out_img.data());
 	}
 }
 

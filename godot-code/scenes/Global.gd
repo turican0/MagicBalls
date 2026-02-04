@@ -65,6 +65,7 @@ func load_custom_texture(path: String) -> ImageTexture:
 		return null
 	var tex = ImageTexture.create_from_image(img)
 	return tex
+
 func load_external_audio(file_path: String) -> AudioStream:
 	if not FileAccess.file_exists(file_path):
 		print("Error: File not found at ", file_path)

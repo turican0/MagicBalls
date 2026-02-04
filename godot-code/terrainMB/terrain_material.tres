@@ -1,15 +1,11 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bpnnts5lr0sif"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bpnnts5lr0sif"]
 
 [ext_resource type="Shader" uid="uid://dkooe1gd4jufd" path="res://terrainMB/terrain_material.gdshader" id="1_1o8ll"]
-[ext_resource type="Texture2D" uid="uid://0p65wgos72xb" path="res://levels/tmaps/out-vert-border.png" id="2_c4wua"]
-[ext_resource type="Texture2D" uid="uid://cpcb4lpgqrshf" path="res://levels/tmaps/out-vert-refl-border.png" id="3_otvtb"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_1o8ll")
 shader_parameter/height_scale = 1.0
-shader_parameter/atlas_texture = ExtResource("2_c4wua")
-shader_parameter/reflect_texture = ExtResource("3_otvtb")
 shader_parameter/atlas_grid_size = Vector2(8, 19)
 shader_parameter/atlas_border_px = Vector2(8, 8)
 shader_parameter/wave_height = 0.5

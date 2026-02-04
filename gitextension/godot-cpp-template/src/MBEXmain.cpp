@@ -104,12 +104,15 @@ int MBEXclass::mapMenuStep(int run) {
 */
 
 String MBEXclass::REMC2getLevelType() {
-	if (D41A0_0.terrain_2FECE.MapType == MapType_t::Day) {
-		return String("Day");
-	} else if (D41A0_0.terrain_2FECE.MapType == MapType_t::Night) {
-		return String("Night");
-	} else
-		return String("Cave");
+	if (x_D41A0_BYTEARRAY_4_struct.levelnumber_43w>20)
+		return "Final";
+	else
+		if (D41A0_0.terrain_2FECE.MapType == MapType_t::Day) {
+			return String("Day");
+		} else if (D41A0_0.terrain_2FECE.MapType == MapType_t::Night) {
+			return String("Night");
+		} else
+			return String("Cave");
 }
 
 void MBEXclass::changeLanguage(int index) {

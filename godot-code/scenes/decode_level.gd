@@ -542,6 +542,10 @@ func gameInit():
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
+		"Final":
+			Global.Main_Sounds.setSoundBank(2)
+			setTime(12.0)
+	get_parent().get_node("TerrainMB").changeTerrain(levelType)
 
 func setTime(time:float):
 	if(time>=0)&&(time<=5):

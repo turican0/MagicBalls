@@ -61,14 +61,34 @@ func init():
 ## --- FÁZE 1: Inicializace ---
 var material
 
+func changeTerrain(levelType:String):
+	if material == null:
+		return
+	var tex_path = ""
+	match levelType:
+		"Day":
+			tex_path = Global.convertdata + "textures/day/BLOCK32.DAT-borders.png"
+		"Night":
+			tex_path = Global.convertdata + "textures/night/BL32N0-0.DAT-borders.png"
+		"Cave":
+			tex_path = Global.convertdata + "textures/cave/BL32C0-0.DAT-borders.png"
+		"Final":
+			tex_path = Global.convertdata + "textures/final/BL32F0-0.DAT-borders.png"
+	if tex_path != "":
+		var atlas_tex = Global.load_custom_texture(tex_path)
+		material.set_shader_parameter("atlas_texture", atlas_tex)
+
 func initialize_nodes():
 	mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = "TerrainMesh"
 	add_child(mesh_instance)
 	
-	# Zde načtěte váš ShaderMaterial (který odkazuje na Texture Atlas)
 	material = load("res://terrainMB/terrain_material.tres")
 	if material:
+		var atlas_tex = Global.load_custom_texture(Global.convertdata+"textures/night/BL32N0-0.DAT-borders.png")
+		var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
+		material.set_shader_parameter("atlas_texture", atlas_tex)
+		material.set_shader_parameter("reflect_texture", reflect_tex)
 		mesh_instance.material_override = material
 	else:
 		# Použijte alespoň standardní materiál pro vizuální kontrolu, pokud se nepodaří načíst

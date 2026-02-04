@@ -40,7 +40,7 @@ shader_parameter/moon_texture_flip_u = false
 shader_parameter/moon_texture_flip_v = false
 shader_parameter/moon_size = 0.07
 shader_parameter/atm_moon_mie_tint = Color(0.137255, 0.184314, 0.292196, 1)
-shader_parameter/atm_moon_mie_intensity = 0.23824333198368547
+shader_parameter/atm_moon_mie_intensity = 0.7
 shader_parameter/atm_moon_partial_mie_phase = Vector3(0.36, 1.64, 1.6)
 shader_parameter/starmap_color = Color(0.709804, 0.709804, 0.709804, 0.854902)
 shader_parameter/starmap_texture = ExtResource("5_0j4pb")
@@ -65,8 +65,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.10778253, 0.00019534572)
-shader_parameter/cirrus_position2 = Vector2(0.10778253, 0.00019534572)
+shader_parameter/cirrus_position1 = Vector2(0.9202901, 3.3801473e-06)
+shader_parameter/cirrus_position2 = Vector2(0.9202901, 3.3801473e-06)
 shader_parameter/cirrus_texture = ExtResource("6_1g8sw")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -76,7 +76,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(264.59964, 0.0009766233)
+shader_parameter/cumulus_position = Vector2(4.6012883, 1.6902011e-05)
 shader_parameter/cumulus_texture = ExtResource("5_rt0jr")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -90,6 +90,7 @@ shader_parameter/moon_matrix = Basis(0, 0.3203044, -0.9473147, -0.7478677, 0.628
 
 [sub_resource type="Sky" id="Sky_0j4pb"]
 sky_material = SubResource("ShaderMaterial_v8wrf")
+radiance_size = 2
 
 [sub_resource type="Environment" id="Environment_1g8sw"]
 background_mode = 2
@@ -128,14 +129,12 @@ metadata/_custom_type_script = "uid://deo0gxkmk2ahd"
 
 [node name="SunLight" type="DirectionalLight3D" parent="Sky3D" unique_id=1705123117]
 transform = Transform3D(-0.99913037, 0.03455595, 0.023331214, 0, 0.55957085, -0.8287825, -0.041694835, -0.82806176, -0.55908424, 0.023331214, -0.8287825, -0.55908424)
-light_color = Color(0.98, 0.523, 0.294, 1)
-light_energy = 0.0
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 600.0
 
 [node name="MoonLight" type="DirectionalLight3D" parent="Sky3D" unique_id=146066408]
 transform = Transform3D(0, -0.7478677, 0.66384774, 0.3203044, 0.6288727, 0.70846605, -0.9473147, 0.21263336, 0.23954532, 0.66384774, 0.70846605, 0.23954532)
-light_energy = 2.0
+light_energy = 1.2752389
 shadow_enabled = true
 directional_shadow_blend_splits = true
 

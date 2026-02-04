@@ -125,7 +125,7 @@ func updateSelectedSpells(spells:Array):
 		var slot = Panel.new()
 		slot.custom_minimum_size = Vector2(64,64)
 		var frame = TextureRect.new()
-		frame.texture = preload("res://MC2FILES/HSPRN0-0-089-00.png")
+		frame.texture = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_089.png")
 		frame.anchor_left = 0
 		frame.anchor_top = 0
 		frame.anchor_right = 1
@@ -133,7 +133,7 @@ func updateSelectedSpells(spells:Array):
 		slot.add_child(frame)
 		var btn = TextureButton.new()
 		if(spell.spellIndex>=0):
-			btn.texture_normal = load("res://MC2FILES/HSPRN0-0-%03d-00.png" % (spell.spellIndex+123))
+			btn.texture_normal = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_%03d.png" % (spell.spellIndex+123))
 		btn.tooltip_text = "fireball"#spell["id"]
 		slot.add_child(btn)
 		var mana_bar = ProgressBar.new()
@@ -165,7 +165,7 @@ func updateSpells(spells:Array):
 		slot.custom_minimum_size = Vector2(64,64)
 		var frame = TextureRect.new()
 		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		frame.texture = preload("res://MC2FILES/HSPRN0-0-089-00.png")
+		frame.texture = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_089.png")
 		frame.anchor_left = 0
 		frame.anchor_top = 0
 		frame.anchor_right = 1
@@ -173,7 +173,7 @@ func updateSpells(spells:Array):
 		slot.add_child(frame)
 		var btn = TextureButton.new()
 		if(spell.spell_state==1):
-			btn.texture_normal = load("res://MC2FILES/HSPRN0-0-%03d-00.png" % (index+97))
+			btn.texture_normal = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_%03d.png" % (index+97))
 		btn.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		btn.tooltip_text = "fireball"#spell["id"]
 		#btn.pressed.connect(Callable(self, "on_spell_pressed").bind(index))
