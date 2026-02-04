@@ -18,13 +18,96 @@ var fadeNode: Node3D
 var NodeSky3D: WorldEnvironment
 
 const KEY_INDEX := {
-	KEY_W: 0, # Forward
-	KEY_S: 1, # Backward
-	KEY_A: 2, # Left
-	KEY_D: 3,  # Right
-	KEY_SPACE: 4, # SPACE
-	KEY_F5: 5, # F5
-	KEY_F9: 6 # F9
+	# Systémové a funkční
+	KEY_ESCAPE: 0x011b,
+	KEY_BACKSPACE: 0x0E08,
+	KEY_TAB: 0x0F09,
+	KEY_ENTER: 0x1c0d,
+	KEY_CTRL: 0x1d00,
+	KEY_SHIFT: 0x2a00, # Namapováno na Left Shift z tvého seznamu
+	KEY_ALT: 0x3800,
+	KEY_SPACE: 0x3920,
+
+	# Čísla (horní řada)
+	KEY_1: 0x0231,
+	KEY_2: 0x0332,
+	KEY_3: 0x0433,
+	KEY_4: 0x0534,
+	KEY_5: 0x0635,
+	KEY_6: 0x0736,
+	KEY_7: 0x0837,
+	KEY_8: 0x0938,
+	KEY_9: 0x0a39,
+	KEY_0: 0x0b30,
+
+	# Písmena - Horní řada
+	KEY_Q: 0x1071,
+	KEY_W: 0x1177,
+	KEY_E: 0x1265,
+	KEY_R: 0x1372,
+	KEY_T: 0x1474,
+	KEY_Y: 0x1579,
+	KEY_U: 0x1675,
+	KEY_I: 0x1769,
+	KEY_O: 0x186f,
+	KEY_P: 0x1970,
+
+	# Písmena - Prostřední řada
+	KEY_A: 0x1e61,
+	KEY_S: 0x1f73,
+	KEY_D: 0x2064,
+	KEY_F: 0x2166,
+	KEY_G: 0x2267,
+	KEY_H: 0x2368,
+	KEY_J: 0x246a,
+	KEY_K: 0x256b,
+	KEY_L: 0x266c,
+
+	# Písmena - Dolní řada
+	KEY_Z: 0x2c7a,
+	KEY_X: 0x2d78,
+	KEY_C: 0x2e63,
+	KEY_V: 0x2f76,
+	KEY_B: 0x3062,
+	KEY_N: 0x316e,
+	KEY_M: 0x326d,
+
+	# Speciální znaky
+	KEY_MINUS: 0x0c2d,
+	KEY_EQUAL: 0x0d3d,
+	KEY_BRACELEFT: 0x1a5b,   # [
+	KEY_BRACERIGHT: 0x1b5d,  # ]
+	KEY_SEMICOLON: 0x273b,
+	KEY_APOSTROPHE: 0x2827,
+	KEY_QUOTELEFT: 0x2960,   # `
+	KEY_BACKSLASH: 0x2b5c,
+	KEY_COMMA: 0x332c,
+	KEY_PERIOD: 0x342e,
+	KEY_SLASH: 0x352f,
+
+	# Funkční klávesy
+	KEY_F1: 0x3b00,
+	KEY_F2: 0x3c00,
+	KEY_F3: 0x3d00,
+	KEY_F4: 0x3e00,
+	KEY_F5: 0x3f00,
+	KEY_F6: 0x4000,
+	KEY_F7: 0x4100,
+	KEY_F8: 0x4200,
+	KEY_F9: 0x4300,
+	KEY_F10: 0x4400,
+
+	# Pohyb a navigace
+	KEY_HOME: 0x4700,
+	KEY_UP: 0x4800,
+	KEY_PAGEUP: 0x4900,
+	KEY_LEFT: 0x4b00,
+	KEY_RIGHT: 0x4d00,
+	KEY_END: 0x4f00,
+	KEY_DOWN: 0x5000,
+	KEY_PAGEDOWN: 0x5000, # V tvém kódu má DOWN i PAGEDOWN stejné 0x5000
+	KEY_INSERT: 0x5200,
+	KEY_DELETE: 0x5300
 }
 
 const MOUSE_BUTTON_INDEX := {

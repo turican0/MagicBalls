@@ -1018,22 +1018,22 @@ void handleInputs(Dictionary inputs,int type) {
 		String action = change["action"];
 		bool is_pressed = (action == "pressed");
 		switch (key_index) {
-			case 0:
+			case 0x1177:
 				setPress(is_pressed, 0x4800); //UP
 				break;
-			case 1:
+			case 0x1f73:
 				setPress(is_pressed, 0x5000); //DOWN
 				break;
-			case 2:
+			case 0x1e61:
 				setPress(is_pressed, 0x4b00); //LEFT
 				break;
-			case 3:
+			case 0x2064:
 				setPress(is_pressed, 0x4d00); //RIGHT
 				break;
-			case 4:
+			case 0x3920:
 				setPress(is_pressed, 0x3920); //SPACE
 				break;
-			case 5:
+			case 0x3f00://F5
 				if (type != 0)
 					break;
 				if (is_pressed) {
@@ -1043,7 +1043,7 @@ void handleInputs(Dictionary inputs,int type) {
 					HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
 				}
 				break;
-			case 6:
+			case 0x4300://F9
 				if (type != 0)
 					break;
 				if (is_pressed) {

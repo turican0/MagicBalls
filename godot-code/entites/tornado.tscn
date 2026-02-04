@@ -6,7 +6,7 @@
 [node name="Node3D" type="Node3D" unique_id=1311742227]
 
 [node name="Sketchfab_Scene2" parent="." unique_id=805200846 instance=ExtResource("1_dy2l7")]
-transform = Transform3D(0.9366171, 0, -0.3504256, 0, 1, 0, 0.3504256, 0, 0.9366171, -0.40920267, 1, -0.28732067)
+transform = Transform3D(-0.86923444, 0, -0.4946847, 0, 1, 0, 0.4946847, 0, -0.86923444, 0.49826062, 1, 0.041669443)
 script = ExtResource("2_1er3g")
 radius = 0.5
 angular_speed = 2.0
