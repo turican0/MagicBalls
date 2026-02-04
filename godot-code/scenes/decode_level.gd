@@ -460,7 +460,7 @@ func gameInit():
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
 
-func setTime(time:int):
+func setTime(time:float):
 	if(time>=0)&&(time<=5):
 		NodeSky3D.clouds_enabled=false
 	else:
