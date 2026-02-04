@@ -455,12 +455,16 @@ func gameInit():
 			setTime(12.0)
 		"Night":
 			Global.Main_Sounds.setSoundBank(1)
-			setTime(8.0)
+			setTime(2.5)
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
-			
+
 func setTime(time:int):
+	if(time>=0)&&(time<=5):
+		NodeSky3D.clouds_enabled=false
+	else:
+		NodeSky3D.clouds_enabled=true
 	NodeSky3D.get_node("TimeOfDay").current_time=time
 	
 func anim1Begin(index:int):
