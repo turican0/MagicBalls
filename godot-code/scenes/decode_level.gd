@@ -452,13 +452,13 @@ func gameInit():
 	match levelType:
 		"Day":
 			Global.Main_Sounds.setSoundBank(0)
-			setTime(11.0)
+			setTime(12.0)
 		"Night":
 			Global.Main_Sounds.setSoundBank(1)
 			setTime(8.0)
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
-			setTime(11.0)
+			setTime(12.0)
 			
 func setTime(time:int):
 	NodeSky3D.get_node("TimeOfDay").current_time=time
