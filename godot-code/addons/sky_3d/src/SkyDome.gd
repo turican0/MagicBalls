@@ -451,7 +451,8 @@ func _update_moon_texture() -> void:
 
 
 ## Color of the moon DirectionalLight3D
-@export var moon_light_color := Color(0.572549, 0.776471, 0.956863, 1.0) :
+#@export var moon_light_color := Color(0.572549, 0.776471, 0.956863, 1.0) :
+@export var moon_light_color := Color(1, 1, 1, 1.0) :
 	set(value):
 		moon_light_color = value
 		_update_moon_light_color()
@@ -485,13 +486,12 @@ func _update_moon_light_energy() -> void:
 	l *= _atm_moon_phases_mult()
 	
 	var fade: float = (1.0 - _sun_transform.origin.y) * 0.5
-	_moon_light_node.light_energy = l * SUN_MOON_CURVE.sample_baked(fade)
+	_moon_light_node.light_energy = l * SUN_MOON_CURVE.sample_baked(fade) * 4
 	
 	if is_equal_approx(_moon_light_node.light_energy, 0.0) and _moon_light_node.shadow_enabled:
 		_moon_light_node.shadow_enabled = false
 	elif _moon_light_node.light_energy > 0.0 and not _moon_light_node.shadow_enabled:
 		_moon_light_node.shadow_enabled = true
-
 
 ## NodePath to the moon DirectionalLight3D node
 @export_node_path("DirectionalLight3D") var moon_light_path := NodePath("../MoonLight") :
