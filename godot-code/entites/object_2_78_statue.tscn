@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cur2q1jtr15dy"]
+[gd_scene format=3 uid="uid://cur2q1jtr15dy"]
 
 [ext_resource type="PackedScene" uid="uid://docxmger7goya" path="res://entites/sources/graveyard_angel_statue.glb" id="1_ger8s"]
+[ext_resource type="Script" uid="uid://dsovydkyq6o5y" path="res://entites/sources/graveyard_angel_statue.gd" id="2_1iqn5"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=247772291]
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ger8s")]
-transform = Transform3D(-1.3113417e-08, 0, -0.3, 0, 0.3, 0, 0.3, 0, -1.3113417e-08, 0, 0, 0)
+[node name="Sketchfab_Scene" parent="." unique_id=879507066 instance=ExtResource("1_ger8s")]
+transform = Transform3D(-1.3113417e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.3113417e-08, 0, 0, 0)
+script = ExtResource("2_1iqn5")

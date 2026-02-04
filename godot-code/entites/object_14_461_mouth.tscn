@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://c5y357hv3lhq2"]
 
 [ext_resource type="PackedScene" uid="uid://dpwp1xq4p5rhw" path="res://entites/sources/mouth_of_marrow_hollow_-_nightmare.glb" id="1_7etuu"]
+[ext_resource type="Script" uid="uid://ioujr8tsmg8w" path="res://entites/sources/mouth_of_marrow_hollow___nightmare.gd" id="2_6fre3"]
 
 [node name="Node3D" type="Node3D" unique_id=1667982880]
 
 [node name="Sketchfab_Scene" parent="." unique_id=1009160819 instance=ExtResource("1_7etuu")]
 transform = Transform3D(-5.795555, 0, 1.5529149, 0, 6, 0, -1.5529149, 0, -5.795555, 0, -1.1805794, -0.41424504)
+script = ExtResource("2_6fre3")
