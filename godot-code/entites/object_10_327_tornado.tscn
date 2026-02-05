@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://id0ds3tdj6pn"]
+
+[ext_resource type="PackedScene" uid="uid://r3m1swc21xe0" path="res://entites/sources/lowpoly_tornado.glb" id="1_dy2l7"]
+[ext_resource type="Script" uid="uid://wxqtni5vhnn7" path="res://entites/sources/lowpoly_tornado.gd" id="2_1er3g"]
+
+[node name="Node3D" type="Node3D" unique_id=1311742227]
+
+[node name="Sketchfab_Scene2" parent="." unique_id=805200846 instance=ExtResource("1_dy2l7")]
+transform = Transform3D(-0.86923444, 0, -0.4946847, 0, 1, 0, 0.4946847, 0, -0.86923444, 0.49826062, 1, 0.041669443)
+script = ExtResource("2_1er3g")
+radius = 0.5
+angular_speed = 2.0
+noise_strength = 0.5
+speed = 20.0

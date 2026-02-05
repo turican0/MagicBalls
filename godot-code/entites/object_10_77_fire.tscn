@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bwtrsaj0l72pr"]
+
+[ext_resource type="PackedScene" uid="uid://dg01pbjdwm2x5" path="res://entites/sources/fire/Godot-Spatial-Fire-Raymarched-main/Assets/Campfire/campfire.tscn" id="1_arcym"]
+
+[node name="Node3D" type="Node3D" unique_id=578660859]
+
+[node name="Campfire" parent="." unique_id=1989401031 instance=ExtResource("1_arcym")]

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bswslu4apq3d5"]
+
+[ext_resource type="PackedScene" uid="uid://rq33hw8do3l3" path="res://entites/sources/fireballs/astro_projectile.glb" id="1_082xb"]
+
+[node name="Node3D" type="Node3D" unique_id=2040429202]
+
+[node name="Sketchfab_Scene2" parent="." unique_id=884472493 instance=ExtResource("1_082xb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

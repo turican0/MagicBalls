@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://boj1kre6edpey"]
+
+[ext_resource type="PackedScene" uid="uid://deuvxxyhi1nwr" path="res://entites/sources/hornet/sketchfab_scene-hornet.tscn" id="1_yjpr0"]
+
+[node name="Node3D" type="Node3D" unique_id=2082703112]
+
+[node name="Sketchfab_Scene2" parent="." unique_id=1068013101 instance=ExtResource("1_yjpr0")]
+transform = Transform3D(-0.05, 0, -4.371139e-09, 0, 0.05, 0, 4.371139e-09, 0, -0.05, 0, 2, 0)

@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://deuvxxyhi1nwr"]
+
+[ext_resource type="PackedScene" uid="uid://ddko4ouc3prfq" path="res://entites/sources/hornet/asian_giant_hornet.glb" id="1_ftj8b"]
+
+[node name="Sketchfab_Scene" unique_id=1068013101 instance=ExtResource("1_ftj8b")]
+
+[node name="Hornet_5" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4" parent_id_path=PackedInt32Array(724636906) index="0" unique_id=1930257104]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8726033e-05, 0.8761328, -0.01714611)
+
+[node name="leg03_7" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/lfLegGrp_6" parent_id_path=PackedInt32Array(749671447) index="0" unique_id=2115957321]
+transform = Transform3D(0.22844836, -0.21429996, 0.94967717, 0.59004486, 0.80637765, 0.040026125, -0.77437615, 0.5512083, 0.31066224, -4.1186748, -3.9139354, -7.19915)
+
+[node name="leg01_9" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/lfLegGrp_6" parent_id_path=PackedInt32Array(749671447) index="1" unique_id=1715498999]
+transform = Transform3D(0.4515172, -0.60022056, 0.6602026, 0.76011443, 0.64625376, 0.06769146, -0.46728823, 0.47126564, 0.748031, -2.3478348, -5.1169376, -11.557891)
+
+[node name="leg02_11" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/lfLegGrp_6" parent_id_path=PackedInt32Array(749671447) index="2" unique_id=587717336]
+transform = Transform3D(0.46744156, -0.65601826, 0.59256923, 0.823169, 0.07860171, -0.56232965, 0.3223216, 0.75064075, 0.57675564, -1.5903988, -4.7931805, -12.602681)
+
+[node name="leg03_14" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/rtLegGrp_13" parent_id_path=PackedInt32Array(1272363954) index="0" unique_id=506587142]
+transform = Transform3D(0.23927703, -0.21291372, 0.9473195, 0.57368183, 0.8181501, 0.038979992, -0.783349, 0.53413296, 0.3179093, -4.1186748, -3.9139354, -7.19915)
+
+[node name="leg01_16" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/rtLegGrp_13" parent_id_path=PackedInt32Array(1272363954) index="1" unique_id=2002718834]
+transform = Transform3D(0.4501071, -0.6188537, 0.64375746, 0.7937441, 0.60755646, 0.029077306, -0.40911362, 0.49789077, 0.7646769, -2.3478348, -5.1169376, -11.557891)
+
+[node name="leg02_18" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/rtLegGrp_13" parent_id_path=PackedInt32Array(1272363954) index="2" unique_id=405251293]
+transform = Transform3D(0.5639651, -0.6954427, 0.44531205, 0.7445543, 0.19497037, -0.6384555, 0.35718656, 0.69162565, 0.62775135, -1.5903988, -4.7931805, -12.602681)
+
+[node name="tail_21" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/BodyGrp_20" parent_id_path=PackedInt32Array(1055311231) index="0" unique_id=1315662800]
+transform = Transform3D(1, 0, 0, 0, 0.9943947, 0.10573148, 0, -0.10573148, 0.9943947, -8.399648e-15, -2.2168367, -2.561497)
+
+[node name="head_23" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/BodyGrp_20" parent_id_path=PackedInt32Array(1055311231) index="1" unique_id=1283978139]
+transform = Transform3D(0.9936836, -0.10506837, 0.03941282, 0.09731321, 0.98171324, 0.16361299, -0.055882636, -0.15874417, 0.98573697, -7.4803174e-16, 1.6469681, 7.7490325)
+
+[node name="ant01_26" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/BodyGrp_20/head_23" index="2" unique_id=1058000176]
+transform = Transform3D(0.9985134, -0.053952474, 0.0077489563, 0.050034244, 0.850887, -0.5229605, 0.021621529, 0.5225707, 0.8523217, -0.5786423, 0.95430696, 3.3789742)
+
+[node name="ant02_28" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/BodyGrp_20/head_23" index="3" unique_id=1149769914]
+transform = Transform3D(0.99920255, 0.011695717, -0.03817501, -0.030279197, 0.84520054, -0.5335907, 0.026024817, 0.53432107, 0.8448808, 0.57991266, 0.991474, 3.4683015)
+
+[node name="wing01_34" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/bigWingGrp_32/rtWing_33" parent_id_path=PackedInt32Array(54332053) index="0" unique_id=1642433193]
+transform = Transform3D(0.52253675, -0.090469986, 0.84780335, -0.026065512, 0.9921948, 0.12194341, -0.8522183, -0.085818335, 0.5161001, -2.1117728, 0.69146764, 0.8891334)
+
+[node name="wing01_37" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/bigWingGrp_32/lfWing_36" parent_id_path=PackedInt32Array(1885132832) index="0" unique_id=660602508]
+transform = Transform3D(0.52253675, -0.090469986, 0.84780335, -0.026065512, 0.9921948, 0.12194341, -0.8522183, -0.085818335, 0.5161001, -1.7883325, 0.5285314, 0.37363282)
+
+[node name="wing01_41" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/lilWingGrp_39/rtWing_40" parent_id_path=PackedInt32Array(1412078390) index="0" unique_id=891870736]
+transform = Transform3D(0.9086823, 0.26441857, 0.32307795, -0.40884852, 0.40698737, 0.8168257, 0.08449522, -0.8743249, 0.47792932, -1.9978682, 0.1912975, 1.5457661)
+
+[node name="wing01_44" parent="Sketchfab_model/root/GLTF_SceneRootNode/Sketchfab_model_0/3bed3888e8c54f4bba253a6e260214d4_fbx_1/Object_2_2/RootNode_3/Hornet01_4/Hornet_5/lilWingGrp_39/lfWing_43" parent_id_path=PackedInt32Array(7333852) index="0" unique_id=76895784]
+transform = Transform3D(0.9086823, 0.26441857, 0.32307795, -0.40884852, 0.40698737, 0.8168257, 0.08449522, -0.8743249, 0.47792932, -1.674428, 0.028361214, 1.0302656)
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=1555332011]
+autoplay = &"Take 001"
+speed_scale = 3.0

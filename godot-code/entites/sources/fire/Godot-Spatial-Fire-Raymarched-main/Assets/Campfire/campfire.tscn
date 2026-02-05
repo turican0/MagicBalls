@@ -1,0 +1,265 @@
+[gd_scene format=3 uid="uid://dg01pbjdwm2x5"]
+
+[ext_resource type="Shader" uid="uid://e8wbl5dx4q3v" path="res://entites/sources/fire/Godot-Spatial-Fire-Raymarched-main/Assets/Campfire/FireEffect/FireEffect.gdshader" id="1_0rds5"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_37bim"]
+frequency = 0.1
+fractal_octaves = 3
+fractal_lacunarity = 3.0
+fractal_gain = 1.0
+fractal_weighted_strength = 1.0
+domain_warp_enabled = true
+domain_warp_fractal_octaves = 1
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_n56f6"]
+noise = SubResource("FastNoiseLite_37bim")
+seamless = true
+invert = true
+normalize = false
+seamless_blend_skirt = 0.25
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5r1iu"]
+render_priority = 0
+shader = ExtResource("1_0rds5")
+shader_parameter/raymarch_steps = 6
+shader_parameter/sample_jitter = true
+shader_parameter/potato_mode = false
+shader_parameter/sample_noise = SubResource("NoiseTexture3D_n56f6")
+shader_parameter/billboard = true
+shader_parameter/billboard_z_offset = 0.675
+shader_parameter/proximity_fade_distance = 0.375
+shader_parameter/time_scale = 0.027
+shader_parameter/noise_scale = 0.45
+shader_parameter/noise_threshold = 0.43
+shader_parameter/fire_height = 2.45
+shader_parameter/fire_width = 2.25
+shader_parameter/box_center = Vector3(0, 0, 0)
+shader_parameter/box_rotation = Vector3(0, 0, 0)
+shader_parameter/taper_factor = 0.425
+shader_parameter/wobble_strength = 2.0
+shader_parameter/wobble_speed = 6.0
+shader_parameter/wobble_noise_frequency = 0.125
+shader_parameter/sharpness_cutoff = 4.5
+shader_parameter/emission_strength = 12.5
+shader_parameter/core_glow_multiplier = 16.0
+shader_parameter/color_core = Vector3(1, 0.9, 0.5)
+shader_parameter/color_mid = Vector3(1, 0.625, 0)
+shader_parameter/color_outer = Vector3(0.8, 0.01, 0)
+shader_parameter/color_smoke = Vector3(-0.067, -0.067, -0.067)
+shader_parameter/jitter_multiplier = 0.5
+
+[sub_resource type="QuadMesh" id="QuadMesh_37bim"]
+size = Vector2(4, 4)
+center_offset = Vector3(0, 1, 0)
+
+[sub_resource type="Curve" id="Curve_86xn7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_37bim"]
+curve = SubResource("Curve_86xn7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_86xn7"]
+lifetime_randomness = 0.75
+particle_flag_align_y = true
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 22.5
+flatness = 0.25
+initial_velocity_min = 2.25
+initial_velocity_max = 3.5
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -0.300002
+linear_accel_max = 0.299998
+radial_accel_min = -1.25
+radial_accel_max = -0.500002
+damping_min = 0.5
+damping_max = 1.25
+scale_min = 0.75
+scale_max = 1.33
+scale_curve = SubResource("CurveTexture_37bim")
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 0.04
+turbulence_noise_speed_random = 0.4
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.105
+turbulence_initial_displacement_min = 1.49012e-06
+turbulence_initial_displacement_max = 21.0
+sub_emitter_mode = 2
+sub_emitter_amount_at_end = 32
+
+[sub_resource type="Curve" id="Curve_0rds5"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.295181, 0.168539), -0.2945, -0.2945, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1pc0f"]
+cull_mode = 2
+diffuse_mode = 3
+specular_mode = 2
+disable_ambient_light = true
+albedo_color = Color(1, 0.715118, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.349378, 0, 1)
+emission_energy_multiplier = 16.0
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_86xn7"]
+material = SubResource("StandardMaterial3D_1pc0f")
+size = 0.015
+sections = 2
+section_length = 0.04
+section_segments = 1
+curve = SubResource("Curve_0rds5")
+
+[sub_resource type="Curve" id="Curve_n56f6"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.99999, 1), -1.22331, -1.22331, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_cry37"]
+curve = SubResource("Curve_n56f6")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_37bim"]
+lifetime_randomness = 1.0
+particle_flag_align_y = true
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 22.5
+flatness = 0.25
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -0.750002
+linear_accel_max = 0.749998
+radial_accel_min = -1.25
+radial_accel_max = -0.500002
+scale_min = 0.75
+scale_max = 2.0
+alpha_curve = SubResource("CurveTexture_cry37")
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 0.04
+turbulence_noise_speed_random = 0.4
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.105
+turbulence_initial_displacement_min = 1.49012e-06
+turbulence_initial_displacement_max = 21.0
+sub_emitter_mode = 2
+sub_emitter_amount_at_end = 32
+
+[sub_resource type="Curve" id="Curve_37bim"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.514925, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_n56f6"]
+curve = SubResource("Curve_37bim")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0rds5"]
+lifetime_randomness = 1.0
+particle_flag_align_y = true
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 66.0
+flatness = 0.25
+initial_velocity_min = 0.6
+initial_velocity_max = 1.3
+orbit_velocity_min = -0.0899999
+orbit_velocity_max = 0.75
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -0.750002
+linear_accel_max = 0.749998
+radial_accel_min = -1.25
+radial_accel_max = -0.500002
+scale_min = 0.5
+scale_max = 1.25
+scale_curve = SubResource("CurveTexture_n56f6")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 0.04
+turbulence_noise_speed_random = 0.4
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.105
+turbulence_initial_displacement_min = 1.49012e-06
+turbulence_initial_displacement_max = 21.0
+sub_emitter_mode = 2
+sub_emitter_amount_at_end = 32
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0rds5"]
+albedo_color = Color(1, 0.899544, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.413333, 0.12, 1)
+emission_energy_multiplier = 8.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_37bim"]
+material = SubResource("StandardMaterial3D_0rds5")
+size = Vector3(0.002, 0.045, 0.002)
+
+[node name="Campfire" type="Node3D" unique_id=143176828]
+
+[node name="Effects" type="Node3D" parent="." unique_id=1902368236]
+
+[node name="FireDomain" type="MeshInstance3D" parent="Effects" unique_id=299073645]
+layers = 524288
+material_override = SubResource("ShaderMaterial_5r1iu")
+mesh = SubResource("QuadMesh_37bim")
+skeleton = NodePath("../..")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Effects" unique_id=1573990506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+light_color = Color(0.93, 0.5332, 0.186, 1)
+light_energy = 12.0
+light_volumetric_fog_energy = 0.225
+light_size = 0.375
+shadow_bias = 0.05
+distance_fade_begin = 4096.0
+distance_fade_shadow = 35.0
+distance_fade_length = 12.5
+omni_range = 56.0
+omni_attenuation = 1.5
+
+[node name="Sparks" type="GPUParticles3D" parent="Effects" unique_id=2077915053]
+cast_shadow = 0
+amount = 12
+lifetime = 1.25
+speed_scale = 0.9
+explosiveness = 0.13
+randomness = 0.13
+local_coords = true
+transform_align = 2
+process_material = SubResource("ParticleProcessMaterial_86xn7")
+draw_pass_1 = SubResource("RibbonTrailMesh_86xn7")
+
+[node name="PreSubSparks" type="GPUParticles3D" parent="Effects" unique_id=1860802269]
+cast_shadow = 0
+amount = 4
+sub_emitter = NodePath("../SubSparks")
+lifetime = 0.5
+explosiveness = 0.13
+randomness = 0.13
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_37bim")
+draw_passes = 2
+draw_pass_1 = SubResource("RibbonTrailMesh_86xn7")
+draw_pass_2 = null
+
+[node name="SubSparks" type="GPUParticles3D" parent="Effects" unique_id=171870552]
+material_override = SubResource("StandardMaterial3D_1pc0f")
+cast_shadow = 0
+amount = 3
+lifetime = 1.13
+explosiveness = 0.75
+randomness = 0.38
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_0rds5")
+draw_passes = 2
+draw_pass_1 = SubResource("BoxMesh_37bim")
+draw_pass_2 = null
+
+[node name="CampFireSfx" type="AudioStreamPlayer3D" parent="Effects" unique_id=1976660664]
+volume_db = 16.0
+unit_size = 0.25
+max_db = -1.5
+pitch_scale = 0.95
+autoplay = true
+attenuation_filter_cutoff_hz = 9000.0
+attenuation_filter_db = -16.0

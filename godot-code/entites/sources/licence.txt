@@ -63,3 +63,13 @@ https://sketchfab.com/3d-models/voidbound-necromancer-6c506ca03faf4c4aa4cba1e18f
 https://sketchfab.com/3d-models/lich-dungeons-and-dragons-2062df03ba49431b8b18727a8f5a4143
 https://sketchfab.com/3d-models/crystal-ball-30618a3f909a4376af013a1d1de1cbba
 https://sketchfab.com/3d-models/elder-moonseer-f8fb5052b57b491699312e02642e0477
+https://sketchfab.com/3d-models/flame-wraith-set-3d-look-around-animation-5be4b7b159944ea49a5ec39cfabc43ee
+
+https://sketchfab.com/3d-models/low-poly-fireball-boule-de-feu-en-low-poly-b722efe7ec084dafbe41427714dc5711
+https://sketchfab.com/3d-models/projectile-magma-ball-915c10ddb81543eeaa122f7e159eccc5
+https://sketchfab.com/3d-models/fire-tornado-b22f1181514946c18fc07980c2d2b63a
+https://sketchfab.com/3d-models/stylized-fire-tornado-fe6bd0b87eca4c73bef78b0c6d874169
+https://sketchfab.com/3d-models/astro-projectile-fea1d82dcd524373b6971a19b2450b07#download
+
+https://sketchfab.com/3d-models/remains-7663ab71893f44b2b6466db3c625b061
+https://godotshaders.com/shader/spatial-fire-raymarched/
