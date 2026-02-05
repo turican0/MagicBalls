@@ -133,59 +133,59 @@ var library_scenes = {}
 var library2_scenes = {}
 var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
-	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree
-	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue
+	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree -difColors!!!
+	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue -difmodels!!!
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
-	Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2 - doplnit
-	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2
+	Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2
+	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2 - same models
 	Vector3i(3,0,0): "",#player1
-	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon
-	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle
+	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
 	Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,9,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,10,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,11,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
 	Vector3i(5,12,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
 	Vector3i(5,13,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,14,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,15,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,16,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,17,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,18,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,19,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,20,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head
-	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body
-	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
-	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
-	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch
-	Vector3i(5,132,0): "res://entites/object_5_132_people5.tscn",#people5 132 133 134
-	Vector3i(5,135,0): "res://entites/object_5_135_people6.tscn",#people6 135 136 137
-	Vector3i(5,138,0): "res://entites/object_5_138_people7.tscn",#people7 138 139 140
-	Vector3i(5,141,0): "res://entites/object_5_141_people8.tscn",#people8 141 142 143s
-	Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat
-	Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157
-	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182
-	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185
-	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201
-	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle
-	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball
-	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball
-	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow
-	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses
-	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball
-	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion
-	Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion
-	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1
-	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",
-	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2
-	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",
-	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
-	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash
-	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll
-	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate
-	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar
+	Vector3i(5,14,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
+	Vector3i(5,15,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
+	Vector3i(5,16,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
+	Vector3i(5,17,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
+	Vector3i(5,18,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
+	Vector3i(5,19,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
+	Vector3i(5,20,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
+	Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
+	Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head-OK
+	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
+	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
+	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
+	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
+	Vector3i(5,132,0): "res://entites/object_5_132_people5.tscn",#people5 132 133 134-OK
+	Vector3i(5,135,0): "res://entites/object_5_135_people6.tscn",#people6 135 136 137-OK
+	Vector3i(5,138,0): "res://entites/object_5_138_people7.tscn",#people7 138 139 140-OK
+	Vector3i(5,141,0): "res://entites/object_5_141_people8.tscn",#people8 141 142 143-OK
+	Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat-OK
+	Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157-OK
+	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
+	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
+	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
+	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
+	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
+	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
+	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
+	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
+	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
+	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK
+	Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion-final-OK
+	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1-OK
+	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",#goldMana -OK
+	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
+	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
+	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
+	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
+	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll -OK
+	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate -OK
+	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
 
 var library2 = {
