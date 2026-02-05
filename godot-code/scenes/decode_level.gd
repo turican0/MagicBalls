@@ -131,6 +131,7 @@ var pool_size = 1000
 # Katalog cest k tscn souborům podle ID typu
 var library_scenes = {}
 var library2_scenes = {}
+
 var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree -difColors!!!
@@ -141,6 +142,7 @@ var library = {
 	Vector3i(3,0,0): "",#player1
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
+	Vector3i(3,211,0): "res://entites/object_3_211_sorcerer.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,9,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,10,0): "res://entites/object_5_8_bowman.tscn",#bowman
@@ -181,12 +183,20 @@ var library = {
 	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",#goldMana -OK
 	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
 	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
+	Vector3i(10,68,0): "res://entites/object_10_68_redSphere.tscn",#red sphere xxxxxxxxxxxx
+	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
+	Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
+	Vector3i(10,327,0): "res://entites/object_10_327_tornado.tscn",#tornado xxxxxxxxxxxxxxxxxxxxxxxx
+	Vector3i(10,463,0): "res://entites/object_10_463_fireball-object.tscn",#fireball-object xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll -OK
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate -OK
 	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
+
+func updateLibrary(a:int,b:int,c:int,path:String):
+	library[Vector3i(a, b, c)] = path
 
 var library2 = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
@@ -194,6 +204,7 @@ var library2 = {
 	Vector3i(0,8,0): "",#unknown
 	Vector3i(0,58,0): "",#unknown
 	Vector3i(0,67,0): "",#unknown
+	Vector3i(0,68,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	Vector3i(10,54,0): "",#fair
@@ -536,16 +547,50 @@ func gameInit():
 		"Day":
 			Global.Main_Sounds.setSoundBank(0)
 			setTime(12.0)
+			setDayEntites()
 		"Night":
 			Global.Main_Sounds.setSoundBank(1)
 			setTime(2.5)
+			setNightEntites()
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
+			setCaveEntites()
 		"Final":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
+			setDayEntites()
 	get_parent().get_node("TerrainMB").changeTerrain(levelType)
+
+func setDayEntites():
+	updateLibrary(5,14,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(5,15,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(5,16,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(5,17,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(5,18,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(5,19,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(5,20,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(5,21,0,"res://entites/object_5_11D_hornet.tscn")
+	
+func setNightEntites():
+	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,15,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,16,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,17,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,18,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,19,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,20,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
+
+func setCaveEntites():
+	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,15,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,16,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,17,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,18,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,19,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,20,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
 
 func setTime(time:float):
 	if(time>=0)&&(time<=5):

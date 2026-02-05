@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cxhx1qfntfsgj"]
+
+[ext_resource type="PackedScene" uid="uid://c3idbqpxfggth" path="res://entites/object_3_211_sorcerer.tscn" id="1_4lyoc"]
+
+[node name="TestScene" type="Node3D" unique_id=950006661]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1176225436]
+transform = Transform3D(-0.9973336, 0, -0.07297713, 0, 1, 0, 0.07297713, 0, -0.9973336, 0, 1.5889893, -6.023926)
+
+[node name="Node3D" parent="." unique_id=872675572 instance=ExtResource("1_4lyoc")]
