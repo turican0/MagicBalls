@@ -184,6 +184,7 @@ void MBEXconvertData(String path, String path2) {
 	MBEXpointersConverts(path + "/POINTERS");//-find true palette
 	MBEXgtdConverts(path + "/GTD");
 	MBEXextractLang(path + "/language", "res://hidata/language/", "/LANGUAGE/");
+	MBEXtmapsConverts(path + "/TMAPS");
 }
 
 void MBEXextractLang(String path, String langPath, String cdLangPath) {
@@ -784,6 +785,206 @@ void MBEXsmatsConverts(String path) {
 	MBEXsmatConverts(path + "", 320, 200, "SMATITLE.DAT", "SMATITLE.PAL");
 	MBEXtextureConverts(path + "", 320, 200, "TITLE3.DAT", "PALTIT3.DAT", false);
 	//MBEXtextureConvertsP(path + "", 320, 200, "TITBASF.DAT");//palette not found
+}
+
+void MBEXbullConverts(String path, String texture, String palette, int max_images) {
+	std::string datPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
+	std::string tabPath = datPath.substr(0, datPath.length() - 3) + "TAB";
+	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
+
+	uint8_t *tempTMAPS00TAB_BEGIN_BUFFER;
+	type_E9C08 *temp_E9C08x;
+	subtype_x_DWORD_E9C28_str *temp_F66F0x[504];
+
+	if (!make_dir_godot(path)) {
+		return;
+	}
+
+	PackedByteArray palette_data;
+	Ref<FileAccess> palFile = FileAccess::open(String(palettePath.c_str()), FileAccess::READ);
+	if (palFile.is_valid()) {
+		palette_data = palFile->get_buffer(palFile->get_length());
+		palFile->close();
+	}
+
+	std::vector<uint8_t> palette_final;
+	palette_final.assign(palette_data.ptr(), palette_data.ptr() + palette_data.size());
+	if (palette_final.size() < 768) {
+		UtilityFunctions::print("Error: Palette is missing or too small.");
+		return;
+	}
+
+	PackedByteArray fileDat_data;
+	Ref<FileAccess> datFile = FileAccess::open(String(datPath.c_str()), FileAccess::READ);
+	if (datFile.is_valid()) {
+		fileDat_data = datFile->get_buffer(datFile->get_length());
+		datFile->close();
+	}
+
+	PackedByteArray fileTab_data;
+	Ref<FileAccess> tabFile = FileAccess::open(String(tabPath.c_str()), FileAccess::READ);
+	if (tabFile.is_valid()) {
+		fileTab_data = tabFile->get_buffer(tabFile->get_length());
+		tabFile->close();
+	}
+
+	uint8_t *contentTMAPSdat = (uint8_t *)fileDat_data.ptr();
+	uint8_t *contentTMAPStab = (uint8_t *)fileTab_data.ptr();
+
+	int dword_0xE6_heapsize_230 = 0x400000;
+	x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226 = (uint8_t *)Malloc_83CD0(dword_0xE6_heapsize_230);
+	x_DWORD_E9C28_str = sub_71B40(dword_0xE6_heapsize_230, 0x1F8u, (type_x_DWORD_E9C28_str *)x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226);
+	tempTMAPS00TAB_BEGIN_BUFFER = contentTMAPStab;
+	temp_E9C08x = sub_72120(0x1F8u);
+
+	std::vector<uint8_t> buffer(256000); // Dostatečný buffer pro dekompresi
+	int indextab = 0;
+	int index = 0;
+
+	while (index < max_images) {
+		int shift = *(uint32_t *)&contentTMAPStab[indextab + 4];
+		uint8_t *stmpdat = &contentTMAPSdat[shift];
+
+		while ((*(uint32_t *)stmpdat) != 0x1434e52) {
+			shift++;
+			stmpdat = &contentTMAPSdat[shift + 1];
+		}
+
+		uint32_t unpacksize = stmpdat[7] + (stmpdat[6] << 8) + (stmpdat[5] << 16) + (stmpdat[4] << 24);
+
+		sub_5C3D0_file_decompress(&contentTMAPSdat[shift], buffer.data());
+
+		uint8_t *indexPtr = 10 * index + tempTMAPS00TAB_BEGIN_BUFFER;
+		temp_F66F0x[index] = LoadTMapMetadata_71E70(x_DWORD_E9C28_str, (unsigned __int16)(4 * ((unsigned int)(*(x_DWORD *)indexPtr + 13) >> 2)), index);
+
+		//type_particle_str** index6 = temp_F66F0[index];
+		//uint8_t **subpointer = (uint8_t **)temp_F66F0[index];
+		temp_F66F0x[index]->partstr_0 = (type_particle_str *)malloc(unpacksize);
+		memcpy(temp_F66F0x[index]->partstr_0, buffer.data(), unpacksize);
+
+		if (temp_F66F0x[index]->partstr_0->word_0 & 1)
+			sub_721C0_initTmap(temp_E9C08x, &temp_F66F0x[index]->partstr_0, index);
+
+		indextab += 10;
+		index++;
+	}
+
+	for (int mainindex = 0; mainindex < 24; mainindex++) {
+		index = 0;
+		while (index < max_images) {
+			uint8_t *subpointer = *(uint8_t **)temp_F66F0x[index];
+			subpointer[0] |= 8;
+			index++;
+		}
+
+		sub_715B0();
+		index = 0;
+
+		while (index < max_images) {
+			uint8_t *subpointer = *(uint8_t **)temp_F66F0x[index];
+			int width = *(uint16_t *)&subpointer[2];
+			int height = *(uint16_t *)&subpointer[4];
+			uint8_t *indices = subpointer + 6;
+
+			bool alpha = (indices[0] == 0 || indices[width - 1] == 0 ||
+					indices[(height - 1) * width] == 0 || indices[width * height - 1] == 0);
+
+			std::vector<unsigned char> rgba_data(width * height * 4);
+			for (int i = 0; i < width * height; i++) {
+				uint8_t idx = indices[i];
+				int d = i * 4;
+				rgba_data[d + 0] = palette_final[idx * 3 + 0] * 4;
+				rgba_data[d + 1] = palette_final[idx * 3 + 1] * 4;
+				rgba_data[d + 2] = palette_final[idx * 3 + 2] * 4;
+				rgba_data[d + 3] = (alpha && idx == 0) ? 0 : 255;
+			}
+
+			char buf[64];
+			snprintf(buf, sizeof(buf), "%s_%03i_%02i.png", texture.utf8().get_data(), index, mainindex);
+			String outPath = path + "/" + String(buf);
+
+			Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
+			if (f.is_valid()) {
+				stbi_write_png_to_func(
+						[](void *context, void *data, int size) {
+							FileAccess *fa = static_cast<FileAccess *>(context);
+							fa->store_buffer(static_cast<const uint8_t *>(data), size);
+						},
+						(void *)f.ptr(), width, height, 4, rgba_data.data(), width * 4);
+				f->close();
+			}
+			index++;
+		}
+	}
+	UtilityFunctions::print("Extraction Completed via Godot API");
+}
+
+void MBEXtmapsCompare(String folder0, String folder1, String folder2, String outFolder) {
+	if (!make_dir_godot(outFolder)) {
+		return;
+	}
+	TypedArray<String> sourceFolders;
+	sourceFolders.push_back(folder0);
+	sourceFolders.push_back(folder1);
+	sourceFolders.push_back(folder2);
+	int max_index = 504;
+	for (int i = 0; i < max_index; i++) {
+		char indexBuf[8];
+		snprintf(indexBuf, sizeof(indexBuf), "%03d", i);
+		String strIndex = String(indexBuf);
+
+		Vector<Ref<Image>> images;
+		int maxHeight = 0;
+		int totalWidth = 0;
+		for (int f = 0; f < 3; f++) {
+			String currentFolder = sourceFolders[f];
+			String fileName = "";
+			PackedStringArray files = DirAccess::get_files_at(currentFolder);
+			for (int j = 0; j < files.size(); j++) {
+				if (files[j].contains("_" + strIndex + "_00.png")) {
+					fileName = files[j];
+					break;
+				}
+			}
+			Ref<Image> img;
+			if (fileName != "") {
+				img = Image::load_from_file(currentFolder + "/" + fileName);
+			}
+			if (img.is_null() || img->is_empty()) {
+				img = Image::create(64, 64, false, Image::FORMAT_RGBA8);
+				img->fill(Color(1, 1, 1, 1)); // Bílá
+			}
+
+			images.push_back(img);
+			totalWidth += img->get_width();
+			if (img->get_height() > maxHeight)
+				maxHeight = img->get_height();
+		}
+		Ref<Image> combined = Image::create(totalWidth, maxHeight, false, Image::FORMAT_RGBA8);
+		combined->fill(Color(0, 0, 0, 0));
+		int currentX = 0;
+		for (int f = 0; f < 3; f++) {
+			int yOffset = (maxHeight - images[f]->get_height()) / 2;
+			combined->blit_rect(images[f], Rect2i(0, 0, images[f]->get_width(), images[f]->get_height()), Vector2i(currentX, yOffset));
+			currentX += images[f]->get_width();
+		}
+		String outPath = outFolder + "/Compare_" + strIndex + ".png";
+		Error err = combined->save_png(outPath);
+
+		if (err == OK) {
+			UtilityFunctions::print("Saved comparison: ", outPath);
+		} else {
+			UtilityFunctions::print("Failed to save: ", outPath);
+		}
+	}
+	UtilityFunctions::print("Comparison generation completed.");
+}
+
+void MBEXtmapsConverts(String path) {
+	MBEXbullConverts(path + "/TMAPS-day", "TMAPS0-0.DAT", "PALD-0.DAT",504);
+	MBEXbullConverts(path + "/TMAPS-night", "TMAPS1-0.DAT", "PALN-0.DAT",504);
+	MBEXbullConverts(path + "/TMAPS-cave", "TMAPS2-0.DAT", "PALC-0.DAT",464);
+	MBEXtmapsCompare(path + "/TMAPS-day", path + "/TMAPS-night", path + "/TMAPS-cave", path + "/TMAPS-compare");
 }
 
 void MBEXwebConverts(String path) {

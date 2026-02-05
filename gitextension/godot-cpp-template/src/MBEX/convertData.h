@@ -15,6 +15,7 @@
 #include "../remc2/engine/Basic.h"
 #include "../remc2/engine/GameUI.h"
 #include "../remc2/engine/Sound.h"
+#include "../remc2/engine/Basic.h"
 #include "../libxmi/xmi2mid.h"
 
 #include <godot_cpp/classes/node.hpp>
@@ -69,3 +70,4 @@ void MBEXextractLang(String path, String langPath, String cdLangPath);
 void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette, bool alpha, int alphaIndex);
 void MBEXsaveBitmapCrop(String path, char *name, int width, int height, uint8_t *data, TColor *palette, int cropXmin);
 void MBEXcdExtract(char *pathGOG, char *pathOut);
+void MBEXtmapsConverts(String path);
