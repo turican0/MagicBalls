@@ -159,6 +159,7 @@ var library = {
 	Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
 	Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head-OK
 	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
+	5 110-114 vampire archer
 	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
 	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
 	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
@@ -194,9 +195,11 @@ var library = {
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate -OK
 	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
+# x 158 perla
 
 func updateLibrary(a:int,b:int,c:int,path:String):
 	library[Vector3i(a, b, c)] = path
+	library_scenes[Vector3i(a, b, c)] = load(path)
 
 var library2 = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
@@ -267,7 +270,7 @@ func _preload_library(source_dict: Dictionary, target_dict: Dictionary):
 
 func _ready():	
 	_preload_library(library, library_scenes)
-	_preload_library(library2, library2_scenes)	
+	_preload_library(library2, library2_scenes)
 	node_pool.resize(pool_size)
 	for i in range(pool_size):
 		node_pool[i] = null
@@ -416,7 +419,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		
 		if current_node == null or current_node.get_meta("id") != modelIndex*1024*1024+actId*1024+actByte0:
 			if current_node != null:
-				current_node.queue_free()			
+				current_node.queue_free()
 			if !(actByte1 & 4):
 				var isDraw = true
 				if(actByte0&1):
