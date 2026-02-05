@@ -449,21 +449,27 @@ void MBEXgraphicConverts(String path, String texture, String palette) {
 		std::vector<unsigned char> rgba_data((size_t)width * height * p_channels);
 		const uint8_t *indices = pdwScreenBuffer_351628;
 
-		for (int i = 0; i < width * height; ++i) {
+		bool alpha = true;
+		bool alpha2 = (indices[0] == 0 ||
+				indices[width - 1] == 0 ||
+				indices[(height - 1) * width] == 0 ||
+				indices[width * height - 1] == 0);
+		if(!alpha2)
+			alpha = false;
+		for (int i = 0; i < width * height; i++) {
 			uint8_t index = indices[i];
 			int pal_idx = index * 3;
 			int dest_idx = i * 4;
 
-			// Základní barvy (pozor na pořadí, PNG chce standardně RGB)
 			rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
 			rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
 			rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
 
-			// 2. Logika průhlednosti: pokud je index 0, alfa = 0 (průhledná), jinak 255 (neprůhledná)
-			if (index == 0) {
-				rgba_data[dest_idx + 3] = 0; // Průhledná
-			} else {
-				rgba_data[dest_idx + 3] = 255; // Neprůhledná
+			rgba_data[dest_idx + 3] = 255;
+			if (alpha) {
+				if (index == 0) {
+					rgba_data[dest_idx + 3] = 0; // transparent
+				}
 			}
 		}
 		char buf[16];
@@ -566,7 +572,14 @@ void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* pale
 	std::vector<unsigned char> rgba_data((size_t)inWidth * inHeight * p_channels);
 	const uint8_t *indices = pdwScreenBuffer_351628;
 
-	for (int i = 0; i < inWidth * inHeight; ++i) {
+	bool alpha2 = (indices[0] == 0 ||
+			indices[inWidth - 1] == 0 ||
+			indices[(inHeight - 1) * inWidth] == 0 ||
+			indices[inWidth * inHeight - 1] == 0);
+	if (!alpha2)
+		alpha = false;
+
+	for (int i = 0; i < inWidth * inHeight; i++) {
 		uint8_t index = indices[i];
 		int pal_idx = index * 3;
 		int dest_idx = i * 4;
@@ -671,6 +684,12 @@ void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *dat
 	int p_channels = 4;
 	std::vector<unsigned char> rgba_data((size_t)inWidth * inHeight * p_channels);
 	const uint8_t *indices = data;
+	bool alpha2 = (indices[0] == 0 ||
+			indices[width - 1] == 0 ||
+			indices[(height - 1) * width] == 0 ||
+			indices[width * height - 1] == 0);
+	if (!alpha2)
+		alpha = false;
 	for (int i = 0; i < inWidth * inHeight; ++i) {
 		uint8_t index = indices[i];
 		int pal_idx = index * 3;
