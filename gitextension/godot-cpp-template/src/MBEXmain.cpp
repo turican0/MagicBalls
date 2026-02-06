@@ -1348,8 +1348,12 @@ int MBEXstate = 0;
 void MBEXclass::REMC2BeginGame(String cdPath) {
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
-	int argc = 1;
-	char *argv[] = { "game.exe", nullptr };
+	int argc = 2;
+	char *argv[2];
+	char arg1[] = "game.exe";
+	char arg2[] = "--interval_save";	
+	argv[0] = arg1;
+	argv[1] = arg2;
 
 	CommandLineParams.Init(argc, argv);
 
