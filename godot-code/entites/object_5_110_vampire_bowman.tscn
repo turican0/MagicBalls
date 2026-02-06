@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bru2p42jhanhj"]
+
+[ext_resource type="PackedScene" uid="uid://cw6xhnldfkjf4" path="res://entites/sources/wizards/skeleton-crossbow-bake.blend" id="1_ny6jc"]
+
+[node name="Node3D" type="Node3D" unique_id=269749299]
+
+[node name="skeleton-crossbow-bake" parent="." unique_id=1852080747 instance=ExtResource("1_ny6jc")]
+transform = Transform3D(-1.7, 0, -2.5669289e-07, 0, 1.7, 0, 2.5669289e-07, 0, -1.7, 0, 0, 0)
