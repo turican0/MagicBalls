@@ -73,3 +73,6 @@ https://sketchfab.com/3d-models/astro-projectile-fea1d82dcd524373b6971a19b2450b0
 
 https://sketchfab.com/3d-models/remains-7663ab71893f44b2b6466db3c625b061
 https://godotshaders.com/shader/spatial-fire-raymarched/
+
+https://sketchfab.com/3d-models/skeleton-df9583076e7d4a5395f0870293f42851
+https://sketchfab.com/3d-models/medieval-crossbow-cc36ed347db340d59bd2ec7b06ae0d63

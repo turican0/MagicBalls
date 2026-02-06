@@ -1,4 +1,3 @@
-@tool
 extends Node3D
 
 @export var radius := 1.5        # poloměr kruhu

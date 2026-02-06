@@ -159,7 +159,11 @@ var library = {
 	Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
 	Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head-OK
 	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
-	5 110-114 vampire archer
+	Vector3i(5,110,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
+	Vector3i(5,111,0): "res://entites/object_5_111_vampire_bowman.tscn",#vampire archer
+	Vector3i(5,112,0): "res://entites/object_5_112_vampire_bowman.tscn",#vampire archer
+	Vector3i(5,113,0): "res://entites/object_5_113_vampire_bowman.tscn",#vampire archer
+	Vector3i(5,114,0): "res://entites/object_5_114_vampire_bowman.tscn",#vampire archer
 	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
 	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
 	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
