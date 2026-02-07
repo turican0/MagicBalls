@@ -5,3 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=578660859]
 
 [node name="Campfire" parent="." unique_id=1989401031 instance=ExtResource("1_arcym")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)

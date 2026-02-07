@@ -76,3 +76,9 @@ https://godotshaders.com/shader/spatial-fire-raymarched/
 
 https://sketchfab.com/3d-models/skeleton-df9583076e7d4a5395f0870293f42851
 https://sketchfab.com/3d-models/medieval-crossbow-cc36ed347db340d59bd2ec7b06ae0d63
+https://sketchfab.com/3d-models/wicker-basket-90cef56c297f41e8a7b2ded58d4f9ef6
+https://sketchfab.com/3d-models/basket-43ef3703091f4e3fb63ee303a98a5bdc
+
+https://sketchfab.com/3d-models/flag-e2258433d1134e30aed8ad6b8a01bfe3
+https://sketchfab.com/3d-models/flag-pole-274fdab226cd4d34916be28f60e61b9d
+https://sketchfab.com/3d-models/tachanka-flag-c1023580e77f467b80ff747a9e7134f3

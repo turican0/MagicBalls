@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://n322swbytjqe"]
+
+[ext_resource type="PackedScene" uid="uid://q5asl73rx5df" path="res://entites/sources/flags/flag.blend" id="1_ieg0y"]
+[ext_resource type="Texture2D" uid="uid://d0jpt4sap6kt1" path="res://entites/sources/flags/textures/flagCREST-clean-white.jpg" id="2_uoeys"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8qan"]
+albedo_texture = ExtResource("2_uoeys")
+
+[node name="flag" unique_id=305953256 instance=ExtResource("1_ieg0y")]
+
+[node name="pPlane1" parent="." index="1" unique_id=356706595]
+surface_material_override/0 = SubResource("StandardMaterial3D_q8qan")

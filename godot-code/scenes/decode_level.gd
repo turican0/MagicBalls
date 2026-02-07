@@ -138,7 +138,10 @@ var library = {
 	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue -difmodels!!!
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
 	Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2
+	Vector3i(2,178,0): "res://entites/object_2_179_burned_tree.tscn",#burned tree
+	Vector3i(2,179,0): "res://entites/object_2_179_burned_tree.tscn",#burned tree
 	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2 - same models
+	Vector3i(2,423,0): "res://entites/object_2_423_basket.tscn",#basket - yyyyyyyyyyyyyyyyyyyyyyyyy
 	Vector3i(3,0,0): "",#player1
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
@@ -160,10 +163,10 @@ var library = {
 	Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head-OK
 	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
 	Vector3i(5,110,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
-	Vector3i(5,111,0): "res://entites/object_5_111_vampire_bowman.tscn",#vampire archer
-	Vector3i(5,112,0): "res://entites/object_5_112_vampire_bowman.tscn",#vampire archer
-	Vector3i(5,113,0): "res://entites/object_5_113_vampire_bowman.tscn",#vampire archer
-	Vector3i(5,114,0): "res://entites/object_5_114_vampire_bowman.tscn",#vampire archer
+	Vector3i(5,111,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
+	Vector3i(5,112,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
+	Vector3i(5,113,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
+	Vector3i(5,114,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
 	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
 	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
 	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
@@ -173,6 +176,7 @@ var library = {
 	Vector3i(5,141,0): "res://entites/object_5_141_people8.tscn",#people8 141 142 143-OK
 	Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat-OK
 	Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157-OK
+	Vector3i(5,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
@@ -182,6 +186,7 @@ var library = {
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
 	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
+	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK
 	Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion-final-OK
 	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1-OK
@@ -199,8 +204,7 @@ var library = {
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate -OK
 	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
-# x 158 perla
-
+#9 116 - fire arrow
 func updateLibrary(a:int,b:int,c:int,path:String):
 	library[Vector3i(a, b, c)] = path
 	library_scenes[Vector3i(a, b, c)] = load(path)
@@ -208,6 +212,7 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 var library2 = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(3,0,0): "",#unknown
+	Vector3i(3,211,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(0,8,0): "",#unknown
 	Vector3i(0,58,0): "",#unknown
 	Vector3i(0,67,0): "",#unknown
@@ -218,6 +223,7 @@ var library2 = {
 	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
 	Vector3i(10,96,0): "",#building
 	Vector3i(11,8,0): "",#unknown
+	Vector3i(14,8,0): "res://entites/object_text.tscn",#unknown
 	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate
 	Vector3i(15,59,0): "",#unknown-jar?
@@ -431,6 +437,11 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				var fromlib=false
 				var scene_to_instance = null
 				var default_key = Vector3i(0, 999, 0)
+				if(actClass==10)and(modelIndex==8):
+					actState+=0
+				if(actClass==3)and(modelIndex==211):
+					if actLife<=0:
+						isDraw=false
 				if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
 					var key = Vector3i(actClass, modelIndex,0)
 					if library_scenes.has(key):

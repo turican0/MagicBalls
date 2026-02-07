@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://4wf386i8tqtd"]
+
+[ext_resource type="PackedScene" uid="uid://c1uslstm0bktw" path="res://entites/sources/realistic_tree.glb" id="1_ofcvg"]
+
+[node name="Sketchfab_Scene" unique_id=402199383 instance=ExtResource("1_ofcvg")]
+
+[node name="crown merged_normal leaves_0" parent="Sketchfab_model/TREE_fbx/RootNode/crown merged" parent_id_path=PackedInt32Array(714150184) index="0" unique_id=2001516617]
+visible = false

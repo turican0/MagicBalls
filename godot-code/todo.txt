@@ -1,6 +1,4 @@
--strech mainMenu
--analyze seounds in game
--remove all MC2 data from res
+-analyze seounds in game - maybe ok
 -better REMC2 code using
 -add help text to mainMenu
 -add help text to mapMenu
@@ -8,3 +6,11 @@
 -add UI to game
 -add sound to mainMenu
 -add 
+
+-prvni kouzelnik musi mit jinak ruce
+-pridat kouzelnikovi barevnou vlajku
+-pridat do dennich levelu vlajky na hrad
+
+-level 2 zkontrolovat v dosbox, zda se prvni vez take neznici
+-schovat branu pred koncem levelu
+-add hight resolution textures
