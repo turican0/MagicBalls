@@ -56,7 +56,7 @@ typedef struct //lenght 13
 	int32_t time2_17DE2C; // weak x_DWORD_17DE28str+4
 	int16_t x_WORD_17DE30_posx; // weak x_DWORD_17DE28str+8
 	int16_t x_WORD_17DE32_posy; // weak x_DWORD_17DE28str+10
-	int8_t x_BYTE_17DE34; // weak x_DWORD_17DE28str+12
+	int8_t DisplayLevelDescriptionText_17DE34; // weak x_DWORD_17DE28str+12
 } Type_DWORD_17DE28str;
 #pragma pack(16)
 
@@ -95,7 +95,7 @@ enum class MenuItem : int {
 };
 
 // from sub_main
-extern char x_BYTE_D419C_level_num;
+extern int8_t LoadLevelNumber_D419C;
 extern char x_BYTE_D41AD_skip_screen;
 extern const char* LevelsNames_D9204[61];
 extern char* off_DB558[];
@@ -114,19 +114,17 @@ extern char x_BYTE_E29E0;
 extern uint8_t* pre_x_DWORD_E9C3C;
 extern uint8_t x_BYTE_EB39E_keys[10];
 extern uint8_t uiBackGroundColorIdx_EB3A8;
-
 extern int32_t x_DWORD_17DBB8[4];
 extern char x_BYTE_17DBC6;
 extern uint32_t x_DWORD_17DBC8x[125];
 extern uint32_t x_DWORD_17DDBCx[26];
-extern char x_BYTE_17E09D;
+extern char IsPlayingCDTrack_17E09D;
 extern int16_t x_WORD_1803EC;
 extern uint8_t unk_180560x[44];
 extern type_unk_18058Cstr unk_18058Cstr;
 
 extern int test_regression_level;
 extern Type_SoundEvent_E17CC str_E17CC_0[];
-extern Type_SoundEvent_E17CC str_E17CC_0x160[];
 extern bool map_not_moving_WORD_E29D6;
 extern Type_unk_17DBA8str unk_17DBA8str;
 extern type_x_DWORD_17DB70str x_DWORD_17DB70str;
@@ -136,9 +134,10 @@ extern Type_DWORD_17DE28str x_DWORD_17DE28str;
 extern type_WORD_E20A4 str_WORD_E20A4[];
 extern type_WORD_E1F84 str_E23E0[];
 extern type_E24BCx str_E2516[];
+extern Type_SoundEvent_E17CC str_E17CC_0x160[];
+extern int16_t x_WORD_17DE26;
 extern char x_BYTE_E29DE;
 extern char x_BYTE_E29E1;
-extern int16_t x_WORD_17DE26;
 
 // functions
 void MenusAndIntros_76930(bool skipMenus = false);
@@ -165,7 +164,7 @@ char LoadGameDialog_7E820(type_WORD_E1F84* a1x);
 int NewGameDraw_7EAE0(__int16* posx, __int16* posy, __int16* a3, __int16* a4, int8_t* a5, type_animStruct* animStruct);
 int LoadLanguageFile(bitmap_pos_struct2_t** a1x, bitmap_pos_struct2_t** a2x, uint8_t* a3, char* langfilename, bitmap_pos_struct_t* a3dattabindex);
 int sub_7F960(bitmap_pos_struct2_t* a1x, bitmap_pos_struct2_t* a2x, uint8_t* a3, char* langcountstring, bitmap_pos_struct_t* a3dattabindex);
-void DrawText_80C30(__int16 posX, __int16 posY, __int16 a3);
+void PresentLevelDescription_80C30(__int16 posX, __int16 posY, __int16 a3);
 bool sub_80D40_move_graphics_and_play_sounds(__int16 a2, __int16 a3, __int16 a4, __int16 a5, char a6);
 void MapMenuPortalsDraw_81760();
 void WriteConfigDat_81DB0();
@@ -209,7 +208,7 @@ void DrawNetworkLevelName_7D380();
 void PaletteCopy_7C800(signed __int16 a1);
 void sub_85BF5(uint8_t* a1, uint8_t* a2, int a3, int a4, int a5, int a6);
 void sub_41BC0();
-void sub_2EB40();
+void StopSubtitles_2EB40();
 void DrawAnimTextsAndPlaySounds_7D400(__int16 posx, __int16 posy, char a4);
 signed int DrawBitmapAndPlaySound_7E320();
 int GetMapMenuDialogIndex_7E320(uint32_t adress, type_WORD_E1F84* a1x);

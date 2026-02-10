@@ -61,6 +61,8 @@ target_sources(${LIBNAME}
     src/remc2/engine/Compare.h
     src/remc2/engine/Events.cpp
     src/remc2/engine/Events.h
+    src/remc2/engine/EventDispatcher.cpp
+    src/remc2/engine/EventDispatcher.h
     src/remc2/engine/GameBitmap.cpp
     src/remc2/engine/GameBitmap.h
     src/remc2/engine/GameBitmapIndexes.h
@@ -79,6 +81,7 @@ target_sources(${LIBNAME}
     src/remc2/engine/global_types.h
     src/remc2/engine/Graphics.cpp
     src/remc2/engine/Graphics.h
+    src/remc2/engine/InputEvent.h
     src/remc2/engine/LangTextIndexes.h
     src/remc2/engine/Level.cpp
     src/remc2/engine/Level.h
@@ -99,6 +102,7 @@ target_sources(${LIBNAME}
     src/remc2/engine/RenderThread.h
     src/remc2/engine/Sound.cpp
     src/remc2/engine/Sound.h
+    src/remc2/engine/Scene.h
     src/remc2/engine/Terrain.cpp
     src/remc2/engine/Terrain.h
     src/remc2/engine/TextureMaps.cpp
@@ -171,6 +175,8 @@ target_sources(${LIBNAME}
     src/remc2/engine/UVTable_D4350.h
     src/remc2/utilities/DataFileRNC.cpp
     src/remc2/utilities/DataFileRNC.h
+    src/remc2/portability/InputRecorder.cpp
+    src/remc2/portability/InputRecorder.h
     src/remc2/portability/fcaseopen.cpp
     src/remc2/portability/fcaseopen.h
     src/remc2/portability/port_filesystem.cpp
@@ -189,6 +195,11 @@ target_sources(${LIBNAME}
     src/remc2/portability/port_outputs.h
     src/remc2/portability/port_sdl_sound.cpp
     src/remc2/portability/port_sdl_sound.h
+    src/remc2/portability/Config.cpp
+    src/remc2/portability/Config.h
+    src/remc2/portability/KeyboardInputMapping.h
+    src/remc2/portability/MouseInputMapping.h
+    src/remc2/portability/ConfigToSdlScancodeMapping.h
     src/modified/remc2_mod.cpp
     src/modified/remc2_mod.h
     src/MBEX/convertData.cpp
@@ -215,6 +226,8 @@ target_link_libraries(${LIBNAME} PRIVATE godot-cpp)
 
 # Require at least C++17 for this target
 set_property(TARGET ${LIBNAME} PROPERTY CXX_STANDARD 17)
+
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_LIST_DIR}/src/lib")
 
 set_target_properties(${LIBNAME}
     PROPERTIES

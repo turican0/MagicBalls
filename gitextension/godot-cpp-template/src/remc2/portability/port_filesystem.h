@@ -80,7 +80,7 @@ typedef struct {
 	char dir[256][512];
 } dirsstruct;
 
-//dirsstruct getListDir(char* dirname);
+dirsstruct getListDir(char* dirname);
 //dirsstruct getListDirFix(char* dirname);
 void FixDir(char* outdirname, char* indirname);
 

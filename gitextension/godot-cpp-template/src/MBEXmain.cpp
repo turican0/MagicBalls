@@ -315,7 +315,7 @@ void ExampleClass::soundQueueClear() {
 }
 */
 
-Array MBEXclass::getPendingSoundActions() {
+Array MBEXclass::getPendingSoundActions() {	
 	Array result;
 	std::vector<SoundAction> pending = sound_queue_get_pending_actions();
 	for (size_t i = 0; i < pending.size(); i++) {
@@ -328,7 +328,7 @@ Array MBEXclass::getPendingSoundActions() {
 		result.append(d);
 	}
 	sound_queue_clear();
-	return result;
+	return result;	
 }
 
 Array MBEXclass::getPendingGraphicsActions() {
@@ -360,33 +360,33 @@ void MBEXclass::setPlayerActiveSpell(int spell_index, int button) {
 	switch (button) {
 		case 0: //left
 		{
-			type_event_0x6E8E *actEvent = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
-			actEvent->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105 = spell_index;
-			actEvent->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = actEvent->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[spell_index];
+			type_entity_0x6E8E *actEvent = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+			actEvent->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105 = spell_index;
+			actEvent->dword_0xA4_164x->str_611.SubSpellIndexRight_1110 = actEvent->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[spell_index];
 			//actEvent->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
 			x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400 = 8;
 			break;
 		}
 		case 1: //right
 		{
-			type_event_0x6E8E *actEvent = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
-			actEvent->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107 = spell_index;
-			actEvent->dword_0xA4_164x->str_611.rightSubSpellIndex_0x456_1110 = actEvent->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[spell_index];
-			//actEvent->dword_0xA4_164x->str_611.rightSubSpellIndex_0x456_1110 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
+			type_entity_0x6E8E *actEvent = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+			actEvent->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107 = spell_index;
+			actEvent->dword_0xA4_164x->str_611.SubSpellIndexRight_1110 = actEvent->dword_0xA4_164x->str_611.array_0x437_1079x.subSpellIndex[spell_index];
+			//actEvent->dword_0xA4_164x->str_611.SubSpellIndexRight_1110 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
 			x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401 = 8;
 			break;
 		}
 	}
 }
 
-drawSpellInfoType getDraWSpellInfo(type_event_0x6E8E *playerEvent) //20f260
+drawSpellInfoType getDraWSpellInfo(type_entity_0x6E8E *playerEvent) //20f260
 {
 	drawSpellInfoType result;
 	result.spellIndex = -1;
-	if (playerEvent > ENTITY_EA3E4[0]) {
+	if (playerEvent > Entities_EA3E4[0]) {
 		GetFont_6FC50(FontType_D419D);
-		type_event_0x6E8E *parentEvent = ENTITY_EA3E4[playerEvent->parentId_0x28_40];
-		if (parentEvent > ENTITY_EA3E4[0]) {
+		type_entity_0x6E8E *parentEvent = Entities_EA3E4[playerEvent->parentId_0x28_40];
+		if (parentEvent > Entities_EA3E4[0]) {
 			uint8_t color0 = playersColors_E88E0x[GetTrueWizardNumber_61790(parentEvent->dword_0xA4_164x->playerColorIndex_0x38_56)][0];
 			uint8_t color1 = playersColors_E88E0x[GetTrueWizardNumber_61790(parentEvent->dword_0xA4_164x->playerColorIndex_0x38_56)][1];
 			if (!(SPELLS_BEGIN_BUFFER_str[playerEvent->model_0x40_64].isEnabled_1 & 4) || playerEvent->word_0x2E_46 <= 0 || playerEvent->word_0x2E_46 >= 32 || !x_D41A0_BYTEARRAY_4_struct.colorIndex_121[1]) {
@@ -405,7 +405,7 @@ drawSpellInfoType getDraWSpellInfo(type_event_0x6E8E *playerEvent) //20f260
 				}
 				/*
 				if (playerEvent->manaRegen_0x88_136)
-					if (!parentEvent->dword_0xA4_164x->word_0x3A_58 || playerEvent->manaRegen_0x88_136 > ENTITY_EA3E4[parentEvent->dword_0xA4_164x->word_0x3A_58]->mana_0x90_144)
+					if (!parentEvent->dword_0xA4_164x->word_0x3A_58 || playerEvent->manaRegen_0x88_136 > Entities_EA3E4[parentEvent->dword_0xA4_164x->word_0x3A_58]->mana_0x90_144)
 						if (D41A0_0.terrain_2FECE.MapType != MapType_t::Day)
 							DrawSquareByColor_2E850(posX, posY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOPTILE_BAR].width_4 * scale, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TOPTILE_BAR].height_5 * scale, 16);
 						else
@@ -420,9 +420,9 @@ drawSpellInfoType getDraWSpellInfo(type_event_0x6E8E *playerEvent) //20f260
 Array MBEXclass::getSelectedSpells() {
 	Array result;
 	drawSpellInfoType spellIndex;
-	type_event_0x6E8E* playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+	type_entity_0x6E8E* playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	//if (x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400) {
-	spellIndex = getDraWSpellInfo(ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.leftSpellIndex_0x451_1105]]);
+	spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105]]);
 	Dictionary dl;
 	dl["spellIndex"] = spellIndex.spellIndex;
 	dl["glow"] = spellIndex.glow;
@@ -433,7 +433,7 @@ Array MBEXclass::getSelectedSpells() {
 		result.append(dl);
 	//}
 	//if (x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401) {
-		spellIndex = getDraWSpellInfo(ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.rightSpellIndex_0x453_1107]]);
+		spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]]);
 		Dictionary dr;
 		dr["spellIndex"] = spellIndex.spellIndex;
 		dr["glow"] = spellIndex.glow;
@@ -448,7 +448,7 @@ Array MBEXclass::getSelectedSpells() {
 
 Array MBEXclass::getActiveSpells() {
 	unsigned __int16 entityIndex;
-	type_event_0x6E8E *playerEntity = ENTITY_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+	type_entity_0x6E8E *playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	uint8 color0 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][0];
 	uint8 color1 = playersColors_E88E0x[GetTrueWizardNumber_61790(playerEntity->dword_0xA4_164x->playerColorIndex_0x38_56)][1];
 	int spellIconIndex = 0;
@@ -458,8 +458,8 @@ Array MBEXclass::getActiveSpells() {
 		uint32_t spell_mana=0;
 		int spellIndex2 = spellIndex_D94FF[spellIconIndex];
 		if (SPELLS_BEGIN_BUFFER_str[spellIndex_D94FF[spellIconIndex]].byte_0 && !(!isCaveLevel_D41B6 && spellIndex2 == 25)) {
-			type_event_0x6E8E *spellEntity = ENTITY_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[spellIndex_D94FF[spellIconIndex]]];
-			if (spellEntity > ENTITY_EA3E4[0])
+			type_entity_0x6E8E *spellEntity = Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.word[spellIndex_D94FF[spellIconIndex]]];
+			if (spellEntity > Entities_EA3E4[0])
 			{
 				int subSpellIndex;
 				if (spellIconIndex == playerEntity->dword_0xA4_164x->str_611.spellIndex_0x458_1112) {
@@ -476,7 +476,7 @@ Array MBEXclass::getActiveSpells() {
 				}
 				if (!skipToLabel43) {
 					bool canSummon = false;
-					if (!SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIndex].maxManaLimit_A || ((entityIndex = playerEntity->dword_0xA4_164x->word_0x3A_58) != 0 && SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIndex].maxManaLimit_A <= ENTITY_EA3E4[entityIndex]->mana_0x90_144)) {
+					if (!SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIndex].maxManaLimit_A || ((entityIndex = playerEntity->dword_0xA4_164x->CastleEntityIndex_0x3A_58) != 0 && SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIndex].maxManaLimit_A <= Entities_EA3E4[entityIndex]->mana_0x90_144)) {
 						canSummon = true;
 					}
 					if (canSummon /* && x_D41A0_BYTEARRAY_4_struct.byteindex_50 == spellIconIndex*/) {
@@ -733,11 +733,11 @@ PackedFloat32Array MBEXclass::GetEntites() {
 	int idx = 0;
 
 	for (int i = 0; i < count; i++) {
-		type_event_0x6E8E *actEntity = ENTITY_EA3E4[i];
+		type_entity_0x6E8E *actEntity = Entities_EA3E4[i];
 
-		write_ptr[idx++] = (float)actEntity->axis_0x4C_76.x;//1
-		write_ptr[idx++] = (float)actEntity->axis_0x4C_76.y;//2
-		write_ptr[idx++] = (float)actEntity->axis_0x4C_76.z;//3
+		write_ptr[idx++] = (float)actEntity->position_0x4C_76.x; //1
+		write_ptr[idx++] = (float)actEntity->position_0x4C_76.y; //2
+		write_ptr[idx++] = (float)actEntity->position_0x4C_76.z;//3
 		write_ptr[idx++] = (float)actEntity->array_0x52_82.yaw;//4
 		write_ptr[idx++] = (float)actEntity->array_0x52_82.pitch;//5
 		write_ptr[idx++] = (float)actEntity->array_0x52_82.roll;//6
@@ -905,7 +905,8 @@ Ref<Image> MBEXclass::getMinimap() {
 					128 * scale,
 					128 * scale,
 					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
-					256 / scale);
+					256 / scale,
+					scale);
 				DrawMinimapMarks_644F0(
 					0,
 					0,
@@ -1120,7 +1121,7 @@ void handleInputs(Dictionary inputs,int type) {
 			x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 2;
 		x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = x_WORD_E3760_mouse.x; //2b4760
 		x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = x_WORD_E3760_mouse.y; //2b4762
-		sub_7C050_get_keyboard_keys1();
+		ReadKeyboardKeysInMenu_7C050();
 		x_WORD_180744_mouse_right_button = 0;
 		x_WORD_180746_mouse_left_button = 0;
 		x_WORD_18074A_mouse_right2_button = 0;
@@ -1133,20 +1134,20 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 	handleInputs(inputs, 0);
 	SetFrameStart(std::chrono::system_clock::now());
 	PaletteChanges_47760();
-	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1)) {
+	if (!(x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1)) {
 		sub_715B0(); //nothing draw //animate sprites
 	}
 	ReadGameUserInputs_89D10(); //get keys
-	MouseAndKeysEvents_17A00(0, x_DWORD_17DB54_game_turn2);
-	GameEvents_51BB0();
+	MouseAndKeysEvents_17A00(0, GameTimerTurn_17DB54);
+	PlayerEvents_51BB0();
 	UpdateEntities_57730();
 	sub_84B80(); //prepare lightting
 	sub_58F00_game_objectives(); //nothing draw
 	//sub_59820(); //nothing draw-sounds
-	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte3_24 & 1))
+	if (!(x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1))
 		sub_57570(); //nothing draw
 	sub_575C0(); //nothing draw-load level
-	sub_6E150(); //nothing draw-sounds
+	PlayEntitySounds_6E150(); //nothing draw-sounds
 
 	if (gameTurn < 2) {
 		StopMusic_8E020();
@@ -1155,7 +1156,7 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 		gameTurn++;
 	}
 
-	x_DWORD_17DB54_game_turn2++;
+	GameTimerTurn_17DB54++;
 }
 
 Dictionary MBEXclass::GetPlayerPositionRotation() {
@@ -1198,7 +1199,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	x_BYTE_14B4E0_second_heightmap = new uint8_t[65536];
 	*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it 3x256 ?
 
-	x_DWORD_17DB54_game_turn2 = 0x40;
+	GameTimerTurn_17DB54 = 0x40;
 	x_BYTE_E36D1 = 0x7;
 	unk_18058Cstr.x_WORD_1805C2_joystick = 0x7;
 
@@ -1281,7 +1282,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	sub_54800_read_and_decompress_tables(D41A0_0.terrain_2FECE.MapType); //235800
 	//237ab3
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x10))
-		D41A0_0.word_0xe = D41A0_0.terrain_2FECE.word_0x2FED7;
+		D41A0_0.NumberOfPlayers_0xe = D41A0_0.terrain_2FECE.word_0x2FED7;
 	if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 4))
 		GenerateLevelMap_43830(&D41A0_0.terrain_2FECE);
 	sub_49F30(); //prepare events pointers

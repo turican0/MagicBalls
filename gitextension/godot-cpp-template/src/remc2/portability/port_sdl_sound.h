@@ -2,39 +2,17 @@
 #ifndef PORT_SDL_SOUND_H
 #define PORT_SDL_SOUND_H
 
-struct SoundAction {
-	std::string action;
-	int p1 = 0;
-	int p2 = 0;
-	int p3 = 0;
-};
 
-//#include <godot_cpp/variant/string.hpp>
-//#include <godot_cpp/variant/string_name.hpp>
-//#include <godot_cpp/variant/dictionary.hpp>
-//#include <godot_cpp/variant/packed_int32_array.hpp>
-
-//#include <godot_cpp/variant/array.hpp>
-//#include <godot_cpp/variant/variant.hpp>
-
-//using namespace godot;
-/*
 //#define SOUND_OPENAL
 
 #include "bitmap_pos_struct.h"
-*/
+//#include "SfxEffectWrapper.h"
+//#include <SDL2/SDL.h>
+
 #define SOUND_SDLMIXER
-/*
-#ifdef _MSC_VER
-	#include "SDL2/SDL.h"
+
 #ifdef SOUND_SDLMIXER
-	#include "SDL2/SDL_mixer.h"
-#endif
-#else
-    #include "SDL2/SDL.h"
-#ifdef SOUND_SDLMIXER
-	#include "SDL2/SDL_mixer.h"
-#endif
+	//#include <SDL2/SDL_mixer.h>
 #endif
 
 #ifdef SOUND_OPENAL
@@ -42,29 +20,37 @@ struct SoundAction {
 	#include <alc.h>
 #endif//SOUND_OPENAL
 
-//#include "music_timidity.h"
 #include "xmi2mid.h"
 #include <time.h>
 #include <string>
-*/
+
 #include "../engine/ail_sound.h"
 #include "port_filesystem.h"
 
-#pragma pack (1)
-typedef struct { //lenght 32 - this is may be format of wav sound file
-	int8_t filename_0[18]; //first 18 chars - name//30
-	uint8_t *wavData_18; //data of wav//18
-	int8_t stub_22[4]; //22
-	int32_t wavSize_26; //24
-	int16_t word_30; //28
-} sub2type_E37A0_sound_buffer2;
+struct SoundAction {
+	std::string action;
+	int p1 = 0;
+	int p2 = 0;
+	int p3 = 0;
+};
 
-typedef struct { //lenght 2072
+#pragma pack (1)
+typedef struct {//lenght 32 - this is may be format of wav sound file
+	int8_t filename_0[18];//first 18 chars - name//30
+	uint8_t* wavData_18;//data of wav//18
+	int8_t stub_22[4];//22
+	int32_t wavSize_26;//24
+	int16_t word_30;//28	
+}
+sub2type_E37A0_sound_buffer2;
+
+typedef struct {//lenght 2072
 	int8_t stub[24];
 	sub2type_E37A0_sound_buffer2 wavs_10[96];
-} sub1type_E37A0_sound_buffer2;
+}
+sub1type_E37A0_sound_buffer2;
 
-typedef struct { //lenght 3100
+typedef struct {//lenght 3100
 	int8_t byte_0;
 	int8_t byte_1;
 	int8_t byte_2;
@@ -73,24 +59,27 @@ typedef struct { //lenght 3100
 	int8_t byte_5;
 	int8_t byte_6;
 	int8_t byte_7;
-	sub1type_E37A0_sound_buffer2 str_8; //2072 lenght
-} type_E37A0_sound_buffer2;
+	sub1type_E37A0_sound_buffer2 str_8;//2072 lenght
+}
+type_E37A0_sound_buffer2;
 
 //shadow type_E37A0_sound_buffer2
-typedef struct { //lenght 32 - this is may be format of wav sound file
-	int8_t filename_0[18]; //first 18 chars - name//30
-	int32_t wavData_18; //data of wav//18
-	int8_t stub_22[4]; //22
-	int32_t wavSize_26; //24
-	int16_t word_30; //28
-} shadow_sub2type_E37A0_sound_buffer2;
+typedef struct {//lenght 32 - this is may be format of wav sound file
+	int8_t filename_0[18];//first 18 chars - name//30
+	int32_t wavData_18;//data of wav//18
+	int8_t stub_22[4];//22
+	int32_t wavSize_26;//24
+	int16_t word_30;//28
+}
+shadow_sub2type_E37A0_sound_buffer2;
 
-typedef struct { //lenght 2072
+typedef struct {//lenght 2072
 	int8_t stub[24];
 	shadow_sub2type_E37A0_sound_buffer2 wavs_10[96];
-} shadow_sub1type_E37A0_sound_buffer2;
+}
+shadow_sub1type_E37A0_sound_buffer2;
 
-typedef struct { //lenght 3100
+typedef struct {//lenght 3100
 	int8_t byte_0;
 	int8_t byte_1;
 	int8_t byte_2;
@@ -99,8 +88,9 @@ typedef struct { //lenght 3100
 	int8_t byte_5;
 	int8_t byte_6;
 	int8_t byte_7;
-	shadow_sub1type_E37A0_sound_buffer2 str_8; //2072 lenght
-} shadow_type_E37A0_sound_buffer2;
+	shadow_sub1type_E37A0_sound_buffer2 str_8;//2072 lenght
+}
+shadow_type_E37A0_sound_buffer2;
 //shadow type_E37A0_sound_buffer2
 
 typedef struct {//lenght 16*6=96
@@ -141,19 +131,6 @@ typedef struct {//lenght 224
 	sub1type_E3808_music_header str_8;//216 lenght
 }
 type_E3808_music_header;
-/*
-typedef struct {//lenght 80656
-	int8_t byte_0;
-	int8_t byte_1;
-	int8_t byte_2;
-	int8_t byte_3;
-	int8_t byte_4;
-	int8_t byte_5;
-	int8_t byte_6;
-	int8_t byte_7;
-	int8_t data_8[];
-}
-type_E3810_music_data;*/
 
 //shadow shadow_type_E3808_music_header
 typedef struct {//lenght 32 - this is may be format of wav sound file
@@ -184,17 +161,18 @@ typedef struct {//lenght 224
 	shadow_sub1type_E3808_music_header str_8;//216 lenght
 }
 shadow_type_E3808_music_header;
+
 //shadow shadow_type_E3808_music_header
 #pragma pack (16)
 
-#ifndef SOUND_SDLMIXER
+//#ifndef SOUND_SDLMIXER
 typedef struct {
 	int allocated;
-	Uint8* abuf;
-	Uint32 alen;
-	Uint8 volume;       /* Per-sample volume, 0-128 */
+	uint8_t* abuf;
+	uint32_t alen;
+	uint8_t volume;
 } Mix_Chunk;
-#endif//SOUND_SDLMIXER
+//#endif//SOUND_SDLMIXER
 
 //#define USE_SDL2
 
@@ -206,17 +184,16 @@ extern bool oggmusic;
 extern char oggmusicFolder[512];
 extern bool oggmusicalternative;
 extern bool fixspeedsound;
+extern bool autoShowObjectivesForForeignLanguages;
+extern int maxSimultaniousSounds;
+extern char speechFolder[512];
+
+extern Mix_Chunk* m_ptrSpeechChunk;
+extern int m_ptrSpeechBytesOffSet;
 
 bool init_sound();
 //bool load_sound_files();
 void clean_up_sound();
-/*int playsound1();
-int playsound2();
-int playsound3();
-int playsound4();
-void playmusic1();
-void stopmusic1();
-*/
 void playmusic2(int32_t track_number);
 extern uint8_t sound_buffer[4][20000];
 //extern HSAMPLE last_sample;
@@ -241,7 +218,27 @@ uint32_t SOUND_sample_status(HSAMPLE S);
 void SOUND_set_sample_volume(HSAMPLE S, int32_t volume);
 void SOUND_set_sequence_volume(int32_t volume, int32_t  milliseconds);
 void SOUND_set_master_volume(int32_t volume);
+void SOUND_set_sample_volume_panning(HSAMPLE S, int32_t panning);
+void SetSamplePosition(HSAMPLE S, int16_t angle, uint8_t distance);
 void SOUND_UPDATE();
+void ChannelFinished(int channel);
+
+void SOUND_RegisterTimer(int timerIdx, uint32_t(*callback)(uint32_t));
+void SOUND_SetTimerPeriod(int timerIdx, uint32_t intervalMs);
+void SOUND_StartTimer(int timerIdx);
+void SOUND_StopTimer(int timerIdx);
+void SOUND_ChangeSamplePlaybackRate(HSAMPLE S, float percent);
+
+bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosSec, int32_t lengthMs);
+bool IsCdTrackPlaying();
+bool EndPlayingCdTrackSegment();
+bool ClearCdTrackSegment();
+bool AreCdTracksAvailable();
+int GetCdTrackCount();
+
+void RegisterEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format);
+template <typename T> void LoadAudioEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format);
+
 //void test_midi_play(uint8_t* data, uint8_t* header, int32_t track_number);
 #ifdef SOUND_OPENAL
 //void ALSOUND_load_wav(char* alBuffer, long alBufferLen);
@@ -249,15 +246,9 @@ void ALSOUND_play(int which, Mix_Chunk* chunk, int loops);
 void ALSOUND_init();
 #endif//SOUND_OPENAL
 
-/*
-void add_sound_action(String p_action_name, int p_p1, int p_p2);
-Array get_pending_actions();
-void clean_actions();
-*/
 void sound_queue_add_action(const std::string &action, int p1, int p2, int p3);
 void sound_queue_clear();
 void sound_update_playing(const std::vector<int> &free_indices);
 std::vector<SoundAction> sound_queue_get_pending_actions();
-
 
 #endif //PORT_SDL_SOUND

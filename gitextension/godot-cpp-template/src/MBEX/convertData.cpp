@@ -1242,8 +1242,8 @@ bool MBLoadSound(uint8_t soundIndex) //265300
 		DataFileIO::Read(file, (uint8_t *)&lastSoundBankPos, 4);
 		DataFileIO::Seek(file, lastSoundBankPos, 0);
 		DataFileIO::Read(file, (uint8_t *)lastSoundBank, 12);
-		soundFreqType_E37B6 = 822;
-		switch (soundFreqType_E37B6) {
+		SoundNumber_E37B6 = 822;
+		switch (SoundNumber_E37B6) {
 			case 800:
 				soundIndex2 = 5; //800
 				break;

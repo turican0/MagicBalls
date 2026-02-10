@@ -18,8 +18,13 @@ bool hqsound=false;
 bool oggmusic=false;
 bool oggmusicalternative = false;
 char oggmusicFolder[512];
+char speechFolder[512];
+Mix_Chunk* m_ptrSpeechChunk;
+int m_ptrSpeechBytesOffSet;
 
 bool fixspeedsound = false;
+bool autoShowObjectivesForForeignLanguages = false;
+int maxSimultaniousSounds = 10;
 
 int32_t last_sequence_num = 0;
 
@@ -39,10 +44,12 @@ ALint source_state[32];
 ALuint alSource[32];      //source
 ALuint alSampleSet[32];
 #endif//SOUND_OPENAL
-//Mix_Chunk gamechunk[32];
-HSAMPLE gamechunkHSAMPLE[32];
+std::map<int, Mix_Chunk> GameChunks = std::map<int, Mix_Chunk>();
+std::map<int, HSAMPLE> GameChunkHSamples = std::map<int, HSAMPLE>();
 
 uint8_t sound_buffer[4][20000];
+
+//std::vector<Mix_Timer> Timers = std::vector<Mix_Timer>();
 /*
 10
 29
@@ -60,6 +67,7 @@ uint8_t sound_buffer[4][20000];
  2
 
 */
+
 void test_midi_play(uint8_t*  /*data*/, uint8_t* header, int32_t track_number)
 {
 	uint8_t* acttrack = &header[32 + track_number * 32];
@@ -69,7 +77,7 @@ void test_midi_play(uint8_t*  /*data*/, uint8_t* header, int32_t track_number)
 	//unsigned char* TranscodeXmiToMid(const unsigned char* pXmiData,	size_t iXmiLength, size_t* pMidLength);
 	size_t iXmiLength = testsize2;
 	size_t pMidLength;
-	//uint8_t* outmidi = TranscodeXmiToMid((const uint8_t*)*(uint32_t*)(acttrack + 18), iXmiLength, &pMidLength);
+	uint8_t* outmidi = TranscodeXmiToMid((const uint8_t*)*(uint32_t*)(acttrack + 18), iXmiLength, &pMidLength);
 	//SDL_RWops* rwmidi = SDL_RWFromMem(outmidi, pMidLength);
 
 	//Timidity_Init();
@@ -86,6 +94,7 @@ void test_midi_play(uint8_t*  /*data*/, uint8_t* header, int32_t track_number)
 
 void SOUND_start_sequence(int32_t sequence_num) {
 	sound_queue_add_action("SOUND_start_sequence", sequence_num, 0, 0);
+	/*
 	if (unitTests)return;
 	//3 - menu
 	//4 - intro
@@ -101,53 +110,170 @@ void SOUND_start_sequence(int32_t sequence_num) {
 		SOUND_set_sequence_volume(settingsMusicVolume, 0);
 	}
 	//volume fix
-	/*
-	if (Mix_PlayingMusic() == 0)
-	{
-		if (Mix_PlayMusic(GAME_music[sequence_num], -1) == -1)
-			if (Mix_PausedMusic() == 1)
-			{
-				Mix_ResumeMusic();
-			}
-			else
-			{
-				Mix_PauseMusic();
-			}
-	}
-	*/
 #endif//SOUND_SDLMIXER
+*/
 };
 
 void SOUND_pause_sequence(int32_t  /*sequence_num*/) {
 	sound_queue_add_action("SOUND_pause_sequence", 0, 0, 0);
+	/*
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_PauseMusic();
 #endif//SOUND_SDLMIXER
+*/
 };
 
 void SOUND_stop_sequence(int32_t  /*sequence_num*/) {
 	sound_queue_add_action("SOUND_stop_sequence", 0, 0, 0);
+	/*
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_HaltMusic();
 #endif//SOUND_SDLMIXER
+*/
 };
 void SOUND_resume_sequence(int32_t  /*sequence_num*/) {
 	sound_queue_add_action("SOUND_resume_sequence", 0, 0, 0);
+	/*
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_ResumeMusic();
 #endif//SOUND_SDLMIXER
+*/
 };
 
 void SOUND_set_sequence_volume(int32_t volume, int32_t  milliseconds) {
 	sound_queue_add_action("SOUND_set_sequence_volume", volume, milliseconds, 0);
+	/*
+	if (unitTests)return;
+#ifdef SOUND_SDLMIXER
+#ifndef __linux__
+	if ((milliseconds > 0) && (volume == 0))
+	{
+		//if (GAME_music[last_sequence_num])
+		{
+			//double position = Mix_GetMusicPosition(GAME_music[last_sequence_num]);
+			//if (position != 0)
+			{
+				//Mix_FadeOutMusic(milliseconds);
+				//Mix_SetMusicPosition(position);
+			}
+		}
+	}
+	else if ((milliseconds > 0) && (lastMusicVolume == 0))
+	{
+		//if (GAME_music[last_sequence_num])
+		{
+			//double position = Mix_GetMusicPosition(GAME_music[last_sequence_num]);
+			//if (position != 0)
+			{
+				//Mix_FadeInMusicPos(GAME_music[last_sequence_num], 1, milliseconds, position);
+			}
+		}
+	}
+	else
+#endif //__linux__
+		//Mix_VolumeMusic(volume);
+	lastMusicVolume = volume;
+	if (milliseconds == 0)
+		settingsMusicVolume = volume;
+#endif//SOUND_SDLMIXER
+*/
 }
 
-void SOUND_init_MIDI_sequence(uint8_t*  /*datax*/, type_E3808_music_header* headerx, int32_t track_number)
+void SOUND_init_MIDI_sequence(uint8_t*  , type_E3808_music_header* headerx, int32_t track_number)
 {
-	return;
+	/*
+	if (unitTests)return;
+	//uint8_t* acttrack = &header[32 + track_number * 32];
+	uint8_t* acttrack = headerx->str_8.track_10[track_number].xmiData_0;
+	//int testsize = *(uint32_t*)(&header[32 + (track_number + 1) * 32] + 18) - *(uint32_t*)(acttrack + 18);
+	int testsize2 = *(uint32_t*)(acttrack + 26);
+
+	//we can translate datax from xmi to mid and play(with bad quality or slow midi emulators), at now but we use ogg samples
+	//unsigned char* TranscodeXmiToMid(const unsigned char* pXmiData,	size_t iXmiLength, size_t* pMidLength);
+	size_t iXmiLength = testsize2;
+	size_t pMidLength;
+	dirsstruct helpdirsstruct;
+
+	if (oggmusic) {
+
+		std::string oggmusicPath = GetSubDirectoryPath(oggmusicFolder);
+		char alternativeMusicPath[512] = "";
+		char selectedTrackPath[512] = "";
+		//if (track_number > 1)track_number = 0;
+		if (oggmusicalternative)///&&track_number==4
+		{
+			if (track_number == 0)
+			{
+				sprintf(alternativeMusicPath, "%s/alternative/day", oggmusicPath.c_str());
+			}
+			else if (track_number == 1)
+			{
+				sprintf(alternativeMusicPath, "%s/alternative/night", oggmusicPath.c_str());
+			}
+			else if (track_number == 2)
+			{
+				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
+			}
+			else if (track_number == 3)
+			{
+				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
+			}
+			else if (track_number == 4)
+			{
+				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
+			}
+			else if (track_number == 5)
+			{
+				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
+			}
+			else
+			{
+				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
+			}
+
+			helpdirsstruct = getListDir(alternativeMusicPath);
+
+			if (helpdirsstruct.number > 0)
+			{
+				int randtrack = rand()%(helpdirsstruct.number + 1);
+				if(randtrack==0)
+					sprintf(selectedTrackPath, "%s/music%d.ogg", oggmusicPath.c_str(), track_number);
+				else
+					sprintf(selectedTrackPath, "%s/%s", alternativeMusicPath ,helpdirsstruct.dir[randtrack-1]);
+			}
+			else
+				sprintf(selectedTrackPath, "%s/music%d.ogg", oggmusicPath.c_str(), track_number);
+		}
+		else
+			sprintf(selectedTrackPath, "%s/music%d.ogg", oggmusicPath.c_str(), track_number);
+#ifdef SOUND_SDLMIXER
+		//GAME_music[track_number] = Mix_LoadMUS(selectedTrackPath);
+		//if (!GAME_music[track_number]) {
+		//	Logger->error("Mix_LoadMUS() error: {}", Mix_GetError());
+		//}
+#endif//SOUND_SDLMIXER
+	}
+	else
+	{
+		uint8_t* outmidi = TranscodeXmiToMid(acttrack, iXmiLength, &pMidLength);
+		//SDL_RWops* rwmidi = SDL_RWFromMem(outmidi, pMidLength);
+
+		//Timidity_Init();
+#ifdef SOUND_SDLMIXER
+		//GAME_music[track_number] = Mix_LoadMUSType_RW(rwmidi, MUS_MID, SDL_TRUE);
+		//if (!GAME_music[track_number]) {
+		//	Logger->error("Mix_LoadMUSType_RW() error: {}", Mix_GetError());
+		//}
+#endif//SOUND_SDLMIXER
+		//music2 = Mix_LoadMUSType_RW(rwmidi, MIX_MUSIC_TIMIDITY, SDL_TRUE);
+
+	}
+#ifdef SOUND_OPENAL
+#endif//SOUND_OPENAL
+*/
 }
 
 
@@ -266,7 +392,27 @@ void stopmusic1()
 */
 void playmusic2(int32_t track_number)
 {
-	return;
+	if (unitTests)return;
+#ifdef SOUND_SDLMIXER
+	/*
+	if (Mix_PlayingMusic() == 0)
+	{
+		//Play the music
+		if (Mix_PlayMusic(GAME_music[track_number], -1) == -1)
+			if (Mix_PausedMusic() == 1)
+			{
+				//Resume the music
+				Mix_ResumeMusic();
+			}
+		//If the music is playing
+			else
+			{
+				//Pause the music
+				Mix_PauseMusic();
+			}
+	}
+	*/
+#endif//SOUND_SDLMIXER
 }
 
 struct {
@@ -330,26 +476,132 @@ int32_t ac_sound_call_driver(AIL_DRIVER* drvr, int32_t fn, VDI_CALL* out) {
 };
 
 void SOUND_set_master_volume(int32_t volume) {
-	sound_queue_add_action("SOUND_set_master_volume", 0, 0, 0);
+	//gamechunk[S->channel].volume = volume;
+#ifdef SOUND_SDLMIXER
+	master_volume = volume;
+
+	for (int i = 0; i < maxSimultaniousSounds; i++)
+	{
+		//Mix_Volume(i, (int)((GameChunks[i].volume * master_volume) / 127));
+	}
+#endif//SOUND_SDLMIXER
+
+	//may be can fix - must analyze
+
 }
 
 void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
-	sound_queue_add_action("SOUND_set_sample_volume", S->index_sample, volume, 0);
+#ifdef SOUND_SDLMIXER
+	if (master_volume == -1)
+		master_volume = 127;
+
+	GameChunks[S->channel].volume = volume;
+	//Mix_Volume(S->channel, (int)((GameChunks[S->channel].volume * master_volume) / 127));
+#endif//SOUND_SDLMIXER
+}
+
+void SOUND_set_sample_volume_panning(HSAMPLE S, int32_t panning) {
+	
+	auto left = uint8_t(255.0f * ((float)(127 - panning) / 127));// * masterPercent);
+	auto right = uint8_t(255.0f * ((float)panning / 127));// * masterPercent);
+
+	//Mix_SetPanning(S->channel, left, right);
+}
+
+void SetSamplePosition(HSAMPLE S, int16_t angle, uint8_t distance) 
+{
+	//Mix_SetPosition(S->channel, angle, distance);
 }
 
 void SOUND_start_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_start_sample", S->index_sample, S->vol_scale_18_0_0, S->volume_16);
+	if (unitTests)return;
+#ifdef SOUND_SDLMIXER
 
-	/*
-	S->flags_14 = flags;
-	S->vol_scale_18[0][0] = index;
-	S->status_1 = volume;
-	S->len_4_5[1] = volumePan;
-	S->vol_scale_18[0][2] = 0;
-	S->vol_scale_18[0][3] = 0;*/
+	if (hqsound)
+	{
+		/*
+		// load sample.wav in to sample
+		uint8_t* presample = malloc(S->len_4_5[0] * 4 + 10);
+		Mix_Chunk* sample;
+		sample = Mix_LoadWAV_RW(presample, 0);
+		if (!sample) {
+			printf("Mix_LoadWAV_RW: %s\n", Mix_GetError());
+			// handle error
+		}
+		*/
+
+		//44100, AUDIO_S16, 2, 4096
+		//src/dst
+		/*SDL_AudioCVT cvt;
+		SDL_BuildAudioCVT(&cvt, AUDIO_U8, 1, S->playback_rate_15, AUDIO_S16, 2, 44100);
+		SDL_assert(cvt.needed); // obviously, this one is always needed.
+		cvt.len = S->len_4_5[0];// 1024 * 2 * 4;  // 1024 stereo float32 sample frames.
+		cvt.buf = (Uint8*)S->start_2_3[0];//(Uint8*)SDL_malloc(cvt.len * cvt.len_mult);
+		// read your float32 data into cvt.buf here.
+		SDL_ConvertAudio(&cvt);*/
+
+		GameChunks[S->channel].abuf = /*sample->abuf;//*/ (uint8_t*)S->start_44mhz;
+		if (fixspeedsound)
+			GameChunks[S->channel].alen = /*sample->alen;//*/S->len_4_5[0] * 16;
+		else
+			GameChunks[S->channel].alen = /*sample->alen;//*/S->len_4_5[0] * 8;
+			if (debug_first_sound) {
+				Logger->trace("SOUND_start_sample-hq:{}", S->start_44mhz);
+				debug_first_sound = false;
+			}
+	}
+	else
+	{
+		if (debug_first_sound) {
+			Logger->trace("SOUND_start_sample:{}", S->start_44mhz);
+			debug_first_sound = false;
+		}
+		GameChunks[S->channel].abuf = (uint8_t*)S->start_2_3[0];
+		GameChunks[S->channel].alen = S->len_4_5[0];
+	}
+	
+	GameChunks[S->channel].volume = S->volume_16;
+	GameChunkHSamples[S->channel] = S;
+
+	float percentage = (float)S->playback_rate_15 / (float)22050;
+	if (percentage != 1.0f)
+		SOUND_ChangeSamplePlaybackRate(S, percentage);
+
+	//Mix_PlayChannel(S->channel, &GameChunks[S->channel], S->loop_count_12);
+	//Mix_ChannelFinished(ChannelFinished);
+
+#endif//SOUND_SDLMIXER
+#ifdef SOUND_OPENAL
+	//sound_load_wav((char*)S->start_44mhz, sizeof(S->start_44mhz));
+	if (hqsound)
+	{
+		gamechunk[S->channel].abuf = (uint8_t*)S->start_44mhz;
+		gamechunk[S->channel].alen = S->len_4_5[0] * 4;
+	}
+	else
+	{
+		gamechunk[S->channel].abuf = (uint8_t*)S->start_2_3[0];
+		gamechunk[S->channel].alen = S->len_4_5[0];
+	}
+
+	gamechunk[S->channel].volume = S->volume_16;
+	gamechunkHSAMPLE[S->channel] = S;
+	ALSOUND_play(S->channel,&gamechunk[S->channel],0);
+#endif//SOUND_OPENAL
 };
 
-//int num_channels = 8;
+void ChannelFinished(int channel)
+{
+	if (GameChunkHSamples.count(channel) > 0)
+	{
+		GameChunkHSamples[channel]->status_1 = 2;
+	}
+
+	if (channel == maxSimultaniousSounds && !IsCdTrackPlaying())
+	{
+		ClearCdTrackSegment();
+	}
+}
 
 std::vector<int> playing_sound_now;
 
@@ -357,43 +609,97 @@ void sound_update_playing(const std::vector<int> &free_indices) {
 	playing_sound_now = free_indices;
 }
 
-int Mix_Playing(int which) {
-    int status = 0;
-	if (which == -1) {
-	for (int idx : playing_sound_now) {
-			if (idx > 0) {
-				++status;
-			}
-		}
-	} else if (which < 10) {
-		if (playing_sound_now[which] > 0) {
-			++status;
-		}
-	}
-	return (status);
-}
-
 uint32_t SOUND_sample_status(HSAMPLE S) {
-	if (unitTests)
-		return 0;
+	if (unitTests)return 0;
+	
 #ifdef SOUND_SDLMIXER
-	if (Mix_Playing(S->index_sample) == 0)
-		return 2;
-#endif //SOUND_SDLMIXER
+	//if (Mix_Playing(S->channel)==0) return 2;
+#endif//SOUND_SDLMIXER
 #ifdef SOUND_OPENAL
 	return 2;
-#endif //SOUND_SDLMIXER
+#endif//SOUND_SDLMIXER
 	return 0;
 }
 
-void SOUND_end_sample(HSAMPLE  /*S*/) {
-	sound_queue_add_action("SOUND_end_sample", 0, 0, 0);
+void SOUND_RegisterTimer(int timerIdx, uint32_t(*callback)(uint32_t))
+{
+	/*
+	auto timer = Mix_Timer();
+	timer.Id = timerIdx;
+	timer.Callback = (SDL_TimerCallback)callback;
+	Timers.push_back(timer);
+	*/
+}
+
+void SOUND_SetTimerPeriod(int timerIdx, uint32_t intervalMs)
+{
+	/*
+	for (int i = 0; i < Timers.size(); i++)
+	{
+		if (Timers[i].Id == timerIdx)
+		{
+			Timers[i].IntervalMs = intervalMs;
+			break;
+		}
+	}
+	*/
+}
+
+void SOUND_StartTimer(int timerIdx)
+{
+	/*
+	for (int i = 0; i < Timers.size(); i++)
+	{
+		if (Timers[i].Id == timerIdx)
+		{
+			Timers[i].SdlId = SDL_AddTimer(Timers[i].IntervalMs, Timers[i].Callback, nullptr);
+			break;
+		}
+	}
+	*/
+}
+
+void SOUND_StopTimer(int timerIdx)
+{
+	/*
+	int idxToDelete = -1;
+	for (int i = 0; i < Timers.size(); i++)
+	{
+		if (Timers[i].Id == timerIdx)
+		{
+			SDL_RemoveTimer(Timers[i].SdlId);
+			idxToDelete = i;
+			break;
+		}
+	}
+	if (idxToDelete > -1)
+		Timers.erase(Timers.begin() + idxToDelete);
+	*/
+}
+
+void SOUND_end_sample(HSAMPLE S) {
+#ifdef SOUND_SDLMIXER
+	//Mix_HaltChannel(S->channel);
+
+	if (GameChunks.count(S->channel) == 0)
+		return;
+
+	GameChunks.erase(S->channel);
+	GameChunkHSamples.erase(S->channel);
+
+#endif//SOUND_SDLMIXER
 };
 
 void SOUND_finalize(int channel) {
-	HSAMPLE S = gamechunkHSAMPLE[channel];
+
+	if (GameChunks.count(channel) == 0)
+		return;
+
+	HSAMPLE S = GameChunkHSamples[channel];
 	if (S)
 	{
+		S->channel = -1;
+
 		if (S->status_1 != 1)
 		{
 			if (S->status_1 != 2)
@@ -402,24 +708,190 @@ void SOUND_finalize(int channel) {
 			}
 		}
 		S->vol_scale_18[0][0] = 0;
+		S->id_9 = 0;
 		S->flags_14 = 0;
 		S->vol_scale_18[0][2] = 0;
 		S->vol_scale_18[0][3] = 0;
 	}
-	sound_queue_add_action("SOUND_finalize", 0, 0, 0);
 }
 
 int run();
 
 bool init_sound()
 {
+	//ActiveAudioEffects.resize(maxSimultaniousSounds);
+
+	//run();
+	//#define MUSIC_MID_FLUIDSYNTH
+	//Initialize SDL_mixer
+	srand(time(NULL));
+#ifdef SOUND_SDLMIXER
+	if (hqsound) {
+		//if (Mix_OpenAudio(44100, AUDIO_S16, 2, 4096) == -1)//4096
+		//if (Mix_OpenAudio(44100, AUDIO_S16, 2, 4096) == -1)//4096
+		//if (Mix_OpenAudio(11025, AUDIO_S8, 1, 4096) == -1)//4096
+		{
+			return false;
+		}
+	}
+	else
+	{
+		/*if (Mix_OpenAudio(22050, AUDIO_U8 , 2, 4096) == -1) //4096
+		{
+			return false;
+		}*/
+	}
+
+	//Mix_AllocateChannels(maxSimultaniousSounds + 1);
+
+	//Mix_SetSoundFonts("c:\\prenos\\Magic2\\sf2\\TOM-SF2.sf2");
+	//load_sound_files();
+	/*if(mp3music)
+		load_music_files();*/
+	/*
+Mix_HookMusicFinished(void (SDLCALL *music_finished)(void));
+*/
+	//Mix_ChannelFinished(SOUND_finalize);
+#endif//SOUND_SDLMIXER
+#ifdef SOUND_OPENAL
+	if (hqsound) {
+		ALSOUND_init();
+	}
+	else
+	{
+		ALSOUND_init();
+	}
+
+#endif//SOUND_OPENAL
 	return true;
+}
+
+void SOUND_ChangeSamplePlaybackRate(HSAMPLE S, float percent)
+{
+	/*
+	if (hqsound)
+		RegisterEffect(S->channel, &GameChunks[S->channel], percent, 44100, 2, AUDIO_S16);
+	else
+		RegisterEffect(S->channel, &GameChunks[S->channel], percent, 22050, 2, AUDIO_U8);
+	*/
+}
+
+void RegisterEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format)
+{
+	/*
+	Logger->debug("Attempting to register effect on channel {}", channel);
+	if (ActiveAudioEffects[channel].effect != nullptr) { return; }
+
+	switch (format)
+	{
+		case AUDIO_U16: LoadAudioEffect<uint16_t>(channel, chunk, speed, frequency, channels, format); break;
+		case AUDIO_S16: LoadAudioEffect<int16_t>(channel, chunk, speed, frequency, channels, format); break;
+		case AUDIO_S32: LoadAudioEffect<int32_t>(channel, chunk, speed, frequency, channels, format); break;
+		case AUDIO_F32: LoadAudioEffect<float>(channel, chunk, speed, frequency, channels, format); break;
+	}
+	*/
+}
+
+template <typename T>
+void LoadAudioEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format)
+{
+	ActiveAudioEffects[channel].effect = new SfxEffectWrapper<T>(chunk, speed, frequency, channels, format);
+	Mix_RegisterEffect(channel, SfxEffectWrapper<T>::EffectModifierCallback, SfxEffectWrapper<T>::EffectDoneCallback, nullptr);
+}
+
+bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs)
+{
+	try
+	{
+		double startPosSec = startPosMs / 1000;
+		m_ptrSpeechBytesOffSet = (44100 * startPosSec * 16 * 2) / 8;
+		char speechPath[512];
+		sprintf(speechPath, "%s/TRACK%02d.WAV", GetSubDirectoryPath(speechFolder).c_str(), trackIdx);
+		//m_ptrSpeechChunk = Mix_LoadWAV(speechPath);
+		m_ptrSpeechChunk->volume = (uint8_t)master_volume;
+		m_ptrSpeechChunk->abuf = m_ptrSpeechChunk->abuf + m_ptrSpeechBytesOffSet;
+		m_ptrSpeechChunk->alen = m_ptrSpeechChunk->alen - m_ptrSpeechBytesOffSet;
+		//Mix_HaltChannel(maxSimultaniousSounds);
+		//if (Mix_PlayChannelTimed(maxSimultaniousSounds, m_ptrSpeechChunk, 0, lengthMs) < 0)
+		{
+			//fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+			return false;
+		}
+
+		return true;
+	}
+	catch (std::exception ex)
+	{
+		return false;
+	}
+}
+
+bool IsCdTrackPlaying()
+{
+	//return Mix_Playing(maxSimultaniousSounds) == 1;
+	return 0;
+}
+
+bool EndPlayingCdTrackSegment()
+{
+	//if (IsCdTrackPlaying())
+	{
+		//auto success = Mix_HaltChannel(maxSimultaniousSounds) == 0;
+		//if (success)
+		//	success = ClearCdTrackSegment();
+
+		//return success;
+	}
+	return true;
+}
+
+bool ClearCdTrackSegment()
+{
+	if (m_ptrSpeechChunk != nullptr)
+	{
+		m_ptrSpeechChunk->abuf = m_ptrSpeechChunk->abuf - m_ptrSpeechBytesOffSet;
+		m_ptrSpeechChunk->alen = m_ptrSpeechChunk->alen + m_ptrSpeechBytesOffSet;
+		//Mix_FreeChunk(m_ptrSpeechChunk);
+		m_ptrSpeechChunk = nullptr;
+		return true;
+	}
+	return true;
+}
+
+bool AreCdTracksAvailable()
+{
+	return GetCdTrackCount() > 0;
+}
+
+int GetCdTrackCount()
+{
+	char speechPath[512];
+	int count = 0;
+	try
+	{
+		for (int i = 1; i < 1000; i++)
+		{
+			sprintf(speechPath, "%s/TRACK%02d.WAV", GetSubDirectoryPath(speechFolder).c_str(), i);
+
+			if (FILE* file = fopen(speechPath, "r")) {
+				fclose(file);
+				count++;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+	catch (std::exception ex)
+	{
+		return count;
+	}
+	return count;
 }
 
 AIL_DRIVER* ac_AIL_API_install_driver(int  /*a1*/, uint8_t*  /*a2*/, int  /*a3*/)/*driver_image,n_bytes*///27f720
 {
-
-
 	//printf("drvr:%08X, fn:%08X, in:%08X, out:%08X\n", drvr, fn, in, out);
 	return 0;
 }
@@ -449,6 +921,56 @@ static short buffer[4096]; /* Audio buffer */
 
 int run()
 {
+	/* local variables */
+	//static SDL_AudioSpec            spec; /* the specs of our piece of music */
+	static struct ADL_MIDIPlayer    *midi_player = NULL; /* Instance of ADLMIDI player */
+	static const char               *music_path = NULL; /* Path to music file */
+	/*
+	music_path = "c:\\prenos\\remc2\\remc2\\memimages\\midi\\Music001.mid";
+
+	if (SDL_Init(SDL_INIT_AUDIO) < 0)
+		return 1;
+
+	spec.freq = 44100;
+	spec.format = AUDIO_S16SYS;
+	spec.channels = 2;
+	spec.samples = 2048;
+
+	midi_player = adl_init(spec.freq);
+	if (!midi_player)
+	{
+		fprintf(stderr, "Couldn't initialize ADLMIDI: %s\n", adl_errorString());
+		return 1;
+	}
+	spec.callback = my_audio_callback;
+	spec.userdata = midi_player;
+	if (Mix_OpenAudio(spec.freq, spec.format, spec.channels, spec.samples) < 0)
+	{
+		fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+		return 1;
+	}
+
+	if (adl_openFile(midi_player, music_path) < 0)
+	{
+		fprintf(stderr, "Couldn't open music file: %s\n", adl_errorInfo(midi_player));
+		Mix_CloseAudio();
+		adl_close(midi_player);
+		return 1;
+	}
+
+	is_playing = 1;
+	Mix_PauseAudio(0);
+
+	Logger->info("Playing... Hit Ctrl+C to quit!");
+
+	while (is_playing)
+	{
+		SDL_Delay(100);
+	}
+
+	SDL_CloseAudio();
+	adl_close(midi_player);
+	*/
 	return 0;
 }
 
@@ -460,6 +982,18 @@ int run()
 */
 void my_audio_callback(void *midi_player, uint8_t *stream, int len)
 {
+	/*
+	struct ADL_MIDIPlayer* p = (struct ADL_MIDIPlayer*)midi_player;
+	int samples_count = len / 2;
+	samples_count = adl_play(p, samples_count, (short*)buffer);
+	if (samples_count <= 0)
+	{
+		is_playing = 0;
+		SDL_memset(stream, 0, len);
+		return;
+	}
+	SDL_memcpy(stream, (uint8_t*)buffer, samples_count * 2);
+	*/
 }
 
 #define TEST_ERROR(_msg)		\
@@ -894,26 +1428,6 @@ int main(int argc, char** argv)
 }
 */
 
-/*
-Array action_queue;
-
-void add_sound_action(String p_action, int p_p1, int p_p2) {
-	Dictionary d;
-	d.set(StringName("action"), Variant(p_action));
-	d.set(StringName("p1"), Variant(p_p1));
-	d.set(StringName("p2"), Variant(p_p2));
-	action_queue.append(d);
-}
-
-void clean_actions() {
-	action_queue.clear();
-}
-
-Array get_pending_actions() {
-	return action_queue;
-}
-*/
-
 std::vector<SoundAction> sound_queue;
 
 void sound_queue_add_action(const std::string &action, int p1, int p2, int p3) {
@@ -936,12 +1450,3 @@ std::vector<SoundAction> sound_queue_get_pending_actions() {
 void sound_queue_clear() {
 	sound_queue.clear();
 }
-/*
-size_t sound_queue_size() {
-	return sound_queue.size();
-}
-
-bool sound_queue_empty() {
-	return sound_queue.empty();
-}
-*/
