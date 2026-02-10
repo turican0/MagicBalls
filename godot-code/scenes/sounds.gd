@@ -110,6 +110,9 @@ func updateSounds(soundActions:Array):
 			"SOUND_set_sequence_volume":
 				set_music_volume(p1)
 				matchok=true
+			"SOUND_set_sample_volume_panning":
+				set_sound_panning(p1, p2)
+				matchok=true
 		if(!matchok):
 			matchok=true
 
@@ -132,7 +135,7 @@ const MAX_SIMULTANEOUS_SOUNDS := 10
 
 func init() -> void:
 	for i in MAX_SIMULTANEOUS_SOUNDS:
-		var player := AudioStreamPlayer.new()
+		var player := AudioStreamPlayer2D.new()
 		player.name = "SFXPlayer" + str(i)
 		player.bus = "SFX"
 		add_child(player)
@@ -170,6 +173,14 @@ func stop_sound(index: int) -> void:
 func set_sound_volume(index: int, volume_int: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
 		Global.sfx_players[index].volume_linear = float(volume_int) / 128.0
+
+func set_sound_panning(index: int, pan_int: int) -> void:
+	if index >= 0 and index < Global.sfx_players.size():
+		var player = Global.sfx_players[index]
+		var pan_x : float = (float(pan_int) - 64.0) * 10.0
+		if player is AudioStreamPlayer2D:
+			player.position.x = pan_x
+			player.attenuation = 0.0001
 
 func set_music_volume(volume_int: int) -> void:
 	if(Global.himusic):
