@@ -113,6 +113,9 @@ func updateSounds(soundActions:Array):
 			"SOUND_set_sample_volume_panning":
 				set_sound_panning(p1, p2)
 				matchok=true
+			"SetSamplePosition":
+				set_sample_position(p1, p2, p3)
+				matchok=true
 		if(!matchok):
 			matchok=true
 
@@ -181,6 +184,22 @@ func set_sound_panning(index: int, pan_int: int) -> void:
 		if player is AudioStreamPlayer2D:
 			player.position.x = pan_x
 			player.attenuation = 0.0001
+
+func set_sample_position(index: int, angle: int, distance: int) -> void:
+	if index < 0 or index >= Global.sfx_players.size():
+		return
+	var player := Global.sfx_players[index]
+	if not (player is AudioStreamPlayer2D):
+		return
+	var rad := deg_to_rad(float(angle) - 90.0)
+	var max_dist: float = 400.0
+	var norm_dist: float = clamp(float(distance) / 255.0, 0.0, 1.0)
+	var dist: float = norm_dist * max_dist
+	player.position = Vector2(
+		cos(rad) * dist,
+		sin(rad) * dist
+	)
+	player.attenuation = 0.001
 
 func set_music_volume(volume_int: int) -> void:
 	if(Global.himusic):

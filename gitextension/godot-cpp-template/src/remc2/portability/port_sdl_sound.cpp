@@ -93,6 +93,7 @@ void test_midi_play(uint8_t*  /*data*/, uint8_t* header, int32_t track_number)
 }
 
 void SOUND_start_sequence(int32_t sequence_num) {
+	sound_queue_add_action("SOUND_start_sequence", sequence_num, 0, 0);
 	if (unitTests)return;
 	//3 - menu
 	//4 - intro
@@ -119,6 +120,7 @@ void SOUND_pause_sequence(int32_t  /*sequence_num*/) {
 };
 
 void SOUND_stop_sequence(int32_t  /*sequence_num*/) {
+	sound_queue_add_action("SOUND_stop_sequence", 0, 0, 0);
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_HaltMusic();
@@ -511,7 +513,7 @@ void SetSamplePosition(HSAMPLE S, int16_t angle, uint8_t distance)
 }
 
 void SOUND_start_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_start_sample", S->channel, S->vol_scale_18[0][0], S->volume_16);
+	sound_queue_add_action("SOUND_start_sample", S->channel, S->id2_19-1, S->volume_16);
 	return;
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
@@ -589,26 +591,21 @@ void SOUND_start_sample(HSAMPLE S) {
 #endif//SOUND_OPENAL
 };
 
+std::vector<int> playing_sound_now;
+
 int Mix_Playing(int which) {
 	int status = 0;
-	/*
-	status = 0;
 	if (which == -1) {
-		int i;
-
-		for (i = 0; i < num_channels; ++i) {
-			if ((mix_channel[i].playing > 0) ||
-					mix_channel[i].looping) {
+		for (int idx:playing_sound_now) {
+			if (idx > 0) {
 				++status;
 			}
 		}
-	} else if (which < num_channels) {
-		if ((mix_channel[which].playing > 0) ||
-				mix_channel[which].looping) {
+	} else if (which < 10) {
+		if (playing_sound_now[which] > 0) {
 			++status;
 		}
 	}
-	*/
 	return (status);
 }
 
@@ -624,8 +621,6 @@ void ChannelFinished(int channel)
 		ClearCdTrackSegment();
 	}
 }
-
-std::vector<int> playing_sound_now;
 
 void sound_update_playing(const std::vector<int> &free_indices) {
 	playing_sound_now = free_indices;
