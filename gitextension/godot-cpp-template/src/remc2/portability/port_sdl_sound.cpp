@@ -93,8 +93,6 @@ void test_midi_play(uint8_t*  /*data*/, uint8_t* header, int32_t track_number)
 }
 
 void SOUND_start_sequence(int32_t sequence_num) {
-	sound_queue_add_action("SOUND_start_sequence", sequence_num, 0, 0);
-	/*
 	if (unitTests)return;
 	//3 - menu
 	//4 - intro
@@ -111,30 +109,22 @@ void SOUND_start_sequence(int32_t sequence_num) {
 	}
 	//volume fix
 #endif//SOUND_SDLMIXER
-*/
 };
 
 void SOUND_pause_sequence(int32_t  /*sequence_num*/) {
-	sound_queue_add_action("SOUND_pause_sequence", 0, 0, 0);
-	/*
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_PauseMusic();
 #endif//SOUND_SDLMIXER
-*/
 };
 
 void SOUND_stop_sequence(int32_t  /*sequence_num*/) {
-	sound_queue_add_action("SOUND_stop_sequence", 0, 0, 0);
-	/*
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	//Mix_HaltMusic();
 #endif//SOUND_SDLMIXER
-*/
 };
 void SOUND_resume_sequence(int32_t  /*sequence_num*/) {
-	sound_queue_add_action("SOUND_resume_sequence", 0, 0, 0);
 	/*
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
@@ -183,7 +173,7 @@ void SOUND_set_sequence_volume(int32_t volume, int32_t  milliseconds) {
 }
 
 void SOUND_init_MIDI_sequence(uint8_t*  , type_E3808_music_header* headerx, int32_t track_number)
-{
+{	
 	/*
 	if (unitTests)return;
 	//uint8_t* acttrack = &header[32 + track_number * 32];
@@ -301,6 +291,7 @@ void SOUND_init_MIDI_sequence(uint8_t*  , type_E3808_music_header* headerx, int3
 
 void clean_up_sound()
 {
+	sound_queue_add_action("clean_up_sound", 0, 0, 0);
 	if (unitTests)return;
 	/*//Free the sound effects
 	Mix_FreeChunk(scratch);
@@ -392,6 +383,7 @@ void stopmusic1()
 */
 void playmusic2(int32_t track_number)
 {
+	sound_queue_add_action("playmusic2", 0, 0, 0);
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 	/*
@@ -476,6 +468,7 @@ int32_t ac_sound_call_driver(AIL_DRIVER* drvr, int32_t fn, VDI_CALL* out) {
 };
 
 void SOUND_set_master_volume(int32_t volume) {
+	sound_queue_add_action("SOUND_set_master_volume", volume, 0, 0);
 	//gamechunk[S->channel].volume = volume;
 #ifdef SOUND_SDLMIXER
 	master_volume = volume;
@@ -491,6 +484,8 @@ void SOUND_set_master_volume(int32_t volume) {
 }
 
 void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
+	sound_queue_add_action("SOUND_set_sample_volume", S->channel, volume, 0);
+	return;
 #ifdef SOUND_SDLMIXER
 	if (master_volume == -1)
 		master_volume = 127;
@@ -501,7 +496,8 @@ void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
 }
 
 void SOUND_set_sample_volume_panning(HSAMPLE S, int32_t panning) {
-	
+	sound_queue_add_action("SOUND_set_sample_volume_panning", S->channel, panning, 0);
+	return;
 	auto left = uint8_t(255.0f * ((float)(127 - panning) / 127));// * masterPercent);
 	auto right = uint8_t(255.0f * ((float)panning / 127));// * masterPercent);
 
@@ -510,10 +506,13 @@ void SOUND_set_sample_volume_panning(HSAMPLE S, int32_t panning) {
 
 void SetSamplePosition(HSAMPLE S, int16_t angle, uint8_t distance) 
 {
+	sound_queue_add_action("SetSamplePosition", S->channel, angle, distance);
 	//Mix_SetPosition(S->channel, angle, distance);
 }
 
 void SOUND_start_sample(HSAMPLE S) {
+	sound_queue_add_action("SOUND_start_sample", S->channel, S->vol_scale_18[0][0], S->volume_16);
+	return;
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
 
@@ -590,6 +589,29 @@ void SOUND_start_sample(HSAMPLE S) {
 #endif//SOUND_OPENAL
 };
 
+int Mix_Playing(int which) {
+	int status = 0;
+	/*
+	status = 0;
+	if (which == -1) {
+		int i;
+
+		for (i = 0; i < num_channels; ++i) {
+			if ((mix_channel[i].playing > 0) ||
+					mix_channel[i].looping) {
+				++status;
+			}
+		}
+	} else if (which < num_channels) {
+		if ((mix_channel[which].playing > 0) ||
+				mix_channel[which].looping) {
+			++status;
+		}
+	}
+	*/
+	return (status);
+}
+
 void ChannelFinished(int channel)
 {
 	if (GameChunkHSamples.count(channel) > 0)
@@ -611,13 +633,13 @@ void sound_update_playing(const std::vector<int> &free_indices) {
 
 uint32_t SOUND_sample_status(HSAMPLE S) {
 	if (unitTests)return 0;
-	
 #ifdef SOUND_SDLMIXER
-	//if (Mix_Playing(S->channel)==0) return 2;
-#endif//SOUND_SDLMIXER
+	if (Mix_Playing(S->channel) == 0)
+		return 2;
+#endif //SOUND_SDLMIXER
 #ifdef SOUND_OPENAL
 	return 2;
-#endif//SOUND_SDLMIXER
+#endif //SOUND_SDLMIXER
 	return 0;
 }
 
@@ -661,6 +683,7 @@ void SOUND_StartTimer(int timerIdx)
 
 void SOUND_StopTimer(int timerIdx)
 {
+	sound_queue_add_action("SOUND_StopTimer", 0, 0, 0);
 	/*
 	int idxToDelete = -1;
 	for (int i = 0; i < Timers.size(); i++)
@@ -678,6 +701,7 @@ void SOUND_StopTimer(int timerIdx)
 }
 
 void SOUND_end_sample(HSAMPLE S) {
+	sound_queue_add_action("SOUND_end_sample", 0, 0, 0);
 #ifdef SOUND_SDLMIXER
 	//Mix_HaltChannel(S->channel);
 
@@ -691,7 +715,6 @@ void SOUND_end_sample(HSAMPLE S) {
 };
 
 void SOUND_finalize(int channel) {
-
 	if (GameChunks.count(channel) == 0)
 		return;
 
@@ -713,12 +736,14 @@ void SOUND_finalize(int channel) {
 		S->vol_scale_18[0][2] = 0;
 		S->vol_scale_18[0][3] = 0;
 	}
+	sound_queue_add_action("SOUND_finalize", 0, 0, 0);
 }
 
 int run();
 
 bool init_sound()
 {
+	sound_queue_add_action("init_sound", 0, 0, 0);
 	//ActiveAudioEffects.resize(maxSimultaniousSounds);
 
 	//run();
@@ -768,6 +793,7 @@ Mix_HookMusicFinished(void (SDLCALL *music_finished)(void));
 
 void SOUND_ChangeSamplePlaybackRate(HSAMPLE S, float percent)
 {
+	sound_queue_add_action("SOUND_ChangeSamplePlaybackRate", 0, 0, 0);
 	/*
 	if (hqsound)
 		RegisterEffect(S->channel, &GameChunks[S->channel], percent, 44100, 2, AUDIO_S16);
@@ -778,6 +804,7 @@ void SOUND_ChangeSamplePlaybackRate(HSAMPLE S, float percent)
 
 void RegisterEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format)
 {
+	sound_queue_add_action("RegisterEffect", 0, 0, 0);
 	/*
 	Logger->debug("Attempting to register effect on channel {}", channel);
 	if (ActiveAudioEffects[channel].effect != nullptr) { return; }
@@ -795,12 +822,14 @@ void RegisterEffect(int channel, const Mix_Chunk* chunk, float speed, int freque
 template <typename T>
 void LoadAudioEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format)
 {
+	sound_queue_add_action("LoadAudioEffect", 0, 0, 0);
 	ActiveAudioEffects[channel].effect = new SfxEffectWrapper<T>(chunk, speed, frequency, channels, format);
 	Mix_RegisterEffect(channel, SfxEffectWrapper<T>::EffectModifierCallback, SfxEffectWrapper<T>::EffectDoneCallback, nullptr);
 }
 
 bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs)
 {
+	sound_queue_add_action("PlayCdTrackSegment", 0, 0, 0);
 	try
 	{
 		double startPosSec = startPosMs / 1000;
@@ -828,12 +857,14 @@ bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs)
 
 bool IsCdTrackPlaying()
 {
+	sound_queue_add_action("IsCdTrackPlaying", 0, 0, 0);
 	//return Mix_Playing(maxSimultaniousSounds) == 1;
 	return 0;
 }
 
 bool EndPlayingCdTrackSegment()
 {
+	sound_queue_add_action("EndPlayingCdTrackSegment", 0, 0, 0);
 	//if (IsCdTrackPlaying())
 	{
 		//auto success = Mix_HaltChannel(maxSimultaniousSounds) == 0;
@@ -847,6 +878,7 @@ bool EndPlayingCdTrackSegment()
 
 bool ClearCdTrackSegment()
 {
+	sound_queue_add_action("ClearCdTrackSegment", 0, 0, 0);
 	if (m_ptrSpeechChunk != nullptr)
 	{
 		m_ptrSpeechChunk->abuf = m_ptrSpeechChunk->abuf - m_ptrSpeechBytesOffSet;
@@ -860,11 +892,14 @@ bool ClearCdTrackSegment()
 
 bool AreCdTracksAvailable()
 {
+	return false;
+	//sound_queue_add_action("AreCdTracksAvailable", 0, 0, 0);
 	return GetCdTrackCount() > 0;
 }
 
 int GetCdTrackCount()
 {
+	sound_queue_add_action("GetCdTrackCount", 0, 0, 0);
 	char speechPath[512];
 	int count = 0;
 	try
@@ -892,6 +927,7 @@ int GetCdTrackCount()
 
 AIL_DRIVER* ac_AIL_API_install_driver(int  /*a1*/, uint8_t*  /*a2*/, int  /*a3*/)/*driver_image,n_bytes*///27f720
 {
+	sound_queue_add_action("ac_AIL_API_install_driver", 0, 0, 0);
 	//printf("drvr:%08X, fn:%08X, in:%08X, out:%08X\n", drvr, fn, in, out);
 	return 0;
 }
@@ -911,6 +947,7 @@ uint16_t ac_get_real_vect(uint32_t vectnum)
 
 void test_music()
 {
+	sound_queue_add_action("test_music", 0, 0, 0);
 }
 
 void my_audio_callback(void *midi_player, uint8_t *stream, int len);
@@ -982,6 +1019,7 @@ int run()
 */
 void my_audio_callback(void *midi_player, uint8_t *stream, int len)
 {
+	sound_queue_add_action("debug", 0, 0, 0);
 	/*
 	struct ADL_MIDIPlayer* p = (struct ADL_MIDIPlayer*)midi_player;
 	int samples_count = len / 2;
@@ -1005,6 +1043,7 @@ void my_audio_callback(void *midi_player, uint8_t *stream, int len)
 //------------------
 
 void SOUND_UPDATE() {
+	sound_queue_add_action("debug", 0, 0, 0);
 #ifdef SOUND_OPENAL
 	for (int i = 0; i < 32; i++)
 	{
