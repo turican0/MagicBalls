@@ -2439,6 +2439,12 @@ void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
 	printf("Reading Ini file\n");
 	//skip if (!readini())
 	//skip 	exit(1);
+
+	EventDispatcher::I = new EventDispatcher();
+	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
+	EventDispatcher::I->RegisterEvent(new Event<Scene>(EventType::E_SCENE_CHANGE, sceneChangeCallBack));
+	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
+
 	sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
 	sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
 	gameDataPath = GetSubDirectoryPath(gameFolder);//added
@@ -2488,6 +2494,7 @@ void sub_main_mod_end() {
 			EndMyNetLib();
 		}
 	}
+	delete EventDispatcher::I;
 }
 
 void Intro_begin(int introType) {
