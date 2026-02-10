@@ -1180,7 +1180,7 @@ bool MBEXsoundConvert(int index, String path) {
 	if (!MBLoadSound(index))
 		return false;
 	bool subSoundExists = true;
-	int j = 0;
+	int j = 1;
 	while (subSoundExists) {
 		uint8_t *buffer = soundIndex_E37A0->str_8.wavs_10[j].wavData_18;
 		int32_t size = soundIndex_E37A0->str_8.wavs_10[j].wavSize_26;

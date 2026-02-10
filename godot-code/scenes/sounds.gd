@@ -98,6 +98,9 @@ func updateSounds(soundActions:Array):
 				play_sound(soundBank, p1, p2)
 				set_sound_volume(p1, p3)
 				matchok=true
+			"SOUND_end_sample":
+				play_sound_end(soundBank, p1)
+				matchok=true
 			"SOUND_set_sample_volume":
 				set_sound_volume(p1, p2)
 				matchok=true
@@ -168,6 +171,13 @@ func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 	player.stream = stream
 	player.play()
 	print("Playing stream:%d:%d" % [player_index, sound_idx])
+	
+func play_sound_end(pack_idx: int, player_index: int):
+	if player_index >= 0 and player_index < MAX_SIMULTANEOUS_SOUNDS:
+		var player = Global.sfx_players[player_index]
+		if player.playing:
+			player.stop()
+			print("Stopping stream on channel: %d" % player_index)
 
 func stop_sound(index: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:

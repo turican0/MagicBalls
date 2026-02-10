@@ -513,7 +513,7 @@ void SetSamplePosition(HSAMPLE S, int16_t angle, uint8_t distance)
 }
 
 void SOUND_start_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_start_sample", S->channel, S->id2_19-1, S->volume_16);
+	sound_queue_add_action("SOUND_start_sample", S->channel, S->id2_19, S->volume_16);
 	return;
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER
@@ -696,7 +696,7 @@ void SOUND_StopTimer(int timerIdx)
 }
 
 void SOUND_end_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_end_sample", 0, 0, 0);
+	sound_queue_add_action("SOUND_end_sample", S->channel, 0, 0);
 #ifdef SOUND_SDLMIXER
 	//Mix_HaltChannel(S->channel);
 
