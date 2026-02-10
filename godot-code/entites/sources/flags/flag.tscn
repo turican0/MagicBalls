@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d0jpt4sap6kt1" path="res://entites/sources/flags/textures/flagCREST-clean-white.jpg" id="2_uoeys"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8qan"]
+cull_mode = 2
 albedo_texture = ExtResource("2_uoeys")
 
 [node name="flag" unique_id=305953256 instance=ExtResource("1_ieg0y")]

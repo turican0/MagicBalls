@@ -184,6 +184,7 @@ var library = {
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
+	Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
 	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -589,6 +590,7 @@ func setDayEntites():
 	updateLibrary(5,19,0,"res://entites/object_5_11D_hornet.tscn")
 	updateLibrary(5,20,0,"res://entites/object_5_11D_hornet.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
 	
 func setNightEntites():
 	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
@@ -599,6 +601,7 @@ func setNightEntites():
 	updateLibrary(5,19,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,20,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(10,96,0,"res://entites/object_10_96_posses_building.tscn")
 
 func setCaveEntites():
 	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
@@ -609,6 +612,7 @@ func setCaveEntites():
 	updateLibrary(5,19,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,20,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
 
 func setTime(time:float):
 	if(time>=0)&&(time<=5):

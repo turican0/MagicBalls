@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://lhtwpjdu4ri"]
+
+[ext_resource type="PackedScene" uid="uid://32p4n0y7te4s" path="res://entites/sources/96-g.tscn" id="1_mukhw"]
+[ext_resource type="PackedScene" uid="uid://n322swbytjqe" path="res://entites/sources/flags/flag.tscn" id="2_jiofq"]
+
+[node name="Node3D" type="Node3D" unique_id=1032799002]
+
+[node name="96" parent="." unique_id=435099992 instance=ExtResource("1_mukhw")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.74399424, 0)
+visible = false
+
+[node name="flag" parent="." unique_id=305953256 instance=ExtResource("2_jiofq")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

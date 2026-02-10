@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dc3wif36en1pg"]
+
+[ext_resource type="PackedScene" uid="uid://d1xm54k7vvtca" path="res://entites/sources/arrow.glb" id="1_x0x4s"]
+
+[sub_resource type="Curve" id="Curve_8wkhn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.087614655), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_p6eld"]
+curve = SubResource("Curve_8wkhn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hufk3"]
+emission_shape = 1
+emission_sphere_radius = 5.68
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, -3.267, 0)
+scale_curve = SubResource("CurveTexture_p6eld")
+
+[sub_resource type="Gradient" id="Gradient_27wta"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 0.39215687, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_j261t"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_twhui"]
+noise = SubResource("FastNoiseLite_j261t")
+color_ramp = SubResource("Gradient_27wta")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ij4bd"]
+albedo_texture = SubResource("NoiseTexture2D_twhui")
+
+[sub_resource type="SphereMesh" id="SphereMesh_rlifr"]
+material = SubResource("StandardMaterial3D_ij4bd")
+radius = 0.05
+height = 0.1
+
+[node name="Node3D" type="Node3D" unique_id=768478738]
+
+[node name="Sketchfab_Scene2" parent="." unique_id=519552307 instance=ExtResource("1_x0x4s")]
+transform = Transform3D(-1.3113416e-09, 0, 0.03, 0, 0.03, 0, -0.03, 0, -1.3113416e-09, 0, 1, 0)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Sketchfab_Scene2" unique_id=1361486478]
+transform = Transform3D(1, 0, 3.5527137e-15, 0, 1, 0, -3.5527137e-15, 0, 1, 35, 0, 0)
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_hufk3")
+draw_pass_1 = SubResource("SphereMesh_rlifr")
