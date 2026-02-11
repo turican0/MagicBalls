@@ -1,13 +1,39 @@
 [gd_scene format=3 uid="uid://n322swbytjqe"]
 
 [ext_resource type="PackedScene" uid="uid://q5asl73rx5df" path="res://entites/sources/flags/flag.blend" id="1_ieg0y"]
-[ext_resource type="Texture2D" uid="uid://d0jpt4sap6kt1" path="res://entites/sources/flags/textures/flagCREST-clean-white.jpg" id="2_uoeys"]
+[ext_resource type="Shader" uid="uid://bksggbossjlfr" path="res://entites/sources/flags/flag.gdshader" id="2_ieg0y"]
+[ext_resource type="Texture2D" uid="uid://phhh1ungp1m8" path="res://entites/sources/flags/textures/flagCREST-clean-white.png" id="3_uoeys"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8qan"]
-cull_mode = 2
-albedo_texture = ExtResource("2_uoeys")
+[sub_resource type="PlaneMesh" id="PlaneMesh_clokj"]
+subdivide_width = 20
+subdivide_depth = 20
 
-[node name="flag" unique_id=305953256 instance=ExtResource("1_ieg0y")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uoeys"]
+render_priority = 0
+shader = ExtResource("2_ieg0y")
+shader_parameter/speed = 1.0
+shader_parameter/frequency_y = 5.0
+shader_parameter/frequency_x = 2.5
+shader_parameter/frequency_z = 2.5
+shader_parameter/amplitude_y = 0.1
+shader_parameter/amplitude_x = 0.05
+shader_parameter/amplitude_z = 0.05
+shader_parameter/inclination = -0.04
+shader_parameter/tex = ExtResource("3_uoeys")
 
-[node name="pPlane1" parent="." index="1" unique_id=356706595]
-surface_material_override/0 = SubResource("StandardMaterial3D_q8qan")
+[node name="flag" unique_id=1119429870 instance=ExtResource("1_ieg0y")]
+
+[node name="pPlane1" parent="." index="1" unique_id=528424477]
+visible = false
+blend_shapes/Key_000_f0001 = 1.0
+blend_shapes/Frame_0191 = 0.0072500003
+blend_shapes/Frame_0199 = 0.0067119226
+
+[node name="AnimationPlayer" parent="." index="3" unique_id=704901151]
+autoplay = &"Action"
+speed_scale = 4.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="4" unique_id=780217824]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -0.9977922, 0.06641318, 2.9030143e-09, -0.06641318, -0.9977922, -4.3614882e-08, 0, 2.3197105, -0.14036143)
+mesh = SubResource("PlaneMesh_clokj")
+surface_material_override/0 = SubResource("ShaderMaterial_uoeys")
