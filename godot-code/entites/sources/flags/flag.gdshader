@@ -14,7 +14,8 @@ uniform float inclination = -0.04;
 uniform sampler2D tex: source_color;
 
 void fragment(){
-	vec4 albedo_tex = texture(tex, UV);
+	vec2 safe_uv = clamp(UV, vec2(0.002), vec2(0.998));
+	vec4 albedo_tex = texture(tex, safe_uv);
 	ALBEDO = albedo_tex.rgb;
 	
 	// TENTO ŘÁDEK AKTIVUJE PRŮHLEDNOST

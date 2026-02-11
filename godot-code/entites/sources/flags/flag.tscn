@@ -21,19 +21,9 @@ shader_parameter/amplitude_z = 0.05
 shader_parameter/inclination = -0.04
 shader_parameter/tex = ExtResource("3_uoeys")
 
-[node name="flag" unique_id=1119429870 instance=ExtResource("1_ieg0y")]
+[node name="flag" unique_id=1504280980 instance=ExtResource("1_ieg0y")]
 
-[node name="pPlane1" parent="." index="1" unique_id=528424477]
-visible = false
-blend_shapes/Key_000_f0001 = 1.0
-blend_shapes/Frame_0191 = 0.0072500003
-blend_shapes/Frame_0199 = 0.0067119226
-
-[node name="AnimationPlayer" parent="." index="3" unique_id=704901151]
-autoplay = &"Action"
-speed_scale = 4.0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="4" unique_id=780217824]
-transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -0.9977922, 0.06641318, 2.9030143e-09, -0.06641318, -0.9977922, -4.3614882e-08, 0, 2.3197105, -0.14036143)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1" unique_id=780217824]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -0.9977922, 0.06641318, 2.9030143e-09, -0.06641318, -0.9977922, -4.3614882e-08, 0, 1.32, -0.14)
 mesh = SubResource("PlaneMesh_clokj")
 surface_material_override/0 = SubResource("ShaderMaterial_uoeys")
