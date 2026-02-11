@@ -14,3 +14,6 @@
 -level 2 zkontrolovat v dosbox, zda se prvni vez take neznici
 -schovat branu pred koncem levelu
 -add hight resolution textures
+
+-brana na konci nesmi byt videt pred dosazenim bodu
+-zkontrolovat palette efekt po dosazeni bodu

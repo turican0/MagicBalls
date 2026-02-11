@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://i38ypibynbx4"]
+
+[ext_resource type="PackedScene" uid="uid://dnowequ6fhd2t" path="res://entites/sources/centipede/flying_centipede_head.glb" id="1_r00fb"]
+
+[node name="Node3D" type="Node3D" unique_id=1054586605]
+
+[node name="flying_centipede_head" parent="." unique_id=302582655 instance=ExtResource("1_r00fb")]
+transform = Transform3D(-1.8, 0, -1.57361e-07, 0, 1.8, 0, 1.57361e-07, 0, -1.8, 0, 0.7, 0)
