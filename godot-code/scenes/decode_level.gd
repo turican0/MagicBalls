@@ -205,7 +205,8 @@ var library = {
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate -OK
 	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
-#9 116 - fire arrow
+#5 26 - head flying centipede
+#5 56 - body flying centipede
 func updateLibrary(a:int,b:int,c:int,path:String):
 	library[Vector3i(a, b, c)] = path
 	library_scenes[Vector3i(a, b, c)] = load(path)
@@ -590,6 +591,7 @@ func setDayEntites():
 	updateLibrary(5,19,0,"res://entites/object_5_11D_hornet.tscn")
 	updateLibrary(5,20,0,"res://entites/object_5_11D_hornet.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11D_hornet.tscn")
+	updateLibrary(3,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
 	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
 	
 func setNightEntites():
@@ -601,6 +603,7 @@ func setNightEntites():
 	updateLibrary(5,19,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,20,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(3,96,0,"res://entites/object_10_96_posses_building.tscn")
 	updateLibrary(10,96,0,"res://entites/object_10_96_posses_building.tscn")
 
 func setCaveEntites():
@@ -612,6 +615,7 @@ func setCaveEntites():
 	updateLibrary(5,19,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,20,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
+	updateLibrary(3,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
 	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
 
 func setTime(time:float):

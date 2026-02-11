@@ -678,7 +678,7 @@ void SOUND_StartTimer(int timerIdx)
 
 void SOUND_StopTimer(int timerIdx)
 {
-	sound_queue_add_action("SOUND_StopTimer", 0, 0, 0);
+	//sound_queue_add_action("SOUND_StopTimer", 0, 0, 0);
 	/*
 	int idxToDelete = -1;
 	for (int i = 0; i < Timers.size(); i++)

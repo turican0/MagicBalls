@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c844fu0be5nd8"]
+[gd_scene format=3 uid="uid://c844fu0be5nd8"]
 
 [sub_resource type="Curve" id="Curve_lxcym"]
 _limits = [-2.0, 2.0, 0.0, 1.0]
@@ -52,19 +52,19 @@ seamless = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_75a4v"]
 albedo_texture = SubResource("NoiseTexture2D_twkgx")
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1822028480]
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=454688779]
 amount = 20
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_7hled")
 draw_pass_1 = SubResource("QuadMesh_v5wgy")
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+[node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=1468120109]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 radius = 0.3
 material = SubResource("StandardMaterial3D_75a4v")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0506482, 0)
 light_energy = 8.0

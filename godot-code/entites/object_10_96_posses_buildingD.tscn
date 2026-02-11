@@ -1,34 +1,31 @@
 [gd_scene format=3 uid="uid://lhtwpjdu4ri"]
 
+[ext_resource type="Script" uid="uid://b2f4a3jyswfec" path="res://entites/object_10_96_posses_building_d.gd" id="1_k5f1y"]
 [ext_resource type="PackedScene" uid="uid://32p4n0y7te4s" path="res://entites/sources/96-g.tscn" id="1_mukhw"]
 [ext_resource type="PackedScene" uid="uid://n322swbytjqe" path="res://entites/sources/flags/flag.tscn" id="2_jiofq"]
 [ext_resource type="Material" uid="uid://cemhvqucxki58" path="res://materials/perl.tres" id="3_qs870"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_k5f1y"]
-
 [node name="Node3D" type="Node3D" unique_id=1032799002]
+script = ExtResource("1_k5f1y")
 
 [node name="96" parent="." unique_id=435099992 instance=ExtResource("1_mukhw")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.74399424, 0)
 visible = false
 
 [node name="flag" parent="." unique_id=305953256 instance=ExtResource("2_jiofq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09592897, 0, 0)
-
-[node name="star" type="MeshInstance3D" parent="flag" unique_id=158312569]
-mesh = SubResource("ArrayMesh_k5f1y")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="flag" unique_id=334184832]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8650146, 0)
-polygon = PackedVector2Array(0.09592897, 1.0791937, 0.67292064, 0.81596744, 0.40009218, 0.6872914, 0.71122974, 0.5045696, 0.42875683, 0.35220265, 0.6845905, 0.18102254, 0, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.1, 2.865, 0)
+polygon = PackedVector2Array(0.33271074, 1.133889, 0.2435562, 0.7767403, 0.70090073, 0.8964443, 0.39496756, 0.57766104, 0.99752825, 0.34919763, 0.24987614, 0.24976659, 0.57880217, -0.10614109, 0, 0, 0, 1)
 mode = 1
 spin_degrees = 360.0
 spin_sides = 3
 material = ExtResource("3_qs870")
 
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="flag/CSGPolygon3D" unique_id=34630419]
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="flag/CSGPolygon3D" unique_id=1737536268]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
-polygon = PackedVector2Array(0.09592897, 1.0791937, 0.67292064, 0.81596744, 0.40009218, 0.6872914, 0.71122974, 0.5045696, 0.42875683, 0.35220265, 0.6845905, 0.18102254, 0, 0)
+polygon = PackedVector2Array(0.33271074, 1.133889, 0.2435562, 0.7767403, 0.70090073, 0.8964443, 0.39496756, 0.57766104, 0.99752825, 0.34919763, 0.24987614, 0.24976659, 0.57880217, -0.10614109, 0, 0, 0, 1)
 mode = 1
 spin_degrees = 360.0
 spin_sides = 3
