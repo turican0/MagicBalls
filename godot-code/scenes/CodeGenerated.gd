@@ -7,7 +7,8 @@ var Main_Player
 var Main_UI
 var Main_Filter
 #var Main_Sounds
-var Main_TerrainMB
+var Main_TerrainMBbottom
+var Main_TerrainMBtop
 #var MainMusic
 func _ready() -> void:
 	await get_tree().process_frame
@@ -17,12 +18,13 @@ func _ready() -> void:
 	Main_Player = get_node("Player")
 	Main_UI = get_node("UI")
 	Main_Filter = get_node("Filter").get_node("ColorRect")
-	Main_TerrainMB = $TerrainMB
+	Main_TerrainMBbottom = $TerrainMBbottom
+	Main_TerrainMBtop = $TerrainMBtop
 	Main_DecodeLevel.Main_Player = Main_Player
 	Main_DecodeLevel.Main_UI = Main_UI
 	Main_UI.Main_DecodeLevel = Main_DecodeLevel
 	Main_DecodeLevel.Main_Filter = Main_Filter
 	Main_DecodeLevel.NodeSky3D = $NodeSky3D/Sky3D
 	$UI.player = $Player
-	Main_TerrainMB.init()	
+	Main_TerrainMBbottom.init()
 	#$CanvasUI.init()

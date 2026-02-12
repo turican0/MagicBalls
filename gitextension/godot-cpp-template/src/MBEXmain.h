@@ -29,7 +29,8 @@ class MBEXclass : public RefCounted {
 
 
 private:
-	MeshInstance3D *mesh_instance = nullptr;
+	MeshInstance3D *mesh_instance_bottom = nullptr;
+	MeshInstance3D *mesh_instance_top = nullptr;
 	Ref<SurfaceTool> surface_tool;
 
 	// Data gridu (doporučeno použít 1D pole pro výkon)
@@ -72,14 +73,14 @@ public:
 	PackedByteArray TerrainGetMapHeight();
 	PackedByteArray TerrainGetAngle();
 
-	void set_mesh_instance(Node *p_node);
+	void set_mesh_instance(Node *p_node, int index);
 	void initialize_grid_data();
-	void recalculate_mesh();
-	void renew_terrain();
-	void update_gpu_heightmap();
+	void recalculate_mesh(int index);
+	void renew_terrain(int index);
+	void update_gpu_heightmap(int index);
 	void update_gpu_controlmap();
-	void initialize_controlmap();
-	void initialize_heightmap();
+	void initialize_controlmap(int index);
+	void initialize_heightmap(int index);
 	Array getActiveSpells();
 	Array getSelectedSpells();
 	void setPlayerActiveSpell(int spell_index, int button);

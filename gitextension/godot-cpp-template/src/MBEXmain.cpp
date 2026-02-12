@@ -29,10 +29,11 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &MBEXclass::RunGameStep);
 	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &MBEXclass::GetEntites);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &MBEXclass::GetPlayerPositionRotation);
-	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D"), &MBEXclass::set_mesh_instance);
+	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D", "int"), &MBEXclass::set_mesh_instance);
+	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D", "int"), &MBEXclass::set_mesh_instance);
 	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &MBEXclass::initialize_grid_data);
-	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh"), &MBEXclass::recalculate_mesh);
-	godot::ClassDB::bind_method(D_METHOD("renew_terrain"), &MBEXclass::renew_terrain);
+	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh", "int"), &MBEXclass::recalculate_mesh);
+	godot::ClassDB::bind_method(D_METHOD("renew_terrain", "int"), &MBEXclass::renew_terrain);
 	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &MBEXclass::getActiveSpells);
 	godot::ClassDB::bind_method(D_METHOD("getSelectedSpells"), &MBEXclass::getSelectedSpells);
 	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &MBEXclass::setPlayerActiveSpell);
@@ -521,24 +522,32 @@ Array MBEXclass::getActiveSpells() {
 }
 
 
-void MBEXclass::set_mesh_instance(Node *p_node) {
-	if (!p_node) {
-		mesh_instance = nullptr;
-		return;
-	}
-
-	// Bezpečné přetypování (ekvivalent "as MeshInstance3D" v GDScriptu)
-	mesh_instance = Object::cast_to<MeshInstance3D>(p_node);
-
-	if (!mesh_instance) {
-		UtilityFunctions::printerr("Chyba: Předaný uzel není typu MeshInstance3D!");
+void MBEXclass::set_mesh_instance(Node *p_node, int index) {
+	if (index == 0) {
+		if (!p_node) {
+			mesh_instance_bottom = nullptr;
+			return;
+		}
+		mesh_instance_bottom = Object::cast_to<MeshInstance3D>(p_node);
+		if (!mesh_instance_bottom) {
+			UtilityFunctions::printerr("Chyba: Předaný uzel není typu MeshInstance3D!");
+		}
+	} else {
+		if (!p_node) {
+			mesh_instance_top = nullptr;
+			return;
+		}
+		mesh_instance_top = Object::cast_to<MeshInstance3D>(p_node);
+		if (!mesh_instance_top) {
+			UtilityFunctions::printerr("Chyba: Předaný uzel není typu MeshInstance3D!");
+		}
 	}
 }
 
 void MBEXclass::initialize_grid_data() {
 }
 
-void MBEXclass::recalculate_mesh() {
+void MBEXclass::recalculate_mesh(int index) {
 	surface_tool.instantiate();	
 	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
 	surface_tool->set_custom_format(0, SurfaceTool::CUSTOM_RGBA_FLOAT);
@@ -575,15 +584,18 @@ void MBEXclass::recalculate_mesh() {
 
 	surface_tool->generate_normals();
 	surface_tool->index();
-	mesh_instance->set_mesh(surface_tool->commit());
+	if (index==0)
+		mesh_instance_top->set_mesh(surface_tool->commit());
+	else
+		mesh_instance_bottom->set_mesh(surface_tool->commit());
 	//renew_terrain();
 }
 
-void MBEXclass::renew_terrain() {
+void MBEXclass::renew_terrain(int index) {
 	if (height_image.is_null())
-		initialize_heightmap();
+		initialize_heightmap(index);
 	if (control_image.is_null())
-		initialize_controlmap();
+		initialize_controlmap(index);
 
 	if (control_data.size() != GRID_SIZE * GRID_SIZE * 4) {
 		control_data.resize(GRID_SIZE * GRID_SIZE * 4);
@@ -612,13 +624,13 @@ void MBEXclass::renew_terrain() {
 		}
 	}
 
-	update_gpu_heightmap();
+	update_gpu_heightmap(index);
 	update_gpu_controlmap();
 }
 
-void MBEXclass::update_gpu_heightmap() {
+void MBEXclass::update_gpu_heightmap(int index) {
 	if (height_image.is_null())
-		initialize_heightmap();
+		initialize_heightmap(index);
 	PackedByteArray byte_array;
 	byte_array.resize(height_data.size() * sizeof(float));
 	memcpy(byte_array.ptrw(), height_data.data(), byte_array.size());
@@ -632,25 +644,48 @@ void MBEXclass::update_gpu_controlmap() {
 	control_texture->update(control_image);
 }
 
-void MBEXclass::initialize_controlmap() {
-	control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
-	control_texture = ImageTexture::create_from_image(control_image);
-	if (mesh_instance) {
-		Ref<ShaderMaterial> mat = mesh_instance->get_material_override();
-		if (mat.is_valid()) {
-			mat->set_shader_parameter("control_map", control_texture);
+void MBEXclass::initialize_controlmap(int index) {
+	if (index == 0) {
+		control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
+		control_texture = ImageTexture::create_from_image(control_image);
+		if (mesh_instance_bottom) {
+			Ref<ShaderMaterial> mat = mesh_instance_bottom->get_material_override();
+			if (mat.is_valid()) {
+				mat->set_shader_parameter("control_map", control_texture);
+			}
+		}
+	} else {
+		control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
+		control_texture = ImageTexture::create_from_image(control_image);
+		if (mesh_instance_top) {
+			Ref<ShaderMaterial> mat = mesh_instance_top->get_material_override();
+			if (mat.is_valid()) {
+				mat->set_shader_parameter("control_map", control_texture);
+			}
 		}
 	}
 }
 
-void MBEXclass::initialize_heightmap() {
-	height_data.assign(GRID_SIZE * GRID_SIZE, 0.0f);
-	height_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
-	height_texture = ImageTexture::create_from_image(height_image);
-	if (mesh_instance) {
-		Ref<ShaderMaterial> mat = mesh_instance->get_material_override();
-		if (mat.is_valid()) {
-			mat->set_shader_parameter("height_map", height_texture);
+void MBEXclass::initialize_heightmap(int index) {
+	if (index == 0) {
+		height_data.assign(GRID_SIZE * GRID_SIZE, 0.0f);
+		height_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
+		height_texture = ImageTexture::create_from_image(height_image);
+		if (mesh_instance_bottom) {
+			Ref<ShaderMaterial> mat = mesh_instance_bottom->get_material_override();
+			if (mat.is_valid()) {
+				mat->set_shader_parameter("height_map", height_texture);
+			}
+		}
+	} else {
+		height_data.assign(GRID_SIZE * GRID_SIZE, 0.0f);
+		height_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
+		height_texture = ImageTexture::create_from_image(height_image);
+		if (mesh_instance_top) {
+			Ref<ShaderMaterial> mat = mesh_instance_top->get_material_override();
+			if (mat.is_valid()) {
+				mat->set_shader_parameter("height_map", height_texture);
+			}
 		}
 	}
 }
@@ -1528,11 +1563,12 @@ void MBEXclass::REMC2BeginInGame() {
 
 bool MBEXclass::REMC2EndInGame() {
 	InGameLoop_47320_mod_end();
-	if (!sub_46830_main_loop_mod_end_cycle_part3()) {
+	if (sub_46830_main_loop_mod_end_cycle_part3()) {
 		MBEXstate = 1;
 		return false;
 	}
 	sub_46830_main_loop_mod_end_cycle_part4();
+	sub_46830_main_loop_mod_begin_cycle();
 	MBEXstate = 11;
 	return true;
 }

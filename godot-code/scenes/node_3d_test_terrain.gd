@@ -12,50 +12,73 @@ var vertices: Array[Array] = []
 var texture_indices: Array[Array] = []
 
 ## --- UZLY ---
-var mesh_instance: MeshInstance3D
+var mesh_instance_bottom: MeshInstance3D
+var mesh_instance_top: MeshInstance3D
 var surface_tool: SurfaceTool
 
+var levelType
 func init():
 	# 1. Inicializace a nastavení uzlů
-	initialize_nodes()
 	
 	# 2. Inicializace dat sítě (vrcholy a textury)
 	#initialize_grid_data()
 	
 	# 3. Generování a vykreslení sítě
 	get_parent().get_node("DecodeLevel").init()
+	initialize_nodes()
 	Global.initSound()
 	get_parent().get_node("DecodeLevel").inGameBegin()
+	levelType=Global.MBEX.REMC2getLevelType()
 	get_parent().get_node("DecodeLevel").setMesh()
 	#recalculate_mesh()	
 	#recalculate_mesh()
 	
 	#begin of Multimesh
-	var mmi:MultiMeshInstance3D = get_parent().get_node("MultiMeshInstance3D")
-	# 1. Pokud už MultiMesh v uzlu existuje, použijeme ho, jinak vytvoříme nový
-	if not mmi.multimesh:
-		mmi.multimesh = MultiMesh.new()
-		mmi.multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	# 2. Přiřadíme tvůj vygenerovaný mesh
-	mmi.multimesh.mesh = mesh_instance.mesh
-	
-	# Překopíruje materiál z hlavního terénu na kopie
-	mmi.material_override = mesh_instance.material_override 
-	# Pokud nepoužíváš override, zkus:
-	if not mmi.material_override:
-		mmi.material_override = mesh_instance.mesh.surface_get_material(0)
-	# 3. Nastavíme pozice kopií (mřížka 3x3 bez středu)
+	var mmi_bottom:MultiMeshInstance3D = get_parent().get_node("MultiMeshbottom")
+	if not mmi_bottom.multimesh:
+		mmi_bottom.multimesh = MultiMesh.new()
+		mmi_bottom.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	mmi_bottom.multimesh.mesh = mesh_instance_bottom.mesh
+	mmi_bottom.material_override = mesh_instance_bottom.material_override 
+	if not mmi_bottom.material_override:
+		mmi_bottom.material_override = mesh_instance_bottom.mesh.surface_get_material(0)
 	var offset = GRID_SIZE * CELL_SCALE
 	var positions = []
-	for x in [-2, -1, 0, 1, 2]:
-		for z in [-2, -1, 0, 1, 2]:
-			if x == 0 and z == 0: continue # Vynechá místo původního terénu
-			positions.append(Vector3(x * offset, 0, z * offset))
-	# 4. Aplikujeme počet a transformace
-	mmi.multimesh.instance_count = positions.size()
+	if(levelType=="Cave"):
+		for x in [-1, 0, 1]:
+			for z in [-1, 0, 1]:
+				if x == 0 and z == 0: continue
+				positions.append(Vector3(x * offset, 0, z * offset))
+	else:
+		for x in [-2, -1, 0, 1, 2]:
+			for z in [-2, -1, 0, 1, 2]:
+				if x == 0 and z == 0: continue
+				positions.append(Vector3(x * offset, 0, z * offset))
+	mmi_bottom.multimesh.instance_count = positions.size()
 	for i in range(positions.size()):
 		var t = Transform3D(Basis(), positions[i])
-		mmi.multimesh.set_instance_transform(i, t)
+		mmi_bottom.multimesh.set_instance_transform(i, t)
+		
+	if(levelType=="Cave"):
+		var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
+		if not mmi_top.multimesh:
+			mmi_top.multimesh = MultiMesh.new()
+			mmi_top.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		mmi_top.multimesh.mesh = mesh_instance_top.mesh
+		mmi_top.material_override = mesh_instance_top.material_override 
+		if not mmi_top.material_override:
+			mmi_top.material_override = mesh_instance_top.mesh.surface_get_material(0)
+		#var offset = GRID_SIZE * CELL_SCALE
+		#var positions = []
+		#for x in [-2, -1, 0, 1, 2]:
+			#for z in [-2, -1, 0, 1, 2]:
+				#if x == 0 and z == 0: continue
+				#positions.append(Vector3(x * offset, 0, z * offset))
+		mmi_top.multimesh.instance_count = positions.size()
+		for i in range(positions.size()):
+			var t = Transform3D(Basis(), positions[i])
+			mmi_top.multimesh.set_instance_transform(i, t)
+		
 	#end of Multimesh
 
 ## --- FÁZE 1: Inicializace ---
@@ -79,9 +102,13 @@ func changeTerrain(levelType:String):
 		material.set_shader_parameter("atlas_texture", atlas_tex)
 
 func initialize_nodes():
-	mesh_instance = MeshInstance3D.new()
-	mesh_instance.name = "TerrainMesh"
-	add_child(mesh_instance)
+	mesh_instance_bottom = MeshInstance3D.new()
+	mesh_instance_bottom.name = "TerrainMesh"
+	add_child(mesh_instance_bottom)
+	
+	mesh_instance_top = MeshInstance3D.new()
+	mesh_instance_top.name = "TerrainMesh"
+	add_child(mesh_instance_top)
 	
 	material = load("res://terrainMB/terrain_material.tres")
 	if material:
@@ -89,11 +116,13 @@ func initialize_nodes():
 		var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
 		material.set_shader_parameter("atlas_texture", atlas_tex)
 		material.set_shader_parameter("reflect_texture", reflect_tex)
-		mesh_instance.material_override = material
+		mesh_instance_bottom.material_override = material
+		mesh_instance_top.material_override = material
 	else:
 		# Použijte alespoň standardní materiál pro vizuální kontrolu, pokud se nepodaří načíst
 		printerr("Chyba: Nepodařilo se načíst terrain_material.tres.")
-		mesh_instance.material_override = StandardMaterial3D.new()
+		mesh_instance_bottom.material_override = StandardMaterial3D.new()
+		mesh_instance_top.material_override = StandardMaterial3D.new()
 
 func initialize_grid_data():
 	# Inicializace pole pro vrcholy (X/Y pozice a náhodná výška Z)
@@ -154,7 +183,8 @@ func recalculate_mesh():
 				add_triangle(v2, v4, v1, rPoint2,rPoint4,rPoint1,g2, g4, g1, g1)
 	surface_tool.generate_normals()
 	surface_tool.index()
-	mesh_instance.mesh = surface_tool.commit()
+	mesh_instance_bottom.mesh = surface_tool.commit()
+	mesh_instance_top.mesh = surface_tool.commit()
 
 func add_triangle(p1: Vector3, p2: Vector3, p3: Vector3, uv1: Vector2, uv2: Vector2, uv3: Vector2, grid_p1: Vector2, grid_p2: Vector2, grid_p3: Vector2, main_p: Vector2):
 	var verts = [p1, p2, p3]
@@ -191,88 +221,88 @@ var control_data : PackedByteArray = PackedByteArray()
 var control_image : Image
 var control_texture : ImageTexture
 
-func initialize_controlmap():
-	control_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8)
-	control_texture = ImageTexture.create_from_image(control_image)
-	var mat = mesh_instance.material_override as ShaderMaterial
-	if mat:
-		mat.set_shader_parameter("control_map", control_texture)
-
-func initialize_heightmap():
-	height_data.resize(GRID_SIZE * GRID_SIZE)
-	height_data.fill(0.0)
-	height_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RF)
-	height_texture = ImageTexture.create_from_image(height_image)
-	var mat = mesh_instance.material_override as ShaderMaterial
-	if mat:
-		mat.set_shader_parameter("height_map", height_texture)
-
-func renew_terrain():
-	if not height_image:
-		initialize_heightmap()
-	if not control_image:
-		initialize_controlmap()
-	var decode = get_parent().get_node("DecodeLevel")
-	# Zajištění velikosti: GRID_SIZE * GRID_SIZE * 4 (RGBA)
-	if control_data.size() != GRID_SIZE * GRID_SIZE * 4:
-		control_data.resize(GRID_SIZE * GRID_SIZE * 4)
-	
-	var raw_h_map = decode.mapHeightmap_11B4E0
-	var raw_t_map = decode.mapTerrainType_10B4E0
-	for y in range(GRID_SIZE):
-		for x in range(GRID_SIZE):
-			var final_c=raw_t_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-			texture_indices[x][y]=final_c
-			var textUV_42:int = ((decode.mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
-			control_data[(y * GRID_SIZE + x)*4 + 0] = final_c
-			control_data[(y * GRID_SIZE + x)*4 + 1] = textUV_42
-			control_data[(y * GRID_SIZE + x)*4 + 2] = 0
-			control_data[(y * GRID_SIZE + x)*4 + 3] = 0
-	for y in range(VERTEX_COUNT):
-		for x in range(VERTEX_COUNT):
-			var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-			var final_h = raw_h * 0.125
-			vertices[x][y].y = final_h
-			
-	for y in range(GRID_SIZE):
-		for x in range(GRID_SIZE):
-			var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
-			var final_h = raw_h * 0.125
-			height_data[y * GRID_SIZE + x] = final_h
-	update_gpu_heightmap()
-	update_gpu_controlmap()
-	#recalculate_mesh()
-	
-func update_gpu_heightmap():
-	if not height_image:
-		initialize_heightmap() # Zavolá Image.create a ImageTexture.create
-	var byte_array = height_data.to_byte_array()
-	height_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RF, byte_array)
-	height_texture.update(height_image)
-	
-func update_gpu_controlmap():
-	control_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8, control_data)
-	control_texture.update(control_image)
-
-func initialize_control_map():
-	control_data.resize(GRID_SIZE * GRID_SIZE * 4) # RGBA (4 bajty na pixel)
-	control_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8)
-	control_texture = ImageTexture.create_from_image(control_image)
-
-	var mat = mesh_instance.material_override as ShaderMaterial
-	mat.set_shader_parameter("control_map", control_texture)
-	
-func update_control_mapxx():
-	var decode = get_parent().get_node("DecodeLevel")
-	for y in range(GRID_SIZE):
-		for x in range(GRID_SIZE):
-			var idx = y * GRID_SIZE + x
-			var t_idx = decode.mapTerrainType_10B4E0[idx]
-			# Zapíšeme do bajtů (RGBA)
-			control_data[idx * 4 + 0] = t_idx # R: Index textury
-			control_data[idx * 4 + 1] = 0     # G: (rezerva)
-			control_data[idx * 4 + 2] = 0     # B: (rezerva)
-			control_data[idx * 4 + 3] = 255   # A: (rezerva)
-			
-	control_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8, control_data)
-	control_texture.update(control_image)
+#func initialize_controlmap():
+	#control_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8)
+	#control_texture = ImageTexture.create_from_image(control_image)
+	#var mat = mesh_instance.material_override as ShaderMaterial
+	#if mat:
+		#mat.set_shader_parameter("control_map", control_texture)
+#
+#func initialize_heightmap():
+	#height_data.resize(GRID_SIZE * GRID_SIZE)
+	#height_data.fill(0.0)
+	#height_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RF)
+	#height_texture = ImageTexture.create_from_image(height_image)
+	#var mat = mesh_instance.material_override as ShaderMaterial
+	#if mat:
+		#mat.set_shader_parameter("height_map", height_texture)
+#
+#func renew_terrain():
+	#if not height_image:
+		#initialize_heightmap()
+	#if not control_image:
+		#initialize_controlmap()
+	#var decode = get_parent().get_node("DecodeLevel")
+	## Zajištění velikosti: GRID_SIZE * GRID_SIZE * 4 (RGBA)
+	#if control_data.size() != GRID_SIZE * GRID_SIZE * 4:
+		#control_data.resize(GRID_SIZE * GRID_SIZE * 4)
+	#
+	#var raw_h_map = decode.mapHeightmap_11B4E0
+	#var raw_t_map = decode.mapTerrainType_10B4E0
+	#for y in range(GRID_SIZE):
+		#for x in range(GRID_SIZE):
+			#var final_c=raw_t_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			#texture_indices[x][y]=final_c
+			#var textUV_42:int = ((decode.mapAngle_13B4E0[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)] >> 2) & 0x1C)
+			#control_data[(y * GRID_SIZE + x)*4 + 0] = final_c
+			#control_data[(y * GRID_SIZE + x)*4 + 1] = textUV_42
+			#control_data[(y * GRID_SIZE + x)*4 + 2] = 0
+			#control_data[(y * GRID_SIZE + x)*4 + 3] = 0
+	#for y in range(VERTEX_COUNT):
+		#for x in range(VERTEX_COUNT):
+			#var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			#var final_h = raw_h * 0.125
+			#vertices[x][y].y = final_h
+			#
+	#for y in range(GRID_SIZE):
+		#for x in range(GRID_SIZE):
+			#var raw_h=raw_h_map[(y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE)]
+			#var final_h = raw_h * 0.125
+			#height_data[y * GRID_SIZE + x] = final_h
+	#update_gpu_heightmap()
+	#update_gpu_controlmap()
+	##recalculate_mesh()
+	#
+#func update_gpu_heightmap():
+	#if not height_image:
+		#initialize_heightmap() # Zavolá Image.create a ImageTexture.create
+	#var byte_array = height_data.to_byte_array()
+	#height_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RF, byte_array)
+	#height_texture.update(height_image)
+	#
+#func update_gpu_controlmap():
+	#control_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8, control_data)
+	#control_texture.update(control_image)
+#
+#func initialize_control_map():
+	#control_data.resize(GRID_SIZE * GRID_SIZE * 4) # RGBA (4 bajty na pixel)
+	#control_image = Image.create(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8)
+	#control_texture = ImageTexture.create_from_image(control_image)
+#
+	#var mat = mesh_instance.material_override as ShaderMaterial
+	#mat.set_shader_parameter("control_map", control_texture)
+	#
+#func update_control_mapxx():
+	#var decode = get_parent().get_node("DecodeLevel")
+	#for y in range(GRID_SIZE):
+		#for x in range(GRID_SIZE):
+			#var idx = y * GRID_SIZE + x
+			#var t_idx = decode.mapTerrainType_10B4E0[idx]
+			## Zapíšeme do bajtů (RGBA)
+			#control_data[idx * 4 + 0] = t_idx # R: Index textury
+			#control_data[idx * 4 + 1] = 0     # G: (rezerva)
+			#control_data[idx * 4 + 2] = 0     # B: (rezerva)
+			#control_data[idx * 4 + 3] = 255   # A: (rezerva)
+			#
+	#control_image.set_data(GRID_SIZE, GRID_SIZE, false, Image.FORMAT_RGBA8, control_data)
+	#control_texture.update(control_image)

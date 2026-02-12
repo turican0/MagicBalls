@@ -361,7 +361,9 @@ func _process(_p_delta) -> void:
 	
 	var continueGame=Global.MBEX.REMC2StepInGame(input_state)
 	if(continueGame):
-		Global.MBEX.renew_terrain()
+		Global.MBEX.renew_terrain(0)
+		if(levelType=="Cave"):
+			Global.MBEX.renew_terrain(1)
 		var mods = Global.MBEX.getPaletteModifications()
 		var current_gain = mods[0]
 		var current_offset = mods[1]
@@ -574,8 +576,9 @@ func init():
 	MBEXinit()
 	Global.initSound()
 
+var levelType
 func gameInit():
-	var levelType=Global.MBEX.REMC2getLevelType()
+	levelType=Global.MBEX.REMC2getLevelType()
 	match levelType:
 		"Day":
 			Global.Main_Sounds.setSoundBank(0)
@@ -593,7 +596,14 @@ func gameInit():
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
 			setDayEntites()
-	get_parent().get_node("TerrainMB").changeTerrain(levelType)
+	get_parent().get_node("TerrainMBbottom").changeTerrain(levelType)
+	if(levelType=="Cave"):
+		get_parent().get_node("TerrainMBtop").show()
+		get_parent().get_node("MultiMeshbottom").show()
+		get_parent().get_node("TerrainMBtop").changeTerrain(levelType)
+	else:
+		get_parent().get_node("TerrainMBtop").hide()
+		get_parent().get_node("MultiMeshtop").hide()
 
 func setDayEntites():
 	updateLibrary(5,14,0,"res://entites/object_5_11D_hornet.tscn")
@@ -685,9 +695,11 @@ func exitGame():
 
 	
 func setMesh():
-	Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainMB").mesh_instance)
+	Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainMBbottom").mesh_instance_bottom,0)
+	Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainMBbottom").mesh_instance_top,1)
 	Global.MBEX.initialize_grid_data()
-	Global.MBEX.recalculate_mesh()
+	Global.MBEX.recalculate_mesh(0)
+	Global.MBEX.recalculate_mesh(1)
 
 #func loadlevel(levelnumber: int):
 	#sub_533B0_decompress_levels(levelnumber)
