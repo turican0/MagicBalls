@@ -171,6 +171,7 @@ BMPData load_bmp_godot(String p_path) {
 
 void MBEXconvertData(String path, String path2) {
 	//MBEXcdExtract((char *)path2.utf8().get_data(), "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/"); //user some path
+	MBEXfontsConverts(path + "/fonts");
 	MBEXsoundConverts(path + "/sounds");
 	MBEXmusicConverts(path + "/musics");
 	MBEXtexturesConverts(path + "/textures");
@@ -978,6 +979,151 @@ void MBEXtmapsCompare(String folder0, String folder1, String folder2, String out
 		}
 	}
 	UtilityFunctions::print("Comparison generation completed.");
+}
+
+void MBEXfontConverts(String path, String texture, String palette) {
+	std::string datPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
+	std::string tabPath = datPath.substr(0, datPath.length() - 3) + "TAB";
+	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
+
+	String outPath = path + "/" + texture + ".png";
+
+	if (!make_dir_godot(path)) {
+		return;
+	}
+
+	PackedByteArray palette_data;
+	Ref<FileAccess> palFile = FileAccess::open(String(palettePath.c_str()), FileAccess::READ);
+	if (palFile.is_valid()) {
+		palette_data = palFile->get_buffer(palFile->get_length());
+		palFile->close();
+	}
+
+	std::vector<uint8_t> palette_final;
+	if (palette_data.size() < 768 && !palette_data.is_empty()) {
+		std::vector<uint8_t> pal_dst(2048);
+		int pal_dec_size = DataFileRNC::Decompress((uint8_t *)palette_data.ptr(), pal_dst.data());
+		palette_final.assign(pal_dst.begin(), pal_dst.begin() + 768);
+	} else {
+		palette_final.assign(palette_data.ptr(), palette_data.ptr() + (palette_data.size() >= 768 ? 768 : palette_data.size()));
+	}
+
+	PackedByteArray fileDat_data;
+	Ref<FileAccess> datFile = FileAccess::open(String(datPath.c_str()), FileAccess::READ);
+	if (datFile.is_valid()) {
+		fileDat_data = datFile->get_buffer(datFile->get_length());
+		datFile->close();
+	}
+	std::vector<uint8_t> dat_dst(5000000);
+	std::vector<uint8_t> dat_final;
+	int dat_dec_size = DataFileRNC::Decompress((uint8_t *)fileDat_data.ptr(), dat_dst.data());
+	dat_final.assign(dat_dst.begin(), dat_dst.begin() + dat_dec_size);
+	if (dat_dec_size==0)
+		dat_final.assign(fileDat_data.ptr(), fileDat_data.ptr() + fileDat_data.size());
+
+	PackedByteArray fileTab_data;
+	Ref<FileAccess> tabFile = FileAccess::open(String(tabPath.c_str()), FileAccess::READ);
+	if (tabFile.is_valid()) {
+		fileTab_data = tabFile->get_buffer(tabFile->get_length());
+		tabFile->close();
+	}
+	std::vector<uint8_t> tab_dst(5000000);
+	std::vector<uint8_t> tab_final;
+	int tab_dec_size = DataFileRNC::Decompress((uint8_t *)fileTab_data.ptr(), tab_dst.data());
+	tab_final.assign(tab_dst.begin(), tab_dst.begin() + tab_dec_size);
+	if (tab_dec_size==0)
+		tab_final.assign(fileTab_data.ptr(), fileTab_data.ptr() + fileTab_data.size());
+
+	bitmap_pos_struct_tm *contentTMAPStab = (bitmap_pos_struct_tm *)tab_final.data();
+	uint8_t *contentTMAPSdat = (uint8_t *)dat_final.data();
+
+	int count = fileTab_data.size() / sizeof(bitmap_pos_struct_t);
+
+	bool success = true;
+	for (int index = 0; index < count; index++) {
+		int begin = contentTMAPStab[index].data;
+		int end = contentTMAPStab[index + 1].data;
+		uint8_t *stmpdat = &contentTMAPSdat[begin];
+		int width = contentTMAPStab[index].width_4;
+		int height = contentTMAPStab[index].height_5;
+		int size = end - begin;
+
+		bitmap_pos_struct_t a3;
+		a3.data = (uint8 *)contentTMAPStab[index].data;
+		a3.width_4 = contentTMAPStab[index].width_4;
+		a3.height_5 = contentTMAPStab[index].height_5;
+		//GameBitmapDrawTransparentBitmap_2DE80(0, 0, a3, 0);//20ee80
+		memset(pdwScreenBuffer_351628, 0, 640 * 480);
+		GameBitmap::DrawMenuGraphic(contentTMAPStab[index].width_4, contentTMAPStab[index].height_5, 1, stmpdat, pdwScreenBuffer_351628);
+
+		//--------------------------
+		int p_channels = 4;
+		std::vector<unsigned char> rgba_data((size_t)width * height * p_channels);
+		const uint8_t *indices = pdwScreenBuffer_351628;
+
+		bool alpha = true;
+		bool alpha2 = (indices[0] == 0 ||
+				indices[width - 1] == 0 ||
+				indices[(height - 1) * width] == 0 ||
+				indices[width * height - 1] == 0);
+		if (!alpha2)
+			alpha = false;
+		for (int i = 0; i < width * height; i++) {
+			uint8_t index = indices[i];
+			int pal_idx = index * 3;
+			int dest_idx = i * 4;
+
+			rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
+			rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
+			rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
+
+			rgba_data[dest_idx + 3] = 255;
+			if (alpha) {
+				if (index == 0) {
+					rgba_data[dest_idx + 3] = 0; // transparent
+				}
+			}
+
+			rgba_data[dest_idx + 0] = pal_idx; // Red
+			rgba_data[dest_idx + 1] = pal_idx; // Green
+			rgba_data[dest_idx + 2] = pal_idx; // Blue
+
+		}
+		char buf[16];
+		snprintf(buf, sizeof(buf), "%03d", (int)index);
+		String outPath = path + "/" + texture + "_" + String(buf) + ".png";
+		// Otevření souboru přes Godot API
+		Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
+		if (f.is_valid()) {
+			// Volání STB s Lambda funkcí přímo v argumentu
+			stbi_write_png_to_func(
+					[](void *context, void *data, int size) {
+						// Context je náš FileAccess*
+						FileAccess *fa = static_cast<FileAccess *>(context);
+						fa->store_buffer(static_cast<const uint8_t *>(data), size);
+					},
+					(void *)f.ptr(), // Předání ukazatele na FileAccess objekt
+					width,
+					height,
+					p_channels,
+					rgba_data.data(),
+					width * p_channels);
+
+			f->flush();
+			f->close();
+			UtilityFunctions::print("PNG saved (lambda): ", outPath);
+		}
+	}
+}
+
+void MBEXfontsConverts(String path) {
+	MBEXfontConverts(path + "/FONT0", "FONT0.DAT", "PALD-0.DAT");
+	MBEXfontConverts(path + "/FONT1", "FONT1.DAT", "PALD-0.DAT");
+	MBEXfontConverts(path + "/FONT2", "FONT2.DAT", "PALD-0.DAT");
+	MBEXfontConverts(path + "/DFONT0", "DFONT0.DAT", "PALD-0.DAT");
+	MBEXfontConverts(path + "/DFONT1", "DFONT1.DAT", "PALD-0.DAT");
+	MBEXfontConverts(path + "/HFONT3", "HFONT3.DAT", "PALD-0.DAT");
+	MBEXfontConverts(path + "/SFONT1", "SFONT1.DAT", "PALD-0.DAT");
 }
 
 void MBEXtmapsConverts(String path) {
