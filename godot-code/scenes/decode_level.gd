@@ -476,7 +476,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				if scene_to_instance != null:
 					entites_per_frame+=1
 					if(entites_per_frame>max_entites_per_frame):
-						entites_per_frame=0
+						entites_per_frame+=0
 					var new_node = scene_to_instance.instantiate()
 					if !fromlib:
 						new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)					
