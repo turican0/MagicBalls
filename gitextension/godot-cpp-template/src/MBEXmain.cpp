@@ -991,10 +991,7 @@ Array MBEXclass::getPaletteModifications() {
 	float gb = mod_palette[0x40 * 3 + 1] / 63.0f;
 	float bb = mod_palette[0x40 * 3 + 2] / 63.0f;
 	Color target_black = Color(rb, gb, bb); // 0,0,0
-	out_gain = Vector3(
-			target_white.r - target_black.r,
-			target_white.g - target_black.g,
-			target_white.b - target_black.b);
+	out_gain = Vector3(target_white.r - target_black.r, target_white.g - target_black.g, target_white.b - target_black.b);
 	out_offset = Vector3(target_black.r, target_black.g, target_black.b);
 	float ref_max_sat = 0.0f;
 	for (int i = 0; i < 256; i++) {
@@ -1008,7 +1005,15 @@ Array MBEXclass::getPaletteModifications() {
 		float sat = get_saturation(corrected);
 		mod_max_sat_after_correction = max(mod_max_sat_after_correction, sat);
 	}
-	out_sat_multiplier = (ref_max_sat > 0.0001f) ? mod_max_sat_after_correction / ref_max_sat : 1.0f;
+	float intensity = 1.5f;
+	out_gain.x = 1.0f + (out_gain.x - 1.0f) * intensity;
+	out_gain.y = 1.0f + (out_gain.y - 1.0f) * intensity;
+	out_gain.z = 1.0f + (out_gain.z - 1.0f) * intensity;
+	out_offset *= intensity;
+	float sat_ratio = (ref_max_sat > 0.0001f) ? mod_max_sat_after_correction / ref_max_sat : 1.0f;
+	out_sat_multiplier = 1.0f + (sat_ratio - 1.0f) * intensity;
+	//out_sat_multiplier = (ref_max_sat > 0.0001f) ? mod_max_sat_after_correction / ref_max_sat : 1.0f;
+
 	Array result;
 	result.push_back(out_gain);
 	result.push_back(out_offset);
