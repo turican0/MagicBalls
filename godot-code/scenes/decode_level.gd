@@ -397,8 +397,9 @@ func _do_change_scene():
 	get_tree().change_scene_to_file("res://scenes/GameMap.tscn")
 		
 
-
+var max_entites_per_frame=5;
 func renderEntites(data_array: PackedFloat32Array) -> void:
+	var entites_per_frame=0;
 	var stride = 31
 	for i in range(pool_size):
 		var offset = i * stride
@@ -473,6 +474,9 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				if(actClass==9):
 					actState+=0
 				if scene_to_instance != null:
+					entites_per_frame+=1
+					if(entites_per_frame>max_entites_per_frame):
+						entites_per_frame=0
 					var new_node = scene_to_instance.instantiate()
 					if !fromlib:
 						new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)					
