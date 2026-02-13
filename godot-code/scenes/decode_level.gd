@@ -586,7 +586,9 @@ func gameInit():
 			setNightEntites()
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
-			setTime(4.0)
+			setTime(12.0)
+			setFog(0.03)
+			setFogSky(1.0)
 			setCaveEntites()
 		"Final":
 			Global.Main_Sounds.setSoundBank(2)
@@ -643,6 +645,14 @@ func setTime(time:float):
 		NodeSky3D.clouds_enabled=true
 	NodeSky3D.get_node("TimeOfDay").current_time=time
 	
+func setFog(density:float):
+	var we_node = NodeSky3D.environment
+	#var test:WorldEnvironment=NodeSky3D.get_node("WorldEnvironment")
+	NodeSky3D.environment.fog_density=density
+
+func setFogSky(sky_affect:float):
+	NodeSky3D.environment.fog_sky_affect=sky_affect
+
 func anim1Begin(index:int):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	#Global.MBEX.playAnim(index)
