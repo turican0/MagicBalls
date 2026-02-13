@@ -586,7 +586,7 @@ func gameInit():
 			setNightEntites()
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
-			setTime(12.0)
+			setTime(4.0)
 			setCaveEntites()
 		"Final":
 			Global.Main_Sounds.setSoundBank(2)
