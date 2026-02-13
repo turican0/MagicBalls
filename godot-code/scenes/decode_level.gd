@@ -143,6 +143,7 @@ var library = {
 	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2 - same models
 	Vector3i(2,423,0): "res://entites/object_2_423_basket.tscn",#basket - yyyyyyyyyyyyyyyyyyyyyyyyy
 	Vector3i(2,424,0): "res://entites/object_2_424_mushroom1.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
+	Vector3i(2,425,0): "res://entites/object_2_425_mushroom2.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(3,0,0): "",#player1
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
@@ -189,8 +190,10 @@ var library = {
 	Vector3i(5,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
+	Vector3i(5,187,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzzzzzzzzzz
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
+	Vector3i(5,287,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzz
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
@@ -217,6 +220,7 @@ var library = {
 	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
 #2 424 - mushroom1
+#5 287 - spider
 func updateLibrary(a:int,b:int,c:int,path:String):
 	library[Vector3i(a, b, c)] = path
 	library_scenes[Vector3i(a, b, c)] = load(path)
@@ -224,10 +228,11 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 var library2 = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(3,0,0): "",#unknown
+	Vector3i(3,88,0): "",#unknown
 	Vector3i(3,211,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(0,8,0): "",#unknown
 	Vector3i(0,58,0): "",#unknown
-	Vector3i(0,67,0): "",#unknown
+	Vector3i(0,67,0): "",#unknowns
 	Vector3i(0,68,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair

@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://kmnmev3fl5gf"]
+
+[ext_resource type="Script" uid="uid://b6ccdj50qxa8n" path="res://entites/object_2_424_mushroom_1.gd" id="1_ecggo"]
+[ext_resource type="PackedScene" uid="uid://chjrtgpxekvpu" path="res://entites/sources/mushrooms/jelly_mushroom.glb" id="2_jpfoe"]
+
+[node name="Node3D" type="Node3D" unique_id=1585835896]
+script = ExtResource("1_ecggo")
+
+[node name="obj1" parent="." unique_id=375434957 instance=ExtResource("2_jpfoe")]
+transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, 0, -0.1, 0)

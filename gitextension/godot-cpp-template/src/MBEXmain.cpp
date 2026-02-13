@@ -821,6 +821,8 @@ PackedFloat32Array MBEXclass::GetEntites() {
 		write_ptr[idx++] = (float)particlesParameters_D951C[actEntity->word_0x5A_90].speed_6; //30
 		write_ptr[idx++] = (float)particlesParameters_D951C[actEntity->word_0x5A_90].rotSpeed_8; //31
 
+		//playerEntity->dword_0xA4_164x->mobilizeCounter_0x14E_334
+
 		//v7x = &str_WORD_D951C[str_F2C20ar.dword0x14x->word_0x5A_90];
 		//67
 
