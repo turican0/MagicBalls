@@ -67,6 +67,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary"), &MBEXclass::REMC2StepInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2getLevelType"), &MBEXclass::REMC2getLevelType);
+	godot::ClassDB::bind_method(D_METHOD("GetWebInfo"), &MBEXclass::GetWebInfo);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -771,6 +772,13 @@ PackedByteArray MBEXclass::TerrainGetAngle() {
 	arr.resize(65536);
 	memcpy(arr.ptrw(), mapAngle_13B4E0, 65536);
 	return arr;
+}
+
+bool MBEXclass::GetWebInfo() {
+	type_entity_0x6E8E *playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+	if (playerEntity->dword_0xA4_164x->mobilizeCounter_0x14E_334)
+		return true;
+	return false;
 }
 
 PackedFloat32Array MBEXclass::GetEntites() {

@@ -5,7 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://scenes/UI.tscn" id="4_x5ge4"]
 [ext_resource type="PackedScene" uid="uid://84v3q55l2pga" path="res://scenes/Sounds.tscn" id="8_pypg8"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
+[ext_resource type="Texture2D" uid="uid://bfq6mu44uustn" path="res://entites/sources/spiders/pngwing.com.png" id="9_kfkod"]
 [ext_resource type="Shader" uid="uid://diekk5uppuvq1" path="res://scenes/FilterColorRect.gdshader" id="9_vrj2c"]
+[ext_resource type="Shader" uid="uid://2qha8dcud50w" path="res://scenes/Blur_effect.gdshader" id="10_vrj2c"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
 
@@ -14,6 +16,10 @@ shader = ExtResource("9_vrj2c")
 shader_parameter/MyGain = Vector3(1, 1, 1)
 shader_parameter/MyOffset = Vector3(0, 0, 0)
 shader_parameter/MySatMultiplier = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_swd5f"]
+shader = ExtResource("10_vrj2c")
+shader_parameter/lod = 2.0
 
 [node name="CodeGenerated" type="Node3D" unique_id=753120922]
 script = ExtResource("1_h7vyv")
@@ -54,3 +60,27 @@ mouse_filter = 2
 update_mode = 1
 size = Vector3(2000, 2000, 2000)
 origin_offset = Vector3(0, 5, 0)
+
+[node name="SpiderWeb" type="CanvasLayer" parent="." unique_id=1045775712]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="SpiderWeb" unique_id=1038861538]
+material = SubResource("ShaderMaterial_swd5f")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SpiderWeb-picture" type="TextureRect" parent="SpiderWeb/ColorRect" unique_id=765930709]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -266.0
+offset_bottom = 266.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_kfkod")

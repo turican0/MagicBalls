@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://d2n5i85l88i5y"]
+
+[ext_resource type="Texture2D" uid="uid://de23iporf50lt" path="res://entites/sources/spiders/pngwing.com (1).png" id="2_wlnrv"]
+
+[node name="Node3D" type="Node3D" unique_id=490721922]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1177381713]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+billboard = 1
+texture = ExtResource("2_wlnrv")

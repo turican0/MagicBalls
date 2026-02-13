@@ -199,6 +199,7 @@ var library = {
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
 	Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
+	Vector3i(9,419,0): "res://entites/object_9_419_spider_web.tscn",#spide web zzzzzzzzzzzzzzOK
 	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK
@@ -221,6 +222,7 @@ var library = {
 }
 #2 424 - mushroom1
 #5 287 - spider
+#9 419 - spider miniweb - 
 func updateLibrary(a:int,b:int,c:int,path:String):
 	library[Vector3i(a, b, c)] = path
 	library_scenes[Vector3i(a, b, c)] = load(path)
@@ -364,6 +366,11 @@ func _process(_p_delta) -> void:
 		Global.MBEX.setPlayerActiveSpell(last_spell_index,last_button)
 		last_spell_index = -1
 		last_button = -1
+	
+	if(Global.MBEX.GetWebInfo()):
+		get_parent().get_node("SpiderWeb").show()
+	else:
+		get_parent().get_node("SpiderWeb").hide()
 	
 	var continueGame=Global.MBEX.REMC2StepInGame(input_state)
 	if(continueGame):		
