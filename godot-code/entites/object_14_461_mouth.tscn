@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c5y357hv3lhq2"]
 
 [ext_resource type="PackedScene" uid="uid://dpwp1xq4p5rhw" path="res://entites/sources/mouth_of_marrow_hollow_-_nightmare.glb" id="1_7etuu"]
-[ext_resource type="Script" uid="uid://cv1oiquo7qe61" path="res://entites/object_14_461_mouth.gd" id="1_wxthu"]
+[ext_resource type="Script" path="res://entites/object_14_461_mouth.gd" id="1_wxthu"]
 [ext_resource type="Script" uid="uid://ioujr8tsmg8w" path="res://entites/sources/mouth_of_marrow_hollow___nightmare.gd" id="2_6fre3"]
 
 [node name="Node3D" type="Node3D" unique_id=1667982880]
