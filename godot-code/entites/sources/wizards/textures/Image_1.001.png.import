@@ -2,13 +2,12 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjvmqbuftr0yk"
+uid="uid://cp8308wrqn4e5"
 path.s3tc="res://.godot/imported/Image_1.001.png-f6816ec28d0101034baea4e531d0e5eb.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={}
 
 [deps]
 
@@ -27,8 +26,8 @@ compress/normal_map=0
 compress/channel_pack=1
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=8
-roughness/src_normal="res://entites/sources/wizards/textures/Image_2.001.png"
+roughness/mode=0
+roughness/src_normal=""
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2
