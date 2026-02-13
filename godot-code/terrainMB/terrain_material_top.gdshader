@@ -1,4 +1,5 @@
 shader_type spatial;
+render_mode cull_front;
 
 uniform sampler2D height_map: filter_nearest, repeat_enable;
 uniform sampler2D control_map : filter_nearest, repeat_enable;
@@ -88,6 +89,9 @@ void vertex() {
 }
 
 void fragment() {
+	if (!FRONT_FACING) {
+		NORMAL = -NORMAL;
+	}
 	//vec3 normal = normalize(cross(dFdy(VERTEX), dFdx(VERTEX)));//test nomals2
     //NORMAL = normal;//test nomals2
 	
