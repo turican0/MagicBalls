@@ -3,6 +3,8 @@ extends Node
 var last_scene_path: String = ""
 var MBEX = null
 
+var levelType: String = ""
+
 var soundInited:bool = false
 var sounds_map = {}
 var music_map = {}

@@ -23,10 +23,8 @@ script = ExtResource("1_h7vyv")
 [node name="Player" parent="." unique_id=1664453856 instance=ExtResource("2_3v2uf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 
-[node name="TerrainMBbottom" type="Node3D" parent="." unique_id=1876905458]
+[node name="TerrainsMB" type="Node3D" parent="." unique_id=1876905458]
 script = ExtResource("26_dvamp")
-
-[node name="TerrainMBtop" type="Node3D" parent="." unique_id=589166014]
 
 [node name="DecodeLevel" type="Node3D" parent="." unique_id=1675347292]
 script = ExtResource("27_6qqjn")
