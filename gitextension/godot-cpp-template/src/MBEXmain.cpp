@@ -23,7 +23,7 @@
 void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &MBEXclass::deRNC);
 	//godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray", "text"), &MBEXclass::TerrainMake);
-	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight"), &MBEXclass::TerrainGetMapHeight);
+	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapHeight", "int"), &MBEXclass::TerrainGetMapHeight);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetMapTerrainType"), &MBEXclass::TerrainGetMapTerrainType);
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &MBEXclass::TerrainGetAngle);
 	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &MBEXclass::RunGameStep);
@@ -523,22 +523,26 @@ Array MBEXclass::getActiveSpells() {
 
 void MBEXclass::set_mesh_instance(Node *p_node, int index) {
 	if (index == 0) {
-		if (!p_node) {
+		if (mesh_instance_bottom == p_node) return;
+		if (mesh_instance_bottom != nullptr) {
+			mesh_instance_bottom->queue_free();
 			mesh_instance_bottom = nullptr;
-			return;
 		}
+		if (!p_node) return;
 		mesh_instance_bottom = Object::cast_to<MeshInstance3D>(p_node);
 		if (!mesh_instance_bottom) {
-			UtilityFunctions::printerr("Chyba: Předaný uzel není typu MeshInstance3D!");
+			UtilityFunctions::printerr("Error: The provided node is not a MeshInstance3D!");
 		}
 	} else {
-		if (!p_node) {
+		if (mesh_instance_top == p_node) return;
+		if (mesh_instance_top != nullptr) {
+			mesh_instance_top->queue_free();
 			mesh_instance_top = nullptr;
-			return;
 		}
+		if (!p_node) return;
 		mesh_instance_top = Object::cast_to<MeshInstance3D>(p_node);
 		if (!mesh_instance_top) {
-			UtilityFunctions::printerr("Chyba: Předaný uzel není typu MeshInstance3D!");
+			UtilityFunctions::printerr("Error: The provided node is not a MeshInstance3D!");
 		}
 	}
 }
@@ -583,10 +587,10 @@ void MBEXclass::recalculate_mesh(int index) {
 
 	surface_tool->generate_normals();
 	surface_tool->index();
-	if (index==0)
-		mesh_instance_top->set_mesh(surface_tool->commit());
-	else
+	if (index == 0)
 		mesh_instance_bottom->set_mesh(surface_tool->commit());
+	else
+		mesh_instance_top->set_mesh(surface_tool->commit());
 	//renew_terrain();
 }
 
@@ -619,7 +623,7 @@ void MBEXclass::renew_terrain(int index) {
 	for (int y = 0; y < GRID_SIZE; ++y) {
 		for (int x = 0; x < GRID_SIZE; ++x) {
 			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
-			if (index==0)
+			if (index == 0)
 				height_data[y * GRID_SIZE + x] = (float)mapHeightmap_11B4E0[idx] * 0.125f;
 			else
 				height_data[y * GRID_SIZE + x] = (float)x_BYTE_14B4E0_second_heightmap[idx] * 0.125f;
@@ -750,7 +754,7 @@ PackedByteArray MBEXclass::TerrainGetMapTerrainType() {
 PackedByteArray MBEXclass::TerrainGetMapHeight(int index) {
 	PackedByteArray arr;
 	arr.resize(65536);
-	if (index==0)
+	if (index == 0)
 		memcpy(arr.ptrw(), mapHeightmap_11B4E0, 65536);
 	else
 		memcpy(arr.ptrw(), x_BYTE_14B4E0_second_heightmap, 65536);
