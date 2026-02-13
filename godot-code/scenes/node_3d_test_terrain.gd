@@ -82,11 +82,10 @@ func init():
 	#end of Multimesh
 
 ## --- FÁZE 1: Inicializace ---
-var material
+var material_bottom
+var material_top
 
 func changeTerrain(levelType:String):
-	if material == null:
-		return
 	var tex_path = ""
 	match levelType:
 		"Day":
@@ -97,9 +96,17 @@ func changeTerrain(levelType:String):
 			tex_path = Global.convertdata + "textures/cave/BL32C0-0.DAT-borders.png"
 		"Final":
 			tex_path = Global.convertdata + "textures/final/BL32F0-0.DAT-borders.png"
+	if material_bottom == null:
+		return
 	if tex_path != "":
 		var atlas_tex = Global.load_custom_texture(tex_path)
-		material.set_shader_parameter("atlas_texture", atlas_tex)
+		material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
+	if(levelType=="Cave"):
+		if material_top == null:
+			return
+		if tex_path != "":
+			var atlas_tex = Global.load_custom_texture(tex_path)
+			material_top.set_shader_parameter("atlas_texture", atlas_tex)
 
 func initialize_nodes():
 	mesh_instance_bottom = MeshInstance3D.new()
@@ -110,16 +117,18 @@ func initialize_nodes():
 	mesh_instance_top.name = "TerrainMesh"
 	add_child(mesh_instance_top)
 	
-	material = load("res://terrainMB/terrain_material.tres")
-	if material:
+	material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
+	material_top = load("res://terrainMB/terrain_material_top.tres")
+	if material_bottom and material_top:
 		var atlas_tex = Global.load_custom_texture(Global.convertdata+"textures/night/BL32N0-0.DAT-borders.png")
 		var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
-		material.set_shader_parameter("atlas_texture", atlas_tex)
-		material.set_shader_parameter("reflect_texture", reflect_tex)
-		mesh_instance_bottom.material_override = material
-		mesh_instance_top.material_override = material
+		material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
+		material_bottom.set_shader_parameter("reflect_texture", reflect_tex)
+		mesh_instance_bottom.material_override = material_bottom
+		material_top.set_shader_parameter("atlas_texture", atlas_tex)
+		material_top.set_shader_parameter("reflect_texture", reflect_tex)
+		mesh_instance_top.material_override = material_top
 	else:
-		# Použijte alespoň standardní materiál pro vizuální kontrolu, pokud se nepodaří načíst
 		printerr("Chyba: Nepodařilo se načíst terrain_material.tres.")
 		mesh_instance_bottom.material_override = StandardMaterial3D.new()
 		mesh_instance_top.material_override = StandardMaterial3D.new()

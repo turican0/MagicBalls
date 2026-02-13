@@ -1,10 +1,10 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://bpnnts5lr0sif"]
 
-[ext_resource type="Shader" uid="uid://dkooe1gd4jufd" path="res://terrainMB/terrain_material.gdshader" id="1_1o8ll"]
+[ext_resource type="Shader" uid="uid://dkooe1gd4jufd" path="res://terrainMB/terrain_material_bottom.gdshader" id="1_2f2vx"]
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_1o8ll")
+shader = ExtResource("1_2f2vx")
 shader_parameter/height_scale = 1.0
 shader_parameter/atlas_grid_size = Vector2(8, 19)
 shader_parameter/atlas_border_px = Vector2(8, 8)

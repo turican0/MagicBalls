@@ -70,7 +70,7 @@ public:
 	uint8_t TerrainGetTileTerrainType(int index);
 	void TerrainSetTileTerrainType(int index, uint8_t value);
 	PackedByteArray TerrainGetMapTerrainType();
-	PackedByteArray TerrainGetMapHeight();
+	PackedByteArray TerrainGetMapHeight(int index);
 	PackedByteArray TerrainGetAngle();
 
 	void set_mesh_instance(Node *p_node, int index);

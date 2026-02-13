@@ -30,7 +30,6 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &MBEXclass::GetEntites);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &MBEXclass::GetPlayerPositionRotation);
 	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D", "int"), &MBEXclass::set_mesh_instance);
-	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D", "int"), &MBEXclass::set_mesh_instance);
 	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &MBEXclass::initialize_grid_data);
 	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh", "int"), &MBEXclass::recalculate_mesh);
 	godot::ClassDB::bind_method(D_METHOD("renew_terrain", "int"), &MBEXclass::renew_terrain);
@@ -620,7 +619,10 @@ void MBEXclass::renew_terrain(int index) {
 	for (int y = 0; y < GRID_SIZE; ++y) {
 		for (int x = 0; x < GRID_SIZE; ++x) {
 			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
-			height_data[y * GRID_SIZE + x] = (float)mapHeightmap_11B4E0[idx] * 0.125f;
+			if (index==0)
+				height_data[y * GRID_SIZE + x] = (float)mapHeightmap_11B4E0[idx] * 0.125f;
+			else
+				height_data[y * GRID_SIZE + x] = (float)x_BYTE_14B4E0_second_heightmap[idx] * 0.125f;
 		}
 	}
 
@@ -745,10 +747,13 @@ PackedByteArray MBEXclass::TerrainGetMapTerrainType() {
 	return arr;
 }
 
-PackedByteArray MBEXclass::TerrainGetMapHeight() {
+PackedByteArray MBEXclass::TerrainGetMapHeight(int index) {
 	PackedByteArray arr;
 	arr.resize(65536);
-	memcpy(arr.ptrw(), mapHeightmap_11B4E0, 65536);
+	if (index==0)
+		memcpy(arr.ptrw(), mapHeightmap_11B4E0, 65536);
+	else
+		memcpy(arr.ptrw(), x_BYTE_14B4E0_second_heightmap, 65536);
 	return arr;
 }
 
