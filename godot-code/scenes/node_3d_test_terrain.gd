@@ -43,8 +43,8 @@ func init():
 	var offset = GRID_SIZE * CELL_SCALE
 	var positions = []
 	if(Global.levelType=="Cave"):
-		for x in [-1, 0, 1]:
-			for z in [-1, 0, 1]:
+		for x in [-1, 0, 1, 2]:
+			for z in [-1, 0, 1, 2]:
 				if x == 0 and z == 0: continue
 				positions.append(Vector3(x * offset, 0, z * offset))
 	else:
@@ -61,10 +61,10 @@ func init():
 		if not mmi_top.multimesh:
 			mmi_top.multimesh = MultiMesh.new()
 			mmi_top.multimesh.transform_format = MultiMesh.TRANSFORM_3D
-		mmi_top.multimesh.mesh = mesh_instance_bottom.mesh	
-		mmi_top.material_override = mesh_instance_bottom.material_override 
+		mmi_top.multimesh.mesh = mesh_instance_top.mesh	
+		mmi_top.material_override = mesh_instance_top.material_override 
 		if not mmi_top.material_override:
-			mmi_top.material_override = mesh_instance_bottom.mesh.surface_get_material(0)
+			mmi_top.material_override = mesh_instance_top.mesh.surface_get_material(0)
 		mmi_top.multimesh.instance_count = positions.size()
 		for i in range(positions.size()):
 			var t = Transform3D(Basis(), positions[i])

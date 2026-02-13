@@ -690,7 +690,7 @@ func exitGame():
 	Global.MBEX.REMC2EndGame()
 
 func setMesh():
-	Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainsMB").mesh_instance_bottom,Global.levelType=="Cave")
+	Global.MBEX.set_mesh_instances(get_parent().get_node("TerrainsMB").mesh_instance_bottom,get_parent().get_node("TerrainsMB").mesh_instance_top,Global.levelType=="Cave")
 	Global.MBEX.initialize_grid_data()
 	Global.MBEX.recalculate_mesh(Global.levelType=="Cave")
 

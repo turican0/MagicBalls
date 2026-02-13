@@ -29,7 +29,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &MBEXclass::RunGameStep);
 	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &MBEXclass::GetEntites);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &MBEXclass::GetPlayerPositionRotation);
-	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D", "bool"), &MBEXclass::set_mesh_instance);
+	godot::ClassDB::bind_method(D_METHOD("set_mesh_instances", "Node3D", "Node3D", "bool"), &MBEXclass::set_mesh_instances);
 	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &MBEXclass::initialize_grid_data);
 	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh", "bool"), &MBEXclass::recalculate_mesh);
 	godot::ClassDB::bind_method(D_METHOD("renew_terrain", "bool"), &MBEXclass::renew_terrain);
@@ -521,25 +521,29 @@ Array MBEXclass::getActiveSpells() {
 }
 
 
-void MBEXclass::set_mesh_instance(Node *p_node, bool isCave) {
-	if (mesh_instance_bottom == p_node) return;
+void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool isCave) {
+	if (mesh_instance_bottom == p_node_bottom)
+		return;
 	if (mesh_instance_bottom != nullptr) {
 		mesh_instance_bottom->queue_free();
 		mesh_instance_bottom = nullptr;
 	}
-	if (!p_node) return;
-	mesh_instance_bottom = Object::cast_to<MeshInstance3D>(p_node);
+	if (!p_node_bottom)
+		return;
+	mesh_instance_bottom = Object::cast_to<MeshInstance3D>(p_node_bottom);
 	if (!mesh_instance_bottom) {
 		UtilityFunctions::printerr("Error: The provided node is not a MeshInstance3D!");
 	}
 	if (isCave) {
-		if (mesh_instance_top == p_node) return;
+		if (mesh_instance_top == p_node_top)
+			return;
 		if (mesh_instance_top != nullptr) {
 			mesh_instance_top->queue_free();
 			mesh_instance_top = nullptr;
 		}
-		if (!p_node) return;
-		mesh_instance_top = Object::cast_to<MeshInstance3D>(p_node);
+		if (!p_node_top)
+			return;
+		mesh_instance_top = Object::cast_to<MeshInstance3D>(p_node_top);
 		if (!mesh_instance_top) {
 			UtilityFunctions::printerr("Error: The provided node is not a MeshInstance3D!");
 		}

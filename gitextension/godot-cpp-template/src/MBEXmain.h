@@ -76,7 +76,7 @@ public:
 	PackedByteArray TerrainGetMapHeight(int index);
 	PackedByteArray TerrainGetAngle();
 
-	void set_mesh_instance(Node *p_node, bool isCave);
+	void set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool isCave);
 	void initialize_grid_data();
 	void recalculate_mesh(bool isCave);
 	void renew_terrain(bool isCave);
