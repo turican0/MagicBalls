@@ -29,10 +29,10 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &MBEXclass::RunGameStep);
 	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &MBEXclass::GetEntites);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &MBEXclass::GetPlayerPositionRotation);
-	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D", "int"), &MBEXclass::set_mesh_instance);
+	godot::ClassDB::bind_method(D_METHOD("set_mesh_instance", "Node3D", "bool"), &MBEXclass::set_mesh_instance);
 	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &MBEXclass::initialize_grid_data);
-	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh", "int"), &MBEXclass::recalculate_mesh);
-	godot::ClassDB::bind_method(D_METHOD("renew_terrain", "int"), &MBEXclass::renew_terrain);
+	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh", "bool"), &MBEXclass::recalculate_mesh);
+	godot::ClassDB::bind_method(D_METHOD("renew_terrain", "bool"), &MBEXclass::renew_terrain);
 	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &MBEXclass::getActiveSpells);
 	godot::ClassDB::bind_method(D_METHOD("getSelectedSpells"), &MBEXclass::getSelectedSpells);
 	godot::ClassDB::bind_method(D_METHOD("setPlayerActiveSpell", "Int", "Int"), &MBEXclass::setPlayerActiveSpell);
@@ -521,19 +521,18 @@ Array MBEXclass::getActiveSpells() {
 }
 
 
-void MBEXclass::set_mesh_instance(Node *p_node, int index) {
-	if (index == 0) {
-		if (mesh_instance_bottom == p_node) return;
-		if (mesh_instance_bottom != nullptr) {
-			mesh_instance_bottom->queue_free();
-			mesh_instance_bottom = nullptr;
-		}
-		if (!p_node) return;
-		mesh_instance_bottom = Object::cast_to<MeshInstance3D>(p_node);
-		if (!mesh_instance_bottom) {
-			UtilityFunctions::printerr("Error: The provided node is not a MeshInstance3D!");
-		}
-	} else {
+void MBEXclass::set_mesh_instance(Node *p_node, bool isCave) {
+	if (mesh_instance_bottom == p_node) return;
+	if (mesh_instance_bottom != nullptr) {
+		mesh_instance_bottom->queue_free();
+		mesh_instance_bottom = nullptr;
+	}
+	if (!p_node) return;
+	mesh_instance_bottom = Object::cast_to<MeshInstance3D>(p_node);
+	if (!mesh_instance_bottom) {
+		UtilityFunctions::printerr("Error: The provided node is not a MeshInstance3D!");
+	}
+	if (isCave) {
 		if (mesh_instance_top == p_node) return;
 		if (mesh_instance_top != nullptr) {
 			mesh_instance_top->queue_free();
@@ -550,7 +549,7 @@ void MBEXclass::set_mesh_instance(Node *p_node, int index) {
 void MBEXclass::initialize_grid_data() {
 }
 
-void MBEXclass::recalculate_mesh(int index) {
+void MBEXclass::recalculate_mesh(bool isCave) {
 	surface_tool.instantiate();	
 	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
 	surface_tool->set_custom_format(0, SurfaceTool::CUSTOM_RGBA_FLOAT);
@@ -587,24 +586,19 @@ void MBEXclass::recalculate_mesh(int index) {
 
 	surface_tool->generate_normals();
 	surface_tool->index();
-	if (index == 0)
-		mesh_instance_bottom->set_mesh(surface_tool->commit());
-	else
+	mesh_instance_bottom->set_mesh(surface_tool->commit());
+	if (isCave)
 		mesh_instance_top->set_mesh(surface_tool->commit());
 	//renew_terrain();
 }
 
-void MBEXclass::renew_terrain(int index) {
-	if (height_image.is_null())
-		initialize_heightmap(index);
+void MBEXclass::renew_terrain(bool isCave) {
 	if (control_image.is_null())
-		initialize_controlmap(index);
-
+		initialize_controlmap(isCave);
 	if (control_data.size() != GRID_SIZE * GRID_SIZE * 4) {
 		control_data.resize(GRID_SIZE * GRID_SIZE * 4);
 	}
 	uint8_t *cd_ptr = control_data.ptrw();
-
 	for (int y = 0; y < GRID_SIZE; ++y) {
 		for (int x = 0; x < GRID_SIZE; ++x) {
 			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
@@ -617,32 +611,46 @@ void MBEXclass::renew_terrain(int index) {
 			cd_ptr[write_idx + 3] = 0;
 		}
 	}
-
-	// 3. Aktualizace Height dat pro GPU
-	height_data.resize(GRID_SIZE * GRID_SIZE);
+	if (height_image_bottom.is_null())
+		initialize_heightmap(0);
+	height_data_bottom.resize(GRID_SIZE * GRID_SIZE);
 	for (int y = 0; y < GRID_SIZE; ++y) {
 		for (int x = 0; x < GRID_SIZE; ++x) {
 			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
-			if (index == 0)
-				height_data[y * GRID_SIZE + x] = (float)mapHeightmap_11B4E0[idx] * 0.125f;
-			else
-				height_data[y * GRID_SIZE + x] = (float)x_BYTE_14B4E0_second_heightmap[idx] * 0.125f;
+			height_data_bottom[y * GRID_SIZE + x] = (float)mapHeightmap_11B4E0[idx] * 0.125f;
 		}
 	}
-
-	update_gpu_heightmap(index);
+	if (isCave) {
+		if (height_image_top.is_null())
+			initialize_heightmap(1);
+		height_data_top.resize(GRID_SIZE * GRID_SIZE);
+		for (int y = 0; y < GRID_SIZE; ++y) {
+			for (int x = 0; x < GRID_SIZE; ++x) {
+				int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
+				height_data_top[y * GRID_SIZE + x] = (float)x_BYTE_14B4E0_second_heightmap[idx] * 0.125f;
+			}
+		}
+	}
+	update_gpu_heightmap(isCave);
 	update_gpu_controlmap();
 }
 
-void MBEXclass::update_gpu_heightmap(int index) {
-	if (height_image.is_null())
-		initialize_heightmap(index);
+void MBEXclass::update_gpu_heightmap(bool isCave) {
+	if (height_image_bottom.is_null())
+		initialize_heightmap(0);
 	PackedByteArray byte_array;
-	byte_array.resize(height_data.size() * sizeof(float));
-	memcpy(byte_array.ptrw(), height_data.data(), byte_array.size());
-
-	height_image->set_data(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF, byte_array);
-	height_texture->update(height_image);
+	byte_array.resize(height_data_bottom.size() * sizeof(float));
+	memcpy(byte_array.ptrw(), height_data_bottom.data(), byte_array.size());
+	height_image_bottom->set_data(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF, byte_array);
+	height_texture_bottom->update(height_image_bottom);
+	if (isCave) {
+		if (height_image_top.is_null())
+			initialize_heightmap(1);
+		byte_array.resize(height_data_top.size() * sizeof(float));
+		memcpy(byte_array.ptrw(), height_data_top.data(), byte_array.size());
+		height_image_top->set_data(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF, byte_array);
+		height_texture_top->update(height_image_top);
+	}
 }
 
 void MBEXclass::update_gpu_controlmap() {
@@ -650,47 +658,40 @@ void MBEXclass::update_gpu_controlmap() {
 	control_texture->update(control_image);
 }
 
-void MBEXclass::initialize_controlmap(int index) {
-	if (index == 0) {
-		control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
-		control_texture = ImageTexture::create_from_image(control_image);
-		if (mesh_instance_bottom) {
-			Ref<ShaderMaterial> mat = mesh_instance_bottom->get_material_override();
-			if (mat.is_valid()) {
-				mat->set_shader_parameter("control_map", control_texture);
-			}
-		}
-	} else {
-		control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
-		control_texture = ImageTexture::create_from_image(control_image);
-		if (mesh_instance_top) {
-			Ref<ShaderMaterial> mat = mesh_instance_top->get_material_override();
-			if (mat.is_valid()) {
-				mat->set_shader_parameter("control_map", control_texture);
-			}
+void MBEXclass::initialize_controlmap(bool isCave) {
+	control_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RGBA8);
+	control_texture = ImageTexture::create_from_image(control_image);
+	Ref<ShaderMaterial> mat = mesh_instance_bottom->get_material_override();
+	if (mat.is_valid()) {
+		mat->set_shader_parameter("control_map", control_texture);
+	}
+	if (isCave) {
+		Ref<ShaderMaterial> mat = mesh_instance_top->get_material_override();
+		if (mat.is_valid()) {
+			mat->set_shader_parameter("control_map", control_texture);
 		}
 	}
 }
 
 void MBEXclass::initialize_heightmap(int index) {
 	if (index == 0) {
-		height_data.assign(GRID_SIZE * GRID_SIZE, 0.0f);
-		height_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
-		height_texture = ImageTexture::create_from_image(height_image);
+		height_data_bottom.assign(GRID_SIZE * GRID_SIZE, 0.0f);
+		height_image_bottom = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
+		height_texture_bottom = ImageTexture::create_from_image(height_image_bottom);
 		if (mesh_instance_bottom) {
 			Ref<ShaderMaterial> mat = mesh_instance_bottom->get_material_override();
 			if (mat.is_valid()) {
-				mat->set_shader_parameter("height_map", height_texture);
+				mat->set_shader_parameter("height_map", height_texture_bottom);
 			}
 		}
 	} else {
-		height_data.assign(GRID_SIZE * GRID_SIZE, 0.0f);
-		height_image = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
-		height_texture = ImageTexture::create_from_image(height_image);
+		height_data_top.assign(GRID_SIZE * GRID_SIZE, 0.0f);
+		height_image_top = Image::create(GRID_SIZE, GRID_SIZE, false, Image::FORMAT_RF);
+		height_texture_top = ImageTexture::create_from_image(height_image_top);
 		if (mesh_instance_top) {
 			Ref<ShaderMaterial> mat = mesh_instance_top->get_material_override();
 			if (mat.is_valid()) {
-				mat->set_shader_parameter("height_map", height_texture);
+				mat->set_shader_parameter("height_map", height_texture_top);
 			}
 		}
 	}

@@ -360,10 +360,8 @@ func _process(_p_delta) -> void:
 		last_button = -1
 	
 	var continueGame=Global.MBEX.REMC2StepInGame(input_state)
-	if(continueGame):
-		Global.MBEX.renew_terrain(0)
-		if(Global.levelType=="Cave"):
-			Global.MBEX.renew_terrain(1)
+	if(continueGame):		
+		Global.MBEX.renew_terrain((Global.levelType=="Cave"))
 		var mods = Global.MBEX.getPaletteModifications()
 		var current_gain = mods[0]
 		var current_offset = mods[1]
@@ -692,13 +690,9 @@ func exitGame():
 	Global.MBEX.REMC2EndGame()
 
 func setMesh():
-	Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainsMB").mesh_instance_bottom,0)
-	if(Global.levelType=="Cave"):
-		Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainsMB").mesh_instance_top,1)
+	Global.MBEX.set_mesh_instance(get_parent().get_node("TerrainsMB").mesh_instance_bottom,Global.levelType=="Cave")
 	Global.MBEX.initialize_grid_data()
-	Global.MBEX.recalculate_mesh(0)
-	if(Global.levelType=="Cave"):
-		Global.MBEX.recalculate_mesh(1)
+	Global.MBEX.recalculate_mesh(Global.levelType=="Cave")
 
 #func loadlevel(levelnumber: int):
 	#sub_533B0_decompress_levels(levelnumber)

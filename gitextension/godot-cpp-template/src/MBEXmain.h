@@ -42,11 +42,14 @@ private:
 	float CELL_SCALE = 1.0f;
 
 	PackedByteArray control_data;
-	std::vector<float> height_data;
+	std::vector<float> height_data_bottom;
+	std::vector<float> height_data_top;
 	int texture_indices[GRID_SIZE][GRID_SIZE];
 
-	Ref<Image> height_image;
-	Ref<ImageTexture> height_texture;
+	Ref<Image> height_image_bottom;
+	Ref<ImageTexture> height_texture_bottom;
+	Ref<Image> height_image_top;
+	Ref<ImageTexture> height_texture_top;
 	Ref<Image> control_image;
 	Ref<ImageTexture> control_texture;
 
@@ -73,13 +76,13 @@ public:
 	PackedByteArray TerrainGetMapHeight(int index);
 	PackedByteArray TerrainGetAngle();
 
-	void set_mesh_instance(Node *p_node, int index);
+	void set_mesh_instance(Node *p_node, bool isCave);
 	void initialize_grid_data();
-	void recalculate_mesh(int index);
-	void renew_terrain(int index);
-	void update_gpu_heightmap(int index);
+	void recalculate_mesh(bool isCave);
+	void renew_terrain(bool isCave);
+	void update_gpu_heightmap(bool isCave);
 	void update_gpu_controlmap();
-	void initialize_controlmap(int index);
+	void initialize_controlmap(bool isCave);
 	void initialize_heightmap(int index);
 	Array getActiveSpells();
 	Array getSelectedSpells();
