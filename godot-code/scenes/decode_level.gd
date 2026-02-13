@@ -142,6 +142,7 @@ var library = {
 	Vector3i(2,179,0): "res://entites/object_2_179_burned_tree.tscn",#burned tree
 	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2 - same models
 	Vector3i(2,423,0): "res://entites/object_2_423_basket.tscn",#basket - yyyyyyyyyyyyyyyyyyyyyyyyy
+	Vector3i(2,424,0): "res://entites/object_2_424_mushroom1.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(3,0,0): "",#player1
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
@@ -209,13 +210,13 @@ var library = {
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
 	Vector3i(10,327,0): "res://entites/object_10_327_tornado.tscn",#tornado xxxxxxxxxxxxxxxxxxxxxxxx
+	Vector3i(10,426,0): "res://entites/object_10_426_bubble.tscn",#bubble - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(10,463,0): "res://entites/object_10_463_fireball-object.tscn",#fireball-object xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll -OK
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate -OK
 	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
-#5 26 - head flying centipede
-#5 56 - body flying centipede
+#2 424 - mushroom1
 func updateLibrary(a:int,b:int,c:int,path:String):
 	library[Vector3i(a, b, c)] = path
 	library_scenes[Vector3i(a, b, c)] = load(path)
@@ -646,8 +647,6 @@ func setTime(time:float):
 	NodeSky3D.get_node("TimeOfDay").current_time=time
 	
 func setFog(density:float):
-	var we_node = NodeSky3D.environment
-	#var test:WorldEnvironment=NodeSky3D.get_node("WorldEnvironment")
 	NodeSky3D.environment.fog_density=density
 
 func setFogSky(sky_affect:float):

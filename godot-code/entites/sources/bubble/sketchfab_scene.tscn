@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://7a8jvbxhwhw8"]
+
+[ext_resource type="PackedScene" uid="uid://6iy4v2d6a6ok" path="res://entites/sources/bubble/simple_bubble.glb" id="1_nifno"]
+
+[sub_resource type="Gradient" id="Gradient_h1jys"]
+offsets = PackedFloat32Array(0, 0.8804781)
+colors = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_pajl0"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1gymk"]
+noise = SubResource("FastNoiseLite_pajl0")
+color_ramp = SubResource("Gradient_h1jys")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gffvs"]
+albedo_texture = SubResource("NoiseTexture2D_1gymk")
+
+[node name="Sketchfab_Scene" unique_id=1682610552 instance=ExtResource("1_nifno")]
+
+[node name="bull001_M_bulleSurface_001_mesh" parent="Sketchfab_model/66db3dfa274749b9b928c898f6b87cb6_abc_cleaner_materialmerger_gles/Object_2/Object_3/Object_4/Object_5/Object_6/MorphMainGroup" parent_id_path=PackedInt32Array(1559430572) index="0" unique_id=403591645]
+blend_shapes/morph_91 = 0.62706316
+blend_shapes/morph_92 = 0.3729346
+surface_material_override/0 = SubResource("StandardMaterial3D_gffvs")
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=781042264]
+autoplay = &"Object_0"
+speed_scale = 15.0
