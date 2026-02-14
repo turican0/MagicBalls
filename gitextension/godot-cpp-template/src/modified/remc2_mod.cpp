@@ -901,16 +901,16 @@ void sub_82510_mod(/*__int16 a1*/ /*, int *a2*/) //263510
 			}
 			memset(v10x, 0, 36); //3550c0
 			//v5 = (char*)&unk_E2516[9 * unk_17DBA8str.unk_17DBB4];
-			//v6x = str_E23E0;
+			//v6x = mapMenuButtons_E23E0;
 			v6y = 0;
 			v10x[0] = str_E2516[unk_17DBA8str.unk_17DBB4];
 			//qmemcpy(v10x, v5, 0x12u);
 			//qmemcpy(&v11, v5 + 0x10u, 2u);
-			while (str_E23E0[v6y].byte_25) {
-				//if (str_E23E0[v6y].byte_23 && str_E23E0[v6y].byte_22 == (int)(unk_E2516[8 + 9 * unk_17DBA8str.unk_17DBB4] >> 8))// x_BYTE_E2527[18 * *((signed __int16 *)a2 + 6)] )
-				if (str_E23E0[v6y].canSelect_23 && str_E23E0[v6y].byte_22 == str_E2516[unk_17DBA8str.unk_17DBB4].byte_16) // x_BYTE_E2527[18 * *((signed __int16 *)a2 + 6)] )
+			while (mapMenuButtons_E23E0[v6y].byte_25) {
+				//if (mapMenuButtons_E23E0[v6y].byte_23 && mapMenuButtons_E23E0[v6y].byte_22 == (int)(unk_E2516[8 + 9 * unk_17DBA8str.unk_17DBB4] >> 8))// x_BYTE_E2527[18 * *((signed __int16 *)a2 + 6)] )
+				if (mapMenuButtons_E23E0[v6y].canSelect_23 && mapMenuButtons_E23E0[v6y].byte_22 == str_E2516[unk_17DBA8str.unk_17DBB4].byte_16) // x_BYTE_E2527[18 * *((signed __int16 *)a2 + 6)] )
 				{
-					str_E23E0[v6y].gold_color_24 = 1;
+					mapMenuButtons_E23E0[v6y].gold_color_24 = 1;
 					break;
 				}
 				//v6 += 44;
@@ -935,50 +935,50 @@ void sub_82510_mod(/*__int16 a1*/ /*, int *a2*/) //263510
 signed int DrawBitmapAndPlaySound_7E320_mod() //25f320
 {
 	type_E24BCx textBoxStr[2];
-	for (int i = 0; str_E23E0[i].byte_25; i++) //draw buttons
+	for (int i = 0; mapMenuButtons_E23E0[i].byte_25; i++) //draw buttons
 	{
-		if (str_E23E0[i].canSelect_23) {
-			sub_7C120_draw_bitmap_640(str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_21]);
+		if (mapMenuButtons_E23E0[i].canSelect_23) {
+			sub_7C120_draw_bitmap_640(mapMenuButtons_E23E0[i].xmin_10, mapMenuButtons_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[mapMenuButtons_E23E0[i].byte_21]);
 		}
 	}
 	if (x_DWORD_17DB70str.x_BYTE_17DB8E)
 		return 0;
 	int index = 0;
-	if (str_E23E0[index].byte_25) {
+	if (mapMenuButtons_E23E0[index].byte_25) {
 		do //adress 25f57c
 		{
-			if (str_E23E0[index].selected_8 && str_E23E0[index].dword_0) {
-				uint8_t dialogIndex = GetMapMenuDialogIndex_7E320(str_E23E0[index].dword_0, &str_E23E0[index]);
+			if (mapMenuButtons_E23E0[index].selected_8 && mapMenuButtons_E23E0[index].dword_0) {
+				uint8_t dialogIndex = GetMapMenuDialogIndex_7E320(mapMenuButtons_E23E0[index].dword_0, &mapMenuButtons_E23E0[index]);
 				if (!dialogIndex) //
 					return 1;
-				str_E23E0[index].selected_8 = 0;
+				mapMenuButtons_E23E0[index].selected_8 = 0;
 				ResetMouse_7B5A0();
 				return dialogIndex;
 			}
 			index++;
-		} while (str_E23E0[index].byte_25);
+		} while (mapMenuButtons_E23E0[index].byte_25);
 	}
-	for (int i = 0; str_E23E0[i].byte_25; i++) {
-		if (str_E23E0[i].canSelect_23 && str_E23E0[i].gold_color_24)
-			sub_7C120_draw_bitmap_640(str_E23E0[i].xmin_10, str_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_20]);
-		str_E23E0[i].selected_8 = 0;
-		str_E23E0[i].gold_color_24 = 0;
+	for (int i = 0; mapMenuButtons_E23E0[i].byte_25; i++) {
+		if (mapMenuButtons_E23E0[i].canSelect_23 && mapMenuButtons_E23E0[i].gold_color_24)
+			sub_7C120_draw_bitmap_640(mapMenuButtons_E23E0[i].xmin_10, mapMenuButtons_E23E0[i].ymin_12, xy_DWORD_17DED4_spritestr[mapMenuButtons_E23E0[i].byte_20]);
+		mapMenuButtons_E23E0[i].selected_8 = 0;
+		mapMenuButtons_E23E0[i].gold_color_24 = 0;
 	}
 	for (int i = 0;; i++) {
-		if (!str_E23E0[i].byte_25) {
+		if (!mapMenuButtons_E23E0[i].byte_25) {
 			sub_82510_mod();
 			return 0;
 		}
-		if (str_E23E0[i].canSelect_23) {
-			str_E23E0[i].sizex_14 = xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_20].width_4;
-			str_E23E0[i].sizey_16 = xy_DWORD_17DED4_spritestr[str_E23E0[i].byte_20].height_5;
-			if (InRegion_7B200(&str_E23E0[i], x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx, x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony)) {
+		if (mapMenuButtons_E23E0[i].canSelect_23) {
+			mapMenuButtons_E23E0[i].sizex_14 = xy_DWORD_17DED4_spritestr[mapMenuButtons_E23E0[i].byte_20].width_4;
+			mapMenuButtons_E23E0[i].sizey_16 = xy_DWORD_17DED4_spritestr[mapMenuButtons_E23E0[i].byte_20].height_5;
+			if (InRegion_7B200(&mapMenuButtons_E23E0[i], x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx, x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony)) {
 				if (x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons & 1) {
-					str_E23E0[i].selected_8 = 1;
+					mapMenuButtons_E23E0[i].selected_8 = 1;
 					ResetMouse_7B5A0();
 					PlaySample_8F100(0, 14, 127, 64, 0x64u, 0, 3u);
 				} else {
-					str_E23E0[i].gold_color_24 = 1;
+					mapMenuButtons_E23E0[i].gold_color_24 = 1;
 					if (x_D41A0_BYTEARRAY_4_struct.showHelp_10 != 1)
 						return 0;
 					int index2 = 0;
@@ -986,7 +986,7 @@ signed int DrawBitmapAndPlaySound_7E320_mod() //25f320
 						return 0;
 					do //adress 25f4e7
 					{
-						if (str_E2516[index2].byte_17 == str_E23E0[i].byte_22) {
+						if (str_E2516[index2].byte_17 == mapMenuButtons_E23E0[i].byte_22) {
 							memset(textBoxStr, 0, 36);
 							textBoxStr[0] = str_E2516[index2];
 							bitmap_pos_struct_t *tempSpriteStr = xy_DWORD_17DEC0_spritestr;
@@ -1219,7 +1219,7 @@ void DrawEndGameTable_82C20_mod(__int16 a1) //263c20
 
 
 int NewGameDraw_7EAE0_mod(int16_t *posx, int16_t *posy, __int16 *portPosX, __int16 *portPosY, int8_t *a5, type_animStruct *animStruct) {
-	type_WORD_E1F84 selectVar;
+	type_menuButtons_E1F84 selectVar;
 	int index2;
 	int index3 = -1;
 	int result2;
@@ -1831,7 +1831,7 @@ void MenusAndIntros_76930_mod_begin(bool skipMenus) //257930
 */
 }
 
-bool NewGameDialog_77350_mod(type_WORD_E1F84 *a1x) //258350
+bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x) //258350
 {
 	bool result = false;
 
@@ -1944,7 +1944,7 @@ void MainMenu_76FA0_mod_begin() //257fa0
 	LoadSounds_84300(0); //265300
 	memset(&x_DWORD_17DBB8, 0, 16);
 	x_BYTE_17DBC6 = 2;
-	x_DWORD_17DE38str.x_WORD_17DF04 = -1;
+	x_DWORD_17DE38str.savedGameIndex_17DF04 = -1;
 	x_DWORD_17DE38str.x_DWORD_17DE44 = x_DWORD_E9C38_smalltit;
 	SetCenterScreenForFlyAssistant_6EDB0();
 	StopMusic_8E020(); //26f020
@@ -2044,7 +2044,7 @@ void MainMenu_76FA0_mod_end() //257fa0
 	LoadSounds_84300(0); //265300
 	memset(&x_DWORD_17DBB8, 0, 16);
 	x_BYTE_17DBC6 = 2;
-	x_DWORD_17DE38str.x_WORD_17DF04 = -1;
+	x_DWORD_17DE38str.savedGameIndex_17DF04 = -1;
 	x_DWORD_17DE38str.x_DWORD_17DE44 = x_DWORD_E9C38_smalltit;
 	SetCenterScreenForFlyAssistant_6EDB0();
 	StopMusic_8E020(); //26f020
@@ -2143,7 +2143,7 @@ void MainMenu_76FA0_mod() //257fa0
 	LoadSounds_84300(0); //265300
 	memset(&x_DWORD_17DBB8, 0, 16);
 	x_BYTE_17DBC6 = 2;
-	x_DWORD_17DE38str.x_WORD_17DF04 = -1;
+	x_DWORD_17DE38str.savedGameIndex_17DF04 = -1;
 	x_DWORD_17DE38str.x_DWORD_17DE44 = x_DWORD_E9C38_smalltit;
 	SetCenterScreenForFlyAssistant_6EDB0();
 	StopMusic_8E020(); //26f020

@@ -1210,7 +1210,7 @@ void MBEXclass::RunGameStep(Dictionary inputs) {
 		sub_715B0(); //nothing draw //animate sprites
 	}
 	ReadGameUserInputs_89D10(); //get keys
-	MouseAndKeysEvents_17A00(0, GameTimerTurn_17DB54);
+	MouseAndKeysEvents_17A00(GameTimerTurn_17DB54);
 	PlayerEvents_51BB0();
 	UpdateEntities_57730();
 	sub_84B80(); //prepare lightting

@@ -665,7 +665,7 @@ int sub_main(int argc, char** argv, char**  /*envp*/)//236F70
 
 		Initialize();//236FDC - 23C8D0//rozdil 1E1000
 
-		sub_46830_main_loop(/*0, */v3, v4);//227830
+		sub_46830_main_loop(v4);//227830
 
 		if (CommandLineParams.GetPlaybackPath().length() > 0 &&
 			std::filesystem::exists(CommandLineParams.GetPlaybackPath().c_str()))
