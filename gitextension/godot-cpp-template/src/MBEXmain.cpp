@@ -1418,7 +1418,7 @@ int MBEXstate = 0;
 //9 - after REMC2BeginInGame
 //10 - after REMC2EndInGame
 
-void MBEXclass::REMC2BeginGame(String cdPath) {
+void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
 	int argc = 2;
@@ -1435,7 +1435,7 @@ void MBEXclass::REMC2BeginGame(String cdPath) {
 	MBEXstate = 1;
 }
 
-void MBEXclass::REMC2EndGame() {
+void MBEXclass::REMC2EndGame() {//OK!!
 	sub_main_mod_end();
 	support_end();
 	MBEXstate = 6;
@@ -1538,6 +1538,8 @@ godot::TextureRect *mainScrBufferRect = nullptr;
 
 void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
+	sub_46830_main_loop_mod(0, MenuNameM::mapMenu, MenuStateM::begin);
+	/*
 	if (MBEXstate == 1)
 		REMC2BeginItem();
 	//Intros_76D10_mod_begin(0);
@@ -1547,6 +1549,7 @@ void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	LoadAndSetGraphicsAndPalette_7AC00();
 	NewGameDialog_77350_mod_Begin();
 	MBEXstate = 7;
+	*/
 }
 
 void MBEXclass::REMC2EndMap() {

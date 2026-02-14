@@ -18,6 +18,19 @@ struct GraphicsAction {
 	int type = 0;
 };
 
+enum class MenuNameM {
+	mapMenu,
+	mainMenu,
+	animFlv,
+	inGame
+};
+
+enum class MenuStateM {
+	begin,
+	loop,
+	end
+};
+
 extern int NewGameDialog_endAction_mod;
 
 bool NewGameDialog_77350_mod_Begin();
@@ -49,3 +62,5 @@ void MainMenu_76FA0_mod_begin();
 void MainMenu_76FA0_mod_end();
 void InGameLoop_47320_mod_begin();
 void InGameLoop_47320_mod_end();
+
+void sub_46830_main_loop_mod(unsigned __int16 actLevel, MenuNameM menuName, MenuStateM menuState);

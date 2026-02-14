@@ -2567,3 +2567,252 @@ size_t graphics_queue_size() {
 bool graphics_queue_empty() {
 	return graphics_queue.empty();
 }*/
+
+MenuNameM actMenuName;
+
+MenuStateM actMenuState;
+
+void sub_46830_main_loop_mod(unsigned __int16 actLevel, MenuNameM menuName, MenuStateM menuState) //227830
+{ //graphics already inited
+	bool isSecretLevel;
+	bool skipMenus = false;
+	int16_t setLevel = -1;
+	std::string customLevelPath = "";
+
+	if (CommandLineParams.DoDebugSequences()) {
+		/*uint8_t origbyte20 = 0;
+		uint8_t remakebyte20 = 0;
+		int debugcounter11 = 0;
+		int comp20 = compare_with_sequence_D41A0((char*)"00227830-00356038", (uint8_t*)& D41A0_BYTESTR_0, 0x356038, debugcounter11, 224790, &origbyte20, &remakebyte20);
+		*/
+	}
+
+	x_D41A0_BYTEARRAY_4_struct.setting_30 = 0; //2a51a4
+	D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 = 0;
+
+	setLevel = CommandLineParams.GetSetLevel();
+	customLevelPath = CommandLineParams.GetCustomLevelPath();
+	if (setLevel > -1 || customLevelPath.length() > 0)
+		skipMenus = true;
+
+	//if (CommandLineParams.DoStateMonitor()) {
+	//	g_state_monitor.Init();
+	//}
+
+	while (1) {
+		//g_state_monitor.Update();
+
+		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
+			return;
+		}
+		sub_48350(); //fix it //229350
+		//!!!!test area1
+		//adress 22787a
+		/*uint8_t origbyte3, remakebyte3;
+		int comp12 = compare_with_snapshot_D41A0((char*)"0160-0022787A", x_D41A0_BYTEARRAY_0, 0x356038, 224790, &origbyte3, &remakebyte3);
+		*/
+		//!!!!test area1
+
+		MenusAndIntros_76930(skipMenus); //set language, intro, menu, atd. //257930
+
+		//debug
+		if (CommandLineParams.ModeDebugAfterload()) {
+			//Load Saved Game File
+			uint32_t numLevelsCompleted = 0;
+			int locSavedGameIndex = CommandLineParams.ModeDebugAfterload();
+			type_menuButtons_E1F84 *buttonStr = &mapMenuButtons_E23E0[1];
+			x_DWORD_17DE38str.savedGameIndex_17DF04 = locSavedGameIndex - 1;
+			char path[512];
+			sprintf(path, "%s", unitTestsPath.c_str());
+			std::string loadFilePath = GetSaveGameFile(path, x_DWORD_17DE38str.savedGameIndex_17DF04);
+			FILE *FILE = DataFileIO::CreateOrOpenFile(loadFilePath.c_str(), 512);
+			if (FILE != NULL) {
+				uint32_t fileSing = 0;
+				int unknownVar = 0;
+				DataFileIO::Read(FILE, (uint8_t *)&fileSing, 4);
+				if (fileSing == 0xFFFFFFF7u) {
+					DataFileIO::Read(FILE, (uint8_t *)&x_DWORD_17DE38str.xx_BYTE_17DF14[(x_DWORD_17DE38str.savedGameIndex_17DF04 - 1)][0], 20);
+					DataFileIO::Read(FILE, (uint8_t *)x_D41A0_BYTEARRAY_4_struct.player_name_57ar, 32);
+					DataFileIO::Read(FILE, (uint8_t *)x_D41A0_BYTEARRAY_4_struct.savestring_89, 32);
+					//Load completed Secret Portals
+					for (int ii = 0; ii < 6; ii++) {
+						DataFileIO::Read(FILE, readbuffer, 17);
+						secretMapScreenPortals_E2970[ii].activated_12 = *(uint16_t *)(readbuffer + 12);
+						if (secretMapScreenPortals_E2970[ii].activated_12 == 1)
+							secretMapScreenPortals_E2970[ii].spriteIndex_14 = 305;
+						else
+							secretMapScreenPortals_E2970[ii].spriteIndex_14 = 270;
+					}
+					DataFileIO::Read(FILE, (uint8_t *)&D41A0_0.m_GameSettings, 16);
+					DataFileIO::Read(FILE, (uint8_t *)&numLevelsCompleted, 4);
+					DataFileIO::Read(FILE, (uint8_t *)&unknownVar, 4);
+					DataFileIO::Read(FILE, (uint8_t *)&D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dword_0x3E6_2BE4_12228.str_611, 505);
+					DataFileIO::Read(FILE, (uint8_t *)x_DWORD_17DBC8x, 500);
+					DataFileIO::Read(FILE, (uint8_t *)x_DWORD_17DDBCx, 100);
+					DataFileIO::Close(FILE);
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.word[1] = 0;
+					int i = 0;
+					//Reset all Portals to inactive
+					while (mapScreenPortals_E17CC[i].viewPortPosX_4) {
+						mapScreenPortals_E17CC[i].activated_18 = 2;
+						i++;
+					}
+					i = 0;
+					//Load completed Portals
+					while (i < numLevelsCompleted && mapScreenPortals_E17CC[i].viewPortPosX_4) {
+						mapScreenPortals_E17CC[i].activated_18 = 1;
+						i++;
+					}
+					i = 0;
+					//Set current level number
+					while (mapScreenPortals_E17CC[i].viewPortPosX_4) {
+						if (mapScreenPortals_E17CC[i].activated_18 == 1)
+							x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = i;
+						i++;
+					}
+					x_DWORD_17DB70str.x_BYTE_17DB8F = 1;
+					memset(&x_DWORD_17DE28str, 0, 13);
+					x_DWORD_17DB70str.x_WORD_17DB8A = -1;
+					if (buttonStr->byte_25) {
+						MapMenuPortalsDraw_81760();
+					} else {
+						x_DWORD_17DE38str.savedGameIndex_17DF04 = -1;
+						NewGameDialog_77350(buttonStr);
+						buttonStr->dword_4 = 2;
+					}
+				}
+			}
+		}
+		//debug
+
+		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
+			Logger->debug("sub_46830_main_loop:before load scr");
+			isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
+			sub_47FC0_load_screen(isSecretLevel); //vga smaltitle
+			Logger->debug("sub_46830_main_loop:load scr passed");
+			LevelInitGame_56A30(setLevel, customLevelPath);
+			Logger->debug("sub_46830_main_loop:init game level passed");
+			if (CommandLineParams.DoAutoChangeRes()) {
+				resindex_begin = 0;
+			}
+
+			//!!!!!!!!!!! debug fix it
+			//mouseturnoff = true;
+			/*uint16_t testa1[3];
+			testa1[0] = 0x4a80;
+			testa1[1] = 0xd480;
+			testa1[2] = 0x1320;
+			sub_50A90((int)testa1, 17, 17);*/
+			//sub_692A0(Entities_EA3E4[0xc4e0 / 168]);
+			//!!!!!!!!!!! debug fix it
+
+			sub_47160();
+			// debug !!!
+			//sub_692A0(testarraymain);
+			// debug !!!
+			//test_x_D41A0_BYTEARRAY_0();
+
+			//fix
+			//write_pngs2();//only for export
+			//fix
+
+			while (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
+				if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
+					switch (D41A0_0.terrain_2FECE.MapType) {
+						case MapType_t::Day:
+							D41A0_0.maptypeMusic_0x235 = 2;
+							break;
+						case MapType_t::Night:
+							D41A0_0.maptypeMusic_0x235 = 1;
+							break;
+						case MapType_t::Cave:
+							D41A0_0.maptypeMusic_0x235 = 3;
+							break;
+					}
+				}
+				SetCenterScreenForFlyAssistant_6EDB0();
+				if (m_ptrGameRender == nullptr) {
+					if (!strcmp(forceRender, "NG"))
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderNG();
+					else if (!strcmp(forceRender, "Original"))
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
+					else if (!strcmp(forceRender, "HD"))
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+					else {
+						if ((gameResWidth <= 640) && (gameResHeight <= 480)) {
+							m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
+						} else {
+							m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+						}
+					}
+				}
+				InGameLoop_47320();
+				if (m_ptrGameRender != nullptr) {
+					delete m_ptrGameRender;
+					m_ptrGameRender = nullptr;
+				}
+				sub_53CC0_close_movie();
+				EndSample_8D8F0();
+				StopMusic_8E020();
+				StopCdPlayback_86860(x_WORD_1803EC);
+				RestoreSoundVolume_59BF0();
+				sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+				if (x_WORD_180660_VGA_type_resolution & 1)
+					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
+				else
+					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
+				if (x_WORD_180660_VGA_type_resolution & 1)
+					sub_90478_VGA_Blit320(maxGameFps);
+				else
+					sub_75200_VGA_Blit640(480, maxGameFps);
+				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2 && !(x_D41A0_BYTEARRAY_4_struct.setting_38545 & 4)) {
+					sub_6DB50(1, 0);
+				}
+				sub_713A0();
+				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 4) {
+					sub_56D60(actLevel, 0);
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] = 4;
+				} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
+					CollectLevelStats_5C530();
+					if (x_D41A0_BYTEARRAY_4_struct.setting_38545 & 0x20)
+						sub_6E0D0();
+				} else {
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] |= 8;
+				}
+				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x10) {
+					actLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w;
+					if (actLevel >= 0x18u) {
+						if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2)
+							CollectLevelStats_5C530();
+						break;
+					}
+					if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
+						Type_SecretMapScreenPortals_E2970 *secretsPortals = GetSecretAndActivedPortal_824B0(actLevel);
+						if (secretsPortals) {
+							//count_begin++; //for debug
+
+							x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = secretsPortals->levelNumber_6;
+							sub_47FC0_load_screen(true);
+							LevelInitGame_56A30(actLevel);
+							sub_47160();
+						}
+					}
+				} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0xA) {
+					break; //must be here
+				}
+			}
+			nextMenu_E29D8 = MenuItem::MainMenu;
+			skipMenus = false;
+			setLevel = -1;
+			customLevelPath = "";
+		}
+		/*
+		if (CommandLineParams.DoTestRenderers()) {
+			if (renderer_tests_quit) {
+				nextMenu_E29D8 = MenuItem::Exit; // exit menu loop
+				break;
+			}
+		}
+		*/
+	}
+}
