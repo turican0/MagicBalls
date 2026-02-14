@@ -66,8 +66,8 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary"), &MBEXclass::REMC2StepInGame);
-	godot::ClassDB::bind_method(D_METHOD("REMC2getLevelType"), &MBEXclass::REMC2getLevelType);
-	godot::ClassDB::bind_method(D_METHOD("GetWebInfo"), &MBEXclass::GetWebInfo);
+	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
+	godot::ClassDB::bind_method(D_METHOD("REMC2GetWebInfo"), &MBEXclass::REMC2GetWebInfo);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -104,7 +104,7 @@ int MBEXclass::mapMenuStep(int run) {
 }
 */
 
-String MBEXclass::REMC2getLevelType() {
+String MBEXclass::REMC2GetLevelType() {
 	if (x_D41A0_BYTEARRAY_4_struct.levelnumber_43w>20)
 		return "Final";
 	else
@@ -774,7 +774,7 @@ PackedByteArray MBEXclass::TerrainGetAngle() {
 	return arr;
 }
 
-bool MBEXclass::GetWebInfo() {
+bool MBEXclass::REMC2GetWebInfo() {
 	type_entity_0x6E8E *playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	if (playerEntity->dword_0xA4_164x->mobilizeCounter_0x14E_334)
 		return true;

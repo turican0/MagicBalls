@@ -367,7 +367,7 @@ func _process(_p_delta) -> void:
 		last_spell_index = -1
 		last_button = -1
 	
-	if(Global.MBEX.GetWebInfo()):
+	if(Global.MBEX.REMC2GetWebInfo()):
 		get_parent().get_node("SpiderWeb").show()
 	else:
 		get_parent().get_node("SpiderWeb").hide()
@@ -704,7 +704,7 @@ func mapMenuEnd():
 func inGameBegin():
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	Global.MBEX.REMC2BeginInGame()
-	Global.levelType=Global.MBEX.REMC2getLevelType()
+	Global.levelType=Global.MBEX.REMC2GetLevelType()
 
 
 func exitGame():	
