@@ -62,6 +62,7 @@ size = Vector3(2000, 2000, 2000)
 origin_offset = Vector3(0, 5, 0)
 
 [node name="SpiderWeb" type="CanvasLayer" parent="." unique_id=1045775712]
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="SpiderWeb" unique_id=1038861538]
 material = SubResource("ShaderMaterial_swd5f")
