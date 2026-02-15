@@ -34,6 +34,7 @@
 #include "engine/LangTextIndexes.h"
 #include "engine/GameState.h"
 #include "engine/MenuState.h"
+#include "engine/EventsFunctions.h"
 
 #include "engine/Terrain.h"
 

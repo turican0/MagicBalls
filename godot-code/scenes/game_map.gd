@@ -25,6 +25,7 @@ func menuInit():
 	Main_DecodeLevel.init()
 	Global.initSound()
 	Global.Main_Sounds.setSoundBank(0)
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Main_DecodeLevel.mapMenuBegin($Control/Foreground)
 	Main_DecodeLevel.changeLanguage(2)
 	Main_DecodeLevel.getLangTexts()

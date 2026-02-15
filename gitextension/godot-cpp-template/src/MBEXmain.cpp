@@ -1538,7 +1538,7 @@ godot::TextureRect *mainScrBufferRect = nullptr;
 
 void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_mod(0, MenuNameM::mapMenu, MenuStateM::begin);
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin });
 	/*
 	if (MBEXstate == 1)
 		REMC2BeginItem();
@@ -1553,15 +1553,17 @@ void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 }
 
 void MBEXclass::REMC2EndMap() {
-	MainMenu_76FA0_mod_end();
-	NewGameDialog_77350_mod_End();
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End });
+	//MainMenu_76FA0_mod_end();
+	//NewGameDialog_77350_mod_End();
 	MBEXstate = 8;
 }
 
 Ref<ImageTexture> mainTexture;
 int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	handleInputs(inputs, 1);
-	NewGameDialog_77350_mod_Step();
+	//NewGameDialog_77350_mod_Step();
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step });
 	Ref<Image> img = getScrBufferImg();
 	if (img.is_null())
 		return 0;
@@ -1571,7 +1573,9 @@ int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	} else {
 		mainTexture->update(img);
 	}
-	return NewGameDialog_endAction_mod;
+	return NewGameDialog_endAction;
+	//test NewGameDialog_endAction
+	//test m_ExitMenuLoop_E29DC
 }
 
 void MBEXclass::REMC2BeginInGame() {

@@ -94,6 +94,14 @@ enum class MenuItem : int {
 	LangSettings = 12
 };
 
+#pragma pack (1)
+typedef struct {//lenght 18
+	uint8_t byte_0;
+	uint8_t stub[17];
+}
+type_BYTE_E25ED_0x;
+#pragma pack (16)
+
 // from sub_main
 extern int8_t LoadLevelNumber_D419C;
 extern char x_BYTE_D41AD_skip_screen;
@@ -114,7 +122,7 @@ extern char x_BYTE_E29E0;
 extern uint8_t* pre_x_DWORD_E9C3C;
 extern uint8_t x_BYTE_EB39E_keys[10];
 extern uint8_t uiBackGroundColorIdx_EB3A8;
-extern int32_t x_DWORD_17DBB8[4];
+extern int32_t times_17DBB8[4];
 extern char x_BYTE_17DBC6;
 extern uint32_t x_DWORD_17DBC8x[125];
 extern uint32_t x_DWORD_17DDBCx[26];
@@ -129,15 +137,19 @@ extern bool map_not_moving_WORD_E29D6;
 extern Type_unk_17DBA8str unk_17DBA8str;
 extern type_x_DWORD_17DB70str x_DWORD_17DB70str;
 extern type_x_BYTE_E25ED_db_str x_BYTE_E26C8_str[];
-extern type_E24BCx str_E24F2[];
+extern typeTextBoxtextBoxStr_E24BCx textBoxStr_E24F2[];
 extern Type_DWORD_17DE28str x_DWORD_17DE28str;
 extern type_WORD_E20A4 str_WORD_E20A4[];
 extern type_menuButtons_E1F84 mapMenuButtons_E23E0[];
-extern type_E24BCx str_E2516[];
+extern typeTextBoxtextBoxStr_E24BCx textBoxStr_E2516[];
 extern Type_SoundEvent_E17CC str_E17CC_0x160[];
 extern int16_t x_WORD_17DE26;
 extern char x_BYTE_E29DE;
 extern char x_BYTE_E29E1;
+extern bool first_enter;
+extern int16_t x_WORD_17DBC4;
+extern typeTextBoxtextBoxStr_E24BCx textBoxStr_E25DC[];
+extern type_BYTE_E25ED_0x str_BYTE_E25ED_0x[];
 
 // functions
 void MenusAndIntros_76930(bool skipMenus = false);
@@ -193,7 +205,7 @@ int DrawScrollDialog_7BF20(type_str_word_26* a1x);
 void sub_8C0E0(unsigned __int8(/*__fastcall*/ *a1)(signed int));
 int DrawScrollDialog2_7B660(int a1, int a2, __int16 a3, type_str_word_26* a4x, char* a5, char a6);
 char /*__fastcall*/ sub_77680();
-char DrawAndServe_7B250();
+bool DrawAndServe_7B250();
 signed int sub_7C390();
 void sub_7C710();
 void SetMultiplayerColors_7D310();
