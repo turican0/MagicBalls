@@ -2555,10 +2555,7 @@ bool graphics_queue_empty() {
 	return graphics_queue.empty();
 }*/
 
-typeStateMenu actState{
-	typeStateMenu::Name::Zero,
-	typeStateMenu::State::Zero
-};
+typeStateMenu2 actState = typeStateMenu2::Zero;
 
 bool main_loop_isSecretLevel;
 bool main_loop_skipMenus;
@@ -2579,7 +2576,8 @@ int NewGameDialog_endAction;
 
 bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState) //258350
 {
-	if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
+	if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })
+	{
 		NewGameDialog_result = false;
 		NewGameDialog_endAction = 0;
 		map_not_moving_WORD_E29D6 = false;
@@ -2591,7 +2589,8 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState
 		unk_17DBA8str.x_BYTE_17DBB6 = 2;
 	}
 	if (LoadLevelNumber_D419C <= -1) {
-		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
+		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })
+		{
 			IsPlayingCDTrack_17E09D = 0;
 			x_DWORD_17DE38str.unk_17E078x.lastSpriteIndex_11 = 16;
 			x_DWORD_17DE38str.y_17E06E = 480;
@@ -2658,7 +2657,8 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState
 				sub_75200_VGA_Blit640(480, menuFps);
 			sub_7A060_get_mouse_and_keyboard_events();
 		}
-		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) {
+		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })\
+		{
 			StopCdPlayback_86860(x_WORD_1803EC);
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] = 0;
 			EndSample_8D8F0();
@@ -2913,7 +2913,8 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 		VGA_cleanKeyBuffer();
 	}
 	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step }))
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
 		if (x_BYTE_E29E1 || x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE || (NewGameDialog_77350_mod(0, newState), !m_ExitMenuLoop_E29DC)) {
 			if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
 				x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
@@ -2933,7 +2934,8 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 				int scanCode = x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode;
 			}
 			if (!m_ExitMenuLoop_E29DC) {
-				if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
+				if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })
+				{
 					SetFrameStart(std::chrono::system_clock::now());
 					if ((MainMenu_tempMousePosX == x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx) && (MainMenu_tempMousePosY == x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony) && (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == MainMenu_scanCode)) {
 						if ((j___clock() - MainMenu_lastTime) / 100 > 60) //after 1 min run intro
@@ -2974,10 +2976,12 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 						DrawMenuAnimations_7AB00(); //25bb00					
 				}
 				if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-					(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step }))
+					(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
+				    (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
 				{
 					if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step }))
+						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
+						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
 					{
 						if (NewGameDialog_77350_mod(&str_E1BAC[0], newState))
 						{
@@ -3098,6 +3102,101 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 	}
 }
 
+void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
+{
+	SetFrameStart(std::chrono::system_clock::now());
+	PaletteChanges_47760();
+	if (!(x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1)) {
+		sub_715B0(); //nothing draw //animate sprites
+	}
+	ReadGameUserInputs_89D10(); //get keys
+	/*
+	if (CommandLineParams.DoAutoChangeRes()) {
+		if ((gameResWidth >= 640) && (gameResHeight >= 480)) {
+			if (resindex_begin == 1) {
+				//Auto press "r" key
+				LastPressedKey_1806E4 = 0x13;
+				resindex_begin++;
+			} else {
+				if (resindex_begin == 2) {
+					LastPressedKey_1806E4 = 0;
+					resindex_begin++;
+				} else {
+					if (resindex_begin < 1) {
+						resindex_begin++;
+					}
+				}
+			}
+		}
+	}*/
+	MouseAndKeysEvents_17A00(turn);
+	/*
+	if (CommandLineParams.DoIntervalSave()) {
+		//save in interval
+		int interval = 1;
+		if (save_debugcounter % interval == 0)
+			intervalsave(save_debugcounter / interval);
+		//save in interval
+		save_debugcounter++;
+	}
+	*/
+	PlayerEvents_51BB0(); //nothing draw
+	sub_848A0(); //nothing draw
+	uint8_t speed = x_D41A0_BYTEARRAY_4_struct.speedIndex;
+	if (speed == 0) {
+		if (!speed)
+			UpdateEntities_57730();
+	} else if (speed == 1) {
+		for (int i = 0; i < 4; i++)
+			UpdateEntities_57730();
+	} else if (speed == 2) {
+		for (int j = 0; j < 8; j++)
+			UpdateEntities_57730();
+	}
+	sub_84B80(); //prepare lightting
+	sub_58F00_game_objectives(); //nothing draw
+	PresentObjective_59820(); //nothing draw
+	if (!(x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1))
+		sub_57570(); //nothing draw
+	sub_575C0(); //nothing draw
+	PlayEntitySounds_6E150(); //nothing draw
+	//DrawGameFrame_2BE30();//ONLY DRAW GET DRAW MENU FROM IT MAYBE
+	//if (x_D41A0_BYTEARRAY_4_struct.showHelp_10)
+	//	DrawHelpPopUps_871F0();//ONLY DRAW GET DRAW MENU FROM IT MAYBE
+	x_D41A0_BYTEARRAY_4_struct.byteindex_196 = GameTimerTurn_17DB54 - x_D41A0_BYTEARRAY_4_struct.byteindex_196;
+	//DrawGameDebugText_6FEC0();//ONLY DRAW GET DRAW MENU FROM IT MAYBE
+	x_D41A0_BYTEARRAY_4_struct.byteindex_196 = GameTimerTurn_17DB54;
+	//if (x_D41A0_BYTEARRAY_4_struct.paletteMod_51 >= 3u)
+	//	sub_40F80();//ONLY DRAW GET DRAW MENU FROM IT MAYBE
+}
+
+bool InGameLoop_47320_break = false;
+uint32_t InGameLoop_47320_mod_gameTurn = 0;
+
+void InGameLoop_47320_mod(typeStateMenu newState) //228320
+{
+	if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })
+	{
+		x_D41A0_BYTEARRAY_4_struct.paletteMod_51 = 0;
+		InGameLoop_47320_mod_gameTurn = 0;
+		D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.word[1] = 0;
+	}
+	if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step })
+		if (!InGameLoop_47320_break) {
+			if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8)
+				InGameLoop_47320_break = true;
+			DrawAndEventsInGame_47560_mod(GameTimerTurn_17DB54);
+			if (InGameLoop_47320_mod_gameTurn < 2) {
+				StopMusic_8E020();
+				if (InGameLoop_47320_mod_gameTurn == 1)
+					StartMusic_8E160(D41A0_0.maptypeMusic_0x235, 0x7Fu);
+				InGameLoop_47320_mod_gameTurn++;
+			}
+		}
+	if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End })
+	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
+}
+
 bool sub_46830_main_loop_break = false;
 
 void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) //227830
@@ -3109,7 +3208,9 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 	std::string customLevelPath;
 	*/
 
-	if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+	    (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }))
+	{
 		main_loop_skipMenus = false;
 		main_loop_setLevel = -1;
 		main_loop_customLevelPath = "";
@@ -3119,122 +3220,145 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 		main_loop_customLevelPath = CommandLineParams.GetCustomLevelPath();
 		if (main_loop_setLevel > -1 || main_loop_customLevelPath.length() > 0)
 			main_loop_skipMenus = true;
-		actState = typeStateMenu{ typeStateMenu::Name::sub_46830_main_loop_mod, typeStateMenu::State::afterBegin };
 		//return;
 	}
 	//while (1)
 	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
 		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
-		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step })||
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
 	{
-		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }){
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }))
+		{
 			if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
 				return;
 			}
 			sub_48350(); //fix it //229350
 		}
-		MenusAndIntros_76930_mod(main_loop_skipMenus, newState); //set language, intro, menu, atd. //257930
-		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })
+			if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
+				MenusAndIntros_76930_mod(main_loop_skipMenus, newState); //set language, intro, menu, atd. //257930
+		if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
+			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }))
 		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
-			Logger->debug("sub_46830_main_loop:before load scr");
-			main_loop_isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
-			sub_47FC0_load_screen(main_loop_isSecretLevel); //vga smaltitle
-			Logger->debug("sub_46830_main_loop:load scr passed");
-			LevelInitGame_56A30(main_loop_setLevel, main_loop_customLevelPath);
-			Logger->debug("sub_46830_main_loop:init game level passed");
-			if (CommandLineParams.DoAutoChangeRes()) {
-				resindex_begin = 0;
+			if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })
+			{
+				main_loop_isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
+				sub_47FC0_load_screen(main_loop_isSecretLevel); //vga smaltitle
+				LevelInitGame_56A30(main_loop_setLevel, main_loop_customLevelPath);
+				if (CommandLineParams.DoAutoChangeRes()) {
+					resindex_begin = 0;
+				}
+				sub_47160();
 			}
-			sub_47160();
-			while (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
-				if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
-					switch (D41A0_0.terrain_2FECE.MapType) {
-						case MapType_t::Day:
-							D41A0_0.maptypeMusic_0x235 = 2;
-							break;
-						case MapType_t::Night:
-							D41A0_0.maptypeMusic_0x235 = 1;
-							break;
-						case MapType_t::Cave:
-							D41A0_0.maptypeMusic_0x235 = 3;
-							break;
-					}
-				}
-				SetCenterScreenForFlyAssistant_6EDB0();
-				if (m_ptrGameRender == nullptr) {
-					if (!strcmp(forceRender, "NG"))
-						m_ptrGameRender = (GameRenderInterface *)new GameRenderNG();
-					else if (!strcmp(forceRender, "Original"))
-						m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
-					else if (!strcmp(forceRender, "HD"))
-						m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
-					else {
-						if ((gameResWidth <= 640) && (gameResHeight <= 480)) {
-							m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
-						} else {
-							m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+			if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
+				(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }))
+				if ((!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) && !sub_46830_main_loop_break) {
+					if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) {
+						if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
+							switch (D41A0_0.terrain_2FECE.MapType) {
+								case MapType_t::Day:
+									D41A0_0.maptypeMusic_0x235 = 2;
+									break;
+								case MapType_t::Night:
+									D41A0_0.maptypeMusic_0x235 = 1;
+									break;
+								case MapType_t::Cave:
+									D41A0_0.maptypeMusic_0x235 = 3;
+									break;
+							}
 						}
+						SetCenterScreenForFlyAssistant_6EDB0();
+						/*
+						if (m_ptrGameRender == nullptr) {
+							if (!strcmp(forceRender, "NG"))
+								m_ptrGameRender = (GameRenderInterface *)new GameRenderNG();
+							else if (!strcmp(forceRender, "Original"))
+								m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
+							else if (!strcmp(forceRender, "HD"))
+								m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+							else {
+								if ((gameResWidth <= 640) && (gameResHeight <= 480)) {
+									m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
+								} else {
+									m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+								}
+							}
+						}
+						*/
 					}
-				}
-				InGameLoop_47320();
-				if (m_ptrGameRender != nullptr) {
-					delete m_ptrGameRender;
-					m_ptrGameRender = nullptr;
-				}
-				sub_53CC0_close_movie();
-				EndSample_8D8F0();
-				StopMusic_8E020();
-				StopCdPlayback_86860(x_WORD_1803EC);
-				RestoreSoundVolume_59BF0();
-				sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
-				if (x_WORD_180660_VGA_type_resolution & 1)
-					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
-				else
-					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
-				if (x_WORD_180660_VGA_type_resolution & 1)
-					sub_90478_VGA_Blit320(maxGameFps);
-				else
-					sub_75200_VGA_Blit640(480, maxGameFps);
-				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2 && !(x_D41A0_BYTEARRAY_4_struct.setting_38545 & 4)) {
-					sub_6DB50(1, 0);
-				}
-				sub_713A0();
-				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 4) {
-					sub_56D60(actLevel, 0);
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] = 4;
-				} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
-					CollectLevelStats_5C530();
-					if (x_D41A0_BYTEARRAY_4_struct.setting_38545 & 0x20)
-						sub_6E0D0();
-				} else {
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] |= 8;
-				}
-				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x10) {
-					actLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w;
-					if (actLevel >= 0x18u) {
-						if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2)
+					if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step })||
+						(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
+						(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
+						InGameLoop_47320_mod(newState);
+					/*
+					if (m_ptrGameRender != nullptr) {
+						delete m_ptrGameRender;
+						m_ptrGameRender = nullptr;
+					}*/
+					if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End })
+					{
+						sub_53CC0_close_movie();
+						EndSample_8D8F0();
+						StopMusic_8E020();
+						StopCdPlayback_86860(x_WORD_1803EC);
+						RestoreSoundVolume_59BF0();
+						sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+						if (x_WORD_180660_VGA_type_resolution & 1)
+							ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
+						else
+							ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
+						if (x_WORD_180660_VGA_type_resolution & 1)
+							sub_90478_VGA_Blit320(maxGameFps);
+						else
+							sub_75200_VGA_Blit640(480, maxGameFps);
+						if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2 && !(x_D41A0_BYTEARRAY_4_struct.setting_38545 & 4)) {
+							sub_6DB50(1, 0);
+						}
+						sub_713A0();
+						if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 4) {
+							sub_56D60(actLevel, 0);
+							D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] = 4;
+						} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
 							CollectLevelStats_5C530();
-						sub_46830_main_loop_break = true;
-						break;
-					}
-					if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
-						Type_SecretMapScreenPortals_E2970 *secretsPortals = GetSecretAndActivedPortal_824B0(actLevel);
-						if (secretsPortals) {
-							x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = secretsPortals->levelNumber_6;
-							sub_47FC0_load_screen(true);
-							LevelInitGame_56A30(actLevel);
-							sub_47160();
+							if (x_D41A0_BYTEARRAY_4_struct.setting_38545 & 0x20)
+								sub_6E0D0();
+						} else {
+							D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] |= 8;
+						}
+						if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x10) {
+							actLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w;
+							if (actLevel >= 0x18u) {
+								if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2)
+									CollectLevelStats_5C530();
+								sub_46830_main_loop_break = true;
+								//break;
+							}
+							if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
+								Type_SecretMapScreenPortals_E2970 *secretsPortals = GetSecretAndActivedPortal_824B0(actLevel);
+								if (secretsPortals) {
+									x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = secretsPortals->levelNumber_6;
+									sub_47FC0_load_screen(true);
+									LevelInitGame_56A30(actLevel);
+									sub_47160();
+								}
+							}
+						} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0xA) {
+							sub_46830_main_loop_break = true;
+							//break; //must be here
 						}
 					}
-				} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0xA) {
-					sub_46830_main_loop_break = true;
-					break; //must be here
 				}
+			if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }) {
+				nextMenu_E29D8 = MenuItem::MainMenu;
+				main_loop_skipMenus = false;
+				main_loop_setLevel = -1;
+				main_loop_customLevelPath = "";
 			}
-			nextMenu_E29D8 = MenuItem::MainMenu;
-			main_loop_skipMenus = false;
-			main_loop_setLevel = -1;
-			main_loop_customLevelPath = "";
 		}
 	}
 }

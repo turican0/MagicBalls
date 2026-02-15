@@ -18,6 +18,14 @@ struct GraphicsAction {
 	int type = 0;
 };
 
+enum class typeStateMenu2 {
+	Zero,
+	AfterMap,
+	AfterMainMenu,
+	AfterGame,
+	AfterAnim
+};
+
 struct typeStateMenu {
 	enum class Name {
 		MapMenu,
@@ -47,6 +55,7 @@ struct typeStateMenu {
 
 
 extern int NewGameDialog_endAction;
+extern typeStateMenu2 actState;
 
 //bool NewGameDialog_77350_mod_Begin();
 //void NewGameDialog_77350_mod_Step();

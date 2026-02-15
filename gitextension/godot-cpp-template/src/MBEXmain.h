@@ -105,8 +105,8 @@ public:
 
 	void REMC2BeginGame(String cdPath);
 	void REMC2EndGame();
-	void REMC2BeginItem();
-	void REMC2EndItem();
+	//void REMC2BeginItem();
+	//void REMC2EndItem();
 	void REMC2BeginAnim(int animIndex);
 	void REMC2EndAnim();
 	int REMC2StepAnim(int run);
