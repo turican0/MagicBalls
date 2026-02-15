@@ -57,7 +57,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2BeginItem"), &MBEXclass::REMC2BeginItem);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EndItem"), &MBEXclass::REMC2EndItem);
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim", "Int"), &MBEXclass::REMC2BeginAnim);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim", "TextureRect", "Int"), &MBEXclass::REMC2BeginAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndAnim"), &MBEXclass::REMC2EndAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Int"), &MBEXclass::REMC2StepAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap", "TextureRect"), &MBEXclass::REMC2BeginMap);
@@ -1418,6 +1418,9 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 //9 - after REMC2BeginInGame
 //10 - after REMC2EndInGame
 
+godot::TextureRect *mainScrBufferRect = nullptr;
+Ref<ImageTexture> mainTexture;
+
 void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
@@ -1457,7 +1460,8 @@ void MBEXclass::REMC2EndItem() {
 }
 */
 
-void MBEXclass::REMC2BeginAnim(int animIndex) {
+void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect,int animIndex) {
+	mainScrBufferRect = scrBufferRect;
 	globalAnimIndex = animIndex;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 	/* if (MBEXstate == 1)
@@ -1533,8 +1537,19 @@ Ref<Image> getScrBufferImg() {
 }
 
 int MBEXclass::REMC2StepAnim(int run) {
+	if (run)
+		LastPressedKey_1806E4 = 20;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });
-	return 1;
+	Ref<Image> img = getScrBufferImg();
+	if (img.is_null())
+		return 0;
+	if (mainTexture.is_null()) {
+		mainTexture = ImageTexture::create_from_image(img);
+		mainScrBufferRect->set_texture(mainTexture);
+	} else {
+		mainTexture->update(img);
+	}
+	return PlayInfoFmv_break;
 	/*
 	if (run)
 		LastPressedKey_1806E4 = 20;
@@ -1544,9 +1559,6 @@ int MBEXclass::REMC2StepAnim(int run) {
 	}
 	*/
 }
-
-godot::TextureRect *mainScrBufferRect = nullptr;
-Ref<ImageTexture> mainTexture;
 
 void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;

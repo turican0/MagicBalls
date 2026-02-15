@@ -3035,6 +3035,54 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 		}
 }
 
+FILE *tempfile_PlayInfoFmv;
+bool PlayInfoFmv_break=false;
+
+void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17CC *pSoundEvent, char *path, typeStateMenu newState) //sub_76160 - 257160
+{
+	//FILE *tempfile;
+	if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })
+	{
+		redrawTextInVideo_E12FC = redrawText;
+		soundEventIndex_D4004 = 0;
+		//x_WORD_17DB58 = 0;//not used
+		ActualKeyframe_17DB60 = 0;
+		framebuffer_E12F4x = (TColor *)pdwScreenBuffer_351628;
+		tempfile_PlayInfoFmv = DataFileIO::CreateOrOpenFile(path, 512);
+		x_DWORD_17DB38_intro_file_handle = tempfile_PlayInfoFmv;
+	}
+	if (tempfile_PlayInfoFmv) {
+		if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })
+		{
+			DataFileIO::Read(tempfile_PlayInfoFmv, (uint8_t *)&unk_17DB40str, sizeof(Type_17DB40)); //ecx=12
+			LastKeyframe_17DB46 = unk_17DB40str.frameCount_6;
+			height_17DB48 = unk_17DB40str.height_8;
+			width_17DB4A = unk_17DB40str.width_alt_10;
+			x_WORD_180744_mouse_right_button = 0;
+			x_WORD_180746_mouse_left_button = 0;
+			fileOffset_E1300 += 12;
+			LastPressedKey_1806E4 = 0;
+			stopPlaybackFlag_17DB5A = 0;
+			FlvInitSet_473B0(); //2283b0
+			allowSkipVideo_17DB5C = allowSkip;
+		}
+		if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })
+			if ((LastPressedKey_1806E4 != 1) && !PlayInfoFmv_break) {
+			SetFrameStart(std::chrono::system_clock::now());
+			if (stopPlaybackFlag_17DB5A)
+				PlayInfoFmv_break = true; //break;
+			if (ActualKeyframe_17DB60 >= LastKeyframe_17DB46 - 1) //34eb60 a 34eb46
+				PlayInfoFmv_break = true; //break;
+			PlayIntoSoundEvents_1B280(pSoundEvent);
+			ReadFrame_75DB0(); //256db0 - read header
+			DrawFrame_75E70(); //256e70 - draw intro frame
+			ActualKeyframe_17DB60++;
+		}// while (LastPressedKey_1806E4 != 1); //while not key pressed
+		if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End })
+			DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
+	}
+}
+
 int globalAnimIndex = -1;
 
 void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
@@ -3072,7 +3120,7 @@ void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
 				ShowWelcomeScreen_83850(); //frog logo and wait
 #endif
 				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
-				PlayInfoFmv(1, 1, str_E17CC_0, introPath); //257160 intro .. 2b27cc
+				PlayInfoFmv_mod(1, 1, str_E17CC_0, introPath, newState); //257160 intro .. 2b27cc
 				StopSubtitles_2EB40();
 				DisplaySubtitles_D41C1 = 0;
 				DisplaySubtitles_D41C0 = 0;
@@ -3082,17 +3130,21 @@ void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
 				}
 				j___delay(50);
 			}
-			if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })
+			if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 			{
 				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
-				PlayInfoFmv(1, 1, str_E17CC_0x160, introPath); //E192C
+				PlayInfoFmv_mod(1, 1, str_E17CC_0x160, introPath, newState); //E192C
 			}
 			break;
 		case 1:
-			if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })
+			if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 			{
 				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
-				PlayInfoFmv(1, 1, str_E17CC_0, introPath);
+				PlayInfoFmv_mod(1, 1, str_E17CC_0, introPath, newState);
 			}
 			break;
 		case 2:
@@ -3102,10 +3154,12 @@ void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
 				DisplaySubtitles_D41C1 = 0;
 				DisplaySubtitles_D41C0 = 0;
 			}
-			if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })
+			if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 			{
 				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
-				PlayInfoFmv(1, 1, str_E17CC_0x160, introPath); //E192C
+				PlayInfoFmv_mod(1, 1, str_E17CC_0x160, introPath, newState); //E192C
 			}
 			break;
 	}
