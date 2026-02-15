@@ -1633,40 +1633,40 @@ FILE *animTempfile;
 Type_SoundEvent_E17CC *tempPSoundEvent;
 void PlayInfoFmv_mod_begin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent, char *path) {
 	tempPSoundEvent = pSoundEvent;
-	x_WORD_E12FC = a2;
-	x_WORD_D4004 = 0;
-	x_WORD_17DB58 = 0;
+	redrawTextInVideo_E12FC = a2;
+	soundEventIndex_D4004 = 0;
+	//x_WORD_17DB58 = 0;
 	ActualKeyframe_17DB60 = 0;
-	x_DWORD_E12F4x = (TColor *)pdwScreenBuffer_351628;
+	framebuffer_E12F4x = (TColor *)pdwScreenBuffer_351628;
 	animTempfile = DataFileIO::CreateOrOpenFile(path, 512);
 	x_DWORD_17DB38_intro_file_handle = animTempfile;
 	if (animTempfile) {
-		DataFileIO::Read(animTempfile, unk_17DB40, 12); //ecx=12
-		LastKeyframe_17DB46 = *(int16_t *)&unk_17DB40[6];
-		x_WORD_17DB48 = *(int16_t *)&unk_17DB40[8];
-		x_WORD_17DB4A = *(int16_t *)&unk_17DB40[10];
+		DataFileIO::Read(animTempfile, (uint8_t *)&unk_17DB40str, sizeof(Type_17DB40)); //ecx=12
+		LastKeyframe_17DB46 = unk_17DB40str.frameCount_6;
+		height_17DB48 = unk_17DB40str.height_8;
+		width_17DB4A = unk_17DB40str.width_alt_10;
 		x_WORD_180744_mouse_right_button = 0;
 		x_WORD_180746_mouse_left_button = 0;
-		x_DWORD_E1300 += 12;
+		fileOffset_E1300 += 12;
 		LastPressedKey_1806E4 = 0;
-		x_WORD_17DB5A = 0;
+		stopPlaybackFlag_17DB5A = 0;
 		FlvInitSet_473B0(); //2283b0
-		x_WORD_17DB5C = a1;
+		allowSkipVideo_17DB5C = a1;
 	}
 }
 
 bool PlayInfoFmv_mod_step() {
 	if ((LastPressedKey_1806E4 != 1) && (!endAnim) && animTempfile) {
 		SetFrameStart(std::chrono::system_clock::now());
-		if (x_WORD_17DB5A)
+		if (stopPlaybackFlag_17DB5A)
 			endAnim = true;
 		else {
 			if (ActualKeyframe_17DB60 >= LastKeyframe_17DB46 - 1) //34eb60 a 34eb46
 				endAnim = true;
 			else {
 				PlayIntoSoundEvents_1B280(tempPSoundEvent);
-				sub_75DB0();
-				sub_75E70();
+				ReadFrame_75DB0();
+				DrawFrame_75E70();
 				ActualKeyframe_17DB60++;
 			}
 		}
