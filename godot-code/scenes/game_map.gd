@@ -9,9 +9,7 @@ var fadeNode: Node3D
 var Main_DecodeLevel
 func _ready():
 	await get_tree().process_frame
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	Engine.max_fps = 25
-	
+	Engine.max_fps = 25	
 	Main_DecodeLevel = get_node("DecodeLevel")
 	fadeNode = Global.addFadeOut(fadeNode)
 	

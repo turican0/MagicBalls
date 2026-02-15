@@ -1,6 +1,7 @@
 extends Node3D
 
-var sprback:Sprite2D
+@onready var foreground = $Control/Foreground
+
 var waiting_for_input = false
 
 signal video_finished
@@ -12,10 +13,9 @@ var Main_DecodeLevel
 #var MainMusic
 func _ready():
 	await get_tree().process_frame
-	sprback = $Control/Sprite2D
-	#Engine.max_fps = 60
+	Engine.max_fps = 25
 	Main_DecodeLevel = get_node("DecodeLevel")
-	Global.initSound()
+	#Global.initSound()
 	fadeNode = Global.addFadeOut(fadeNode)
 	showMyImg(0)
 	
@@ -29,17 +29,7 @@ func showMyImg(index):
 		file_name_spr="welcomeScreen.png"
 	var file_path_spr = SPRITE_DIR + file_name_spr
 	var tex2 = Global.load_custom_texture(file_path_spr)
-	sprback.texture=tex2
-	sprback.centered = true
-	var screen_size = get_viewport().get_visible_rect().size
-	sprback.position = screen_size / 2	
-	var tex_size = tex2.get_size()
-	var scale_factor = Vector2(screen_size.x / tex_size.x, screen_size.y / tex_size.y)	
-	# Pokud chceš zachovat poměr stran a mít černé pruhy (fit):
-	# var final_scale = min(scale_factor.x, scale_factor.y)
-	# Pokud chceš roztáhnout bez ohledu na deformaci:
-	sprback.scale = scale_factor
-	sprback.show()
+	foreground.texture=tex2
 	waiting_for_input = true
 	
 func _input(event):
@@ -72,7 +62,7 @@ var animTextureRect: ImageTexture
 func animInit():
 	animImage = Image.create_empty(animWidth, animHeight, false, Image.FORMAT_RGB8)
 	animTextureRect = ImageTexture.create_from_image(animImage)
-	sprback.texture = animTextureRect
+	foreground.texture = animTextureRect
 	Main_DecodeLevel.init()
 	Global.initSound()
 	match animIndex:

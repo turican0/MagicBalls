@@ -3035,9 +3035,103 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 		}
 }
 
+int globalAnimIndex = -1;
+
+void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
+{
+	char introPath[MAX_PATH];
+	if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })
+	{
+		char dataPath[MAX_PATH];
+		x_DWORD_17DE38str.x_DWORD_17DE54 = &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787];
+		x_DWORD_17DE38str.x_DWORD_17DEC0 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[308527];
+		x_DWORD_17DE38str.x_DWORD_17DEC4 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[310159];
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
+		sub_7AA70_load_and_decompres_dat_file(dataPath, &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787], 0x164FCD, 0x35C);
+		sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DEC0, 0x165329, 0x224);
+		sub_7AA70_load_and_decompres_dat_file(0, 0, 0, 0);
+		if (x_WORD_180660_VGA_type_resolution & 1)
+			sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+		else
+			sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+		StopSubtitles_2EB40();
+		if (soundAble_E3798 && x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex == 2) {
+			DisplaySubtitles_D41C1 = 0;
+			DisplaySubtitles_D41C0 = 0;
+		} else {
+			DisplaySubtitles_D41C0 = 1;
+			DisplaySubtitles_D41C1 = 1;
+		}
+		SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
+	}
+	switch (introType) {
+		case 0:
+			if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })
+			{
+#ifndef debug_hide_graphics
+				ShowWelcomeScreen_83850(); //frog logo and wait
+#endif
+				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
+				PlayInfoFmv(1, 1, str_E17CC_0, introPath); //257160 intro .. 2b27cc
+				StopSubtitles_2EB40();
+				DisplaySubtitles_D41C1 = 0;
+				DisplaySubtitles_D41C0 = 0;
+				while (sub_9A10A_check_keyboard()) {
+					LastPressedKey_1806E4 = 0;
+					sub_7A060_get_mouse_and_keyboard_events();
+				}
+				j___delay(50);
+			}
+			if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })
+			{
+				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+				PlayInfoFmv(1, 1, str_E17CC_0x160, introPath); //E192C
+			}
+			break;
+		case 1:
+			if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })
+			{
+				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
+				PlayInfoFmv(1, 1, str_E17CC_0, introPath);
+			}
+			break;
+		case 2:
+			if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })
+			{
+				LastPressedKey_1806E4 = 0;
+				DisplaySubtitles_D41C1 = 0;
+				DisplaySubtitles_D41C0 = 0;
+			}
+			if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })
+			{
+				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+				PlayInfoFmv(1, 1, str_E17CC_0x160, introPath); //E192C
+			}
+			break;
+	}
+	if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }) {
+		sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+		EndSample_8D8F0();
+		StopMusic_8E020();
+		FadeClearBlit_7B5D0();
+		nextMenu_E29D8 = MenuItem::MainMenu;
+		DisplaySubtitles_D41C0 = 0;
+		DisplaySubtitles_D41C1 = 0;
+		if (sub_9A10A_check_keyboard())
+			sub_7A060_get_mouse_and_keyboard_events();
+		x_DWORD_17DE38str.x_BYTE_17DF11_last_key_status = 0;
+		x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
+		if (!introType)
+			LoadAndSetGraphicsAndPalette_7AC00();
+	}
+}
+
 void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 {
-	if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
+	int animIndex = 0;
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
+	{
 		//1 -351660
 		x_BYTE_E29DF_skip_screen = x_BYTE_D41AD_skip_screen;
 		if (skipMenus) {
@@ -3061,9 +3155,18 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 		SetCenterScreenForFlyAssistant_6EDB0(); //24FDB0
 		WriteConfigDat_81DB0(); //262DB0
 
-		nextMenu_E29D8 = MenuItem::MainMenu; //added code!!!!!!!!!!!!!!!!!!!!!!!!
-		Intros_76D10(-1); //added code!!!!!!!!!!!!!!!!!!!!!!!!
-		LoadAndSetGraphicsAndPalette_7AC00(); //added code!!!!!!!!!!!!!!!!!!!!!!!!
+		//added code!!!!!!!!!!!!!!!!!!!!!!!!
+		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })
+		{
+			nextMenu_E29D8 = MenuItem::MainMenu;
+			Intros_76D10(-1);
+			LoadAndSetGraphicsAndPalette_7AC00();
+		} else if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }) {
+			nextMenu_E29D8 = MenuItem::Intros;
+			animIndex = globalAnimIndex;
+		}
+		//added code!!!!!!!!!!!!!!!!!!!!!!!!
+
 	}
 	if (!m_ExitMenuLoop_E29DC) {
 		//2b39d8
@@ -3078,7 +3181,7 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 				//_wcpp_1_unwind_leave__131(); //257d00 asi konec
 				break;
 			case MenuItem::Intros:
-				Intros_76D10(0); //257d10
+				Intros_76D10_mod(animIndex, newState); //257d10
 				nextMenu_E29D8 = MenuItem::MainMenu;
 				break;
 			case MenuItem::MainMenu:
@@ -3094,7 +3197,9 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 				break;
 		}
 	}// while (!m_ExitMenuLoop_E29DC);
-	if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) {
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
+	{
 		sub_7ADE0(x_BYTE_E29DE);
 		if (x_BYTE_E29E1)
 			x_BYTE_E29E1 = 0;
@@ -3209,7 +3314,8 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 	*/
 
 	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-	    (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }))
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
 	{
 		main_loop_skipMenus = false;
 		main_loop_setLevel = -1;
@@ -3228,10 +3334,14 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
 		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
 		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step })||
-		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })||
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })||
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 	{
 		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }))
+			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
 		{
 			if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
 				return;
@@ -3239,9 +3349,12 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 			sub_48350(); //fix it //229350
 		}
 			if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
-			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
-				MenusAndIntros_76930_mod(main_loop_skipMenus, newState); //set language, intro, menu, atd. //257930
+				(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
+				(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })||
+				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
+					MenusAndIntros_76930_mod(main_loop_skipMenus, newState); //set language, intro, menu, atd. //257930
 		if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
 			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }))
 		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {

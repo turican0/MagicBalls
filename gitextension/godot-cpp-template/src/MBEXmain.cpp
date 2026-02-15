@@ -1458,6 +1458,7 @@ void MBEXclass::REMC2EndItem() {
 */
 
 void MBEXclass::REMC2BeginAnim(int animIndex) {
+	globalAnimIndex = animIndex;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 	/* if (MBEXstate == 1)
 		REMC2BeginItem();
@@ -1545,6 +1546,7 @@ int MBEXclass::REMC2StepAnim(int run) {
 }
 
 godot::TextureRect *mainScrBufferRect = nullptr;
+Ref<ImageTexture> mainTexture;
 
 void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
@@ -1570,7 +1572,6 @@ void MBEXclass::REMC2EndMap() {
 	//MBEXstate = 8;
 }
 
-Ref<ImageTexture> mainTexture;
 int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	handleInputs(inputs, 1);
 	//NewGameDialog_77350_mod_Step();

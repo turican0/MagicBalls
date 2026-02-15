@@ -56,6 +56,7 @@ struct typeStateMenu {
 
 extern int NewGameDialog_endAction;
 extern typeStateMenu2 actState;
+extern int globalAnimIndex;
 
 //bool NewGameDialog_77350_mod_Begin();
 //void NewGameDialog_77350_mod_Step();
