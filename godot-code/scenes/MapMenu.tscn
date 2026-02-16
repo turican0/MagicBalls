@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://6hjxjkqj1hpf" path="res://scenes/map_menu.gd" id="1_wnw6w"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_dg4tg"]
 
-[node name="GameMap" type="Node3D" unique_id=1941747587]
+[node name="MapMenu" type="Node3D" unique_id=1941747587]
 script = ExtResource("1_wnw6w")
 
 [node name="Control" type="Control" parent="." unique_id=1475894817]

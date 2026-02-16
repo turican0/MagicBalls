@@ -1,24 +1,20 @@
-[gd_scene format=3 uid="uid://w2bl0jsy84ei"]
+[gd_scene format=3 uid="uid://bxndbjec8b12m"]
 
-[ext_resource type="Script" uid="uid://chunf88gy7wda" path="res://scenes/main_menu.gd" id="1_0ykhv"]
+[ext_resource type="Script" uid="uid://dw14mqj0yi34q" path="res://scenes/main_menu.gd" id="1_0ykhv"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_0ykhv"]
 
-[node name="MainMenu" type="Node3D" unique_id=1948712134]
+[node name="MainMenu" type="Node3D" unique_id=1941747587]
 script = ExtResource("1_0ykhv")
 
-[node name="Control" type="Control" parent="." unique_id=1548812681]
+[node name="Control" type="Control" parent="." unique_id=1475894817]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -265.84607
-offset_bottom = -148.7692
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.3, 1.3)
 
-[node name="Foreground" type="TextureRect" parent="Control" unique_id=2081134540]
-texture_filter = 1
+[node name="Foreground" type="TextureRect" parent="Control" unique_id=1924248961]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +22,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="DecodeLevel" type="Node3D" parent="." unique_id=499891640]
+[node name="DecodeLevel" type="Node3D" parent="." unique_id=516358933]
 script = ExtResource("2_0ykhv")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"

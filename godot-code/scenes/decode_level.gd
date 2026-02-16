@@ -683,6 +683,18 @@ func anim1End():
 	Global.MBEX.REMC2EndAnim()
 	#Global.MBEX.REMC2EndItem()
 
+func mainMenuBegin(ScrBufferRect:TextureRect):
+	Global.MBEX.REMC2BeginMain(ScrBufferRect)
+
+func mainMenuStep() -> int:
+	getInputs()
+	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
+	var mapMenuOut=Global.MBEX.REMC2StepMain(input_state)
+	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	return mapMenuOut
+
+func mainenuEnd():
+	Global.MBEX.REMC2EndMain()
 
 func mapMenuBegin(ScrBufferRect:TextureRect):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())

@@ -60,9 +60,15 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim", "TextureRect", "Int"), &MBEXclass::REMC2BeginAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndAnim"), &MBEXclass::REMC2EndAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Dictionary"), &MBEXclass::REMC2StepAnim);
+
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap", "TextureRect"), &MBEXclass::REMC2BeginMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndMap"), &MBEXclass::REMC2EndMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap", "Dictionary"), &MBEXclass::REMC2StepMap);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMain", "TextureRect"), &MBEXclass::REMC2BeginMain);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EndMain"), &MBEXclass::REMC2EndMain);
+	godot::ClassDB::bind_method(D_METHOD("REMC2StepMain", "Dictionary"), &MBEXclass::REMC2StepMain);
+
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary"), &MBEXclass::REMC2StepInGame);
@@ -1607,6 +1613,32 @@ int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	//test NewGameDialog_endAction
 	//test m_ExitMenuLoop_E29DC
 }
+
+void MBEXclass::REMC2BeginMain(TextureRect *scrBufferRect) {
+	mainScrBufferRect = scrBufferRect;
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin });
+}
+
+void MBEXclass::REMC2EndMain() {
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End });
+	actState = typeStateMenu2::AfterMap;
+}
+
+int MBEXclass::REMC2StepMain(Dictionary inputs) {
+	handleInputs(inputs, 1);
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step });
+	Ref<Image> img = getScrBufferImg();
+	if (img.is_null())
+		return 0;
+	if (mainTexture.is_null()) {
+		mainTexture = ImageTexture::create_from_image(img);
+		mainScrBufferRect->set_texture(mainTexture);
+	} else {
+		mainTexture->update(img);
+	}
+	return NewGameDialog_endAction;
+}
+
 
 void MBEXclass::REMC2BeginInGame() {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin });

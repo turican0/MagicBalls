@@ -2893,7 +2893,9 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x) //258350
 
 void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 {
-	if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+	    (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }))
+	{
 		//fixed
 		help_VGA_type_resolution = 0;
 		//fixed
@@ -2934,7 +2936,8 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 				int scanCode = x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode;
 			}
 			if (!m_ExitMenuLoop_E29DC) {
-				if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })
+				if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+				    (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
 				{
 					SetFrameStart(std::chrono::system_clock::now());
 					if ((MainMenu_tempMousePosX == x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx) && (MainMenu_tempMousePosY == x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony) && (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == MainMenu_scanCode)) {
@@ -3004,7 +3007,8 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 							}
 						}
 				}
-				if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) {
+				if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })
+				{
 					if (MainMenu_onlyBlit) {
 						if (x_WORD_180660_VGA_type_resolution & 1)
 							sub_90478_VGA_Blit320(menuFps);
@@ -3018,15 +3022,19 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 					sub_7A060_get_mouse_and_keyboard_events();
 				}
 			}
-			if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) {
+			if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+				(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
+			{
 				sub_41BC0();
 				D41A0_0.m_GameSettings.m_Display.m_uiScreenSize = 0;
 				sub_753D0();
 				x_DWORD_E9C38_smalltit = x_DWORD_17DE38str.x_DWORD_17DE44;
 			}
 		} else {
-			if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-				(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
+			if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+				(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+				(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
+				(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End }))
 			{
 				sub_41BC0();
 				D41A0_0.m_GameSettings.m_Display.m_uiScreenSize = 0;
@@ -3183,7 +3191,8 @@ void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
 void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 {
 	int animIndex = 0;
-	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
 	{
 		//1 -351660
@@ -3210,7 +3219,8 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 		WriteConfigDat_81DB0(); //262DB0
 
 		//added code!!!!!!!!!!!!!!!!!!!!!!!!
-		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+		    (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }))
 		{
 			nextMenu_E29D8 = MenuItem::MainMenu;
 			Intros_76D10(-1);
@@ -3259,7 +3269,8 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 				break;
 		}
 	}// while (!m_ExitMenuLoop_E29DC);
-	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 	{
 		sub_7ADE0(x_BYTE_E29DE);
@@ -3375,8 +3386,9 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 	std::string customLevelPath;
 	*/
 
-	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
 	{
 		main_loop_skipMenus = false;
@@ -3391,17 +3403,21 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 		//return;
 	}
 	//while (1)
-	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
-		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
-		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
-		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step })||
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }) ||
-		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })||
-		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })||
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 	{
-		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
 		{
@@ -3410,11 +3426,14 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 			}
 			sub_48350(); //fix it //229350
 		}
-		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
-			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
-			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })||
-			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })||
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 				MenusAndIntros_76930_mod(main_loop_skipMenus, newState); //set language, intro, menu, atd. //257930
 		if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||

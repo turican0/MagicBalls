@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://w2bl0jsy84ei"]
+
+[ext_resource type="Script" uid="uid://chunf88gy7wda" path="res://scenes/main_menu_old.gd" id="1_08wjd"]
+[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_aqgy8"]
+
+[node name="MainMenu" type="Node3D" unique_id=1948712134]
+script = ExtResource("1_08wjd")
+
+[node name="Control" type="Control" parent="." unique_id=1548812681]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -265.84607
+offset_bottom = -148.7692
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.3, 1.3)
+
+[node name="Foreground" type="TextureRect" parent="Control" unique_id=2081134540]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DecodeLevel" type="Node3D" parent="." unique_id=499891640]
+script = ExtResource("2_aqgy8")
+levels_tab_path = "res://mclevels/LEVELS.TAB"
+levels_dat_path = "res://mclevels/LEVELS.DAT"
