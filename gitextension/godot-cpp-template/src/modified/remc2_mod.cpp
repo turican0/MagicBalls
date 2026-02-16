@@ -3010,7 +3010,8 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 							}
 						}
 				}
-				if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })
+				if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+					(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
 				{
 					if (MainMenu_onlyBlit) {
 						if (x_WORD_180660_VGA_type_resolution & 1)
