@@ -2574,7 +2574,8 @@ int NewGameDialog_endAction;
 
 bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState) //258350
 {
-	if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
 	{
 		NewGameDialog_result = false;
 		NewGameDialog_endAction = 0;
@@ -2587,7 +2588,8 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState
 		unk_17DBA8str.x_BYTE_17DBB6 = 2;
 	}
 	if (LoadLevelNumber_D419C <= -1) {
-		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
 		{
 			IsPlayingCDTrack_17E09D = 0;
 			x_DWORD_17DE38str.unk_17E078x.lastSpriteIndex_11 = 16;
@@ -2655,7 +2657,8 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState
 				sub_75200_VGA_Blit640(480, menuFps);
 			sub_7A060_get_mouse_and_keyboard_events();
 		}
-		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })\
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
 		{
 			StopCdPlayback_86860(x_WORD_1803EC);
 			D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] = 0;
@@ -2673,7 +2676,9 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState
 			NewGameDialog_result = true;
 		}
 	} else {
-		if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
+		{
 			m_ExitMenuLoop_E29DC = 1;
 			x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = LoadLevelNumber_D419C;
 			if (a1x)
@@ -2925,11 +2930,6 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 				x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
 				sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 				ResetMouse_7B5A0();
-
-				//fix
-				//write_pngs();//only for export
-				//fix
-
 				SetCursor_8CD27(xy_DWORD_17DED4_spritestr[39]);
 				x_DWORD_17DE38str.showHelp_17DF13 = x_D41A0_BYTEARRAY_4_struct.showHelp_10;
 				times_17DBB8[0] = j___clock();
@@ -2981,24 +2981,26 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 					if (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step })
 						DrawMenuAnimations_7AB00(); //25bb00	
 				}
-				if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-					(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
-				    (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
+				if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+					(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step }) ||
+					(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+					(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
 				{
-					if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
-						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
-					{
-						if (NewGameDialog_77350_mod(&str_E1BAC[0], newState))
-						{
-							MainMenu_tempMousePosY = x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony;
-							MainMenu_tempMousePosX = x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx;
-							MainMenu_onlyBlit = false;
-							MainMenu_scanCode = x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode;
-							MainMenu_lastTime = j___clock();
-						}
-					} else
-						if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })
+					if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||//added code
+						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step }) ||//added code
+						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))//added code
+					{//added code
+						if (NewGameDialog_77350_mod(&str_E1BAC[0], newState))//added code
+						{//added code
+							MainMenu_tempMousePosY = x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony;//added code
+							MainMenu_tempMousePosX = x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx;//added code
+							MainMenu_onlyBlit = false;//added code
+							MainMenu_scanCode = x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode;//added code
+							MainMenu_lastTime = j___clock();//added code
+						}//added code
+					} else//added code
+						if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+						    (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
 						{
 							if (DrawAndServe_7B250_mod(newState)) //25c250
 							{
@@ -3027,7 +3029,7 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 				}
 			}
 			if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
-				(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
+				(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End }))
 			{
 				sub_41BC0();
 				D41A0_0.m_GameSettings.m_Display.m_uiScreenSize = 0;
