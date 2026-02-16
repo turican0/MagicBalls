@@ -657,7 +657,7 @@ func setTime(time:float):
 	else:
 		NodeSky3D.clouds_enabled=true
 	NodeSky3D.get_node("TimeOfDay").current_time=time
-	
+
 func setFog(density:float):
 	NodeSky3D.environment.fog_density=density
 
@@ -678,7 +678,7 @@ func anim1Step() -> int:
 	var endAnimOut=Global.MBEX.REMC2StepAnim(input_state)
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return endAnimOut
-	
+
 func anim1End():
 	Global.MBEX.REMC2EndAnim()
 	#Global.MBEX.REMC2EndItem()

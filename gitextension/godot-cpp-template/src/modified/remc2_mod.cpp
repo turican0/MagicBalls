@@ -2916,9 +2916,12 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 	}
 	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
 		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
-		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }))
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
 		if (x_BYTE_E29E1 || x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE || (NewGameDialog_77350_mod(0, newState), !m_ExitMenuLoop_E29DC)) {
-			if (newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) {
+			if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+				(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }))
+			{
 				x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
 				sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 				ResetMouse_7B5A0();
@@ -3236,6 +3239,11 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 		//sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
 		nextMenu_E29D8 = MenuItem::Intros;
 		animIndex = globalAnimIndex;
+	}
+	if (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }) {
+		//ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0); //fix
+		//sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
+		nextMenu_E29D8 = MenuItem::MainMenu;
 	}
 	//added code!!!!!!!!!!!!!!!!!!!!!!!!
 
