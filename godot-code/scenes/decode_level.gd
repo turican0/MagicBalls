@@ -693,8 +693,8 @@ func mainMenuStep() -> int:
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 
-func mainenuEnd():
-	Global.MBEX.REMC2EndMain()
+#func mainenuEnd():
+	#Global.MBEX.REMC2EndMain()
 
 func mapMenuBegin(ScrBufferRect:TextureRect):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())

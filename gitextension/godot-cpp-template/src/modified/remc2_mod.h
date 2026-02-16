@@ -20,10 +20,13 @@ struct GraphicsAction {
 
 enum class typeStateMenu2 {
 	Zero,
-	AfterMap,
-	AfterMainMenu,
-	AfterGame,
-	AfterAnim
+	//AfterMapMenu,
+	//AfterMainMenu,
+	//AfterGame,
+	//AfterAnim,
+	AfterMenu,
+	MapMenuSelected,
+	ExitGameSelected
 };
 
 struct typeStateMenu {

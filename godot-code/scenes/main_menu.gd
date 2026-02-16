@@ -35,10 +35,10 @@ func _process(delta) -> void:
 	match mapMenuAction:
 		1:
 			runned=false
-			goGame()
+			goMapMenu()
 		2:
 			runned=false
-			exitMenu()
+			exitGame()
 		3:
 			runned=false
 		4:
@@ -48,20 +48,18 @@ func _process(delta) -> void:
 		#endSpritesrender()
 
 func endMapMenu():
-	Main_DecodeLevel.minMenuEnd()
 	Global.Main_Sounds.stopAllSounds()
 	#endAnim()
 
-func goGame():
+func goMapMenu():
 	fadeNode = Global.addFadeIn(fadeNode)
 	endMapMenu()
 	await fadeNode.fade_finished
 	Global.last_scene_path = get_tree().current_scene.scene_file_path
-	get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
+	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 
-func exitMenu():
+func exitGame():#fix this - add correct end game
 	fadeNode = Global.addFadeIn(fadeNode)
 	endMapMenu()
 	await fadeNode.fade_finished
-	Global.last_scene_path = get_tree().current_scene.scene_file_path
-	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+	get_tree().quit()

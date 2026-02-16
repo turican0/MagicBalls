@@ -18,4 +18,8 @@
 -brana na konci nesmi byt videt pred dosazenim bodu-ok
 -zkontrolovat palette efekt po dosazeni bodu-ok
 -bad resolution of minimap
--for cave level init only 3x3
+-for cave level init only 3x3 -ok
+
+-remove some fadein/out
+-add goMapMenu
+-add exitGame

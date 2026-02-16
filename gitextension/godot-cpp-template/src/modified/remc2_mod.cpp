@@ -2689,13 +2689,90 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState
 	return NewGameDialog_result;
 }
 
+bool DrawAndServe_pre_sub_7B250_mod(uint32_t var, type_menuButtons_E1F84 *var2x) {
+	bool callres = true;
+	switch (var) {
+		case 0x258350: {
+			//return NewGameDialog_77350(var2x); //258350 - new game
+			actState = typeStateMenu2::MapMenuSelected;
+			return true;
+			break;
+		}
+		case 0x258980: {
+			bool result=ExitDialog_77980(var2x);
+			if (result) {
+				if (m_ExitMenuLoop_E29DC) {
+					actState = typeStateMenu2::ExitGameSelected;
+				}
+				return true;
+			}
+			else
+				return false;
+			break;
+		}
+		case 0x2589e0: {
+			return LanguageSettingDialog_779E0(var2x);
+			break;
+		}
+		case 0x2590f0: {
+			return LoadGameDialog_780F0(var2x); //2590f0 - load
+			break;
+		}
+		case 0x259730: {
+			return SaveGameDialog_78730(var2x); //259730 -save
+			break;
+		}
+		case 0x259e00: {
+			return SetPlayerNameDialog_78E00(var2x); //set user name
+			break;
+		}
+		case 0x25a160: { //set joystick
+			return SetJoystickDialog_79160(var2x);
+			break;
+		}
+		case 0x25a610: { //set keys
+			return SetKeysDialog_79610();
+			break;
+		}
+		case 0x25dcf0: {
+			return sub_7CCF0(/*var*/);
+			break;
+		}
+		case 0x25dd30: {
+			return sub_7CD30(/*var*/);
+			break;
+		}
+		case 0x25dca0: {
+			return sub_7CCA0(/*var*/);
+			break;
+		}
+		case 0x25dda0: {
+			return sub_7CDA0(/*var*/);
+			break;
+		}
+		case 0x25dbf0: {
+			return sub_7CBF0(/*var*/);
+			break;
+		}
+		case 0x25dc40: {
+			return sub_7CC40(/*var*/);
+			break;
+		}
+		case 0x25ee80: {
+			return MultiplayerMenu_7DE80(var2x);
+			break;
+		}
+	}
+	return callres;
+}
+
 typeTextBoxtextBoxStr_E24BCx DrawAndServe_textBoxStr[2];
 
 bool DrawAndServe_7B250_mod(typeStateMenu newState) //25c250
 {
 	for (int i = 0; str_E1BAC[i].xmin_10; i++) {
 		if (str_E1BAC[i].selected_8 && str_E1BAC[i].dword_0) {
-			if (DrawAndServe_pre_sub_7B250(str_E1BAC[i].dword_0, &str_E1BAC[i])) {
+			if (DrawAndServe_pre_sub_7B250_mod(str_E1BAC[i].dword_0, &str_E1BAC[i])) {
 				str_E1BAC[i].selected_8 = 0;
 				ResetMouse_7B5A0();
 			}

@@ -1590,7 +1590,6 @@ void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 
 void MBEXclass::REMC2EndMap() {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End });
-	actState = typeStateMenu2::AfterMap;
 	//MainMenu_76FA0_mod_end();
 	//NewGameDialog_77350_mod_End();
 	//MBEXstate = 8;
@@ -1621,7 +1620,6 @@ void MBEXclass::REMC2BeginMain(TextureRect *scrBufferRect) {
 
 void MBEXclass::REMC2EndMain() {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End });
-	actState = typeStateMenu2::AfterMap;
 }
 
 int MBEXclass::REMC2StepMain(Dictionary inputs) {
@@ -1636,7 +1634,25 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 	} else {
 		mainTexture->update(img);
 	}
-	return NewGameDialog_endAction;
+
+	if ((actState == typeStateMenu2::MapMenuSelected) || (actState == typeStateMenu2::ExitGameSelected))
+		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End });
+
+	int result = 0;
+	switch (actState) {
+		case typeStateMenu2::MapMenuSelected:
+			result = 1;
+			break;
+		case typeStateMenu2::ExitGameSelected:
+			result = 2;
+			break;
+		default:
+			break;
+	}
+
+	actState = typeStateMenu2::AfterMenu;
+
+	return result;
 }
 
 
