@@ -84,14 +84,14 @@ func _process(_p_delta) -> void:
 	#var is_skipping = Input.is_anything_pressed() or \
 					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or \
 					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
-	var endAnim
+	var endAnimVar
 	#if(is_skipping):
-	endAnim = Main_DecodeLevel.anim1Step()
+	endAnimVar = Main_DecodeLevel.anim1Step()
 		#Global.Main_Sounds.stopAllSounds()
 		#endAnim()
 	#else:
 		#endAnim = Main_DecodeLevel.anim1Step(0)
-	if(endAnim):
+	if(endAnimVar):
 		Global.Main_Sounds.stopAllSounds()
 		endAnim()
 	else:
