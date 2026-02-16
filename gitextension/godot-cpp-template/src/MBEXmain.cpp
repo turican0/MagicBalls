@@ -1436,6 +1436,8 @@ void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 	support_begin();
 	sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
 	//MBEXstate = 1;
+
+	//changeLanguage(2);//added code
 }
 
 void MBEXclass::REMC2EndGame() {//OK!!
@@ -1512,7 +1514,8 @@ Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
 	for (int r = 0; r < crop_h; ++r) {
 		int row_offset = (crop_y + r) * screenWidth_18062C;
 		for (int c = 0; c < crop_w; ++c) {
-			uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
+			//uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
+			uint32_t color_idx = tempVGABuffer[row_offset + (crop_x + c)];
 			int pal_pos = color_idx * 3;
 			/* if (color_idx == 0) {
 				int dest_pos = (r * crop_w + c) * 4;
@@ -1541,7 +1544,7 @@ int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 	//if (run)
 	//	LastPressedKey_1806E4 = 20;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });
-	Ref<Image> img = getScrBufferImg(320,200);
+	Ref<Image> img = getScrBufferImg(320, 200);
 	if (img.is_null())
 		return 0;
 	if (mainTexture.is_null()) {
