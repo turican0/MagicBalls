@@ -3221,7 +3221,7 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 
 	//added code!!!!!!!!!!!!!!!!!!!!!!!!
 	if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }) ||
-			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })) {
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })) {
 		//ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0); //fix
 		//sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
 		nextMenu_E29D8 = MenuItem::Intros;

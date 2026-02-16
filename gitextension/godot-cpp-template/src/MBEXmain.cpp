@@ -1093,7 +1093,7 @@ void handleInputs(Dictionary inputs,int type) {
 		int key_index = change["key_index"];
 		String action = change["action"];
 		bool is_pressed = (action == "pressed");
-		if (type == 1) {
+		if (type != 0) {
 			mainSetPress(is_pressed, key_index);
 		} else
 		switch (key_index) {
@@ -1180,12 +1180,12 @@ void handleInputs(Dictionary inputs,int type) {
 		mouse_pos = inputs["mouse_pos"];
 		MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y);
 	}
-	if (type == 1) {
+	if (type != 0) {
 		mouse_pos = inputs["mouse_pos2"];
 		MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
 	}
 
-	if (type == 1) {
+	if (type != 0) {
 		x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons = 0;
 		if (x_WORD_180746_mouse_left_button)
 			x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons |= 1;
@@ -1194,10 +1194,12 @@ void handleInputs(Dictionary inputs,int type) {
 		x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx = x_WORD_E3760_mouse.x; //2b4760
 		x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony = x_WORD_E3760_mouse.y; //2b4762
 		ReadKeyboardKeysInMenu_7C050();
-		x_WORD_180744_mouse_right_button = 0;
-		x_WORD_180746_mouse_left_button = 0;
-		x_WORD_18074A_mouse_right2_button = 0;
-		x_WORD_18074C_mouse_left2_button = 0;
+		if (type != 2) {
+			x_WORD_180744_mouse_right_button = 0;
+			x_WORD_180746_mouse_left_button = 0;
+			x_WORD_18074A_mouse_right2_button = 0;
+			x_WORD_18074C_mouse_left2_button = 0;
+		}
 	}
 }
 
@@ -1540,7 +1542,7 @@ Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
 }
 
 int MBEXclass::REMC2StepAnim(Dictionary inputs) {
-	handleInputs(inputs, 1);
+	handleInputs(inputs, 2);
 	//if (run)
 	//	LastPressedKey_1806E4 = 20;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });

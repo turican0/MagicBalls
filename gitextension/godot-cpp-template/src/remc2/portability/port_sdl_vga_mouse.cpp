@@ -441,9 +441,9 @@ void VGA_Set_mouse(const int16_t x, const int16_t y) {
 
 void VGA_Blit(uint8* srcBuffer) {
 	if (srcBuffer)
-		memcpy(tempVGABuffer, srcBuffer, 320 * 200);
+		memcpy(tempVGABuffer, srcBuffer, 640 * 480);
 	else
-		memset(tempVGABuffer, 0, 320 * 200);
+		memset(tempVGABuffer, 0, 640 * 480);
 }
 
 void SubBlit(uint16_t originalResWidth, uint16_t originalResHeight) {

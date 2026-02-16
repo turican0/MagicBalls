@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cqs30dtci0jur"]
 
-[ext_resource type="Script" uid="uid://6hjxjkqj1hpf" path="res://scenes/game_map.gd" id="1_ccdfn"]
-[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_jpp6x"]
+[ext_resource type="Script" uid="uid://6hjxjkqj1hpf" path="res://scenes/map_menu.gd" id="1_wnw6w"]
+[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_dg4tg"]
 
 [node name="GameMap" type="Node3D" unique_id=1941747587]
-script = ExtResource("1_ccdfn")
+script = ExtResource("1_wnw6w")
 
 [node name="Control" type="Control" parent="." unique_id=1475894817]
 layout_mode = 3
@@ -23,6 +23,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="DecodeLevel" type="Node3D" parent="." unique_id=516358933]
-script = ExtResource("2_jpp6x")
+script = ExtResource("2_dg4tg")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"
