@@ -12,13 +12,12 @@ func _ready():
 	Engine.max_fps = 25	
 	Main_DecodeLevel = get_node("DecodeLevel")
 	fadeNode = Global.addFadeOut(fadeNode)
-	
 	startMenuLoop()
-	
+
 func startMenuLoop():
 	runned = true
 	menuInit()
-	
+
 func menuInit():
 	Main_DecodeLevel.init()
 	Global.initSound()
@@ -27,12 +26,12 @@ func menuInit():
 	Main_DecodeLevel.mapMenuBegin($Control/Foreground)
 	Main_DecodeLevel.changeLanguage(2)
 	Main_DecodeLevel.getLangTexts()
-	
+
 func _process(delta) -> void:
 	if(!runned):
 		return
 	var mapMenuAction = Main_DecodeLevel.mapMenuStep()
-	
+
 	match mapMenuAction:
 		1:
 			runned=false
@@ -47,7 +46,7 @@ func _process(delta) -> void:
 		5:
 			runned=false
 		#endSpritesrender()
-		
+
 func endMapMenu():
 	Main_DecodeLevel.mapMenuEnd()
 	Global.Main_Sounds.stopAllSounds()

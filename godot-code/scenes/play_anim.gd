@@ -18,10 +18,10 @@ func _ready():
 	#Global.initSound()
 	fadeNode = Global.addFadeOut(fadeNode)
 	showMyImg(0)
-	
+
 var runned = false
 var animIndex
-	
+
 func showMyImg(index):
 	var SPRITE_DIR = Global.convertdata+"HSCREEN/"
 	var file_name_spr
@@ -31,7 +31,7 @@ func showMyImg(index):
 	var tex2 = Global.load_custom_texture(file_path_spr)
 	foreground.texture=tex2
 	waiting_for_input = true
-	
+
 func _input(event):
 	if waiting_for_input:
 		if event is InputEventKey or event is InputEventMouseButton:
@@ -72,29 +72,28 @@ func animInit():
 			Global.Main_Sounds.setSoundBank(4)
 		2:
 			Global.Main_Sounds.setSoundBank(4)
-	Main_DecodeLevel.anim1Begin(animIndex)
-	
+	Main_DecodeLevel.anim1Begin($Control/Foreground,animIndex)
+
 func endAnim():
 	Main_DecodeLevel.anim1End()
 	emit_signal("video_finished")
 
-
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
-	var is_skipping = Input.is_anything_pressed() or \
-					  Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or \
-					  Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
+	#var is_skipping = Input.is_anything_pressed() or \
+					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or \
+					  #Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 	var endAnim
-	if(is_skipping):
-		endAnim = Main_DecodeLevel.anim1Step(1)
-		Global.Main_Sounds.stopAllSounds()
-		endAnim()
-	else:
-		endAnim = Main_DecodeLevel.anim1Step(0)
+	#if(is_skipping):
+	endAnim = Main_DecodeLevel.anim1Step()
+		#Global.Main_Sounds.stopAllSounds()
+		#endAnim()
+	#else:
+		#endAnim = Main_DecodeLevel.anim1Step(0)
 	if(endAnim):
+		Global.Main_Sounds.stopAllSounds()
 		endAnim()
 	else:
 		animImage.set_data(animWidth, animHeight, false, Image.FORMAT_RGB8, Main_DecodeLevel.getVGABuffer())
 		animTextureRect.update(animImage)
-	

@@ -59,7 +59,7 @@ void MBEXclass::_bind_methods() {
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EndItem"), &MBEXclass::REMC2EndItem);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim", "TextureRect", "Int"), &MBEXclass::REMC2BeginAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndAnim"), &MBEXclass::REMC2EndAnim);
-	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Int"), &MBEXclass::REMC2StepAnim);
+	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Dictionary"), &MBEXclass::REMC2StepAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap", "TextureRect"), &MBEXclass::REMC2BeginMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndMap"), &MBEXclass::REMC2EndMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap", "Dictionary"), &MBEXclass::REMC2StepMap);
@@ -1536,9 +1536,10 @@ Ref<Image> getScrBufferImg() {
 	return img;
 }
 
-int MBEXclass::REMC2StepAnim(int run) {
-	if (run)
-		LastPressedKey_1806E4 = 20;
+int MBEXclass::REMC2StepAnim(Dictionary inputs) {
+	handleInputs(inputs, 1);
+	//if (run)
+	//	LastPressedKey_1806E4 = 20;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });
 	Ref<Image> img = getScrBufferImg();
 	if (img.is_null())

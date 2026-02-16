@@ -3216,6 +3216,8 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 			Intros_76D10(-1);
 			LoadAndSetGraphicsAndPalette_7AC00();
 		} else if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }) {
+			//ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0); //fix
+			//sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
 			nextMenu_E29D8 = MenuItem::Intros;
 			animIndex = globalAnimIndex;
 		}
@@ -3236,7 +3238,8 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 				break;
 			case MenuItem::Intros:
 				Intros_76D10_mod(animIndex, newState); //257d10
-				nextMenu_E29D8 = MenuItem::MainMenu;
+				if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End })
+					nextMenu_E29D8 = MenuItem::MainMenu;
 				break;
 			case MenuItem::MainMenu:
 				MainMenu_76FA0_mod(newState); //257fa0

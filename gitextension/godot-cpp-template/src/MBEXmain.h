@@ -109,7 +109,7 @@ public:
 	//void REMC2EndItem();
 	void REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex);
 	void REMC2EndAnim();
-	int REMC2StepAnim(int run);
+	int REMC2StepAnim(Dictionary inputs);
 	void REMC2BeginMap(TextureRect* scrBufferRect);
 	void REMC2EndMap();
 	int REMC2StepMap(Dictionary inputs);

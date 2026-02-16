@@ -664,17 +664,18 @@ func setFog(density:float):
 func setFogSky(sky_affect:float):
 	NodeSky3D.environment.fog_sky_affect=sky_affect
 
-func anim1Begin(index:int):
+func anim1Begin(ScrBufferRect:TextureRect,index:int):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	#Global.MBEX.playAnim(index)
 	#Global.MBEX.REMC2BeginItem()
-	Global.MBEX.REMC2BeginAnim(index)
+	Global.MBEX.REMC2BeginAnim(ScrBufferRect,index)
 	changeLanguage(2)#only temporary fix
 
-func anim1Step(endAnimIn:int) -> int:
+func anim1Step() -> int:
+	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
 	#var endAnimOut=Global.MBEX.playAnimStep(endAnimIn)
-	var endAnimOut=Global.MBEX.REMC2StepAnim(endAnimIn)
+	var endAnimOut=Global.MBEX.REMC2StepAnim(input_state)
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return endAnimOut
 	
