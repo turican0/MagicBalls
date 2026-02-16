@@ -2117,7 +2117,7 @@ void MainMenu_76FA0_mod_end() //257fa0
 		sub_753D0();
 	}*/
 }
-
+/*
 void MainMenu_76FA0_mod() //257fa0
 {
 	//fixed
@@ -2151,24 +2151,22 @@ void MainMenu_76FA0_mod() //257fa0
 		while (!m_ExitMenuLoop_E29DC) {
 			SetFrameStart(std::chrono::system_clock::now());
 			if ((tempMousePosX == x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx) && (tempMousePosY == x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony) && (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == scanCode)) {
-				/*
-				if ((j___clock() - lastTime) / 100 > 60) //after 1 min run intro
-				{
-					uint8_t *tempSmalltit = x_DWORD_E9C38_smalltit;
-					x_DWORD_E9C38_smalltit = x_DWORD_17DE38str.x_DWORD_17DE44;
-					PlayIntros_83250(introIndex);
-					x_DWORD_E9C38_smalltit = tempSmalltit;
-					introIndex = (introIndex == 1) + 1; //alternate 1 and 2
-					tempMousePosY = x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony;
-					tempMousePosX = x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx;
-					x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
-					scanCode = 0;
-					lastTime = j___clock();
-					StopMusic_8E020();
-					onlyBlit = 0;
-					StartMusic_8E160(4, 0x7Fu);
-				}
-				*/
+				//if ((j___clock() - lastTime) / 100 > 60) //after 1 min run intro
+				//{
+				//	uint8_t *tempSmalltit = x_DWORD_E9C38_smalltit;
+				//	x_DWORD_E9C38_smalltit = x_DWORD_17DE38str.x_DWORD_17DE44;
+				//	PlayIntros_83250(introIndex);
+				//	x_DWORD_E9C38_smalltit = tempSmalltit;
+				//	introIndex = (introIndex == 1) + 1; //alternate 1 and 2
+				//	tempMousePosY = x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony;
+				//	tempMousePosX = x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx;
+				//	x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
+				//	scanCode = 0;
+				//	lastTime = j___clock();
+				//	StopMusic_8E020();
+				//	onlyBlit = 0;
+				//	StartMusic_8E160(4, 0x7Fu);
+				//}
 			} else {
 				tempMousePosY = x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony;
 				tempMousePosX = x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx;
@@ -2216,7 +2214,7 @@ void MainMenu_76FA0_mod() //257fa0
 		sub_753D0();
 	}
 }
-
+*/
 void MenusAndIntros_76930_mod_end() //257930
 {
 	sub_7ADE0(x_BYTE_E29DE);
@@ -2416,6 +2414,8 @@ void sub_46830_main_loop_mod_end_cycle_part4() //227830
 }
 
 void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
+	SetTimeStart();
+
 	begin_plugin();
 	preconvert(); //rewrite and remove it later
 	*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it
@@ -2434,8 +2434,6 @@ void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
 
 	sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
 	sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
-	gameDataPath = GetSubDirectoryPath(gameFolder);//added
-	cdDataPath = GetSubDirectoryPath(cdFolder);//added
 	windowResWidth = 640;//added
 	windowResHeight = 480;//added
 	gameResWidth = 640;//added
@@ -2914,10 +2912,12 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 		x_WORD_17DE26 = 0;
 		VGA_cleanKeyBuffer();
 	}
-	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
-		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
-		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End })||
-		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }))
+	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End }))
 		if (x_BYTE_E29E1 || x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE || (NewGameDialog_77350_mod(0, newState), !m_ExitMenuLoop_E29DC)) {
 			if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
 				(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }))
@@ -2979,7 +2979,7 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 
 					sub_7C120_draw_bitmap_640(185, 232, xy_DWORD_17DED4_spritestr[66]); //adress 25827a
 					if (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step })
-						DrawMenuAnimations_7AB00(); //25bb00					
+						DrawMenuAnimations_7AB00(); //25bb00	
 				}
 				if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
 					(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step })||
