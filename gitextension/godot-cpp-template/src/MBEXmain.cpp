@@ -1500,12 +1500,12 @@ void MBEXclass::REMC2EndAnim() {
 	//MBEXstate = 4;
 }
 
-Ref<Image> getScrBufferImg() {
+Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
 	uint8_t *palette = VGA_Get_Palette();
 	int crop_x = 0;
 	int crop_y = 0;
-	int crop_w = 640;
-	int crop_h = 480;
+	//int crop_w = 640;
+	//int crop_h = 480;
 	PackedByteArray rgba_data;
 	rgba_data.resize(crop_w * crop_h * 4);
 	uint8_t *dest = rgba_data.ptrw();
@@ -1541,7 +1541,7 @@ int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 	//if (run)
 	//	LastPressedKey_1806E4 = 20;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });
-	Ref<Image> img = getScrBufferImg();
+	Ref<Image> img = getScrBufferImg(320,200);
 	if (img.is_null())
 		return 0;
 	if (mainTexture.is_null()) {
