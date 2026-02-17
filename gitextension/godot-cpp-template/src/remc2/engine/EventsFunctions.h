@@ -424,6 +424,8 @@ extern char x_BYTE_D4B51;
 extern char x_BYTE_DB734;
 extern int resindex_begin;
 
+extern int save_debugcounter;
+
 void j___delay(x_DWORD); // weak
 
 void WriteBufferToBMP(uint16_t width, uint16_t height, uint8_t* ptrPalette, uint8_t* ptrBuffer, const std::string& filename = "BufferOut.bmp");
@@ -1608,4 +1610,5 @@ void sub_53CC0_close_movie();
 void sub_713A0();
 signed int ReadKeyboardKeysInMenu_7C050();
 void sub_848A0();
+void intervalsave(int index);
 #endif

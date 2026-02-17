@@ -3400,7 +3400,6 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 		sub_715B0(); //nothing draw //animate sprites
 	}
 	ReadGameUserInputs_89D10(); //get keys
-	/*
 	if (CommandLineParams.DoAutoChangeRes()) {
 		if ((gameResWidth >= 640) && (gameResHeight >= 480)) {
 			if (resindex_begin == 1) {
@@ -3418,9 +3417,8 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 				}
 			}
 		}
-	}*/
+	}
 	MouseAndKeysEvents_17A00(turn);
-	/*
 	if (CommandLineParams.DoIntervalSave()) {
 		//save in interval
 		int interval = 1;
@@ -3429,7 +3427,6 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 		//save in interval
 		save_debugcounter++;
 	}
-	*/
 	PlayerEvents_51BB0(); //nothing draw
 	sub_848A0(); //nothing draw
 	uint8_t speed = x_D41A0_BYTEARRAY_4_struct.speedIndex;

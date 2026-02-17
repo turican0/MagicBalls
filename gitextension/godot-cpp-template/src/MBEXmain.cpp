@@ -895,7 +895,7 @@ Ref<Image> MBEXclass::getMinimap() {
 	uint8_t scale = 2;
 
 	int temp_180660_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
-	x_WORD_180660_VGA_type_resolution = 8;
+	//x_WORD_180660_VGA_type_resolution = 8;
 
 	if (x_WORD_180660_VGA_type_resolution == 1) {
 		locViewportPosx = 384; //320x200
@@ -1432,12 +1432,14 @@ Ref<ImageTexture> mainTexture;
 void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
-	int argc = 2;
-	char *argv[2];
+	int argc = 3;
+	char *argv[3];
 	char arg1[] = "game.exe";
 	char arg2[] = "--interval_save";
+	char arg3[] = "--auto_change_res";
 	argv[0] = arg1;
 	argv[1] = arg2;
+	argv[2] = arg3;
 
 	CommandLineParams.Init(argc, argv);
 
