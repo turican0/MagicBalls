@@ -25,4 +25,6 @@ func _ready() -> void:
 	Main_DecodeLevel.NodeSky3D = $NodeSky3D/Sky3D
 	$UI.player = $Player
 	Main_TerrainsMB.init()
+	
+	Main_DecodeLevel.SetRunned(true)
 	#$CanvasUI.init()

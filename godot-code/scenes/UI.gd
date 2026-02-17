@@ -27,9 +27,9 @@ func _ready():
 	sb.texture_margin_bottom = 16
 	sb.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
 	sb.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
-	$RefreshLevel.add_theme_stylebox_override("panel", sb)
-	$RefreshLevel.borderless = true
-	$RefreshLevel.popup_centered()
+	#$RefreshLevel.add_theme_stylebox_override("panel", sb)
+	#$RefreshLevel.borderless = true
+	#$RefreshLevel.popup_centered()
 	
 	
 func _on_start_pressed():

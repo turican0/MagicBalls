@@ -95,6 +95,7 @@ offset_bottom = 40.0
 stretch_mode = 3
 
 [node name="StartButton" type="Button" parent="." unique_id=850660505]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -109,10 +110,9 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Run Game"
 
-[node name="RefreshLevel" type="AcceptDialog" parent="." unique_id=1601671991]
+[node name="RefreshLevelX" type="AcceptDialog" parent="." unique_id=1601671991]
 oversampling_override = 1.0
 title = ""
 position = Vector2i(300, 55)
 size = Vector2i(261, 100)
-visible = true
 dialog_text = "You are killed, play Level Again?"
