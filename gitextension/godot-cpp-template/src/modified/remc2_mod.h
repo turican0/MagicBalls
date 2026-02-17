@@ -28,6 +28,8 @@ enum class typeStateMenu2 {
 	MapMenuSelected,
 	ExitGameSelected,
 	changeLangSelected,
+	setKeysSelected,
+	multiplayerSelected,
 
 	RunGameFromMapMenuSelected,
 	ExitMapMenuSelected

@@ -2746,35 +2746,39 @@ bool DrawAndServe_pre_sub_7B250_mod(uint32_t var, type_menuButtons_E1F84 *var2x)
 			break;
 		}
 		case 0x25a610: { //set keys
-			return SetKeysDialog_79610();
+			//return SetKeysDialog_79610();
+			actState = typeStateMenu2::setKeysSelected;
+			return true;
 			break;
 		}
 		case 0x25dcf0: {
-			return sub_7CCF0(/*var*/);
+			return sub_7CCF0();
 			break;
 		}
 		case 0x25dd30: {
-			return sub_7CD30(/*var*/);
+			return sub_7CD30();
 			break;
 		}
 		case 0x25dca0: {
-			return sub_7CCA0(/*var*/);
+			return sub_7CCA0();
 			break;
 		}
 		case 0x25dda0: {
-			return sub_7CDA0(/*var*/);
+			return sub_7CDA0();
 			break;
 		}
 		case 0x25dbf0: {
-			return sub_7CBF0(/*var*/);
+			return sub_7CBF0();
 			break;
 		}
 		case 0x25dc40: {
-			return sub_7CC40(/*var*/);
+			return sub_7CC40();
 			break;
 		}
 		case 0x25ee80: {
-			return MultiplayerMenu_7DE80(var2x);
+			//return MultiplayerMenu_7DE80(var2x);
+			actState = typeStateMenu2::multiplayerSelected;
+			return true;
 			break;
 		}
 	}
