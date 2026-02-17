@@ -24,8 +24,10 @@ func menuInit():
 	Global.Main_Sounds.setSoundBank(0)
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Main_DecodeLevel.mainMenuBegin($Control/Foreground)
-	Main_DecodeLevel.changeLanguage(2)
+	Global.countLang=getLangCount()
+	Main_DecodeLevel.changeLanguage(Global.defaultLangIndex)
 	Main_DecodeLevel.getLangTexts()
+	set_language_texture(Global.defaultLangIndex)
 
 func _process(delta) -> void:
 	if(!runned):
@@ -63,3 +65,38 @@ func exitGame():#fix this - add correct end game
 	endMapMenu()
 	await fadeNode.fade_finished
 	get_tree().quit()
+
+	
+func set_language_texture(lang_id: int) -> bool:
+	var base_path := "user://convertdata/language/"
+	var file_name := "L%d.TXT.png" % lang_id
+	var full_path := base_path + file_name	
+	if not FileAccess.file_exists(full_path):
+		push_error("File not found: " + full_path)
+		return false
+	var image := Image.new()
+	var err := image.load(full_path)	
+	if err != OK:
+		push_error("Can not read image: " + full_path)
+		return false	
+	var texture := ImageTexture.create_from_image(image)
+	$Control/LangRect.texture = texture	
+	return true
+
+func getLangCount() -> int:
+	var path := "user://convertdata/language/"
+	var count := 0
+	
+	var dir := DirAccess.open(path)
+	if dir == null:
+		push_error("Nelze otevřít složku: " + path)
+		return 0	
+	dir.list_dir_begin()
+	var file_name = dir.get_next()	
+	while file_name != "":
+		if not dir.current_is_dir():
+			if file_name.begins_with("L") and file_name.ends_with(".TXT.png"):
+				count += 1		
+		file_name = dir.get_next()	
+	dir.list_dir_end()	
+	return count

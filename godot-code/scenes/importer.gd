@@ -20,7 +20,7 @@ func goFirstMenu():
 	await fadeNode.fade_finished
 	Global.last_scene_path = "res://scenes/MainMenu.tscn"
 	get_tree().change_scene_to_file("res://scenes/PlayAnim.tscn")
-	
+
 func check_existing_data() -> bool:
 	var music_path = Global.convertdata+"musics/"
 	if DirAccess.dir_exists_absolute(music_path):

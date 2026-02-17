@@ -239,7 +239,7 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 		String f_name = dir->get_next();
 		while (f_name != "") {
 			if (f_name != "." && f_name != "..") {
-				if (f_name.begins_with("l")) {
+				if (f_name.begins_with("l") || f_name.begins_with("L")) {
 					String full_path = langPath.path_join(f_name);
 					CharString full_pathUtf = full_path.utf8();
 					Ref<FileAccess> file = FileAccess::open(full_path, FileAccess::READ);
