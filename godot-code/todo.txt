@@ -23,3 +23,11 @@
 -remove some fadein/out
 -add goMapMenu
 -add exitGame
+
+-fix mapMenu-mainMenu
+-fix mainMenu-mapMenu
+-fix mapMenu-game
+-fix game-mapMenu
+-fix animation-mainMenu
+-fix mainMenu-animation
+-fix languageChange

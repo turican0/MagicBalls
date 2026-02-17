@@ -22,6 +22,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="TextureRect" type="TextureRect" parent="Control" unique_id=1834035423]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="DecodeLevel" type="Node3D" parent="." unique_id=516358933]
 script = ExtResource("2_0ykhv")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
