@@ -1672,6 +1672,9 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 		case typeStateMenu2::ExitGameSelected:
 			result = 2;
 			break;
+		case typeStateMenu2::changeLangSelected:
+			result = 4;
+			break;
 		default:
 			break;
 	}

@@ -25,9 +25,9 @@ func menuInit():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Main_DecodeLevel.mainMenuBegin($Control/Foreground)
 	Global.countLang=getLangCount()
-	Main_DecodeLevel.changeLanguage(Global.defaultLangIndex)
+	Main_DecodeLevel.changeLanguage(Global.defaultLangIndex+1)
 	Main_DecodeLevel.getLangTexts()
-	set_language_texture(Global.defaultLangIndex)
+	set_language_texture(Global.defaultLangIndex+1)
 
 func _process(delta) -> void:
 	if(!runned):
@@ -44,7 +44,10 @@ func _process(delta) -> void:
 		3:
 			runned=false
 		4:
-			runned=false
+			Global.defaultLangIndex=(Global.defaultLangIndex+1)%Global.countLang;
+			set_language_texture(Global.defaultLangIndex+1)
+			Main_DecodeLevel.changeLanguage(Global.defaultLangIndex+1)
+			$Control/LangRect.material.set_shader_parameter("alpha", 1.0)
 		5:
 			runned=false
 		#endSpritesrender()

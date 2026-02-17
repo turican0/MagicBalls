@@ -21,7 +21,7 @@ var hidata:String="res://hidata/"
 
 var langTexts:Dictionary
 
-var defaultLangIndex = 2
+var defaultLangIndex = 1
 var countLang = 0
 
 func initSound():

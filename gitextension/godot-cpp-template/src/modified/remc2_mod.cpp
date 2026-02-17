@@ -2724,7 +2724,9 @@ bool DrawAndServe_pre_sub_7B250_mod(uint32_t var, type_menuButtons_E1F84 *var2x)
 			break;
 		}
 		case 0x2589e0: {
-			return LanguageSettingDialog_779E0(var2x);
+			actState = typeStateMenu2::changeLangSelected;
+			return true;
+			//return LanguageSettingDialog_779E0(var2x);
 			break;
 		}
 		case 0x2590f0: {

@@ -27,6 +27,8 @@ enum class typeStateMenu2 {
 	AfterMenu,
 	MapMenuSelected,
 	ExitGameSelected,
+	changeLangSelected,
+
 	RunGameFromMapMenuSelected,
 	ExitMapMenuSelected
 };

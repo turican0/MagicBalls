@@ -24,6 +24,12 @@ config/icon="res://icon.svg"
 
 Global="*res://scenes/Global.gd"
 
+[display]
+
+window/size/viewport_width=1024
+window/size/viewport_height=768
+window/stretch/aspect="ignore"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/midi/plugin.cfg", "res://addons/sky_3d/plugin.cfg")
