@@ -24,10 +24,11 @@
 -add goMapMenu-ok
 -add exitGame-ok
 
--fix mapMenu-mainMenu
--fix mainMenu-mapMenu
--fix mapMenu-game
--fix game-mapMenu
+-fix mapMenu-mainMenu-ok
+-fix mainMenu-mapMenu-ok
+-fix mapMenu-game-ok
+-fix game-mapMenu-ok-non tested path
+-fix MapMenu statistic
 -fix animation-mainMenu
 -fix mainMenu-animation
--fix languageChange
+-fix languageChange-ok

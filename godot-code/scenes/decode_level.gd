@@ -229,6 +229,7 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 
 var library2 = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
+	Vector3i(0,0,0): "",#unknown
 	Vector3i(3,0,0): "",#unknown
 	Vector3i(3,88,0): "",#unknown
 	Vector3i(3,211,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
@@ -407,7 +408,7 @@ func _do_change_scene():
 	fadeNode = Global.addFadeIn(fadeNode)
 	await fadeNode.fade_finished
 	Global.last_scene_path = get_tree().current_scene.scene_file_path
-	get_tree().change_scene_to_file("res://scenes/GameMap.tscn")
+	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 		
 
 var max_entites_per_frame=5;
@@ -492,7 +493,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 						entites_per_frame+=0
 					var new_node = scene_to_instance.instantiate()
 					if !fromlib:
-						new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)					
+						new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)
 					#if((actClass==10)&&(modelIndex==57)||(modelIndex==63)):
 						#var scale_scene_node = new_node.get_node("Sketchfab_Scene")
 						#var s = randf_range(0.6, 1.8)

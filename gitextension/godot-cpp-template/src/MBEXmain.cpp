@@ -1746,11 +1746,10 @@ bool MBEXclass::REMC2StepInGame(Dictionary inputs) {
 	GameTimerTurn_17DB54++;
 	*/
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step });
-	/*
 	if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8) {
-		REMC2EndInGame();
+		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End });
 		return false;
-	}*/
+	}
 	//MBEXclass::RunGameStep(inputs);
 
 	return true;
