@@ -3302,8 +3302,9 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 		WriteConfigDat_81DB0(); //262DB0
 
 		//added code!!!!!!!!!!!!!!!!!!!!!!!!
-		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
+		if (((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin })||
 		    (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }))
+			&& actState == typeStateMenu2::Zero)
 		{
 			nextMenu_E29D8 = MenuItem::MainMenu;
 			Intros_76D10(-1);
@@ -3314,7 +3315,8 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 
 	//added code!!!!!!!!!!!!!!!!!!!!!!!!
 	if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }) ||
-		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step })) {
+		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step }))
+	{
 		//ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0); //fix
 		//sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
 		nextMenu_E29D8 = MenuItem::Intros;
@@ -3474,10 +3476,12 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 	std::string customLevelPath;
 	*/
 
-	if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+	if (((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
+		&& actState == typeStateMenu2::Zero
+		)
 	{
 		main_loop_skipMenus = false;
 		main_loop_setLevel = -1;
@@ -3504,10 +3508,11 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 	{
-		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+		if (((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
+			&& actState == typeStateMenu2::Zero)
 		{
 			if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
 				return;

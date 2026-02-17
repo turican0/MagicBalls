@@ -116,7 +116,7 @@ public:
 	int REMC2StepMap(Dictionary inputs);
 
 	void REMC2BeginMain(TextureRect *scrBufferRect);
-	void REMC2EndMain();
+	//void REMC2EndMain();
 	int REMC2StepMain(Dictionary inputs);
 
 	void REMC2BeginInGame();

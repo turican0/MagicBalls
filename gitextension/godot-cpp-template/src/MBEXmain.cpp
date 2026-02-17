@@ -66,7 +66,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap", "Dictionary"), &MBEXclass::REMC2StepMap);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMain", "TextureRect"), &MBEXclass::REMC2BeginMain);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EndMain"), &MBEXclass::REMC2EndMain);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EndMain"), &MBEXclass::REMC2EndMain);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepMain", "Dictionary"), &MBEXclass::REMC2StepMain);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
@@ -1618,9 +1618,11 @@ void MBEXclass::REMC2BeginMain(TextureRect *scrBufferRect) {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin });
 }
 
+/*
 void MBEXclass::REMC2EndMain() {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End });
 }
+*/
 
 int MBEXclass::REMC2StepMain(Dictionary inputs) {
 	handleInputs(inputs, 1);
@@ -1635,8 +1637,10 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 		mainTexture->update(img);
 	}
 
-	if ((actState == typeStateMenu2::MapMenuSelected) || (actState == typeStateMenu2::ExitGameSelected))
+	if ((actState == typeStateMenu2::MapMenuSelected) || (actState == typeStateMenu2::ExitGameSelected)) {
 		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End });
+		mainTexture.unref();
+	}
 
 	int result = 0;
 	switch (actState) {
