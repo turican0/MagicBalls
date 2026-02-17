@@ -21,8 +21,8 @@
 -for cave level init only 3x3 -ok
 
 -remove some fadein/out
--add goMapMenu
--add exitGame
+-add goMapMenu-ok
+-add exitGame-ok
 
 -fix mapMenu-mainMenu
 -fix mainMenu-mapMenu
