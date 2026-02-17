@@ -26,7 +26,9 @@ enum class typeStateMenu2 {
 	//AfterAnim,
 	AfterMenu,
 	MapMenuSelected,
-	ExitGameSelected
+	ExitGameSelected,
+	RunGameFromMapMenuSelected,
+	ExitMapMenuSelected
 };
 
 struct typeStateMenu {

@@ -1608,6 +1608,28 @@ int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	} else {
 		mainTexture->update(img);
 	}
+
+	//if ((actState == typeStateMenu2::MapMenuSelected) || (actState == typeStateMenu2::ExitGameSelected))
+	if (NewGameDialog_endAction)
+	{
+		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End });
+		mainTexture.unref();
+	}
+
+	int result = 0;
+	switch (actState) {
+		case typeStateMenu2::RunGameFromMapMenuSelected:
+			result = 1;
+			break;
+		case typeStateMenu2::ExitMapMenuSelected:
+			result = 2;
+			break;
+		default:
+			break;
+	}
+
+	actState = typeStateMenu2::AfterMenu;
+
 	return NewGameDialog_endAction;
 	//test NewGameDialog_endAction
 	//test m_ExitMenuLoop_E29DC

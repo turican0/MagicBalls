@@ -2639,6 +2639,19 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState
 					&x_DWORD_17DB70str.unk_17DB80,
 					&x_DWORD_17DB70str.x_BYTE_17DB8F,
 					&x_DWORD_17DB70str.unk_17DB90);
+
+			//added code
+			if (NewGameDialog_endAction)
+			switch (NewGameDialog_endAction) {
+				case 1:
+					actState = typeStateMenu2::RunGameFromMapMenuSelected;
+					break;
+				case 2:
+					actState = typeStateMenu2::ExitMapMenuSelected;
+					break;
+			}
+			//added code
+
 			if (CommandLineParams.ModeTestRegressionsGame()) {
 				x_DWORD_17DB70str.x_BYTE_17DB8E = 1;
 				x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = test_regression_level;
