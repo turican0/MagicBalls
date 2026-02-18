@@ -20,10 +20,6 @@ struct GraphicsAction {
 
 enum class typeStateMenu2 {
 	Zero,
-	//AfterMapMenu,
-	//AfterMainMenu,
-	//AfterGame,
-	//AfterAnim,
 	AfterMenu,
 	MapMenuSelected,
 	ExitGameSelected,
@@ -57,7 +53,6 @@ struct typeStateMenu {
 	Name name;
 	State state;
 
-	// ručně operator==
 	bool operator==(const typeStateMenu &other) const {
 		return name == other.name && state == other.state;
 	}
