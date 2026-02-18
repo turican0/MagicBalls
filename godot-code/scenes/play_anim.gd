@@ -12,6 +12,8 @@ var Main_DecodeLevel
 #var Main_Sounds
 #var MainMusic
 func _ready():
+	if Global.last_scene_path=="":
+		Global.last_scene_path="res://scenes/MainMenu.tscn"
 	await get_tree().process_frame
 	Engine.max_fps = 25
 	Main_DecodeLevel = get_node("DecodeLevel")
@@ -48,7 +50,7 @@ func _input(event):
 				fadeNode = Global.addFadeIn(fadeNode)
 				await fadeNode.fade_finished
 				get_tree().change_scene_to_file(Global.last_scene_path)
-	
+
 func playAnim(index:int):
 	animIndex=index
 	runned = true
@@ -75,7 +77,7 @@ func animInit():
 	Main_DecodeLevel.anim1Begin($Control/Foreground,animIndex)
 
 func endAnim():
-	Main_DecodeLevel.anim1End()
+	#Main_DecodeLevel.anim1End()
 	emit_signal("video_finished")
 
 func _process(_p_delta) -> void:

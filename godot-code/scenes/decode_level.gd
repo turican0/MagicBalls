@@ -336,8 +336,8 @@ func SetRunned(sendRunned) -> void:
 	gameInit()
 	runned = sendRunned
 
-func getSpritesActions():
-	return Global.MBEX.getPendingGraphicsActions()
+#func getSpritesActions():
+	#return Global.MBEX.getPendingGraphicsActions()
 
 func changeLanguage(langIndex):
 	Global.MBEX.changeLanguage(langIndex)
@@ -680,9 +680,9 @@ func anim1Step() -> int:
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return endAnimOut
 
-func anim1End():
-	Global.MBEX.REMC2EndAnim()
-	#Global.MBEX.REMC2EndItem()
+#func anim1End():
+	#Global.MBEX.REMC2EndAnim()
+	##Global.MBEX.REMC2EndItem()
 
 func mainMenuBegin(ScrBufferRect:TextureRect):
 	Global.MBEX.REMC2BeginMain(ScrBufferRect)
@@ -693,6 +693,9 @@ func mainMenuStep() -> int:
 	var mapMenuOut=Global.MBEX.REMC2StepMain(input_state)
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
+
+func exitGame():
+	Global.MBEX.REMC2EndGame()
 
 #func mainenuEnd():
 	#Global.MBEX.REMC2EndMain()
@@ -720,9 +723,6 @@ func inGameBegin():
 	Global.MBEX.REMC2BeginInGame()
 	Global.levelType=Global.MBEX.REMC2GetLevelType()
 
-
-func exitGame():	
-	Global.MBEX.REMC2EndGame()
 
 func setMesh():
 	Global.MBEX.set_mesh_instances(get_parent().get_node("TerrainsMB").mesh_instance_bottom,get_parent().get_node("TerrainsMB").mesh_instance_top,Global.levelType=="Cave")

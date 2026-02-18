@@ -64,6 +64,7 @@ func goMapMenu():
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 
 func exitGame():#fix this - add correct end game
+	Main_DecodeLevel.exitGame()
 	fadeNode = Global.addFadeIn(fadeNode)
 	endMapMenu()
 	await fadeNode.fade_finished

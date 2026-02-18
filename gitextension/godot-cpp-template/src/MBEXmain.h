@@ -108,11 +108,11 @@ public:
 	//void REMC2BeginItem();
 	//void REMC2EndItem();
 	void REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex);
-	void REMC2EndAnim();
+	//void REMC2EndAnim();
 	int REMC2StepAnim(Dictionary inputs);
 
 	void REMC2BeginMap(TextureRect* scrBufferRect);
-	void REMC2EndMap();
+	//void REMC2EndMap();
 	int REMC2StepMap(Dictionary inputs);
 
 	void REMC2BeginMain(TextureRect *scrBufferRect);
@@ -120,7 +120,7 @@ public:
 	int REMC2StepMain(Dictionary inputs);
 
 	void REMC2BeginInGame();
-	bool REMC2EndInGame();
+	//bool REMC2EndInGame();
 	bool REMC2StepInGame(Dictionary inputs);
 	String REMC2GetLevelType();
 	bool REMC2GetWebInfo();

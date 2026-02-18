@@ -29,6 +29,7 @@
 -fix mapMenu-game-ok
 -fix game-mapMenu-ok-non tested path
 -fix MapMenu statistic
--fix animation-mainMenu
--fix mainMenu-animation
+-fix animation-mainMenu-ok
+-fix mainMenu-animation-ok-remove it
 -fix languageChange-ok
+-when more rotation, minimap no showed
