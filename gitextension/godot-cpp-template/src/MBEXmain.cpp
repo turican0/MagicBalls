@@ -58,11 +58,11 @@ void MBEXclass::_bind_methods() {
 	//godot::ClassDB::bind_method(D_METHOD("REMC2BeginItem"), &MBEXclass::REMC2BeginItem);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EndItem"), &MBEXclass::REMC2EndItem);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim", "TextureRect", "Int"), &MBEXclass::REMC2BeginAnim);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EndAnim"), &MBEXclass::REMC2EndAnim);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EndAnim"), &MBEXclass::REMC2EndAnim);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Dictionary"), &MBEXclass::REMC2StepAnim);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap", "TextureRect"), &MBEXclass::REMC2BeginMap);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EndMap"), &MBEXclass::REMC2EndMap);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EndMap"), &MBEXclass::REMC2EndMap);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap", "Dictionary"), &MBEXclass::REMC2StepMap);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMain", "TextureRect"), &MBEXclass::REMC2BeginMain);
@@ -70,7 +70,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepMain", "Dictionary"), &MBEXclass::REMC2StepMain);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EndInGame"), &MBEXclass::REMC2EndInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary"), &MBEXclass::REMC2StepInGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetWebInfo"), &MBEXclass::REMC2GetWebInfo);
@@ -1468,6 +1468,7 @@ void MBEXclass::REMC2EndItem() {
 */
 
 void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect,int animIndex) {
+	PlayInfoFmv_break = false;
 	mainScrBufferRect = scrBufferRect;
 	globalAnimIndex = animIndex;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
@@ -1500,12 +1501,13 @@ void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect,int animIndex) {
 	//MBEXstate = 3;
 }
 
+/*
 void MBEXclass::REMC2EndAnim() {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
 	//PlayInfoFmv_mod_end();
 	//Intros_76D10_mod_end(0);
 	//MBEXstate = 4;
-}
+}*/
 
 Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
 	uint8_t *palette = VGA_Get_Palette();
@@ -1558,6 +1560,12 @@ int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 	} else {
 		mainTexture->update(img);
 	}
+
+	if (PlayInfoFmv_break) {
+		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
+		mainTexture.unref();
+	}
+
 	return PlayInfoFmv_break;
 	/*
 	if (run)
@@ -1585,12 +1593,13 @@ void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	*/
 }
 
+/*
 void MBEXclass::REMC2EndMap() {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End });
 	//MainMenu_76FA0_mod_end();
 	//NewGameDialog_77350_mod_End();
 	//MBEXstate = 8;
-}
+}*/
 
 int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	handleInputs(inputs, 1);
@@ -1698,20 +1707,11 @@ void MBEXclass::REMC2BeginInGame() {
 	//MBEXstate = 9;
 }
 
+/*
 bool MBEXclass::REMC2EndInGame() {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End });
-	/*
-	InGameLoop_47320_mod_end();
-	if (sub_46830_main_loop_mod_end_cycle_part3()) {
-		MBEXstate = 1;
-		return false;
-	}
-	sub_46830_main_loop_mod_end_cycle_part4();
-	sub_46830_main_loop_mod_begin_cycle();
-	MBEXstate = 11;
-	*/
 	return true;
-}
+}*/
 
 bool MBEXclass::REMC2StepInGame(Dictionary inputs) {
 	handleInputs(inputs, 0);

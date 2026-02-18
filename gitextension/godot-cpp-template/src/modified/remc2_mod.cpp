@@ -3297,6 +3297,9 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
 	{
+		if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })
+			nextMenu_E29D8 = MenuItem::InitLanguage;
+
 		//1 -351660
 		x_BYTE_E29DF_skip_screen = x_BYTE_D41AD_skip_screen;
 		if (skipMenus) {
