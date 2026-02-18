@@ -894,9 +894,6 @@ Ref<Image> MBEXclass::getMinimap() {
 	int locMinimapHeight;
 	uint8_t scale = 2;
 
-	int temp_180660_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
-	//x_WORD_180660_VGA_type_resolution = 8;
-
 	if (x_WORD_180660_VGA_type_resolution == 1) {
 		locViewportPosx = 384; //320x200
 		locViewportWidth = 256;
@@ -987,8 +984,6 @@ Ref<Image> MBEXclass::getMinimap() {
 					128 * scale,
 					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].ActPlayerIndex_0x00e_2BDE_11244 + 1].rotation__2BDE_11701.yaw,
 					256 / scale);
-
-	x_WORD_180660_VGA_type_resolution = temp_180660_VGA_type_resolution;
 
 	uint8_t *palette = VGA_Get_Palette(true);
 	int crop_x = 0;
