@@ -336,8 +336,8 @@ func SetRunned(sendRunned) -> void:
 	gameInit()
 	runned = sendRunned
 
-func getSpritesActions():
-	return Global.MBEX.getPendingGraphicsActions()
+#func getSpritesActions():
+	#return Global.MBEX.getPendingGraphicsActions()
 
 func changeLanguage(langIndex):
 	Global.MBEX.changeLanguage(langIndex)
