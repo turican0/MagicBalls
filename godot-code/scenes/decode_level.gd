@@ -694,6 +694,9 @@ func mainMenuStep() -> int:
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 
+func exitGame():
+	Global.MBEX.REMC2EndGame()
+
 #func mainenuEnd():
 	#Global.MBEX.REMC2EndMain()
 

@@ -48,7 +48,7 @@ func _input(event):
 				fadeNode = Global.addFadeIn(fadeNode)
 				await fadeNode.fade_finished
 				get_tree().change_scene_to_file(Global.last_scene_path)
-	
+
 func playAnim(index:int):
 	animIndex=index
 	runned = true
