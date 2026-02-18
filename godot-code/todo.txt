@@ -32,3 +32,4 @@
 -fix animation-mainMenu-ok
 -fix mainMenu-animation-ok-remove it
 -fix languageChange-ok
+-when more rotation, minimap no showed
