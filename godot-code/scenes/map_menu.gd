@@ -48,7 +48,7 @@ func _process(delta) -> void:
 		#endSpritesrender()
 
 func endMapMenu():
-	Main_DecodeLevel.mapMenuEnd()
+	#Main_DecodeLevel.mapMenuEnd()
 	Global.Main_Sounds.stopAllSounds()
 	#endAnim()
 

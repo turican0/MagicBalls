@@ -1080,8 +1080,9 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 				MenusAndIntros_76930_mod(main_loop_skipMenus, newState); //set language, intro, menu, atd. //257930
-		if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
-			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }))
+		if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
 		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
 			if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })
 			{
@@ -1093,8 +1094,9 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 				}
 				sub_47160();
 			}
-			if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
-				(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }))
+			if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
+				(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }) ||
+				(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
 				if ((!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) && !sub_46830_main_loop_break) {
 					if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) {
 

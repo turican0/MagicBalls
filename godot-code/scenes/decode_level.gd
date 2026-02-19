@@ -288,6 +288,13 @@ var library2 = {
 	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn"#building
 }
 
+#3-97 red flag
+#3-251 - wizard
+#3-100 - green flag
+#3-89 - red ballon
+#3-92 - green ballon
+#10-71 - green mana
+
 var filter_material: ShaderMaterial
 var data_img: Image
 var data_tex: ImageTexture
@@ -711,8 +718,8 @@ func mapMenuStep() -> int:
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 
-func mapMenuEnd():
-	Global.MBEX.REMC2EndMap()
+#func mapMenuEnd():
+	#Global.MBEX.REMC2EndMap()
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())	
 	#var mapMenuOut=Global.MBEX.REMC2StepMap(endMapMenu)
 	#Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())

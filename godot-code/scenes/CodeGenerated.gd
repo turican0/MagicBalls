@@ -26,5 +26,4 @@ func _ready() -> void:
 	$UI.player = $Player
 	Main_TerrainsMB.init()
 	
-	Main_DecodeLevel.SetRunned(true)
 	#$CanvasUI.init()

@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://bxndbjec8b12m"]
+[gd_scene format=3 uid="uid://w2bl0jsy84ei"]
 
 [ext_resource type="Script" uid="uid://dw14mqj0yi34q" path="res://scenes/main_menu.gd" id="1_0ykhv"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_0ykhv"]
-[ext_resource type="Shader" uid="uid://cqvqou2u8cq8o" path="res://scenes/MainMenu-lang.gdshader" id="2_2wh52"]
+[ext_resource type="Shader" path="res://scenes/MainMenu-lang.gdshader" id="2_2wh52"]
 [ext_resource type="Script" uid="uid://w2xikvu6pfky" path="res://scenes/hide_lang_rect.gd" id="3_ow34m"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ow34m"]

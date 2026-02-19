@@ -28,8 +28,9 @@
 -fix mainMenu-mapMenu-ok
 -fix mapMenu-game-ok
 -fix game-mapMenu-ok-non tested path
--fix MapMenu statistic
+-fix MapMenu statistic-ok
 -fix animation-mainMenu-ok
 -fix mainMenu-animation-ok-remove it
 -fix languageChange-ok
--when more rotation, minimap no showed
+-when more rotation, minimap no showed-ok
+-fix second pass ingame

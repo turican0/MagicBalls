@@ -69,6 +69,7 @@ func init():
 		for i in range(positions.size()):
 			var t = Transform3D(Basis(), positions[i])
 			mmi_top.multimesh.set_instance_transform(i, t)
+	get_parent().get_node("DecodeLevel").SetRunned(true)
 	#end of Multimesh
 
 ## --- FÁZE 1: Inicializace ---
