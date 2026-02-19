@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://domhm87hbhbg1"]
+[gd_scene format=3 uid="uid://domhm87hbhbg1"]
 
 [ext_resource type="Script" uid="uid://dajlr3n5wjwmb" path="res://scenes/Player.gd" id="1_nm1yx"]
 [ext_resource type="Script" uid="uid://b62ppvc03a6b1" path="res://scenes/CameraManager.gd" id="2_loos7"]
@@ -7,31 +7,31 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_smq6u"]
 
-[node name="Player" type="Node3D"]
+[node name="Player" type="Node3D" unique_id=1851690785]
 script = ExtResource("1_nm1yx")
 
-[node name="CameraManager" type="Node3D" parent="."]
+[node name="CameraManager" type="Node3D" parent="." unique_id=823420474]
 script = ExtResource("2_loos7")
 
-[node name="Arm" type="SpringArm3D" parent="CameraManager"]
+[node name="Arm" type="SpringArm3D" parent="CameraManager" unique_id=1606625825]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 2.32515, -0.0321627)
 shape = SubResource("SphereShape3D_smq6u")
 spring_length = 6.0
 margin = 0.5
 
-[node name="Camera3D" type="Camera3D" parent="CameraManager/Arm"]
+[node name="Camera3D" type="Camera3D" parent="CameraManager/Arm" unique_id=202831983]
 unique_name_in_owner = true
 near = 0.25
 far = 16384.0
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("4_ops02")]
+[node name="Sketchfab_Scene" parent="." unique_id=1468173958 instance=ExtResource("4_ops02")]
 visible = false
 
-[node name="Sketchfab_Scene3" parent="." instance=ExtResource("5_7x12g")]
+[node name="Sketchfab_Scene3" parent="." unique_id=1758151089 instance=ExtResource("5_7x12g")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.85, 0)
 visible = false
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1626102450]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 current = true
