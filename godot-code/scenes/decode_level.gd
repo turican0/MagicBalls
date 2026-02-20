@@ -418,11 +418,16 @@ func _do_change_scene():
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 		
 
-var max_entites_per_frame=5;
 func renderEntites(data_array: PackedFloat32Array) -> void:
-	var entites_per_frame=0;
+	var entities_created_this_frame=0;
 	var stride = 31
+	var id_to_pool_index = {}
 	for i in range(pool_size):
+		if node_pool[i] != null:
+			id_to_pool_index[node_pool[i].get_meta("id")] = i
+	var used_indices = {}
+	var num_entities = data_array.size()/stride
+	for i in range(num_entities):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
 		var rot = Vector3(data_array[offset+3], data_array[offset+4], data_array[offset+5])
@@ -453,16 +458,21 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actBitmapScaleHelp = int(data_array[offset+29])
 		var actBitmapScale = int(data_array[offset+30])
 		
+		var uid = modelIndex * 1024*1024 + actId * 1024 + actByte0
+		
 		if(modelIndex==0)&&(actClass==3):
 			Main_Player.MOVE_SPEED=actSpeed
 			Main_Player.LIFE=actLife
 			Main_Player.MANA=actMana
 		
-		var current_node = node_pool[i]
+		var current_node = null
+		var pool_idx = -1
+		if id_to_pool_index.has(uid):
+			pool_idx = id_to_pool_index[uid]
+			current_node = node_pool[pool_idx]
+			used_indices[pool_idx] = true
 		
 		if current_node == null or current_node.get_meta("id") != modelIndex*1024*1024+actId*1024+actByte0:
-			if current_node != null:
-				current_node.queue_free()
 			if !(actByte1 & 4):
 				var isDraw = true
 				if(actByte0&1):
@@ -495,9 +505,6 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				if(actClass==9):
 					actState+=0
 				if scene_to_instance != null:
-					entites_per_frame+=1
-					if(entites_per_frame>max_entites_per_frame):
-						entites_per_frame+=0
 					var new_node = scene_to_instance.instantiate()
 					if !fromlib:
 						new_node.get_node("Label3D").text="M:" + str(modelIndex)+"_C:" +str(actClass)+"_M:" +str(actModel)+"_S:" +str(actState)+"_B0:"+str(actByte0)
@@ -507,8 +514,15 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 						#scale_scene_node.scale *= s
 					add_child(new_node)
 					new_node.set_meta("id", modelIndex*1024*1024+actId*1024+actByte0) # Uložíme ID pro budoucí kontrolu
-					node_pool[i] = new_node
+					if current_node == null:
+						current_node = new_node
+						for j in range(pool_size):
+							if node_pool[j] == null:
+								pool_idx=j
+								break
 					current_node = new_node
+					node_pool[pool_idx] = new_node
+					used_indices[pool_idx] = true
 		else:
 			if (actByte1 & 4):
 				current_node.queue_free()
@@ -538,6 +552,14 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			var pitch = PI*rot2.y/(256*4)
 			var roll = PI*rot2.z/(256*4)
 			current_node.rotation=Vector3(-pitch, -yaw, -roll)
+			
+	var keys_to_remove = []
+	for i in range(pool_size):
+		if not i in used_indices:
+			var node = node_pool[i]
+			if is_instance_valid(node):
+				node.queue_free()
+			node_pool[i]=null
 
 var last_keys_state: Dictionary = {}
 var last_mouse_buttons_state: Dictionary = {}
