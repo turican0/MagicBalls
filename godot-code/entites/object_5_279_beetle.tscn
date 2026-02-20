@@ -8,6 +8,6 @@
 transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, 0, 0, 0)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene2" unique_id=1499104716]
-transform = Transform3D(1, 0, 5.3290705e-15, 0, 1, 0, -5.3290705e-15, 0, 1, 0, 0.8, -1.5)
+transform = Transform3D(0.6666667, 0, 1.4210855e-14, 0, 0.6666667, 0, -1.4210855e-14, 0, 0.6666667, 0, 2.0768309, -1.5)
 light_color = Color(0.95686275, 0.94509804, 0.67058825, 1)
-omni_range = 30.0
+omni_range = 20.0

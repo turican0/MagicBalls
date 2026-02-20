@@ -419,15 +419,9 @@ func _do_change_scene():
 		
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
-	var entities_created_this_frame=0;
+	var entites_per_frame=0;
 	var stride = 31
-	var id_to_pool_index = {}
 	for i in range(pool_size):
-		if node_pool[i] != null:
-			id_to_pool_index[node_pool[i].get_meta("id")] = i
-	var used_indices = {}
-	var num_entities = data_array.size()/stride
-	for i in range(num_entities):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
 		var rot = Vector3(data_array[offset+3], data_array[offset+4], data_array[offset+5])
@@ -458,21 +452,16 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actBitmapScaleHelp = int(data_array[offset+29])
 		var actBitmapScale = int(data_array[offset+30])
 		
-		var uid = modelIndex * 1024*1024 + actId * 1024 + actByte0
-		
 		if(modelIndex==0)&&(actClass==3):
 			Main_Player.MOVE_SPEED=actSpeed
 			Main_Player.LIFE=actLife
 			Main_Player.MANA=actMana
 		
-		var current_node = null
-		var pool_idx = -1
-		if id_to_pool_index.has(uid):
-			pool_idx = id_to_pool_index[uid]
-			current_node = node_pool[pool_idx]
-			used_indices[pool_idx] = true
+		var current_node = node_pool[i]
 		
 		if current_node == null or current_node.get_meta("id") != modelIndex*1024*1024+actId*1024+actByte0:
+			if current_node != null:
+				current_node.queue_free()
 			if !(actByte1 & 4):
 				var isDraw = true
 				if(actByte0&1):
@@ -514,15 +503,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 						#scale_scene_node.scale *= s
 					add_child(new_node)
 					new_node.set_meta("id", modelIndex*1024*1024+actId*1024+actByte0) # Uložíme ID pro budoucí kontrolu
-					if current_node == null:
-						current_node = new_node
-						for j in range(pool_size):
-							if node_pool[j] == null:
-								pool_idx=j
-								break
+					node_pool[i] = new_node
 					current_node = new_node
-					node_pool[pool_idx] = new_node
-					used_indices[pool_idx] = true
 		else:
 			if (actByte1 & 4):
 				current_node.queue_free()
@@ -553,14 +535,6 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			var roll = PI*rot2.z/(256*4)
 			current_node.rotation=Vector3(-pitch, -yaw, -roll)
 			
-	var keys_to_remove = []
-	for i in range(pool_size):
-		if not i in used_indices:
-			var node = node_pool[i]
-			if is_instance_valid(node):
-				node.queue_free()
-			node_pool[i]=null
-
 var last_keys_state: Dictionary = {}
 var last_mouse_buttons_state: Dictionary = {}
 var mouse_640: Vector2
@@ -628,7 +602,7 @@ func gameInit():
 			setFogFall(15)
 			setFogDensity(0.01)
 			setAtmDayTint(Color(0.8,0.9,1.0))
-			setSunMoon(true,true)
+			setSunMoon(true,true,1.0,1.0)
 		"Night":
 			Global.Main_Sounds.setSoundBank(1)
 			setTime(2.5)
@@ -638,7 +612,7 @@ func gameInit():
 			setFogFall(15)
 			setFogDensity(0.01)
 			setAtmDayTint(Color(0.8,0.9,1.0))
-			setSunMoon(true,true)
+			setSunMoon(true,true,1.0,1.0)
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(0.0)
@@ -647,7 +621,7 @@ func gameInit():
 			setSkyExposure(0.3)
 			setCaveEntites()
 			setAtmDayTint(Color(0,0,0))
-			setSunMoon(false,true)
+			setSunMoon(false,true,1.0,0.0)
 		"Final":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
@@ -712,7 +686,7 @@ func setTime(time:float):
 		NodeSky3D.clouds_enabled=true
 		moon.light_energy=1
 
-func setSunMoon(sun:bool,moon:bool):
+func setSunMoon(sun:bool,moon:bool,sunSpec:float,moonSpec:float):
 	if(sun):
 		NodeSky3D.get_node_or_null(^"SunLight").show()
 	else:
@@ -721,6 +695,8 @@ func setSunMoon(sun:bool,moon:bool):
 		NodeSky3D.get_node_or_null(^"MoonLight").show()
 	else:
 		NodeSky3D.get_node_or_null(^"MoonLight").hide()
+	NodeSky3D.get_node_or_null(^"SunLight").light_specular=sunSpec
+	NodeSky3D.get_node_or_null(^"MoonLight").light_specular=moonSpec
 
 func setAtmDayTint(value:Color):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
