@@ -6,3 +6,9 @@
 
 [node name="Sketchfab_Scene" parent="." unique_id=1682610552 instance=ExtResource("1_4t1do")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, -0.3, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene" unique_id=568578890]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 14.27376, 0)
+light_color = Color(0.91764706, 0, 0.31764707, 1)
+light_energy = 2.0
+omni_range = 20.0

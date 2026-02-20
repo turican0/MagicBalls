@@ -627,6 +627,8 @@ func gameInit():
 			sefFogEnd(200)
 			setFogFall(15)
 			setFogDensity(0.01)
+			setAtmDayTint(Color(0.8,0.9,1.0))
+			setSunMoon(true,true)
 		"Night":
 			Global.Main_Sounds.setSoundBank(1)
 			setTime(2.5)
@@ -635,13 +637,17 @@ func gameInit():
 			sefFogEnd(200)
 			setFogFall(15)
 			setFogDensity(0.01)
+			setAtmDayTint(Color(0.8,0.9,1.0))
+			setSunMoon(true,true)
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
-			setTime(12.0)
+			setTime(0.0)
 			setFog(0.03)
 			setFogSky(1.0)
 			setSkyExposure(0.3)
 			setCaveEntites()
+			setAtmDayTint(Color(0,0,0))
+			setSunMoon(false,true)
 		"Final":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
@@ -705,6 +711,20 @@ func setTime(time:float):
 	else:
 		NodeSky3D.clouds_enabled=true
 		moon.light_energy=1
+
+func setSunMoon(sun:bool,moon:bool):
+	if(sun):
+		NodeSky3D.get_node_or_null(^"SunLight").show()
+	else:
+		NodeSky3D.get_node_or_null(^"SunLight").hide()
+	if(moon):
+		NodeSky3D.get_node_or_null(^"MoonLight").show()
+	else:
+		NodeSky3D.get_node_or_null(^"MoonLight").hide()
+
+func setAtmDayTint(value:Color):
+	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
+	skydome.atm_day_tint=value
 
 func setSkyExposure(value:float):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")

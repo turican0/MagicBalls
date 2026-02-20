@@ -1,10 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://uj1oehe2lyyr"]
+[gd_scene format=3 uid="uid://uj1oehe2lyyr"]
 
 [ext_resource type="PackedScene" uid="uid://dp21ujtpv5jvl" path="res://entites/sources/smoke1.tscn" id="1_a76yj"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1468003290]
 
-[node name="Scale" type="Node3D" parent="."]
+[node name="Scale" type="Node3D" parent="." unique_id=1772973405]
 
-[node name="Sketchfab_Scene" parent="Scale" instance=ExtResource("1_a76yj")]
+[node name="Sketchfab_Scene" parent="Scale" unique_id=2135611355 instance=ExtResource("1_a76yj")]
 transform = Transform3D(0.002, 0, 0, 0, 0.003, 0, 0, 0, 0.002, 0, -0.2, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Scale" unique_id=483335827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0773492, 0)
+light_color = Color(0.627451, 1, 1, 1)

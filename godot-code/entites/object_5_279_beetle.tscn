@@ -1,8 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsjsam2xd0xyq"]
+[gd_scene format=3 uid="uid://bsjsam2xd0xyq"]
 
 [ext_resource type="PackedScene" uid="uid://8wnv6dlkmh3i" path="res://entites/sources/arachnid_bug.tscn" id="1_0gwlc"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1449551978]
 
-[node name="Sketchfab_Scene2" parent="." instance=ExtResource("1_0gwlc")]
+[node name="Sketchfab_Scene2" parent="." unique_id=1184341939 instance=ExtResource("1_0gwlc")]
 transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, 0, 0, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene2" unique_id=1499104716]
+transform = Transform3D(1, 0, 5.3290705e-15, 0, 1, 0, -5.3290705e-15, 0, 1, 0, 0.8, -1.5)
+light_color = Color(0.95686275, 0.94509804, 0.67058825, 1)
+omni_range = 30.0
