@@ -1025,9 +1025,17 @@ Array MBEXclass::getPaletteModifications() {
 	float g = mod_palette[0xE0 * 3 + 1] / 63.0f;
 	float b = mod_palette[0xE0 * 3 + 2] / 63.0f;
 	Color target_white = Color(r, g, b); // 63,63,63
-	float rb = mod_palette[0x40 * 3 + 0] / 63.0f;
-	float gb = mod_palette[0x40 * 3 + 1] / 63.0f;
-	float bb = mod_palette[0x40 * 3 + 2] / 63.0f;
+	float rb = mod_palette[0x00 * 3 + 0] / 63.0f;
+	float gb = mod_palette[0x00 * 3 + 1] / 63.0f;
+	float bb = mod_palette[0x00 * 3 + 2] / 63.0f;
+	if ((ref_palette[0x40 * 3 + 0] == 0) &&
+			(ref_palette[0x40 * 3 + 1] == 0) &&
+			(ref_palette[0x40 * 3 + 2] == 0))
+	{
+		rb = mod_palette[0x40 * 3 + 0] / 63.0f;
+		gb = mod_palette[0x40 * 3 + 1] / 63.0f;
+		bb = mod_palette[0x40 * 3 + 2] / 63.0f;
+	}
 	Color target_black = Color(rb, gb, bb); // 0,0,0
 	out_gain = Vector3(target_white.r - target_black.r, target_white.g - target_black.g, target_white.b - target_black.b);
 	out_offset = Vector3(target_black.r, target_black.g, target_black.b);
@@ -1401,6 +1409,7 @@ void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 	CommandLineParams.Init(argc, argv);
 
 	support_begin();
+
 	sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
 	//MBEXstate = 1;
 
@@ -1568,6 +1577,24 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 
 void MBEXclass::REMC2BeginInGame() {
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin });
+
+	char dataPath[MAX_PATH];
+	switch (D41A0_0.terrain_2FECE.MapType) {
+		case MapType_t::Day:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALD-0.DAT");
+			break;
+		case MapType_t::Night:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
+			break;
+		case MapType_t::Cave:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALC-0.DAT");
+			break;
+	}
+	uint8_t temp_palette[256 * 3];
+	uint8_t *temp_ptr[1];
+	temp_ptr[0] = temp_palette;
+	DataFileIO::ReadFileAndDecompress(dataPath, temp_ptr);
+	VGA_Set_Palette(temp_ptr[0], true);
 }
 
 bool MBEXclass::REMC2StepInGame(Dictionary inputs) {
