@@ -428,6 +428,9 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 	var cam_pos = camera.global_position if has_camera else Vector3.ZERO
 	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
 	for i in range(pool_size):
+		if(node_pool[i]):
+			node_pool[i].set_meta("del", null)
+	for i in range(pool_size):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
 		var rot = Vector3(data_array[offset+3], data_array[offset+4], data_array[offset+5])
@@ -456,25 +459,24 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actMaxLife = int(data_array[offset+27])
 		var actOwnerObject = int(data_array[offset+28])
 		var actBitmapScaleHelp = int(data_array[offset+29])
-		var actBitmapScale = int(data_array[offset+30])		
+		var actBitmapScale = int(data_array[offset+30])
 		if modelIndex == 0 and actClass == 3:
 			Main_Player.MOVE_SPEED = actSpeed
 			Main_Player.LIFE = actLife
-			Main_Player.MANA = actMana		
+			Main_Player.MANA = actMana
 		var current_node = node_pool[i]
 		# 1024 * 1024 = 1048576 (vypočítáno předem)
-		var entity_id = modelIndex * 1048576 + actId * 1024 + actByte0		
+		var entity_id = modelIndex * 1048576 + actId * 1024 + actByte0
 		if current_node == null or current_node.get_meta("id") != entity_id:
 			if current_node != null:
-				current_node.queue_free()
-				current_node = null			
+				pass
 			if not (actByte1 & 4):
-				var isDraw = (actByte0 & 1) == 0				
+				var isDraw = (actByte0 & 1) == 0
 				if actClass == 3 and modelIndex == 211 and actLife <= 0:
-					isDraw = false					
+					isDraw = false
 				var fromlib = false
 				var scene_to_instance = null
-				var key = Vector3i(actClass, modelIndex, 0)				
+				var key = Vector3i(actClass, modelIndex, 0)
 				if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
 					if library_scenes.has(key):
 						scene_to_instance = library_scenes[key]
@@ -486,55 +488,48 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 						scene_to_instance = library2_scenes[key]
 						fromlib = true
 					elif not library2.has(key):
-						scene_to_instance = library2_scenes.get(default_key)				
+						scene_to_instance = library2_scenes.get(default_key)
 				if scene_to_instance != null:
-					entites_per_frame += 1
-					# Zde jsi měl: if entites_per_frame > max: entites_per_frame += 0
-					# Jelikož přičtení nuly nic nedělá, ponechal jsem to prázdné pro případnou tvoji úpravu
-					if entites_per_frame > max_entites_per_frame:
-						pass 
-					
 					var new_node = scene_to_instance.instantiate()
 					if not fromlib:
-						# Formátování stringů je rychlejší než jejich sčítání
 						new_node.get_node("Label3D").text = "M:%d_C:%d_M:%d_S:%d_B0:%d" % [modelIndex, actClass, actModel, actState, actByte0]
-					
 					add_child(new_node)
 					new_node.set_meta("id", entity_id)
 					node_pool[i] = new_node
 					current_node = new_node
+					current_node.set_meta("del", "noDel")
 		else:
 			if actByte1 & 4:
+				pass
+			else:
+				current_node.set_meta("del", "noDel")
+		
+		if(current_node):
+			if(current_node.get_meta("del")!="noDel"):
 				current_node.queue_free()
 				current_node = null
-				
-		# Aplikujeme transformace pouze pokud node reálně existuje
-		if current_node != null:
+		#var current_node=pool_size[i]
+		if (current_node):
 			if actBitmapScaleHelp:
 				var scale_scene_node = current_node.get_node_or_null("Scale")
 				if scale_scene_node:
 					var s = actBitmapScale * inv_256
 					scale_scene_node.scale = Vector3(s, s, s)
-					
 			var entityScale = 1.0
 			if actState == 0x29 and actClass == 0xA and actModel == 0x27: # manSphere
 				entityScale = pow(actMana, 1.0 / 3.0) * 0.2
 			current_node.scale = Vector3(entityScale, entityScale, entityScale)
-			
 			var base_pos_x = data_array[offset] * inv_256
 			var base_pos_y = data_array[offset + 2] * inv_256
 			var base_pos_z = data_array[offset + 1] * inv_256
-			
 			if has_camera:
 				var new_x = cam_pos.x + fposmod(base_pos_x - cam_pos.x + 128.0, 256.0) - 128.0
 				var new_z = cam_pos.z + fposmod(base_pos_z - cam_pos.z + 128.0, 256.0) - 128.0
-				current_node.global_position = Vector3(new_x, base_pos_y, new_z)
+				node_pool[i].global_position = Vector3(new_x, base_pos_y, new_z)
 			else:
-				current_node.position = Vector3(base_pos_x, base_pos_y, base_pos_z)
-			
-			# Pitch a Roll byly kvůli Vector3(X, 0, 0) v původním kódu vždy nulové
+				node_pool[i].position = Vector3(base_pos_x, base_pos_y, base_pos_z)
 			var yaw = -rot2.x * rad_mult
-			current_node.rotation = Vector3(0, yaw, 0)
+			node_pool[i].rotation = Vector3(0, yaw, 0)
 			
 var last_keys_state: Dictionary = {}
 var last_mouse_buttons_state: Dictionary = {}
