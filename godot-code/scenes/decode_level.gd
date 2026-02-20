@@ -621,17 +621,26 @@ func gameInit():
 	match Global.levelType:
 		"Day":
 			Global.Main_Sounds.setSoundBank(0)
-			setTime(12.0)
+			setTime(11.0)
 			setDayEntites()
+			setSkyExposure(0.3)
+			sefFogEnd(200)
+			setFogFall(15)
+			setFogDensity(0.01)
 		"Night":
 			Global.Main_Sounds.setSoundBank(1)
 			setTime(2.5)
 			setNightEntites()
+			setSkyExposure(1.5)
+			sefFogEnd(200)
+			setFogFall(15)
+			setFogDensity(0.01)
 		"Cave":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
 			setFog(0.03)
 			setFogSky(1.0)
+			setSkyExposure(0.3)
 			setCaveEntites()
 		"Final":
 			Global.Main_Sounds.setSoundBank(2)
@@ -696,6 +705,22 @@ func setTime(time:float):
 	else:
 		NodeSky3D.clouds_enabled=true
 		moon.light_energy=1
+
+func setSkyExposure(value:float):
+	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
+	skydome.exposure=value
+	
+func sefFogEnd(value:float):
+	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
+	skydome.fog_end=value
+	
+func setFogFall(value:float):
+	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
+	skydome.fog_falloff=value
+	
+func setFogDensity(value:float):
+	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
+	skydome.fog_density=value
 
 func setFog(density:float):
 	NodeSky3D.environment.fog_density=density
