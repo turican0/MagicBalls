@@ -660,11 +660,20 @@ func setCaveEntites():
 	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
 
 func setTime(time:float):
+	time = fposmod(time, 24.0)  # zajistí 0–24 hodin, žádný crash
+	var tod = NodeSky3D.get_node_or_null(^"TimeOfDay")
+	var moon = NodeSky3D.get_node_or_null(^"MoonLight")
+	if tod:
+		if "current_time" in tod:
+			tod.current_time = time
+	if "current_time" in NodeSky3D:
+		NodeSky3D.current_time = time
 	if(time>=0)&&(time<=5):
 		NodeSky3D.clouds_enabled=false
+		moon.light_energy=1.5
 	else:
 		NodeSky3D.clouds_enabled=true
-	NodeSky3D.get_node("TimeOfDay").current_time=time
+		moon.light_energy=1
 
 func setFog(density:float):
 	NodeSky3D.environment.fog_density=density
