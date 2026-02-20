@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hl8w41k0t8ia"
+uid="uid://d24wot78p8gxv"
 path.s3tc="res://.godot/imported/ProtGrid0.jpg-a6c3e0f643d399373a34d2d9522160a1.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
@@ -22,8 +22,8 @@ compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=2
-compress/channel_pack=0
+compress/normal_map=0
+compress/channel_pack=1
 mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
