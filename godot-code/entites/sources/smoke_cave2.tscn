@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://b351v2xjjqylq"]
+[gd_scene format=4 uid="uid://gj0jha0sq8hf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w37v6"]
 albedo_color = Color(0.39607844, 0.44313726, 0.44705883, 1)
@@ -40,17 +40,17 @@ shadow_mesh = SubResource("ArrayMesh_0dcat")
 transparency = 1
 albedo_color = Color(1, 1, 1, 0.32156864)
 
-[node name="Sketchfab_Scene" type="Node3D" unique_id=1371165785]
+[node name="Sketchfab_Scene" type="Node3D" unique_id=526534867]
 
-[node name="Sketchfab_model" type="Node3D" parent="." unique_id=1419641047]
+[node name="Sketchfab_model" type="Node3D" parent="." unique_id=807059225]
 transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0, 0)
 
-[node name="cloud_obj_cleaner_gles" type="Node3D" parent="Sketchfab_model" unique_id=1372706750]
+[node name="cloud_obj_cleaner_gles" type="Node3D" parent="Sketchfab_model" unique_id=161808738]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -228.141, -280.375, -22.7344)
 
-[node name="Object_2" type="Node3D" parent="Sketchfab_model/cloud_obj_cleaner_gles" unique_id=647626864]
+[node name="Object_2" type="Node3D" parent="Sketchfab_model/cloud_obj_cleaner_gles" unique_id=1541534161]
 
-[node name="Object_3" type="MeshInstance3D" parent="Sketchfab_model/cloud_obj_cleaner_gles/Object_2" unique_id=2095116330]
+[node name="Object_3" type="MeshInstance3D" parent="Sketchfab_model/cloud_obj_cleaner_gles/Object_2" unique_id=226010003]
 mesh = SubResource("ArrayMesh_7tlr5")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_tc5r2")

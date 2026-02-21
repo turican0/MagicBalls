@@ -514,7 +514,6 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				isDraw = false
 			var fromlib = false
 			var scene_to_instance = null
-			#var key = Vector3i(actClass, modelIndex, 0)
 			if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
 				if library_scenes.has(uid):
 					scene_to_instance = library_scenes[uid]
@@ -672,7 +671,9 @@ func setDayEntites():
 	updateLibrary(5,20,0,"res://entites/object_5_11D_hornet.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11D_hornet.tscn")
 	updateLibrary(3,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
-	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
+	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")	
+	updateLibrary(10,57,0,"res://entites/object_10_57_smoke.tscn")
+	updateLibrary(10,63,0,"res://entites/object_10_63_smoke.tscn")
 	
 func setNightEntites():
 	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
@@ -685,6 +686,8 @@ func setNightEntites():
 	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(3,96,0,"res://entites/object_10_96_posses_building.tscn")
 	updateLibrary(10,96,0,"res://entites/object_10_96_posses_building.tscn")
+	updateLibrary(10,57,0,"res://entites/object_10_57_smoke.tscn")
+	updateLibrary(10,63,0,"res://entites/object_10_63_smoke.tscn")
 
 func setCaveEntites():
 	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
@@ -697,6 +700,8 @@ func setCaveEntites():
 	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(3,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
 	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
+	updateLibrary(10,57,0,"res://entites/object_10_57_smokeC.tscn")
+	updateLibrary(10,63,0,"res://entites/object_10_63_smokeC.tscn")
 
 func setTime(time:float):
 	time = fposmod(time, 24.0)  # zajistí 0–24 hodin, žádný crash

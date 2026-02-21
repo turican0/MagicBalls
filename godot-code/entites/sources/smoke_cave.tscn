@@ -1,12 +1,12 @@
-[gd_scene format=3 uid="uid://dp21ujtpv5jvl"]
+[gd_scene format=3 uid="uid://blcegg1hloni6"]
 
-[ext_resource type="PackedScene" uid="uid://ciy44bwoveorq" path="res://entites/sources/clouds.glb" id="1_sm4np"]
+[ext_resource type="PackedScene" uid="uid://ciy44bwoveorq" path="res://entites/sources/clouds.glb" id="1_ta4nk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sm4np"]
 transparency = 1
-albedo_color = Color(1, 0.81960785, 0.8117647, 0.59607846)
+albedo_color = Color(0, 0, 0.13333334, 0.59607846)
 
-[node name="Sketchfab_Scene" unique_id=979711904 instance=ExtResource("1_sm4np")]
+[node name="Sketchfab_Scene" unique_id=2056786751 instance=ExtResource("1_ta4nk")]
 
 [node name="Object_3" parent="Sketchfab_model/cloud_obj_cleaner_gles/Object_2" parent_id_path=PackedInt32Array(960811426) index="0" unique_id=1718706802]
 surface_material_override/0 = SubResource("StandardMaterial3D_sm4np")

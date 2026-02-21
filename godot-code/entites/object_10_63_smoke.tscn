@@ -8,7 +8,3 @@
 
 [node name="Sketchfab_Scene" parent="Scale" unique_id=480492785 instance=ExtResource("1_dtb54")]
 transform = Transform3D(0.002, 0, 0, 0, 0.003, 0, 0, 0, 0.002, 0, -0.2, 0)
-
-[node name="OmniLight3D" type="OmniLight3D" parent="Scale" unique_id=168048524]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0773492, 0)
-light_color = Color(0.627451, 1, 1, 1)
