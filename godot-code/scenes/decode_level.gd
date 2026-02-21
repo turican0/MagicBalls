@@ -697,8 +697,8 @@ func setCaveEntites():
 	updateLibrary(5,19,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,20,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
-	updateLibrary(3,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
-	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
+	updateLibrary(3,96,0,"res://entites/object_10_96_posses_building.tscn")
+	updateLibrary(10,96,0,"res://entites/object_10_96_posses_building.tscn")
 	updateLibrary(10,57,0,"res://entites/object_10_57_smokeC.tscn")
 	updateLibrary(10,63,0,"res://entites/object_10_63_smokeC.tscn")
 
