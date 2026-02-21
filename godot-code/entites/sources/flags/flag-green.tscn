@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://doorqiwdu45hw"]
+
+[ext_resource type="PackedScene" uid="uid://q5asl73rx5df" path="res://entites/sources/flags/flag.blend" id="1_arel1"]
+[ext_resource type="Shader" uid="uid://bksggbossjlfr" path="res://entites/sources/flags/flag.gdshader" id="2_f72h1"]
+[ext_resource type="Texture2D" uid="uid://cfcxa26ug5wjf" path="res://entites/sources/flags/textures/flagCREST-clean-green.png" id="3_arel1"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_clokj"]
+subdivide_width = 20
+subdivide_depth = 20
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uoeys"]
+render_priority = 0
+shader = ExtResource("2_f72h1")
+shader_parameter/speed = 1.0
+shader_parameter/frequency_y = 5.0
+shader_parameter/frequency_x = 2.5
+shader_parameter/frequency_z = 2.5
+shader_parameter/amplitude_y = 0.1
+shader_parameter/amplitude_x = 0.05
+shader_parameter/amplitude_z = 0.05
+shader_parameter/inclination = -0.04
+shader_parameter/tex = ExtResource("3_arel1")
+
+[node name="flag" unique_id=1504280980 instance=ExtResource("1_arel1")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1" unique_id=780217824]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -0.9977922, 0.06641318, 2.9030143e-09, -0.06641318, -0.9977922, -4.3614882e-08, 0, 1.32, -0.14)
+mesh = SubResource("PlaneMesh_clokj")
+surface_material_override/0 = SubResource("ShaderMaterial_uoeys")

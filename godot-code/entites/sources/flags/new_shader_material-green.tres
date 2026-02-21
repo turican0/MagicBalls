@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cm7b6vvwv806d"]
+
+[ext_resource type="Shader" uid="uid://bksggbossjlfr" path="res://entites/sources/flags/flag.gdshader" id="1_lvqqi"]
+[ext_resource type="Texture2D" uid="uid://cfcxa26ug5wjf" path="res://entites/sources/flags/textures/flagCREST-clean-green.png" id="2_lvqqi"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_lvqqi")
+shader_parameter/speed = 1.0
+shader_parameter/frequency_y = 5.0
+shader_parameter/frequency_x = 2.5
+shader_parameter/frequency_z = 2.5
+shader_parameter/amplitude_y = 0.1
+shader_parameter/amplitude_x = 0.05
+shader_parameter/amplitude_z = 0.05
+shader_parameter/inclination = -0.04
+shader_parameter/tex = ExtResource("2_lvqqi")

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cctfdflshobx4"]
+
+[ext_resource type="PackedScene" uid="uid://q5asl73rx5df" path="res://entites/sources/flags/flag.blend" id="1_lwul7"]
+[ext_resource type="Material" uid="uid://ckj8nmivbn3fb" path="res://entites/sources/flags/new_shader_material-red.tres" id="2_lxktx"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_clokj"]
+subdivide_width = 20
+subdivide_depth = 20
+
+[node name="flag" unique_id=1504280980 instance=ExtResource("1_lwul7")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1" unique_id=780217824]
+transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -0.9977922, 0.06641318, 2.9030143e-09, -0.06641318, -0.9977922, -4.3614882e-08, 0, 1.32, -0.14)
+mesh = SubResource("PlaneMesh_clokj")
+surface_material_override/0 = ExtResource("2_lxktx")

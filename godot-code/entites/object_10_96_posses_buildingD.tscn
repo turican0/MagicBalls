@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://lhtwpjdu4ri"]
 
-[ext_resource type="Script" uid="uid://b2f4a3jyswfec" path="res://entites/object_10_96_posses_building_d.gd" id="1_k5f1y"]
+[ext_resource type="Script" path="res://entites/object_10_96_posses_building_d.gd" id="1_k5f1y"]
 [ext_resource type="PackedScene" uid="uid://32p4n0y7te4s" path="res://entites/sources/96-g.tscn" id="1_mukhw"]
 [ext_resource type="PackedScene" uid="uid://n322swbytjqe" path="res://entites/sources/flags/flag.tscn" id="2_jiofq"]
-[ext_resource type="Material" uid="uid://cemhvqucxki58" path="res://materials/perl.tres" id="3_qs870"]
+[ext_resource type="Material" uid="uid://btk8gxxylau6s" path="res://entites/sources/flags/perl-white.tres" id="4_k5f1y"]
 
 [node name="Node3D" type="Node3D" unique_id=1032799002]
 script = ExtResource("1_k5f1y")
@@ -21,7 +21,7 @@ polygon = PackedVector2Array(0.33271074, 1.133889, 0.2435562, 0.7767403, 0.70090
 mode = 1
 spin_degrees = 360.0
 spin_sides = 3
-material = ExtResource("3_qs870")
+material = ExtResource("4_k5f1y")
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="flag/CSGPolygon3D" unique_id=1737536268]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
@@ -29,4 +29,4 @@ polygon = PackedVector2Array(0.33271074, 1.133889, 0.2435562, 0.7767403, 0.70090
 mode = 1
 spin_degrees = 360.0
 spin_sides = 3
-material = ExtResource("3_qs870")
+material = ExtResource("4_k5f1y")
