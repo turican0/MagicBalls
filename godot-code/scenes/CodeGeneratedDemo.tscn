@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
 [ext_resource type="Shader" uid="uid://diekk5uppuvq1" path="res://scenes/FilterColorRect.gdshader" id="9_vrj2c"]
 [ext_resource type="Texture2D" uid="uid://csrngnir5a8qs" path="res://entites/sources/spiders/spiderweb.png" id="10_kfkod"]
-[ext_resource type="Shader" uid="uid://2qha8dcud50w" path="res://scenes/Blur_effect.gdshader" id="10_vrj2c"]
+[ext_resource type="Shader" path="res://scenes/Blur_effect.gdshader" id="10_vrj2c"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
 

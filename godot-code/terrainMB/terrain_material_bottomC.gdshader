@@ -136,11 +136,8 @@ void fragment() {
 	ALBEDO = tex1;
 	//ALBEDO = NORMAL * 0.5 + 0.5;//trest normals
 	
-	float target_roughness = 0.05;
-	float target_metallic = 0.5;
-	float default_roughness = 1.0;
-	float default_metallic = 0.0;
-	
-	ROUGHNESS = mix(default_roughness, target_roughness, refl1);
-	METALLIC = mix(default_metallic, target_metallic, refl1);
+	ROUGHNESS = 1.0;
+	METALLIC = 0.0;
+
+	EMISSION = tex1 * refl1;
 }

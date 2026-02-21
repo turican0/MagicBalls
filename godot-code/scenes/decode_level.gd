@@ -652,8 +652,7 @@ func gameInit():
 		"Final":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
-			setDayEntites()
-	get_parent().get_node("TerrainsMB").changeTerrain(Global.levelType)
+			setDayEntites()	
 	if(Global.levelType=="Cave"):
 		get_parent().get_node("TerrainsMB").mesh_instance_top.show()
 		get_parent().get_node("MultiMeshbottom").show()
@@ -814,7 +813,6 @@ func inGameBegin():
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	Global.MBEX.REMC2BeginInGame()
 	Global.levelType=Global.MBEX.REMC2GetLevelType()
-
 
 func setMesh():
 	Global.MBEX.set_mesh_instances(get_parent().get_node("TerrainsMB").mesh_instance_bottom,get_parent().get_node("TerrainsMB").mesh_instance_top,Global.levelType=="Cave")

@@ -30,6 +30,7 @@ func init():
 	get_parent().get_node("DecodeLevel").setMesh()
 	#recalculate_mesh()	
 	#recalculate_mesh()
+	changeTerrain(Global.levelType)
 	
 	#begin of Multimesh
 	var mmi_bottom:MultiMeshInstance3D = get_parent().get_node("MultiMeshbottom")
@@ -91,17 +92,27 @@ func changeTerrain(levelType:String):
 		var atlas_tex = Global.load_custom_texture(tex_path)
 		if material_bottom == null:
 			return
-		material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
+		#material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
 		if(levelType=="Cave"):
 			if material_top == null:
 				return
 			material_top.set_shader_parameter("atlas_texture", atlas_tex)
+			material_bottom = load("res://terrainMB/terrain_material_bottomC.tres")
+		else:
+			material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
+		var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
+		material_bottom.set_shader_parameter("reflect_texture", reflect_tex)
+		material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
+		mesh_instance_bottom.material_override = material_bottom
 
 func initialize_nodes():
 	mesh_instance_bottom = MeshInstance3D.new()
 	mesh_instance_bottom.name = "TerrainMeshBottom"
 	add_child(mesh_instance_bottom)
-	material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
+	if(Global.levelType=="Cave"):
+		material_bottom = load("res://terrainMB/terrain_material_bottomC.tres")
+	else:
+		material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
 	var atlas_tex = Global.load_custom_texture(Global.convertdata+"textures/night/BL32N0-0.DAT-borders.png")
 	var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
 	material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
