@@ -437,7 +437,9 @@ func get_first_entity_with_uid(uid: Vector3i) -> Node:
 
 func delete_first_entity_with_uid(uid: Vector3i):
 	if entites_pool.has(uid) and not entites_pool[uid].is_empty():
-		var removed_node = entites_pool[uid].pop_front()
+		entites_pool[uid].pop_front()
+		if entites_pool[uid].is_empty():
+			entites_pool.erase(uid)
 
 func remove_all_entities_pool():
 	for uid in entites_pool.keys():
