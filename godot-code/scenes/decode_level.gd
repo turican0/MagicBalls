@@ -463,9 +463,6 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 	var cam_pos = camera.global_position if has_camera else Vector3.ZERO
 	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
 	for i in range(pool_size):
-		if(node_pool[i]):
-			node_pool[i].set_meta("del", "null")
-	for i in range(pool_size):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
 		var rot = Vector3(data_array[offset+3], data_array[offset+4], data_array[offset+5])
@@ -533,17 +530,15 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					new_node.set_meta("id", uid)
 					node_pool[i] = new_node
 					current_node = new_node
-					current_node.set_meta("del", "noDel")
 					updateObject=true
 		else:
 			if actByte1 & 4:
 				pass
 			else:
-				current_node.set_meta("del", "noDel")
 				updateObject=true
 		
 		if(current_node):
-			if(current_node.get_meta("del")!="noDel"):
+			if(!updateObject):
 				current_node.queue_free()
 				current_node = null
 		#var current_node=pool_size[i]
