@@ -126,7 +126,7 @@ var input_state: Dictionary = {
 # Akumulovaný posun myši od startu
 var total_mouse_delta := Vector2.ZERO
 
-var node_pool = []
+#var node_pool = []
 var pool_size = 1000
 # Katalog cest k tscn souborům podle ID typu
 var library_scenes = {}
@@ -308,9 +308,9 @@ func _preload_library(source_dict: Dictionary, target_dict: Dictionary):
 func _ready():	
 	_preload_library(library, library_scenes)
 	_preload_library(library2, library2_scenes)
-	node_pool.resize(pool_size)
-	for i in range(pool_size):
-		node_pool[i] = null
+	#node_pool.resize(pool_size)
+	#for i in range(pool_size):
+		#node_pool[i] = null
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -442,8 +442,7 @@ func delete_first_entity_with_uid(uid: Vector3i):
 			entites_pool.erase(uid)
 
 func remove_all_entities_pool():
-	for uid in entites_pool.keys():
-		var uid_array = entites_pool[uid]
+	for uid_array in entites_pool.values():
 		for temp_node in uid_array:
 			if is_instance_valid(temp_node):
 				temp_node.queue_free()
@@ -453,6 +452,11 @@ func move_first_entity_to_used(uid: Vector3i):
 	if entites_pool.has(uid) and not entites_pool[uid].is_empty():
 		var tempNode=entites_pool[uid].front()
 		add_to_entites_pool_used(uid,tempNode)
+
+static var _next_uid: int = 0
+func generate_unique_id() -> int:
+	_next_uid += 1
+	return _next_uid
 
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
@@ -464,6 +468,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 	var has_camera = camera != null
 	var cam_pos = camera.global_position if has_camera else Vector3.ZERO
 	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
+	entites_pool = entites_pool_used
+	entites_pool_used = {}
 	for i in range(pool_size):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
@@ -494,56 +500,46 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actOwnerObject = int(data_array[offset+28])
 		var actBitmapScaleHelp = int(data_array[offset+29])
 		var actBitmapScale = int(data_array[offset+30])
+		
 		if modelIndex == 0 and actClass == 3:
 			Main_Player.MOVE_SPEED = actSpeed
 			Main_Player.LIFE = actLife
 			Main_Player.MANA = actMana
-		var current_node = node_pool[i]
-		# 1024 * 1024 = 1048576 (vypočítáno předem)
+		var uid = Vector3i(actClass,modelIndex,0)
+		var current_node = get_first_entity_with_uid(uid)
 		var updateObject=false
-		var uid = Vector3i(modelIndex,actId,actByte0)
-		if current_node == null or current_node.get_meta("id") != uid:
-			if current_node != null:
-				pass
-			if not (actByte1 & 4):
-				var isDraw = (actByte0 & 1) == 0
-				if actClass == 3 and modelIndex == 211 and actLife <= 0:
-					isDraw = false
-				var fromlib = false
-				var scene_to_instance = null
-				var key = Vector3i(actClass, modelIndex, 0)
-				if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
-					if library_scenes.has(key):
-						scene_to_instance = library_scenes[key]
-						fromlib = true
-					elif not library.has(key):
-						scene_to_instance = library_scenes.get(default_key)
-				else:
-					if library2_scenes.has(key):
-						scene_to_instance = library2_scenes[key]
-						fromlib = true
-					elif not library2.has(key):
-						scene_to_instance = library2_scenes.get(default_key)
-				if scene_to_instance != null:
+		if not (actByte1 & 4):
+			var isDraw = (actByte0 & 1) == 0
+			if actClass == 3 and modelIndex == 211 and actLife <= 0:
+				isDraw = false
+			var fromlib = false
+			var scene_to_instance = null
+			#var key = Vector3i(actClass, modelIndex, 0)
+			if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
+				if library_scenes.has(uid):
+					scene_to_instance = library_scenes[uid]
+					fromlib = true
+				elif not library.has(uid):
+					scene_to_instance = library_scenes.get(default_key)
+			else:
+				if library2_scenes.has(uid):
+					scene_to_instance = library2_scenes[uid]
+					fromlib = true
+				elif not library2.has(uid):
+					scene_to_instance = library2_scenes.get(default_key)
+			if scene_to_instance != null:
+				if current_node == null:
 					var new_node = scene_to_instance.instantiate()
 					if not fromlib:
 						new_node.get_node("Label3D").text = "M:%d_C:%d_M:%d_S:%d_B0:%d" % [modelIndex, actClass, actModel, actState, actByte0]
 					add_child(new_node)
-					new_node.set_meta("id", uid)
-					node_pool[i] = new_node
 					current_node = new_node
+					add_to_entites_pool_used(uid,new_node)
 					updateObject=true
-		else:
-			if actByte1 & 4:
-				pass
-			else:
-				updateObject=true
-		
-		if(current_node):
-			if(!updateObject):
-				current_node.queue_free()
-				current_node = null
-		#var current_node=pool_size[i]
+				else:
+					delete_first_entity_with_uid(uid)
+					add_to_entites_pool_used(uid,current_node)
+					updateObject=true
 		if (current_node&&updateObject):
 			if actBitmapScaleHelp:
 				var scale_scene_node = current_node.get_node_or_null("Scale")
@@ -560,12 +556,13 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			if has_camera:
 				var new_x = cam_pos.x + fposmod(base_pos_x - cam_pos.x + 128.0, 256.0) - 128.0
 				var new_z = cam_pos.z + fposmod(base_pos_z - cam_pos.z + 128.0, 256.0) - 128.0
-				node_pool[i].global_position = Vector3(new_x, base_pos_y, new_z)
+				current_node.global_position = Vector3(new_x, base_pos_y, new_z)
 			else:
-				node_pool[i].position = Vector3(base_pos_x, base_pos_y, base_pos_z)
+				current_node.position = Vector3(base_pos_x, base_pos_y, base_pos_z)
 			var yaw = -rot2.x * rad_mult
-			node_pool[i].rotation = Vector3(0, yaw, 0)
-			
+			current_node.rotation = Vector3(0, yaw, 0)
+	remove_all_entities_pool()
+
 var last_keys_state: Dictionary = {}
 var last_mouse_buttons_state: Dictionary = {}
 var mouse_640: Vector2
