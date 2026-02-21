@@ -416,7 +416,42 @@ func _do_change_scene():
 	await fadeNode.fade_finished
 	Global.last_scene_path = get_tree().current_scene.scene_file_path
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
-		
+
+var entites_pool:Dictionary
+var entites_pool_used:Dictionary
+
+func add_to_entites_pool(uid:Vector3i,sendNode:Node):
+	if not entites_pool.has(uid):
+		entites_pool[uid] = []
+	entites_pool[uid].append(sendNode)
+
+func add_to_entites_pool_used(uid:Vector3i,sendNode:Node):
+	if not entites_pool_used.has(uid):
+		entites_pool_used[uid] = []
+	entites_pool_used[uid].append(sendNode)
+
+func get_first_entity_with_uid(uid: Vector3i) -> Node:
+	if entites_pool.has(uid) and not entites_pool[uid].is_empty():
+		return entites_pool[uid].front()
+	return null
+
+func delete_first_entity_with_uid(uid: Vector3i):
+	if entites_pool.has(uid) and not entites_pool[uid].is_empty():
+		var removed_node = entites_pool[uid].pop_front()
+
+func remove_all_entities_pool():
+	for uid in entites_pool.keys():
+		var uid_array = entites_pool[uid]
+		for temp_node in uid_array:
+			if is_instance_valid(temp_node):
+				temp_node.queue_free()
+	entites_pool.clear()
+
+func move_first_entity_to_used(uid: Vector3i):
+	if entites_pool.has(uid) and not entites_pool[uid].is_empty():
+		var tempNode=entites_pool[uid].front()
+		add_to_entites_pool_used(uid,tempNode)
+
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
 	var entites_per_frame=0;
@@ -429,7 +464,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
 	for i in range(pool_size):
 		if(node_pool[i]):
-			node_pool[i].set_meta("del", null)
+			node_pool[i].set_meta("del", "null")
 	for i in range(pool_size):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
@@ -466,8 +501,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			Main_Player.MANA = actMana
 		var current_node = node_pool[i]
 		# 1024 * 1024 = 1048576 (vypočítáno předem)
-		var entity_id = modelIndex * 1048576 + actId * 1024 + actByte0
-		if current_node == null or current_node.get_meta("id") != entity_id:
+		var uid = Vector3i(modelIndex,actId,actByte0)
+		if current_node == null or current_node.get_meta("id") != uid:
 			if current_node != null:
 				pass
 			if not (actByte1 & 4):
@@ -494,7 +529,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					if not fromlib:
 						new_node.get_node("Label3D").text = "M:%d_C:%d_M:%d_S:%d_B0:%d" % [modelIndex, actClass, actModel, actState, actByte0]
 					add_child(new_node)
-					new_node.set_meta("id", entity_id)
+					new_node.set_meta("id", uid)
 					node_pool[i] = new_node
 					current_node = new_node
 					current_node.set_meta("del", "noDel")
