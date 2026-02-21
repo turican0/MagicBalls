@@ -501,6 +501,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			Main_Player.MANA = actMana
 		var current_node = node_pool[i]
 		# 1024 * 1024 = 1048576 (vypočítáno předem)
+		var updateObject=false
 		var uid = Vector3i(modelIndex,actId,actByte0)
 		if current_node == null or current_node.get_meta("id") != uid:
 			if current_node != null:
@@ -533,18 +534,20 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					node_pool[i] = new_node
 					current_node = new_node
 					current_node.set_meta("del", "noDel")
+					updateObject=true
 		else:
 			if actByte1 & 4:
 				pass
 			else:
 				current_node.set_meta("del", "noDel")
+				updateObject=true
 		
 		if(current_node):
 			if(current_node.get_meta("del")!="noDel"):
 				current_node.queue_free()
 				current_node = null
 		#var current_node=pool_size[i]
-		if (current_node):
+		if (current_node&&updateObject):
 			if actBitmapScaleHelp:
 				var scale_scene_node = current_node.get_node_or_null("Scale")
 				if scale_scene_node:
