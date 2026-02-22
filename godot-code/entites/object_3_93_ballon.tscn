@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dp400hhj1150u"]
 
-[ext_resource type="PackedScene" uid="uid://cwafpjbi0c5se" path="res://assets/ballon/hot_air_balloon.glb" id="1_ww6jl"]
+[ext_resource type="PackedScene" uid="uid://0v5qaeim8jyf" path="res://assets/ballon/hot_air_balloon-ping.glb" id="1_ww6jl"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=334345570]
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_ww6jl")]
+[node name="hot_air_balloon-ping" parent="." unique_id=1689053574 instance=ExtResource("1_ww6jl")]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
