@@ -461,6 +461,14 @@ func show_hide_entites() -> void:
 		bucket["act_index"] = 0
 		bucket["active_count"] = 0
 
+func clear_entites_pool() -> void:
+	for bucket in entites_pool.values():
+		var arr = bucket["array"]
+		for node in arr:
+			if is_instance_valid(node):
+				node.queue_free()	
+	entites_pool.clear()
+
 static var _next_uid: int = 0
 func generate_unique_id() -> int:
 	_next_uid += 1
@@ -516,14 +524,15 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			Main_Player.MOVE_SPEED = actSpeed
 			Main_Player.LIFE = actLife
 			Main_Player.MANA = actMana
-		var uid = Vector3i(actClass,modelIndex,0)
-		var current_node = get_first_entity_with_uid(uid)
+
 		var updateObject=false
+		var current_node = null
 		if not (actByte1 & 4):
 			var isDraw = (actByte0 & 1) == 0
 			if actClass == 3 and modelIndex == 211 and actLife <= 0:
 				isDraw = false
 			var fromlib = false
+			var uid = Vector3i(actClass,modelIndex,0)
 			var scene_to_instance = null
 			if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
 				if library_scenes.has(uid):
@@ -538,6 +547,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				elif not library2.has(uid):
 					scene_to_instance = library2_scenes.get(default_key)
 			if scene_to_instance != null:
+				current_node = get_first_entity_with_uid(uid)
 				if current_node == null:
 					var new_node = scene_to_instance.instantiate()
 					if not fromlib:
@@ -669,6 +679,7 @@ func gameInit():
 	else:
 		get_parent().get_node("TerrainsMB").mesh_instance_top.hide()
 		get_parent().get_node("MultiMeshtop").hide()
+	clear_entites_pool()
 
 func setDayEntites():
 	updateLibrary(5,14,0,"res://entites/object_5_11D_hornet.tscn")
