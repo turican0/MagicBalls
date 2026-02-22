@@ -460,6 +460,9 @@ func show_hide_entites() -> void:
 				node.set_physics_process(false)
 				if(node.get_meta("uid")==Vector3i(14,461,0)):#remove entites with start script
 					node.queue_free()
+					arr.remove_at(i)
+		if arr.is_empty():
+			entites_pool.erase(bucket)
 		bucket["act_index"] = 0
 		bucket["active_count"] = 0
 
