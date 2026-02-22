@@ -148,6 +148,7 @@ var library = {
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
 	Vector3i(3,211,0): "res://entites/object_3_211_sorcerer.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,251,0): "res://entites/object_3_251_sorcerer-green.tscn",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,9,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,10,0): "res://entites/object_5_8_bowman.tscn",#bowman
@@ -289,7 +290,7 @@ var library2 = {
 }
 
 #3-97 red flag--
-#3-251 - wizard
+#3-251 - wizard-ok
 #3-100 - green flag--
 #3-89 - red ballon
 #3-92 - green ballon
