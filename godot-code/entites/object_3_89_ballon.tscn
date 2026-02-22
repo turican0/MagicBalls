@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cath1jkljx4t4"]
+
+[ext_resource type="PackedScene" uid="uid://csu7rvb05vxsx" path="res://assets/ballon/hot_air_balloon-red.glb" id="1_tj8ql"]
+
+[node name="Node3D" type="Node3D" unique_id=1095322473]
+
+[node name="hot_air_balloon-red" parent="." unique_id=643981774 instance=ExtResource("1_tj8ql")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)

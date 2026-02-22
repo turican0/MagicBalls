@@ -146,7 +146,16 @@ var library = {
 	Vector3i(2,425,0): "res://entites/object_2_425_mushroom2.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(3,0,0): "",#player1
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,89,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,90,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,91,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,92,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,93,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,94,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,95,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
+	Vector3i(3,97,0): "res://entites/object_3_97_posses_building-redD.tscn",#castle -difmodels!!!
+	Vector3i(3,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#castle -difmodels!!!
 	Vector3i(3,211,0): "res://entites/object_3_211_sorcerer.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "res://entites/object_3_251_sorcerer-green.tscn",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
@@ -210,6 +219,7 @@ var library = {
 	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
 	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
 	Vector3i(10,68,0): "res://entites/object_10_68_redSphere.tscn",#red sphere xxxxxxxxxxxx
+	Vector3i(10,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
@@ -289,12 +299,12 @@ var library2 = {
 	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn"#building
 }
 
-#3-97 red flag--
+#3-97 red flag---ok
 #3-251 - wizard-ok
-#3-100 - green flag--
-#3-89 - red ballon
-#3-92 - green ballon
-#10-71 - green mana--
+#3-100 - green flag---ok
+#3-89 - red ballon-ok
+#3-92 - green ballon-ok
+#10-71 - green mana--ok
 
 var filter_material: ShaderMaterial
 var data_img: Image
