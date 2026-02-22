@@ -417,41 +417,49 @@ func _do_change_scene():
 	Global.last_scene_path = get_tree().current_scene.scene_file_path
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 
+
 var entites_pool:Dictionary
-var entites_pool_used:Dictionary
 
-func add_to_entites_pool(uid:Vector3i,sendNode:Node):
+func add_to_entites_pool(uid: Vector3i, sendNode: Node) -> void:
 	if not entites_pool.has(uid):
-		entites_pool[uid] = []
-	entites_pool[uid].append(sendNode)
-
-func add_to_entites_pool_used(uid:Vector3i,sendNode:Node):
-	if not entites_pool_used.has(uid):
-		entites_pool_used[uid] = []
-	entites_pool_used[uid].append(sendNode)
+		entites_pool[uid] = {
+			"array": [],
+			"active_count": 0,
+			"act_index": 0
+		}
+	entites_pool[uid]["array"].append(sendNode)
+	entites_pool[uid]["active_count"] += 1
 
 func get_first_entity_with_uid(uid: Vector3i) -> Node:
-	if entites_pool.has(uid) and not entites_pool[uid].is_empty():
-		return entites_pool[uid].front()
+	if entites_pool.has(uid) and not entites_pool[uid]["array"].is_empty():
+		if(entites_pool[uid]["act_index"]<entites_pool[uid]["array"].size()):
+			var result = entites_pool[uid]["array"][entites_pool[uid]["act_index"]]
+			return result
+		else:
+			return null;
 	return null
 
-func delete_first_entity_with_uid(uid: Vector3i):
-	if entites_pool.has(uid) and not entites_pool[uid].is_empty():
-		entites_pool[uid].pop_front()
-		if entites_pool[uid].is_empty():
-			entites_pool.erase(uid)
+func add_pool_index(uid: Vector3i):
+	if entites_pool.has(uid) and not entites_pool[uid]["array"].is_empty():
+		entites_pool[uid]["act_index"]+=1
+		entites_pool[uid]["active_count"] += 1
 
-func remove_all_entities_pool():
-	for uid_array in entites_pool.values():
-		for temp_node in uid_array:
-			if is_instance_valid(temp_node):
-				temp_node.queue_free()
-	entites_pool.clear()
-
-func move_first_entity_to_used(uid: Vector3i):
-	if entites_pool.has(uid) and not entites_pool[uid].is_empty():
-		var tempNode=entites_pool[uid].front()
-		add_to_entites_pool_used(uid,tempNode)
+func show_hide_entites() -> void:
+	for bucket in entites_pool.values():
+		var arr = bucket["array"]
+		var active_count = bucket["active_count"]
+		for i in range(arr.size()):
+			var node: Node = arr[i]
+			if i < active_count:
+				node.show()
+				node.set_process(true)
+				node.set_physics_process(true)
+			else:
+				node.hide()
+				node.set_process(false)
+				node.set_physics_process(false)
+		bucket["act_index"] = 0
+		bucket["active_count"] = 0
 
 static var _next_uid: int = 0
 func generate_unique_id() -> int:
@@ -468,8 +476,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 	var has_camera = camera != null
 	var cam_pos = camera.global_position if has_camera else Vector3.ZERO
 	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
-	entites_pool = entites_pool_used
-	entites_pool_used = {}
+	#entites_pool = entites_pool_used
+	#entites_pool_used = {}
 	for i in range(pool_size):
 		var offset = i * stride
 		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
@@ -500,6 +508,9 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actOwnerObject = int(data_array[offset+28])
 		var actBitmapScaleHelp = int(data_array[offset+29])
 		var actBitmapScale = int(data_array[offset+30])
+		
+		#if(modelIndex!=144):
+			#continue;
 		
 		if modelIndex == 0 and actClass == 3:
 			Main_Player.MOVE_SPEED = actSpeed
@@ -533,11 +544,10 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 						new_node.get_node("Label3D").text = "M:%d_C:%d_M:%d_S:%d_B0:%d" % [modelIndex, actClass, actModel, actState, actByte0]
 					add_child(new_node)
 					current_node = new_node
-					add_to_entites_pool_used(uid,new_node)
+					add_to_entites_pool(uid,new_node)
 					updateObject=true
 				else:
-					delete_first_entity_with_uid(uid)
-					add_to_entites_pool_used(uid,current_node)
+					add_pool_index(uid)
 					updateObject=true
 		if (current_node&&updateObject):
 			if actBitmapScaleHelp:
@@ -560,7 +570,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				current_node.position = Vector3(base_pos_x, base_pos_y, base_pos_z)
 			var yaw = -rot2.x * rad_mult
 			current_node.rotation = Vector3(0, yaw, 0)
-	remove_all_entities_pool()
+	show_hide_entites()
 
 var last_keys_state: Dictionary = {}
 var last_mouse_buttons_state: Dictionary = {}
