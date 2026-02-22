@@ -458,6 +458,8 @@ func show_hide_entites() -> void:
 				node.hide()
 				node.set_process(false)
 				node.set_physics_process(false)
+				if(node.get_meta("uid")==Vector3i(14,461,0)):#remove entites with start script
+					node.queue_free()
 		bucket["act_index"] = 0
 		bucket["active_count"] = 0
 
@@ -466,7 +468,7 @@ func clear_entites_pool() -> void:
 		var arr = bucket["array"]
 		for node in arr:
 			if is_instance_valid(node):
-				node.queue_free()	
+				node.queue_free()
 	entites_pool.clear()
 
 static var _next_uid: int = 0
@@ -552,6 +554,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					var new_node = scene_to_instance.instantiate()
 					if not fromlib:
 						new_node.get_node("Label3D").text = "M:%d_C:%d_M:%d_S:%d_B0:%d" % [modelIndex, actClass, actModel, actState, actByte0]
+					new_node.set_meta("uid",uid)
 					add_child(new_node)
 					current_node = new_node
 					add_to_entites_pool(uid,new_node)

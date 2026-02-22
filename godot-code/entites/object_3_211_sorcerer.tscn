@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://c3idbqpxfggth"]
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_mwkhn"]
-[ext_resource type="PackedScene" uid="uid://bgydpuavcj6ik" path="res://entites/sources/wizards/shadow_mage.glb" id="2_n08pu"]
+[ext_resource type="PackedScene" uid="uid://by5db3rtqgr7c" path="res://entites/sources/wizards/shadow_mage.tscn" id="2_mwkhn"]
 
 [node name="Node3D" type="Node3D" unique_id=872675572]
 
 [node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_mwkhn")]
 
-[node name="Sketchfab_Scene2" parent="Sketchfab_Scene" unique_id=444587603 instance=ExtResource("2_n08pu")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 2, 0)
+[node name="shadow_mage" parent="Sketchfab_Scene" unique_id=2109155494 instance=ExtResource("2_mwkhn")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 0, 0)
