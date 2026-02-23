@@ -146,13 +146,13 @@ var library = {
 	Vector3i(2,425,0): "res://entites/object_2_425_mushroom2.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(3,0,0): "",#player1
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
-	Vector3i(3,89,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
-	Vector3i(3,90,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
-	Vector3i(3,91,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
-	Vector3i(3,92,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
-	Vector3i(3,93,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
-	Vector3i(3,94,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
-	Vector3i(3,95,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,89,0): "res://entites/object_3_89_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,90,0): "res://entites/object_3_90_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,91,0): "res://entites/object_3_91_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,92,0): "res://entites/object_3_92_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,93,0): "res://entites/object_3_93_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,94,0): "res://entites/object_3_94_ballon.tscn",#ballon -difColors!!!
+	Vector3i(3,95,0): "res://entites/object_3_95_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
 	Vector3i(3,97,0): "res://entites/object_3_97_posses_building-redD.tscn",#castle -difmodels!!!
 	Vector3i(3,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#castle -difmodels!!!
