@@ -1096,6 +1096,9 @@ void handleInputs(Dictionary inputs,int type) {
 			case 0x3920:
 				mainSetPress(is_pressed, 0x3920); //SPACE
 				break;
+			case 0x011B:
+				mainSetPress(is_pressed, 0x011B); //ESC
+				break;
 			case 0x3f00://F5
 				if (type != 0)
 					break;
