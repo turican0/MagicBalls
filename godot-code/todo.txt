@@ -7,12 +7,12 @@
 -add sound to mainMenu
 -add 
 
--prvni kouzelnik musi mit jinak ruce
--pridat kouzelnikovi barevnou vlajku
--pridat do dennich levelu vlajky na hrad
+-prvni kouzelnik musi mit jinak ruce-ok
+-pridat kouzelnikovi barevnou vlajku-ok
+-pridat do dennich levelu vlajky na hrad-ok
 
 -level 2 zkontrolovat v dosbox, zda se prvni vez take neznici
--schovat branu pred koncem levelu
+-schovat branu pred koncem levelu-ok
 -add hight resolution textures
 
 -brana na konci nesmi byt videt pred dosazenim bodu-ok

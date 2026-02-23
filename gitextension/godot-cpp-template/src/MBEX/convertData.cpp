@@ -870,22 +870,43 @@ void MBEXbullConverts(String path, String texture, String palette, int max_image
 		index++;
 	}
 
-	for (int mainindex = 0; mainindex < 24; mainindex++) {
+	type_E9C08 *tempAnimations_E9C08x;
+	tempAnimations_E9C08x = sub_72120(0x1F8u);
+
+		/*
 		index = 0;
 		while (index < max_images) {
 			uint8_t *subpointer = *(uint8_t **)temp_F66F0x[index];
 			subpointer[0] |= 8;
 			index++;
-		}
+		}*/
 
 		sub_715B0();
 		index = 0;
 
-		while (index < max_images) {
-			uint8_t *subpointer = *(uint8_t **)temp_F66F0x[index];
-			int width = *(uint16_t *)&subpointer[2];
-			int height = *(uint16_t *)&subpointer[4];
-			uint8_t *indices = subpointer + 6;
+		for (index = 0; index < max_images; index++) {
+			type_particle_str *subpointer = temp_F66F0x[index]->partstr_0;
+			type_particle_str **index6x = &temp_F66F0x[index]->partstr_0;
+			type_animations1 *anim;
+			int width = subpointer->width;
+			int height = subpointer->height;
+			uint8_t *indices = (uint8_t *)subpointer->textureBuffer;
+			int countOfFrames = 1;
+			if ((*index6x)->word_0 & 1) {
+				anim = sub_721C0_initTmap(tempAnimations_E9C08x, index6x, index);
+				
+				width = anim->Particles_4->width;
+				height = anim->Particles_4->height;
+				indices = (uint8_t *)anim->Particles_4->textureBuffer;
+				countOfFrames = anim->CountOfFrames_16;
+			}
+			for (int mainindex = 0; mainindex < countOfFrames; mainindex++) {
+			if (mainindex > 0) {
+				sub_72350(anim);
+				width = anim->Particles_4->width;
+				height = anim->Particles_4->height;
+				indices = (uint8_t *)anim->Particles_4->textureBuffer;
+			}
 
 			bool alpha = (indices[0] == 0 || indices[width - 1] == 0 ||
 					indices[(height - 1) * width] == 0 || indices[width * height - 1] == 0);
@@ -914,9 +935,9 @@ void MBEXbullConverts(String path, String texture, String palette, int max_image
 						(void *)f.ptr(), width, height, 4, rgba_data.data(), width * 4);
 				f->close();
 			}
-			index++;
 		}
 	}
+	sub_72550(&tempAnimations_E9C08x);
 	UtilityFunctions::print("Extraction Completed via Godot API");
 }
 

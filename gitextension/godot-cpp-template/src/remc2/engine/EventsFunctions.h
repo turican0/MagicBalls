@@ -1611,4 +1611,6 @@ void sub_713A0();
 signed int ReadKeyboardKeysInMenu_7C050();
 void sub_848A0();
 void intervalsave(int index);
+void sub_72350(type_animations1 *a1x); //253350 //animates sprite
+void sub_72550(type_E9C08 **a1x);
 #endif
