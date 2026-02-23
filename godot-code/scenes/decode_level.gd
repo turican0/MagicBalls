@@ -248,6 +248,7 @@ var library2 = {
 	Vector3i(0,58,0): "",#unknown
 	Vector3i(0,67,0): "",#unknowns
 	Vector3i(0,68,0): "",#unknown
+	Vector3i(0,71,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	Vector3i(10,54,0): "",#fair
@@ -305,6 +306,8 @@ var library2 = {
 #3-89 - red ballon-ok
 #3-92 - green ballon-ok
 #10-71 - green mana--ok
+#10-98 - violet flag
+#9-64 - meteor
 
 var filter_material: ShaderMaterial
 var data_img: Image
