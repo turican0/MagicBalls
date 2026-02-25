@@ -224,12 +224,14 @@ var library = {
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
+	Vector3i(10,145,0): "res://entites/object_9_64_meteor.tscn",#meteor
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
 	Vector3i(10,327,0): "res://entites/object_10_327_tornado.tscn",#tornado xxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,426,0): "res://entites/object_10_426_bubble.tscn",#bubble - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(10,463,0): "res://entites/object_10_463_fireball-object.tscn",#fireball-object xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll -OK
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate -OK
+	Vector3i(14,462,0): "res://entites/object_14_462_portal.tscn",#day portal
 	Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
 #2 424 - mushroom1
@@ -250,15 +252,19 @@ var library2 = {
 	Vector3i(0,67,0): "",#unknowns
 	Vector3i(0,68,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
+	Vector3i(9,64,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	Vector3i(10,54,0): "",#fair
+	Vector3i(10,77,0): "",#fair
 	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
 	Vector3i(10,96,0): "",#building
+	Vector3i(10,145,0): "",#unknown
 	Vector3i(11,8,0): "",#unknown
 	Vector3i(14,8,0): "res://entites/object_text.tscn",#unknown
 	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate
+	Vector3i(14,462,0): "res://entites/object_14_462_portal.tscn",#day portal
 	Vector3i(15,59,0): "",#unknown-jar?
 	#
 	#,
@@ -308,7 +314,11 @@ var library2 = {
 #3-92 - green ballon-ok
 #10-71 - green mana--ok
 #10-98 - violet flag
-#9-64 - meteor
+#9-64 - meteor-ok
+#14-462 - day portal
+#10-77 - ohen-ok
+#10-145(koule-metor?)-ok
+#- fix dead sorcerer
 
 var filter_material: ShaderMaterial
 var data_img: Image
@@ -396,7 +406,7 @@ func _process(_p_delta) -> void:
 		get_parent().get_node("SpiderWeb").hide()
 	
 	var continueGame=Global.MBEX.REMC2StepInGame(input_state)
-	if(continueGame):		
+	if(continueGame):
 		Global.MBEX.renew_terrain((Global.levelType=="Cave"))
 		var mods = Global.MBEX.getPaletteModifications()
 		var current_gain = mods[0]
@@ -473,7 +483,7 @@ func show_hide_entites() -> void:
 				node.hide()
 				node.set_process(false)
 				node.set_physics_process(false)
-				if(node.get_meta("uid")==Vector3i(14,461,0)):#remove entites with start script
+				if(node.get_meta("uid")==Vector3i(14,461,0) or node.get_meta("uid")==Vector3i(14,462,0)):#remove entites with start script
 					node.queue_free()
 					arr.remove_at(i)
 		if arr.is_empty():
@@ -544,12 +554,15 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			Main_Player.MOVE_SPEED = actSpeed
 			Main_Player.LIFE = actLife
 			Main_Player.MANA = actMana
+		
+		if modelIndex == 251:
+			modelIndex+=0
 
 		var updateObject=false
 		var current_node = null
 		if not (actByte1 & 4):
 			var isDraw = (actByte0 & 1) == 0
-			if actClass == 3 and modelIndex == 211 and actLife <= 0:
+			if actClass == 3 and (modelIndex == 211 or modelIndex == 251) and actLife <= 0:
 				isDraw = false
 			var fromlib = false
 			var uid = Vector3i(actClass,modelIndex,0)

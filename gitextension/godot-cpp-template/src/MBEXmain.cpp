@@ -507,7 +507,7 @@ void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool i
 	if (mesh_instance_bottom == p_node_bottom)
 		return;
 	if (mesh_instance_bottom != nullptr) {
-		mesh_instance_bottom->queue_free();
+		//mesh_instance_bottom->queue_free();
 		mesh_instance_bottom = nullptr;
 	}
 	if (!p_node_bottom)
@@ -520,7 +520,7 @@ void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool i
 		if (mesh_instance_top == p_node_top)
 			return;
 		if (mesh_instance_top != nullptr) {
-			mesh_instance_top->queue_free();
+			//mesh_instance_top->queue_free();
 			mesh_instance_top = nullptr;
 		}
 		if (!p_node_top)
@@ -968,12 +968,19 @@ Ref<Image> MBEXclass::getMinimap() {
 	PackedByteArray rgba_data;
 	rgba_data.resize(crop_w * crop_h * 4);
 	uint8_t *dest = rgba_data.ptrw();
+	int circle_size = 256;
+	float center = circle_size / 2.0;
+	float radius = circle_size / 2.0;
 	for (int r = 0; r < crop_h; ++r) {
 		int row_offset = (crop_y + r) * screenWidth_18062C;
 		for (int c = 0; c < crop_w; ++c) {
+			float dx = c - center;
+			float dy = r - center;
+			float distanceSquared = dx * dx + dy * dy;
 			uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
 			int pal_pos = color_idx * 3;
-			if (color_idx==0) {
+			if (distanceSquared > radius * radius) {
+			//if (color_idx==0) {
 				int dest_pos = (r * crop_w + c) * 4;
 				dest[dest_pos + 0] = 0;
 				dest[dest_pos + 1] = 0;
@@ -1403,7 +1410,7 @@ void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 	int argc = 3;
 	char *argv[3];
 	char arg1[] = "game.exe";
-	char arg2[] = "--interval_save";
+	char arg2[] = "";
 	char arg3[] = "--auto_change_res";
 	argv[0] = arg1;
 	argv[1] = arg2;
