@@ -206,6 +206,7 @@ var library = {
 	Vector3i(5,287,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzz
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
+	Vector3i(9,64,0): "res://entites/object_9_64_meteor.tscn",#meteor-OK
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
 	Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
