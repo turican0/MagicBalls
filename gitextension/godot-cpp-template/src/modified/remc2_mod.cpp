@@ -1198,6 +1198,8 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 				main_loop_skipMenus = false;
 				main_loop_setLevel = -1;
 				main_loop_customLevelPath = "";
+
+				sub_46830_main_loop_break = false;
 			}
 		}
 	}

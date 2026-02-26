@@ -1,16 +1,11 @@
 [gd_scene format=3 uid="uid://la15xr27ga4e"]
 
 [ext_resource type="Script" uid="uid://b2f4a3jyswfec" path="res://entites/object_10_96_posses_building_d.gd" id="1_xg3og"]
-[ext_resource type="PackedScene" uid="uid://32p4n0y7te4s" path="res://entites/sources/96-g.tscn" id="2_5wqc8"]
 [ext_resource type="PackedScene" uid="uid://doorqiwdu45hw" path="res://entites/sources/flags/flag-green.tscn" id="3_yg3bp"]
 [ext_resource type="Material" uid="uid://c8oflscoawuyf" path="res://entites/sources/flags/perl-green.tres" id="4_xg3og"]
 
 [node name="Node3D" type="Node3D" unique_id=1032799002]
 script = ExtResource("1_xg3og")
-
-[node name="96" parent="." unique_id=435099992 instance=ExtResource("2_5wqc8")]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.74399424, 0)
-visible = false
 
 [node name="flag3" parent="." unique_id=1504280980 instance=ExtResource("3_yg3bp")]
 
