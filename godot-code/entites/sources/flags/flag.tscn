@@ -24,6 +24,6 @@ shader_parameter/tex = ExtResource("3_uoeys")
 [node name="flag" unique_id=1504280980 instance=ExtResource("1_ieg0y")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1" unique_id=780217824]
-transform = Transform3D(1.9106855e-15, -4.371139e-08, 1, -0.9977922, 0.06641318, 2.9030143e-09, -0.06641318, -0.9977922, -4.3614882e-08, 0, 1.32, -0.14)
+transform = Transform3D(-3.8097014e-09, -4.3545057e-08, 1, -0.99619484, 0.08715581, 0, -0.08715581, -0.99619484, -4.371139e-08, 0, 1.4333345, -0.23772728)
 mesh = SubResource("PlaneMesh_clokj")
 surface_material_override/0 = SubResource("ShaderMaterial_uoeys")

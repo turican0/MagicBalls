@@ -19,7 +19,8 @@ void fragment(){
 	ALBEDO = albedo_tex.rgb;
 	
 	// TENTO ŘÁDEK AKTIVUJE PRŮHLEDNOST
-	ALPHA = albedo_tex.a; 
+	ALPHA = albedo_tex.a;
+	ALPHA_SCISSOR_THRESHOLD = 0.5;
 	
 	// Pokud chceš mít ostré hrany bez "duchů", odkomentuj řádek níže:
 	// ALPHA_SCISSOR_THRESHOLD = 0.5;
