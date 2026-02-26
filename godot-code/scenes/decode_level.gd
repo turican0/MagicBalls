@@ -551,20 +551,24 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			if actClass == 3 and modelIndex == 211 and actLife <= 0:
 				isDraw = false
 			var fromlib = false
-			var uid = Vector3i(actClass,modelIndex,0)
+			var uid2 = Vector3i(actClass,modelIndex,0)
 			var scene_to_instance = null
+			var libType:int = 0
 			if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
-				if library_scenes.has(uid):
-					scene_to_instance = library_scenes[uid]
+				libType = 1
+				if library_scenes.has(uid2):
+					scene_to_instance = library_scenes[uid2]
 					fromlib = true
-				elif not library.has(uid):
+				elif not library.has(uid2):
 					scene_to_instance = library_scenes.get(default_key)
 			else:
-				if library2_scenes.has(uid):
-					scene_to_instance = library2_scenes[uid]
+				libType = 2
+				if library2_scenes.has(uid2):
+					scene_to_instance = library2_scenes[uid2]
 					fromlib = true
-				elif not library2.has(uid):
+				elif not library2.has(uid2):
 					scene_to_instance = library2_scenes.get(default_key)
+			var uid = Vector3i(actClass,modelIndex,libType)
 			if scene_to_instance != null:
 				current_node = get_first_entity_with_uid(uid)
 				if current_node == null:
