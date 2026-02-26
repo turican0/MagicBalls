@@ -507,7 +507,9 @@ void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool i
 	if (mesh_instance_bottom == p_node_bottom)
 		return;
 	if (mesh_instance_bottom != nullptr) {
-		//mesh_instance_bottom->queue_free();
+		//mesh_instance_bottom->queue_free();		
+		height_image_bottom.unref();
+		height_texture_bottom.unref();
 		mesh_instance_bottom = nullptr;
 	}
 	if (!p_node_bottom)
@@ -521,6 +523,8 @@ void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool i
 			return;
 		if (mesh_instance_top != nullptr) {
 			//mesh_instance_top->queue_free();
+			height_image_top.unref();
+			height_texture_top.unref();
 			mesh_instance_top = nullptr;
 		}
 		if (!p_node_top)
