@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c844fu0be5nd8"]
 
 [ext_resource type="PackedScene" uid="uid://fld224c8dumo" path="res://entites/sources/bullets/posses/posses.tscn" id="1_6687t"]
+[ext_resource type="Texture2D" uid="uid://bjt1sp1gdxf3d" path="res://entites/sources/bullets/posses/decorative-sparkles-set-0-2.png" id="1_n5yi4"]
 
 [sub_resource type="Curve" id="Curve_lxcym"]
 _limits = [-2.0, 2.0, 0.0, 1.0]
@@ -22,20 +23,11 @@ gravity = Vector3(0, 0, 0)
 linear_accel_min = 9.999997
 linear_accel_max = 9.999997
 
-[sub_resource type="Gradient" id="Gradient_fi65x"]
-offsets = PackedFloat32Array(0, 0.70776254, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.92156863, 1, 1, 0, 0.9882353, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bjna2"]
-gradient = SubResource("Gradient_fi65x")
-fill = 1
-fill_from = Vector2(0.52136755, 0.4871795)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b0wp"]
 transparency = 1
 blend_mode = 1
 vertex_color_use_as_albedo = true
-albedo_texture = SubResource("GradientTexture2D_bjna2")
+albedo_texture = ExtResource("1_n5yi4")
 billboard_mode = 1
 
 [sub_resource type="QuadMesh" id="QuadMesh_v5wgy"]

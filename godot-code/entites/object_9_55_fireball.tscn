@@ -3,6 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://bvhcqxg5nnxyv" path="res://entites/sources/bullets/star/TMAPS0-0.DAT_055_00-cgi-6x.png" id="1_1opbh"]
 [ext_resource type="PackedScene" uid="uid://bysqknbwpuxbd" path="res://entites/sources/bullets/star/star.tscn" id="1_w51rj"]
 
+[sub_resource type="Curve" id="Curve_1opbh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.95786506, 0.15435505), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_to0ql"]
+curve = SubResource("Curve_1opbh")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7hled"]
 direction = Vector3(0, 0, 0)
 spread = 180.0
@@ -11,11 +18,13 @@ initial_velocity_max = 3.0
 gravity = Vector3(0, 0, 0)
 linear_accel_min = 9.999997
 linear_accel_max = 9.999997
+scale_curve = SubResource("CurveTexture_to0ql")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_to0ql"]
 transparency = 1
 albedo_texture = ExtResource("1_1opbh")
 billboard_mode = 1
+billboard_keep_scale = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_6iq6v"]
 material = SubResource("StandardMaterial3D_to0ql")

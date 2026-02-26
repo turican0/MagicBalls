@@ -1,60 +1,39 @@
-[gd_scene load_steps=10 format=3 uid="uid://b52ll3t4onklj"]
+[gd_scene format=3 uid="uid://b52ll3t4onklj"]
+
+[ext_resource type="Texture2D" uid="uid://crg1qf8t87mf3" path="res://entites/sources/bullets/clay/20260226_2017_Image Generation_simple_compose_01kjdp5j7be0krh5wsj0fr85tf.png" id="1_n33pl"]
+[ext_resource type="PackedScene" uid="uid://i8ws3s5pw8vd" path="res://entites/sources/bullets/clay/meteor.glb" id="2_e1s43"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7hled"]
-emission_shape = 1
-emission_sphere_radius = 2.0
 direction = Vector3(0, 0, 0)
+initial_velocity_max = 1.0
 gravity = Vector3(0, 0, 0)
 radial_accel_min = -100.0
 radial_accel_max = -2.2351742e-06
 tangential_accel_min = 17.649998
 tangential_accel_max = 17.649998
 
-[sub_resource type="Gradient" id="Gradient_fi65x"]
-offsets = PackedFloat32Array(0, 0.41573033, 0.66853935, 0.6741573, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.22745098, 0.21176471, 0, 1, 0.44313726, 0.48235294, 0.4862745, 1, 0.92156863, 0, 0, 0, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bjna2"]
-gradient = SubResource("Gradient_fi65x")
-fill = 1
-fill_from = Vector2(0.52136755, 0.4871795)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b0wp"]
 transparency = 1
 vertex_color_use_as_albedo = true
-albedo_texture = SubResource("GradientTexture2D_bjna2")
+albedo_texture = ExtResource("1_n33pl")
 billboard_mode = 1
+fixed_size = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_v5wgy"]
 material = SubResource("StandardMaterial3D_8b0wp")
 size = Vector2(0.7, 0.7)
 
-[sub_resource type="Gradient" id="Gradient_lvves"]
-colors = PackedColorArray(0.20392157, 0.105882354, 0, 1, 0.48235294, 0.5019608, 0.5137255, 1)
+[node name="Node3D" type="Node3D" unique_id=1218560495]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_6nunw"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_twkgx"]
-noise = SubResource("FastNoiseLite_6nunw")
-color_ramp = SubResource("Gradient_lvves")
-seamless = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_75a4v"]
-albedo_texture = SubResource("NoiseTexture2D_twkgx")
-
-[node name="Node3D" type="Node3D"]
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-amount = 30
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=803003562]
+amount = 5
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_7hled")
 draw_pass_1 = SubResource("QuadMesh_v5wgy")
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
-radius = 0.3
-material = SubResource("StandardMaterial3D_75a4v")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1890414389]
 light_color = Color(0.8348168, 0.45113957, 3.85046e-07, 1)
 light_energy = 16.0
+
+[node name="Sketchfab_Scene" parent="." unique_id=609082836 instance=ExtResource("2_e1s43")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
