@@ -34,3 +34,9 @@
 -fix languageChange-ok
 -when more rotation, minimap no showed-ok
 -fix second pass ingame
+-fix transparent miniMap
+-fix transparent Flag
+-from level 5 can not exit
+-portal in level 5 not move
+-other wizard not see on map
+-analyze slow interval

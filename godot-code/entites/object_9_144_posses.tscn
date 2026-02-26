@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://c844fu0be5nd8"]
 
+[ext_resource type="PackedScene" uid="uid://fld224c8dumo" path="res://entites/sources/bullets/posses/posses.tscn" id="1_6687t"]
+
 [sub_resource type="Curve" id="Curve_lxcym"]
 _limits = [-2.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -39,19 +41,6 @@ billboard_mode = 1
 [sub_resource type="QuadMesh" id="QuadMesh_v5wgy"]
 material = SubResource("StandardMaterial3D_8b0wp")
 
-[sub_resource type="Gradient" id="Gradient_lvves"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_6nunw"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_twkgx"]
-noise = SubResource("FastNoiseLite_6nunw")
-color_ramp = SubResource("Gradient_lvves")
-seamless = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_75a4v"]
-albedo_texture = SubResource("NoiseTexture2D_twkgx")
-
 [node name="Node3D" type="Node3D" unique_id=1822028480]
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=454688779]
@@ -60,11 +49,9 @@ lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_7hled")
 draw_pass_1 = SubResource("QuadMesh_v5wgy")
 
-[node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=1468120109]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
-radius = 0.3
-material = SubResource("StandardMaterial3D_75a4v")
-
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0506482, 0)
 light_energy = 8.0
+
+[node name="posses" parent="." unique_id=1478039552 instance=ExtResource("1_6687t")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)

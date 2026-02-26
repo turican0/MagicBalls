@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://fld224c8dumo"]
+
+[ext_resource type="PackedScene" uid="uid://bq0suphb2xbgl" path="res://entites/sources/bullets/posses/posses.blend" id="1_4y8js"]
+
+[sub_resource type="Gradient" id="Gradient_4y8js"]
+colors = PackedColorArray(0.7792914, 0.7792914, 0.7792913, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8qdaa"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1igq0"]
+noise = SubResource("FastNoiseLite_8qdaa")
+color_ramp = SubResource("Gradient_4y8js")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0ou33"]
+albedo_texture = SubResource("NoiseTexture2D_1igq0")
+
+[node name="posses" unique_id=1478039552 instance=ExtResource("1_4y8js")]
+
+[node name="Icosphere" parent="." index="0" unique_id=892943798]
+surface_material_override/0 = SubResource("StandardMaterial3D_0ou33")
