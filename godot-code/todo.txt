@@ -33,9 +33,9 @@
 -fix mainMenu-animation-ok-remove it
 -fix languageChange-ok
 -when more rotation, minimap no showed-ok
--fix second pass ingame
--fix transparent miniMap
--fix transparent Flag
+-fix second pass ingame-ok
+-fix transparent miniMap-ok
+-fix transparent Flag-maybe
 -from level 5 can not exit
 -portal in level 5 not move
 -other wizard not see on map
