@@ -40,3 +40,4 @@
 -portal in level 5 not move
 -other wizard not see on map
 -analyze slow interval
+-add exit from inGame

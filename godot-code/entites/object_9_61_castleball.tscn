@@ -17,11 +17,10 @@ transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_n33pl")
 billboard_mode = 1
-fixed_size = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_v5wgy"]
 material = SubResource("StandardMaterial3D_8b0wp")
-size = Vector2(0.7, 0.7)
+size = Vector2(2, 2)
 
 [node name="Node3D" type="Node3D" unique_id=1218560495]
 

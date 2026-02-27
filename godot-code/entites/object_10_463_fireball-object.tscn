@@ -1,8 +1,15 @@
 [gd_scene format=3 uid="uid://bswslu4apq3d5"]
 
 [ext_resource type="PackedScene" uid="uid://rq33hw8do3l3" path="res://entites/sources/fireballs/astro_projectile.glb" id="1_082xb"]
+[ext_resource type="Texture2D" uid="uid://c73s86au0gdsn" path="res://entites/sources/fire/sun1024.png" id="2_wfuau"]
 
 [node name="Node3D" type="Node3D" unique_id=2040429202]
 
 [node name="Sketchfab_Scene2" parent="." unique_id=884472493 instance=ExtResource("1_082xb")]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.2, 0)
+visible = false
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=940674145]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0.25, 0)
+billboard = 1
+texture = ExtResource("2_wfuau")

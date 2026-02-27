@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=13 format=3 uid="uid://cxhaa6i7bto07"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cxhaa6i7bto07"]
 
 [ext_resource type="Shader" uid="uid://bfrlkbjyfakqt" path="res://GodotExplosionVFX-master/GodotProject/ExplosionShader.tres" id="1_c4nbu"]
 [ext_resource type="Texture2D" uid="uid://bp33fhgkifm6y" path="res://GodotExplosionVFX-master/GodotProject/normal+.png" id="2_gperf"]
