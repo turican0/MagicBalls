@@ -1,5 +1,19 @@
 [gd_scene format=3 uid="uid://kob71u7q85wk"]
 
 [ext_resource type="PackedScene" uid="uid://bhs6olb6gqmui" path="res://entites/sources/wizards/skeleton-crossbow-bake.blend" id="1_0fsj4"]
+[ext_resource type="Material" uid="uid://b707r1nu6ffuh" path="res://entites/sources/skeleton-bowman/skeleton-bowman-mat2.tres" id="2_58ahi"]
+[ext_resource type="Material" uid="uid://dnwdtq0weinkw" path="res://entites/sources/skeleton-bowman/skeleton-bowman-mat1.tres" id="2_srex6"]
 
 [node name="skeleton-crossbow-bake" unique_id=2044310852 instance=ExtResource("1_0fsj4")]
+
+[node name="mesh_2" parent="Armature" parent_id_path=PackedInt32Array(1072729567) index="11" unique_id=1979866458]
+visible = false
+
+[node name="Object_10" parent="Armature" parent_id_path=PackedInt32Array(1072729567) index="22" unique_id=844302486]
+visible = false
+
+[node name="Object_22" parent="Armature" parent_id_path=PackedInt32Array(1072729567) index="23" unique_id=1233542214]
+surface_material_override/0 = ExtResource("2_58ahi")
+
+[node name="Object_6" parent="Armature" parent_id_path=PackedInt32Array(1072729567) index="26" unique_id=147040119]
+surface_material_override/0 = ExtResource("2_srex6")
