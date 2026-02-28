@@ -37,7 +37,20 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"Cape": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://entites/sources/skeleton-bowman/skeleton-bowman-mat1.tres",
+"use_external/path": "uid://dnwdtq0weinkw"
+},
+"Dress": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://entites/sources/skeleton-bowman/skeleton-bowman-mat2.tres",
+"use_external/path": "uid://b707r1nu6ffuh"
+}
+}
+}
 blender/nodes/visible=0
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true

@@ -1,0 +1,18 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b707r1nu6ffuh"]
+
+[ext_resource type="Texture2D" uid="uid://dy4xgqkq0xoc" path="res://entites/sources/wizards/textures/Image_14.png" id="1_v4jsn"]
+[ext_resource type="Texture2D" uid="uid://besro0moa15w2" path="res://entites/sources/wizards/textures/Image_15.png" id="2_qjipw"]
+[ext_resource type="Texture2D" uid="uid://v70l7adt8fc7" path="res://entites/sources/wizards/textures/Image_16.png" id="3_8l653"]
+
+[resource]
+resource_name = "Dress"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_v4jsn")
+metallic = 1.0
+metallic_texture = ExtResource("2_qjipw")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_qjipw")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_8l653")
