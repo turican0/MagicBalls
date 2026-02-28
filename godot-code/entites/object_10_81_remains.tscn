@@ -2,7 +2,30 @@
 
 [ext_resource type="PackedScene" uid="uid://btq2e2xps6ldi" path="res://entites/sources/remains/remains.glb" id="1_el3mw"]
 
+[sub_resource type="Gradient" id="Gradient_el3mw"]
+offsets = PackedFloat32Array(0, 0.5503356, 1)
+colors = PackedColorArray(0.2484256, 0.19364291, 0.06476032, 1, 0.64705884, 0.654902, 0.5254902, 1, 0.35686275, 0.35686275, 0.27058825, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_s7va0"]
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ukjgy"]
+noise = SubResource("FastNoiseLite_s7va0")
+color_ramp = SubResource("Gradient_el3mw")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_66vnr"]
+albedo_texture = SubResource("NoiseTexture2D_ukjgy")
+
 [node name="Node3D" type="Node3D" unique_id=578660859]
 
 [node name="Sketchfab_Scene" parent="." unique_id=448652915 instance=ExtResource("1_el3mw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.3566055, -0.2, 0.356987)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.934081, -0.2990257, 1.0696983)
+
+[node name="CSGSphere3D" type="CSGTorus3D" parent="Sketchfab_Scene" unique_id=814808421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8226662, -0.63143235, -1.0840826)
+inner_radius = 2.7986565
+outer_radius = 4.1394677
+sides = 20
+ring_sides = 10
+material = SubResource("StandardMaterial3D_66vnr")

@@ -11,7 +11,7 @@ func _ready():
 	await get_tree().process_frame
 	Engine.max_fps = 25
 	Main_DecodeLevel = get_node("DecodeLevel")
-	#fadeNode = Global.addFadeOut(fadeNode)
+	fadeNode = Global.addFadeOut(fadeNode)
 	startMenuLoop()
 
 func startMenuLoop():
@@ -57,17 +57,17 @@ func endMapMenu():
 	#endAnim()
 
 func goMapMenu():
-	#fadeNode = Global.addFadeIn(fadeNode)
+	fadeNode = Global.addFadeIn(fadeNode)
 	endMapMenu()
-	#await fadeNode.fade_finished
+	await fadeNode.fade_finished
 	Global.last_scene_path = get_tree().current_scene.scene_file_path
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 
 func exitGame():#fix this - add correct end game
 	Main_DecodeLevel.exitGame()
-	#fadeNode = Global.addFadeIn(fadeNode)
+	fadeNode = Global.addFadeIn(fadeNode)
 	endMapMenu()
-	#await fadeNode.fade_finished
+	await fadeNode.fade_finished
 	get_tree().quit()
 
 	

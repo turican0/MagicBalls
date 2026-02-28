@@ -54,11 +54,11 @@ func fadeInit(fadeNode):
 	return get_tree().root.get_node_or_null("FadeInOut")
 func addFadeIn(fadeNode):
 	fadeNode=fadeInit(fadeNode)
-	fadeNode.start_fade(0.5, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
+	fadeNode.start_fade(0.3, Color(0, 0, 0, 0),Color(0, 0, 0, 1))
 	return fadeNode
 func addFadeOut(fadeNode):
 	fadeNode=fadeInit(fadeNode)
-	fadeNode.start_fade(0.5, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
+	fadeNode.start_fade(0.3, Color(0, 0, 0, 1),Color(0, 0, 0, 0))
 	return fadeNode
 
 #Imports
