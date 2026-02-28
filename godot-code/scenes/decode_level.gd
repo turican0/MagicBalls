@@ -138,7 +138,7 @@ var library = {
 	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue -difmodels!!!
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
 	Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2
-	Vector3i(2,178,0): "res://entites/object_2_179_burned_tree.tscn",#burned tree
+	Vector3i(2,178,0): "res://entites/object_2_178_burned_tree.tscn",#burned tree
 	Vector3i(2,179,0): "res://entites/object_2_179_burned_tree.tscn",#burned tree
 	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2 - same models
 	Vector3i(2,423,0): "res://entites/object_2_423_basket.tscn",#basket - yyyyyyyyyyyyyyyyyyyyyyyyy
