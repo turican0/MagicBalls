@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://bov1khnikm8yo"]
+
+[ext_resource type="PackedScene" uid="uid://0jpdbr6p1y2l" path="res://entites/sources/sun/sun.glb" id="1_6ldtt"]
+[ext_resource type="Texture2D" uid="uid://dfyipwwnuxfjm" path="res://entites/sources/sun/sun_1.png" id="2_1ogu1"]
+[ext_resource type="Texture2D" uid="uid://dwplv4fd5l7nv" path="res://entites/sources/sun/sun_0.jpg" id="3_yi6sq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ogu1"]
+resource_name = "material"
+albedo_texture = ExtResource("3_yi6sq")
+emission = Color(1, 1, 1, 1)
+emission_operator = 1
+emission_texture = ExtResource("3_yi6sq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xtlgu"]
+resource_name = "material_1"
+blend_mode = 1
+albedo_texture = ExtResource("2_1ogu1")
+emission_enabled = true
+emission = Color(0.8802303, 0.8802303, 0.8802303, 1)
+emission_energy_multiplier = 0.5
+emission_operator = 1
+emission_texture = ExtResource("3_yi6sq")
+grow_amount = 11.26
+
+[node name="Sketchfab_Scene" unique_id=960527081 instance=ExtResource("1_6ldtt")]
+
+[node name="UnstableStarCore" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode" parent_id_path=PackedInt32Array(416510957) index="0" unique_id=118517077]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+
+[node name="UnstableStarCore_1_0" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode/UnstableStarCore" index="0" unique_id=2029508117]
+surface_material_override/0 = SubResource("StandardMaterial3D_1ogu1")
+
+[node name="UnstableStarref" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode" parent_id_path=PackedInt32Array(416510957) index="1" unique_id=832638965]
+transform = Transform3D(1.01, 0, 0, 0, -4.4148504e-08, 1.01, 0, -1.01, -4.4148504e-08, 0, 0, 0)
+
+[node name="UnstableStarref_2_0" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode/UnstableStarref" index="0" unique_id=1695024193]
+surface_material_override/0 = SubResource("StandardMaterial3D_xtlgu")
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=613005901]
+autoplay = &"Take 001"

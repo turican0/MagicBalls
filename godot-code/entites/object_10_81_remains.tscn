@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=578660859]
 
 [node name="rem2" parent="." unique_id=148891587 instance=ExtResource("1_el3mw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2357635, -0.47555846, 1.2334752)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1775212, -0.47555846, 1.5392485)
