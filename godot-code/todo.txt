@@ -41,3 +41,4 @@
 -other wizard not see on map
 -analyze slow interval
 -add exit from inGame
+-fix enter to hide level

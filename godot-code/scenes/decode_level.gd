@@ -224,6 +224,7 @@ var library = {
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
+	Vector3i(10,98,0): "res://entites/object_10_98_posses_buildingD-violet.tscn",#building -difmodels!!!
 	Vector3i(10,145,0): "res://entites/object_9_64_meteor.tscn",#meteor
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
 	Vector3i(10,327,0): "res://entites/object_10_327_tornado.tscn",#tornado xxxxxxxxxxxxxxxxxxxxxxxx
@@ -247,11 +248,13 @@ var library2 = {
 	Vector3i(3,0,0): "",#unknown
 	Vector3i(3,88,0): "",#unknown
 	Vector3i(3,211,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,251,0): "",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
 	Vector3i(0,8,0): "",#unknown
 	Vector3i(0,58,0): "",#unknown
 	Vector3i(0,67,0): "",#unknowns
 	Vector3i(0,68,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
+	Vector3i(5,14,0): "",#unknown
 	Vector3i(9,64,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
@@ -313,12 +316,14 @@ var library2 = {
 #3-89 - red ballon-ok
 #3-92 - green ballon-ok
 #10-71 - green mana--ok
-#10-98 - violet flag
+#10-98 - violet flag-must make!!!!!!!!!!!!!
 #9-64 - meteor-ok
 #14-462 - day portal
 #10-77 - ohen-ok
 #10-145(koule-metor?)-ok
 #- fix dead sorcerer
+
+#3-251 5-411-mummy
 
 var filter_material: ShaderMaterial
 var data_img: Image
