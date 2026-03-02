@@ -41,4 +41,6 @@
 -other wizard not see on map
 -analyze slow interval
 -add exit from inGame
--fix enter to hide level
+-fix enter to hide level - 50%
+-add screen between maps
+-add animations between maps
