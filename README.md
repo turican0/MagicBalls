@@ -7,25 +7,27 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 
 ## What needs to be done to complete the game:
 -Create 3D models of all entities.<br>
--Add sounds/music.<br>
--Add menus/levels, etc.<br>
--Add proper water.<br>
--Add particle effects.<br>
 -Add gamepad controls, etc.<br>
 -Add first-person/third-person camera options<br>
--Integrate data copier from Magic Carpet 2<br>
--Better terrain abilites(water/lava)<br>
-
--Draw Terrain modification by fire<br>
--Draw Spider Web<br>
 -Draw healt<br>
 
 ---
 
 ## Next version:
 -Update UI<br>
--Add end of level 1<br>
--Add some models<br>
+
+## Version 260302:
+-Many fixes and updates<br>
+-Draw Spider Web<br>
+-Draw Terrain modification by fire<br>
+-Add models to level 1-5<br>
+-Integrate data copier from Magic Carpet 2<br>
+-Better terrain abilites(water/lava)<br>
+-Add sounds/music.<br>
+-Add menus/levels, etc.<br>
+-Add proper water.<br>
+-Add particle effects.<br>
+[Second youtube video](https://www.youtube.com/watch?v=gSrJQ-UL85s)
 
 ## Version 260121:
 -Add sounds<br>
