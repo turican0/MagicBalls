@@ -64,8 +64,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.74080205, 1.0066603e-05)
-shader_parameter/cirrus_position2 = Vector2(0.74080205, 1.0066603e-05)
+shader_parameter/cirrus_position1 = Vector2(0.53755516, 1.9745687e-06)
+shader_parameter/cirrus_position2 = Vector2(0.53755516, 1.9745687e-06)
 shader_parameter/cirrus_texture = ExtResource("6_1g8sw")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -75,7 +75,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(13.702491, 5.0337785e-05)
+shader_parameter/cumulus_position = Vector2(2.687804, 9.873084e-06)
 shader_parameter/cumulus_texture = ExtResource("5_rt0jr")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -122,7 +122,6 @@ editor_time_enabled = false
 game_time_enabled = false
 current_time = 11.0
 skydome_energy = 0.0
-wind_speed = 7.000000000000001
 wind_direction = 1.5708
 metadata/_custom_type_script = "uid://deo0gxkmk2ahd"
 
@@ -149,7 +148,6 @@ moon_altitude = -2.5413165
 fog_falloff = 15.0
 fog_density = 0.010818545
 fog_end = 200.0
-wind_speed = 7.000000000000001
 wind_direction = 1.5708
 
 [node name="TimeOfDay" type="Node" parent="Sky3D" unique_id=2106945032]
