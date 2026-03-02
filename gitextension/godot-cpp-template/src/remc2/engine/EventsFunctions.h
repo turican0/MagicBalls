@@ -428,7 +428,7 @@ extern int save_debugcounter;
 
 void j___delay(x_DWORD); // weak
 
-void WriteBufferToBMP(uint16_t width, uint16_t height, uint8_t* ptrPalette, uint8_t* ptrBuffer, const std::string& filename = "BufferOut.bmp");
+void WriteBufferToBMP(uint16_t width, uint16_t height, uint8_t* ptrPalette, uint8_t* ptrBuffer, const char* fileName = "BufferOut.bmp");
 void WriteMenuGraphicToBMP(uint16_t width, uint16_t height, uint8_t scale, uint8_t* ptrPalette, uint8_t* ptrBuffer);
 
 void sub_43C60(unsigned __int8 a1, char a2, int a3, int a4);
@@ -1610,7 +1610,8 @@ void sub_53CC0_close_movie();
 void sub_713A0();
 signed int ReadKeyboardKeysInMenu_7C050();
 void sub_848A0();
+void InitialiseSpells_54A50(int playerIndex2, int playerIndex);
 void intervalsave(int index);
-void sub_72350(type_animations1 *a1x); //253350 //animates sprite
-void sub_72550(type_E9C08 **a1x);
+void sub_72350(type_animations1* a1);
+void sub_72550(type_E9C08** a1);
 #endif

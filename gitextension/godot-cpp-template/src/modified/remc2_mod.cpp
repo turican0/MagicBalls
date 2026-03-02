@@ -277,7 +277,7 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x, typeStateMenu newState
 			}
 			//added code
 
-			if (CommandLineParams.ModeTestRegressionsGame()) {
+			if (CommandLineParams.ModeRegressionsTestType() == 0) {
 				x_DWORD_17DB70str.x_BYTE_17DB8E = 1;
 				x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = test_regression_level;
 				if (mapScreenPortals_E17CC[test_regression_level].activated_18 == 1)

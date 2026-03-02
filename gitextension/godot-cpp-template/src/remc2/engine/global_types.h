@@ -132,12 +132,12 @@ typedef struct {//lenght 18
 }type_str_0x1AC_428;
 
 typedef struct {
-	uint8_t subSpellIndex[26];
+	uint8_t SpellIndex[26];
 }
 type_8_1a;
 
 typedef struct {
-	int16_t word[26];
+	int16_t SpellEnabled[26];
 	//uint16_t word_2279;
 }
 type_16_1a;
@@ -183,6 +183,7 @@ typedef enum
 	MULTIPLAYER_MODE = 0x10u,
 	SPEECH_ENABLED = 0x40,
 	SPEECH_DISABLED = 0xBF,
+	LEVEL_LOADED_FROM_ARG = 0x80u,
 } Setting;
 
 typedef struct {//begin 611//str_611
