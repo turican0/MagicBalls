@@ -781,6 +781,8 @@ PackedFloat32Array MBEXclass::GetEntites() {
 
 		if (!(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x20u) && (particlesParameters_D951C[actEntity->word_0x5A_90].word_0 == 461))
 			continue;//not show mount before end level
+		if (!(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x20u) && (particlesParameters_D951C[actEntity->word_0x5A_90].word_0 == 462))
+			continue; //not show mount before end level
 
 		write_ptr[idx++] = (float)actEntity->position_0x4C_76.x; //1
 		write_ptr[idx++] = (float)actEntity->position_0x4C_76.y; //2

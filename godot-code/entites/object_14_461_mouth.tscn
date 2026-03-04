@@ -16,4 +16,4 @@ transform = Transform3D(-5.795555, 0, 1.5529149, 0, 6, 0, -1.5529149, 0, -5.7955
 script = ExtResource("2_6fre3")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Moving/Sketchfab_Scene" unique_id=623928991]
-transform = Transform3D(0.16666667, 0, 0, 0, 0.16666667, 0, 0, 0, 0.16666667, -0.12287426, 0.3401526, -0.04677602)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12287426, 0.3401526, -0.04677602)
