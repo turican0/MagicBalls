@@ -6297,6 +6297,11 @@ void PrepareEventSound_6E450(int16_t entityIndex, int16_t a2, int16_t wavIndex)/
 			flags_v29 = 0;
 			break;
 	}
+	if (Switch_41 == wavIndex)
+	{
+		wavIndex++;
+		wavIndex--;
+	}
 	switch (wavIndex)
 	{
 	case Ocean_1:
