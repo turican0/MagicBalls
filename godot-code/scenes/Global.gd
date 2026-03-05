@@ -67,8 +67,6 @@ func setLoadingScreenStr(fileName):
 			return
 	setLoadingScreen(null)
 
-
-
 func setLoadingScreen(buffer):
 	if buffer == null:
 		loadScreenNodeRect.texture = null
