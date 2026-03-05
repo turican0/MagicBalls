@@ -877,9 +877,12 @@ func mapMenuStep() -> int:
 func inGameBegin():
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	var buffer=Global.MBEX.REMC2BeginInGame()
-	Global.setLoadingScreen(buffer)
+	#Global.setLoadingScreen(buffer)
 	Global.MBEX.REMC2BeginInGameAfterScreen()
-	Global.setLoadingScreen(null)
+	fadeNode = Global.addFadeIn(fadeNode)
+	await fadeNode.fade_finished
+	Global.setLoadingScreenStr("")
+	fadeNode = Global.addFadeOut(fadeNode)
 	Global.levelType=Global.MBEX.REMC2GetLevelType()
 
 func setMesh():

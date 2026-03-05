@@ -11,7 +11,6 @@ var Main_TerrainsMB
 #var MainMusic
 func _ready() -> void:
 	await get_tree().process_frame
-	fadeNode = Global.addFadeOut(fadeNode)
 	Engine.max_fps = 60
 	Main_DecodeLevel = get_node("DecodeLevel")
 	Main_Player = get_node("Player")

@@ -56,12 +56,24 @@ func loadScreenInit():
 			get_tree().root.move_child(new_layer, fade.get_index())
 	return get_tree().root.get_node_or_null("LoadScreen")
 
+func setLoadingScreenStr(fileName):
+	if(fileName):
+		setLoadingScreen(null)
+	var path = "user://convertdata/smat/" + fileName
+	if FileAccess.file_exists(path):
+		var img = Image.load_from_file(path)
+		if img:
+			setLoadingScreen(img)
+			return
+	setLoadingScreen(null)
+
+
+
 func setLoadingScreen(buffer):
 	if buffer == null:
-		pass#loadScreenNodeRect.texture = null
+		loadScreenNodeRect.texture = null
 	else:
-		loadScreenNodeRect.texture = ImageTexture.create_from_image(buffer)		
-	print(loadScreenNodeRect)
+		loadScreenNodeRect.texture = ImageTexture.create_from_image(buffer)
 
 #FadeInOut
 func fadeInit(fadeNode):

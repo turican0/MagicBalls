@@ -327,9 +327,9 @@ void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, St
 		uint8_t index = indices[i];
 		int pal_idx = index * 3;
 
-		rgb_data[i * 3 + 0] = palette_final[pal_idx + 2]*4; // Blue
+		rgb_data[i * 3 + 0] = palette_final[pal_idx + 0]*4; // Blue
 		rgb_data[i * 3 + 1] = palette_final[pal_idx + 1]*4; // Green
-		rgb_data[i * 3 + 2] = palette_final[pal_idx + 0]*4; // Red
+		rgb_data[i * 3 + 2] = palette_final[pal_idx + 2]*4; // Red
 	}
 
 	Ref<FileAccess> f = FileAccess::open(outPath, FileAccess::WRITE);
