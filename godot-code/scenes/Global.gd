@@ -43,6 +43,26 @@ func initSound():
 	Main_Sounds.setSoundBank(1)#Night
 	Global.soundInited = true
 
+var loadScreenNodeRect:TextureRect;
+func loadScreenInit():
+	if(!get_tree().root.get_node_or_null("LoadScreen")):
+		var fade_layer_scene = preload("res://scenes/LoadScreen.tscn")
+		var new_layer = fade_layer_scene.instantiate()
+		new_layer.name = "LoadScreen"
+		get_tree().root.add_child(new_layer)
+		loadScreenNodeRect = new_layer.get_node_or_null("TextureRect");
+		var fade = get_tree().root.get_node_or_null("FadeInOut")
+		if fade:
+			get_tree().root.move_child(new_layer, fade.get_index())
+	return get_tree().root.get_node_or_null("LoadScreen")
+
+func setLoadingScreen(buffer):
+	if buffer == null:
+		pass#loadScreenNodeRect.texture = null
+	else:
+		loadScreenNodeRect.texture = ImageTexture.create_from_image(buffer)		
+	print(loadScreenNodeRect)
+
 #FadeInOut
 func fadeInit(fadeNode):
 	if(!get_tree().root.get_node_or_null("FadeInOut")):

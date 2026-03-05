@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dnlqpfh1kvcy3"]
+
+[node name="LoadScreen" type="Control" unique_id=490298468]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1775036241]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

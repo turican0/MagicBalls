@@ -993,7 +993,7 @@ uint32_t InGameLoop_47320_mod_gameTurn = 0;
 
 void InGameLoop_47320_mod(typeStateMenu newState) //228320
 {
-	if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })
+	if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen })
 	{
 		x_D41A0_BYTEARRAY_4_struct.paletteMod_51 = 0;
 		InGameLoop_47320_mod_gameTurn = 0;
@@ -1015,6 +1015,41 @@ void InGameLoop_47320_mod(typeStateMenu newState) //228320
 	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
 }
 
+bool setLoadScreen = false;
+
+void sub_47FC0_load_screen_mod(bool isSecretLevel) //228fc0
+{
+	char dataPath[MAX_PATH];
+	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+	//debug
+	sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
+	//debug
+	if (isSecretLevel) {
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITL2.DAT");
+		DataFileIO::ReadFileAndDecompress(dataPath, &x_DWORD_E9C38_smalltit);
+	} else {
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITLE.DAT");
+		DataFileIO::ReadFileAndDecompress(dataPath, &x_DWORD_E9C38_smalltit);
+	}
+	CopyScreen_85B20(x_DWORD_E9C38_smalltit, pdwScreenBuffer_351628, 0x190u);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		sub_90478_VGA_Blit320();
+	else
+		sub_75200_VGA_Blit640(480);
+	if (isSecretLevel) {
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITL2.PAL");
+		DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+	} else {
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITLE.PAL");
+		DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+	}
+	sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
+	D41A0_0.dword_0x23a = 1;
+	D41A0_0.dword_0x23e = 0;
+	D41A0_0.dword_0x242 = 0;
+	setLoadScreen = true;
+}
+
 bool sub_46830_main_loop_break = false;
 
 void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) //227830
@@ -1026,7 +1061,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 	std::string customLevelPath;
 	*/
 
-	if (((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||
+	if (((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin }) ||		
 		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }))
@@ -1052,6 +1087,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
+		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }) ||
 		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin }) ||
@@ -1081,24 +1117,28 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 				MenusAndIntros_76930_mod(main_loop_skipMenus, newState); //set language, intro, menu, atd. //257930
 		if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }) ||
 			(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
 		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
 			if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })
 			{
 				main_loop_isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
-				sub_47FC0_load_screen(main_loop_isSecretLevel); //vga smaltitle
+				sub_47FC0_load_screen_mod(main_loop_isSecretLevel); //vga smaltitle
+			}
+			if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen })
+			{
 				LevelInitGame_56A30(main_loop_setLevel, main_loop_customLevelPath);
 				if (CommandLineParams.DoAutoChangeRes()) {
 					resindex_begin = 0;
 				}
 				sub_47160();
 			}
-			if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) ||
+			if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen }) ||
 				(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }) ||
 				(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
 				if ((!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) && !sub_46830_main_loop_break) {
-					if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin }) {
+					if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen }) {
 						if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
 							switch (D41A0_0.terrain_2FECE.MapType) {
 								case MapType_t::Day:
@@ -1132,7 +1172,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 						*/
 					}
 					if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step })||
-						(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })||
+						(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen }) ||
 						(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
 						InGameLoop_47320_mod(newState);
 					/*
@@ -1182,7 +1222,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 								Type_SecretMapScreenPortals_E2970 *secretsPortals = GetSecretAndActivedPortal_824B0(actLevel);
 								if (secretsPortals) {
 									x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = secretsPortals->levelNumber_6;
-									sub_47FC0_load_screen(true);
+									sub_47FC0_load_screen_mod(true);
 									LevelInitGame_56A30(actLevel);
 									sub_47160();
 								}

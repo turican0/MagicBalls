@@ -61,6 +61,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMain", "TextureRect"), &MBEXclass::REMC2BeginMain);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepMain", "Dictionary"), &MBEXclass::REMC2StepMain);
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGameAfterScreen"), &MBEXclass::REMC2BeginInGameAfterScreen);
 	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary"), &MBEXclass::REMC2StepInGame);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
@@ -1011,6 +1012,35 @@ Ref<Image> MBEXclass::getMinimap() {
 	return img;
 }
 
+Ref<Image> GetFrameBuffer(int width,int height) {
+	uint8_t *palette = VGA_Get_Palette();
+	int crop_x = 0;
+	int crop_y = 0;
+	int crop_w = width;
+	int crop_h = height;
+	PackedByteArray rgba_data;
+	rgba_data.resize(crop_w * crop_h * 4);
+	uint8_t *dest = rgba_data.ptrw();
+	for (int r = 0; r < crop_h; ++r) {
+		int row_offset = (crop_y + r) * screenWidth_18062C;
+		for (int c = 0; c < crop_w; ++c) {
+			uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
+			int pal_pos = color_idx * 3;
+			uint8_t red = palette[pal_pos + 0] * 4;
+			uint8_t green = palette[pal_pos + 1] * 4;
+			uint8_t blue = palette[pal_pos + 2] * 4;
+			int dest_pos = (r * crop_w + c) * 4;
+			dest[dest_pos + 0] = red;
+			dest[dest_pos + 1] = green;
+			dest[dest_pos + 2] = blue;
+			dest[dest_pos + 3] = 255;
+		}
+	}
+	Ref<Image> img = Image::create_from_data(crop_w, crop_h, false, Image::FORMAT_RGBA8, rgba_data);
+	//img->save_png("user://debug.png");
+	return img;
+}
+
 Vector3 get_color(const uint8_t *pal, int index) {
 	return {
 		pal[index * 3 + 0] / 63.0f,
@@ -1594,8 +1624,35 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 }
 
 
-void MBEXclass::REMC2BeginInGame() {
+Ref<Image> MBEXclass::REMC2BeginInGame() {
+	setLoadScreen = false;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin });
+	/*
+	char dataPath[MAX_PATH];
+	switch (D41A0_0.terrain_2FECE.MapType) {
+		case MapType_t::Day:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALD-0.DAT");
+			break;
+		case MapType_t::Night:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
+			break;
+		case MapType_t::Cave:
+			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALC-0.DAT");
+			break;
+	}
+	uint8_t temp_palette[256 * 3];
+	uint8_t *temp_ptr[1];
+	temp_ptr[0] = temp_palette;
+	DataFileIO::ReadFileAndDecompress(dataPath, temp_ptr);
+	VGA_Set_Palette(temp_ptr[0], true);
+	*/
+	if (setLoadScreen)
+		return GetFrameBuffer(320,200);
+	return nullptr;
+}
+
+void MBEXclass::REMC2BeginInGameAfterScreen() {
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen });
 
 	char dataPath[MAX_PATH];
 	switch (D41A0_0.terrain_2FECE.MapType) {

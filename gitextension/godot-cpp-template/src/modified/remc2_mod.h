@@ -44,6 +44,7 @@ struct typeStateMenu {
 
 	enum class State {
 		Begin,
+		BeginAfterScreen,
 		Step,
 		End,
 		Zero,
@@ -63,6 +64,7 @@ extern int NewGameDialog_endAction;
 extern typeStateMenu2 actState;
 extern int globalAnimIndex;
 extern bool PlayInfoFmv_break;
+extern bool setLoadScreen;
 
 void InitLanguage_76A40_mod_only_language();
 

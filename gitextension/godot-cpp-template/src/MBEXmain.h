@@ -119,7 +119,8 @@ public:
 	//void REMC2EndMain();
 	int REMC2StepMain(Dictionary inputs);
 
-	void REMC2BeginInGame();
+	Ref<Image> REMC2BeginInGame();
+	void REMC2BeginInGameAfterScreen();
 	//bool REMC2EndInGame();
 	bool REMC2StepInGame(Dictionary inputs);
 	String REMC2GetLevelType();

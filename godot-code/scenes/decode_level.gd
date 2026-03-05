@@ -678,6 +678,7 @@ func getInputs():
 	input_state["mouse_pos2"] = Vector2(m_x, m_y)
 
 func init():
+	Global.loadScreenInit()
 	MBEXinit()
 	Global.initSound()
 
@@ -875,7 +876,10 @@ func mapMenuStep() -> int:
 	
 func inGameBegin():
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
-	Global.MBEX.REMC2BeginInGame()
+	var buffer=Global.MBEX.REMC2BeginInGame()
+	Global.setLoadingScreen(buffer)
+	Global.MBEX.REMC2BeginInGameAfterScreen()
+	Global.setLoadingScreen(null)
 	Global.levelType=Global.MBEX.REMC2GetLevelType()
 
 func setMesh():
