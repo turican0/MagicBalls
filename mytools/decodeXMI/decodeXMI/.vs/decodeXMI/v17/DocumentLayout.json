@@ -1,0 +1,45 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\decodeXMI\\decodeXMI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FA7E022A-FF7D-4EE9-805B-12D06216E7A5}|decodeXMI.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\decodeXMI\\decodeXMI\\decodeXMI.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FA7E022A-FF7D-4EE9-805B-12D06216E7A5}|decodeXMI.vcxproj|solutionrelative:decodeXMI.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "decodeXMI.cpp",
+              "DocumentMoniker": "C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\decodeXMI\\decodeXMI\\decodeXMI.cpp",
+              "RelativeDocumentMoniker": "decodeXMI.cpp",
+              "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\decodeXMI\\decodeXMI\\decodeXMI.cpp",
+              "RelativeToolTip": "decodeXMI.cpp",
+              "ViewState": "AgIAAKQAAAAAAAAAAAAwwLoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-03-06T13:03:02.587Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
