@@ -14,12 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
@@ -32,7 +28,7 @@
               "RelativeDocumentMoniker": "decodeXMI.cpp",
               "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\decodeXMI\\decodeXMI\\decodeXMI.cpp*",
               "RelativeToolTip": "decodeXMI.cpp*",
-              "ViewState": "AgIAAKQAAAAAAAAAAAAwwLoAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAQwFsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-03-06T13:03:02.587Z",
               "EditorCaption": ""

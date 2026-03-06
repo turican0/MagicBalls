@@ -74,11 +74,20 @@ static void parse_RBRN(const uint8_t* data, uint32_t size, RbrnChunk* out) {
 static void parse_TIMB(const uint8_t* data, uint32_t size, TimbChunk* out) {
     out->count = 0;
     if (size < 2) return;
+
     uint16_t count = read_be16(data);
+
+    // Ověř že data jsou dostatečně velká
+    uint32_t expected_size = 2 + (uint32_t)count * 2;
+    if (expected_size > size) {
+        printf("  [TIMB] WARNING: count=%u but size=%u, truncating\n", count, size);
+        count = (uint16_t)((size - 2) / 2);
+    }
+
     out->count = count;
     for (int i = 0; i < count && i < 128; i++) {
-        out->timbres[i].patch = data[2 + i * 2];
-        out->timbres[i].bank = data[3 + i * 2];
+        out->timbres[i].patch = (int)(uint8_t)data[2 + i * 2];
+        out->timbres[i].bank = (int)(uint8_t)data[3 + i * 2];
     }
 }
 
@@ -95,93 +104,161 @@ static void analyze_EVNT(const uint8_t* evnt_data, uint32_t evnt_size,
     double total_seconds = 0.0;
     const uint8_t* p = evnt_data;
     const uint8_t* end = evnt_data + evnt_size;
-    uint8_t running_status = 0;
 
-    printf("\n    [Bullfrog XMI Scan: Patches, Banks & Loops]\n");
-    printf("    Time (s) | Offset  | Event Details\n");
+    printf("\n    [EVNT Event Dump]\n");
+    printf("    Ticks    | Offset  | Event Details\n");
     printf("    ---------|---------|----------------------------------------\n");
 
     while (p < end) {
         uint32_t offset = (uint32_t)(p - evnt_data);
 
-        // Kontrola RBRN markerů (Bullfrog branching body)
+        // Kontrola RBRN markerů
         for (int i = 0; i < rbrn->count; i++) {
             if (rbrn->markers[i].offset == offset) {
-                printf("    %7.2f  | 0x%05X | >>> BRANCH POINT ID %d <<<\n", total_seconds, offset, rbrn->markers[i].id);
+                printf("    %8u | 0x%05X | >>> BRANCH POINT ID %d <<<\n",
+                    total_ticks, offset, rbrn->markers[i].id);
             }
         }
 
-        // 1. Čtení Delta Time (XMI VLQ)
-        int vlq_len = 0;
-        uint32_t delta = (*p < 0x80) ? *p++ : read_vlq(p, &vlq_len);
-        if (vlq_len > 0) p += vlq_len;
-
-        total_ticks += delta;
-        total_seconds += (double)delta * (tempo / 1000000.0) / 120.0;
+        // 1. XMI delay — sumování 7-bit hodnot (NE concatenace jako MIDI VLQ!)
+        // Delay bajty mají vysoký bit = 0
+        // Event bajty mají vysoký bit = 1
+        if (p < end && (*p & 0x80) == 0) {
+            uint32_t delta = 0;
+            while (p < end && (*p & 0x80) == 0) {
+                delta += *p;
+                if (*p != 0x7F) { p++; break; }
+                p++;
+            }
+            total_ticks += delta;
+            double beat_len = tempo / 1000000.0;
+            total_seconds += (double)delta / 120.0 * beat_len;
+        }
 
         if (p >= end) break;
 
-        // 2. Status Byte a Running Status (Klíčové pro Bullfrog!)
-        uint8_t status = *p;
-        if (status < 0x80) {
-            status = running_status;
-        }
-        else {
-            status = *p++;
-            if (status < 0xF0) running_status = status;
-        }
-
+        uint32_t event_offset = (uint32_t)(p - evnt_data);
+        uint8_t status = *p++;
         uint8_t type = status & 0xF0;
         uint8_t chan = status & 0x0F;
 
-        // 3. Detekce Patch / Bank / Loop
-        if (type == 0xC0) { // PATCH CHANGE
-            uint8_t patch = *p++;
-            printf("    %7.2f  | 0x%05X | [PATCH] Ch %d -> #%d\n", total_seconds, offset, chan, patch);
+        if (status == 0xFF) {
+            // META event
+            uint8_t m_type = *p++;
+            // Meta délka je standardní MIDI VLQ (concatenace)
+            uint32_t m_len = 0;
+            while (p < end) {
+                uint8_t b = *p++;
+                m_len = (m_len << 7) | (b & 0x7F);
+                if (!(b & 0x80)) break;
+            }
+            if (m_type == 0x51 && m_len >= 3) {
+                tempo = ((uint32_t)p[0] << 16) | ((uint32_t)p[1] << 8) | p[2];
+                printf("    %8u | 0x%05X | [TEMPO] %u us/beat = %.1f BPM\n",
+                    total_ticks, event_offset, tempo, 60000000.0 / tempo);
+            }
+            else if (m_type == 0x2F) {
+                printf("    %8u | 0x%05X | [END OF TRACK]\n",
+                    total_ticks, event_offset);
+            }
+            else if (m_type == 0x03) {
+                printf("    %8u | 0x%05X | [TRACK NAME] \"%.*s\"\n",
+                    total_ticks, event_offset, (int)m_len, p);
+            }
+            else if (m_type == 0x06 || m_type == 0x07) {
+                printf("    %8u | 0x%05X | [MARKER] \"%.*s\"\n",
+                    total_ticks, event_offset, (int)m_len, p);
+            }
+            p += m_len;
         }
-        else if (type == 0xB0) { // CONTROL CHANGE (Banky a Smyčky)
+        else if (type == 0x90) {
+            // NOTE ON — XMI má navíc duration jako VLQ za velocity
+            uint8_t note = *p++;
+            uint8_t vel = *p++;
+            // Duration: standardní MIDI VLQ (concatenace)
+            uint32_t dur = 0;
+            while (p < end) {
+                uint8_t b = *p++;
+                dur = (dur << 7) | (b & 0x7F);
+                if (!(b & 0x80)) break;
+            }
+            // Tichý Note On (vel=0) loguj jen pokud chceš všechny eventy
+            if (vel > 0) {
+                printf("    %8u | 0x%05X | [NOTE ON]  Ch %2d  Note %3d  Vel %3d  Dur %u\n",
+                    total_ticks, event_offset, chan, note, vel, dur);
+            }
+        }
+        else if (type == 0x80) {
+            // NOTE OFF — v XMI by neměly být, ale pro robustnost
+            uint8_t note = *p++;
+            uint8_t vel = *p++;
+            printf("    %8u | 0x%05X | [NOTE OFF] Ch %2d  Note %3d  Vel %3d\n",
+                total_ticks, event_offset, chan, note, vel);
+        }
+        else if (type == 0xB0) {
+            // CONTROL CHANGE
             uint8_t cc = *p++;
             uint8_t val = *p++;
             if (cc == 0 || cc == 32) {
-                printf("    %7.2f  | 0x%05X | [BANK] Ch %d -> Bank %d\n", total_seconds, offset, chan, val);
+                printf("    %8u | 0x%05X | [BANK]       Ch %2d  Bank %d\n",
+                    total_ticks, event_offset, chan, val);
             }
             else if (cc == 116) {
-                printf("    %7.2f  | 0x%05X | [LOOP START] (CC 116) <<<<<<\n", total_seconds, offset);
+                printf("    %8u | 0x%05X | [LOOP START] Ch %2d  Val %d  <<<<<<\n",
+                    total_ticks, event_offset, chan, val);
             }
             else if (cc == 117) {
-                printf("    %7.2f  | 0x%05X | [LOOP JUMP/END] (CC 117, Val: %d) >>>>>>\n", total_seconds, offset, val);
+                printf("    %8u | 0x%05X | [LOOP END]   Ch %2d  Val %d  >>>>>>\n",
+                    total_ticks, event_offset, chan, val);
+            }
+            else {
+                printf("    %8u | 0x%05X | [CC]         Ch %2d  CC %3d  Val %3d\n",
+                    total_ticks, event_offset, chan, cc, val);
             }
         }
-        else if (status == 0xFF) { // META (Tempo, Text)
-            uint8_t m_type = *p++;
-            int m_len_b = 0;
-            uint32_t m_len = read_vlq(p, &m_len_b);
-            p += m_len_b;
-            if (m_type == 0x51) {
-                tempo = ((uint32_t)p[0] << 16) | ((uint32_t)p[1] << 8) | p[2];
-            }
-            else if (m_type == 0x06 || m_type == 0x07) {
-                printf("    %7.2f  | 0x%05X | [MARKER] \"%.*s\"\n", total_seconds, offset, (int)m_len, p);
-            }
-            p += m_len;
-            running_status = 0;
+        else if (type == 0xC0) {
+            uint8_t patch = *p++;
+            printf("    %8u | 0x%05X | [PATCH]      Ch %2d  Patch %d\n",
+                total_ticks, event_offset, chan, patch);
         }
-        else if (type == 0x90) { // NOTE ON (XMI Specifikum - má délku tónu navíc!)
-            p += 2; // note, velocity
-            int dur_len = 0;
-            read_vlq(p, &dur_len); // Skip XMI Duration
-            p += dur_len;
+        else if (type == 0xD0) {
+            uint8_t pressure = *p++;
+            printf("    %8u | 0x%05X | [AFTERTOUCH] Ch %2d  Val %d\n",
+                total_ticks, event_offset, chan, pressure);
         }
-        // Přeskakování ostatních MIDI dat, aby se parser neztratil
-        else if (type == 0x80 || type == 0xA0 || type == 0xE0) p += 2;
-        else if (type == 0xD0) p += 1;
+        else if (type == 0xA0) {
+            uint8_t note = *p++;
+            uint8_t val = *p++;
+            printf("    %8u | 0x%05X | [POLY AT]    Ch %2d  Note %d  Val %d\n",
+                total_ticks, event_offset, chan, note, val);
+        }
+        else if (type == 0xE0) {
+            uint8_t lo = *p++;
+            uint8_t hi = *p++;
+            int bend = ((hi << 7) | lo) - 8192;
+            printf("    %8u | 0x%05X | [PITCH BEND] Ch %2d  Val %d\n",
+                total_ticks, event_offset, chan, bend);
+        }
         else if (status == 0xF0 || status == 0xF7) {
-            int s_len_b = 0;
-            uint32_t s_len = read_vlq(p, &s_len_b);
-            p += s_len_b + s_len;
-            running_status = 0;
+            // SysEx
+            uint32_t s_len = 0;
+            while (p < end) {
+                uint8_t b = *p++;
+                s_len = (s_len << 7) | (b & 0x7F);
+                if (!(b & 0x80)) break;
+            }
+            printf("    %8u | 0x%05X | [SYSEX]  len=%u\n",
+                total_ticks, event_offset, s_len);
+            p += s_len;
+        }
+        else {
+            printf("    %8u | 0x%05X | [UNKNOWN] status=0x%02X\n",
+                total_ticks, event_offset, status);
+            // Nebezpečné — raději zastav aby se parser neztratil
+            break;
         }
     }
+
     *out_total_ticks = total_ticks;
     *out_total_seconds = total_seconds;
 }
