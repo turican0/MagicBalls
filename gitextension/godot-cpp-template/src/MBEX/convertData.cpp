@@ -1278,17 +1278,38 @@ void MBEXmusicConverts(String path) {
 		}
 		String filename = String::utf8((const char *)filename_c);
 		String midi_filename = filename.get_basename() + ".mid";
-		String full_path = path + "/" + vformat("%03d_%s", i - 1, midi_filename);
+		String xmi_filename = filename.get_basename() + ".xmi";
+		String full_path_mid = path + "/" + vformat("%03d_%s", i - 1, midi_filename);
+		String full_path_xmi = path + "/" + vformat("%03d_%s", i - 1, xmi_filename);
+		//String full_path = path + "/" + vformat("%03d_%s", i - 1, midi_filename);
 		if (!make_dir_godot(path)) {
 			break;
 		}
+
+		// --- Save XMI ---
+		Ref<FileAccess> file_xmi = FileAccess::open(full_path_xmi, FileAccess::WRITE);
+		if (file_xmi.is_valid()) {
+			file_xmi->store_buffer(buffer, size);
+			Error err = file_xmi->get_error();
+			if (err != OK) {
+				UtilityFunctions::push_error(vformat("ERROR in write XMI: %s (Error: %d)", full_path_xmi, (int)err));
+			} else {
+				file_xmi->flush();
+				UtilityFunctions::print(vformat("Write sucessfull XMI: %s (%d bajtů)", full_path_xmi, size));
+			}
+			file_xmi->close();
+		} else {
+			UtilityFunctions::push_error(vformat("Can not open path for XMI: %s", full_path_xmi));
+		}
+
+		// --- Save MIDI ---
 		size_t midi_size = 0;
 		unsigned char *midi_buffer = TranscodeXmiToMid(buffer, size, &midi_size);
 		if (!midi_buffer || midi_size == 0) {
 			UtilityFunctions::push_error(vformat("ERROR converting XMI to MIDI for track %d (%s)", i - 1, filename));
 			break;
 		}
-		Ref<FileAccess> file = FileAccess::open(full_path, FileAccess::WRITE);
+		Ref<FileAccess> file = FileAccess::open(full_path_mid, FileAccess::WRITE);
 		if (!file.is_valid()) {
 			free(midi_buffer);
 			break;
@@ -1296,14 +1317,14 @@ void MBEXmusicConverts(String path) {
 		file->store_buffer(midi_buffer, midi_size);
 		Error err = file->get_error();
 		if (err != OK) {
-			UtilityFunctions::push_error(vformat("CHYBA při zápisu do souboru: %s (Error: %d)", full_path, (int)err));
+			UtilityFunctions::push_error(vformat("CHYBA při zápisu do souboru: %s (Error: %d)", full_path_mid, (int)err));
 			free(midi_buffer);
 			break;
 		}
 		file->flush();
 		file->close();
 		free(midi_buffer);
-		UtilityFunctions::print(vformat("Úspěšně zapsáno MIDI: %s (%d bajtů z %d bajtů XMI)", full_path, midi_size, size));
+		UtilityFunctions::print(vformat("Úspěšně zapsáno MIDI: %s (%d bajtů z %d bajtů XMI)", full_path_mid, midi_size, size));
 	}
 }
 
