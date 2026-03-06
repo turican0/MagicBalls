@@ -23,14 +23,14 @@ func init():
 	#initialize_grid_data()
 	
 	# 3. Generování a vykreslení sítě
-	get_parent().get_node("DecodeLevel").init()
+	get_parent().get_node("DecodeLevel").init()	
+	await get_parent().get_node("DecodeLevel").inGameBegin()
 	initialize_nodes()
 	Global.initSound()
-	get_parent().get_node("DecodeLevel").inGameBegin()
 	get_parent().get_node("DecodeLevel").setMesh()
 	#recalculate_mesh()	
 	#recalculate_mesh()
-	changeTerrain(Global.levelType)
+	changeTerrain(Global.getLevelType())
 	
 	#begin of Multimesh
 	var mmi_bottom:MultiMeshInstance3D = get_parent().get_node("MultiMeshbottom")
@@ -43,7 +43,7 @@ func init():
 		mmi_bottom.material_override = mesh_instance_bottom.mesh.surface_get_material(0)
 	var offset = GRID_SIZE * CELL_SCALE
 	var positions = []
-	if(Global.levelType=="Cave"):
+	if(Global.getLevelType()=="Cave"):
 		for x in [-1, 0, 1, 2]:
 			for z in [-1, 0, 1, 2]:
 				if x == 0 and z == 0: continue
@@ -57,7 +57,7 @@ func init():
 	for i in range(positions.size()):
 		var t = Transform3D(Basis(), positions[i])
 		mmi_bottom.multimesh.set_instance_transform(i, t)
-	if(Global.levelType=="Cave"):
+	if(Global.getLevelType()=="Cave"):
 		var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
 		if not mmi_top.multimesh:
 			mmi_top.multimesh = MultiMesh.new()
@@ -109,7 +109,7 @@ func initialize_nodes():
 	mesh_instance_bottom = MeshInstance3D.new()
 	mesh_instance_bottom.name = "TerrainMeshBottom"
 	add_child(mesh_instance_bottom)
-	if(Global.levelType=="Cave"):
+	if(Global.getLevelType()=="Cave"):
 		material_bottom = load("res://terrainMB/terrain_material_bottomC.tres")
 	else:
 		material_bottom = load("res://terrainMB/terrain_material_bottom.tres")

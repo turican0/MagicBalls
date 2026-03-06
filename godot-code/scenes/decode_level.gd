@@ -412,7 +412,7 @@ func _process(_p_delta) -> void:
 	
 	var continueGame=Global.MBEX.REMC2StepInGame(input_state)
 	if(continueGame):
-		Global.MBEX.renew_terrain((Global.levelType=="Cave"))
+		Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))
 		var mods = Global.MBEX.getPaletteModifications()
 		var current_gain = mods[0]
 		var current_offset = mods[1]
@@ -683,7 +683,7 @@ func init():
 	Global.initSound()
 
 func gameInit():
-	match Global.levelType:
+	match Global.getLevelType():
 		"Day":
 			Global.Main_Sounds.setSoundBank(0)
 			setTime(11.0)
@@ -717,7 +717,7 @@ func gameInit():
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
 			setDayEntites()	
-	if(Global.levelType=="Cave"):
+	if(Global.getLevelType()=="Cave"):
 		get_parent().get_node("TerrainsMB").mesh_instance_top.show()
 		get_parent().get_node("MultiMeshbottom").show()
 	else:
@@ -883,12 +883,12 @@ func inGameBegin():
 	await fadeNode.fade_finished
 	Global.setLoadingScreenStr("")
 	fadeNode = Global.addFadeOut(fadeNode)
-	Global.levelType=Global.MBEX.REMC2GetLevelType()
+	Global.setLevelType(Global.MBEX.REMC2GetLevelType())
 
 func setMesh():
-	Global.MBEX.set_mesh_instances(get_parent().get_node("TerrainsMB").mesh_instance_bottom,get_parent().get_node("TerrainsMB").mesh_instance_top,Global.levelType=="Cave")
+	Global.MBEX.set_mesh_instances(get_parent().get_node("TerrainsMB").mesh_instance_bottom,get_parent().get_node("TerrainsMB").mesh_instance_top,Global.getLevelType()=="Cave")
 	Global.MBEX.initialize_grid_data()
-	Global.MBEX.recalculate_mesh(Global.levelType=="Cave")
+	Global.MBEX.recalculate_mesh(Global.getLevelType()=="Cave")
 
 #func loadlevel(levelnumber: int):
 	#sub_533B0_decompress_levels(levelnumber)

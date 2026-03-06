@@ -3,7 +3,7 @@ extends Node
 var last_scene_path: String = ""
 var MBEX = null
 
-var levelType: String = ""
+var LevelType: String = ""
 
 var soundInited:bool = false
 var sounds_map = {}
@@ -23,6 +23,12 @@ var langTexts:Dictionary
 
 var defaultLangIndex = 1
 var countLang = 0
+
+func getLevelType():
+	return LevelType
+
+func setLevelType(levelType):
+	LevelType=levelType
 
 func initSound():
 	if(soundInited):
