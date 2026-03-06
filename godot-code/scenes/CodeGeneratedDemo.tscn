@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://scenes/Player.tscn" id="2_3v2uf"]
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://scenes/UI.tscn" id="4_x5ge4"]
 [ext_resource type="PackedScene" uid="uid://84v3q55l2pga" path="res://scenes/Sounds.tscn" id="8_pypg8"]
-[ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
+[ext_resource type="PackedScene" uid="uid://crltnj7pujw8k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
 [ext_resource type="Shader" uid="uid://diekk5uppuvq1" path="res://scenes/FilterColorRect.gdshader" id="9_vrj2c"]
 [ext_resource type="Texture2D" uid="uid://csrngnir5a8qs" path="res://entites/sources/spiders/spiderweb.png" id="10_kfkod"]
 [ext_resource type="Shader" uid="uid://2qha8dcud50w" path="res://scenes/Blur_effect.gdshader" id="10_vrj2c"]

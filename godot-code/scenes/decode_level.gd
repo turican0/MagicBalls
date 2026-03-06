@@ -716,7 +716,16 @@ func gameInit():
 		"Final":
 			Global.Main_Sounds.setSoundBank(2)
 			setTime(12.0)
-			setDayEntites()	
+			setDayEntites()
+			#wind speed = 1
+			#ssr_enabled = true
+			#ssr_max_steps = 512
+			#ssr_fade_in = 1e-05
+			#ssr_fade_out = 1e-05
+			#ssr_depth_tolerance = 0.11
+			#month = 8
+			#year = 2026
+			
 	if(Global.levelType=="Cave"):
 		get_parent().get_node("TerrainsMB").mesh_instance_top.show()
 		get_parent().get_node("MultiMeshbottom").show()

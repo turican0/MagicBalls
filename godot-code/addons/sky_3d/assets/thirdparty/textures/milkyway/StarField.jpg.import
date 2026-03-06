@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bh7emtadmqfyk"
+uid="uid://bm7dot7t7u1q4"
 path.s3tc="res://.godot/imported/StarField.jpg-9d224e20fcbe8fdc7ff5028dae269839.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
@@ -23,7 +23,7 @@ compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
-compress/channel_pack=1
+compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
