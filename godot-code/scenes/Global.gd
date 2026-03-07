@@ -55,6 +55,7 @@ func loadScreenInit():
 		var fade_layer_scene = preload("res://scenes/LoadScreen.tscn")
 		var new_layer = fade_layer_scene.instantiate()
 		new_layer.name = "LoadScreen"
+		new_layer.z_index=99
 		get_tree().root.add_child(new_layer)
 		loadScreenNodeRect = new_layer.get_node_or_null("TextureRect");
 		var fade = get_tree().root.get_node_or_null("FadeInOut")

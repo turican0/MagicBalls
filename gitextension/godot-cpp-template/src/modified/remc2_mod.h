@@ -45,8 +45,10 @@ struct typeStateMenu {
 	enum class State {
 		Begin,
 		BeginAfterScreen,
+		BeginAfterSecret,
 		Step,
 		End,
+		EndPostSecretScreen,
 		Zero,
 		afterBegin
 	};
@@ -65,6 +67,7 @@ extern typeStateMenu2 actState;
 extern int globalAnimIndex;
 extern bool PlayInfoFmv_break;
 extern bool setLoadScreen;
+extern Type_SecretMapScreenPortals_E2970 *secretsModPortals;
 
 void InitLanguage_76A40_mod_only_language();
 

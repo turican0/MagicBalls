@@ -23,8 +23,15 @@ func init():
 	#initialize_grid_data()
 	
 	# 3. Generování a vykreslení sítě
-	get_parent().get_node("DecodeLevel").init()	
+	get_parent().get_node("DecodeLevel").init()
 	await get_parent().get_node("DecodeLevel").inGameBegin()
+
+	updateMeshes()
+
+	get_parent().get_node("DecodeLevel").SetRunned(true)
+	#end of Multimesh
+
+func updateMeshes():
 	initialize_nodes()
 	Global.initSound()
 	get_parent().get_node("DecodeLevel").setMesh()
@@ -70,8 +77,6 @@ func init():
 		for i in range(positions.size()):
 			var t = Transform3D(Basis(), positions[i])
 			mmi_top.multimesh.set_instance_transform(i, t)
-	get_parent().get_node("DecodeLevel").SetRunned(true)
-	#end of Multimesh
 
 ## --- FÁZE 1: Inicializace ---
 var material_bottom

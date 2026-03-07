@@ -122,7 +122,7 @@ public:
 	Ref<Image> REMC2BeginInGame();
 	void REMC2BeginInGameAfterScreen();
 	//bool REMC2EndInGame();
-	bool REMC2StepInGame(Dictionary inputs);
+	int REMC2StepInGame(Dictionary inputs, int state);
 	String REMC2GetLevelType();
 	bool REMC2GetWebInfo();
 	};

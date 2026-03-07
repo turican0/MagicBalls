@@ -382,6 +382,7 @@ func changeLanguage(langIndex):
 func getLangTexts():
 	Global.langTexts=Global.MBEX.getLangTexts()
 
+var nextState=0
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
@@ -410,35 +411,53 @@ func _process(_p_delta) -> void:
 	else:
 		get_parent().get_node("SpiderWeb").hide()
 	
-	var continueGame=Global.MBEX.REMC2StepInGame(input_state)
-	if(continueGame):
-		Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))
-		var mods = Global.MBEX.getPaletteModifications()
-		var current_gain = mods[0]
-		var current_offset = mods[1]
-		var current_saturation = mods[2]
-		if current_gain != last_gain or current_offset != last_offset or current_saturation != last_saturation:
-			if(!filter_material):
-				filter_material = Main_Filter.material as ShaderMaterial
-			filter_material.set_shader_parameter("MyGain", current_gain)
-			filter_material.set_shader_parameter("MyOffset", current_offset)
-			filter_material.set_shader_parameter("MySatMultiplier", current_saturation)
-			last_gain = current_gain
-			last_offset = current_offset
-			last_saturation = current_saturation
-		#var gain_vec = Vector3(gain_rgb.r, gain_rgb.g, gain_rgb.b)
-		#var offset_vec = Vector3(offset_rgb.r, offset_rgb.g, offset_rgb.b)	
-		#Main_Filter.material_override.set_shader_parameter("MyGain", gain_vec)
-		#Main_Filter.material_override.set_shader_parameter("MyOffset", offset_vec)
-		updatePlayer(getPlayerPosRot())
-		renderEntites(getEntites())
-		get_parent().get_node("UI").updateSpells(Global.MBEX.getActiveSpells())
-		get_parent().get_node("UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
-		get_parent().get_node("UI").updateMinimap(Global.MBEX.getMinimap())
-		Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
-	else:
-		runned=false
-		call_deferred("_do_change_scene")
+	var gameState=Global.MBEX.REMC2StepInGame(input_state,nextState)
+	match gameState:
+		1:
+			Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))
+			var mods = Global.MBEX.getPaletteModifications()
+			var current_gain = mods[0]
+			var current_offset = mods[1]
+			var current_saturation = mods[2]
+			if current_gain != last_gain or current_offset != last_offset or current_saturation != last_saturation:
+				if(!filter_material):
+					filter_material = Main_Filter.material as ShaderMaterial
+				filter_material.set_shader_parameter("MyGain", current_gain)
+				filter_material.set_shader_parameter("MyOffset", current_offset)
+				filter_material.set_shader_parameter("MySatMultiplier", current_saturation)
+				last_gain = current_gain
+				last_offset = current_offset
+				last_saturation = current_saturation
+			#var gain_vec = Vector3(gain_rgb.r, gain_rgb.g, gain_rgb.b)
+			#var offset_vec = Vector3(offset_rgb.r, offset_rgb.g, offset_rgb.b)	
+			#Main_Filter.material_override.set_shader_parameter("MyGain", gain_vec)
+			#Main_Filter.material_override.set_shader_parameter("MyOffset", offset_vec)
+			updatePlayer(getPlayerPosRot())
+			renderEntites(getEntites())
+			get_parent().get_node("UI").updateSpells(Global.MBEX.getActiveSpells())
+			get_parent().get_node("UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
+			get_parent().get_node("UI").updateMinimap(Global.MBEX.getMinimap())
+			Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+		2:
+			Global.setLoadingScreenStr("SMATITL2.DAT.png")
+			get_parent().get_node("SpiderWeb").hide()
+			filter_material.set_shader_parameter("MyGain", Vector3(1.0,1.0,1.0))
+			filter_material.set_shader_parameter("MyOffset", Vector3(0.0,0.0,0.0))
+			filter_material.set_shader_parameter("MySatMultiplier", 1.0)
+			nextState=1
+		3:#shadow level
+			Global.setLevelType(Global.MBEX.REMC2GetLevelType())
+			Global.Main_Sounds.stopAllSounds()
+			get_parent().get_node("TerrainsMB").updateMeshes()
+			gameInit()
+			fadeNode = Global.addFadeIn(fadeNode)
+			await fadeNode.fade_finished
+			Global.setLoadingScreenStr("")
+			fadeNode = Global.addFadeOut(fadeNode)
+			nextState=0
+		_:
+			runned=false
+			call_deferred("_do_change_scene")
 
 func _do_change_scene():
 	Global.Main_Sounds.stopAllSounds()
@@ -884,6 +903,7 @@ func inGameBegin():
 	Global.setLoadingScreenStr("")
 	fadeNode = Global.addFadeOut(fadeNode)
 	Global.setLevelType(Global.MBEX.REMC2GetLevelType())
+	nextState=0
 
 func setMesh():
 	Global.MBEX.set_mesh_instances(get_parent().get_node("TerrainsMB").mesh_instance_bottom,get_parent().get_node("TerrainsMB").mesh_instance_top,Global.getLevelType()=="Cave")
