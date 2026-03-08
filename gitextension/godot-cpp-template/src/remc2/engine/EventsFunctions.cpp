@@ -969,8 +969,6 @@ void UpdateMouseEventData_8CB3A(uint32_t mouse_states, int32_t mouse_posx, int32
 // void sub_8F935_bitmap_draw_final(__int16 a1, signed int a2, int a3, char *a4, unsigned __int8 a5, char a6);
 //void sub_90164(int16_t a1, int16_t a2, int16_t a3, int16_t a4, uint8_t a5);
 //void sub_901E4(int16_t a1, int16_t a2, int16_t a3, int16_t a4, unsigned __int16 a5);
-int sub_9025C(__int16 a1, __int16 a2, __int16 a3, __int16 a4, unsigned __int16 a5, __int16 a6);
-int sub_90374(uint16_t viewPortX, uint16_t viewPortY, uint16_t viewPortWidth, uint16_t viewPortHeight, unsigned __int16 a5, __int16 a6);
 //void sub_90478_VGA_Blit320();
 char sub_904C0(float a1);
 //unsigned __int8 sub_90530(int a1, int a2, float a3);
@@ -2892,6 +2890,8 @@ type_x_BYTE_E25ED_2BB str_BYTE_E25ED_a3[3] = {//set joy
 { 0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000 }
 };
 
+void (*ptrDrawBitmap_F01EC)(int16_t, int16_t, bitmap_pos_struct_t, uint8_t scale);
+
 MenuItem nextMenu_E29D8 = MenuItem::InitLanguage; // weak//2b39d8
 __int16 x_WORD_E29DA_type_resolution = 0; // weak
 int16_t m_ExitMenuLoop_E29DC = 0; // weak
@@ -3497,7 +3497,6 @@ int x_DWORD_E9C24_fps; // weak
 axis_3d predictedAxis_EB398ar; // weak
 uint8_t x_BYTE_EB39E_keys[10]; // weak 0 - setting keys
 uint8_t uiBackGroundColorIdx_EB3A8;
-void(*ptrDrawBitmap_F01EC)(int16_t, int16_t, bitmap_pos_struct_t, uint8_t scale); // eax
 char x_BYTE_F01FEx[34]; // fix it -  weak
 char x_BYTE_F0220[256]; // idb
 char x_BYTE_F0320[256]; // idb
