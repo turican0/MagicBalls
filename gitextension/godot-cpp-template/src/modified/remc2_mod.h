@@ -68,6 +68,7 @@ extern int globalAnimIndex;
 extern bool PlayInfoFmv_break;
 extern bool setLoadScreen;
 extern Type_SecretMapScreenPortals_E2970 *secretsModPortals;
+extern unsigned __int16 tempActLevel;
 
 void InitLanguage_76A40_mod_only_language();
 

@@ -87,7 +87,7 @@ void MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 }
 
 String MBEXclass::REMC2GetLevelType() {
-	if (x_D41A0_BYTEARRAY_4_struct.levelnumber_43w>20)
+	if (x_D41A0_BYTEARRAY_4_struct.levelnumber_43w==24)
 		return "Final";
 	else
 		if (D41A0_0.terrain_2FECE.MapType == MapType_t::Day) {

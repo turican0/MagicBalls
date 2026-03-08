@@ -1001,8 +1001,8 @@ void InGameLoop_47320_mod(typeStateMenu newState) //228320
 		D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.word[1] = 0;
 
 		//fix res on begin level for hidden levels-neoriginal code
-		if (((gameResWidth != 320) && (gameResHeight != 200)) &&
-			((gameResWidth != 640) && (gameResHeight != 480))) {
+		//if (((gameResWidth != 320) && (gameResHeight != 200)) && ((gameResWidth != 640) && (gameResHeight != 480)))
+		{
 			VGA_Resize(320, 200);
 			screenWidth_18062C = 320;
 			screenHeight_180624 = 200;
@@ -1199,11 +1199,17 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 						}
 						*/
 					}
-					if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step })||
-						(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen }) ||
-						(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterSecret }) ||
-						(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
+					if ((newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step }) ||
+							(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen }) ||
+							(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterSecret }) ||
+							(newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End }))
+					{
+						//added code
+						VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0], true);
+						//added code
+
 						InGameLoop_47320_mod(newState);
+					}
 					/*
 					if (m_ptrGameRender != nullptr) {
 						delete m_ptrGameRender;
