@@ -82,10 +82,13 @@ grow_vertical = 0
 columns = 13
 
 [node name="GridContainer2" type="GridContainer" parent="CanvasUI" unique_id=1356310682]
-offset_left = 884.0
-offset_top = 7.0
-offset_right = 1011.0
-offset_bottom = 92.0
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -127.0
+offset_bottom = 85.0
+grow_horizontal = 0
 columns = 2
 
 [node name="Minimap" type="TextureRect" parent="." unique_id=352229578]
@@ -96,7 +99,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-stretch_mode = 3
 
 [node name="StartButton" type="Button" parent="." unique_id=850660505]
 visible = false

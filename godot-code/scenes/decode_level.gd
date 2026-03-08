@@ -224,6 +224,7 @@ var library = {
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
+	Vector3i(10,97,0): "res://entites/object_10_97_posses_buildingD.tscn",#building -difmodels!!!
 	Vector3i(10,98,0): "res://entites/object_10_98_posses_buildingD-violet.tscn",#building -difmodels!!!
 	Vector3i(10,145,0): "res://entites/object_9_64_meteor.tscn",#meteor
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
