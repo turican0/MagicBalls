@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dne6na1m4xku8" path="res://scenes/UI.gd" id="1_why5e"]
 
-[node name="UI" type="Control" unique_id=66072025 node_paths=PackedStringArray("spell_grid", "spell_grid_selected")]
+[node name="UI" type="Control" unique_id=66072025 node_paths=PackedStringArray("spell_grid", "sub_spell_grid")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_why5e")
 spell_grid = NodePath("CanvasUI/GridContainer")
-spell_grid_selected = NodePath("CanvasUI/GridContainer2")
+sub_spell_grid = NodePath("CanvasUI/GridContainer2")
 
 [node name="Label" type="Label" parent="." unique_id=1598188907]
 unique_name_in_owner = true
@@ -71,6 +71,7 @@ offset_bottom = 319.0
 [node name="CanvasUI" type="CanvasLayer" parent="." unique_id=1205789009]
 
 [node name="GridContainer" type="GridContainer" parent="CanvasUI" unique_id=346444275]
+visible = false
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -80,21 +81,12 @@ grow_horizontal = 2
 grow_vertical = 0
 columns = 13
 
-[node name="GridContainer2" type="GridContainer" parent="CanvasUI" unique_id=1356310682]
+[node name="GridContainer2" type="GridContainer" parent="CanvasUI" unique_id=416989984]
 visible = false
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -127.0
-offset_bottom = 85.0
-grow_horizontal = 0
-columns = 2
-
-[node name="GridContainerSub" type="GridContainer" parent="CanvasUI" unique_id=592973556]
-offset_left = 1.0
-offset_top = 648.0
-offset_right = 41.0
-offset_bottom = 688.0
+offset_left = 2.0
+offset_top = 578.0
+offset_right = 42.0
+offset_bottom = 618.0
 
 [node name="Minimap" type="TextureRect" parent="." unique_id=352229578]
 z_index = 1

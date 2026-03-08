@@ -85,8 +85,10 @@ public:
 	void initialize_controlmap(bool isCave);
 	void initialize_heightmap(int index);
 	Array getActiveSpells();
+	//Array getActiveSubSpells();
 	Array getSelectedSpells();
 	void setPlayerActiveSpell(int spell_index, int button);
+	void setPlayerActiveSubSpell(int spell_index, int sub_spell_index, int button);
 	Array getPaletteModifications();
 	Ref<Image> getMinimap();
 	void convertOriginalData(String path, String path2);

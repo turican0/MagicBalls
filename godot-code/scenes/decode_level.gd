@@ -350,11 +350,18 @@ func _input(event):
 var last_spell_index:int =-1
 var last_button:int =-1
 
+var last_spell_sub_index:int =-1
+var last_sub_button:int =-1
+
 func setPlayerActiveSpell(spell_index: int,button:int):
 	last_spell_index = spell_index
 	last_button = button
 	Global.MBEX.setPlayerActiveSpell(spell_index,button)
 
+func setPlayerActiveSubSpell(spell_index: int,sub_spell_index: int,button:int):
+	last_spell_sub_index = spell_index
+	last_sub_button = button
+	Global.MBEX.setPlayerActiveSubSpell(spell_index,sub_spell_index,button)
 
 func updatePlayer(playerPosRot) -> void:
 	Main_Player.position=playerPosRot.position/256

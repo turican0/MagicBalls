@@ -1,7 +1,7 @@
 extends Control
 
 @export var spell_grid: Node
-@export var spell_grid_sub: Node
+@export var sub_spell_grid: Node
 #@export var spell_grid_selected: Node
 
 @onready var start_button: Button = $StartButton
@@ -15,6 +15,7 @@ var Main_DecodeLevel
 var is_ctrl_active: bool = false
 var old_is_ctrl_active: bool = false
 var hovered_index: int = -1
+var sub_hovered_index: int = -1
 
 func _ready():
 	start_button.pressed.connect(_on_start_pressed)
@@ -47,9 +48,15 @@ func _input(event: InputEvent) -> void:
 				spell_grid.show()
 				is_ctrl_active = true
 		else:
-			is_ctrl_active = false
-			hovered_index = -1
-			spell_grid.hide()
+			hide_panels()
+			
+func hide_panels():
+	is_ctrl_active = false
+	hovered_index = -1
+	sub_hovered_index = -1
+	spell_grid.hide()
+	sub_spell_grid.hide()
+
 
 var saved_mouse_pos: Vector2 = Vector2.ZERO
 
@@ -59,6 +66,14 @@ func update_hover_selection():
 		var slot = spell_grid.get_child(i) as Control
 		if is_instance_valid(slot) and slot.get_global_rect().has_point(mouse_pos):
 			hovered_index = i
+			break
+
+func update_hover_sub_selection():
+	var mouse_pos = get_global_mouse_position()
+	for i in range(sub_spell_grid.get_child_count()):
+		var slot = sub_spell_grid.get_child(i) as Control
+		if is_instance_valid(slot) and slot.get_global_rect().has_point(mouse_pos):
+			sub_hovered_index = i
 			break
 
 func _process(_p_delta) -> void:
@@ -85,6 +100,7 @@ func _process(_p_delta) -> void:
 			#"""
 	if is_ctrl_active:
 		update_hover_selection()
+		update_hover_sub_selection()
 
 
 #func _unhandled_key_input(p_event: InputEvent) -> void:
@@ -161,6 +177,7 @@ func updateSpells(spells:Array):
 	for child in spell_grid.get_children():
 		child.queue_free()
 	var index=0
+	var someSpellSelected:bool=false
 	for spell in spells:
 		var slot = Panel.new()
 		slot.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -209,19 +226,126 @@ func updateSpells(spells:Array):
 		style.border_color = Color(1.0, 0.84, 0.0)
 		#style.set_corner_radius_all(2)
 		selection_rect.add_theme_stylebox_override("panel", style)
-		if(hovered_index!=index):
+		if(hovered_index!=index) or (spell.spell_state!=1):
 			selection_rect.hide()
+		else:
+			someSpellSelected=true
+			updateSubSpells(index,spell)
+			sub_spell_grid.show()
 		slot.add_child(selection_rect)
 	
 		spell_grid.add_child(slot)
 		index+=1
+	if(!someSpellSelected):
+		sub_spell_grid.hide()
+
+func updateSubSpells(index,spell:Dictionary):
+	for child in sub_spell_grid.get_children():
+		child.queue_free()
+
+	#spell_grid_sub.global_position = Vector2(slot_pos.x, slot_pos.y - spell_grid_sub.size.y)
+
+	var sub_index=0
+	for subspell in 3:
+		var slot = Panel.new()
+		slot.mouse_filter = Control.MOUSE_FILTER_PASS
+		slot.custom_minimum_size = Vector2(80,24)
+		
+		var frame = TextureRect.new()
+		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		frame.texture = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_089.png")
+		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		frame.stretch_mode = TextureRect.STRETCH_SCALE
+		frame.anchor_left = 0
+		frame.anchor_top = 0
+		frame.anchor_right = 1
+		frame.anchor_bottom = 1
+		slot.add_child(frame)
+		
+		if(spell.sub_spell_state[subspell]==2):
+			var label = Label.new()
+			label.text = "Subspell %d" % sub_index
+			label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			slot.add_child(label)
+		
+		var btn = TextureButton.new()
+		#btn.flat = true
+		btn.mouse_filter = Control.MOUSE_FILTER_PASS
+		#if(true):#if(spell.spell_state==1):
+			#btn.texture_normal = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_%03d.png" % (index+97))
+		btn.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		btn.tooltip_text = "fireball"#spell["id"]
+		#btn.pressed.connect(Callable(self, "on_spell_pressed").bind(index))
+		btn.gui_input.connect(on_slot_gui_input_sub.bind(index,sub_index))
+		slot.add_child(btn)
+		
+		#var btn = Button.new()
+		#btn.flat = true
+		#btn.mouse_filter = Control.MOUSE_FILTER_PASS
+		#btn.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		#btn.gui_input.connect(on_slot_gui_input.bind(index))
+		#slot.add_child(btn)
+		
+		#var mana_bar = ProgressBar.new()
+		#mana_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#mana_bar.show_percentage = false
+		#mana_bar.custom_minimum_size = Vector2(0, 6) 
+		#mana_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+		#var style_fill = StyleBoxFlat.new()
+		#style_fill.bg_color = Color(0, 0.6, 1)
+		#mana_bar.add_theme_stylebox_override("fill", style_fill)
+		#var style_bg = StyleBoxFlat.new()
+		#style_bg.bg_color = Color(0, 0, 0, 1)
+		#mana_bar.add_theme_stylebox_override("background", style_bg)
+		#mana_bar.value = spell.spell_mana
+		#slot.add_child(mana_bar)
+		
+		var selection_rect = Panel.new()
+		selection_rect.name = "Highlight"
+		selection_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		selection_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		var style = StyleBoxFlat.new()
+		style.draw_center = false           # <--- Tímto vypneš výplň (bude průhledná)
+		style.border_width_left = 3         # Tloušťka okraje v pixelech
+		style.border_width_top = 3
+		style.border_width_right = 3
+		style.border_width_bottom = 3
+		style.border_color = Color(1.0, 0.84, 0.0)
+		#style.set_corner_radius_all(2)
+		selection_rect.add_theme_stylebox_override("panel", style)
+		if(sub_hovered_index!=sub_index) or (spell.sub_spell_state[subspell]!=2):
+			selection_rect.hide()
+		slot.add_child(selection_rect)
+	
+		sub_spell_grid.add_child(slot)
+		sub_index+=1
+		
+	await get_tree().process_frame
+	var hovered_slot = spell_grid.get_child(index)
+	var slot_pos = hovered_slot.global_position
+	sub_spell_grid.global_position = Vector2(slot_pos.x, slot_pos.y - sub_spell_grid.size.y)
 
 func on_slot_gui_input(event: InputEvent, index: int):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			Main_DecodeLevel.setPlayerActiveSpell(index,0)
+			#hide_panels()
 			get_viewport().set_input_as_handled()
 		else:
 			if event.button_index == MOUSE_BUTTON_RIGHT:
 				Main_DecodeLevel.setPlayerActiveSpell(index,1)
+				#hide_panels()
+				get_viewport().set_input_as_handled()
+
+func on_slot_gui_input_sub(event: InputEvent, index: int, sub_index: int):
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			Main_DecodeLevel.setPlayerActiveSubSpell(index,sub_index,0)
+			#hide_panels()
+			get_viewport().set_input_as_handled()
+		else:
+			if event.button_index == MOUSE_BUTTON_RIGHT:
+				Main_DecodeLevel.setPlayerActiveSubSpell(index,sub_index,1)
+				#hide_panels()
 				get_viewport().set_input_as_handled()
