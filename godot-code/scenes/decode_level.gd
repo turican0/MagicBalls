@@ -256,6 +256,7 @@ var library2 = {
 	Vector3i(0,68,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
 	Vector3i(5,14,0): "",#unknown
+	Vector3i(5,55,0): "",#unknown
 	Vector3i(9,64,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
@@ -265,7 +266,7 @@ var library2 = {
 	Vector3i(10,96,0): "",#building
 	Vector3i(10,145,0): "",#unknown
 	Vector3i(11,8,0): "",#unknown
-	Vector3i(14,8,0): "res://entites/object_text.tscn",#unknown
+	Vector3i(14,8,0): "",#unknown-switch?
 	Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll
 	Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate
 	Vector3i(14,462,0): "res://entites/object_14_462_portal.tscn",#day portal
@@ -325,6 +326,8 @@ var library2 = {
 #- fix dead sorcerer
 
 #3-251 5-411-mummy
+
+#9-420
 
 var filter_material: ShaderMaterial
 var data_img: Image

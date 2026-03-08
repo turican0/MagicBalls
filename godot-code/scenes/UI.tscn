@@ -69,7 +69,7 @@ offset_right = 246.0
 offset_bottom = 319.0
 
 [node name="CanvasUI" type="CanvasLayer" parent="." unique_id=1205789009]
-layer = 6
+layer = 4
 
 [node name="GridContainer" type="GridContainer" parent="CanvasUI" unique_id=346444275]
 visible = false
