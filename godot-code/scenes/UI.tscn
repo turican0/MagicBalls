@@ -71,7 +71,6 @@ offset_bottom = 319.0
 [node name="CanvasUI" type="CanvasLayer" parent="." unique_id=1205789009]
 
 [node name="GridContainer" type="GridContainer" parent="CanvasUI" unique_id=346444275]
-visible = false
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -90,6 +89,12 @@ offset_left = -127.0
 offset_bottom = 85.0
 grow_horizontal = 0
 columns = 2
+
+[node name="GridContainerSub" type="GridContainer" parent="CanvasUI" unique_id=592973556]
+offset_left = 1.0
+offset_top = 648.0
+offset_right = 41.0
+offset_bottom = 688.0
 
 [node name="Minimap" type="TextureRect" parent="." unique_id=352229578]
 z_index = 1

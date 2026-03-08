@@ -1,7 +1,8 @@
 extends Control
 
 @export var spell_grid: Node
-@export var spell_grid_selected: Node
+@export var spell_grid_sub: Node
+#@export var spell_grid_selected: Node
 
 @onready var start_button: Button = $StartButton
 
@@ -119,36 +120,37 @@ func toggle_fullscreen() -> void:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 		
 func updateSelectedSpells(spells:Array):
-	for child in spell_grid_selected.get_children():
-		child.queue_free()
-	for spell in spells:
-		var slot = Panel.new()
-		slot.custom_minimum_size = Vector2(64,64)
-		var frame = TextureRect.new()
-		frame.texture = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_089.png")
-		frame.anchor_left = 0
-		frame.anchor_top = 0
-		frame.anchor_right = 1
-		frame.anchor_bottom = 1
-		slot.add_child(frame)
-		var btn = TextureButton.new()
-		if(spell.spellIndex>=0):
-			btn.texture_normal = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_%03d.png" % (spell.spellIndex+123))
-		btn.tooltip_text = "fireball"#spell["id"]
-		slot.add_child(btn)
-		var mana_bar = ProgressBar.new()
-		mana_bar.show_percentage = false
-		mana_bar.custom_minimum_size = Vector2(0, 6) 
-		mana_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-		var style_fill = StyleBoxFlat.new()
-		style_fill.bg_color = Color(0, 0.6, 1)
-		mana_bar.add_theme_stylebox_override("fill", style_fill)
-		var style_bg = StyleBoxFlat.new()
-		style_bg.bg_color = Color(0, 0, 0, 1)
-		mana_bar.add_theme_stylebox_override("background", style_bg)
-		mana_bar.value = spell.mana1
-		slot.add_child(mana_bar)
-		spell_grid_selected.add_child(slot)
+	pass
+	#for child in spell_grid_selected.get_children():
+		#child.queue_free()
+	#for spell in spells:
+		#var slot = Panel.new()
+		#slot.custom_minimum_size = Vector2(64,64)
+		#var frame = TextureRect.new()
+		#frame.texture = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_089.png")
+		#frame.anchor_left = 0
+		#frame.anchor_top = 0
+		#frame.anchor_right = 1
+		#frame.anchor_bottom = 1
+		#slot.add_child(frame)
+		#var btn = TextureButton.new()
+		#if(spell.spellIndex>=0):
+			#btn.texture_normal = Global.load_custom_texture(Global.convertdata+"HSPR/HSPR-night/HSPRN0-0.DAT_%03d.png" % (spell.spellIndex+123))
+		#btn.tooltip_text = "fireball"#spell["id"]
+		#slot.add_child(btn)
+		#var mana_bar = ProgressBar.new()
+		#mana_bar.show_percentage = false
+		#mana_bar.custom_minimum_size = Vector2(0, 6) 
+		#mana_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+		#var style_fill = StyleBoxFlat.new()
+		#style_fill.bg_color = Color(0, 0.6, 1)
+		#mana_bar.add_theme_stylebox_override("fill", style_fill)
+		#var style_bg = StyleBoxFlat.new()
+		#style_bg.bg_color = Color(0, 0, 0, 1)
+		#mana_bar.add_theme_stylebox_override("background", style_bg)
+		#mana_bar.value = spell.mana1
+		#slot.add_child(mana_bar)
+		#spell_grid_selected.add_child(slot)
 		
 func updateMinimap(image:Image):
 	if image:

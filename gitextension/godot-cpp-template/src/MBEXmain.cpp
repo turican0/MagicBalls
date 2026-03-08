@@ -873,6 +873,8 @@ PackedFloat32Array MBEXclass::GetEntites() {
 	return result;
 }
 
+uint MyUiBackGroundColorIdx = 200;
+
 void DrawGameFrame_2BE30_mod() //20CE30
 {
 	int16_t spellLeftPosX = 510;
@@ -927,9 +929,9 @@ void DrawGameFrame_2BE30_mod() //20CE30
 				x_BYTE_D41C6_old_graphics_mode = D41A0_0.m_GameSettings.m_Graphics.m_wViewPortSize;
 				if (D41A0_0.m_GameSettings.m_Graphics.m_wViewPortSize < 40) {
 					if (x_WORD_180660_VGA_type_resolution & 1)
-						ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, uiBackGroundColorIdx_EB3A8);
+						ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8*/);
 					else
-						ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, uiBackGroundColorIdx_EB3A8);
+						ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8*/);
 				}
 			}
 			if (D41A0_0.m_GameSettings.m_Graphics.m_wViewPortSize < 40) {
@@ -1482,7 +1484,7 @@ Ref<Image> MBEXclass::getMinimap() {
 			uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
 			int pal_pos = color_idx * 3;
 			//if (distanceSquared > radius * radius) {
-			if (color_idx == uiBackGroundColorIdx_EB3A8) {
+			if (color_idx == MyUiBackGroundColorIdx) {
 				int dest_pos = (r * crop_w + c) * 4;
 				dest[dest_pos + 0] = 0;
 				dest[dest_pos + 1] = 0;
