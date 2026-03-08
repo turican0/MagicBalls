@@ -442,9 +442,9 @@ func _process(_p_delta) -> void:
 			#Main_Filter.material_override.set_shader_parameter("MyOffset", offset_vec)
 			updatePlayer(getPlayerPosRot())
 			renderEntites(getEntites())
-			get_parent().get_node("UI").updateSpells(Global.MBEX.getActiveSpells())
-			get_parent().get_node("UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
-			get_parent().get_node("UI").updateMinimap(Global.MBEX.getMinimap())
+			get_parent().get_node("UILayer/UI").updateSpells(Global.MBEX.getActiveSpells())
+			get_parent().get_node("UILayer/UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
+			get_parent().get_node("UILayer/UI").updateMinimap(Global.MBEX.getMinimap())
 			Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 		2:
 			Global.setLoadingScreenStr("SMATITL2.DAT.png")

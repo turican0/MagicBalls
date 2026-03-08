@@ -14,7 +14,7 @@ func _ready() -> void:
 	Engine.max_fps = 60
 	Main_DecodeLevel = get_node("DecodeLevel")
 	Main_Player = get_node("Player")
-	Main_UI = get_node("UI")
+	Main_UI = get_node("UILayer/UI")
 	Main_Filter = get_node("Filter").get_node("ColorRect")
 	Main_TerrainsMB = $TerrainsMB
 	Main_DecodeLevel.Main_Player = Main_Player
@@ -22,7 +22,7 @@ func _ready() -> void:
 	Main_UI.Main_DecodeLevel = Main_DecodeLevel
 	Main_DecodeLevel.Main_Filter = Main_Filter
 	Main_DecodeLevel.NodeSky3D = $NodeSky3D/Sky3D
-	$UI.player = $Player
+	$UILayer/UI.player = $Player
 	Main_TerrainsMB.init()
 	
 	#$CanvasUI.init()

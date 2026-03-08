@@ -24,8 +24,6 @@ shader_parameter/lod = 2.0
 [node name="CodeGenerated" type="Node3D" unique_id=753120922]
 script = ExtResource("1_h7vyv")
 
-[node name="UI" parent="." unique_id=1982999733 instance=ExtResource("4_x5ge4")]
-
 [node name="Player" parent="." unique_id=1664453856 instance=ExtResource("2_3v2uf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 
@@ -44,6 +42,7 @@ levels_dat_path = "res://mclevels/LEVELS.DAT"
 [node name="NodeSky3D" parent="." unique_id=298907047 instance=ExtResource("9_2gbss")]
 
 [node name="Filter" type="CanvasLayer" parent="." unique_id=485850370]
+layer = 5
 
 [node name="ColorRect" type="ColorRect" parent="Filter" unique_id=279077604]
 material = SubResource("ShaderMaterial_kfkod")
@@ -83,3 +82,8 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("10_kfkod")
 expand_mode = 1
+
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=1172139693]
+layer = 3
+
+[node name="UI" parent="UILayer" unique_id=1982999733 instance=ExtResource("4_x5ge4")]

@@ -50,17 +50,35 @@ func initSound():
 	Global.soundInited = true
 
 var loadScreenNodeRect:TextureRect;
+#func loadScreenInit():
+	#if(!get_tree().root.get_node_or_null("LoadScreen")):
+		#var fade_layer_scene = preload("res://scenes/LoadScreen.tscn")
+		#var new_layer = fade_layer_scene.instantiate()
+		#new_layer.name = "LoadScreen"
+		#new_layer.z_index=99
+		#get_tree().root.add_child(new_layer)
+		#loadScreenNodeRect = new_layer.get_node_or_null("TextureRect");
+		#var fade = get_tree().root.get_node_or_null("FadeInOut")
+		#if fade:
+			#get_tree().root.move_child(new_layer, fade.get_index())
+	#return get_tree().root.get_node_or_null("LoadScreen")
+	
 func loadScreenInit():
-	if(!get_tree().root.get_node_or_null("LoadScreen")):
+	if !get_tree().root.get_node_or_null("LoadScreenCanvas"):
 		var fade_layer_scene = preload("res://scenes/LoadScreen.tscn")
 		var new_layer = fade_layer_scene.instantiate()
 		new_layer.name = "LoadScreen"
-		new_layer.z_index=99
-		get_tree().root.add_child(new_layer)
-		loadScreenNodeRect = new_layer.get_node_or_null("TextureRect");
+		new_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var canvas = CanvasLayer.new()
+		canvas.layer = 10
+		canvas.name = "LoadScreenCanvas"
+		get_tree().root.add_child(canvas)
+		canvas.add_child(new_layer)
+		loadScreenNodeRect = new_layer.get_node_or_null("TextureRect")
+		loadScreenNodeRect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var fade = get_tree().root.get_node_or_null("FadeInOut")
 		if fade:
-			get_tree().root.move_child(new_layer, fade.get_index())
+			get_tree().root.move_child(canvas, fade.get_index())
 	return get_tree().root.get_node_or_null("LoadScreen")
 
 func setLoadingScreenStr(fileName):
@@ -163,3 +181,10 @@ func _parse_wav(buffer: PackedByteArray) -> AudioStreamWAV:
 		print("Error: Could not find 'data' chunk in WAV")
 		return null		
 	return stream
+	
+func _input(event):
+	if event is InputEventMouseButton and event.pressed:
+		var c = get_viewport().gui_get_hovered_control()
+		while c:
+			print("GUI chain: ", c.get_path())
+			c = c.get_parent()

@@ -69,6 +69,7 @@ offset_right = 246.0
 offset_bottom = 319.0
 
 [node name="CanvasUI" type="CanvasLayer" parent="." unique_id=1205789009]
+layer = 6
 
 [node name="GridContainer" type="GridContainer" parent="CanvasUI" unique_id=346444275]
 visible = false
@@ -96,6 +97,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="StartButton" type="Button" parent="." unique_id=850660505]
 visible = false

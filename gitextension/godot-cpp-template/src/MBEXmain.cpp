@@ -375,6 +375,7 @@ void MBEXclass::setPlayerActiveSubSpell(int spell_index, int sub_spell_index, in
 			actEvent->dword_0xA4_164x->str_611.SubSpellIndexLeft_1109 = sub_spell_index;
 			//actEvent->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
 			x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400 = 8;
+			SetSpell_6D5E0(Entities_EA3E4[actEvent->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[spell_index]], sub_spell_index);
 			break;
 		}
 		case 1: //right
@@ -384,6 +385,7 @@ void MBEXclass::setPlayerActiveSubSpell(int spell_index, int sub_spell_index, in
 			actEvent->dword_0xA4_164x->str_611.SubSpellIndexRight_1110 = sub_spell_index;
 			//actEvent->dword_0xA4_164x->str_611.SubSpellIndexRight_1110 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
 			x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401 = 8;
+			SetSpell_6D5E0(Entities_EA3E4[actEvent->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[spell_index]], sub_spell_index);
 			break;
 		}
 	}
@@ -982,7 +984,7 @@ PackedFloat32Array MBEXclass::GetEntites() {
 	return result;
 }
 
-//uint MyUiBackGroundColorIdx = 200;
+uint MyUiBackGroundColorIdx = 200;
 
 void DrawGameFrame_2BE30_mod() //20CE30
 {
@@ -994,7 +996,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 	void (*drawBitmapFunction)(int16_t, int16_t, bitmap_pos_struct_t, uint8_t scale); // eax
 
 	//added code
-	//ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8*/);
+	ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8*/);
 	//added code
 
 	SetTextBoxMinMaxForSetResolution();
@@ -1140,6 +1142,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 				DrawPauseMenu_2FD90(scale);
 			} else {
 				if (x_DWORD_D4188 && playerEntity->dword_0xA4_164x->mobilizeCounter_0x14E_334) {
+					/*
 					//Draw Spiders Web
 					int16_t offSetX = 0;
 					int16_t offSetY = 0;
@@ -1174,6 +1177,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 						countY++;
 						y += yAdd;
 					}
+					*/
 				}
 				if (D41A0_0.m_GameSettings.m_Display.m_wMiniMap) {
 					DrawMinimap_63600( //draw minimap
@@ -1260,9 +1264,9 @@ void DrawGameFrame_2BE30_mod() //20CE30
 		case 0xE:
 			playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 			if (x_WORD_180660_VGA_type_resolution & 1)
-				ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, uiBackGroundColorIdx_EB3A8);
+				ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8*/);
 			else
-				ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, uiBackGroundColorIdx_EB3A8);
+				ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8 */);
 
 			int locViewportPosx;
 			int locViewportWidth;
@@ -1597,7 +1601,7 @@ Ref<Image> MBEXclass::getMinimap() {
 			uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
 			int pal_pos = color_idx * 3;
 			//if (distanceSquared > radius * radius) {
-			if (color_idx == uiBackGroundColorIdx_EB3A8) {
+			if (color_idx == MyUiBackGroundColorIdx) {
 				int dest_pos = (r * crop_w + c) * 4;
 				dest[dest_pos + 0] = 0;
 				dest[dest_pos + 1] = 0;
@@ -1694,6 +1698,8 @@ Array MBEXclass::getPaletteModifications() {
 	out_offset = Vector3(target_black.r, target_black.g, target_black.b);
 	float ref_max_sat = 0.0f;
 	for (int i = 0; i < 256; i++) {
+		if (i == MyUiBackGroundColorIdx)
+			continue;
 		Vector3 ref_col = get_color(ref_palette, i);
 		Vector3 mod_col = get_color(mod_palette, i);
 		ref_max_sat = max(ref_max_sat, get_saturation(ref_col));
@@ -2294,6 +2300,11 @@ int MBEXclass::REMC2StepInGame(Dictionary inputs, int state) {
 			if (secretsModPortals) {
 				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2)
 					return 2;
+				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 10)
+				{
+					sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
+					return 0;
+				}
 				return 4;
 			}
 			sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });

@@ -268,6 +268,14 @@ func updateSubSpells(index,spell:Dictionary):
 			label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 			slot.add_child(label)
+		else:
+			if(spell.sub_spell_state[subspell]==3):
+				var label = Label.new()
+				label.text = "Subspell %d" % sub_index
+				label.modulate = Color.GRAY
+				label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+				slot.add_child(label)
 		
 		var btn = TextureButton.new()
 		#btn.flat = true
