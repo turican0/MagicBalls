@@ -44,6 +44,8 @@ func updateMeshes():
 	if not mmi_bottom.multimesh:
 		mmi_bottom.multimesh = MultiMesh.new()
 		mmi_bottom.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	else:
+		mmi_bottom.multimesh.instance_count = 0
 	mmi_bottom.multimesh.mesh = mesh_instance_bottom.mesh	
 	mmi_bottom.material_override = mesh_instance_bottom.material_override 
 	if not mmi_bottom.material_override:
@@ -69,6 +71,8 @@ func updateMeshes():
 		if not mmi_top.multimesh:
 			mmi_top.multimesh = MultiMesh.new()
 			mmi_top.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		else:
+			mmi_top.multimesh.instance_count = 0
 		mmi_top.multimesh.mesh = mesh_instance_top.mesh	
 		mmi_top.material_override = mesh_instance_top.material_override 
 		if not mmi_top.material_override:
@@ -77,6 +81,10 @@ func updateMeshes():
 		for i in range(positions.size()):
 			var t = Transform3D(Basis(), positions[i])
 			mmi_top.multimesh.set_instance_transform(i, t)
+	else:
+		var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
+		if mmi_top.multimesh:
+			mmi_top.multimesh.instance_count = 0
 
 ## --- FÁZE 1: Inicializace ---
 var material_bottom
@@ -111,6 +119,12 @@ func changeTerrain(levelType:String):
 		mesh_instance_bottom.material_override = material_bottom
 
 func initialize_nodes():
+	if mesh_instance_bottom:
+		mesh_instance_bottom.queue_free()
+		mesh_instance_bottom = null
+	if mesh_instance_top:
+		mesh_instance_top.queue_free()
+		mesh_instance_top = null
 	mesh_instance_bottom = MeshInstance3D.new()
 	mesh_instance_bottom.name = "TerrainMeshBottom"
 	add_child(mesh_instance_bottom)

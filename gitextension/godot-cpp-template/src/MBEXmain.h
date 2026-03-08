@@ -125,4 +125,6 @@ public:
 	int REMC2StepInGame(Dictionary inputs, int state);
 	String REMC2GetLevelType();
 	bool REMC2GetWebInfo();
+
+	bool REMC2IsHiddenLevel();
 	};

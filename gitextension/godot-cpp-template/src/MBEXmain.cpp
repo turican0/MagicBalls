@@ -66,6 +66,8 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetWebInfo"), &MBEXclass::REMC2GetWebInfo);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2IsHiddenLevel"), &MBEXclass::REMC2IsHiddenLevel);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -1685,7 +1687,9 @@ int MBEXclass::REMC2StepInGame(Dictionary inputs, int state) {
 		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8) {
 			sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End });
 			if (secretsModPortals) {
-				return 2;
+				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2)
+					return 2;
+				return 4;
 			}
 			sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
 			return 0;
@@ -1693,3 +1697,9 @@ int MBEXclass::REMC2StepInGame(Dictionary inputs, int state) {
 	}
 	return 1;
 }
+
+bool MBEXclass::REMC2IsHiddenLevel() {
+	if (x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50)
+		return true;
+	return false;
+};

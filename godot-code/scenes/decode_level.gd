@@ -445,7 +445,10 @@ func _process(_p_delta) -> void:
 			filter_material.set_shader_parameter("MyOffset", Vector3(0.0,0.0,0.0))
 			filter_material.set_shader_parameter("MySatMultiplier", 1.0)
 			nextState=1
+		4:
+			nextState=1
 		3:#shadow level
+			runned=false
 			Global.setLevelType(Global.MBEX.REMC2GetLevelType())
 			Global.Main_Sounds.stopAllSounds()
 			get_parent().get_node("TerrainsMB").updateMeshes()
@@ -455,6 +458,7 @@ func _process(_p_delta) -> void:
 			Global.setLoadingScreenStr("")
 			fadeNode = Global.addFadeOut(fadeNode)
 			nextState=0
+			runned=true
 		_:
 			runned=false
 			call_deferred("_do_change_scene")
@@ -738,7 +742,7 @@ func gameInit():
 			setDayEntites()	
 	if(Global.getLevelType()=="Cave"):
 		get_parent().get_node("TerrainsMB").mesh_instance_top.show()
-		get_parent().get_node("MultiMeshbottom").show()
+		get_parent().get_node("MultiMeshtop").show()
 	else:
 		get_parent().get_node("TerrainsMB").mesh_instance_top.hide()
 		get_parent().get_node("MultiMeshtop").hide()

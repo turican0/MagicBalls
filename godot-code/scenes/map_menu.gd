@@ -61,7 +61,10 @@ func goGame():
 		#fadeNode.queue_free()
 		#fadeNode = null # Vyčistíme referenci	
 	fadeNode = Global.addFadeOut(fadeNode)
-	Global.setLoadingScreenStr("SMATITLE.DAT.png")
+	if(Global.MBEX.REMC2IsHiddenLevel()):
+		Global.setLoadingScreenStr("SMATITL2.DAT.png")
+	else:
+		Global.setLoadingScreenStr("SMATITLE.DAT.png")
 	await fadeNode.fade_finished
 	Global.last_scene_path = get_tree().current_scene.scene_file_path
 	get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
