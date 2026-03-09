@@ -1758,6 +1758,10 @@ void handleInputs(Dictionary inputs,int type) {
 			case 0x011B:
 				mainSetPress(is_pressed, 0x011B); //ESC
 				break;
+			case 0x5300:
+				HandleButtonClick_191B0(29, 0);
+				HandleButtonClick_191B0(27, 0);
+				break;
 			case 0x3f00://F5
 				if (type != 0)
 					break;
@@ -1776,6 +1780,8 @@ void handleInputs(Dictionary inputs,int type) {
 					x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
 					HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
 				}
+				break;
+			default:
 				break;
 		}
 	}
@@ -2298,14 +2304,21 @@ int MBEXclass::REMC2StepInGame(Dictionary inputs, int state) {
 		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8) {
 			sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End });
 			if (secretsModPortals) {
-				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 10)
+				switch (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2])
 				{
-					sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
-					return 0;
+					case 0xa://0xa-correct end of hidden level 0x2 0x8
+						sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
+						return 0;
+					case 0x18://0x18-end of hidden level by escape 0x8 0x10
+						sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
+						return 0;
+					case 0x1a://0x1a-go to hidden level - show load screen 0x2 0x8 0x10
+						return 2;
+					case 0x4://0x4-dead 0x4
+						return 4;
+					default:
+						break;
 				}
-				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2)
-					return 2;
-				return 4;
 			}
 			sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
 			return 0;
