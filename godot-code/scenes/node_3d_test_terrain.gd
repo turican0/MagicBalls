@@ -90,8 +90,31 @@ func updateMeshes():
 var material_bottom
 var material_top
 
+var hitextures:bool=true
+
 func changeTerrain(levelType:String):
 	var tex_path = ""
+	if(hitextures):
+		match levelType:
+			"Day":
+				tex_path = Global.hidata + "textures/block128.png"
+			"Night":
+				tex_path = Global.hidata + "textures/bl128n.png"
+			"Cave":
+				tex_path = Global.hidata + "textures/bl128c.png"
+			"Final":
+				tex_path = Global.hidata + "textures/bl128f.png"
+	else:
+		match levelType:
+			"Day":
+				tex_path = Global.convertdata + "textures/day/BLOCK32.DAT-borders.png"
+			"Night":
+				tex_path = Global.convertdata + "textures/night/BL32N0-0.DAT-borders.png"
+			"Cave":
+				tex_path = Global.convertdata + "textures/cave/BL32C0-0.DAT-borders.png"
+			"Final":
+				tex_path = Global.convertdata + "textures/final/BL32F0-0.DAT-borders.png"
+
 	match levelType:
 		"Day":
 			tex_path = Global.convertdata + "textures/day/BLOCK32.DAT-borders.png"

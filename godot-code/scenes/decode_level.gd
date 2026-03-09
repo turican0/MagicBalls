@@ -211,6 +211,7 @@ var library = {
 	Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
 	Vector3i(9,419,0): "res://entites/object_9_419_spider_web.tscn",#spide web zzzzzzzzzzzzzzOK
+	Vector3i(9,420,0): "res://entites/object_9_420_walnut.tscn",#walnul ball zzzzzzzzzzzzzzOK
 	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK

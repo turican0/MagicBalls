@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://ds6mugxlwltpx"]
+
+[ext_resource type="PackedScene" uid="uid://bfr6q8b1gex2w" path="res://entites/sources/walnuts/nut_08.glb" id="1_j68ew"]
+[ext_resource type="Script" uid="uid://cfm5mwcpyomti" path="res://entites/sources/walnuts/nut_08.gd" id="2_7iwqw"]
+[ext_resource type="Texture2D" uid="uid://d33kh1f8xr0ta" path="res://entites/sources/fire/10545835.png" id="2_j68ew"]
+
+[sub_resource type="Curve" id="Curve_2c7ur"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yjii4"]
+curve = SubResource("Curve_2c7ur")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4pltj"]
+emission_shape_scale = Vector3(0.3, 0.3, 0.3)
+emission_shape = 1
+emission_sphere_radius = 18.0
+angle_min = 1.0728835e-05
+angle_max = 360.00003
+direction = Vector3(0, 1, 0)
+spread = 180.0
+angular_velocity_min = -1.6093254e-05
+angular_velocity_max = 359.99997
+gravity = Vector3(0, 0, 0)
+linear_accel_min = 0.49999776
+linear_accel_max = 0.49999776
+scale_curve = SubResource("CurveTexture_yjii4")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b0wp"]
+transparency = 1
+blend_mode = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_j68ew")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_iaptm"]
+material = SubResource("StandardMaterial3D_8b0wp")
+size = Vector2(0.5, 0.5)
+
+[node name="Node3D" type="Node3D" unique_id=2126800082]
+
+[node name="Sketchfab_Scene" parent="." unique_id=405670666 instance=ExtResource("1_j68ew")]
+transform = Transform3D(1.5067351, 0, 23.952656, 0, 24, 0, -23.952656, 0, 1.5067351, 0, 0, 0)
+script = ExtResource("2_7iwqw")
+speed = Vector3(0, 500, 0)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Sketchfab_Scene" unique_id=50961294]
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, 0)
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_4pltj")
+draw_pass_1 = SubResource("QuadMesh_iaptm")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene/GPUParticles3D" unique_id=863407155]
+light_color = Color(1, 0.5058824, 0, 1)
+light_energy = 3.0
