@@ -43,7 +43,12 @@ struct typeStateMenu {
 	};
 
 	enum class State {
-		Begin,
+		MapMenuBeginPreAnim,
+		MapMenuBeginStepAnim,
+		MapMenuBeginPostAnim,
+		MainMenuBegin,
+		AnimFlvBegin,
+		InGameBegin,
 		BeginAfterScreen,
 		BeginAfterSecret,
 		Step,

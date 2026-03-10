@@ -2094,7 +2094,7 @@ void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect,int animIndex) {
 	PlayInfoFmv_break = false;
 	mainScrBufferRect = scrBufferRect;
 	globalAnimIndex = animIndex;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin });
 }
 
 Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
@@ -2155,7 +2155,10 @@ int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 
 void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPreAnim });
+	if ()
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginStepAnim });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim });
 }
 
 int MBEXclass::REMC2StepMap(Dictionary inputs) {
@@ -2197,7 +2200,7 @@ int MBEXclass::REMC2StepMap(Dictionary inputs) {
 
 void MBEXclass::REMC2BeginMain(TextureRect *scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::MainMenuBegin });
 }
 
 int MBEXclass::REMC2StepMain(Dictionary inputs) {
@@ -2245,7 +2248,7 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 
 Ref<Image> MBEXclass::REMC2BeginInGame() {
 	setLoadScreen = false;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::InGameBegin });
 	/*
 	char dataPath[MAX_PATH];
 	switch (D41A0_0.terrain_2FECE.MapType) {
