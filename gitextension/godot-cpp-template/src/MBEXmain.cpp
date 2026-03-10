@@ -72,6 +72,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2IsHiddenLevel"), &MBEXclass::REMC2IsHiddenLevel);
 }
 
+
 //PlayIntoSoundEvents_1B280
 //StopMusic_8E020();
 //InitMusicBank_8EAD0(pSoundEvent[x_WORD_D4004].index);
@@ -2084,6 +2085,48 @@ void MBEXclass::REMC2BeginGame_old(String cdPath) {//OK!!
 	//changeLanguage(2);//added code
 }
 
+/*
+std::thread t2;
+String saved_real_cdPath;
+int saved_argc;
+char *saved_argv[3];*/
+
+void MBEXclass::REMC2BeginGame(String cdPath) { //OK!!
+	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+	saved_argc = 3;
+	saved_argv[0] = (char *)"game.exe";
+	saved_argv[1] = (char *)"";
+	saved_argv[2] = (char *)"--auto_change_res";
+
+	CommandLineParams.Init(saved_argc, saved_argv);
+
+	support_begin();
+
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread2_state = Thread2_State::BEGIN;
+		thread1_state = Thread1_State::BEGIN;
+		thread2_waiting = false;
+		thread1_waiting = false;
+	}
+
+	t2 = std::thread([this]() {
+		sub_main_mod(saved_argc, saved_argv, (char *)saved_real_cdPath.utf8().get_data());
+	});
+	t2.detach(); // vlákno přežije konec funkce
+
+	// Čekej dokud vlákno 2 nezavolá thread2_wait_for_continue()
+	{
+		std::unique_lock<std::mutex> lock(main_mutex);
+		main_cv.wait(lock, [] { return thread2_waiting; });
+	}
+	//sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
+	//MBEXstate = 1;
+
+	changeLanguage(2); //added code
+}
+
+/*
 void MBEXclass::REMC2BeginGame(String cdPath) { //OK!!
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
@@ -2122,7 +2165,7 @@ void MBEXclass::REMC2BeginGame(String cdPath) { //OK!!
 	//MBEXstate = 1;
 
 	//changeLanguage(2);//added code
-}
+}*/
 
 
 void REMC2Continue() {
@@ -2142,11 +2185,19 @@ void MBEXclass::REMC2EndGame() {//OK!!
 	//MBEXstate = 6;
 }
 
-void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect,int animIndex) {
+void MBEXclass::REMC2BeginAnim_old(TextureRect *scrBufferRect,int animIndex) {
 	PlayInfoFmv_break = false;
 	mainScrBufferRect = scrBufferRect;
 	globalAnimIndex = animIndex;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
+}
+
+void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex) {
+	PlayInfoFmv_break = false;
+	mainScrBufferRect = scrBufferRect;
+	globalAnimIndex = animIndex;
+	thread1_continue(Thread1_State::BEGIN_ANIM);
+	//sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 }
 
 Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {

@@ -1318,6 +1318,51 @@ bool thread1_turn = false;
 Thread1_State thread1_state = Thread1_State::BEGIN;
 Thread2_State thread2_state = Thread2_State::BEGIN;
 
+bool thread1_waiting = false;
+bool thread2_waiting = false;
+
+void thread2_wait_for_continue(Thread2_State sendstate) {
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread2_state = sendstate;
+		thread2_waiting = true;
+	}
+	main_cv.notify_one();
+
+	std::unique_lock<std::mutex> lock(main_mutex);
+	main_cv.wait(lock, [] { return !thread2_waiting; });
+}
+
+void thread1_wait_for_continue(Thread1_State sendstate) {
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread1_state = sendstate;
+		thread1_waiting = true;
+	}
+	main_cv.notify_one();
+
+	std::unique_lock<std::mutex> lock(main_mutex);
+	main_cv.wait(lock, [] { return !thread1_waiting; });
+}
+
+void thread1_continue(Thread1_State sendstate) {	
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread1_state = sendstate;
+		thread1_waiting = false;
+	}
+	main_cv.notify_one();
+}
+
+void thread2_continue(Thread2_State sendstate) {	
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread2_state = sendstate;
+		thread2_waiting = false;
+	}
+	main_cv.notify_one();
+}
+
 int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
 	int exitCode = 0;
@@ -1387,14 +1432,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 		}
 		Initialize(); //236FDC - 23C8D0//rozdil 1E1000
 
-		// BEGIN SUB_MAIN_BEFORE_LOOP
-		{
-			std::lock_guard<std::mutex> lock(main_mutex);
-			thread2_state = Thread2_State::SUB_MAIN_BEFORE_LOOP;
-			thread1_turn = true;
-		}
-		main_cv.notify_one();
-		// ========================================
+		thread2_wait_for_continue(Thread2_State::SUB_MAIN_BEFORE_LOOP);
 
 		sub_46830_main_loop(v4); //227830
 
@@ -1424,14 +1462,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 	}
 	//Logger->info("Exited Game");
 
-	// BEGIN SUB_MAIN_END_FUNCTION
-	{
-		std::lock_guard<std::mutex> lock(main_mutex);
-		thread2_state = Thread2_State::SUB_MAIN_END_FUNCTION;
-		thread1_turn = true;
-	}
-	main_cv.notify_one();
-	// ========================================
+	thread2_wait_for_continue(Thread2_State::SUB_MAIN_END_FUNCTION);
 
 	return exitCode;
 }

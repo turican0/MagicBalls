@@ -29,6 +29,11 @@ class MBEXclass : public RefCounted {
 
 
 private:
+	std::thread t2;
+	String saved_real_cdPath;
+	int saved_argc;
+	char *saved_argv[3];
+
 	MeshInstance3D *mesh_instance_bottom = nullptr;
 	MeshInstance3D *mesh_instance_top = nullptr;
 	Ref<SurfaceTool> surface_tool;
@@ -110,6 +115,7 @@ public:
 	//void REMC2BeginItem();
 	//void REMC2EndItem();
 	void REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex);
+	void REMC2BeginAnim_old(TextureRect *scrBufferRect, int animIndex);
 	//void REMC2EndAnim();
 	int REMC2StepAnim(Dictionary inputs);
 

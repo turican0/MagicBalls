@@ -63,6 +63,7 @@ struct typeStateMenu {
 
 enum class Thread1_State {
 	BEGIN,
+	BEGIN_ANIM,
 	RUNNING,
 	DONE
 };
@@ -91,6 +92,9 @@ extern bool thread1_turn;
 extern Thread1_State thread1_state;
 extern Thread2_State thread2_state;
 
+extern bool thread1_waiting;
+extern bool thread2_waiting;
+
 void InitLanguage_76A40_mod_only_language();
 
 void sub_main_mod_begin(int argc, char **argv, char *real_cdPathch);
@@ -99,3 +103,8 @@ void sub_main_mod_end();
 void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState);
 
 int sub_main_mod(int argc, char **argv, char *real_cdPathch);
+
+void thread2_wait_for_continue(Thread2_State sendstate);
+void thread1_wait_for_continue(Thread1_State sendstate);
+void thread1_continue(Thread1_State sendstate);
+void thread2_continue(Thread2_State sendstate);
