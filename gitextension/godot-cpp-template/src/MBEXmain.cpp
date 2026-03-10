@@ -2062,6 +2062,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
+
 void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
@@ -2078,7 +2079,28 @@ void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 
 	support_begin();
 
-	sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
+    std::thread t2([&]() {
+		sub_main_mod(argc, argv, (char *)real_cdPath.utf8().get_data());
+
+		// --- Sem vlákno 2 dorazilo na "značku" ---
+		{
+			std::lock_guard<std::mutex> lock(main_mutex);
+			thread1_turn = true;
+		}
+		main_cv.notify_one(); // Signál pro main
+	});
+
+	// Main čeká na signál od vlákna 2
+	{
+		std::unique_lock<std::mutex> lock(main_mutex);
+		main_cv.wait(lock, [] { return thread1_turn; });
+	}
+
+	std::unique_lock<std::mutex> lock(main_mutex);
+
+	main_cv.wait(lock, [] { return thread1_turn; });
+
+	//sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
 	//MBEXstate = 1;
 
 	//changeLanguage(2);//added code

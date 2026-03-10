@@ -2,6 +2,10 @@
 
 //int NewGameDialog_endAction_mod;
 
+std::mutex main_mutex;
+std::condition_variable main_cv;
+bool thread1_turn = false;
+
 void InitLanguage_76A40_mod_only_language() //257A40
 {
 	
@@ -974,34 +978,55 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 		if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin })
 			nextMenu_E29D8 = MenuItem::InitLanguage;
 
-		//1 -351660
-		x_BYTE_E29DF_skip_screen = x_BYTE_D41AD_skip_screen;
-		if (skipMenus) {
-			x_BYTE_D41AD_skip_screen = 1;
-			m_ExitMenuLoop_E29DC = 1;
-		} else {
-			m_ExitMenuLoop_E29DC = 0;
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPreAnim }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::MainMenuBegin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin }))
+		{
+			//1 -351660
+			x_BYTE_E29DF_skip_screen = x_BYTE_D41AD_skip_screen;
+			if (skipMenus) {
+				x_BYTE_D41AD_skip_screen = 1;
+				m_ExitMenuLoop_E29DC = 1;
+			} else {
+				m_ExitMenuLoop_E29DC = 0;
+			}
 		}
-
-		if (x_BYTE_D41AD_skip_screen == 1 || (nextMenu_E29D8 != MenuItem::InitLanguage)) {
-			PlayInGameFmv_82670_mod(newState);
-			LoadAndSetGraphicsAndPalette_7AC00();
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPreAnim }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginStepAnim }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::MainMenuBegin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin }))
+				if (x_BYTE_D41AD_skip_screen == 1 || (nextMenu_E29D8 != MenuItem::InitLanguage))
+				{
+					if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPreAnim }) ||
+						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginStepAnim }) ||
+						(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim }) ||
+						(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::MainMenuBegin }) ||
+						(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin }))
+							PlayInGameFmv_82670_mod(newState);
+					if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim }) ||
+						(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::MainMenuBegin }) ||
+						(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin }))
+							LoadAndSetGraphicsAndPalette_7AC00();
+				}
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::MainMenuBegin }) ||
+			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin }))
+		{
+			if (x_BYTE_D41AD_skip_screen == 1) {
+				InitLanguage_76A40();
+				nextMenu_E29D8 = MenuItem::MainMenu;
+			}
+			memset(&x_DWORD_17DE38str, 0, sizeof(type_x_DWORD_17DE38str));
+			x_DWORD_17DE38str.x_DWORD_17DEE0_filedesc = NULL;
+			sub_7BEC0(); //25CEC0
+			SetCenterScreenForFlyAssistant_6EDB0(); //24FDB0
+			WriteConfigDat_81DB0(); //262DB0
 		}
-		if (x_BYTE_D41AD_skip_screen == 1) {
-			InitLanguage_76A40();
-			nextMenu_E29D8 = MenuItem::MainMenu;
-		}
-		memset(&x_DWORD_17DE38str, 0, sizeof(type_x_DWORD_17DE38str));
-		x_DWORD_17DE38str.x_DWORD_17DEE0_filedesc = NULL;
-		sub_7BEC0(); //25CEC0
-		SetCenterScreenForFlyAssistant_6EDB0(); //24FDB0
-		WriteConfigDat_81DB0(); //262DB0
 
 		//added code!!!!!!!!!!!!!!!!!!!!!!!!
-		if (((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim }) ||
+		if ((newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim }) ||
 		    (newState == typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::MainMenuBegin }))
-				/*
-				&& actState == typeStateMenu2::Zero*/)
 		{
 			nextMenu_E29D8 = MenuItem::MainMenu;
 			Intros_76D10(-1);
@@ -1455,4 +1480,139 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) 
 			}
 		}
 	}
+}
+
+enum class Main_State {
+	WAITING, // čeká na signál od vlákna 2
+	RUNNING, // běží
+	DONE // skončilo
+};
+
+// Stavy vlákna 2
+enum class Thread2_State {
+	INITIALIZING, // inicializuje se
+	READY, // dosáhlo značky, signál odeslán
+	RUNNING, // běží dál po značce
+	DONE // skončilo
+};
+
+Main_State main_state = Main_State::WAITING;
+Thread2_State thread2_state = Thread2_State::INITIALIZING;
+
+int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
+	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
+	int exitCode = 0;
+	SetTimeStart();
+	try {
+		begin_plugin();
+		preconvert(); //rewrite and remove it later
+		*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it
+		signed int v3; // edi
+		unsigned __int16 v4; // si
+		v3 = 0;
+		v4 = 0;
+		//std::cout << "Initializing logger...\n";
+		//spdlog::level::level_enum level = GetLoggingLevelFromString(CommandLineParams.GetLogLevelStr().c_str());
+		//InitializeLogging(level);
+		EventDispatcher::I = new EventDispatcher();
+		EventDispatcher::I->RegisterEvent(new Event<Scene>(EventType::E_SCENE_CHANGE, sceneChangeCallBack));
+		EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
+
+		sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
+		sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
+		windowResWidth = 640; //added
+		windowResHeight = 480; //added
+		gameResWidth = 640; //added
+		gameResHeight = 480; //added
+
+		if (CommandLineParams.DoDisableGraphicsEnhance()) {
+			Logger->debug("Disabling enhanced graphics");
+			bigSprites = false;
+			bigTextures = false;
+			texturepixels = 32;
+		}
+		//Set Paths for game data
+		gameDataPath = GetSubDirectoryPath(gameFolder);
+		cdDataPath = GetSubDirectoryPath(cdFolder);
+		bigGraphicsPath = GetSubDirectoryPath(bigGraphicsFolder);
+		VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
+		gamepad_init(gameResWidth, gameResHeight);
+		if (std::string mainfile = GetSubDirectoryFile(gameFolder, "CDATA", "TMAPS0-0.DAT"); !file_exists(mainfile.c_str())) //test original file
+		{
+			/*
+			if (std::filesystem::is_directory(gameDataPath)) {
+				Logger->info("Original game not found in {0} sub folder ", gameFolder);
+				Logger->info("Installing game data from CD_Files...");
+			} else {
+				Logger->error("Sub folder {0} does not exist!", gameFolder);
+				mydelay(5000);
+				exit(1); //iso not found
+			}*/
+		} else {
+			//Logger->info("Original Game Data Found!");
+		}
+		initposistruct();
+		sub_56210_process_command_line(argc, argv); //236FD4 - 237210
+		if (CommandLineParams.ModeTestNetwork()) {
+			if (Iam_server || Iam_client)
+				InitNetworkInfo();
+		}
+		if (CommandLineParams.DoCopySkipConfig()) {
+			x_BYTE_D41AD_skip_screen = config_skip_screen;
+		}
+		if (CommandLineParams.GetPlaybackPath().length() > 0 &&
+				std::filesystem::exists(CommandLineParams.GetPlaybackPath().c_str())) {
+			StartPlayback(CommandLineParams.GetPlaybackPath().c_str());
+		} else if (CommandLineParams.GetRecordingPath().length() > 0) {
+			StartRecording(CommandLineParams.GetRecordingPath().c_str());
+		}
+		Initialize(); //236FDC - 23C8D0//rozdil 1E1000
+
+		// BEGIN SUB_MAIN_BEFORE_LOOP
+		{
+			std::lock_guard<std::mutex> lock(main_mutex);
+			thread2_state = Thread2_State::SUB_MAIN_BEFORE_LOOP;
+			thread1_turn = true;
+		}
+		main_cv.notify_one();
+		// ========================================
+
+		sub_46830_main_loop(v4); //227830
+
+		if (CommandLineParams.GetPlaybackPath().length() > 0 &&
+				std::filesystem::exists(CommandLineParams.GetPlaybackPath().c_str())) {
+			StopPlayback();
+		} else if (CommandLineParams.GetRecordingPath().length() > 0) {
+			StopRecording();
+		}
+
+		sub_5BC20(); //23CC20 //remove devices?
+		sub_56730_clean_memory(); //237730
+		if (CommandLineParams.ModeTestNetwork()) {
+			if (Iam_server || Iam_client) {
+				EndMyNetLib();
+				/*EndLibNetClient();
+				if (Iam_server)
+					EndLibNetServer();*/
+			}
+		}
+		delete EventDispatcher::I;
+	} catch (const thread_exit_exception &e) {
+		//Logger->info("Immediate Exit called");
+	} catch (const std::exception &e) {
+		//Logger->critical("Critical Error: {}", e.what());
+		exitCode = -1;
+	}
+	//Logger->info("Exited Game");
+
+	// BEGIN SUB_MAIN_END_FUNCTION
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread2_state = Thread2_State::SUB_MAIN_END_FUNCTION;
+		thread1_turn = true;
+	}
+	main_cv.notify_one();
+	// ========================================
+
+	return exitCode;
 }
