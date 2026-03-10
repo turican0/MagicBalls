@@ -2062,8 +2062,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
-
-void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
+void MBEXclass::REMC2BeginGame_old(String cdPath) {//OK!!
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 
 	int argc = 3;
@@ -2079,31 +2078,62 @@ void MBEXclass::REMC2BeginGame(String cdPath) {//OK!!
 
 	support_begin();
 
-    std::thread t2([&]() {
-		sub_main_mod(argc, argv, (char *)real_cdPath.utf8().get_data());
+	sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
+	//MBEXstate = 1;
 
-		// --- Sem vlákno 2 dorazilo na "značku" ---
-		{
-			std::lock_guard<std::mutex> lock(main_mutex);
-			thread1_turn = true;
-		}
-		main_cv.notify_one(); // Signál pro main
+	//changeLanguage(2);//added code
+}
+
+void MBEXclass::REMC2BeginGame(String cdPath) { //OK!!
+	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+
+	int argc = 3;
+	char *argv[3];
+	char arg1[] = "game.exe";
+	char arg2[] = "";
+	char arg3[] = "--auto_change_res";
+	argv[0] = arg1;
+	argv[1] = arg2;
+	argv[2] = arg3;
+
+	CommandLineParams.Init(argc, argv);
+
+	support_begin();
+
+	// Reset před čekáním !
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread1_turn = false;
+		thread2_state = Thread2_State::BEGIN;
+		thread1_state = Thread1_State::BEGIN;
+	}
+
+	std::thread t2([&]() {
+		sub_main_mod(argc, argv, (char *)real_cdPath.utf8().get_data());
 	});
 
-	// Main čeká na signál od vlákna 2
+	// Main čeká na signál od vlákna 2 - POUZE JEDNOU
 	{
 		std::unique_lock<std::mutex> lock(main_mutex);
 		main_cv.wait(lock, [] { return thread1_turn; });
+		thread1_state = Thread1_State::RUNNING;
 	}
-
-	std::unique_lock<std::mutex> lock(main_mutex);
-
-	main_cv.wait(lock, [] { return thread1_turn; });
-
 	//sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
 	//MBEXstate = 1;
 
 	//changeLanguage(2);//added code
+}
+
+
+void REMC2Continue() {
+	// Tato funkce odblokuje vlákno 2
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread1_turn = false; // reset pro další čekání
+		thread2_state = Thread2_State::RUNNING;
+		// dej vláknu 2 signál ať pokračuje
+	}
+	main_cv.notify_one();
 }
 
 void MBEXclass::REMC2EndGame() {//OK!!
@@ -2116,7 +2146,7 @@ void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect,int animIndex) {
 	PlayInfoFmv_break = false;
 	mainScrBufferRect = scrBufferRect;
 	globalAnimIndex = animIndex;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 }
 
 Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
@@ -2177,10 +2207,7 @@ int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 
 void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPreAnim });
-	//if ()
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginStepAnim });
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin });
 }
 
 int MBEXclass::REMC2StepMap(Dictionary inputs) {
@@ -2222,7 +2249,7 @@ int MBEXclass::REMC2StepMap(Dictionary inputs) {
 
 void MBEXclass::REMC2BeginMain(TextureRect *scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::MainMenuBegin });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin });
 }
 
 int MBEXclass::REMC2StepMain(Dictionary inputs) {
@@ -2270,7 +2297,7 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 
 Ref<Image> MBEXclass::REMC2BeginInGame() {
 	setLoadScreen = false;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::InGameBegin });
+	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin });
 	/*
 	char dataPath[MAX_PATH];
 	switch (D41A0_0.terrain_2FECE.MapType) {
@@ -2357,3 +2384,6 @@ bool MBEXclass::REMC2IsHiddenLevel() {
 		return true;
 	return false;
 };
+
+
+

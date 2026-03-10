@@ -129,4 +129,7 @@ public:
 	bool REMC2GetWebInfo();
 
 	bool REMC2IsHiddenLevel();
+
+
+	void REMC2BeginGame_old(String cdPath);
 	};

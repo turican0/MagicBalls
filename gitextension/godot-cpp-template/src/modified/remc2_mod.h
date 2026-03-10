@@ -43,12 +43,7 @@ struct typeStateMenu {
 	};
 
 	enum class State {
-		MapMenuBeginPreAnim,
-		MapMenuBeginStepAnim,
-		MapMenuBeginPostAnim,
-		MainMenuBegin,
-		AnimFlvBegin,
-		InGameBegin,
+		Begin,
 		BeginAfterScreen,
 		BeginAfterSecret,
 		Step,
@@ -66,6 +61,20 @@ struct typeStateMenu {
 	}
 };
 
+enum class Thread1_State {
+	BEGIN,
+	RUNNING,
+	DONE
+};
+
+enum class Thread2_State {
+	BEGIN,
+	SUB_MAIN_END_FUNCTION,
+	SUB_MAIN_BEFORE_LOOP,
+	RUNNING,
+	DONE
+};
+
 
 extern int NewGameDialog_endAction;
 extern typeStateMenu2 actState;
@@ -74,9 +83,13 @@ extern bool PlayInfoFmv_break;
 extern bool setLoadScreen;
 extern Type_SecretMapScreenPortals_E2970 *secretsModPortals;
 extern unsigned __int16 tempActLevel;
+
 extern std::mutex main_mutex;
 extern std::condition_variable main_cv;
 extern bool thread1_turn;
+
+extern Thread1_State thread1_state;
+extern Thread2_State thread2_state;
 
 void InitLanguage_76A40_mod_only_language();
 
