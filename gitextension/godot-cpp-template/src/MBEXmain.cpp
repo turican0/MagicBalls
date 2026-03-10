@@ -2156,7 +2156,7 @@ int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPreAnim });
-	if ()
+	//if ()
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginStepAnim });
 	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim });
 }

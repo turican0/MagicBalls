@@ -680,7 +680,7 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 {
 	//FILE *tempfile;
 	if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin }) ||
-		(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::MapMenuBeginPreAnim }))
+		(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPreAnim }))
 	{
 		redrawTextInVideo_E12FC = redrawText;
 		soundEventIndex_D4004 = 0;
@@ -692,7 +692,7 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 	}
 	if (tempfile_PlayInfoFmv) {
 		if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::AnimFlvBegin }) ||
-			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::MapMenuBeginPreAnim }))
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPreAnim }))
 		{
 			DataFileIO::Read(tempfile_PlayInfoFmv, (uint8_t *)&unk_17DB40str, sizeof(Type_17DB40)); //ecx=12
 			LastKeyframe_17DB46 = unk_17DB40str.frameCount_6;
@@ -707,7 +707,7 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 			allowSkipVideo_17DB5C = allowSkip;
 		}
 		if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step }) ||
-			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::MapMenuBeginStepAnim }))
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginStepAnim }))
 				if ((LastPressedKey_1806E4 != 1) && !PlayInfoFmv_break) {
 				SetFrameStart(std::chrono::system_clock::now());
 				if (stopPlaybackFlag_17DB5A)
@@ -720,7 +720,7 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 				ActualKeyframe_17DB60++;
 			}// while (LastPressedKey_1806E4 != 1); //while not key pressed
 		if ((newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }) ||
-			(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::MapMenuBeginPostAnim }))
+			(newState == typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::MapMenuBeginPostAnim }))
 				DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
 	}
 }
