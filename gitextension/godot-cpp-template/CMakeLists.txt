@@ -102,6 +102,8 @@ target_sources(${LIBNAME}
     src/remc2/engine/RenderThread.h
     src/remc2/engine/Sound.cpp
     src/remc2/engine/Sound.h
+    src/remc2/engine/XmiInfo.cpp
+    src/remc2/engine/XmiInfo.h
     src/remc2/engine/Scene.h
     src/remc2/engine/Terrain.cpp
     src/remc2/engine/Terrain.h

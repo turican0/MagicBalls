@@ -838,7 +838,7 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 		}
 
 		if (x_BYTE_D41AD_skip_screen == 1 || (nextMenu_E29D8 != MenuItem::InitLanguage)) {
-			sub_82670();
+			PlayInGameFmv_82670();
 			LoadAndSetGraphicsAndPalette_7AC00();
 		}
 		if (x_BYTE_D41AD_skip_screen == 1) {

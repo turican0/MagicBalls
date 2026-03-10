@@ -933,7 +933,6 @@ void sub_87B30();
 void sub_87B70();
 // int /*__fastcall*/ _wcpp_1_unwind_leave__132(x_DWORD); weak
 void sub_87BE0();
-void sub_88580();
 void sub_88B20();
 void sub_88B60();
 void sub_88BA0();
@@ -2890,8 +2889,6 @@ type_x_BYTE_E25ED_2BB str_BYTE_E25ED_a3[3] = {//set joy
 { 0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000 }
 };
 
-void (*ptrDrawBitmap_F01EC)(int16_t, int16_t, bitmap_pos_struct_t, uint8_t scale);
-
 MenuItem nextMenu_E29D8 = MenuItem::InitLanguage; // weak//2b39d8
 __int16 x_WORD_E29DA_type_resolution = 0; // weak
 int16_t m_ExitMenuLoop_E29DC = 0; // weak
@@ -3497,6 +3494,7 @@ int x_DWORD_E9C24_fps; // weak
 axis_3d predictedAxis_EB398ar; // weak
 uint8_t x_BYTE_EB39E_keys[10]; // weak 0 - setting keys
 uint8_t uiBackGroundColorIdx_EB3A8;
+void(*ptrDrawBitmap_F01EC)(int16_t, int16_t, bitmap_pos_struct_t, uint8_t scale); // eax
 char x_BYTE_F01FEx[34]; // fix it -  weak
 char x_BYTE_F0220[256]; // idb
 char x_BYTE_F0320[256]; // idb
@@ -21986,7 +21984,7 @@ void DrawGameFrame_2BE30()//20CE30
 			DrawPauseMenu_2FD90(scale);
 			break;
 		}
-		DrawTextPauseEndOfLevel_2CE30(6, 6);
+		DrawTextPauseEndOfLevel_2CE30(6, 6, scale);
 		if (x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400)
 			DrawSpellIcon_2E260(
 				spellLeftPosX,
@@ -22108,7 +22106,7 @@ void DrawTextPauseEndOfLevel_2CE30(int16_t posX, int16_t posY, uint8_t scale)//2
 		if (x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1)
 		{
 			DrawText_2BC10(x_DWORD_E9C4C_langindexbuffer[425], posX, posY, (*xadataclrd0dat.colorPalette_var28)[240], scale);//Paused!
-			textPosX = (8 * scale) * ((strlen((const char*)x_DWORD_E9C4C_langindexbuffer[425]) + 2) * scale) + posX;//Paused!
+			textPosX = ((8 * scale) * (strlen((const char*)x_DWORD_E9C4C_langindexbuffer[425]) + 2)) + posX;//Paused!
 		}
 
 		if (!(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & 0x20) && D41A0_0.struct_0x3659C[D41A0_0.LevelIndex_0xc].substr_3659C.IsLevelEnd_0)
@@ -31692,8 +31690,7 @@ void InGameLoop_47320()//228320
 	D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.word[1] = 0;
 
 	//fix res on begin level for hidden levels-neoriginal code
-	if (((gameResWidth != 320) && (gameResHeight != 200))&&
-		((gameResWidth != 640) && (gameResHeight != 480)))
+	if (!IsDefaultResolution(gameResWidth, gameResHeight))
 	{
 		VGA_Resize(320, 200);
 		screenWidth_18062C = 320;
@@ -32217,7 +32214,7 @@ void sub_47FC0_load_screen(bool isSecretLevel)//228fc0
 		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITLE.DAT");
 		DataFileIO::ReadFileAndDecompress(dataPath, &x_DWORD_E9C38_smalltit);
 	}
-	CopyScreen_85B20(x_DWORD_E9C38_smalltit, pdwScreenBuffer_351628, 0x190u);
+	CopyScreen_85B20(x_DWORD_E9C38_smalltit, pdwScreenBuffer_351628, 400);
 	if (x_WORD_180660_VGA_type_resolution & 1)
 		sub_90478_VGA_Blit320();
 	else
@@ -47848,20 +47845,21 @@ int sub_85060(int a1)//266060
 }
 
 //----- (00085B20) --------------------------------------------------------
-void CopyScreen_85B20(uint8_t *src, uint8_t *dest, uint16_t rows_count) //266b20
+void CopyScreen_85B20(uint8_t* src, uint8_t* dest, uint16_t rows_count) //266b20
 {
 	if (x_WORD_180660_VGA_type_resolution & 1) {
-		CopyScreen(src, dest, 320, 200); //copy 320x200 to 320x200
-	} else {
+		CopyScreen(src, dest, 320, 200);//copy 320x200 to 320x200
+	}
+	else {
 		uint16_t rows = rows_count / 2;
-		for (int y = 0; y < rows; y++) { //copy 320x200 to 640x480
+		for (int y = 0; y < rows; y++) {//copy 320x200 to 640x480
 			for (int doubleRowIndex = 0; doubleRowIndex < 2; doubleRowIndex++)
 				for (int x = 0; x < 320; x++) {
 					uint8_t scr_byte = src[y * 320 + x];
-					dest[y * 2 * 320 + doubleRowIndex * 320 + x] = (scr_byte << 8) | scr_byte; //set two bytes
+					dest[y * 2 * 320 + doubleRowIndex * 320 + x] = (scr_byte << 8) | scr_byte;//set two bytes
 				}
 		}
-		if (dest != loc_A0000_vga_buffer && rows_count >= 400) //clear last 80 rows
+		if (dest != loc_A0000_vga_buffer && rows_count >= 400)//clear last 80 rows
 			memset(&dest[rows * 320 * 2], 0, 320 * 2 * 80);
 	}
 }
