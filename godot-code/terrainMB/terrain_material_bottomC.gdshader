@@ -82,7 +82,7 @@ void vertex() {
 	
 	// Data pro fragment
 	//v_texture_index1 = textureLod(control_map, main_uv, 0.0).r * 255.0;
-	if (v_texture_index1 < 0.5)
+	if (v_texture_index1 == 0.0)
 		NORMAL = vec3(0.0, 1.0, 0.0);
 	row_index = int(round(textureLod(control_map, main_uv, 0.0).g * 255.0));
 }
