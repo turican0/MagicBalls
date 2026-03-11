@@ -864,6 +864,17 @@ func anim1Begin(ScrBufferRect:TextureRect,index:int):
 	Global.MBEX.REMC2SetScrBuffer(ScrBufferRect)
 	changeLanguage(2)#only temporary fix
 
+func setLoadScreenBuffer():
+	Global.MBEX.REMC2SetScrBuffer(Global.loadScreenNodeRect)
+
+func MBrun():
+	getInputs()
+	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
+	var result=Global.MBEX.REMC2Run(input_state,0)
+	var endAnimOut=false;
+	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	return endAnimOut
+
 func anim1Step() -> int:
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	

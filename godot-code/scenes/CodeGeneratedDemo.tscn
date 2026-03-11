@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dakis6gu8b7nm" path="res://scenes/CodeGenerated.gd" id="1_h7vyv"]
 [ext_resource type="PackedScene" uid="uid://domhm87hbhbg1" path="res://scenes/Player.tscn" id="2_3v2uf"]
+[ext_resource type="Script" uid="uid://kwr82wuj0j7e" path="res://scenes/mb_engine.gd" id="2_kfkod"]
 [ext_resource type="PackedScene" uid="uid://d2jihfohphuue" path="res://scenes/UI.tscn" id="4_x5ge4"]
 [ext_resource type="PackedScene" uid="uid://84v3q55l2pga" path="res://scenes/Sounds.tscn" id="8_pypg8"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="9_2gbss"]
@@ -23,6 +24,9 @@ shader_parameter/lod = 2.0
 
 [node name="CodeGenerated" type="Node3D" unique_id=753120922]
 script = ExtResource("1_h7vyv")
+
+[node name="MBEngine" type="Node3D" parent="." unique_id=1184480590]
+script = ExtResource("2_kfkod")
 
 [node name="Player" parent="." unique_id=1664453856 instance=ExtResource("2_3v2uf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
