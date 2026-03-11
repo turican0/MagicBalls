@@ -63,6 +63,7 @@ struct typeStateMenu {
 
 enum class Thread1_State {
 	BEGIN,
+	CONTINUE,
 	BEGIN_ANIM,
 	RUNNING,
 	DONE
@@ -72,6 +73,8 @@ enum class Thread2_State {
 	BEGIN,
 	SUB_MAIN_END_FUNCTION,
 	SUB_MAIN_BEFORE_LOOP,
+	SHOW_WELCOME_SCREEN_LOOP,
+	PLAY_INFO_FLV_LOOP,
 	RUNNING,
 	DONE
 };
@@ -100,11 +103,11 @@ void InitLanguage_76A40_mod_only_language();
 void sub_main_mod_begin(int argc, char **argv, char *real_cdPathch);
 void sub_main_mod_end();
 
-void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState);
+void sub_46830_main_loop_modX(unsigned __int16 actLevel, typeStateMenu newState);
 
 int sub_main_mod(int argc, char **argv, char *real_cdPathch);
 
 void thread2_wait_for_continue(Thread2_State sendstate);
 void thread1_wait_for_continue(Thread1_State sendstate);
-void thread1_continue(Thread1_State sendstate);
-void thread2_continue(Thread2_State sendstate);
+void thread1_continue(Thread2_State sendstate);
+void thread2_continue(Thread1_State sendstate);

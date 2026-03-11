@@ -70,6 +70,10 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetWebInfo"), &MBEXclass::REMC2GetWebInfo);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2IsHiddenLevel"), &MBEXclass::REMC2IsHiddenLevel);
+
+	//godot::ClassDB::bind_method(D_METHOD("REMC2SetCDPath", "text"), &MBEXclass::REMC2SetCDPath);
+	godot::ClassDB::bind_method(D_METHOD("REMC2SetScrBuffer", "TextureRect"), &MBEXclass::REMC2SetScrBuffer);
+	godot::ClassDB::bind_method(D_METHOD("REMC2Run", "Dictionary", "Int"), &MBEXclass::REMC2Run);
 }
 
 
@@ -2107,23 +2111,26 @@ void MBEXclass::REMC2BeginGame(String cdPath) { //OK!!
 		thread2_state = Thread2_State::BEGIN;
 		thread1_state = Thread1_State::BEGIN;
 		thread2_waiting = false;
-		thread1_waiting = false;
+		thread1_waiting = true;
 	}
 
+    printf("REMC2BeginGame: spoustim vlakno 2\n");
 	t2 = std::thread([this]() {
+		printf("Vlakno 2: startuje\n");
 		sub_main_mod(saved_argc, saved_argv, (char *)saved_real_cdPath.utf8().get_data());
+		printf("Vlakno 2: skoncilo\n");
 	});
-	t2.detach(); // vlákno přežije konec funkce
+	t2.detach();
 
-	// Čekej dokud vlákno 2 nezavolá thread2_wait_for_continue()
+	printf("REMC2BeginGame: cekam na vlakno 2\n");
 	{
 		std::unique_lock<std::mutex> lock(main_mutex);
-		main_cv.wait(lock, [] { return thread2_waiting; });
+		main_cv.wait(lock, [] {
+			printf("REMC2BeginGame: kontrolujem thread2_waiting=%d\n", thread2_waiting);
+			return thread2_waiting == true; // ← čekej až vlákno 2 resetuje
+		});
 	}
-	//sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
-	//MBEXstate = 1;
-
-	changeLanguage(2); //added code
+	printf("REMC2BeginGame: probудил se, konec\n");
 }
 
 /*
@@ -2189,14 +2196,14 @@ void MBEXclass::REMC2BeginAnim_old(TextureRect *scrBufferRect,int animIndex) {
 	PlayInfoFmv_break = false;
 	mainScrBufferRect = scrBufferRect;
 	globalAnimIndex = animIndex;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
+	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 }
 
 void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex) {
 	PlayInfoFmv_break = false;
 	mainScrBufferRect = scrBufferRect;
 	globalAnimIndex = animIndex;
-	thread1_continue(Thread1_State::BEGIN_ANIM);
+	thread2_continue(Thread1_State::BEGIN_ANIM);
 	//sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 }
 
@@ -2237,7 +2244,7 @@ Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
 
 int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 	handleInputs(inputs, 2);
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });
+	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });
 	Ref<Image> img = getScrBufferImg(320, 200);
 	if (img.is_null())
 		return 0;
@@ -2249,7 +2256,7 @@ int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 	}
 
 	if (PlayInfoFmv_break) {
-		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
+		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
 		mainTexture.unref();
 	}
 
@@ -2258,12 +2265,12 @@ int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 
 void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin });
+	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin });
 }
 
 int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	handleInputs(inputs, 1);
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step });
+	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step });
 	Ref<Image> img = getScrBufferImg();
 	if (img.is_null())
 		return 0;
@@ -2277,7 +2284,7 @@ int MBEXclass::REMC2StepMap(Dictionary inputs) {
 	//if ((actState == typeStateMenu2::MapMenuSelected) || (actState == typeStateMenu2::ExitGameSelected))
 	if (NewGameDialog_endAction)
 	{
-		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End });
+		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End });
 		mainTexture.unref();
 	}
 
@@ -2300,12 +2307,12 @@ int MBEXclass::REMC2StepMap(Dictionary inputs) {
 
 void MBEXclass::REMC2BeginMain(TextureRect *scrBufferRect) {
 	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin });
+	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin });
 }
 
 int MBEXclass::REMC2StepMain(Dictionary inputs) {
 	handleInputs(inputs, 1);
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step });
+	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step });
 	Ref<Image> img = getScrBufferImg();
 	if (img.is_null())
 		return 0;
@@ -2317,7 +2324,7 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 	}
 
 	if ((actState == typeStateMenu2::MapMenuSelected) || (actState == typeStateMenu2::ExitGameSelected)) {
-		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End });
+		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End });
 		mainTexture.unref();
 	}
 
@@ -2348,7 +2355,7 @@ int MBEXclass::REMC2StepMain(Dictionary inputs) {
 
 Ref<Image> MBEXclass::REMC2BeginInGame() {
 	setLoadScreen = false;
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin });
+	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin });
 	/*
 	char dataPath[MAX_PATH];
 	switch (D41A0_0.terrain_2FECE.MapType) {
@@ -2374,7 +2381,7 @@ Ref<Image> MBEXclass::REMC2BeginInGame() {
 }
 
 void MBEXclass::REMC2BeginInGameAfterScreen() {
-	sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen });
+	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen });
 
 	char dataPath[MAX_PATH];
 	switch (D41A0_0.terrain_2FECE.MapType) {
@@ -2397,23 +2404,23 @@ void MBEXclass::REMC2BeginInGameAfterScreen() {
 
 int MBEXclass::REMC2StepInGame(Dictionary inputs, int state) {
 	if (state == 1) {
-		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
-		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterSecret });
+		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
+		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterSecret });
 		return 3;
 	}
 	if (state == 0) {
 		handleInputs(inputs, 0);
-		sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step });
+		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step });
 		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8) {
-			sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End });
+			sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End });
 			if (secretsModPortals) {
 				switch (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2])
 				{
 					case 0xa://0xa-correct end of hidden level 0x2 0x8
-						sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
+						sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
 						return 0;
 					case 0x18://0x18-end of hidden level by escape 0x8 0x10
-						sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
+						sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
 						return 0;
 					case 0x1a://0x1a-go to hidden level - show load screen 0x2 0x8 0x10
 						return 2;
@@ -2423,7 +2430,7 @@ int MBEXclass::REMC2StepInGame(Dictionary inputs, int state) {
 						break;
 				}
 			}
-			sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
+			sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
 			return 0;
 		}
 	}
@@ -2436,5 +2443,45 @@ bool MBEXclass::REMC2IsHiddenLevel() {
 	return false;
 };
 
+void MBEXclass::REMC2SetScrBuffer(TextureRect *scrBufferRect) {
+	//PlayInfoFmv_break = false;
+	mainScrBufferRect = scrBufferRect;
+	//globalAnimIndex = animIndex;
+	//sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
+};
+
+/*
+void MBEXclass::REMC2SetCDPath(String cdPath) {
+	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+}*/
+
+int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
+	switch (stage) {
+		case 0:
+			{
+				handleInputs(inputs, 2);
+				//thread2_continue(Thread1_State::CONTINUE);
+				thread1_wait_for_continue(Thread1_State::CONTINUE);
+				Ref<Image> img = getScrBufferImg(320, 200);
+				if (img.is_null())
+					return 0;
+				if (mainTexture.is_null()) {
+					mainTexture = ImageTexture::create_from_image(img);
+					mainScrBufferRect->set_texture(mainTexture);
+				} else {
+					mainTexture->update(img);
+				}
+				/*
+				if (PlayInfoFmv_break) {
+					sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
+					mainTexture.unref();
+				}*/
+			}
+			return 0;
+		default:
+			break;
+	}
+	return -1;
+}
 
 

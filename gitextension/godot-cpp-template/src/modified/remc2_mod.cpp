@@ -676,7 +676,7 @@ void MainMenu_76FA0_mod(typeStateMenu newState) //257fa0
 FILE *tempfile_PlayInfoFmv;
 bool PlayInfoFmv_break=false;
 
-void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17CC *pSoundEvent, char *path, typeStateMenu newState) //sub_76160 - 257160
+void PlayInfoFmv_modX(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17CC *pSoundEvent, char *path, typeStateMenu newState) //sub_76160 - 257160
 {
 	//FILE *tempfile;
 	if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })
@@ -723,7 +723,7 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 
 int globalAnimIndex = -1;
 
-void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
+void Intros_76D10_modX(char introType, typeStateMenu newState) //257d10
 {
 	char introPath[MAX_PATH];
 	if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin })
@@ -758,7 +758,7 @@ void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
 				ShowWelcomeScreen_83850(); //frog logo and wait
 #endif
 				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
-				PlayInfoFmv_mod(1, 1, str_E17CC_0, introPath, newState); //257160 intro .. 2b27cc
+				PlayInfoFmv_modX(1, 1, str_E17CC_0, introPath, newState); //257160 intro .. 2b27cc
 				StopSubtitles_2EB40();
 				DisplaySubtitles_D41C1 = 0;
 				DisplaySubtitles_D41C0 = 0;
@@ -773,7 +773,7 @@ void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
 				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 			{
 				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
-				PlayInfoFmv_mod(1, 1, str_E17CC_0x160, introPath, newState); //E192C
+				PlayInfoFmv_modX(1, 1, str_E17CC_0x160, introPath, newState); //E192C
 			}
 			break;
 		case 1:
@@ -782,7 +782,7 @@ void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
 				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 			{
 				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
-				PlayInfoFmv_mod(1, 1, str_E17CC_0, introPath, newState);
+				PlayInfoFmv_modX(1, 1, str_E17CC_0, introPath, newState);
 			}
 			break;
 		case 2:
@@ -797,7 +797,7 @@ void Intros_76D10_mod(char introType, typeStateMenu newState) //257d10
 				(newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End }))
 			{
 				sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
-				PlayInfoFmv_mod(1, 1, str_E17CC_0x160, introPath, newState); //E192C
+				PlayInfoFmv_modX(1, 1, str_E17CC_0x160, introPath, newState); //E192C
 			}
 			break;
 	}
@@ -895,7 +895,7 @@ void MenusAndIntros_76930_mod(bool skipMenus, typeStateMenu newState) //257930
 				//_wcpp_1_unwind_leave__131(); //257d00 asi konec
 				break;
 			case MenuItem::Intros:
-				Intros_76D10_mod(animIndex, newState); //257d10
+				Intros_76D10_modX(animIndex, newState); //257d10
 				if (newState == typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End })
 					nextMenu_E29D8 = MenuItem::MainMenu;
 				break;
@@ -1069,7 +1069,7 @@ bool sub_46830_main_loop_break = false;
 
 unsigned __int16 tempActLevel=-1;
 
-void sub_46830_main_loop_mod(unsigned __int16 actLevel, typeStateMenu newState) //227830
+void sub_46830_main_loop_modX(unsigned __int16 actLevel, typeStateMenu newState) //227830
 { //graphics already inited
 	/*
 	bool isSecretLevel;
@@ -1326,8 +1326,9 @@ void thread2_wait_for_continue(Thread2_State sendstate) {
 		std::lock_guard<std::mutex> lock(main_mutex);
 		thread2_state = sendstate;
 		thread2_waiting = true;
+		thread1_waiting = false;
 	}
-	main_cv.notify_one();
+	main_cv.notify_all();
 
 	std::unique_lock<std::mutex> lock(main_mutex);
 	main_cv.wait(lock, [] { return !thread2_waiting; });
@@ -1338,30 +1339,394 @@ void thread1_wait_for_continue(Thread1_State sendstate) {
 		std::lock_guard<std::mutex> lock(main_mutex);
 		thread1_state = sendstate;
 		thread1_waiting = true;
+		thread2_waiting = false;
 	}
-	main_cv.notify_one();
+	main_cv.notify_all();
 
 	std::unique_lock<std::mutex> lock(main_mutex);
 	main_cv.wait(lock, [] { return !thread1_waiting; });
 }
 
-void thread1_continue(Thread1_State sendstate) {	
+void thread1_continue(Thread2_State sendstate) {	
 	{
 		std::lock_guard<std::mutex> lock(main_mutex);
-		thread1_state = sendstate;
+		thread2_state = sendstate;
 		thread1_waiting = false;
 	}
 	main_cv.notify_one();
 }
 
-void thread2_continue(Thread2_State sendstate) {	
+void thread2_continue(Thread1_State sendstate) {	
 	{
 		std::lock_guard<std::mutex> lock(main_mutex);
-		thread2_state = sendstate;
+		thread1_state = sendstate;
 		thread2_waiting = false;
 	}
 	main_cv.notify_one();
 }
+
+void ShowWelcomeScreen_83850_mod() //264850
+{
+	char dataPath[MAX_PATH];
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
+	sub_7AA70_load_and_decompres_dat_file(dataPath, x_DWORD_E9C38_smalltit, 0x178E5F, 0x32B9);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, *xadatapald0dat2.colorPalette_var28, 0x17C118, 0x300);
+	sub_7AA70_load_and_decompres_dat_file(cdDataPath.c_str(), nullptr, 0, 0);
+	bool afterFade = false;
+	int time = j___clock();
+	LastPressedKey_1806E4 = 0;
+	while (!LastPressedKey_1806E4 && !x_WORD_180746_mouse_left_button && !x_WORD_180744_mouse_right_button && (j___clock() - time) / 100 <= 20) {
+		SetFrameStart(std::chrono::system_clock::now());
+		if (x_WORD_180660_VGA_type_resolution & 1)
+			CopyScreen(x_DWORD_E9C38_smalltit, pdwScreenBuffer_351628, 320, 200);
+		else
+			CopyScreen(x_DWORD_E9C38_smalltit, pdwScreenBuffer_351628, 640, 480);
+		if (afterFade) {
+			if (x_WORD_180660_VGA_type_resolution & 1)
+				sub_90478_VGA_Blit320(menuFps);
+			else
+				sub_75200_VGA_Blit640(480, menuFps);
+			thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
+		} else {
+			afterFade = true;
+			ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0);
+			sub_75200_VGA_Blit640(480, menuFps);
+			thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
+			sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
+		}
+	}
+	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		ClearGraphicsBuffer_72883(pdwScreenBuffer_351628, 320, 200, 0);
+	else
+		ClearGraphicsBuffer_72883(pdwScreenBuffer_351628, 640, 480, 0);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		sub_90478_VGA_Blit320(menuFps);
+	else
+		sub_75200_VGA_Blit640(480, menuFps);
+	thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
+	while (sub_9A10A_check_keyboard()) {
+		LastPressedKey_1806E4 = 0;
+		sub_7A060_get_mouse_and_keyboard_events();
+	}
+	j___delay(50);
+}
+
+void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17CC *pSoundEvent, char *path) //sub_76160 - 257160
+{
+	FILE *tempfile;
+	redrawTextInVideo_E12FC = redrawText;
+	soundEventIndex_D4004 = 0;
+	//x_WORD_17DB58 = 0;//not used
+	ActualKeyframe_17DB60 = 0;
+	framebuffer_E12F4x = (TColor *)pdwScreenBuffer_351628;
+	tempfile = DataFileIO::CreateOrOpenFile(path, 512);
+	x_DWORD_17DB38_intro_file_handle = tempfile;
+	if (tempfile) {
+		DataFileIO::Read(tempfile, (uint8_t *)&unk_17DB40str, sizeof(Type_17DB40)); //ecx=12
+		LastKeyframe_17DB46 = unk_17DB40str.frameCount_6;
+		height_17DB48 = unk_17DB40str.height_8;
+		width_17DB4A = unk_17DB40str.width_alt_10;
+		x_WORD_180744_mouse_right_button = 0;
+		x_WORD_180746_mouse_left_button = 0;
+		fileOffset_E1300 += 12;
+		LastPressedKey_1806E4 = 0;
+		stopPlaybackFlag_17DB5A = 0;
+		FlvInitSet_473B0(); //2283b0
+		allowSkipVideo_17DB5C = allowSkip;
+		do {
+			SetFrameStart(std::chrono::system_clock::now());
+			if (stopPlaybackFlag_17DB5A)
+				break;
+			if (ActualKeyframe_17DB60 >= LastKeyframe_17DB46 - 1) //34eb60 a 34eb46
+				break;
+			PlayIntoSoundEvents_1B280(pSoundEvent);
+			ReadFrame_75DB0(); //256db0 - read header
+			DrawFrame_75E70(); //256e70 - draw intro frame
+			thread2_wait_for_continue(Thread2_State::PLAY_INFO_FLV_LOOP);
+			ActualKeyframe_17DB60++;
+		} while (LastPressedKey_1806E4 != 1); //while not key pressed
+		DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
+	}
+}
+
+void Intros_76D10_mod(char introType) //257d10
+{
+	char dataPath[MAX_PATH];
+	x_DWORD_17DE38str.x_DWORD_17DE54 = &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787];
+	x_DWORD_17DE38str.x_DWORD_17DEC0 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[308527];
+	x_DWORD_17DE38str.x_DWORD_17DEC4 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[310159];
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
+	sub_7AA70_load_and_decompres_dat_file(dataPath, &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787], 0x164FCD, 0x35C);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DEC0, 0x165329, 0x224);
+	sub_7AA70_load_and_decompres_dat_file(0, 0, 0, 0);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+	else
+		sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+
+	StopSubtitles_2EB40();
+	if (soundAble_E3798 && x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex == 2) {
+		DisplaySubtitles_D41C1 = 0;
+		DisplaySubtitles_D41C0 = 0;
+	} else {
+		DisplaySubtitles_D41C0 = 1;
+		DisplaySubtitles_D41C1 = 1;
+	}
+	SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
+	char introPath[MAX_PATH];
+	switch (introType) {
+		case 0:
+#ifndef debug_hide_graphics
+			ShowWelcomeScreen_83850_mod(); //frog logo and wait
+#endif
+			sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
+			PlayInfoFmv_mod(1, 1, str_E17CC_0, introPath); //257160 intro .. 2b27cc
+			StopSubtitles_2EB40();
+			DisplaySubtitles_D41C1 = 0;
+			DisplaySubtitles_D41C0 = 0;
+			while (sub_9A10A_check_keyboard()) {
+				LastPressedKey_1806E4 = 0;
+				sub_7A060_get_mouse_and_keyboard_events();
+			}
+			j___delay(50);
+			sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+			PlayInfoFmv_mod(1, 1, str_E17CC_0x160, introPath); //E192C
+			break;
+		case 1:
+			sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
+			PlayInfoFmv_mod(1, 1, str_E17CC_0, introPath);
+			break;
+		case 2:
+			LastPressedKey_1806E4 = 0;
+			DisplaySubtitles_D41C1 = 0;
+			DisplaySubtitles_D41C0 = 0;
+			sprintf(introPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
+			PlayInfoFmv_mod(1, 1, str_E17CC_0x160, introPath); //E192C
+			break;
+	}
+	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+	EndSample_8D8F0();
+	StopMusic_8E020();
+	FadeClearBlit_7B5D0();
+	nextMenu_E29D8 = MenuItem::MainMenu;
+	DisplaySubtitles_D41C0 = 0;
+	DisplaySubtitles_D41C1 = 0;
+	if (sub_9A10A_check_keyboard())
+		sub_7A060_get_mouse_and_keyboard_events();
+	x_DWORD_17DE38str.x_BYTE_17DF11_last_key_status = 0;
+	x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
+	if (!introType)
+		LoadAndSetGraphicsAndPalette_7AC00();
+}
+
+void MenusAndIntros_76930_mod(bool skipMenus) //257930
+{
+	//1 -351660
+	x_BYTE_E29DF_skip_screen = x_BYTE_D41AD_skip_screen;
+	if (skipMenus) {
+		x_BYTE_D41AD_skip_screen = 1;
+		m_ExitMenuLoop_E29DC = 1;
+	} else {
+		m_ExitMenuLoop_E29DC = 0;
+	}
+
+	if (x_BYTE_D41AD_skip_screen == 1 || (nextMenu_E29D8 != MenuItem::InitLanguage)) {
+		PlayInGameFmv_82670();
+		LoadAndSetGraphicsAndPalette_7AC00();
+	}
+	if (x_BYTE_D41AD_skip_screen == 1) {
+		InitLanguage_76A40();
+		nextMenu_E29D8 = MenuItem::MainMenu;
+	}
+	memset(&x_DWORD_17DE38str, 0, sizeof(type_x_DWORD_17DE38str));
+	x_DWORD_17DE38str.x_DWORD_17DEE0_filedesc = NULL;
+	sub_7BEC0(); //25CEC0
+	SetCenterScreenForFlyAssistant_6EDB0(); //24FDB0
+	WriteConfigDat_81DB0(); //262DB0
+
+	//added code!!!!!!!!!!!!!!!!!!!!!!!!
+	nextMenu_E29D8 = MenuItem::Intros;
+	//Intros_76D10(-1);
+	//x_WORD_180660_VGA_type_resolution = 1;
+	//LoadAndSetGraphicsAndPalette_7AC00();
+	//x_BYTE_E29E1 = 1;
+	//added code!!!!!!!!!!!!!!!!!!!!!!!!
+
+	do {
+		//2b39d8
+		switch (nextMenu_E29D8) {
+			case MenuItem::InitLanguage:
+				InitLanguage_76A40(); //257A40
+				break;
+			case MenuItem::SetToIntro:
+				SetToIntro_76CF0(); //257cf0 nastavi x_WORD_E29D8 na 3
+				break;
+			case MenuItem::LeaveX:
+				//_wcpp_1_unwind_leave__131(); //257d00 asi konec
+				break;
+			case MenuItem::Intros:
+				Intros_76D10_mod(0); //257d10
+				nextMenu_E29D8 = MenuItem::MainMenu;
+				break;
+			case MenuItem::MainMenu:
+				MainMenu_76FA0(); //257fa0
+				break;
+			case MenuItem::Exit:
+				m_ExitMenuLoop_E29DC = 1;
+				break;
+			case MenuItem::LangSettings:
+				LanguageSettingDialog_779E0(0); //2589e0
+				break;
+			default:
+				break;
+		}
+	} while (!m_ExitMenuLoop_E29DC);
+	sub_7ADE0(x_BYTE_E29DE);
+	if (x_BYTE_E29E1)
+		x_BYTE_E29E1 = 0;
+	WriteConfigDat_81DB0();
+}
+
+void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
+{ //graphics already inited
+	bool isSecretLevel;
+	bool skipMenus = false;
+	int16_t setLevel = -1;
+	std::string customLevelPath = "";
+
+	x_D41A0_BYTEARRAY_4_struct.setting_30 = 0; //2a51a4
+	D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 = 0;
+
+	setLevel = CommandLineParams.GetSetLevel();
+	customLevelPath = CommandLineParams.GetCustomLevelPath();
+	if ((setLevel > -1 || customLevelPath.length() > 0) || CommandLineParams.ModeRegressionsTestType() != -1) {
+		if (CommandLineParams.ModeRegressionsTestType() == -1)
+			x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 |= LEVEL_LOADED_FROM_ARG;
+		skipMenus = true;
+	}
+
+	while (1) {
+		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
+			return;
+		}
+		sub_48350(); //fix it //229350
+
+		MenusAndIntros_76930_mod(skipMenus); //set language, intro, menu, atd. //257930
+
+		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
+			isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
+			sub_47FC0_load_screen(isSecretLevel); //vga smaltitle
+			LevelInitGame_56A30(setLevel, customLevelPath);
+			if (CommandLineParams.DoAutoChangeRes()) {
+				resindex_begin = 0;
+			}
+
+			sub_47160();
+
+			while (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
+				if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
+					switch (D41A0_0.terrain_2FECE.MapType) {
+						case MapType_t::Day:
+							D41A0_0.maptypeMusic_0x235 = 2;
+							break;
+						case MapType_t::Night:
+							D41A0_0.maptypeMusic_0x235 = 1;
+							break;
+						case MapType_t::Cave:
+							D41A0_0.maptypeMusic_0x235 = 3;
+							break;
+					}
+				}
+				SetCenterScreenForFlyAssistant_6EDB0();
+				if (m_ptrGameRender == nullptr) {
+					if (!strcmp(forceRender, "NG"))
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderNG();
+					else if (!strcmp(forceRender, "Original"))
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
+					else if (!strcmp(forceRender, "HD"))
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+					else {
+						if ((gameResWidth <= 640) && (gameResHeight <= 480)) {
+							m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
+						} else {
+							m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+						}
+					}
+				}
+				InGameLoop_47320();
+				if (m_ptrGameRender != nullptr) {
+					delete m_ptrGameRender;
+					m_ptrGameRender = nullptr;
+				}
+				sub_53CC0_close_movie();
+				EndSample_8D8F0();
+				StopMusic_8E020();
+				StopCdPlayback_86860(x_WORD_1803EC);
+				RestoreSoundVolume_59BF0();
+				sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+				if (x_WORD_180660_VGA_type_resolution & 1)
+					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
+				else
+					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
+				if (x_WORD_180660_VGA_type_resolution & 1)
+					sub_90478_VGA_Blit320(maxGameFps);
+				else
+					sub_75200_VGA_Blit640(480, maxGameFps);
+				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2 && !(x_D41A0_BYTEARRAY_4_struct.setting_38545 & 4)) {
+					sub_6DB50(1, 0);
+				}
+				sub_713A0();
+				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 4) {
+					sub_56D60(actLevel, 0);
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] = 4;
+				} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
+					CollectLevelStats_5C530();
+					if (x_D41A0_BYTEARRAY_4_struct.setting_38545 & 0x20)
+						sub_6E0D0();
+				} else
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] |= 8;
+				if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x10) {
+					actLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w;
+					if (actLevel >= 0x18u) {
+						if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2)
+							CollectLevelStats_5C530();
+						break;
+					}
+					if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 2) {
+						Type_SecretMapScreenPortals_E2970 *secretsPortals = GetSecretAndActivedPortal_824B0(actLevel);
+						if (secretsPortals) {
+							x_D41A0_BYTEARRAY_4_struct.levelnumber_43w = secretsPortals->levelNumber_6;
+
+							//fix level number-neoriginal code
+							actLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w;
+							//fix level number-neoriginal code
+
+							//fix res before secret level-neoriginal code
+							VGA_Resize(320, 200);
+							screenWidth_18062C = 320;
+							screenHeight_180624 = 200;
+							sub_A0D50_set_viewport(0, 0, 320, 200);
+							x_WORD_180660_VGA_type_resolution = 1;
+							//fix res before secret level-neoriginal code
+
+							sub_47FC0_load_screen(true);
+							LevelInitGame_56A30(actLevel);
+							sub_47160();
+						}
+					}
+				} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0xA) {
+					break; //must be here
+				}
+			}
+			nextMenu_E29D8 = MenuItem::MainMenu;
+			skipMenus = false;
+			setLevel = -1;
+			customLevelPath = "";
+		}
+	}
+}
+
 
 int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
@@ -1434,7 +1799,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 
 		thread2_wait_for_continue(Thread2_State::SUB_MAIN_BEFORE_LOOP);
 
-		sub_46830_main_loop(v4); //227830
+		sub_46830_main_loop_mod(v4); //227830
 
 		if (CommandLineParams.GetPlaybackPath().length() > 0 &&
 				std::filesystem::exists(CommandLineParams.GetPlaybackPath().c_str())) {
@@ -1466,3 +1831,6 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 
 	return exitCode;
 }
+
+
+//fix sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);

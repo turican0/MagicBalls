@@ -860,14 +860,20 @@ func anim1Begin(ScrBufferRect:TextureRect,index:int):
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
 	#Global.MBEX.playAnim(index)
 	#Global.MBEX.REMC2BeginItem()
-	Global.MBEX.REMC2BeginAnim(ScrBufferRect,index)
-	changeLanguage(2)#only temporary fix
+	#Global.MBEX.REMC2BeginAnim(ScrBufferRect,index)
+	Global.MBEX.REMC2SetScrBuffer(ScrBufferRect)
+	changeLanguage(6)#only temporary fix
 
 func anim1Step() -> int:
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
 	#var endAnimOut=Global.MBEX.playAnimStep(endAnimIn)
-	var endAnimOut=Global.MBEX.REMC2StepAnim(input_state)
+	
+	#var endAnimOut=Global.MBEX.REMC2StepAnim(input_state)
+	
+	var result=Global.MBEX.REMC2Run(input_state,0)
+	var endAnimOut=false;
+	
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return endAnimOut
 
@@ -936,6 +942,7 @@ func MBEXinit():
 	if !Global.MBEX:
 		Global.MBEX = MBEXclass.new()
 		Global.MBEX.REMC2BeginGame(Global.cdPath)
+		#Global.MBEX.REMC2SetCDPath(Global.cdPath)
 
 func MBEXconvert(path, path2):
 	Global.MBEX.convertOriginalData(path,path2)

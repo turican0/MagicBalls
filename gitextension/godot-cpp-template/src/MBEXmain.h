@@ -138,4 +138,8 @@ public:
 
 
 	void REMC2BeginGame_old(String cdPath);
+
+	void REMC2SetScrBuffer(TextureRect *scrBufferRect);
+	//void REMC2SetCDPath(String cdPath);
+	int REMC2Run(Dictionary inputs, int stage);
 	};
