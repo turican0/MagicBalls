@@ -871,9 +871,8 @@ func MBrun():
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
 	var result=Global.MBEX.REMC2Run(input_state,0)
-	var endAnimOut=false;
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
-	return endAnimOut
+	return result
 
 func anim1Step() -> int:
 	getInputs()

@@ -2465,7 +2465,7 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			{
 				handleInputs(inputs, 2);
 				//thread2_continue(Thread1_State::CONTINUE);
-				thread1_wait_for_continue(Thread1_State::CONTINUE);
+				thread1_wait_for_continue(Thread1_State::CONTINUE);				
 				Ref<Image> img = getScrBufferImg();
 				if (img.is_null())
 					return 0;
@@ -2481,6 +2481,10 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 					sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
 					mainTexture.unref();
 				}*/
+			}
+			switch (thread2_state) {
+				case Thread2_State::SUB_MAIN_END_FUNCTION:
+					return 1;
 			}
 			return 0;
 		default:

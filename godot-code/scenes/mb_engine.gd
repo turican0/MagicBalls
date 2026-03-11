@@ -25,11 +25,11 @@ func endAnim():
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
-	var endAnimVar
-	endAnimVar = Main_DecodeLevel.MBrun()
-	if(endAnimVar):
-		Global.Main_Sounds.stopAllSounds()
-		endAnim()
+	var endRunVar = Main_DecodeLevel.MBrun()
+	match(endRunVar):
+		1:
+			Global.Main_Sounds.stopAllSounds()
+			get_tree().quit()
 	#else:
 		#animImage.set_data(animWidth, animHeight, false, Image.FORMAT_RGB8, Main_DecodeLevel.getVGABuffer())
 		#animTextureRect.update(animImage)
