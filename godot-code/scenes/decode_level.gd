@@ -862,7 +862,7 @@ func anim1Begin(ScrBufferRect:TextureRect,index:int):
 	#Global.MBEX.REMC2BeginItem()
 	#Global.MBEX.REMC2BeginAnim(ScrBufferRect,index)
 	Global.MBEX.REMC2SetScrBuffer(ScrBufferRect)
-	changeLanguage(6)#only temporary fix
+	changeLanguage(2)#only temporary fix
 
 func anim1Step() -> int:
 	getInputs()

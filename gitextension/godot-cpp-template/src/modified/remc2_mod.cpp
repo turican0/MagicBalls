@@ -1834,3 +1834,4 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 
 
 //fix sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+//fix changeLanguage
