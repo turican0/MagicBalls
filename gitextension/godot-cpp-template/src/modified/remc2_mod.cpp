@@ -1940,7 +1940,8 @@ void MenusAndIntros_76930_mod(bool skipMenus) //257930
 	WriteConfigDat_81DB0(); //262DB0
 
 	//added code!!!!!!!!!!!!!!!!!!!!!!!!
-	nextMenu_E29D8 = MenuItem::Intros;
+	if (thread2_state == Thread2_State::SUB_MAIN_BEFORE_LOOP)
+		nextMenu_E29D8 = MenuItem::Intros;
 	//Intros_76D10(-1);
 	//x_WORD_180660_VGA_type_resolution = 1;
 	//LoadAndSetGraphicsAndPalette_7AC00();
