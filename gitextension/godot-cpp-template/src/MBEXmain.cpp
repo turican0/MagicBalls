@@ -108,6 +108,32 @@ String MBEXclass::REMC2GetLevelType() {
 }
 
 void MBEXclass::changeLanguage(int index) {
+	
+	FILE *configFile2;
+	char configFilePath[MAX_PATH];
+	TypeConfigDat configDat;
+	sprintf(configFilePath, "%s/%s", gameDataPath.c_str(), "CONFIG.DAT");
+
+
+
+	configFile2 = DataFileIO::Open(configFilePath, 0x222, 0x40);
+	if (configFile2 != nullptr) {
+		DataFileIO::Close(configFile2);
+		configFile2 = DataFileIO::CreateOrOpenFile(configFilePath, 512);
+		if (configFile2 != nullptr) {
+			DataFileIO::Read(configFile2, (uint8_t *)&configDat.configDatSign_0, 4);
+			if (configDat.configDatSign_0 == 0xfffffff7) {
+				DataFileIO::Read(configFile2, (uint8_t *)&configDat.langIndex_4, 2);
+				index = configDat.langIndex_4;
+				//DataFileIO::Read(configFile2, (uint8_t *)&configDat.langIndex_4, 2);
+				//sprintf(printbuffer, "L%d.TXT", configDat.langIndex_4);
+				//x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex = sub_7F960(tabBuffer, tabBufferEnd, langBuffer, printbuffer, langDatTab); //tady se pak zmeni v1 za v1_langdattab
+			}
+			DataFileIO::Close(configFile2);
+		}
+	} else
+		x_D41A0_BYTEARRAY_4_struct.setting_38402 = 1;
+
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
 	InitLanguage_76A40_mod_only_language();
 }

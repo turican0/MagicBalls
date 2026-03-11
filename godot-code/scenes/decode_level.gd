@@ -864,8 +864,8 @@ func anim1Begin(ScrBufferRect:TextureRect,index:int):
 	Global.MBEX.REMC2SetScrBuffer(ScrBufferRect)
 	changeLanguage(2)#only temporary fix
 
-func setLoadScreenBuffer():
-	Global.MBEX.REMC2SetScrBuffer(Global.loadScreenNodeRect)
+func setLoadScreenBuffer(locTextureRect):
+	Global.MBEX.REMC2SetScrBuffer(locTextureRect)
 
 func MBrun():
 	getInputs()

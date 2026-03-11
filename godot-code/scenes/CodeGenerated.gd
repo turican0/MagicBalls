@@ -27,6 +27,8 @@ func _ready() -> void:
 	$UILayer/UI.player = $Player
 	#Main_TerrainsMB.init()
 	MBEngine.Main_DecodeLevel=Main_DecodeLevel
+	MBEngine.LoadScrRect=$LoadScr/Control/Foreground
+	MBEngine.FlagRect=$LoadScr/Control/LangRect
 	MBEngine.init()
 	
 	#$CanvasUI.init()

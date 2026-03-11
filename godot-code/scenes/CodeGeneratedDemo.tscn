@@ -9,6 +9,8 @@
 [ext_resource type="Shader" uid="uid://diekk5uppuvq1" path="res://scenes/FilterColorRect.gdshader" id="9_vrj2c"]
 [ext_resource type="Texture2D" uid="uid://csrngnir5a8qs" path="res://entites/sources/spiders/spiderweb.png" id="10_kfkod"]
 [ext_resource type="Shader" uid="uid://2qha8dcud50w" path="res://scenes/Blur_effect.gdshader" id="10_vrj2c"]
+[ext_resource type="Shader" uid="uid://cqvqou2u8cq8o" path="res://scenes/MainMenu-lang.gdshader" id="12_gfbub"]
+[ext_resource type="Script" uid="uid://w2xikvu6pfky" path="res://scenes/hide_lang_rect.gd" id="13_76h4m"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="26_dvamp"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="27_6qqjn"]
 
@@ -21,6 +23,13 @@ shader_parameter/MySatMultiplier = 1.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_swd5f"]
 shader = ExtResource("10_vrj2c")
 shader_parameter/lod = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gj3i4"]
+shader = ExtResource("12_gfbub")
+shader_parameter/amplitude = 0.02
+shader_parameter/frequency = 10.0
+shader_parameter/speed = 2.0
+shader_parameter/alpha = 0.50000002375
 
 [node name="CodeGenerated" type="Node3D" unique_id=753120922]
 script = ExtResource("1_h7vyv")
@@ -91,3 +100,28 @@ expand_mode = 1
 layer = 3
 
 [node name="UI" parent="UILayer" unique_id=1982999733 instance=ExtResource("4_x5ge4")]
+
+[node name="LoadScr" type="CanvasLayer" parent="." unique_id=722041302]
+
+[node name="Control" type="Control" parent="LoadScr" unique_id=1324751400]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Foreground" type="TextureRect" parent="LoadScr/Control" unique_id=1328273624]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LangRect" type="TextureRect" parent="LoadScr/Control" unique_id=955431668]
+material = SubResource("ShaderMaterial_gj3i4")
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("13_76h4m")

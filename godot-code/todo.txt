@@ -44,3 +44,5 @@
 -fix enter to hide level - 50%
 -add screen between maps
 -add animations between maps
+
+-fix sound banks

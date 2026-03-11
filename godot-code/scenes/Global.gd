@@ -63,40 +63,40 @@ var loadScreenNodeRect:TextureRect;
 			#get_tree().root.move_child(new_layer, fade.get_index())
 	#return get_tree().root.get_node_or_null("LoadScreen")
 	
-func loadScreenInit():
-	if !get_tree().root.get_node_or_null("LoadScreenCanvas"):
-		var fade_layer_scene = preload("res://scenes/LoadScreen.tscn")
-		var new_layer = fade_layer_scene.instantiate()
-		new_layer.name = "LoadScreen"
-		new_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var canvas = CanvasLayer.new()
-		canvas.layer = 10
-		canvas.name = "LoadScreenCanvas"
-		get_tree().root.add_child(canvas)
-		canvas.add_child(new_layer)
-		loadScreenNodeRect = new_layer.get_node_or_null("TextureRect")
-		loadScreenNodeRect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var fade = get_tree().root.get_node_or_null("FadeInOut")
-		if fade:
-			get_tree().root.move_child(canvas, fade.get_index())
-	return get_tree().root.get_node_or_null("LoadScreen")
+#func loadScreenInit():
+	#if !get_tree().root.get_node_or_null("LoadScreenCanvas"):
+		#var fade_layer_scene = preload("res://scenes/LoadScreen.tscn")
+		#var new_layer = fade_layer_scene.instantiate()
+		#new_layer.name = "LoadScreen"
+		#new_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#var canvas = CanvasLayer.new()
+		#canvas.layer = 10
+		#canvas.name = "LoadScreenCanvas"
+		#get_tree().root.add_child(canvas)
+		#canvas.add_child(new_layer)
+		#loadScreenNodeRect = new_layer.get_node_or_null("TextureRect")
+		#loadScreenNodeRect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#var fade = get_tree().root.get_node_or_null("FadeInOut")
+		#if fade:
+			#get_tree().root.move_child(canvas, fade.get_index())
+	#return get_tree().root.get_node_or_null("LoadScreen")
+#
+#func setLoadingScreenStr(fileName):
+	#if(fileName):
+		#setLoadingScreen(null)
+	#var path = "user://convertdata/smat/" + fileName
+	#if FileAccess.file_exists(path):
+		#var img = Image.load_from_file(path)
+		#if img:
+			#setLoadingScreen(img)
+			#return
+	#setLoadingScreen(null)
 
-func setLoadingScreenStr(fileName):
-	if(fileName):
-		setLoadingScreen(null)
-	var path = "user://convertdata/smat/" + fileName
-	if FileAccess.file_exists(path):
-		var img = Image.load_from_file(path)
-		if img:
-			setLoadingScreen(img)
-			return
-	setLoadingScreen(null)
-
-func setLoadingScreen(buffer):
-	if buffer == null:
-		loadScreenNodeRect.texture = null
-	else:
-		loadScreenNodeRect.texture = ImageTexture.create_from_image(buffer)
+#func setLoadingScreen(buffer):
+	#if buffer == null:
+		#loadScreenNodeRect.texture = null
+	#else:
+		#loadScreenNodeRect.texture = ImageTexture.create_from_image(buffer)
 
 #FadeInOut
 func fadeInit(fadeNode):

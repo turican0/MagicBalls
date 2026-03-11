@@ -4,12 +4,15 @@ var Main_DecodeLevel
 
 var runned:bool = false
 
+var LoadScrRect:TextureRect
+var FlagRect:TextureRect
+
 func init():
-	Global.loadScreenInit()
+	#Global.loadScreenInit()
 	Main_DecodeLevel.MBEXinit()
 	Global.initSound()
 	#Main_DecodeLevel.anim1Begin($Control/Foreground)
-	Main_DecodeLevel.setLoadScreenBuffer()
+	Main_DecodeLevel.setLoadScreenBuffer(LoadScrRect)
 	Main_DecodeLevel.changeLanguage(2)
 #	Global.Main_Sounds.setSoundBank(3)
 	runned=true
