@@ -440,6 +440,17 @@ extern char x_BYTE_D41C6_old_graphics_mode;
 
 extern int save_debugcounter;
 
+extern char x_BYTE_F0220[];
+extern char x_BYTE_F0320[];
+extern char x_BYTE_F0420[];
+extern char x_BYTE_F0520[];
+extern char x_BYTE_F0620[];
+extern char x_BYTE_F0720[];
+extern char x_BYTE_F0820[];
+extern char x_BYTE_F0920[];
+
+extern char x_BYTE_D478C;
+
 void j___delay(x_DWORD); // weak
 
 void WriteBufferToBMP(uint16_t width, uint16_t height, uint8_t* ptrPalette, uint8_t* ptrBuffer, const char* fileName = "BufferOut.bmp");
@@ -1634,4 +1645,10 @@ void CopyScreen_85B20(uint8_t* src, uint8_t* dest, uint16_t rows_count);
 void sub_88580();
 int sub_9025C(__int16 a1, __int16 a2, __int16 a3, __int16 a4, unsigned __int16 a5, __int16 a6);
 int sub_90374(uint16_t viewPortX, uint16_t viewPortY, uint16_t viewPortWidth, uint16_t viewPortHeight, unsigned __int16 a5, __int16 a6);
+void BlendAndBlit_40F80();
+void DrawGameDebugText_6FEC0();
+int sub_40D10();
+void sub_BD1B6(uint8_t *a1);
+void sub_BD2CB(uint8_t *a1);
+void sub_BD3DD();
 #endif

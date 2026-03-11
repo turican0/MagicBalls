@@ -991,7 +991,7 @@ PackedFloat32Array MBEXclass::GetEntites() {
 
 uint MyUiBackGroundColorIdx = 200;
 
-void DrawGameFrame_2BE30_mod() //20CE30
+void DrawGameFrame_2BE30_modX() //20CE30
 {
 	int16_t spellLeftPosX = 510;
 	int16_t spellRightPosX = 574;
@@ -1584,7 +1584,7 @@ Ref<Image> MBEXclass::getMinimap() {
 					256 / scale,
 					scale);
 	*/
-	DrawGameFrame_2BE30_mod();
+	DrawGameFrame_2BE30_modX();
 
 	uint8_t *palette = VGA_Get_Palette(true);
 	int crop_x = 0;
@@ -2207,7 +2207,11 @@ void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex) {
 	//sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 }
 
-Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
+Ref<Image> getScrBufferImg() {
+
+	POSITION tempRes = VGA_GetResolution();
+	int crop_w = tempRes.x;
+	int crop_h = tempRes.y;
 	uint8_t *palette = VGA_Get_Palette();
 	int crop_x = 0;
 	int crop_y = 0;
@@ -2245,7 +2249,7 @@ Ref<Image> getScrBufferImg(int crop_w = 640, int crop_h = 480) {
 int MBEXclass::REMC2StepAnim(Dictionary inputs) {
 	handleInputs(inputs, 2);
 	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });
-	Ref<Image> img = getScrBufferImg(320, 200);
+	Ref<Image> img = getScrBufferImg();
 	if (img.is_null())
 		return 0;
 	if (mainTexture.is_null()) {
@@ -2462,10 +2466,11 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 				handleInputs(inputs, 2);
 				//thread2_continue(Thread1_State::CONTINUE);
 				thread1_wait_for_continue(Thread1_State::CONTINUE);
-				Ref<Image> img = getScrBufferImg(320, 200);
+				Ref<Image> img = getScrBufferImg();
 				if (img.is_null())
 					return 0;
-				if (mainTexture.is_null()) {
+				if (mainTexture.is_null() || mainTexture->get_width() != img->get_width() || mainTexture->get_height() != img->get_height())
+				{
 					mainTexture = ImageTexture::create_from_image(img);
 					mainScrBufferRect->set_texture(mainTexture);
 				} else {

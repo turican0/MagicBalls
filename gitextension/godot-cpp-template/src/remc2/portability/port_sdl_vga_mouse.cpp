@@ -234,6 +234,10 @@ void VGA_Resize(int width, int height) {
 	m_iOrigh = height;
 }
 
+POSITION VGA_GetResolution() {
+	return { m_iOrigw, m_iOrigh };
+}
+
 FILE* fptpal;
 void SavePal(uint8* Palettebuffer, char* filename)
 {
@@ -441,9 +445,9 @@ void VGA_Set_mouse(const int16_t x, const int16_t y) {
 
 void VGA_Blit(uint8* srcBuffer) {
 	if (srcBuffer)
-		memcpy(tempVGABuffer, srcBuffer, 640 * 480);
+		memcpy(tempVGABuffer, srcBuffer, m_iOrigw * m_iOrigh);
 	else
-		memset(tempVGABuffer, 0, 640 * 480);
+		memset(tempVGABuffer, 0, m_iOrigw * m_iOrigh);
 }
 
 void SubBlit(uint16_t originalResWidth, uint16_t originalResHeight) {

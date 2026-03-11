@@ -18,10 +18,10 @@ func endAnim():
 	#Main_DecodeLevel.anim1End()
 	emit_signal("video_finished")
 
-var animWidth = 320
-var animHeight = 200
-var animImage: Image
-var animTextureRect: ImageTexture
+#var animWidth = 320
+#var animHeight = 200
+#var animImage: Image
+#var animTextureRect: ImageTexture
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
