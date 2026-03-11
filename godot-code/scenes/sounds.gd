@@ -37,7 +37,7 @@ func load_musics_from_dir(path: String):
 					var music_idx = parts[0].to_int()
 					var full_path = path + file_name
 					Global.music_map[music_idx] = full_path
-					print("Hudba nacetna: ", music_idx)
+					print("Midi track readed: ", music_idx)
 			file_name = dir.get_next()
 	else:
 		print("Chyba: Adresář nebyl nalezen.")
@@ -55,7 +55,7 @@ func load_musics_hi_from_dir(path: String):
 					var music_idx = parts[0].to_int()
 					var full_path = path + file_name
 					Global.music_hi_map[music_idx] = full_path
-					print("Hudba nacetna: ", music_idx)
+					print("Ogg track readed: ", music_idx)
 			file_name = dir.get_next()
 	else:
 		print("Chyba: Adresář nebyl nalezen.")

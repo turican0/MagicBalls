@@ -1030,7 +1030,7 @@ void InGameLoop_47320_modX(typeStateMenu newState) //228320
 
 bool setLoadScreen = false;
 
-void sub_47FC0_load_screen_mod(bool isSecretLevel) //228fc0
+void sub_47FC0_load_screen_modX(bool isSecretLevel) //228fc0
 {
 	char dataPath[MAX_PATH];
 	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
@@ -1148,7 +1148,7 @@ void sub_46830_main_loop_modX(unsigned __int16 actLevel, typeStateMenu newState)
 			if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin })
 			{
 				main_loop_isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
-				sub_47FC0_load_screen_mod(main_loop_isSecretLevel); //vga smaltitle
+				sub_47FC0_load_screen_modX(main_loop_isSecretLevel); //vga smaltitle
 			}
 			if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen })
 			{
@@ -1284,7 +1284,7 @@ void sub_46830_main_loop_modX(unsigned __int16 actLevel, typeStateMenu newState)
 										tempActLevel = actLevel;
 										//fix res before secret level-neoriginal code
 
-										sub_47FC0_load_screen_mod(true);
+										sub_47FC0_load_screen_modX(true);
 									}
 									if (newState == typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen })
 									{
@@ -1365,6 +1365,56 @@ void thread2_continue(Thread1_State sendstate) {
 	main_cv.notify_one();
 }
 
+int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shadow_levels, bool singlestep, int32_t frameDelay=10) //271B27 init and nightfall
+{
+	TColor outbufferx[256]; // [esp+0h] [ebp-30Ch]
+	uint16_t i; // [esp+300h] [ebp-Ch]
+	TColor zero_bufferx[256];
+	VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
+	if (singlestep) {
+		if (x_BYTE_E390C_VGA_pal_not_begin) {
+			x_WORD_181B44++;
+			if (shadow_levels == x_WORD_181B44)
+				x_BYTE_E390C_VGA_pal_not_begin = 0;
+		} else {
+			x_WORD_181B44 = 0;
+			x_BYTE_E390C_VGA_pal_not_begin = 1;
+			sub_A0D2C_VGA_get_Palette(x_BYTE_181544_oldpalbufferx);
+			if (!newpalbufferx)
+				memset(zero_bufferx, 0, 0x300);
+		}
+		if (!newpalbufferx)
+			newpalbufferx = zero_bufferx;
+		for (i = 0; i < 0x100; i++) {
+			outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((x_WORD_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels);
+			outbufferx[i].green = x_BYTE_181544_oldpalbufferx[i].green + ((x_WORD_181B44) * (newpalbufferx[i].green - x_BYTE_181544_oldpalbufferx[i].green) / shadow_levels);
+			outbufferx[i].blue = x_BYTE_181544_oldpalbufferx[i].blue + ((x_WORD_181B44) * (newpalbufferx[i].blue - x_BYTE_181544_oldpalbufferx[i].blue) / shadow_levels);
+		}
+		sub_41A90_VGA_Palette_install(outbufferx);
+		fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
+		thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
+	} else {
+		sub_A0D2C_VGA_get_Palette(x_BYTE_181544_oldpalbufferx);
+		if (!newpalbufferx) //ebp+14 - 355204
+		{
+			newpalbufferx = zero_bufferx;
+			memset(zero_bufferx, 0, 768);
+		}
+		for (x_WORD_181B44 = 0; x_WORD_181B44 < shadow_levels; x_WORD_181B44++) {
+			for (i = 0; i < 0x100; i++) {
+				outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((x_WORD_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels); //352b42 352544
+				outbufferx[i].green = x_BYTE_181544_oldpalbufferx[i].green + ((x_WORD_181B44) * (newpalbufferx[i].green - x_BYTE_181544_oldpalbufferx[i].green) / shadow_levels); //352b42 352544
+				outbufferx[i].blue = x_BYTE_181544_oldpalbufferx[i].blue + ((x_WORD_181B44) * (newpalbufferx[i].blue - x_BYTE_181544_oldpalbufferx[i].blue) / shadow_levels); //352b42 352544
+			}
+			sub_41A90_VGA_Palette_install(outbufferx);
+			fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
+			thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
+		}
+		x_BYTE_E390C_VGA_pal_not_begin = 0;
+	}
+	return x_WORD_181B44;
+}
+
 void ShowWelcomeScreen_83850_mod() //264850
 {
 	char dataPath[MAX_PATH];
@@ -1392,10 +1442,10 @@ void ShowWelcomeScreen_83850_mod() //264850
 			ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0);
 			sub_75200_VGA_Blit640(480, menuFps);
 			thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
-			sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
+			sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
 		}
 	}
-	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+	sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
 	if (x_WORD_180660_VGA_type_resolution & 1)
 		ClearGraphicsBuffer_72883(pdwScreenBuffer_351628, 320, 200, 0);
 	else
@@ -1506,7 +1556,7 @@ void Intros_76D10_mod(char introType) //257d10
 			PlayInfoFmv_mod(1, 1, str_E17CC_0x160, introPath); //E192C
 			break;
 	}
-	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+	sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
 	EndSample_8D8F0();
 	StopMusic_8E020();
 	FadeClearBlit_7B5D0();
@@ -1550,7 +1600,7 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x) //258350
 		SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
 
 		ResetMouse_7B5A0();
-		sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+		sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
 		if (x_WORD_180660_VGA_type_resolution & 1) {
 			ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, getPaletteIndex_5BE80(x_DWORD_17DE38str.palette_17DE38x, 0, 0, 0));
 		} else {
@@ -1614,7 +1664,7 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x) //258350
 			a1x->dword_4 = 1;
 		}
 		SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]);
-		sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+		sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
 		result = true;
 	} else {
 		m_ExitMenuLoop_E29DC = 1;
@@ -1941,7 +1991,7 @@ void MainMenu_76FA0_mod() //257fa0
 			} else {
 				onlyBlit = true;
 				//34ee38 20 0
-				sub_90B27_VGA_pal_fadein_fadeout(x_DWORD_17DE38str.palette_17DE38x, 0x20u, 0); //tady
+				sub_90B27_VGA_pal_fadein_fadeout_mod(x_DWORD_17DE38str.palette_17DE38x, 0x20u, 0); //tady
 			}
 			sub_7A060_get_mouse_and_keyboard_events();
 		}
@@ -2751,7 +2801,7 @@ void InGameLoop_47320_mod() //228320
 	//fix res on begin level for hidden levels-neoriginal code
 
 	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
-
+	thread2_wait_for_continue(Thread2_State::IN_GAME_BEGIN);
 	while (1) {
 
 		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8)
@@ -2867,7 +2917,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 				StopMusic_8E020();
 				StopCdPlayback_86860(x_WORD_1803EC);
 				RestoreSoundVolume_59BF0();
-				sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+				sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
 				if (x_WORD_180660_VGA_type_resolution & 1)
 					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, getPaletteIndex_5BE80((TColor *)*xadatapald0dat2.colorPalette_var28, 0, 0, 0));
 				else
@@ -3037,4 +3087,4 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 
 
 //fix sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
-//fix changeLanguage
+//fix changeLanguage-ok

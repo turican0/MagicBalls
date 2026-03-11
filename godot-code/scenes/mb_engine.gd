@@ -1,6 +1,7 @@
 extends Node3D
 
 var Main_DecodeLevel
+var Main_TerrainsMB
 
 var runned:bool = false
 
@@ -8,6 +9,7 @@ var LoadScrRect:TextureRect
 var FlagRect:TextureRect
 
 func init():
+	Engine.max_fps = 60
 	#Global.loadScreenInit()
 	Main_DecodeLevel.MBEXinit()
 	Global.initSound()
@@ -20,7 +22,7 @@ func init():
 	runned=true
 	
 func beginMainMenu():
-	Global.Main_Sounds.setSoundBank(3)
+	Global.Main_Sounds.setSoundBank(0)
 	Global.countLang=getLangCount()
 	Global.defaultLangIndex=Main_DecodeLevel.initLanguage(Global.defaultLangIndex+1)-1
 	Main_DecodeLevel.getLangTexts()
@@ -64,6 +66,9 @@ func getLangCount() -> int:
 	dir.list_dir_end()
 	return count
 
+func beginInGame():
+	Main_TerrainsMB.init()
+
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
@@ -81,6 +86,8 @@ func _process(_p_delta) -> void:
 			beginMainMenu()
 		4:
 			beginAnimation()
+		5:
+			beginInGame()
 	#else:
 		#animImage.set_data(animWidth, animHeight, false, Image.FORMAT_RGB8, Main_DecodeLevel.getVGABuffer())
 		#animTextureRect.update(animImage)

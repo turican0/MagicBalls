@@ -2521,6 +2521,8 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 					return 3;
 				case Thread2_State::INTRO_BEGIN:
 					return 4;
+				case Thread2_State::IN_GAME_BEGIN:
+					return 5;
 			}
 			return 0;
 		default:

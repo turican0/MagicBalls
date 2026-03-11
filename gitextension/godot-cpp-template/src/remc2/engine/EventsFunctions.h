@@ -451,6 +451,8 @@ extern char x_BYTE_F0920[];
 
 extern char x_BYTE_D478C;
 
+extern char x_BYTE_E390C_VGA_pal_not_begin;
+
 void j___delay(x_DWORD); // weak
 
 void WriteBufferToBMP(uint16_t width, uint16_t height, uint8_t* ptrPalette, uint8_t* ptrBuffer, const char* fileName = "BufferOut.bmp");
@@ -661,6 +663,7 @@ extern std::array<type_D4C52ar, 17> str_D4C48ar;
 extern type_entity_0x6E8E* (*arsub_2a881e[])(axis_3d*);
 
 extern Type_CutScene_E16E0 cutScene_E16E0[];
+extern TColor x_BYTE_181544_oldpalbufferx[];
 
 void sub_49A30(type_entity_0x6E8E* event, unsigned __int16 a2);
 int GetSpellIndex_6E020(int entitySubtype);
@@ -1651,4 +1654,5 @@ int sub_40D10();
 void sub_BD1B6(uint8_t *a1);
 void sub_BD2CB(uint8_t *a1);
 void sub_BD3DD();
+void sub_A0D2C_VGA_get_Palette(TColor *a1);
 #endif

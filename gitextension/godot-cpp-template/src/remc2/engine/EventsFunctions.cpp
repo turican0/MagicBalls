@@ -1006,7 +1006,6 @@ __int16 sub_9D31C(__int16 result);
 void sub_9E250(uint32_t user); // weak
 int sub_A0B24(int a1);
 int sub_A0BB0(int* a1, int a2);
-void sub_A0D2C_VGA_get_Palette(TColor* a1);
 int sub_AC24B();
 void sub_AC250(int a1, int a2, int a3, int a4, int a5, x_DWORD* a6, x_DWORD* a7, signed int* a8);
 x_BYTE* sub_AD09E(x_BYTE* a1, int a2);

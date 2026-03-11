@@ -716,7 +716,7 @@ func getInputs():
 	input_state["mouse_pos2"] = Vector2(m_x, m_y)
 
 func init():
-	Global.loadScreenInit()
+	#Global.loadScreenInit()
 	MBEXinit()
 	Global.initSound()
 
@@ -930,13 +930,13 @@ func mapMenuStep() -> int:
 	
 func inGameBegin():
 	#Global.MBEX.updateFreeSoundPlayers(Main_Sounds.get_free_player_indices())
-	var buffer=Global.MBEX.REMC2BeginInGame()
+	#var buffer=Global.MBEX.REMC2BeginInGame()
 	#Global.setLoadingScreen(buffer)
-	Global.MBEX.REMC2BeginInGameAfterScreen()
-	fadeNode = Global.addFadeIn(fadeNode)
-	await fadeNode.fade_finished
-	Global.setLoadingScreenStr("")
-	fadeNode = Global.addFadeOut(fadeNode)
+	#Global.MBEX.REMC2BeginInGameAfterScreen()
+	#fadeNode = Global.addFadeIn(fadeNode)
+	#await fadeNode.fade_finished
+	#Global.setLoadingScreenStr("")
+	#fadeNode = Global.addFadeOut(fadeNode)
 	Global.setLevelType(Global.MBEX.REMC2GetLevelType())
 	nextState=0
 
