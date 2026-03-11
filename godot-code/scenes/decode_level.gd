@@ -388,6 +388,9 @@ func SetRunned(sendRunned) -> void:
 #func getSpritesActions():
 	#return Global.MBEX.getPendingGraphicsActions()
 
+func initLanguage(langIndex):
+	return Global.MBEX.initLanguage(langIndex)
+
 func changeLanguage(langIndex):
 	Global.MBEX.changeLanguage(langIndex)
 

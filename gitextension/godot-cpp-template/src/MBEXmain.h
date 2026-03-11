@@ -108,6 +108,7 @@ public:
 	//void mapMenuInit();
 	//int mapMenuStep(int run);
 	Dictionary getLangTexts();
+	int initLanguage(int index);
 	void changeLanguage(int index);
 
 	void REMC2BeginGame(String cdPath);

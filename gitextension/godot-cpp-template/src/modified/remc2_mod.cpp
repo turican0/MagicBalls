@@ -1434,6 +1434,7 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 		stopPlaybackFlag_17DB5A = 0;
 		FlvInitSet_473B0(); //2283b0
 		allowSkipVideo_17DB5C = allowSkip;
+		thread2_wait_for_continue(Thread2_State::INTRO_BEGIN);
 		do {
 			SetFrameStart(std::chrono::system_clock::now());
 			if (stopPlaybackFlag_17DB5A)
@@ -1521,7 +1522,7 @@ void Intros_76D10_mod(char introType) //257d10
 }
 
 bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x) //258350
-{
+{	
 	bool result = false;
 
 	int endAction = 0;
@@ -1625,6 +1626,11 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x) //258350
 	return result;
 }
 
+char LanguageSettingDialog_779E0_mod(type_menuButtons_E1F84 *a1y) {
+	thread2_wait_for_continue(Thread2_State::LANGUAGE_SETTING_CLICKED);
+	return true;
+}
+
 bool DrawAndServe_pre_sub_7B250_mod(uint32_t var, type_menuButtons_E1F84 *var2x) {
 	bool callres = true;
 	switch (var) {
@@ -1637,7 +1643,7 @@ bool DrawAndServe_pre_sub_7B250_mod(uint32_t var, type_menuButtons_E1F84 *var2x)
 			break;
 		}
 		case 0x2589e0: {
-			return LanguageSettingDialog_779E0(var2x);
+			return LanguageSettingDialog_779E0_mod(var2x);
 			break;
 		}
 		case 0x2590f0: {
@@ -1807,6 +1813,40 @@ bool DrawAndServe_7B250_mod() //25c250
 	return false;
 }
 
+void PlayIntros_83250_mod(char a1) //264250
+{
+	SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]);
+	memset((void *)pdwScreenBuffer_351628, 0, 307200);
+	if (x_WORD_180660_VGA_type_resolution != 1) {
+		sub_54600_mouse_reset();
+		memset((void *)*xadatapald0dat2.colorPalette_var28, 0, 768);
+		x_WORD_180660_VGA_type_resolution = 1;
+		sub_90D6E_VGA_set_video_mode_320x200_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
+		sub_8CEDF_install_mouse();
+		SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
+	}
+	Intros_76D10_mod(a1);
+	sub_54600_mouse_reset();
+	memset((void *)*xadatapald0dat2.colorPalette_var28, 0, 768);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, 0);
+	else
+		ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0);
+
+	sub_41A90_VGA_Palette_install((TColor *)*xadatapald0dat2.colorPalette_var28);
+	x_WORD_180660_VGA_type_resolution = 8;
+	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
+	sub_8CEDF_install_mouse();
+	SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
+	SetCenterScreenForFlyAssistant_6EDB0();
+	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
+	ResetMouse_7B5A0();
+	SetCursor_8CD27(xy_DWORD_17DED4_spritestr[39]);
+	x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons = 0;
+	x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
+	LoadSounds_84300(0);
+}
+
 //----- (00076FA0) --------------------------------------------------------
 void MainMenu_76FA0_mod() //257fa0
 {
@@ -1843,6 +1883,7 @@ void MainMenu_76FA0_mod() //257fa0
 		int16_t tempMousePosX = x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx;
 		int16_t tempMousePosY = x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony;
 		int scanCode = x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode;
+		thread2_wait_for_continue(Thread2_State::MAIN_MENU_BEGIN);
 		while (!m_ExitMenuLoop_E29DC) {
 			//g_state_monitor.Update();
 
@@ -1852,7 +1893,8 @@ void MainMenu_76FA0_mod() //257fa0
 				{
 					uint8_t *tempSmalltit = x_DWORD_E9C38_smalltit;
 					x_DWORD_E9C38_smalltit = x_DWORD_17DE38str.x_DWORD_17DE44;
-					PlayIntros_83250(introIndex);
+					PlayIntros_83250_mod(introIndex);
+					thread2_wait_for_continue(Thread2_State::MAIN_MENU_BEGIN);
 					x_DWORD_E9C38_smalltit = tempSmalltit;
 					introIndex = (introIndex == 1) + 1; //alternate 1 and 2
 					tempMousePosY = x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony;

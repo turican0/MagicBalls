@@ -52,6 +52,7 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("getLangTexts"), &MBEXclass::getLangTexts);
 	godot::ClassDB::bind_method(D_METHOD("changeLanguage", "Int"), &MBEXclass::changeLanguage);
+	godot::ClassDB::bind_method(D_METHOD("initLanguage", "Int"), &MBEXclass::initLanguage);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text"), &MBEXclass::REMC2BeginGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
@@ -107,14 +108,11 @@ String MBEXclass::REMC2GetLevelType() {
 			return String("Cave");
 }
 
-void MBEXclass::changeLanguage(int index) {
-	
+int MBEXclass::initLanguage(int index) {
 	FILE *configFile2;
 	char configFilePath[MAX_PATH];
 	TypeConfigDat configDat;
 	sprintf(configFilePath, "%s/%s", gameDataPath.c_str(), "CONFIG.DAT");
-
-
 
 	configFile2 = DataFileIO::Open(configFilePath, 0x222, 0x40);
 	if (configFile2 != nullptr) {
@@ -134,6 +132,12 @@ void MBEXclass::changeLanguage(int index) {
 	} else
 		x_D41A0_BYTEARRAY_4_struct.setting_38402 = 1;
 
+	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
+	InitLanguage_76A40_mod_only_language();
+	return index;
+}
+
+void MBEXclass::changeLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
 	InitLanguage_76A40_mod_only_language();
 }
@@ -2511,6 +2515,12 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			switch (thread2_state) {
 				case Thread2_State::SUB_MAIN_END_FUNCTION:
 					return 1;
+				case Thread2_State::LANGUAGE_SETTING_CLICKED:
+					return 2;
+				case Thread2_State::MAIN_MENU_BEGIN:
+					return 3;
+				case Thread2_State::INTRO_BEGIN:
+					return 4;
 			}
 			return 0;
 		default:
