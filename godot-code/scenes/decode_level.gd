@@ -917,7 +917,7 @@ func MBrun(inGame):
 			renderEntites(getEntites())		
 		#get_parent().get_node("UILayer/UI").updateSpells(Global.MBEX.getActiveSpells())
 		#get_parent().get_node("UILayer/UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
-		get_parent().get_node("UILayer/UI").updateMinimap(Global.MBEX.getMinimap())
+		#get_parent().get_node("UILayer/UI").updateMinimap(Global.MBEX.getMinimap())
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())	
 	return result
 

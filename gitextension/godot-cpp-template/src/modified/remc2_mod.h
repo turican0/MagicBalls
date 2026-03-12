@@ -105,6 +105,7 @@ extern Thread2_State thread2_state;
 
 extern bool thread1_waiting;
 extern bool thread2_waiting;
+extern uint8_t MyUiBackGroundColorIdx;
 
 const int GRAPHICS_ENHANCE_ON = 1;
 const int GRAPHICS_ENHANCE_OFF = 0;

@@ -2076,7 +2076,24 @@ void MenusAndIntros_76930_mod(bool skipMenus) //257930
 	WriteConfigDat_81DB0();
 }
 
-int MyUiBackGroundColorIdx = 200;
+void draw_minimap_circle(int16_t x, int16_t y, uint16_t width, uint16_t height, uint8_t color) {
+	if (x_WORD_180660_VGA_type_resolution & 1) {
+		x >>= 1;
+		y >>= 1;
+		width >>= 1;
+		height >>= 1;
+	}
+	int cx = x + width / 2;
+	int cy = y + height / 2;
+	int r = width / 2;
+	for (int dy = -r; dy <= r; dy++) {
+		int dx = (int)sqrt((double)(r * r - dy * dy));
+		uint8_t *row = pdwScreenBuffer_351628 + (cy + dy) * screenWidth_18062C;
+		memset(row + cx - dx, color, 2 * dx + 1);
+	}
+}
+
+uint8_t MyUiBackGroundColorIdx = 200;
 
 void DrawGameFrame_2BE30_mod() //20CE30
 {
@@ -2098,7 +2115,8 @@ void DrawGameFrame_2BE30_mod() //20CE30
 	}
 
 	//added code
-	ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8*/);
+	if (graphics_enhance)
+		ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8*/);
 	//added code
 
 	x_DWORD_D41C8 = 0;
@@ -2271,6 +2289,11 @@ void DrawGameFrame_2BE30_mod() //20CE30
 					}
 				}
 				if (D41A0_0.m_GameSettings.m_Display.m_wMiniMap) {
+					//added code
+					if (graphics_enhance)
+						draw_minimap_circle(0,0,128 * scale,128 * scale,0);
+					//added code
+
 					DrawMinimap_63600( //draw minimap
 							0,
 							0,

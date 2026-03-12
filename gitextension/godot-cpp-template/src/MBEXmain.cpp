@@ -1021,8 +1021,6 @@ PackedFloat32Array MBEXclass::GetEntites() {
 	return result;
 }
 
-uint MyUiBackGroundColorIdx = 200;
-
 void DrawGameFrame_2BE30_modX() //20CE30
 {
 	int16_t spellLeftPosX = 510;
@@ -1808,7 +1806,7 @@ void handleInputs(Dictionary inputs,int type) {
 					if (graphics_enhance) {
 						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
 					} else
-						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
+						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
 				}
 				break;
 			case 0x3f00://F5
@@ -2523,7 +2521,7 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 				thread1_wait_for_continue(Thread1_State::CONTINUE);
 				Ref<Image> img;
 				if (thread2_state == Thread2_State::IN_GAME_LOOP)
-					img = getScrBufferImg(200);
+					img = getScrBufferImg(MyUiBackGroundColorIdx);
 				else
 					img = getScrBufferImg();
 				if (img.is_null())

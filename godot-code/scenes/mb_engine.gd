@@ -69,6 +69,7 @@ func getLangCount() -> int:
 
 func beginInGame():
 	Main_TerrainsMB.init()
+	Main_DecodeLevel.gameInit()
 
 var inGameLoop=false
 
