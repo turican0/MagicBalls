@@ -2,6 +2,7 @@ extends Node3D
 
 var Main_DecodeLevel
 var Main_TerrainsMB
+var Main_UI
 
 var runned:bool = false
 
@@ -69,10 +70,12 @@ func getLangCount() -> int:
 func beginInGame():
 	Main_TerrainsMB.init()
 
+var inGameLoop=false
+
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
-	var endRunVar = Main_DecodeLevel.MBrun()
+	var endRunVar = Main_DecodeLevel.MBrun(inGameLoop)
 	match(endRunVar):
 		1:
 			Global.Main_Sounds.stopAllSounds()
@@ -84,10 +87,17 @@ func _process(_p_delta) -> void:
 			FlagRect.material.set_shader_parameter("alpha", 1.0)
 		3:
 			beginMainMenu()
+			inGameLoop=false
 		4:
 			beginAnimation()
+			inGameLoop=false
 		5:
 			beginInGame()
+			inGameLoop=true
+		
+		
+			
+			
 	#else:
 		#animImage.set_data(animWidth, animHeight, false, Image.FORMAT_RGB8, Main_DecodeLevel.getVGABuffer())
 		#animTextureRect.update(animImage)

@@ -83,6 +83,7 @@ enum class Thread2_State {
 	MAIN_MENU_BEGIN,
 	INTRO_BEGIN,
 	IN_GAME_BEGIN,
+	LOAD_SCREEN,
 	RUNNING
 };
 

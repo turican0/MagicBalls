@@ -2841,6 +2841,41 @@ void InGameLoop_47320_mod() //228320
 	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
 }
 
+void sub_47FC0_load_screen_mod(bool isSecretLevel) //228fc0
+{
+	char dataPath[MAX_PATH];
+	sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
+
+	//debug
+	//sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
+	//debug
+
+	if (isSecretLevel) {
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITL2.DAT");
+		DataFileIO::ReadFileAndDecompress(dataPath, &x_DWORD_E9C38_smalltit);
+	} else {
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITLE.DAT");
+		DataFileIO::ReadFileAndDecompress(dataPath, &x_DWORD_E9C38_smalltit);
+	}
+	CopyScreen_85B20(x_DWORD_E9C38_smalltit, pdwScreenBuffer_351628, 400);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		sub_90478_VGA_Blit320();
+	else
+		sub_75200_VGA_Blit640(480);
+	thread2_wait_for_continue(Thread2_State::LOAD_SCREEN);
+	if (isSecretLevel) {
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITL2.PAL");
+		DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+	} else {
+		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITLE.PAL");
+		DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+	}
+	sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
+	D41A0_0.dword_0x23a = 1;
+	D41A0_0.dword_0x23e = 0;
+	D41A0_0.dword_0x242 = 0;
+}
+
 void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 { //graphics already inited
 	bool isSecretLevel;
@@ -2869,7 +2904,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 
 		if (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
 			isSecretLevel = x_D41A0_BYTEARRAY_4_struct.levelnumber_43w > 24 && x_D41A0_BYTEARRAY_4_struct.levelnumber_43w < 50;
-			sub_47FC0_load_screen(isSecretLevel); //vga smaltitle
+			sub_47FC0_load_screen_mod(isSecretLevel); //vga smaltitle
 			LevelInitGame_56A30(setLevel, customLevelPath);
 			if (CommandLineParams.DoAutoChangeRes()) {
 				resindex_begin = 0;
@@ -2963,7 +2998,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 							x_WORD_180660_VGA_type_resolution = 1;
 							//fix res before secret level-neoriginal code
 
-							sub_47FC0_load_screen(true);
+							sub_47FC0_load_screen_mod(true);
 							LevelInitGame_56A30(actLevel);
 							sub_47160();
 						}

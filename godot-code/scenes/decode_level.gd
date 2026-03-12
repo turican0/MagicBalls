@@ -870,11 +870,52 @@ func anim1Begin(ScrBufferRect:TextureRect,index:int):
 func setLoadScreenBuffer(locTextureRect):
 	Global.MBEX.REMC2SetScrBuffer(locTextureRect)
 
-func MBrun():
+func MBrun(inGame):
 	getInputs()
-	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())	
+	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())
+	if(inGame):
+		if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
+			if Main_UI.is_ctrl_active:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+				Main_UI.saved_mouse_pos = get_viewport().get_mouse_position()
+				var grid_rect = Main_UI.spell_grid.get_global_rect()
+				var center_pos = grid_rect.position + (grid_rect.size / 2.0)
+				center_pos.x=50
+				get_viewport().warp_mouse(center_pos)
+			else:
+				get_viewport().warp_mouse(Main_UI.saved_mouse_pos)
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active
+		if(last_spell_index!=-1):
+			Global.MBEX.setPlayerActiveSpell(last_spell_index,last_button)
+			last_spell_index = -1
+			last_button = -1	
+		if(Global.MBEX.REMC2GetWebInfo()):
+			get_parent().get_node("SpiderWeb").show()
+		else:
+			get_parent().get_node("SpiderWeb").hide()
+		Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))
 	var result=Global.MBEX.REMC2Run(input_state,0)
-	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	if(inGame):
+		var mods = Global.MBEX.getPaletteModifications()
+		var current_gain = mods[0]
+		var current_offset = mods[1]
+		var current_saturation = mods[2]
+		if current_gain != last_gain or current_offset != last_offset or current_saturation != last_saturation:
+			if(!filter_material):
+				filter_material = Main_Filter.material as ShaderMaterial
+			filter_material.set_shader_parameter("MyGain", current_gain)
+			filter_material.set_shader_parameter("MyOffset", current_offset)
+			filter_material.set_shader_parameter("MySatMultiplier", current_saturation)
+			last_gain = current_gain
+			last_offset = current_offset
+			last_saturation = current_saturation
+		updatePlayer(getPlayerPosRot())
+		renderEntites(getEntites())
+		get_parent().get_node("UILayer/UI").updateSpells(Global.MBEX.getActiveSpells())
+		get_parent().get_node("UILayer/UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
+		get_parent().get_node("UILayer/UI").updateMinimap(Global.MBEX.getMinimap())
+	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())	
 	return result
 
 func anim1Step() -> int:

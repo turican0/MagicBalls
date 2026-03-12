@@ -28,7 +28,7 @@ func init():
 
 	updateMeshes()
 
-	get_parent().get_node("DecodeLevel").SetRunned(true)
+	#get_parent().get_node("DecodeLevel").SetRunned(true)
 	#end of Multimesh
 
 func updateMeshes():
