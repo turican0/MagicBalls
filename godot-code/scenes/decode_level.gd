@@ -889,7 +889,7 @@ func MBrun(inGame):
 		if(last_spell_index!=-1):
 			Global.MBEX.setPlayerActiveSpell(last_spell_index,last_button)
 			last_spell_index = -1
-			last_button = -1	
+			last_button = -1
 		if(Global.MBEX.REMC2GetWebInfo()):
 			get_parent().get_node("SpiderWeb").show()
 		else:
