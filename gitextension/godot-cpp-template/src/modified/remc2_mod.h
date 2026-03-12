@@ -106,6 +106,10 @@ extern Thread2_State thread2_state;
 extern bool thread1_waiting;
 extern bool thread2_waiting;
 
+const int GRAPHICS_ENHANCE_ON = 1;
+const int GRAPHICS_ENHANCE_OFF = 0;
+extern int graphics_enhance;
+
 void InitLanguage_76A40_mod_only_language();
 
 void sub_main_mod_begin(int argc, char **argv, char *real_cdPathch);

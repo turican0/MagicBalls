@@ -143,4 +143,6 @@ public:
 	void REMC2SetScrBuffer(TextureRect *scrBufferRect);
 	//void REMC2SetCDPath(String cdPath);
 	int REMC2Run(Dictionary inputs, int stage);
+
+	int REMC2GetGraphicsEenhance();
 	};

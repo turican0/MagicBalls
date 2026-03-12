@@ -75,6 +75,8 @@ void MBEXclass::_bind_methods() {
 	//godot::ClassDB::bind_method(D_METHOD("REMC2SetCDPath", "text"), &MBEXclass::REMC2SetCDPath);
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetScrBuffer", "TextureRect"), &MBEXclass::REMC2SetScrBuffer);
 	godot::ClassDB::bind_method(D_METHOD("REMC2Run", "Dictionary", "Int"), &MBEXclass::REMC2Run);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2GetGraphicsEenhance"), &MBEXclass::REMC2GetGraphicsEenhance);
 }
 
 
@@ -1793,9 +1795,12 @@ void handleInputs(Dictionary inputs,int type) {
 			case 0x011B:
 				mainSetPress(is_pressed, 0x011B); //ESC
 				break;
-			case 0x5300:
+			case 0x5300: //DELETE
 				HandleButtonClick_191B0(29, 0);
 				HandleButtonClick_191B0(27, 0);
+				break;
+			case 0x4700: //HOME
+				graphics_enhance = 1 - graphics_enhance;
 				break;
 			case 0x3f00://F5
 				if (type != 0)
@@ -2469,6 +2474,10 @@ int MBEXclass::REMC2StepInGame(Dictionary inputs, int state) {
 		}
 	}
 	return 1;
+}
+
+int MBEXclass::REMC2GetGraphicsEenhance() {
+	return graphics_enhance;
 }
 
 bool MBEXclass::REMC2IsHiddenLevel() {
