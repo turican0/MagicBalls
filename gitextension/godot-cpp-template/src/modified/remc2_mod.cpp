@@ -2093,7 +2093,7 @@ void draw_minimap_circle(int16_t x, int16_t y, uint16_t width, uint16_t height, 
 	}
 }
 
-uint8_t MyUiBackGroundColorIdx = 200;
+uint8_t MyUiBackGroundColorIdx = 0;
 
 void DrawGameFrame_2BE30_mod() //20CE30
 {
@@ -3152,5 +3152,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 }
 
 
-//fix sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+//fix sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);-ok
 //fix changeLanguage-ok
+//fix palette in end load screen
+//fix key ctrl

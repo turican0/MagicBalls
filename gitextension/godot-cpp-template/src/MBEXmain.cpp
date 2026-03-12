@@ -1793,6 +1793,9 @@ void handleInputs(Dictionary inputs,int type) {
 			case 0x011B:
 				mainSetPress(is_pressed, 0x011B); //ESC
 				break;
+			case 0x1d00:
+				mainSetPress(is_pressed, 0x1d00); //CTRL
+				break;
 			case 0x5300: //DELETE
 				if (is_pressed) {
 					HandleButtonClick_191B0(29, 0);
