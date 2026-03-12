@@ -452,6 +452,7 @@ extern char x_BYTE_F0920[];
 extern char x_BYTE_D478C;
 
 extern char x_BYTE_E390C_VGA_pal_not_begin;
+extern uint8_t uiBackGroundColorIdx_EB3A8;
 
 void j___delay(x_DWORD); // weak
 

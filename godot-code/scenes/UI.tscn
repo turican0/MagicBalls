@@ -90,6 +90,7 @@ offset_right = 42.0
 offset_bottom = 618.0
 
 [node name="Minimap" type="TextureRect" parent="." unique_id=352229578]
+visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = 15

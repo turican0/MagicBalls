@@ -1796,11 +1796,20 @@ void handleInputs(Dictionary inputs,int type) {
 				mainSetPress(is_pressed, 0x011B); //ESC
 				break;
 			case 0x5300: //DELETE
-				HandleButtonClick_191B0(29, 0);
-				HandleButtonClick_191B0(27, 0);
+				if (is_pressed) {
+					HandleButtonClick_191B0(29, 0);
+					HandleButtonClick_191B0(27, 0);
+				}
 				break;
-			case 0x4700: //HOME
-				graphics_enhance = 1 - graphics_enhance;
+			case 0x2368: //H
+				if (is_pressed) {
+					graphics_enhance = 1 - graphics_enhance;
+
+					if (graphics_enhance) {
+						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
+					} else
+						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
+				}
 				break;
 			case 0x3f00://F5
 				if (type != 0)
@@ -1868,11 +1877,14 @@ void handleInputs(Dictionary inputs,int type) {
 	}
 
 	Vector2 mouse_pos;
-	if (type == 0) {
-		mouse_pos = inputs["mouse_pos"];
+	if (type == 0)
+	{
+		//mouse_pos = inputs["mouse_pos"];
+		mouse_pos = inputs["mouse_pos2"];
 		MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y);
 	}
-	if (type != 0) {
+	if (type != 0)
+	{
 		mouse_pos = inputs["mouse_pos2"];
 		MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
 	}
@@ -2242,7 +2254,8 @@ void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex) {
 	//sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 }
 
-Ref<Image> getScrBufferImg() {
+Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
+	uint8_t locTransparentColor = transparentColor;
 
 	POSITION tempRes = VGA_GetResolution();
 	int crop_w = tempRes.x;
@@ -2259,13 +2272,13 @@ Ref<Image> getScrBufferImg() {
 			//uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
 			uint32_t color_idx = tempVGABuffer[row_offset + (crop_x + c)];
 			int pal_pos = color_idx * 3;
-			/* if (color_idx == 0) {
+			if (color_idx == transparentColor) {
 				int dest_pos = (r * crop_w + c) * 4;
 				dest[dest_pos + 0] = 0;
 				dest[dest_pos + 1] = 0;
 				dest[dest_pos + 2] = 0;
 				dest[dest_pos + 3] = 0;
-			}  else {*/
+			}  else {
 				uint8_t red = palette[pal_pos + 0] * 4;
 				uint8_t green = palette[pal_pos + 1] * 4;
 				uint8_t blue = palette[pal_pos + 2] * 4;
@@ -2274,7 +2287,7 @@ Ref<Image> getScrBufferImg() {
 				dest[dest_pos + 1] = green;
 				dest[dest_pos + 2] = blue;
 				dest[dest_pos + 3] = 255;
-			//}
+			}
 		}
 	}
 	Ref<Image> img = Image::create_from_data(crop_w, crop_h, false, Image::FORMAT_RGBA8, rgba_data);
@@ -2502,10 +2515,17 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 	switch (stage) {
 		case 0:
 			{
-				handleInputs(inputs, 2);
+				if (thread2_state == Thread2_State::IN_GAME_LOOP)
+					handleInputs(inputs, 0);
+				else
+					handleInputs(inputs, 2);
 				//thread2_continue(Thread1_State::CONTINUE);
-				thread1_wait_for_continue(Thread1_State::CONTINUE);				
-				Ref<Image> img = getScrBufferImg();
+				thread1_wait_for_continue(Thread1_State::CONTINUE);
+				Ref<Image> img;
+				if (thread2_state == Thread2_State::IN_GAME_LOOP)
+					img = getScrBufferImg(200);
+				else
+					img = getScrBufferImg();
 				if (img.is_null())
 					return 0;
 				if (mainTexture.is_null() || mainTexture->get_width() != img->get_width() || mainTexture->get_height() != img->get_height())

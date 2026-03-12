@@ -1438,14 +1438,13 @@ void ShowWelcomeScreen_83850_mod() //264850
 				sub_90478_VGA_Blit320(menuFps);
 			else
 				sub_75200_VGA_Blit640(480, menuFps);
-			thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
 		} else {
 			afterFade = true;
 			ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0);
 			sub_75200_VGA_Blit640(480, menuFps);
-			thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
 			sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
 		}
+		thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
 	}
 	sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
 	if (x_WORD_180660_VGA_type_resolution & 1)
@@ -1456,10 +1455,10 @@ void ShowWelcomeScreen_83850_mod() //264850
 		sub_90478_VGA_Blit320(menuFps);
 	else
 		sub_75200_VGA_Blit640(480, menuFps);
-	thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
 	while (sub_9A10A_check_keyboard()) {
 		LastPressedKey_1806E4 = 0;
 		sub_7A060_get_mouse_and_keyboard_events();
+		thread2_wait_for_continue(Thread2_State::SHOW_WELCOME_SCREEN_LOOP);
 	}
 	j___delay(50);
 }
@@ -1495,9 +1494,9 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 				break;
 			PlayIntoSoundEvents_1B280(pSoundEvent);
 			ReadFrame_75DB0(); //256db0 - read header
-			DrawFrame_75E70(); //256e70 - draw intro frame
-			thread2_wait_for_continue(Thread2_State::PLAY_INFO_FLV_LOOP);
+			DrawFrame_75E70(); //256e70 - draw intro frame			
 			ActualKeyframe_17DB60++;
+			thread2_wait_for_continue(Thread2_State::PLAY_INFO_FLV_LOOP);
 		} while (LastPressedKey_1806E4 != 1); //while not key pressed
 		DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
 	}
@@ -1650,9 +1649,9 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x) //258350
 			if (x_WORD_180660_VGA_type_resolution & 1)
 				sub_90478_VGA_Blit320(menuFps);
 			else
-				sub_75200_VGA_Blit640(480, menuFps);
-			thread2_wait_for_continue(Thread2_State::MAP_MENU_LOOP);
+				sub_75200_VGA_Blit640(480, menuFps);			
 			sub_7A060_get_mouse_and_keyboard_events();
+			thread2_wait_for_continue(Thread2_State::MAP_MENU_LOOP);
 		}
 		StopCdPlayback_86860(x_WORD_1803EC);
 		D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] = 0;
@@ -1988,14 +1987,14 @@ void MainMenu_76FA0_mod() //257fa0
 				if (x_WORD_180660_VGA_type_resolution & 1)
 					sub_90478_VGA_Blit320(menuFps);
 				else
-					sub_75200_VGA_Blit640(480, menuFps);
-				thread2_wait_for_continue(Thread2_State::MAIN_MENU_LOOP);
+					sub_75200_VGA_Blit640(480, menuFps);				
 			} else {
 				onlyBlit = true;
 				//34ee38 20 0
 				sub_90B27_VGA_pal_fadein_fadeout_mod(x_DWORD_17DE38str.palette_17DE38x, 0x20u, 0); //tady
 			}
 			sub_7A060_get_mouse_and_keyboard_events();
+			thread2_wait_for_continue(Thread2_State::MAIN_MENU_LOOP);
 		}
 		sub_41BC0();
 		D41A0_0.m_GameSettings.m_Display.m_uiScreenSize = 0;
@@ -2077,6 +2076,8 @@ void MenusAndIntros_76930_mod(bool skipMenus) //257930
 	WriteConfigDat_81DB0();
 }
 
+int MyUiBackGroundColorIdx = 200;
+
 void DrawGameFrame_2BE30_mod() //20CE30
 {
 	int16_t spellLeftPosX = 510;
@@ -2095,6 +2096,10 @@ void DrawGameFrame_2BE30_mod() //20CE30
 			spellRightPosX = screenWidth_18062C - (66 * scale);
 		}
 	}
+
+	//added code
+	ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, MyUiBackGroundColorIdx /* uiBackGroundColorIdx_EB3A8*/);
+	//added code
 
 	x_DWORD_D41C8 = 0;
 	if (D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198) {
@@ -2144,14 +2149,15 @@ void DrawGameFrame_2BE30_mod() //20CE30
 			}
 
 			viewPort.SetRenderViewPortSize_40C50(D41A0_0.m_GameSettings.m_Graphics.m_wViewPortSize);
-			m_ptrGameRender->DrawWorld_411A0( //draw terrain and particles
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.x, //position of player
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.y, //position of player
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw, //rotation of player z
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.z + 128,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.pitch,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.roll,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.fov);
+			if (graphics_enhance == GRAPHICS_ENHANCE_OFF)
+				m_ptrGameRender->DrawWorld_411A0( //draw terrain and particles
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.x, //position of player
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.y, //position of player
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw, //rotation of player z
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.z + 128,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.pitch,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.roll,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.fov);
 			/*
 			if (CommandLineParams.DoTestRenderers()) {
 				memcpy(help_ScreenBuffer, pdwScreenBuffer_351628, screenWidth_18062C * screenHeight_180624);
@@ -2408,15 +2414,14 @@ void DrawGameFrame_2BE30_mod() //20CE30
 
 			viewPort.SetRenderViewPortSize_40BF0(locViewportPosx, 0, locViewportWidth, locViewportHeight);
 
-			if (graphics_enhance==GRAPHICS_ENHANCE_OFF)
-				m_ptrGameRender->DrawWorld_411A0(
-						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.x,
-						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.y,
-						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw,
-						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.z + 128,
-						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.pitch,
-						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.roll,
-						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.fov);
+			m_ptrGameRender->DrawWorld_411A0(
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.x,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.y,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.z + 128,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.pitch,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.roll,
+					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.fov);
 			/*
 			if (CommandLineParams.DoTestRenderers()) {
 				memcpy(help_ScreenBuffer, pdwScreenBuffer_351628, screenWidth_18062C * screenHeight_180624);
@@ -2647,8 +2652,7 @@ void BlendAndBlit_40F80_mod() //221f80
 	else if (x_WORD_180660_VGA_type_resolution & 1)
 		sub_90478_VGA_Blit320(maxGameFps);
 	else
-		sub_75200_VGA_Blit640(480, maxGameFps);
-	thread2_wait_for_continue(Thread2_State::BLEND_AND_BLIT_LOOP);
+		sub_75200_VGA_Blit640(480, maxGameFps);	
 }
 
 int loc_debug_first_run = 0;
@@ -2838,6 +2842,7 @@ void InGameLoop_47320_mod() //228320
 			}
 		}
 		*/
+		thread2_wait_for_continue(Thread2_State::IN_GAME_LOOP);
 	}
 	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::GAMEPLAY_ENDED);
 
