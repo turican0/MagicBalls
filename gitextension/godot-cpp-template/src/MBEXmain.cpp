@@ -1776,16 +1776,16 @@ void handleInputs(Dictionary inputs,int type) {
 		} else
 		switch (key_index) {
 			case 0x1177:
-				mainSetPress(is_pressed, 0x4800); //UP
+				mainSetPress(is_pressed, inputMapping.Forward /*0x4800*/); //UP
 				break;
 			case 0x1f73:
-				mainSetPress(is_pressed, 0x5000); //DOWN
+				mainSetPress(is_pressed, inputMapping.Backwards /*0x5000*/); //DOWN
 				break;
 			case 0x1e61:
-				mainSetPress(is_pressed, 0x4b00); //LEFT
+				mainSetPress(is_pressed, inputMapping.Left /*0x4b00*/); //LEFT
 				break;
 			case 0x2064:
-				mainSetPress(is_pressed, 0x4d00); //RIGHT
+				mainSetPress(is_pressed, inputMapping.Right /*0x4d00*/); //RIGHT
 				break;
 			case 0x3920:
 				mainSetPress(is_pressed, 0x3920); //SPACE
@@ -1794,7 +1794,16 @@ void handleInputs(Dictionary inputs,int type) {
 				mainSetPress(is_pressed, 0x011B); //ESC
 				break;
 			case 0x1d00:
-				mainSetPress(is_pressed, 0x1d00); //CTRL
+				//mainSetPress(is_pressed, 0x1d00); //CTRL
+				mainSetPress(is_pressed, inputMapping.SpellMenu); //CTRL
+				//0xe0 - LEFT CTRL//inputMapping.SpellMenu
+				//0xe1 - SHIFT LEFT
+				//0xe2 - ALT LEFT
+				//0xe3 - LEFT WIN / META
+				//0xe4 - RIGHT CTRL
+				//0xe5 - RIGHT SHIFT
+				//0xe6 - RIGHT ALT
+				//0xe7 - RIGHT WIN / META
 				break;
 			case 0x5300: //DELETE
 				if (is_pressed) {
@@ -2255,6 +2264,8 @@ void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex) {
 	//sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
 }
 
+std::set<uint32_t> used_colors; //test used colors in palette
+
 Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
 	uint8_t locTransparentColor = transparentColor;
 
@@ -2273,7 +2284,9 @@ Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
 			//uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
 			uint32_t color_idx = tempVGABuffer[row_offset + (crop_x + c)];
 			int pal_pos = color_idx * 3;
-			if (color_idx == transparentColor) {
+			//if(transparentColor!=255)
+			used_colors.insert(color_idx);
+			if (color_idx == transparentColor && transparentColor!=255) {
 				int dest_pos = (r * crop_w + c) * 4;
 				dest[dest_pos + 0] = 0;
 				dest[dest_pos + 1] = 0;
