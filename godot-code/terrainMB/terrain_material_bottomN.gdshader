@@ -13,6 +13,10 @@ uniform float wave_height : hint_range(0.0, 1.0) = 0.5;
 uniform float wave_speed : hint_range(0.1, 5.0) = 2.0;
 uniform float wave_scale : hint_range(0.1, 32.0) = 4.0;
 
+uniform float emission_strength : hint_range(0.0, 10.0) = 1.0;
+uniform float yellow_threshold : hint_range(0.0, 1.0) = 0.2;
+uniform vec3 yellow_color : source_color = vec3(1.0, 0.9, 0.0);
+
 varying flat float v_texture_index1;
 varying flat int row_index;
 
@@ -136,8 +140,16 @@ void fragment() {
 	ALBEDO = tex1;
 	//ALBEDO = NORMAL * 0.5 + 0.5;//trest normals
 	
-	ROUGHNESS = 1.0;
-	METALLIC = 0.0;
-
-	EMISSION = tex1 * refl1;
+	// Yellow detect
+	float yellowness = 1.0 - length(tex1 - yellow_color);
+	yellowness = smoothstep(yellow_threshold, 1.0, yellowness);	
+	EMISSION = tex1 * yellowness * emission_strength;
+	
+	float target_roughness = 0.05;
+	float target_metallic = 0.5;
+	float default_roughness = 1.0;
+	float default_metallic = 0.0;
+	
+	ROUGHNESS = mix(default_roughness, target_roughness, refl1);
+	METALLIC = mix(default_metallic, target_metallic, refl1);
 }

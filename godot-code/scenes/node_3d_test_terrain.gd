@@ -135,7 +135,10 @@ func changeTerrain(levelType:String):
 			material_top.set_shader_parameter("atlas_texture", atlas_tex)
 			material_bottom = load("res://terrainMB/terrain_material_bottomC.tres")
 		else:
-			material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
+			if(levelType=="Night"):
+				material_bottom = load("res://terrainMB/terrain_material_bottomN.tres")
+			else:
+				material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
 		var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
 		material_bottom.set_shader_parameter("reflect_texture", reflect_tex)
 		material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
@@ -154,7 +157,10 @@ func initialize_nodes():
 	if(Global.getLevelType()=="Cave"):
 		material_bottom = load("res://terrainMB/terrain_material_bottomC.tres")
 	else:
-		material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
+		if(Global.getLevelType()=="Night"):
+			material_bottom = load("res://terrainMB/terrain_material_bottomN.tres")
+		else:
+			material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
 	var atlas_tex = Global.load_custom_texture(Global.convertdata+"textures/night/BL32N0-0.DAT-borders.png")
 	var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
 	material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
