@@ -1776,16 +1776,16 @@ void handleInputs(Dictionary inputs,int type) {
 		} else
 		switch (key_index) {
 			case 0x1177:
-				mainSetPress(is_pressed, /* inputMapping.Forward*/0x4800); //UP
+				mainSetPress(is_pressed, inputMapping.Forward /*0x4800*/); //UP
 				break;
 			case 0x1f73:
-				mainSetPress(is_pressed, /* inputMapping.Backwards*/ 0x5000); //DOWN
+				mainSetPress(is_pressed, inputMapping.Backwards /*0x5000*/); //DOWN
 				break;
 			case 0x1e61:
-				mainSetPress(is_pressed, /* inputMapping.Left*/ 0x4b00); //LEFT
+				mainSetPress(is_pressed, inputMapping.Left /*0x4b00*/); //LEFT
 				break;
 			case 0x2064:
-				mainSetPress(is_pressed, /*inputMapping.Right*/ 0x4d00); //RIGHT
+				mainSetPress(is_pressed, inputMapping.Right /*0x4d00*/); //RIGHT
 				break;
 			case 0x3920:
 				mainSetPress(is_pressed, 0x3920); //SPACE
@@ -1795,7 +1795,7 @@ void handleInputs(Dictionary inputs,int type) {
 				break;
 			case 0x1d00:
 				//mainSetPress(is_pressed, 0x1d00); //CTRL
-				mainSetPress(is_pressed, /* inputMapping.SpellMenu*/0x00e0); //CTRL
+				mainSetPress(is_pressed, inputMapping.SpellMenu/*0x00e0*/); //CTRL
 				//0xe0 - LEFT CTRL//inputMapping.SpellMenu
 				//0xe1 - SHIFT LEFT
 				//0xe2 - ALT LEFT

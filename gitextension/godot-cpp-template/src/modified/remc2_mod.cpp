@@ -109,12 +109,22 @@ void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
 	EventDispatcher::I->RegisterEvent(new Event<Scene>(EventType::E_SCENE_CHANGE, sceneChangeCallBack));
 	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
 
+	//SetConfig();
+	//next code can be replaced SetConfig in future
 	sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
 	sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
+	inputMapping.Forward = 0x1a;
+	inputMapping.Backwards = 0x16;
+	inputMapping.Left = 0x04;
+	inputMapping.Right = 0x07;
+	inputMapping.Map = 0x2b;
+	inputMapping.SpellMenu = 0xe0;
+	inputMapping.SpellMenuMark = 0xe1;
 	windowResWidth = 640;//added
 	windowResHeight = 480;//added
 	gameResWidth = 640;//added
 	gameResHeight = 480;//added
+
 
 	if (CommandLineParams.DoDisableGraphicsEnhance()) {
 		bigSprites = false;
