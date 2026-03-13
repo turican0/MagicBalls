@@ -404,22 +404,22 @@ func _process(_p_delta) -> void:
 	getInputs()
 	#MBEX.soundQueueClear()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())
-	if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
-		if Main_UI.is_ctrl_active:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			Main_UI.saved_mouse_pos = get_viewport().get_mouse_position()
-			var grid_rect = Main_UI.spell_grid.get_global_rect()
-			var center_pos = grid_rect.position + (grid_rect.size / 2.0)
-			center_pos.x=50
-			get_viewport().warp_mouse(center_pos)
-		else:
-			get_viewport().warp_mouse(Main_UI.saved_mouse_pos)
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active
-	if(last_spell_index!=-1):
-		Global.MBEX.setPlayerActiveSpell(last_spell_index,last_button)
-		last_spell_index = -1
-		last_button = -1
+	#if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
+		#if Main_UI.is_ctrl_active:
+			#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			#Main_UI.saved_mouse_pos = get_viewport().get_mouse_position()
+			#var grid_rect = Main_UI.spell_grid.get_global_rect()
+			#var center_pos = grid_rect.position + (grid_rect.size / 2.0)
+			#center_pos.x=50
+			#get_viewport().warp_mouse(center_pos)
+		#else:
+			#get_viewport().warp_mouse(Main_UI.saved_mouse_pos)
+			#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		#Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active
+	#if(last_spell_index!=-1):
+		#Global.MBEX.setPlayerActiveSpell(last_spell_index,last_button)
+		#last_spell_index = -1
+		#last_button = -1
 	
 	if(Global.MBEX.REMC2GetWebInfo()):
 		get_parent().get_node("SpiderWeb").show()
@@ -671,8 +671,8 @@ const SCREEN_HEIGHT := 480
 
 func getInputs():
 	var changes = []
-	if Main_UI && Main_UI.is_ctrl_active:
-		return
+	#if Main_UI && Main_UI.is_ctrl_active:
+		#return
 	for keycode: int in KEY_INDEX:
 		var index: int = KEY_INDEX[keycode]
 		var is_pressed: bool = Input.is_key_pressed(keycode)
