@@ -1376,6 +1376,7 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 	uint16_t i; // [esp+300h] [ebp-Ch]
 	TColor zero_bufferx[256];
 	VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
+	bool fadeout = false;
 	if (singlestep) {
 		if (x_BYTE_E390C_VGA_pal_not_begin) {
 			x_WORD_181B44++;
@@ -1389,7 +1390,10 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 				memset(zero_bufferx, 0, 0x300);
 		}
 		if (!newpalbufferx)
+		{
 			newpalbufferx = zero_bufferx;
+			fadeout = true;
+		}
 		for (i = 0; i < 0x100; i++) {
 			outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((x_WORD_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels);
 			outbufferx[i].green = x_BYTE_181544_oldpalbufferx[i].green + ((x_WORD_181B44) * (newpalbufferx[i].green - x_BYTE_181544_oldpalbufferx[i].green) / shadow_levels);
@@ -1397,7 +1401,10 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 		}
 		sub_41A90_VGA_Palette_install(outbufferx);
 		fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
-		MBChangePalette(11);
+		if (fadeout)
+			MBChangePalette(9, shadow_levels);
+		else
+			MBChangePalette(1, shadow_levels);
 		thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
 	} else {
 		sub_A0D2C_VGA_get_Palette(x_BYTE_181544_oldpalbufferx);
@@ -1405,6 +1412,7 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 		{
 			newpalbufferx = zero_bufferx;
 			memset(zero_bufferx, 0, 768);
+			fadeout = true;
 		}
 		for (x_WORD_181B44 = 0; x_WORD_181B44 < shadow_levels; x_WORD_181B44++) {
 			for (i = 0; i < 0x100; i++) {
@@ -1414,7 +1422,10 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 			}
 			sub_41A90_VGA_Palette_install(outbufferx);
 			fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
-			MBChangePalette(12);
+			if (fadeout)
+				MBChangePalette(9, shadow_levels);
+			else
+				MBChangePalette(1, shadow_levels);
 			thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
 		}
 		x_BYTE_E390C_VGA_pal_not_begin = 0;
@@ -2687,7 +2698,7 @@ float MB_Palette_gain[3] = { 1.0f, 1.0f, 1.0f };
 float MB_Paletteoffset[3] = { 0.0f, 0.0f, 0.0f };
 float MB_Palettesat_multiplier = 1.0f;
 
-void MBChangePalette(int type) {
+void MBChangePalette(int type, int shadow_levels) {
 	switch (type) {
 		case 0: // Reset / Normal
 			MB_Palette_gain[0] = 1.0f;
@@ -2699,9 +2710,9 @@ void MBChangePalette(int type) {
 			MB_Palettesat_multiplier = 1.0f;
 			break;
 
-		case 1: // Fade Back – multi-pass, shadow_levels=4
+		case 1: // Fade In
 		{
-			float t = (float)x_WORD_181B44 / 4.0f;
+			float t = (float)x_WORD_181B44 / (shadow_levels-1);
 			MB_Palette_gain[0] = t;
 			MB_Palette_gain[1] = t;
 			MB_Palette_gain[2] = t;
@@ -2785,48 +2796,9 @@ void MBChangePalette(int type) {
 			MB_Palettesat_multiplier = 1.0f;
 			break;
 
-		case 9: // Fade in from black – 16 steps
+		case 9: // Fade Out
 		{
-			float t = (float)x_WORD_181B44 / 16.0f;
-			MB_Palette_gain[0] = t;
-			MB_Palette_gain[1] = t;
-			MB_Palette_gain[2] = t;
-			MB_Paletteoffset[0] = 0.0f;
-			MB_Paletteoffset[1] = 0.0f;
-			MB_Paletteoffset[2] = 0.0f;
-			MB_Palettesat_multiplier = 1.0f;
-			break;
-		}
-
-		case 10: // Fade in from black – 28 steps
-		{
-			float t = (float)x_WORD_181B44 / 28.0f;
-			MB_Palette_gain[0] = t;
-			MB_Palette_gain[1] = t;
-			MB_Palette_gain[2] = t;
-			MB_Paletteoffset[0] = 0.0f;
-			MB_Paletteoffset[1] = 0.0f;
-			MB_Paletteoffset[2] = 0.0f;
-			MB_Palettesat_multiplier = 1.0f;
-			break;
-		}
-
-		case 11: // Fade in from black – 16 steps, thread-synchronized
-		{
-			float t = (float)x_WORD_181B44 / 16.0f;
-			MB_Palette_gain[0] = t;
-			MB_Palette_gain[1] = t;
-			MB_Palette_gain[2] = t;
-			MB_Paletteoffset[0] = 0.0f;
-			MB_Paletteoffset[1] = 0.0f;
-			MB_Paletteoffset[2] = 0.0f;
-			MB_Palettesat_multiplier = 1.0f;
-			break;
-		}
-
-		case 12: // Fade in from black – 28 steps, thread-synchronized
-		{
-			float t = (float)x_WORD_181B44 / 28.0f;
+			float t = 1.0-((float)x_WORD_181B44 / (shadow_levels - 1));
 			MB_Palette_gain[0] = t;
 			MB_Palette_gain[1] = t;
 			MB_Palette_gain[2] = t;
@@ -2901,10 +2873,9 @@ void PaletteChanges_47760_mod() //228760
 				case 1:
 					//Fade back
 					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
-					if (sub_90B27_VGA_pal_fadein_fadeout(*DefaultPal, 4u, 1, 0) == 4) {
+					if (sub_90B27_VGA_pal_fadein_fadeout_mod(*DefaultPal, 4u, 1, 0) == 4) {
 						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
 					}
-					MBChangePalette(1);
 					break;
 				case 2:
 					//Hit (red flash)
@@ -3052,17 +3023,15 @@ void PaletteChanges_47760_mod() //228760
 					break;
 				case 9:
 					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
-					if (sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x10u, 1) == 16) {
+					if (sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x10u, 1) == 16) {
 						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
 					}
-					MBChangePalette(9);
 					break;
 				case 0xA:
 					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
-					if (sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x1Cu, 1) == 28) {
+					if (sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x1Cu, 1) == 28) {
 						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
 					}
-					MBChangePalette(10);
 					break;
 				default:
 					return;

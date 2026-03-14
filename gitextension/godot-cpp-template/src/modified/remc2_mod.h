@@ -128,4 +128,4 @@ void thread2_wait_for_continue(Thread2_State sendstate);
 void thread1_wait_for_continue(Thread1_State sendstate);
 void thread1_continue(Thread2_State sendstate);
 void thread2_continue(Thread1_State sendstate);
-void MBChangePalette(int type);
+void MBChangePalette(int type,int shadow_level=0);
