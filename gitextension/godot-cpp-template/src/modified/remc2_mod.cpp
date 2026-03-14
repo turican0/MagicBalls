@@ -2,7 +2,7 @@
 
 //int NewGameDialog_endAction_mod;
 
-int graphics_enhance = 0;
+int graphics_enhance = 1;
 
 void InitLanguage_76A40_mod_only_language() //257A40
 {
@@ -113,13 +113,6 @@ void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
 	//next code can be replaced SetConfig in future
 	sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
 	sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
-	inputMapping.Forward = 0x1a;
-	inputMapping.Backwards = 0x16;
-	inputMapping.Left = 0x04;
-	inputMapping.Right = 0x07;
-	inputMapping.Map = 0x2b;
-	inputMapping.SpellMenu = 0xe0;
-	inputMapping.SpellMenuMark = 0xe1;
 	windowResWidth = 640;//added
 	windowResHeight = 480;//added
 	gameResWidth = 640;//added
@@ -1404,6 +1397,7 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 		}
 		sub_41A90_VGA_Palette_install(outbufferx);
 		fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
+		MBChangePalette(11);
 		thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
 	} else {
 		sub_A0D2C_VGA_get_Palette(x_BYTE_181544_oldpalbufferx);
@@ -1420,6 +1414,7 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 			}
 			sub_41A90_VGA_Palette_install(outbufferx);
 			fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
+			MBChangePalette(12);
 			thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
 		}
 		x_BYTE_E390C_VGA_pal_not_begin = 0;
@@ -2103,7 +2098,7 @@ void draw_minimap_circle(int16_t x, int16_t y, uint16_t width, uint16_t height, 
 	}
 }
 
-uint8_t MyUiBackGroundColorIdx = 0;
+uint8_t MyUiBackGroundColorIdx = 254;
 
 void DrawGameFrame_2BE30_mod() //20CE30
 {
@@ -2688,6 +2683,395 @@ void BlendAndBlit_40F80_mod() //221f80
 		sub_75200_VGA_Blit640(480, maxGameFps);	
 }
 
+float MB_Palette_gain[3] = { 1.0f, 1.0f, 1.0f };
+float MB_Paletteoffset[3] = { 0.0f, 0.0f, 0.0f };
+float MB_Palettesat_multiplier = 1.0f;
+
+void MBChangePalette(int type) {
+	switch (type) {
+		case 0: // Reset / Normal
+			MB_Palette_gain[0] = 1.0f;
+			MB_Palette_gain[1] = 1.0f;
+			MB_Palette_gain[2] = 1.0f;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+
+		case 1: // Fade Back – multi-pass, shadow_levels=4
+		{
+			float t = (float)x_WORD_181B44 / 4.0f;
+			MB_Palette_gain[0] = t;
+			MB_Palette_gain[1] = t;
+			MB_Palette_gain[2] = t;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+		}
+
+		case 2: // Hit – red flash, single-pass
+			MB_Palette_gain[0] = 1.0f;
+			MB_Palette_gain[1] = 1.0f;
+			MB_Palette_gain[2] = 1.0f;
+			MB_Paletteoffset[0] = 40.0f / 63.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+
+		case 3: // R+B suppression, driven by paletteCount_184w
+		{
+			float t = (float)x_D41A0_BYTEARRAY_4_struct.paletteCount_184w / 256.0f;
+			MB_Palette_gain[0] = 1.0f;
+			MB_Palette_gain[1] = 1.0f;
+			MB_Palette_gain[2] = 1.0f;
+			MB_Paletteoffset[0] = (-56.0f * t) / 63.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = (-56.0f * t) / 63.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+		}
+
+		case 4: // Blue max flash, single-pass
+			MB_Palette_gain[0] = 1.0f;
+			MB_Palette_gain[1] = 1.0f;
+			MB_Palette_gain[2] = 1.0f;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 1.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+
+		case 5: // Black screen – transitions to subMod=10
+			MB_Palette_gain[0] = 0.0f;
+			MB_Palette_gain[1] = 0.0f;
+			MB_Palette_gain[2] = 0.0f;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 0.0f;
+			break;
+
+		case 6: // Cyan flash, single-pass
+			MB_Palette_gain[0] = 1.0f;
+			MB_Palette_gain[1] = 1.0f;
+			MB_Palette_gain[2] = 1.0f;
+			MB_Paletteoffset[0] = 48.0f / 63.0f;
+			MB_Paletteoffset[1] = 32.0f / 63.0f;
+			MB_Paletteoffset[2] = 32.0f / 63.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+
+		case 7: // Black & White, single-pass
+			MB_Palette_gain[0] = 1.0f;
+			MB_Palette_gain[1] = 1.0f;
+			MB_Palette_gain[2] = 1.0f;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 0.0f;
+			break;
+
+		case 8: // White flash, single-pass
+			MB_Palette_gain[0] = 1.0f;
+			MB_Palette_gain[1] = 1.0f;
+			MB_Palette_gain[2] = 1.0f;
+			MB_Paletteoffset[0] = 48.0f / 63.0f;
+			MB_Paletteoffset[1] = 48.0f / 63.0f;
+			MB_Paletteoffset[2] = 48.0f / 63.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+
+		case 9: // Fade in from black – 16 steps
+		{
+			float t = (float)x_WORD_181B44 / 16.0f;
+			MB_Palette_gain[0] = t;
+			MB_Palette_gain[1] = t;
+			MB_Palette_gain[2] = t;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+		}
+
+		case 10: // Fade in from black – 28 steps
+		{
+			float t = (float)x_WORD_181B44 / 28.0f;
+			MB_Palette_gain[0] = t;
+			MB_Palette_gain[1] = t;
+			MB_Palette_gain[2] = t;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+		}
+
+		case 11: // Fade in from black – 16 steps, thread-synchronized
+		{
+			float t = (float)x_WORD_181B44 / 16.0f;
+			MB_Palette_gain[0] = t;
+			MB_Palette_gain[1] = t;
+			MB_Palette_gain[2] = t;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+		}
+
+		case 12: // Fade in from black – 28 steps, thread-synchronized
+		{
+			float t = (float)x_WORD_181B44 / 28.0f;
+			MB_Palette_gain[0] = t;
+			MB_Palette_gain[1] = t;
+			MB_Palette_gain[2] = t;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+		}
+
+		default:
+			break;
+	}
+}
+
+void PaletteChanges_47760_mod() //228760
+{
+	char dataPath[MAX_PATH];
+	TColor **DefaultPal = (TColor **)xadatapald0dat2.colorPalette_var28;
+	x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 0;
+	switch (x_D41A0_BYTEARRAY_4_struct.paletteMod_51) {
+		case 0:
+		case 1: //Fade out loading screen
+		{
+			sub_480A0_set_clear_Palette();
+			x_D41A0_BYTEARRAY_4_struct.paletteMod_51++;
+			MBChangePalette(0);
+			break;
+		}
+		case 2: {
+			x_D41A0_BYTEARRAY_4_struct.paletteMod_51++;
+			x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
+			memset((void *)*DefaultPal, 0, 768);
+			sub_41A90_VGA_Palette_install(*DefaultPal);
+			switch (D41A0_0.terrain_2FECE.MapType) {
+				case MapType_t::Day: {
+					sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALD-0.DAT");
+					DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+					sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/CLRD-0.DAT");
+					DataFileIO::ReadFileAndDecompress(dataPath, xadataclrd0dat.colorPalette_var28);
+				} break;
+				case MapType_t::Night: {
+					if (D41A0_0.terrain_2FECE.byte_0x2FED2 & 2) {
+						sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALF-0.DAT");
+						DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+					} else {
+						sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
+						DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+					}
+					sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/CLRN-0.DAT");
+					DataFileIO::ReadFileAndDecompress(dataPath, xadataclrd0dat.colorPalette_var28);
+					break;
+				}
+				case MapType_t::Cave: {
+					sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALC-0.DAT");
+					DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+					sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/CLRC-0.DAT");
+					DataFileIO::ReadFileAndDecompress(dataPath, xadataclrd0dat.colorPalette_var28);
+					break;
+				}
+			}
+			qmemcpy((void *)tempPalette_EA3B8x, (void *)*DefaultPal, 0x300u);
+			sub_47650(0x300);
+			sub_90D27();
+			uiBackGroundColorIdx_EB3A8 = (*DefaultPal)[0].red;
+			sub_57640();
+			MBChangePalette(0);
+			break;
+		}
+		case 3: {
+			switch (x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180) {
+				case 1:
+					//Fade back
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					if (sub_90B27_VGA_pal_fadein_fadeout(*DefaultPal, 4u, 1, 0) == 4) {
+						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
+					}
+					MBChangePalette(1);
+					break;
+				case 2:
+					//Hit (red flash)
+					for (int i = 1; i < 256; i++) {
+						x_DWORD_F42A0 = (*DefaultPal)[i].red + 40;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+						x_DWORD_F42A0 = (*DefaultPal)[i].green;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+						x_DWORD_F42A0 = (*DefaultPal)[i].blue;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
+					}
+					sub_90D27();
+					sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
+					x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					MBChangePalette(2);
+					break;
+				case 3:
+					for (int i = 1; i < 256; i++) {
+						x_DWORD_F42A0 = (*DefaultPal)[i].red;
+						x_DWORD_F42A0 += -56 * x_D41A0_BYTEARRAY_4_struct.paletteCount_184w >> 8;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+						x_DWORD_F42A0 = (*DefaultPal)[i].green;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+						x_DWORD_F42A0 = (*DefaultPal)[i].blue;
+						x_DWORD_F42A0 += -56 * x_D41A0_BYTEARRAY_4_struct.paletteCount_184w >> 8;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
+					}
+					sub_90D27();
+					sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
+					x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					MBChangePalette(3);
+					break;
+				case 4:
+					for (int i = 1; i < 256; i++) {
+						x_DWORD_F42A0 = 255;
+						x_BYTE_F3FA0arx[i].red = (*DefaultPal)[i].red;
+						x_BYTE_F3FA0arx[i].green = (*DefaultPal)[i].green;
+						x_BYTE_F3FA0arx[i].blue = 63;
+					}
+					sub_90D27();
+					sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
+					x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					MBChangePalette(4);
+					break;
+				case 5:
+					memset((void *)*xadatapald0dat2.colorPalette_var28, 0, 768);
+					x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 10;
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					MBChangePalette(5);
+					break;
+				case 6:
+					for (int i = 1; i < 256; i++) {
+						x_DWORD_F42A0 = (*DefaultPal)[i].blue + 48;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+						x_DWORD_F42A0 = (*DefaultPal)[i].green + 32;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+						x_DWORD_F42A0 = (*DefaultPal)[i].blue + 32;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
+					}
+					sub_90D27();
+					sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
+					x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					MBChangePalette(6);
+					break;
+				case 7:
+					//Black and White
+					for (int i = 1; i < 256; i++) {
+						x_DWORD_F42A0 = ((*DefaultPal)[i].red + (*DefaultPal)[i].green + (*DefaultPal)[i].blue) / 3;
+						x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+						x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+						x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
+					}
+					sub_90D27();
+					sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
+					x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 1;
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					MBChangePalette(7);
+					break;
+				case 8:
+					for (int i = 1; i < 256; i++) {
+						x_DWORD_F42A0 = (*DefaultPal)[i].red + 48;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].red = x_DWORD_F42A0;
+						x_DWORD_F42A0 = (*DefaultPal)[i].green + 48;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].green = x_DWORD_F42A0;
+						x_DWORD_F42A0 = (*DefaultPal)[i].blue + 48;
+						if (x_DWORD_F42A0 < 0)
+							x_DWORD_F42A0 = 0;
+						if (x_DWORD_F42A0 > 63)
+							x_DWORD_F42A0 = 63;
+						x_BYTE_F3FA0arx[i].blue = x_DWORD_F42A0;
+					}
+					sub_90D27();
+					sub_41A90_VGA_Palette_install(x_BYTE_F3FA0arx);
+					x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 9;
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					MBChangePalette(8);
+					break;
+				case 9:
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					if (sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x10u, 1) == 16) {
+						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
+					}
+					MBChangePalette(9);
+					break;
+				case 0xA:
+					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
+					if (sub_90B27_VGA_pal_fadein_fadeout((TColor *)*xadatapald0dat2.colorPalette_var28, 0x1Cu, 1) == 28) {
+						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
+					}
+					MBChangePalette(10);
+					break;
+				default:
+					return;
+			}
+			break;
+		}
+	}
+}
+
 int loc_debug_first_run = 0;
 void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 {
@@ -2696,7 +3080,7 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 	if ((CommandLineParams.ModeRegressionsTestType() != -1) && (count_begin == 1))
 		debugcounter_47560++;
 	*/
-	PaletteChanges_47760();
+	PaletteChanges_47760_mod();
 	if (!(x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1)) {
 		sub_715B0(); //nothing draw //animate sprites
 	}
@@ -2830,7 +3214,8 @@ void InGameLoop_47320_mod() //228320
 	D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.word[1] = 0;
 
 	//fix res on begin level for hidden levels-neoriginal code
-	if (!IsDefaultResolution(gameResWidth, gameResHeight)) {
+	if (!(gameResWidth == 320 && gameResHeight == 200))
+	{
 		VGA_Resize(320, 200);
 		screenWidth_18062C = 320;
 		screenHeight_180624 = 200;
@@ -3069,6 +3454,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 		unsigned __int16 v4; // si
 		v3 = 0;
 		v4 = 0;
+		
 		//std::cout << "Initializing logger...\n";
 		//spdlog::level::level_enum level = GetLoggingLevelFromString(CommandLineParams.GetLogLevelStr().c_str());
 		//InitializeLogging(level);
@@ -3076,12 +3462,21 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 		EventDispatcher::I->RegisterEvent(new Event<Scene>(EventType::E_SCENE_CHANGE, sceneChangeCallBack));
 		EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
 
+		//SetConfig();
 		sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
 		sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
+		inputMapping.Forward = 0x1a; //added
+		inputMapping.Backwards = 0x16; //added
+		inputMapping.Left = 0x04; //added
+		inputMapping.Right = 0x07; //added
+		inputMapping.Map = 0x2b; //added
+		inputMapping.SpellMenu = 0xe0; //added
+		inputMapping.SpellMenuMark = 0xe1; //added
 		windowResWidth = 640; //added
 		windowResHeight = 480; //added
 		gameResWidth = 640; //added
 		gameResHeight = 480; //added
+		maxGameFps = 1000; //added
 
 		if (CommandLineParams.DoDisableGraphicsEnhance()) {
 			Logger->debug("Disabling enhanced graphics");
@@ -3162,7 +3557,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 }
 
 
-//fix sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);-ok
+//fix sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);-no ok fade ou engine
 //fix changeLanguage-ok
-//fix palette in end load screen
+//fix palette in end load screen - better analyze
 //fix key ctrl

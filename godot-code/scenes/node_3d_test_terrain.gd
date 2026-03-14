@@ -90,7 +90,7 @@ func updateMeshes():
 var material_bottom
 var material_top
 
-var hitextures:bool=false
+var hitextures:bool=true
 
 func changeTerrain(levelType:String):
 	var tex_path = ""

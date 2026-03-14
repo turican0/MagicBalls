@@ -107,6 +107,10 @@ extern bool thread1_waiting;
 extern bool thread2_waiting;
 extern uint8_t MyUiBackGroundColorIdx;
 
+extern float MB_Palette_gain[3];
+extern float MB_Paletteoffset[3];
+extern float MB_Palettesat_multiplier;
+
 const int GRAPHICS_ENHANCE_ON = 1;
 const int GRAPHICS_ENHANCE_OFF = 0;
 extern int graphics_enhance;
@@ -124,3 +128,4 @@ void thread2_wait_for_continue(Thread2_State sendstate);
 void thread1_wait_for_continue(Thread1_State sendstate);
 void thread1_continue(Thread2_State sendstate);
 void thread2_continue(Thread1_State sendstate);
+void MBChangePalette(int type);

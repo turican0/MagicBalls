@@ -665,6 +665,8 @@ extern type_entity_0x6E8E* (*arsub_2a881e[])(axis_3d*);
 
 extern Type_CutScene_E16E0 cutScene_E16E0[];
 extern TColor x_BYTE_181544_oldpalbufferx[];
+extern int x_DWORD_F42A0;
+extern TColor x_BYTE_F3FA0arx[];
 
 void sub_49A30(type_entity_0x6E8E* event, unsigned __int16 a2);
 int GetSpellIndex_6E020(int entitySubtype);
@@ -1656,4 +1658,7 @@ void sub_BD1B6(uint8_t *a1);
 void sub_BD2CB(uint8_t *a1);
 void sub_BD3DD();
 void sub_A0D2C_VGA_get_Palette(TColor *a1);
+void sub_480A0_set_clear_Palette(/*int a1, int a2, int a3*/);
+void sub_90D27();
+void sub_57640();
 #endif

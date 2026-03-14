@@ -1707,9 +1707,11 @@ float get_saturation(const Vector3 &col) {
 }
 
 Array MBEXclass::getPaletteModifications() {
-	Vector3 out_gain;
-	Vector3 out_offset;
-	float out_sat_multiplier;
+	Vector3 out_gain = Vector3(MB_Palette_gain[0], MB_Palette_gain[1], MB_Palette_gain[2]);
+	Vector3 out_offset = Vector3(MB_Paletteoffset[0], MB_Paletteoffset[1], MB_Paletteoffset[2]);
+	float out_sat_multiplier = MB_Palettesat_multiplier;
+
+	/*
 	float mod_max_sat_after_correction = 0.0f;
 	uint8_t *mod_palette = VGA_Get_Palette();
 	uint8_t *ref_palette = VGA_Get_Palette(true);
@@ -1753,7 +1755,7 @@ Array MBEXclass::getPaletteModifications() {
 	float sat_ratio = (ref_max_sat > 0.0001f) ? mod_max_sat_after_correction / ref_max_sat : 1.0f;
 	out_sat_multiplier = 1.0f + (sat_ratio - 1.0f) * intensity;
 	//out_sat_multiplier = (ref_max_sat > 0.0001f) ? mod_max_sat_after_correction / ref_max_sat : 1.0f;
-
+	*/
 	Array result;
 	result.push_back(out_gain);
 	result.push_back(out_offset);
@@ -2285,7 +2287,8 @@ Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
 			uint32_t color_idx = tempVGABuffer[row_offset + (crop_x + c)];
 			int pal_pos = color_idx * 3;
 			//if(transparentColor!=255)
-			used_colors.insert(color_idx);
+			if (transparentColor != 255)
+				used_colors.insert(color_idx);
 			if (color_idx == transparentColor && transparentColor!=255) {
 				int dest_pos = (r * crop_w + c) * 4;
 				dest[dest_pos + 0] = 0;
@@ -2525,19 +2528,25 @@ void MBEXclass::REMC2SetCDPath(String cdPath) {
 	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 }*/
 
+int inGameBeginSteps = 0;
+
 int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 	switch (stage) {
 		case 0:
 			{
-				if (thread2_state == Thread2_State::IN_GAME_LOOP)
-					handleInputs(inputs, 0);
-				else
-					handleInputs(inputs, 2);
+			if (thread2_state == Thread2_State::IN_GAME_LOOP)
+			{
+				handleInputs(inputs, 0);
+				if (inGameBeginSteps < 10)
+					inGameBeginSteps++;
+			}
+			else
+				handleInputs(inputs, 2);
 				//thread2_continue(Thread1_State::CONTINUE);
 				thread1_wait_for_continue(Thread1_State::CONTINUE);
 				Ref<Image> img;
-				if (thread2_state == Thread2_State::IN_GAME_LOOP)
-					img = getScrBufferImg(MyUiBackGroundColorIdx);
+				if (inGameBeginSteps > 1 && graphics_enhance)
+					img = getScrBufferImg(MyUiBackGroundColorIdx);//NIGHT 254 or 10, cave 254 or 10, day 254 or 28
 				else
 					img = getScrBufferImg();
 				if (img.is_null())
@@ -2565,6 +2574,8 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 				case Thread2_State::INTRO_BEGIN:
 					return 4;
 				case Thread2_State::IN_GAME_BEGIN:
+					MBChangePalette(0);
+					inGameBeginSteps = 0;
 					return 5;
 			}
 			return 0;
