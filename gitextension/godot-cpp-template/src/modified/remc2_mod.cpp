@@ -2,7 +2,7 @@
 
 //int NewGameDialog_endAction_mod;
 
-int graphics_enhance = 1;
+int graphics_enhance = 0;
 
 void InitLanguage_76A40_mod_only_language() //257A40
 {

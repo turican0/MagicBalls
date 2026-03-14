@@ -2537,8 +2537,11 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			if (thread2_state == Thread2_State::IN_GAME_LOOP)
 			{
 				handleInputs(inputs, 0);
-				if (inGameBeginSteps < 10)
+				if (inGameBeginSteps < 10) {
+					if (inGameBeginSteps == 1)
+						graphics_enhance = 1;
 					inGameBeginSteps++;
+				}
 			}
 			else
 				handleInputs(inputs, 2);
@@ -2576,6 +2579,7 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 				case Thread2_State::IN_GAME_BEGIN:
 					MBChangePalette(0);
 					inGameBeginSteps = 0;
+					graphics_enhance = 0;
 					return 5;
 			}
 			return 0;

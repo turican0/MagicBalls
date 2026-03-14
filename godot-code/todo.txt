@@ -45,4 +45,7 @@
 -add screen between maps
 -add animations between maps
 
--fix sound banks
+-fix sound banks-ok
+-fix inverse mouse
+-fix palette problems on exit level
+-fix bliking on level start
