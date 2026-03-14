@@ -57,16 +57,6 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text"), &MBEXclass::REMC2BeginGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginAnim", "TextureRect", "Int"), &MBEXclass::REMC2BeginAnim);
-	godot::ClassDB::bind_method(D_METHOD("REMC2StepAnim", "Dictionary"), &MBEXclass::REMC2StepAnim);
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMap", "TextureRect"), &MBEXclass::REMC2BeginMap);
-	godot::ClassDB::bind_method(D_METHOD("REMC2StepMap", "Dictionary"), &MBEXclass::REMC2StepMap);
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginMain", "TextureRect"), &MBEXclass::REMC2BeginMain);
-	godot::ClassDB::bind_method(D_METHOD("REMC2StepMain", "Dictionary"), &MBEXclass::REMC2StepMain);
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGame"), &MBEXclass::REMC2BeginInGame);
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginInGameAfterScreen"), &MBEXclass::REMC2BeginInGameAfterScreen);
-	godot::ClassDB::bind_method(D_METHOD("REMC2StepInGame", "Dictionary", "Int"), &MBEXclass::REMC2StepInGame);
-
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetWebInfo"), &MBEXclass::REMC2GetWebInfo);
 
@@ -2251,21 +2241,6 @@ void MBEXclass::REMC2EndGame() {//OK!!
 	//MBEXstate = 6;
 }
 
-void MBEXclass::REMC2BeginAnim_old(TextureRect *scrBufferRect,int animIndex) {
-	PlayInfoFmv_break = false;
-	mainScrBufferRect = scrBufferRect;
-	globalAnimIndex = animIndex;
-	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
-}
-
-void MBEXclass::REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex) {
-	PlayInfoFmv_break = false;
-	mainScrBufferRect = scrBufferRect;
-	globalAnimIndex = animIndex;
-	thread2_continue(Thread1_State::BEGIN_ANIM);
-	//sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Begin });
-}
-
 std::set<uint32_t> used_colors; //test used colors in palette
 
 Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
@@ -2311,200 +2286,6 @@ Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
 	return img;
 }
 
-int MBEXclass::REMC2StepAnim(Dictionary inputs) {
-	handleInputs(inputs, 2);
-	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::Step });
-	Ref<Image> img = getScrBufferImg();
-	if (img.is_null())
-		return 0;
-	if (mainTexture.is_null()) {
-		mainTexture = ImageTexture::create_from_image(img);
-		mainScrBufferRect->set_texture(mainTexture);
-	} else {
-		mainTexture->update(img);
-	}
-
-	if (PlayInfoFmv_break) {
-		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
-		mainTexture.unref();
-	}
-
-	return PlayInfoFmv_break;
-}
-
-void MBEXclass::REMC2BeginMap(TextureRect* scrBufferRect) {
-	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Begin });
-}
-
-int MBEXclass::REMC2StepMap(Dictionary inputs) {
-	handleInputs(inputs, 1);
-	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::Step });
-	Ref<Image> img = getScrBufferImg();
-	if (img.is_null())
-		return 0;
-	if (mainTexture.is_null()) {
-		mainTexture = ImageTexture::create_from_image(img);
-		mainScrBufferRect->set_texture(mainTexture);
-	} else {
-		mainTexture->update(img);
-	}
-
-	//if ((actState == typeStateMenu2::MapMenuSelected) || (actState == typeStateMenu2::ExitGameSelected))
-	if (NewGameDialog_endAction)
-	{
-		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MapMenu, typeStateMenu::State::End });
-		mainTexture.unref();
-	}
-
-	int result = 0;
-	switch (actState) {
-		case typeStateMenu2::RunGameFromMapMenuSelected:
-			result = 1;
-			break;
-		case typeStateMenu2::ExitMapMenuSelected:
-			result = 2;
-			break;
-		default:
-			break;
-	}
-
-	actState = typeStateMenu2::AfterMenu;
-
-	return NewGameDialog_endAction;
-}
-
-void MBEXclass::REMC2BeginMain(TextureRect *scrBufferRect) {
-	mainScrBufferRect = scrBufferRect;
-	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Begin });
-}
-
-int MBEXclass::REMC2StepMain(Dictionary inputs) {
-	handleInputs(inputs, 1);
-	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::Step });
-	Ref<Image> img = getScrBufferImg();
-	if (img.is_null())
-		return 0;
-	if (mainTexture.is_null()) {
-		mainTexture = ImageTexture::create_from_image(img);
-		mainScrBufferRect->set_texture(mainTexture);
-	} else {
-		mainTexture->update(img);
-	}
-
-	if ((actState == typeStateMenu2::MapMenuSelected) || (actState == typeStateMenu2::ExitGameSelected)) {
-		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::MainMenu, typeStateMenu::State::End });
-		mainTexture.unref();
-	}
-
-	int result = 0;
-	switch (actState) {
-		case typeStateMenu2::MapMenuSelected:
-			result = 1;
-			break;
-		case typeStateMenu2::ExitGameSelected:
-			result = 2;
-			break;
-		case typeStateMenu2::changeLangSelected:
-			result = 4;
-			break;
-		case typeStateMenu2::animFlvSelected:
-			actState = typeStateMenu2::AfterMenu;
-			result = 0;//no used at now
-			break;
-		default:
-			break;
-	}
-
-	actState = typeStateMenu2::AfterMenu;
-
-	return result;
-}
-
-
-Ref<Image> MBEXclass::REMC2BeginInGame() {
-	setLoadScreen = false;
-	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Begin });
-	/*
-	char dataPath[MAX_PATH];
-	switch (D41A0_0.terrain_2FECE.MapType) {
-		case MapType_t::Day:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALD-0.DAT");
-			break;
-		case MapType_t::Night:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
-			break;
-		case MapType_t::Cave:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALC-0.DAT");
-			break;
-	}
-	uint8_t temp_palette[256 * 3];
-	uint8_t *temp_ptr[1];
-	temp_ptr[0] = temp_palette;
-	DataFileIO::ReadFileAndDecompress(dataPath, temp_ptr);
-	VGA_Set_Palette(temp_ptr[0], true);
-	*/
-	if (setLoadScreen)
-		return GetFrameBuffer(320,200);
-	return nullptr;
-}
-
-void MBEXclass::REMC2BeginInGameAfterScreen() {
-	sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterScreen });
-
-	char dataPath[MAX_PATH];
-	switch (D41A0_0.terrain_2FECE.MapType) {
-		case MapType_t::Day:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALD-0.DAT");
-			break;
-		case MapType_t::Night:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
-			break;
-		case MapType_t::Cave:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALC-0.DAT");
-			break;
-	}
-	uint8_t temp_palette[256 * 3];
-	uint8_t *temp_ptr[1];
-	temp_ptr[0] = temp_palette;
-	DataFileIO::ReadFileAndDecompress(dataPath, temp_ptr);
-	VGA_Set_Palette(temp_ptr[0], true);
-}
-
-int MBEXclass::REMC2StepInGame(Dictionary inputs, int state) {
-	if (state == 1) {
-		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
-		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::BeginAfterSecret });
-		return 3;
-	}
-	if (state == 0) {
-		handleInputs(inputs, 0);
-		sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::Step });
-		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8) {
-			sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::End });
-			if (secretsModPortals) {
-				switch (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2])
-				{
-					case 0xa://0xa-correct end of hidden level 0x2 0x8
-						sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
-						return 0;
-					case 0x18://0x18-end of hidden level by escape 0x8 0x10
-						sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
-						return 0;
-					case 0x1a://0x1a-go to hidden level - show load screen 0x2 0x8 0x10
-						return 2;
-					case 0x4://0x4-dead 0x4
-						return 4;
-					default:
-						break;
-				}
-			}
-			sub_46830_main_loop_modX(0, typeStateMenu{ typeStateMenu::Name::InGame, typeStateMenu::State::EndPostSecretScreen });
-			return 0;
-		}
-	}
-	return 1;
-}
 
 int MBEXclass::REMC2GetGraphicsEenhance() {
 	return graphics_enhance;
@@ -2575,12 +2356,27 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 				case Thread2_State::MAIN_MENU_BEGIN:
 					return 3;
 				case Thread2_State::INTRO_BEGIN:
+					switch (numberOfIntroVideos)
+					{
+						case 0:
+							return 15;
+						case 1:
+							return 16;
+						case 2:
+							return 17;
+						case 3:
+							return 18;
+						case 4:
+							return 19;
+					}
 					return 4;
 				case Thread2_State::IN_GAME_BEGIN:
 					MBChangePalette(0);
 					inGameBeginSteps = 0;
 					graphics_enhance = 0;
 					return 5;
+				case Thread2_State::MAP_MENU_BEGIN:
+					return 6;
 				case Thread2_State::IN_GAME_END:
 					MBChangePalette(0);
 					break;

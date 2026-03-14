@@ -30,8 +30,8 @@ func beginMainMenu():
 	set_language_texture(Global.defaultLangIndex+1)
 	FlagRect.material.set_shader_parameter("alpha", 1.0)
 
-func beginAnimation():
-	Global.Main_Sounds.setSoundBank(4)
+func beginAnimation(soundIndex):
+	Global.Main_Sounds.setSoundBank(soundIndex)
 
 func set_language_texture(lang_id: int) -> bool:
 	var base_path := "user://convertdata/language/"
@@ -93,11 +93,29 @@ func _process(_p_delta) -> void:
 			beginMainMenu()
 			inGameLoop=false
 		4:
-			beginAnimation()
+			beginAnimation(4)
 			inGameLoop=false
 		5:
 			beginInGame()
 			inGameLoop=true
+		6:
+			beginAnimation(0)
+			inGameLoop=false
+		15:
+			beginAnimation(5)
+			inGameLoop=false
+		16:
+			beginAnimation(6)
+			inGameLoop=false
+		17:
+			beginAnimation(7)
+			inGameLoop=false
+		18:
+			beginAnimation(8)
+			inGameLoop=false
+		19:
+			beginAnimation(9)
+			inGameLoop=false
 		
 		
 			

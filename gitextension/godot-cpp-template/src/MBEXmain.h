@@ -99,8 +99,7 @@ public:
 	void convertOriginalData(String path, String path2);
 	void convertOriginalDataExtractCD(String path, String path2);
 	Array getPendingSoundActions();
-	Array getPendingGraphicsActions();
-	//void soundQueueClear();
+		//void soundQueueClear();
 	void updateFreeSoundPlayers(const godot::Array &p_indices);
 	void playAnim(int index);
 	PackedByteArray getVGABuffer();
@@ -115,23 +114,6 @@ public:
 	void REMC2EndGame();
 	//void REMC2BeginItem();
 	//void REMC2EndItem();
-	void REMC2BeginAnim(TextureRect *scrBufferRect, int animIndex);
-	void REMC2BeginAnim_old(TextureRect *scrBufferRect, int animIndex);
-	//void REMC2EndAnim();
-	int REMC2StepAnim(Dictionary inputs);
-
-	void REMC2BeginMap(TextureRect* scrBufferRect);
-	//void REMC2EndMap();
-	int REMC2StepMap(Dictionary inputs);
-
-	void REMC2BeginMain(TextureRect *scrBufferRect);
-	//void REMC2EndMain();
-	int REMC2StepMain(Dictionary inputs);
-
-	Ref<Image> REMC2BeginInGame();
-	void REMC2BeginInGameAfterScreen();
-	//bool REMC2EndInGame();
-	int REMC2StepInGame(Dictionary inputs, int state);
 	String REMC2GetLevelType();
 	bool REMC2GetWebInfo();
 

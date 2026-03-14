@@ -77,6 +77,7 @@ enum class Thread2_State {
 	PLAY_INFO_FLV_LOOP,
 	MAIN_MENU_LOOP,
 	MAP_MENU_LOOP,
+	MAP_MENU_BEGIN,
 	IN_GAME_LOOP,
 	FADEIN_FADEOUT_LOOP,
 	LANGUAGE_SETTING_CLICKED,
@@ -91,7 +92,7 @@ enum class Thread2_State {
 
 extern int NewGameDialog_endAction;
 extern typeStateMenu2 actState;
-extern int globalAnimIndex;
+//extern int globalAnimIndex;
 extern bool PlayInfoFmv_break;
 extern bool setLoadScreen;
 extern Type_SecretMapScreenPortals_E2970 *secretsModPortals;
@@ -115,13 +116,12 @@ extern float MB_Palettesat_multiplier;
 const int GRAPHICS_ENHANCE_ON = 1;
 const int GRAPHICS_ENHANCE_OFF = 0;
 extern int graphics_enhance;
+extern int numberOfIntroVideos;
 
 void InitLanguage_76A40_mod_only_language();
 
 void sub_main_mod_begin(int argc, char **argv, char *real_cdPathch);
 void sub_main_mod_end();
-
-void sub_46830_main_loop_modX(unsigned __int16 actLevel, typeStateMenu newState);
 
 int sub_main_mod(int argc, char **argv, char *real_cdPathch);
 
