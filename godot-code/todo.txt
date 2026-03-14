@@ -47,5 +47,8 @@
 
 -fix sound banks-ok
 -fix inverse mouse
--fix palette problems on exit level
+-fix palette problems on exit level-ok
 -fix bliking on level start
+-problem after end level
+
+sub_7A110_load_hscreen FadeClearBlit_7B5D0

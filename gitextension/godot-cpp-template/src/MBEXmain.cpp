@@ -2581,6 +2581,9 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 					inGameBeginSteps = 0;
 					graphics_enhance = 0;
 					return 5;
+				case Thread2_State::IN_GAME_END:
+					MBChangePalette(0);
+					break;
 			}
 			return 0;
 		default:
