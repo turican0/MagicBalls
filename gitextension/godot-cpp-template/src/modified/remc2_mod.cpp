@@ -288,7 +288,7 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 		if (!newpalbufferx)
 		{
 			newpalbufferx = zero_bufferx;
-			fadeout = true;
+			//fadeout = true;
 		}
 		for (i = 0; i < 0x100; i++) {
 			outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((x_WORD_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels);
@@ -297,6 +297,22 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 		}
 		sub_41A90_VGA_Palette_install(outbufferx);
 		fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
+
+		//compute darker palette
+		int old_sum = 0;
+		int new_sum = 0;
+		for (int i = 0; i < 0x100; i++) {
+			old_sum += x_BYTE_181544_oldpalbufferx[i].red;
+			old_sum += x_BYTE_181544_oldpalbufferx[i].green;
+			old_sum += x_BYTE_181544_oldpalbufferx[i].blue;
+			new_sum += newpalbufferx[i].red;
+			new_sum += newpalbufferx[i].green;
+			new_sum += newpalbufferx[i].blue;
+		}
+		fadeout = (new_sum < old_sum);
+		//compute darker palette
+
+
 		if (fadeout)
 			MBChangePalette(9, shadow_levels);
 		else
@@ -1833,6 +1849,16 @@ void MBChangePalette(int type, int shadow_levels) {
 			break;
 		}
 
+		case 10: // Clear palette
+			MB_Palette_gain[0] = 0.0f;
+			MB_Palette_gain[1] = 0.0f;
+			MB_Palette_gain[2] = 0.0f;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+
 		default:
 			break;
 	}
@@ -1849,7 +1875,7 @@ void PaletteChanges_47760_mod() //228760
 		{
 			sub_480A0_set_clear_Palette();
 			x_D41A0_BYTEARRAY_4_struct.paletteMod_51++;
-			MBChangePalette(0);
+			MBChangePalette(10);
 			break;
 		}
 		case 2: {
@@ -1889,7 +1915,7 @@ void PaletteChanges_47760_mod() //228760
 			sub_90D27();
 			uiBackGroundColorIdx_EB3A8 = (*DefaultPal)[0].red;
 			sub_57640();
-			MBChangePalette(0);
+			//MBChangePalette(0);
 			break;
 		}
 		case 3: {
