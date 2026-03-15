@@ -11,6 +11,7 @@ var FlagRect:TextureRect
 
 func init():
 	Engine.max_fps = 60
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	#Global.loadScreenInit()
 	Main_DecodeLevel.MBEXinit()
 	Global.initSound()
@@ -80,6 +81,12 @@ func _process(_p_delta) -> void:
 	print("FPS:", Engine.get_frames_per_second(), "Limit:", Engine.max_fps)
 
 	var endRunVar = Main_DecodeLevel.MBrun(inGameLoop)
+	var warpMouse = Main_DecodeLevel.MBgetWarpMouse()
+	if(warpMouse["is"]):
+		var screen_size = get_viewport().get_visible_rect().size
+		var target_x = (warpMouse["x"] / float(Main_DecodeLevel.SCREEN_WIDTH)) * screen_size.x
+		var target_y = (warpMouse["y"] / float(Main_DecodeLevel.SCREEN_HEIGHT)) * screen_size.y
+		Input.warp_mouse(Vector2(target_x, target_y))
 	match(endRunVar):
 		1:
 			Global.Main_Sounds.stopAllSounds()

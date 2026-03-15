@@ -67,6 +67,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2Run", "Dictionary", "Int"), &MBEXclass::REMC2Run);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetGraphicsEenhance"), &MBEXclass::REMC2GetGraphicsEenhance);
+	godot::ClassDB::bind_method(D_METHOD("REMC2getWarpMouse"), &MBEXclass::REMC2getWarpMouse);
 }
 
 
@@ -1883,7 +1884,10 @@ void handleInputs(Dictionary inputs,int type) {
 	{
 		//mouse_pos = inputs["mouse_pos"];
 		mouse_pos = inputs["mouse_pos2"];
-		MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y);
+		if (x_WORD_18072C_cursor_sizex == 0)
+			MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y);
+		else
+			MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
 	}
 	if (type != 0)
 	{
@@ -2308,6 +2312,16 @@ void MBEXclass::REMC2SetScrBuffer(TextureRect *scrBufferRect) {
 void MBEXclass::REMC2SetCDPath(String cdPath) {
 	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 }*/
+
+
+Dictionary MBEXclass::REMC2getWarpMouse() {
+	Dictionary result;
+	result["x"] = warpMouseX;
+	result["y"] = warpMouseY;
+	result["is"] = warpMouseIs;
+	warpMouseIs = false;
+	return result;
+}
 
 int inGameBeginSteps = 0;
 

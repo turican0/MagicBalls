@@ -127,4 +127,6 @@ public:
 	int REMC2Run(Dictionary inputs, int stage);
 
 	int REMC2GetGraphicsEenhance();
+
+	Dictionary REMC2getWarpMouse();
 	};

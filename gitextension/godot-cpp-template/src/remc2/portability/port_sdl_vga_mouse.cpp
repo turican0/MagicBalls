@@ -440,7 +440,16 @@ int events()
 	return 1;
 }
 
-void VGA_Set_mouse(const int16_t x, const int16_t y) {
+int warpMouseX = 0;
+int warpMouseY = 0;
+bool warpMouseIs = false;
+
+void VGA_Set_mouse(const int16_t x, const int16_t y, bool warp_mouse) {
+	if (warp_mouse) {
+		warpMouseX = x;
+		warpMouseY = y;
+		warpMouseIs = true;
+	}
 };
 
 void VGA_Blit(uint8* srcBuffer) {

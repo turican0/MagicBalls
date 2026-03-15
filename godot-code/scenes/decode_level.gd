@@ -1074,3 +1074,6 @@ func generate_level_map_43830() -> void:
 	mapShading_12B4E0.fill(0)
 	mapAngle_13B4E0.fill(0)
 	mapEntityIndex_15B4E0.fill(0)
+	
+func MBgetWarpMouse():
+	return Global.MBEX.REMC2getWarpMouse()

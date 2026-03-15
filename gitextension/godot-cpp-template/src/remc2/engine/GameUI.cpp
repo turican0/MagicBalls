@@ -4285,7 +4285,7 @@ void SetMousePositionInMemory_5BDC0(int16_t posX, int16_t posY)//23cdc0
 		//v3 = (float)v3 / 200 * 480;
 	}
 
-	VGA_Set_mouse(posX, posY);
+	VGA_Set_mouse(posX, posY,true);
 }
 
 //----- (0001A5B0) --------------------------------------------------------
