@@ -896,6 +896,7 @@ func MBrun(inGame):
 	var result=Global.MBEX.REMC2Run(input_state,0)
 	if(inGame):
 		if(locGraphicsEnhance):
+			Main_Filter.show()
 			if(Global.MBEX.REMC2GetWebInfo()):
 				get_parent().get_node("SpiderWeb").show()
 			else:
@@ -915,7 +916,9 @@ func MBrun(inGame):
 				last_offset = current_offset
 				last_saturation = current_saturation
 			updatePlayer(getPlayerPosRot())
-			renderEntites(getEntites())		
+			renderEntites(getEntites())
+		else:
+			Main_Filter.hide()
 		#get_parent().get_node("UILayer/UI").updateSpells(Global.MBEX.getActiveSpells())
 		#get_parent().get_node("UILayer/UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
 		#get_parent().get_node("UILayer/UI").updateMinimap(Global.MBEX.getMinimap())

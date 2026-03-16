@@ -2333,7 +2333,7 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			{
 				handleInputs(inputs, 0);
 				if (inGameBeginSteps < 10) {
-					if (inGameBeginSteps == 1)
+					if (inGameBeginSteps == 0)
 						graphics_enhance = 1;
 					inGameBeginSteps++;
 				}
