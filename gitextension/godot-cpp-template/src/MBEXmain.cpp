@@ -2393,6 +2393,7 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 					return 6;
 				case Thread2_State::IN_GAME_END:
 					MBChangePalette(0);
+					inGameBeginSteps = 0;
 					break;
 			}
 			return 0;
