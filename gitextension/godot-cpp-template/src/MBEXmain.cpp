@@ -999,6 +999,8 @@ PackedFloat32Array MBEXclass::GetEntites() {
 				break;
 			case 199: //vesnican-ok
 				break;
+			case 411: //mummy-ok
+				break;
 			default:
 				test = 200;
 		}

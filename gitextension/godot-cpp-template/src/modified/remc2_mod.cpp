@@ -314,6 +314,10 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 			old_sum = 0;
 		if (new_sum < 0x400)
 			new_sum = 0;
+		if (old_sum > 0x5000)
+			old_sum = 0x5000;
+		if (new_sum < 0x5000)
+			new_sum = 0x5000;
 		fadeout = (new_sum < old_sum);
 		samePal = new_sum == old_sum;
 		//compute darker palette
@@ -2741,3 +2745,4 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 
 //fix importer
 //fix palette
+//sub_68BF0() sub_68C70(jx)
