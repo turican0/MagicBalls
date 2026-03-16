@@ -128,9 +128,7 @@ func _process(_p_delta) -> void:
 		Main_Filter.show()
 	else:
 		Main_Filter.hide()
-		
-			
-			
+	
 	#else:
 		#animImage.set_data(animWidth, animHeight, false, Image.FORMAT_RGB8, Main_DecodeLevel.getVGABuffer())
 		#animTextureRect.update(animImage)
