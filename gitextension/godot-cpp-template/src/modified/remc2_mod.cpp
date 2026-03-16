@@ -273,6 +273,7 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 	TColor zero_bufferx[256];
 	VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
 	bool fadeout = false;
+	bool samePal = false;
 	if (singlestep) {
 		if (x_BYTE_E390C_VGA_pal_not_begin) {
 			x_WORD_181B44++;
@@ -309,14 +310,26 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 			new_sum += newpalbufferx[i].green;
 			new_sum += newpalbufferx[i].blue;
 		}
+		if (old_sum < 0x400)
+			old_sum = 0;
+		if (new_sum < 0x400)
+			new_sum = 0;
 		fadeout = (new_sum < old_sum);
+		samePal = new_sum == old_sum;
 		//compute darker palette
 
+		if (samePal) {
+			if (new_sum == 0)
+				MBChangePalette(10);
+			 else
+				MBChangePalette(0);
+		} else {
+			if (fadeout)
+				MBChangePalette(12, shadow_levels);
+			else
+				MBChangePalette(11, shadow_levels);
+		}
 
-		if (fadeout)
-			MBChangePalette(9, shadow_levels);
-		else
-			MBChangePalette(1, shadow_levels);
 		thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
 	} else {
 		sub_A0D2C_VGA_get_Palette(x_BYTE_181544_oldpalbufferx);
@@ -324,8 +337,27 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 		{
 			newpalbufferx = zero_bufferx;
 			memset(zero_bufferx, 0, 768);
-			fadeout = true;
 		}
+
+		//compute darker palette
+		int old_sum = 0;
+		int new_sum = 0;
+		for (int i = 0; i < 0x100; i++) {
+			old_sum += x_BYTE_181544_oldpalbufferx[i].red;
+			old_sum += x_BYTE_181544_oldpalbufferx[i].green;
+			old_sum += x_BYTE_181544_oldpalbufferx[i].blue;
+			new_sum += newpalbufferx[i].red;
+			new_sum += newpalbufferx[i].green;
+			new_sum += newpalbufferx[i].blue;
+		}
+		if (old_sum < 0x400)
+			old_sum = 0;
+		if (new_sum < 0x400)
+			new_sum = 0;
+		fadeout = (new_sum < old_sum);
+		samePal = new_sum == old_sum;
+		//compute darker palette
+
 		for (x_WORD_181B44 = 0; x_WORD_181B44 < shadow_levels; x_WORD_181B44++) {
 			for (i = 0; i < 0x100; i++) {
 				outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((x_WORD_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels); //352b42 352544
@@ -334,10 +366,19 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 			}
 			sub_41A90_VGA_Palette_install(outbufferx);
 			fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
-			if (fadeout)
-				MBChangePalette(9, shadow_levels);
-			else
-				MBChangePalette(1, shadow_levels);
+
+			if (samePal) {
+				if (new_sum == 0)
+					MBChangePalette(10);
+				else
+					MBChangePalette(0);
+			} else {
+				if (fadeout)
+					MBChangePalette(9, shadow_levels);
+				else
+					MBChangePalette(1, shadow_levels);
+			}
+
 			thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
 		}
 		x_BYTE_E390C_VGA_pal_not_begin = 0;
@@ -601,6 +642,13 @@ bool NewGameDialog_77350_mod(type_menuButtons_E1F84 *a1x) //258350
 			a1x->dword_4 = 1;
 		}
 		SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]);
+
+#ifdef DEBUG_PALETTE
+		//debug palette log
+		writePalLog("NewGameDialog_77350_mod/sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0)");
+		//debug palette log
+#endif //DEBUG_PALETTE
+
 		sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
 		result = true;
 	} else {
@@ -822,6 +870,13 @@ void PlayIntros_83250_mod(char a1) //264250
 
 	sub_41A90_VGA_Palette_install((TColor *)*xadatapald0dat2.colorPalette_var28);
 	x_WORD_180660_VGA_type_resolution = 8;
+
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	writePalLog("PlayIntros_83250_mod/sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28)");
+	//debug palette log
+#endif //DEBUG_PALETTE
+
 	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
 	MBChangePalette(0);
 	sub_8CEDF_install_mouse();
@@ -1046,10 +1101,18 @@ void PlayInGameFmv_82670_mod() //263670
 							ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 640, 480, 0);
 						sub_41A90_VGA_Palette_install((TColor *)*xadatapald0dat2.colorPalette_var28);
 						x_WORD_180660_VGA_type_resolution = tempTypeResolution;
+
+#ifdef DEBUG_PALETTE
+						//debug palette log
+						writePalLog("PlayInGameFmv_82670_mod/sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28)");
+						//debug palette log
+#endif //DEBUG_PALETTE
+
 						if (x_WORD_180660_VGA_type_resolution & 1)
 							sub_90D6E_VGA_set_video_mode_320x200_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
 						else
 							sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
+						MBChangePalette(0);
 						sub_8CEDF_install_mouse();
 						SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
 					}
@@ -1123,6 +1186,13 @@ void MenusAndIntros_76930_mod(bool skipMenus) //257930
 				break;
 		}
 	} while (!m_ExitMenuLoop_E29DC);
+
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	writePalLog("MenusAndIntros_76930_mod/sub_7ADE0(x_BYTE_E29DE)");
+	//debug palette log
+#endif //DEBUG_PALETTE
+
 	sub_7ADE0(x_BYTE_E29DE);
 	if (x_BYTE_E29E1)
 		x_BYTE_E29E1 = 0;
@@ -1737,8 +1807,10 @@ float MB_Paletteoffset[3] = { 0.0f, 0.0f, 0.0f };
 float MB_Palettesat_multiplier = 1.0f;
 
 void MBChangePalette(int type, int shadow_levels) {
+	/*
 	if ((thread2_state != Thread2_State::IN_GAME_LOOP) &&(type != 0))
 		return;
+	*/
 	switch (type) {
 		case 0: // Reset / Normal
 			MB_Palette_gain[0] = 1.0f;
@@ -1859,9 +1931,61 @@ void MBChangePalette(int type, int shadow_levels) {
 			MB_Palettesat_multiplier = 1.0f;
 			break;
 
+		case 11: // Fade In 2
+		{
+			float t = (float)x_WORD_181B44 / shadow_levels;
+			MB_Palette_gain[0] = t;
+			MB_Palette_gain[1] = t;
+			MB_Palette_gain[2] = t;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+		}
+
+		case 12: // Fade Out 2
+		{
+			float t = 1.0 - ((float)x_WORD_181B44 / shadow_levels);
+			MB_Palette_gain[0] = t;
+			MB_Palette_gain[1] = t;
+			MB_Palette_gain[2] = t;
+			MB_Paletteoffset[0] = 0.0f;
+			MB_Paletteoffset[1] = 0.0f;
+			MB_Paletteoffset[2] = 0.0f;
+			MB_Palettesat_multiplier = 1.0f;
+			break;
+		}
+
 		default:
 			break;
 	}
+
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	char logMessage[200];
+	sprintf(logMessage, "MBChangePalette gain(%f %f %f), offset(%f %f %f), sat(%f)", MB_Palette_gain[0], MB_Palette_gain[1], MB_Palette_gain[2], MB_Paletteoffset[0], MB_Paletteoffset[1], MB_Paletteoffset[2], MB_Palettesat_multiplier);
+	writePalLog(logMessage);
+	//debug palette log
+#endif //DEBUG_PALETTE
+}
+
+void PaletteFadeIn_480A0_mod() //2290a0
+{
+	char dataPath[MAX_PATH];
+	unsigned int timeDiff = 0;
+	SetMusicVolume_98790(500, 0);
+	long time = j___clock();
+	do
+		timeDiff = j___clock() - time;
+	while (timeDiff < 50); //delay 50 mms
+	sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
+	D41A0_0.dword_0x23a = 0;
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALD-0.DAT");
+	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/CLRD-0.DAT");
+	DataFileIO::ReadFileAndDecompress(dataPath, xadataclrd0dat.colorPalette_var28);
+	sub_48120();
 }
 
 void PaletteChanges_47760_mod() //228760
@@ -1873,9 +1997,8 @@ void PaletteChanges_47760_mod() //228760
 		case 0:
 		case 1: //Fade out loading screen
 		{
-			sub_480A0_set_clear_Palette();
+			PaletteFadeIn_480A0_mod();
 			x_D41A0_BYTEARRAY_4_struct.paletteMod_51++;
-			MBChangePalette(10);
 			break;
 		}
 		case 2: {
@@ -2099,6 +2222,13 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 	if ((CommandLineParams.ModeRegressionsTestType() != -1) && (count_begin == 1))
 		debugcounter_47560++;
 	*/
+
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	writePalLog("DrawAndEventsInGame_47560_mod/PaletteChanges_47760_mod()");
+	//debug palette log
+#endif //DEBUG_PALETTE
+
 	PaletteChanges_47760_mod();
 	if (!(x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1)) {
 		sub_715B0(); //nothing draw //animate sprites
@@ -2123,6 +2253,13 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 			}
 		}
 	}
+
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	writePalLog("DrawAndEventsInGame_47560_mod/MouseAndKeysEvents_17A00(turn)");
+	//debug palette log
+#endif //DEBUG_PALETTE
+
 	MouseAndKeysEvents_17A00(turn);
 	//debug
 	if (CommandLineParams.DoDebugafterload()) {
@@ -2284,12 +2421,24 @@ void InGameLoop_47320_mod() //228320
 	thread2_wait_for_continue(Thread2_State::IN_GAME_END);
 	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::GAMEPLAY_ENDED);
 
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	writePalLog("InGameLoop_47320_mod/sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28)");
+	//debug palette log
+#endif //DEBUG_PALETTE
+
 	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor *)*xadatapald0dat2.colorPalette_var28);
 	MBChangePalette(0);
 }
 
 void sub_47FC0_load_screen_mod(bool isSecretLevel) //228fc0
 {
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	writePalLog("sub_47FC0_load_screen_mod/sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0)");
+	//debug palette log
+#endif //DEBUG_PALETTE
+
 	char dataPath[MAX_PATH];
 	sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
 
@@ -2317,6 +2466,13 @@ void sub_47FC0_load_screen_mod(bool isSecretLevel) //228fc0
 		sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SMATITLE.PAL");
 		DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
 	}
+
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	writePalLog("sub_47FC0_load_screen_mod/sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0)");
+	//debug palette log
+#endif //DEBUG_PALETTE
+
 	sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x20u, 0);
 	D41A0_0.dword_0x23a = 1;
 	D41A0_0.dword_0x23e = 0;

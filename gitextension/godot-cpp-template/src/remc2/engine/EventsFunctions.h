@@ -1658,7 +1658,8 @@ void sub_BD1B6(uint8_t *a1);
 void sub_BD2CB(uint8_t *a1);
 void sub_BD3DD();
 void sub_A0D2C_VGA_get_Palette(TColor *a1);
-void sub_480A0_set_clear_Palette(/*int a1, int a2, int a3*/);
+void PaletteFadeIn_480A0();
 void sub_90D27();
 void sub_57640();
+void sub_48120();
 #endif

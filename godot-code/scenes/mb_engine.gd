@@ -3,6 +3,7 @@ extends Node3D
 var Main_DecodeLevel
 var Main_TerrainsMB
 var Main_UI
+var Main_Filter
 
 var runned:bool = false
 
@@ -123,7 +124,10 @@ func _process(_p_delta) -> void:
 		19:
 			beginAnimation(9)
 			inGameLoop=false
-		
+	if(inGameLoop):
+		Main_Filter.show()
+	else:
+		Main_Filter.hide()
 		
 			
 			

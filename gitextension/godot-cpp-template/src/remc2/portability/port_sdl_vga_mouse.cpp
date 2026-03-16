@@ -113,9 +113,37 @@ uint8_t *VGA_Get_Palette(bool withoutModification) {
 	return tempPalettebuffer;
 }
 
+void write_minilog(char *filename, char *string) {
+	FILE *f = fopen(filename, "a");
+	if (f == NULL)
+		return;
+
+	fprintf(f, "%s\n", string);
+	fclose(f);
+}
+
+#ifdef DEBUG_PALETTE
+void writePalLog(char *string) {
+	write_minilog("pal_log.txt",string);
+}
+#endif //DEBUG_PALETTE
+
 uint16_t lastResHeight=0;
 
 void SetPalette(SDL_Color* colours) {
+#ifdef DEBUG_PALETTE
+	//debug palette log
+	writePalLog("SetPalette");
+	char palbuf[64 * 3 + 1];
+	for (int i = 0; i < 64; i++)sprintf(&palbuf[i * 3], "%02X ", colours[i].r);palbuf[64 * 3] = 0;
+	writePalLog(palbuf);
+	for (int i = 0; i < 64; i++)sprintf(&palbuf[i * 3], "%02X ", colours[i].g);palbuf[64 * 3] = 0;
+	writePalLog(palbuf);
+	for (int i = 0; i < 64; i++)sprintf(&palbuf[i * 3], "%02X ", colours[i].b);palbuf[64 * 3] = 0;
+	writePalLog(palbuf);	
+	//debug palette log
+#endif //DEBUG_PALETTE
+
 	memcpy(m_currentPalletColours, colours, sizeof(SDL_Color) * 256);
 	/*
 	if (m_gamePalletisedSurface) {
@@ -277,7 +305,7 @@ MainMenu_76FA0->DrawAndServe_7B250->DrawAndServe_pre_sub_7B250->NewGameDialog_77
 MainMenu_76FA0->DrawAndServe_7B250->DrawAndServe_pre_sub_7B250->NewGameDialog_77350->sub_41A90_VGA_Palette_install->VGA_Set_Palette
 MenusAndIntros_76930->sub_7ADE0->sub_90D6E_VGA_set_video_mode_320x200_and_Palette->sub_41A90_VGA_Palette_install->VGA_Set_Palette
 sub_46830_main_loop->sub_47FC0_load_screen->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install->VGA_Set_Palette
-DrawAndEventsInGame_47560->PaletteChanges_47760->sub_480A0_set_clear_Palette->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install
+DrawAndEventsInGame_47560->PaletteChanges_47760->PaletteFadeIn_480A0->sub_90B27_VGA_pal_fadein_fadeout->sub_41A90_VGA_Palette_install
 
 */
 

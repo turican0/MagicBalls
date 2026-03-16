@@ -30,6 +30,7 @@ func _ready() -> void:
 	MBEngine.Main_TerrainsMB=Main_TerrainsMB
 	MBEngine.LoadScrRect=$LoadScr/Control/Foreground
 	MBEngine.FlagRect=$LoadScr/Control/LangRect
+	MBEngine.Main_Filter = Main_Filter
 	MBEngine.init()
 	
 	#$CanvasUI.init()

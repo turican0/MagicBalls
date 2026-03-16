@@ -18,6 +18,8 @@
 #include "../engine/Scene.h"
 #include "../engine/GameState.h"
 
+//#define DEBUG_PALETTE
+
 typedef struct
 {
 	int32_t x;
@@ -75,6 +77,10 @@ void Draw_black();
 SDL_Rect GetDisplayByIndex(uint8_t index);
 SDL_Rect FindDisplayByResolution(uint32_t width, uint32_t height);
 void mainSetPress(bool locpressed, uint16_t loclastchar);
+
+#ifdef DEBUG_PALETTE
+void writePalLog(char *string);
+#endif
 
 extern uint8_t LastPressedKey_1806E4; // weak//3516e4
 extern int8_t pressedKeys_180664[128]; // idb
