@@ -200,6 +200,7 @@ var library = {
 	Vector3i(5,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
+	Vector3i(5,411,0): "res://entites/object_5_411_zombie",#zombie
 	#Vector3i(5,187,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzzzzzzzzzz
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK

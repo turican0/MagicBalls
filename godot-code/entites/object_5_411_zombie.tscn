@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bb8x5jooo5rmv"]
+
+[ext_resource type="PackedScene" uid="uid://b4dyllk18javr" path="res://entites/sources/zombie-mummy/zomie_mummy.tscn" id="1_226pc"]
+
+[node name="Node3D" type="Node3D" unique_id=726647630]
+
+[node name="zomie-mummy" parent="." unique_id=1869227258 instance=ExtResource("1_226pc")]
+transform = Transform3D(-1.4, 0, -1.2239188e-07, 0, 1.4, 0, 1.2239188e-07, 0, -1.4, 0, 0, 0)
