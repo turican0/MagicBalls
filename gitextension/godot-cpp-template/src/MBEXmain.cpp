@@ -1001,6 +1001,10 @@ PackedFloat32Array MBEXclass::GetEntites() {
 				break;
 			case 411: //mummy-ok
 				break;
+			case 424: //muschroom1				
+				break;//12
+			case 425: //muschroom2
+				break;
 			default:
 				test = 200;
 		}
@@ -2405,4 +2409,6 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 	return -1;
 }
 
+//5 271-head
+//hi fliing muschrooms
 

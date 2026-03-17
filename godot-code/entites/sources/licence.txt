@@ -97,3 +97,27 @@ https://sketchfab.com/3d-models/meteor-1635786c47dd49e09117f72138e10c65
 https://sketchfab.com/3d-models/sun-9ef1c68fbb944147bcfcc891d3912645
 
 https://sketchfab.com/3d-models/zombie-smoke-mummy-character-12-mb-855ade268167415e954f4377ed4519c5
+
+orbs:
+https://sketchfab.com/3d-models/time-orb-4a5c39889f0e4328b233e94d47b4a929
+https://sketchfab.com/3d-models/water-orb-30ca9b8469da4a49ab127b6bb5b87d61
+https://sketchfab.com/3d-models/magical-orb-5e2e0ac919cb4d30ac022133086c088c
+https://sketchfab.com/3d-models/orb-407e86174a14486b904e6c900d385d91
+https://sketchfab.com/3d-models/orb-morb-ae0cc50dc25a4fcab18906b9402b44b6
+https://sketchfab.com/3d-models/chaos-orb-f24b9bee2056411e9a706f30cb021260
+https://sketchfab.com/3d-models/magic-orb-348d3a01dd31484eb339a397b94e6d2b
+https://sketchfab.com/3d-models/star-orb-6328e644bd8f46eabc3d7332febab31d
+https://sketchfab.com/3d-models/crystal-orb-31b46a71534b41e785aafe5b9bc1e37d
+https://sketchfab.com/3d-models/mystical-orb-sculpt-46dede225583498193766ba2c798e61f
+https://sketchfab.com/3d-models/orb-168a89416d4c4ab1afe06fa215a40c82
+https://sketchfab.com/3d-models/heavy-metal-squiggle-orb-4dbebd5ce1a941399685046ecd30e5df
+
+beholder:
+https://sketchfab.com/3d-models/animated-beholder-dungeons-dragons-b0fa0199cd74478fa1c46abc1ecc7adb
+https://sketchfab.com/3d-models/beholder-by-upolygraf-a1571a0950e141dea1ec76ab321663e7
+
+evil frame:
+https://sketchfab.com/3d-models/portal-frame-da34b37a224e4e49b307c0b17a50af2c
+
+stone head:
+https://sketchfab.com/3d-models/olmec-head-textured-75c1eef15251402fafc6749c57b69d46

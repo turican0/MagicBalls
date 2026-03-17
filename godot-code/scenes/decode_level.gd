@@ -200,6 +200,7 @@ var library = {
 	Vector3i(5,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
+	Vector3i(5,271,0): "res://entites/object_5_271_stoneHead.tscn",#stone head
 	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
 	#Vector3i(5,187,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzzzzzzzzzz
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
@@ -224,11 +225,13 @@ var library = {
 	Vector3i(10,68,0): "res://entites/object_10_68_redSphere.tscn",#red sphere xxxxxxxxxxxx
 	Vector3i(10,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
+	Vector3i(10,80,0): "res://entites/object_10_80_castle_orb.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
 	Vector3i(10,97,0): "res://entites/object_10_97_posses_buildingD.tscn",#building -difmodels!!!
 	Vector3i(10,98,0): "res://entites/object_10_98_posses_buildingD-violet.tscn",#building -difmodels!!!
 	Vector3i(10,145,0): "res://entites/object_9_64_meteor.tscn",#meteor
+	Vector3i(10,168,0): "res://entites/object_10_168_FacePortal.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
 	Vector3i(10,327,0): "res://entites/object_10_327_tornado.tscn",#tornado xxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,426,0): "res://entites/object_10_426_bubble.tscn",#bubble - zzzzzzzzzzzzzzzzzzzzzzzzzz
@@ -325,11 +328,12 @@ var library2 = {
 #14-462 - day portal
 #10-77 - ohen-ok
 #10-145(koule-metor?)-ok
+#10-34
 #- fix dead sorcerer
 
 #3-251 5-411-mummy
-
-#9-420
+#Vector3i(10,34,0): "",#fair - portal
+#10 80 - catle bold
 
 var filter_material: ShaderMaterial
 var data_img: Image
@@ -642,6 +646,13 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					add_pool_index(uid)
 					updateObject=true
 		if (current_node&&updateObject):
+			if(modelIndex == 411):#zobmie
+				#var nodeStateVisibility=current_node.get_fade_state()
+				var entityStateHidden=actByte2 & 0x80
+				if(entityStateHidden==0x80):
+					current_node.fade_out()
+				else:
+					current_node.fade_in()
 			if actBitmapScaleHelp:
 				var scale_scene_node = current_node.get_node_or_null("Scale")
 				if scale_scene_node:

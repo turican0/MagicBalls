@@ -2746,3 +2746,6 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 //fix importer
 //fix palette
 //sub_68BF0() sub_68C70(jx) struct_byte_0xc_12_15.byte[0] 0x5 0x20
+
+//sub_293D0-hide
+//sub_69300-show?

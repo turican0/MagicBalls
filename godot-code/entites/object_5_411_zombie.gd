@@ -16,7 +16,8 @@ var _fade_state: FadeState = FadeState.VISIBLE
 func fade_out() -> void: _fade(min_alpha, FadeState.FADING_OUT, FadeState.HIDDEN)
 func fade_in()  -> void: _fade(1.0,       FadeState.FADING_IN,  FadeState.VISIBLE)
 
-func get_fade_state() -> FadeState: return _fade_state
+func get_fade_state():
+	return _fade_state
 
 func _apply_fade_out() -> void: fade_out()
 func _apply_fade_in()  -> void: fade_in()
