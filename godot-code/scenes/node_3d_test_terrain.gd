@@ -115,15 +115,15 @@ func changeTerrain(levelType:String):
 			"Final":
 				tex_path = Global.convertdata + "textures/final/BL32F0-0.DAT-borders.png"
 
-	match levelType:
-		"Day":
-			tex_path = Global.convertdata + "textures/day/BLOCK32.DAT-borders.png"
-		"Night":
-			tex_path = Global.convertdata + "textures/night/BL32N0-0.DAT-borders.png"
-		"Cave":
-			tex_path = Global.convertdata + "textures/cave/BL32C0-0.DAT-borders.png"
-		"Final":
-			tex_path = Global.convertdata + "textures/final/BL32F0-0.DAT-borders.png"
+	#match levelType:
+		#"Day":
+			#tex_path = Global.convertdata + "textures/day/BLOCK32.DAT-borders.png"
+		#"Night":
+			#tex_path = Global.convertdata + "textures/night/BL32N0-0.DAT-borders.png"
+		#"Cave":
+			#tex_path = Global.convertdata + "textures/cave/BL32C0-0.DAT-borders.png"
+		#"Final":
+			#tex_path = Global.convertdata + "textures/final/BL32F0-0.DAT-borders.png"
 	if tex_path != "":
 		var atlas_tex = Global.load_custom_texture(tex_path)
 		if material_bottom == null:
