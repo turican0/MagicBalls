@@ -4285,7 +4285,7 @@ void SetMousePositionInMemory_5BDC0(int16_t posX, int16_t posY)//23cdc0
 		//v3 = (float)v3 / 200 * 480;
 	}
 
-	VGA_Set_mouse(posX, posY,true);
+	VGA_Set_mouse(posX, posY);
 }
 
 //----- (0001A5B0) --------------------------------------------------------
@@ -4629,7 +4629,7 @@ void DrawOkCancelMenu_30A60(int16_t posTextX, int16_t posTextY, uint8_t scale)//
 //----- (00052D70) --------------------------------------------------------
 void ShowMessage_52D70(uint16_t playerIndex, char* cheatMessage)//233d70
 {
-	strcpy(D41A0_0.array_0x2BDE[playerIndex].array_0x01c_2BFA_11258, cheatMessage);
+	strcpy(D41A0_0.array_0x2BDE[playerIndex].CurrentNotificationText_0x01c_2BFA_11258, cheatMessage);
 	D41A0_0.array_0x2BDE[playerIndex].word_0x04d_2C2B_11307 = 100;
 	D41A0_0.array_0x2BDE[playerIndex].word_0x04f_2C2D_11309 = 1;
 }
