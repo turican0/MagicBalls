@@ -183,6 +183,8 @@ var library = {
 	Vector3i(5,29,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
 	Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head-OK
 	Vector3i(5,56,0): "res://entites/object_5_56_flyingCentipedeBody.tscn",#xxxxxxxxxxxxxxxxxxxxxx
+	Vector3i(5,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star-special
+	Vector3i(5,58,0): "res://entites/object_10_58_goldSphere.tscn",#fliing goldMana -OK
 	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
 	Vector3i(5,110,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
 	Vector3i(5,111,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
@@ -224,6 +226,7 @@ var library = {
 	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
 	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
 	Vector3i(10,68,0): "res://entites/object_10_68_redSphere.tscn",#red sphere xxxxxxxxxxxx
+	Vector3i(10,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
 	Vector3i(10,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,80,0): "res://entites/object_10_80_castle_orb.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -335,9 +338,13 @@ var library2 = {
 #3-251 5-411-mummy
 #Vector3i(10,34,0): "",#fair - portal
 #10 80 - catle bold
-#2-422-sud
-#3-203-osmy kouzelnik
+
+#2-422-sud-ok
+#3-203-osmy kouzelnik-blue
 #3-99-modra vlajka hradu
+#10-70-blue mana-ok
+#10-55-hvezdicka-zbran-ok
+#5-58-gold mana-ok
 
 var filter_material: ShaderMaterial
 var data_img: Image
