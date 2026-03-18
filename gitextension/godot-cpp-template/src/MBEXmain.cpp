@@ -1810,7 +1810,7 @@ void handleInputs(Dictionary inputs,int type) {
 					HandleButtonClick_191B0(27, 0);
 				}
 				break;
-			case 0x2368: //H
+			case 0x2368: //H - change graphics type
 				if (is_pressed) {
 					graphics_enhance = 1 - graphics_enhance;
 
@@ -1820,6 +1820,8 @@ void handleInputs(Dictionary inputs,int type) {
 						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
 				}
 				break;
+			case 0x256b: //K - kill all creatures - cheat
+				KillAllCreatures_1B5F0();
 			case 0x3f00://F5
 				if (type != 0)
 					break;

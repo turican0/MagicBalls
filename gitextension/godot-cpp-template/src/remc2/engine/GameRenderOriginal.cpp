@@ -3148,11 +3148,19 @@ void GameRenderOriginal::DrawSprites_3E360(int a2x)//21f360
 	}
 
 	result = Str_E9C38_smalltit[a2x].haveBillboard_36;
+
 	do
 	{
 		//adress 21f370
 
 		v3x = Entities_EA3E4[result];
+
+		int test = particlesParameters_D951C[v3x->word_0x5A_90].word_0;
+		if (424 == test) {
+			test++;
+			test--;
+		}
+
 		str_F2C20ar.dword0x14x = v3x;
 		if (!(v3x->struct_byte_0xc_12_15.byte[0] & 0x21))
 		{
