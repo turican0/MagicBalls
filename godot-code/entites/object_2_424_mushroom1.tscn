@@ -3,23 +3,27 @@
 [ext_resource type="Script" uid="uid://b6ccdj50qxa8n" path="res://entites/object_2_424_mushroom_1.gd" id="1_hgyc8"]
 [ext_resource type="PackedScene" uid="uid://mfe77kdaokfm" path="res://entites/sources/mushrooms/glowing_mushroom.glb" id="1_yrhjr"]
 [ext_resource type="PackedScene" uid="uid://dfjw48ywlwdik" path="res://entites/sources/mushrooms/low_poly_mushroom_phallus_indusiatus.glb" id="2_hgyc8"]
-[ext_resource type="PackedScene" uid="uid://c00hupfvjgwjp" path="res://entites/sources/mushrooms/morel_mushroom.glb" id="3_3bh7p"]
+[ext_resource type="PackedScene" uid="uid://1ne4ywm8535g" path="res://entites/sources/mushrooms/mushroom3.tscn" id="4_hgyc8"]
 [ext_resource type="PackedScene" uid="uid://nt8a4bud64to" path="res://entites/sources/mushrooms/mushroom4.tscn" id="5_hgyc8"]
 
 [node name="Node3D" type="Node3D" unique_id=1585835896]
 script = ExtResource("1_hgyc8")
 
 [node name="obj1" parent="." unique_id=997829463 instance=ExtResource("1_yrhjr")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.40782452, 0)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.2, 0)
+visible = false
 
 [node name="obj2" parent="." unique_id=1204251394 instance=ExtResource("2_hgyc8")]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+visible = false
 
-[node name="obj3" parent="." unique_id=815429754 instance=ExtResource("3_3bh7p")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.20626187, -0.27401587, 0.39418972)
+[node name="obj3" parent="." unique_id=384214065 instance=ExtResource("4_hgyc8")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+visible = false
 
 [node name="obj4" parent="." unique_id=2013553071 instance=ExtResource("5_hgyc8")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+visible = false
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=376339495]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)

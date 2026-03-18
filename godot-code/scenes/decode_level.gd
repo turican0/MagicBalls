@@ -141,6 +141,7 @@ var library = {
 	Vector3i(2,178,0): "res://entites/object_2_178_burned_tree.tscn",#burned tree
 	Vector3i(2,179,0): "res://entites/object_2_179_burned_tree.tscn",#burned tree
 	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2 - same models
+	Vector3i(2,422,0): "res://entites/object_2_422_barell.tscn",#barell
 	Vector3i(2,423,0): "res://entites/object_2_423_basket.tscn",#basket - yyyyyyyyyyyyyyyyyyyyyyyyy
 	Vector3i(2,424,0): "res://entites/object_2_424_mushroom1.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(2,425,0): "res://entites/object_2_425_mushroom2.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
@@ -334,6 +335,9 @@ var library2 = {
 #3-251 5-411-mummy
 #Vector3i(10,34,0): "",#fair - portal
 #10 80 - catle bold
+#2-422-sud
+#3-203-osmy kouzelnik
+#3-99-modra vlajka hradu
 
 var filter_material: ShaderMaterial
 var data_img: Image

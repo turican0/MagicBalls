@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=108925272]
 
 [node name="Sketchfab_Scene" parent="." unique_id=1086921098 instance=ExtResource("1_vfeaw")]
-transform = Transform3D(0.006, 0, 0, 0, 0.006, 0, 0, 0, 0.006, 0, 0, 0)
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, 0)

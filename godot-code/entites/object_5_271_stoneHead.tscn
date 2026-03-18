@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=393404257]
 
 [node name="olmec_head_textured2" parent="." unique_id=890695682 instance=ExtResource("1_y84d5")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 2, 0)

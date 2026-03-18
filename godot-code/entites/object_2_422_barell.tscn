@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c58mppcm0cifd"]
+
+[ext_resource type="PackedScene" uid="uid://cl66sejetyor" path="res://entites/sources/barrel/barrel.glb" id="1_8eos7"]
+
+[node name="Node3D" type="Node3D" unique_id=247772291]
+
+[node name="Sketchfab_Scene" parent="." unique_id=804690181 instance=ExtResource("1_8eos7")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
