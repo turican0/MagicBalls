@@ -56,3 +56,4 @@ sub_7A110_load_hscreen FadeClearBlit_7B5D0
 -bad palette maybe
 -problem with key
 -problem with mouse warp
+-remove blue sorcerer after dead
