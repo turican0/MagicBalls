@@ -187,6 +187,9 @@ var library = {
 	Vector3i(5,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star-special
 	Vector3i(5,58,0): "res://entites/object_10_58_goldSphere.tscn",#fliing goldMana -OK
 	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
+	Vector3i(5,67,0): "res://entites/object_10_67_whiteSphere.tscn",
+	Vector3i(5,68,0): "res://entites/object_10_68_redSphere.tscn",
+	Vector3i(5,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
 	Vector3i(5,110,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
 	Vector3i(5,111,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
 	Vector3i(5,112,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
@@ -216,6 +219,7 @@ var library = {
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
 	Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
+	Vector3i(9,151,0): "res://entites/object_9_144_posses.tscn",#fix this to better
 	Vector3i(9,419,0): "res://entites/object_9_419_spider_web.tscn",#spide web zzzzzzzzzzzzzzOK
 	Vector3i(9,420,0): "res://entites/object_9_420_walnut.tscn",#walnul ball zzzzzzzzzzzzzzOK
 	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
@@ -265,9 +269,11 @@ var library2 = {
 	Vector3i(0,58,0): "",#unknown
 	Vector3i(0,67,0): "",#unknowns
 	Vector3i(0,68,0): "",#unknown
+	Vector3i(0,70,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
 	Vector3i(5,14,0): "",#unknown
 	Vector3i(5,55,0): "",#unknown
+	Vector3i(5,71,0): "",#unknown
 	Vector3i(9,64,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
@@ -347,6 +353,12 @@ var library2 = {
 #10-70-blue mana-ok
 #10-55-hvezdicka-zbran-ok
 #5-58-gold mana-ok
+#5-71-ok
+#5-67-ok
+#5-68-ok
+#0-70-ok
+#5-67-ok
+#9-151
 
 var filter_material: ShaderMaterial
 var data_img: Image

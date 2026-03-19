@@ -46,9 +46,13 @@
 -add animations between maps
 
 -fix sound banks-ok
--fix inverse mouse
+-fix inverse mouse-ok
 -fix palette problems on exit level-ok
--fix bliking on level start
--problem after end level
+-fix bliking on level start-ok
+-problem after end level-ok
 
 sub_7A110_load_hscreen FadeClearBlit_7B5D0
+
+-bad palette maybe
+-problem with key
+-problem with mouse warp

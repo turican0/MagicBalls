@@ -68,11 +68,6 @@ mouse_filter = 2
 
 [node name="Sounds" parent="." unique_id=681772629 instance=ExtResource("8_pypg8")]
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=194762300]
-update_mode = 1
-size = Vector3(2000, 2000, 2000)
-origin_offset = Vector3(0, 5, 0)
-
 [node name="SpiderWeb" type="CanvasLayer" parent="." unique_id=1045775712]
 visible = false
 

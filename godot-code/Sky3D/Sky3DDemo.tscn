@@ -64,8 +64,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.53755516, 1.9745687e-06)
-shader_parameter/cirrus_position2 = Vector2(0.53755516, 1.9745687e-06)
+shader_parameter/cirrus_position1 = Vector2(0.05536727, 2.0337396e-07)
+shader_parameter/cirrus_position2 = Vector2(0.05536727, 2.0337396e-07)
 shader_parameter/cirrus_texture = ExtResource("6_1g8sw")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -75,7 +75,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(2.687804, 9.873084e-06)
+shader_parameter/cumulus_position = Vector2(0.2768343, 1.0168699e-06)
 shader_parameter/cumulus_texture = ExtResource("5_rt0jr")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -110,6 +110,7 @@ fog_light_color = Color(0, 0, 0, 1)
 [node name="Main" type="Node3D" unique_id=1508260845]
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=1415687904]
+visible = false
 update_mode = 1
 size = Vector3(2000, 2000, 2000)
 origin_offset = Vector3(0, 5, 0)
