@@ -1,20 +1,21 @@
-[gd_scene format=4 uid="uid://cbxrbrfv4q4os"]
+[gd_scene format=4 uid="uid://dly4cf17t5bm6"]
 
-[ext_resource type="Texture2D" uid="uid://bkip5lfi3rmfu" path="res://entites/sources/96_steel03_basecolor.jpg" id="1_krhds"]
-[ext_resource type="Texture2D" uid="uid://c4w15wqmllhnq" path="res://entites/sources/96_steel_metallic-steel_glossiness.png" id="2_7o4e6"]
-[ext_resource type="Texture2D" uid="uid://cst4ap7yapckv" path="res://entites/sources/96_steel_normal_opengl.jpg" id="3_aafcm"]
+[ext_resource type="Texture2D" uid="uid://bkip5lfi3rmfu" path="res://entites/sources/96_steel03_basecolor.jpg" id="1_c43rm"]
+[ext_resource type="Texture2D" uid="uid://c4w15wqmllhnq" path="res://entites/sources/96_steel_metallic-steel_glossiness.png" id="2_iqcrp"]
+[ext_resource type="Texture2D" uid="uid://cst4ap7yapckv" path="res://entites/sources/96_steel_normal_opengl.jpg" id="3_1hoiu"]
+[ext_resource type="Material" uid="uid://c3t80ts0mlamy" path="res://entites/sources/flags/99-mat.tres" id="4_c43rm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oe17r"]
 resource_name = "Scratched blue metal"
 cull_mode = 2
-albedo_texture = ExtResource("1_krhds")
+albedo_texture = ExtResource("1_c43rm")
 metallic = 1.0
-metallic_texture = ExtResource("2_7o4e6")
+metallic_texture = ExtResource("2_iqcrp")
 metallic_texture_channel = 2
-roughness_texture = ExtResource("2_7o4e6")
+roughness_texture = ExtResource("2_iqcrp")
 roughness_texture_channel = 1
 normal_enabled = true
-normal_texture = ExtResource("3_aafcm")
+normal_texture = ExtResource("3_1hoiu")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_dulm7"]
 _surfaces = [{
@@ -126,12 +127,6 @@ _surfaces = [{
 }]
 shadow_mesh = SubResource("ArrayMesh_csfrv")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_krhds"]
-albedo_color = Color(0, 0, 1, 1)
-emission_enabled = true
-emission = Color(0, 0, 1, 1)
-emission_energy_multiplier = 10.0
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_11ve0"]
 resource_name = "Automotive led lights.001"
 transparency = 4
@@ -214,14 +209,15 @@ transform = Transform3D(0.3090796, 0, 0, 0, 0.3090796, 0, 0, 0, 0.3090796, 0, -2
 mesh = SubResource("ArrayMesh_oaqte")
 skeleton = NodePath("")
 
-[node name="Sphere" type="MeshInstance3D" parent="." unique_id=337819790]
-transform = Transform3D(1.235807, 0, 0, 0, 1.0694846, 0, 0, 0, 1.235807, 0, -0.4822902, 0)
+[node name="Sphere2" type="MeshInstance3D" parent="." unique_id=1756210462]
+transform = Transform3D(1.236, 0, 0, 0, 1.069, 0, 0, 0, 1.236, 0, -0.482, 0)
 mesh = SubResource("ArrayMesh_ho077")
-surface_material_override/0 = SubResource("StandardMaterial3D_krhds")
+skeleton = NodePath("../Sphere_001")
+surface_material_override/0 = ExtResource("4_c43rm")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Sphere" unique_id=2064826755]
+[node name="OmniLight3D" type="OmniLight3D" parent="Sphere2" unique_id=485494623]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1784892, 0)
-light_color = Color(0, 0.8509804, 1, 1)
+light_color = Color(0, 1, 0, 1)
 light_energy = 5.0
 
 [node name="Sphere_001" type="MeshInstance3D" parent="." unique_id=1200801727]
