@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://b8mclmj0w8m70"]
+
+[ext_resource type="PackedScene" uid="uid://xmejxgr0lxvt" path="res://entites/sources/wizards/necromancer2.blend" id="1_f4emp"]
+[ext_resource type="Texture2D" uid="uid://dedm6qk04g46l" path="res://entites/sources/wizards/necromancer-texture/Image_0.jpg" id="2_wxrie"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eqcob"]
+albedo_texture = ExtResource("2_wxrie")
+
+[node name="necromancer2" unique_id=1365390532 instance=ExtResource("1_f4emp")]
+
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(293951513) index="0" unique_id=1509869059]
+bones/0/rotation = Quaternion(0.12583818, 0.0002009175, -0.00022708985, 0.9920507)
+bones/4/rotation = Quaternion(0.3283006, -0.074550994, 0.23662955, 0.9114095)
+bones/5/rotation = Quaternion(-0.13602164, 0.027220614, -0.2349351, 0.96206176)
+bones/24/rotation = Quaternion(0.90880686, -0.41203213, -0.021736778, -0.061864164)
+bones/29/rotation = Quaternion(0.913391, 0.40606463, -0.0053385864, -0.028283069)
+bones/42/rotation = Quaternion(-0.23435886, -0.4001599, 0.82615876, -0.3200151)
+bones/64/rotation = Quaternion(0.6850401, -0.4025443, -0.39584556, -0.4604177)
+bones/77/rotation = Quaternion(0.7128007, 0.42978653, 0.34631112, -0.43274397)
+bones/81/rotation = Quaternion(0.28853136, 0.8215191, 0.19080591, -0.4532649)
+bones/84/rotation = Quaternion(0.032346454, 0.7078217, 0.70564836, -0.0016048561)
+bones/85/rotation = Quaternion(0.032346718, 0.7078216, 0.7056485, -0.0016044343)
+bones/89/rotation = Quaternion(-0.13160144, 0.822496, -0.5525266, -0.029928552)
+bones/92/rotation = Quaternion(0.7790398, 0.3970067, -0.48470074, -0.023408543)
+bones/100/rotation = Quaternion(-0.24084662, 0.27975985, -0.49095225, 0.78910923)
+bones/101/rotation = Quaternion(0.40142345, -0.048125662, -0.12346584, 0.90625566)
+bones/123/rotation = Quaternion(-0.18975966, -0.63813204, 0.68128234, 0.304357)
+bones/124/rotation = Quaternion(0.45242125, -0.14885356, -0.46940213, 0.7435182)
+bones/125/rotation = Quaternion(0.10075931, 0.08958141, 0.09312379, 0.986484)
+bones/150/rotation = Quaternion(0.087541565, 1.8422046e-12, 1.0204888e-11, 0.99616086)
+
+[node name="Object_10" parent="metarig/Skeleton3D" index="0" unique_id=191972229]
+surface_material_override/0 = SubResource("StandardMaterial3D_eqcob")
+
+[node name="AnimationPlayer" parent="." index="2" unique_id=1508650255]
+autoplay = &"metarigAction"

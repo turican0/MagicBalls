@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://42vyt4xv45b1"]
+
+[ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_01vcg"]
+[ext_resource type="PackedScene" uid="uid://b8mclmj0w8m70" path="res://entites/sources/wizards/necromancer_2.tscn" id="2_01vcg"]
+
+[sub_resource type="Gradient" id="Gradient_mwkhn"]
+colors = PackedColorArray(0, 0, 1, 1, 0, 0.74509805, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_n08pu"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ila4u"]
+noise = SubResource("FastNoiseLite_n08pu")
+color_ramp = SubResource("Gradient_mwkhn")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bjjno"]
+albedo_texture = SubResource("NoiseTexture2D_ila4u")
+
+[node name="Node3D" type="Node3D" unique_id=872675572]
+
+[node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_01vcg")]
+
+[node name="necromancer3" parent="Sketchfab_Scene" unique_id=1365390532 instance=ExtResource("2_01vcg")]
+transform = Transform3D(-2.2, 0, -1.923301e-07, 0, 2.2, 0, 1.923301e-07, 0, -2.2, 0, 0, 0)
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Sketchfab_Scene/necromancer3" unique_id=1773880973]
+transform = Transform3D(-0.6, 0, 6.8099105e-08, 0, 0.6, 0, -9.0597496e-08, 0, -0.451, 7.285847e-09, 1.1068726, -0.08334038)
+inner_radius = 0.4
+outer_radius = 0.5
+sides = 20
+ring_sides = 10
+material = SubResource("StandardMaterial3D_bjjno")

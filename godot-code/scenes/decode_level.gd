@@ -157,6 +157,7 @@ var library = {
 	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
 	Vector3i(3,97,0): "res://entites/object_3_97_posses_building-redD.tscn",#castle -difmodels!!!
 	Vector3i(3,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#castle -difmodels!!!
+	Vector3i(3,203,0): "res://entites/object_3_203_sorcerer-blue.tscn",
 	Vector3i(3,211,0): "res://entites/object_3_211_sorcerer.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "res://entites/object_3_251_sorcerer-green.tscn",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
@@ -221,6 +222,7 @@ var library = {
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK
 	Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion-final-OK
+	Vector3i(10,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star-special
 	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1-OK
 	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",#goldMana -OK
 	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
@@ -341,7 +343,7 @@ var library2 = {
 
 #2-422-sud-ok
 #3-203-osmy kouzelnik-blue
-#3-99-modra vlajka hradu
+#3-99-modra vlajka hradu-ok
 #10-70-blue mana-ok
 #10-55-hvezdicka-zbran-ok
 #5-58-gold mana-ok
