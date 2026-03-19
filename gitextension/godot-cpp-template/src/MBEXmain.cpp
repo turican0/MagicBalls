@@ -1760,6 +1760,8 @@ Array MBEXclass::getPaletteModifications() {
 	return result;
 }
 
+int game_paused = 0;
+
 void handleInputs(Dictionary inputs,int type) {
 	LastPressedKey_1806E4 = 0;
 	//type==0 game
@@ -1819,6 +1821,10 @@ void handleInputs(Dictionary inputs,int type) {
 					} else
 						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
 				}
+				break;
+			case 0x1970: //P - pause
+				if (is_pressed)
+					game_paused = 1 - game_paused;
 				break;
 			case 0x256b: //K - kill all creatures - cheat
 				KillAllCreatures_1B5F0();
@@ -2349,7 +2355,8 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			else
 				handleInputs(inputs, 2);
 				//thread2_continue(Thread1_State::CONTINUE);
-				thread1_wait_for_continue(Thread1_State::CONTINUE);
+				if (!game_paused)
+					thread1_wait_for_continue(Thread1_State::CONTINUE);
 				Ref<Image> img;
 				if (inGameBeginSteps > 1 && graphics_enhance)
 					img = getScrBufferImg(MyUiBackGroundColorIdx);//NIGHT 254 or 10, cave 254 or 10, day 254 or 28
