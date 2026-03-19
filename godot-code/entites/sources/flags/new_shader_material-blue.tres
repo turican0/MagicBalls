@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c6bluxygefu4f"]
+
+[ext_resource type="Shader" uid="uid://bksggbossjlfr" path="res://entites/sources/flags/flag.gdshader" id="1_xwjcj"]
+[ext_resource type="Texture2D" uid="uid://dflumk7n7003c" path="res://entites/sources/flags/textures/flagCREST-clean-blue.png" id="2_xwjcj"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_xwjcj")
+shader_parameter/speed = 1.0
+shader_parameter/frequency_y = 5.0
+shader_parameter/frequency_x = 2.5
+shader_parameter/frequency_z = 2.5
+shader_parameter/amplitude_y = 0.1
+shader_parameter/amplitude_x = 0.05
+shader_parameter/amplitude_z = 0.05
+shader_parameter/inclination = -0.04
+shader_parameter/tex = ExtResource("2_xwjcj")

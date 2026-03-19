@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://blbl6k7lbnx4"]
+
+[ext_resource type="Script" uid="uid://b2f4a3jyswfec" path="res://entites/object_10_96_posses_building_d.gd" id="1_rtitw"]
+[ext_resource type="PackedScene" uid="uid://i8bqukwbxyg1" path="res://entites/sources/flags/flag-blue.tscn" id="2_rtitw"]
+[ext_resource type="Material" uid="uid://dtcl2ttgxx0yc" path="res://entites/sources/flags/perl-red.tres" id="3_5b0q6"]
+
+[node name="Node3D" type="Node3D" unique_id=1032799002]
+script = ExtResource("1_rtitw")
+
+[node name="flag" parent="." unique_id=1504280980 instance=ExtResource("2_rtitw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.2, 0)
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="flag" unique_id=1351371695]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.1, 2.865, 0)
+polygon = PackedVector2Array(0.33271074, 1.133889, 0.2435562, 0.7767403, 0.70090073, 0.8964443, 0.39496756, 0.57766104, 0.99752825, 0.34919763, 0.24987614, 0.24976659, 0.57880217, -0.10614109, 0, 0, 0, 1)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 3
+material = ExtResource("3_5b0q6")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="flag/CSGPolygon3D2" unique_id=1159626976]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+polygon = PackedVector2Array(0.33271074, 1.133889, 0.2435562, 0.7767403, 0.70090073, 0.8964443, 0.39496756, 0.57766104, 0.99752825, 0.34919763, 0.24987614, 0.24976659, 0.57880217, -0.10614109, 0, 0, 0, 1)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 3
+material = ExtResource("3_5b0q6")
