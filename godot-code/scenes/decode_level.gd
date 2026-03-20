@@ -679,7 +679,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					scale_scene_node.scale = Vector3(s, s, s)
 			var entityScale = 1.0
 			if actState == 0x29 and actClass == 0xA and actModel == 0x27: # manSphere
-				entityScale = pow(actMana, 1.0 / 3.0) * 0.2
+				entityScale = pow(actMana, 1.0 / 3.0) * 0.1
 			current_node.scale = Vector3(entityScale, entityScale, entityScale)
 			var base_pos_x = data_array[offset] * inv_256
 			var base_pos_y = data_array[offset + 2] * inv_256

@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://i38ypibynbx4"]
 
-[ext_resource type="PackedScene" uid="uid://dnowequ6fhd2t" path="res://entites/sources/centipede/flying_centipede_head.glb" id="1_r00fb"]
+[ext_resource type="PackedScene" uid="uid://ccsb5v1vgmltj" path="res://entites/sources/centipede/flying_centipede_head.tscn" id="1_r00fb"]
 
 [node name="Node3D" type="Node3D" unique_id=1054586605]
 
-[node name="flying_centipede_head" parent="." unique_id=302582655 instance=ExtResource("1_r00fb")]
+[node name="flying_centipede_head2" parent="." unique_id=85759305 instance=ExtResource("1_r00fb")]
 transform = Transform3D(-1.8, 0, -1.57361e-07, 0, 1.8, 0, 1.57361e-07, 0, -1.8, 0, 0.7, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="flying_centipede_head2" unique_id=222392201]
+transform = Transform3D(-1, 0, -8.7422784e-08, 0, 1, 0, 8.7422784e-08, 0, -1, 0.26249313, 4.075507, -0.03145933)
+light_color = Color(0, 0, 0, 1)

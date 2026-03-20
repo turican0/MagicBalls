@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://civbopw7yao6q"]
 
-[ext_resource type="PackedScene" uid="uid://cgrxkmdg0rmb3" path="res://entites/sources/centipede/flying_centipede_body-text.glb" id="2_swerv"]
+[ext_resource type="PackedScene" uid="uid://cks75cpfsfvbh" path="res://entites/sources/centipede/flying_centipede_body_text.tscn" id="1_y0avl"]
 
 [node name="Node3D" type="Node3D" unique_id=1391184386]
 
 [node name="Scale" type="Node3D" parent="." unique_id=1409433205]
 
-[node name="flying_centipede_body-text" parent="Scale" unique_id=2073103559 instance=ExtResource("2_swerv")]
+[node name="flying_centipede_body-text2" parent="Scale" unique_id=2007778101 instance=ExtResource("1_y0avl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Scale/flying_centipede_body-text2" unique_id=849072177]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.27626, 0)

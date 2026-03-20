@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cks75cpfsfvbh"]
+
+[ext_resource type="PackedScene" uid="uid://cgrxkmdg0rmb3" path="res://entites/sources/centipede/flying_centipede_body-text.glb" id="1_clase"]
+[ext_resource type="Texture2D" uid="uid://dq2hafq3ux5py" path="res://entites/sources/centipede/flying_centipede_body-text_0.png" id="2_kof3r"]
+[ext_resource type="Texture2D" uid="uid://g5h8exit12tq" path="res://entites/sources/centipede/flying_centipede_body-text_0-emm.png" id="3_wqmiy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_enkr5"]
+albedo_texture = ExtResource("2_kof3r")
+emission_enabled = true
+emission_energy_multiplier = 0.05
+emission_texture = ExtResource("3_wqmiy")
+
+[node name="flying_centipede_body-text" unique_id=2007778101 instance=ExtResource("1_clase")]
+
+[node name="geometry_0" parent="world" parent_id_path=PackedInt32Array(261481176) index="0" unique_id=1581809828]
+surface_material_override/0 = SubResource("StandardMaterial3D_enkr5")
