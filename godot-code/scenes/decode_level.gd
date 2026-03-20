@@ -263,6 +263,7 @@ var library2 = {
 	Vector3i(0,0,0): "",#unknown
 	Vector3i(3,0,0): "",#unknown
 	Vector3i(3,88,0): "",#unknown
+	Vector3i(3,203,0): "",#sorcerer-blue xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,211,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
 	Vector3i(0,8,0): "",#unknown
@@ -624,15 +625,12 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			Main_Player.LIFE = actLife
 			Main_Player.MANA = actMana
 		
-		if modelIndex == 251:
-			modelIndex+=0
-
 		var updateObject=false
 		var current_node = null
 		if not (actByte1 & 4):
 			var isDraw = (actByte0 & 1) == 0
-			if actClass == 3 and (modelIndex == 211 or modelIndex == 251) and actLife <= 0:
-				isDraw = false
+			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 251) and actLife <= 0:
+				isDraw = false#noDraw dead sorcerers
 			var fromlib = false
 			var uid2 = Vector3i(actClass,modelIndex,0)
 			var scene_to_instance = null

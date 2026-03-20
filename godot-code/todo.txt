@@ -55,5 +55,5 @@ sub_7A110_load_hscreen FadeClearBlit_7B5D0
 
 -bad palette maybe-ok
 -problem with key-maybe ok
--problem with mouse warp
--remove blue sorcerer after dead
+-problem with mouse warp-ok
+-remove blue sorcerer after dead-ok
