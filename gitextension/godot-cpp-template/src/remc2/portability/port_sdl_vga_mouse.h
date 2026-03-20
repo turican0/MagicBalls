@@ -89,6 +89,9 @@ extern uint8_t tempVGABuffer[];
 extern int warpMouseX;
 extern int warpMouseY;
 extern bool warpMouseIs;
+extern bool globalMouseWarp;
+
+void SetMouseWarp(bool mouseWarp);
 
 POSITION VGA_GetResolution();
 

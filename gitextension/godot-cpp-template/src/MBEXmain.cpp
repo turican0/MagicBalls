@@ -2343,17 +2343,19 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 	switch (stage) {
 		case 0:
 			{
-			if (thread2_state == Thread2_State::IN_GAME_LOOP)
-			{
-				handleInputs(inputs, 0);
-				if (inGameBeginSteps < 10) {
-					if (inGameBeginSteps == 0)
-						graphics_enhance = 1;
-					inGameBeginSteps++;
+				if (thread2_state == Thread2_State::IN_GAME_LOOP)
+				{
+					SetMouseWarp(true);
+					handleInputs(inputs, 0);
+					if (inGameBeginSteps < 10) {
+						if (inGameBeginSteps == 0)
+							graphics_enhance = 1;
+						inGameBeginSteps++;
+					}
+				} else {
+					SetMouseWarp(false);
+					handleInputs(inputs, 2);
 				}
-			}
-			else
-				handleInputs(inputs, 2);
 				//thread2_continue(Thread1_State::CONTINUE);
 				if (!game_paused)
 					thread1_wait_for_continue(Thread1_State::CONTINUE);

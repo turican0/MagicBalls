@@ -471,9 +471,14 @@ int events()
 int warpMouseX = 0;
 int warpMouseY = 0;
 bool warpMouseIs = false;
+bool globalMouseWarp = false;
+
+void SetMouseWarp(bool mouseWarp){
+	globalMouseWarp = mouseWarp;
+};
 
 void VGA_Set_mouse(const int16_t x, const int16_t y, bool warp_mouse) {
-	if (warp_mouse) {
+	if (warp_mouse || globalMouseWarp) {
 		warpMouseX = x;
 		warpMouseY = y;
 		warpMouseIs = true;
