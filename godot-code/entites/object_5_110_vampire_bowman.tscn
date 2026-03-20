@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=269749299]
 
 [node name="skeleton-crossbow-bake2" parent="." unique_id=2044310852 instance=ExtResource("1_ny6jc")]
-transform = Transform3D(-1.7, 0, -1.4861872e-07, 0, 1.7, 0, 1.4861872e-07, 0, -1.7, 0, 0, 0)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 0, 0)

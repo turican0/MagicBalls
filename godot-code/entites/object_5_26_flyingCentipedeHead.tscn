@@ -8,5 +8,5 @@
 transform = Transform3D(-1.8, 0, -1.57361e-07, 0, 1.8, 0, 1.57361e-07, 0, -1.8, 0, 0.7, 0)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="flying_centipede_head2" unique_id=222392201]
-transform = Transform3D(-1, 0, -8.7422784e-08, 0, 1, 0, 8.7422784e-08, 0, -1, 0.26249313, 4.075507, -0.03145933)
-light_color = Color(0, 0, 0, 1)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 0.4, 0)
+omni_range = 4.0

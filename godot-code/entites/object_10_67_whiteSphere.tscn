@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bdw3j48jhug0b"]
+[gd_scene format=3 uid="uid://bdw3j48jhug0b"]
 
 [sub_resource type="Gradient" id="Gradient_mvjvp"]
 colors = PackedColorArray(0.8474744, 0.84747446, 0.84747446, 1, 1, 1, 1, 1)
@@ -30,8 +30,12 @@ clearcoat_enabled = true
 [sub_resource type="SphereMesh" id="SphereMesh_2ml7a"]
 material = SubResource("StandardMaterial3D_ak2ch")
 
-[node name="MeshInstance3D" type="Node3D"]
+[node name="MeshInstance3D" type="Node3D" unique_id=897053177]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1204894747]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("SphereMesh_2ml7a")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="MeshInstance3D" unique_id=1443395721]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 2, 0)
+omni_range = 3.0

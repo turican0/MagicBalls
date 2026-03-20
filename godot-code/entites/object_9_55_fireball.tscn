@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bysqknbwpuxbd" path="res://entites/sources/bullets/star/star.tscn" id="1_w51rj"]
 
 [sub_resource type="Curve" id="Curve_1opbh"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.95786506, 0.15435505), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.28089893), 0.0, 0.0, 0, 0, Vector2(1, 0.123595595), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_to0ql"]
@@ -34,7 +34,7 @@ material = SubResource("StandardMaterial3D_to0ql")
 [node name="Node3D" type="Node3D" unique_id=347306834]
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1745473769]
-amount = 20
+amount = 10
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_7hled")
 draw_pass_1 = SubResource("QuadMesh_6iq6v")
@@ -45,4 +45,4 @@ light_color = Color(1, 0.5411765, 0, 1)
 light_energy = 16.0
 
 [node name="star" parent="." unique_id=2108005646 instance=ExtResource("1_w51rj")]
-transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, -0.5, 0, 0.5, -2.1855694e-08, 0, 0, 0)
+transform = Transform3D(0.2, 0, 0, 0, -8.742278e-09, -0.2, 0, 0.2, -8.742278e-09, 0, 0, 0)

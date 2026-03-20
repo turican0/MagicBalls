@@ -5,7 +5,7 @@
 [node name="Node3D" type="Node3D" unique_id=1449551978]
 
 [node name="Sketchfab_Scene2" parent="." unique_id=1184341939 instance=ExtResource("1_0gwlc")]
-transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 0, 0)
+transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0, 0, 0)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene2" unique_id=1499104716]
 transform = Transform3D(1, 0, 2.1316282e-14, 0, 1, 0, -2.1316282e-14, 0, 1, 0, 2.0768309, -1.5)
