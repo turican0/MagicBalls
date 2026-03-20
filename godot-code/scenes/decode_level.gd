@@ -377,10 +377,6 @@ func _ready():
 	#for i in range(pool_size):
 		#node_pool[i] = null
 
-func _input(event):
-	if event is InputEventMouseMotion:
-		total_mouse_delta += event.relative
-
 var last_spell_index:int =-1
 var last_button:int =-1
 
@@ -706,7 +702,81 @@ var mouse_640: Vector2
 const SCREEN_WIDTH := 640
 const SCREEN_HEIGHT := 480
 
+var _pending_key_changes: Array = []
+var _pending_mouse_changes: Array = []
+#var last_keys_state: Dictionary = {}
+#var last_mouse_buttons_state: Dictionary = {}
+#var input_state: Dictionary = {}
+#var total_mouse_delta: Vector2 = Vector2.ZERO
+#var mouse_640: Vector2 = Vector2.ZERO
+
+func _notification(what):
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		_release_all_inputs()
+
+func _input(event):
+	if event is InputEventMouseMotion:
+		total_mouse_delta += event.relative
+	if event is InputEventKey and not event.echo:
+		if event.keycode in KEY_INDEX:
+			var index = KEY_INDEX[event.keycode]
+			var is_pressed: bool = event.pressed
+			if last_keys_state.get(index, false) != is_pressed:
+				last_keys_state[index] = is_pressed
+				_pending_key_changes.append({
+					"key_index": index,
+					"action": "pressed" if is_pressed else "released"
+			})
+
+	if event is InputEventMouseButton:
+		if event.button_index in MOUSE_BUTTON_INDEX:
+			var index = MOUSE_BUTTON_INDEX[event.button_index]
+			var is_pressed: bool = event.pressed
+			if last_mouse_buttons_state.get(index, false) != is_pressed:
+				last_mouse_buttons_state[index] = is_pressed
+				_pending_mouse_changes.append({
+					"button_index": index,
+					"action": "pressed" if is_pressed else "released"
+				})
+
+func _release_all_inputs():
+	for index in last_keys_state:
+		if last_keys_state[index] == true:
+			_pending_key_changes.append({
+				"key_index": index,
+				"action": "released"
+			})
+			last_keys_state[index] = false
+
+	for index in last_mouse_buttons_state:
+		if last_mouse_buttons_state[index] == true:
+			_pending_mouse_changes.append({
+				"button_index": index,
+				"action": "released"
+			})
+			last_mouse_buttons_state[index] = false
+
 func getInputs():
+	var key_changes = _pending_key_changes
+	var mouse_changes = _pending_mouse_changes
+	_pending_key_changes = []
+	_pending_mouse_changes = []
+	mouse_640 = Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+	mouse_640 += total_mouse_delta * 0.2
+	mouse_640.x = clamp(mouse_640.x, 0, SCREEN_WIDTH)
+	mouse_640.y = clamp(mouse_640.y, 0, SCREEN_HEIGHT)
+	var real_mouse_pos = get_viewport().get_mouse_position()
+	var screen_size = get_viewport().get_visible_rect().size
+	var m_x = clamp((real_mouse_pos.x / screen_size.x) * SCREEN_WIDTH, 0, SCREEN_WIDTH)
+	var m_y = clamp((real_mouse_pos.y / screen_size.y) * SCREEN_HEIGHT, 0, SCREEN_HEIGHT)
+	input_state = {
+		"key_changes": key_changes,
+		"mouse_button_changes": mouse_changes,
+		"mouse_pos": mouse_640,
+		"mouse_pos2": Vector2(m_x, m_y)
+	}
+
+func getInputsX():
 	var changes = []
 	#if Main_UI && Main_UI.is_ctrl_active:
 		#return
