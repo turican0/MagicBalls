@@ -95,7 +95,6 @@ public:
 	void setPlayerActiveSpell(int spell_index, int button);
 	void setPlayerActiveSubSpell(int spell_index, int sub_spell_index, int button);
 	Array getPaletteModifications();
-	Ref<Image> getMinimap();
 	void convertOriginalData(String path, String path2);
 	void convertOriginalDataExtractCD(String path, String path2);
 	Array getPendingSoundActions();

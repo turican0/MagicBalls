@@ -1514,10 +1514,11 @@ void DrawGameFrame_2BE30_mod() //20CE30
 		case 0xC:
 		case 0xE:
 			playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
-			if (x_WORD_180660_VGA_type_resolution & 1)
-				ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, uiBackGroundColorIdx_EB3A8);
-			else
-				ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, uiBackGroundColorIdx_EB3A8);
+			if (graphics_enhance == GRAPHICS_ENHANCE_OFF)
+				if (x_WORD_180660_VGA_type_resolution & 1)
+					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, 320, 200, uiBackGroundColorIdx_EB3A8);
+				else
+					ClearGraphicsBuffer_72883((void *)pdwScreenBuffer_351628, screenWidth_18062C, screenHeight_180624, uiBackGroundColorIdx_EB3A8);
 
 			int locViewportPosx;
 			int locViewportWidth;
@@ -1574,14 +1575,15 @@ void DrawGameFrame_2BE30_mod() //20CE30
 
 			viewPort.SetRenderViewPortSize_40BF0(locViewportPosx, 0, locViewportWidth, locViewportHeight);
 
-			m_ptrGameRender->DrawWorld_411A0(
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.x,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.y,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.z + 128,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.pitch,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.roll,
-					D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.fov);
+			if (graphics_enhance == GRAPHICS_ENHANCE_OFF)
+				m_ptrGameRender->DrawWorld_411A0(
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.x,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.y,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.yaw,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].axis_2BDE_11695.z + 128,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.pitch,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.roll,
+						D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].struct_0x1d1_2BDE_11695[actPlayerIndex + 1].rotation__2BDE_11701.fov);
 			/*
 			if (CommandLineParams.DoTestRenderers()) {
 				memcpy(help_ScreenBuffer, pdwScreenBuffer_351628, screenWidth_18062C * screenHeight_180624);
