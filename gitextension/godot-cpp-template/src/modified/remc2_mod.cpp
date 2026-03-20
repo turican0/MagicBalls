@@ -1419,7 +1419,16 @@ void DrawGameFrame_2BE30_mod() //20CE30
 				if (D41A0_0.m_GameSettings.m_Display.m_wMiniMap) {
 					//added code
 					if (graphics_enhance)
-						draw_minimap_circle(0,0,128 * scale,128 * scale,0);
+						switch (D41A0_0.terrain_2FECE.MapType) {
+							case MapType_t::Day: {
+								draw_minimap_circle(0, 0, 128 * scale, 128 * scale, 107);//blue
+								break;
+							}
+							default: {
+								draw_minimap_circle(0, 0, 128 * scale, 128 * scale, 0);//black
+								break;
+							}
+						}
 					//added code
 
 					DrawMinimap_63600( //draw minimap
