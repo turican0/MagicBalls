@@ -1123,6 +1123,7 @@ Array MBEXclass::getPaletteModifications() {
 }
 
 int game_paused = 0;
+bool oneFrameRun = false;
 
 void handleInputs(Dictionary inputs,int type) {
 	LastPressedKey_1806E4 = 0;
@@ -1182,6 +1183,7 @@ void handleInputs(Dictionary inputs,int type) {
 						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
 					} else
 						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
+					oneFrameRun = true;
 				}
 				break;
 			case 0x1970: //P - pause
@@ -1714,24 +1716,24 @@ int inGameBeginSteps = 0;
 
 int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 	switch (stage) {
-		case 0:
-			{
-				if (thread2_state == Thread2_State::IN_GAME_LOOP)
-				{
-					SetMouseWarp(true);
-					handleInputs(inputs, 0);
-					if (inGameBeginSteps < 10) {
-						if (inGameBeginSteps == 0)
-							graphics_enhance = 1;
-						inGameBeginSteps++;
-					}
-				} else {
-					SetMouseWarp(false);
-					handleInputs(inputs, 2);
+		case 0: {
+			if (thread2_state == Thread2_State::IN_GAME_LOOP) {
+				SetMouseWarp(true);
+				handleInputs(inputs, 0);
+				if (inGameBeginSteps < 10) {
+					if (inGameBeginSteps == 0)
+						graphics_enhance = 1;
+					inGameBeginSteps++;
 				}
-				//thread2_continue(Thread1_State::CONTINUE);
-				if (!game_paused)
-					thread1_wait_for_continue(Thread1_State::CONTINUE);
+			} else {
+				SetMouseWarp(false);
+				handleInputs(inputs, 2);
+			}
+			//thread2_continue(Thread1_State::CONTINUE);
+			if (!game_paused || oneFrameRun) {
+				thread1_wait_for_continue(Thread1_State::CONTINUE);
+				oneFrameRun = false;
+			}
 				Ref<Image> img;
 				if (inGameBeginSteps > 1 && graphics_enhance)
 					img = getScrBufferImg(MyUiBackGroundColorIdx);//NIGHT 254 or 10, cave 254 or 10, day 254 or 28
