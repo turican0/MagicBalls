@@ -1826,6 +1826,17 @@ void handleInputs(Dictionary inputs,int type) {
 				if (is_pressed)
 					game_paused = 1 - game_paused;
 				break;
+			case 0x1c0d: //Enter - chnage map type
+				if (is_pressed)
+					mainSetPress(is_pressed, key_index);
+				break;
+			case 0x1675: //U - destroy castle
+				if (is_pressed) {
+					type_entity_0x6E8E* event = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+					if (event->dword_0xA4_164x->CastleEntityIndex_0x3A_58)
+						HandleButtonClick_191B0(42, 0);
+				}
+				break;
 			case 0x256b: //K - kill all creatures - cheat
 				KillAllCreatures_1B5F0();
 			case 0x3f00://F5
