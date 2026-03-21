@@ -9,3 +9,4 @@ transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1
 
 [node name="OmniLight3D" type="OmniLight3D" parent="hopperPoses" unique_id=1843348626]
 transform = Transform3D(1, 0, 2.2737368e-14, 0, 1, 0, -2.2737368e-14, 0, 1, 0, 12, 0)
+light_energy = 0.5
