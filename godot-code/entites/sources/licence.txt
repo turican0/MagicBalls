@@ -128,3 +128,6 @@ https://sketchfab.com/3d-models/barrel-31f97a56576548c388e057010afc6914
 imp:
 https://sketchfab.com/3d-models/hellish-imp-01-f4f361ed0bcf4782a3dae72264faefba
 https://sketchfab.com/3d-models/demon-from-hell-5ef4210b29434347b9d7e776eb36ff37
+
+fire:
+	https://unity.com/blog/engine-platform/free-vfx-image-sequences-flipbooks

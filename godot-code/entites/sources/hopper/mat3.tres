@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c0lhdng5ykudg"]
+
+[ext_resource type="Texture2D" uid="uid://day8k0gskjna5" path="res://entites/sources/hopper/textures/Image_0.png" id="1_fp84t"]
+[ext_resource type="Texture2D" uid="uid://c5py1m5yavdco" path="res://entites/sources/hopper/textures/Image_1.png" id="2_2yrhf"]
+[ext_resource type="Texture2D" uid="uid://df5jh6dws6cks" path="res://entites/sources/hopper/textures/Image_2.png" id="3_7fgij"]
+
+[resource]
+resource_name = "cuerpo.001"
+cull_mode = 2
+albedo_texture = ExtResource("1_fp84t")
+normal_enabled = true
+normal_texture = ExtResource("3_7fgij")
+ao_enabled = true
+ao_texture = ExtResource("2_2yrhf")
+metadata/extras = {
+"blenderkit": {}
+}

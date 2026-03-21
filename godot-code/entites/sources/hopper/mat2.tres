@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c56woa2yqdh3q"]
+
+[ext_resource type="Texture2D" uid="uid://cncb6nhxj7nea" path="res://entites/sources/hopper/textures/Image_3.png" id="1_qqvjg"]
+[ext_resource type="Texture2D" uid="uid://bwr5ott0vkyr1" path="res://entites/sources/hopper/textures/Image_5.png" id="3_w4wuy"]
+
+[resource]
+resource_name = "dientes.001"
+cull_mode = 2
+albedo_texture = ExtResource("1_qqvjg")
+normal_enabled = true
+normal_texture = ExtResource("3_w4wuy")
+metadata/extras = {
+"blenderkit": {}
+}

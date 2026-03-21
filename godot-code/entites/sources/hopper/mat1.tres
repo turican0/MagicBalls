@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://yo1tufd4tsjj"]
+
+[ext_resource type="Texture2D" uid="uid://d1d5jqw6vfvr1" path="res://entites/sources/hopper/textures/Image_6.png" id="1_icqj8"]
+[ext_resource type="Texture2D" uid="uid://e5f1yahlpqji" path="res://entites/sources/hopper/textures/Image_8.png" id="3_n42h8"]
+
+[resource]
+resource_name = "garras.001"
+cull_mode = 2
+albedo_texture = ExtResource("1_icqj8")
+normal_enabled = true
+normal_texture = ExtResource("3_n42h8")
+metadata/extras = {
+"blenderkit": {}
+}

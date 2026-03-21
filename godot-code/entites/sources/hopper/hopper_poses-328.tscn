@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://c0yl8t2ac423m"]
 
 [ext_resource type="PackedScene" uid="uid://d01q23pnflyo8" path="res://entites/sources/hopper/hopperPoses.blend" id="1_0cl7k"]
+[ext_resource type="Material" uid="uid://yo1tufd4tsjj" path="res://entites/sources/hopper/mat1.tres" id="2_udn8g"]
+[ext_resource type="Material" uid="uid://c56woa2yqdh3q" path="res://entites/sources/hopper/mat2.tres" id="3_2fmay"]
+[ext_resource type="Material" uid="uid://c0lhdng5ykudg" path="res://entites/sources/hopper/mat3.tres" id="4_e3826"]
 
 [node name="hopperPoses" unique_id=1451981561 instance=ExtResource("1_0cl7k")]
 
@@ -37,3 +40,8 @@ bones/148/rotation = Quaternion(0.9478772, -0.10398811, 0.09362751, 0.28626764)
 bones/149/rotation = Quaternion(0.63994384, -0.07333778, 0.054203004, 0.7629912)
 bones/150/rotation = Quaternion(-0.449677, -0.05654544, -0.034173224, 0.8907444)
 bones/151/rotation = Quaternion(-2.6245333e-08, 0.79918796, -0.60108125, 1.6631125e-07)
+
+[node name="Object_6" parent="metarig/Skeleton3D" index="0" unique_id=1141793065]
+surface_material_override/0 = ExtResource("2_udn8g")
+surface_material_override/1 = ExtResource("3_2fmay")
+surface_material_override/2 = ExtResource("4_e3826")

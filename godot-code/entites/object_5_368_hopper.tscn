@@ -6,3 +6,6 @@
 
 [node name="hopperPoses" parent="." unique_id=1451981561 instance=ExtResource("1_eggoc")]
 transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="hopperPoses" unique_id=567505259]
+transform = Transform3D(1, 0, 1.7053026e-14, 0, 1, 0, -1.7053026e-14, 0, 1, 0, 12, 0)
