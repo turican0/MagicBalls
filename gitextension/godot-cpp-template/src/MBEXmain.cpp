@@ -1190,11 +1190,15 @@ void handleInputs(Dictionary inputs,int type) {
 				if (is_pressed)
 					game_paused = 1 - game_paused;
 				break;
-			case 0x1c0d: //Enter - chnage map type
+			case 0x186f: //O - one step in pause mode
+				if (game_paused)
+					oneFrameRun = true;
+				break;
+			case 0x1c0d: //Enter - change map type
 				if (is_pressed)
 					mainSetPress(is_pressed, key_index);
 				break;
-			case 0x1675: //U - destroy castle
+			case 0x266c: //L - destroy castle
 				if (is_pressed) {
 					type_entity_0x6E8E* event = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 					if (event->dword_0xA4_164x->CastleEntityIndex_0x3A_58)
@@ -1718,17 +1722,20 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 	switch (stage) {
 		case 0: {
 			if (thread2_state == Thread2_State::IN_GAME_LOOP) {
-				SetMouseWarp(true);
-				handleInputs(inputs, 0);
 				if (inGameBeginSteps < 10) {
 					if (inGameBeginSteps == 0)
 						graphics_enhance = 1;
 					inGameBeginSteps++;
 				}
+			}
+			if (inGameBeginSteps > 0) {
+				SetMouseWarp(true);
+				handleInputs(inputs, 0);
 			} else {
 				SetMouseWarp(false);
 				handleInputs(inputs, 2);
 			}
+
 			//thread2_continue(Thread1_State::CONTINUE);
 			if (!game_paused || oneFrameRun) {
 				thread1_wait_for_continue(Thread1_State::CONTINUE);

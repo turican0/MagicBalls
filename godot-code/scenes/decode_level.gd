@@ -360,7 +360,17 @@ var library2 = {
 #0-70-ok
 #5-67-ok
 #9-151
-#5-352-skokan
+#5-352-skokan---------------
+#328	335	levá noha pokrčena v koleni, nahoře	ctvrta
+#336	343	pravá noha mírně za levou, obě na zemi	pata
+#344	351	pravá noha mírně za levou, obě na zemi, tělo mírně přikrčené	sesta
+#352	359	pravá noha mírně za levou, obě na zemi, tělo více přikrčené	první
+#360	367	levá noha před pravou v nákroku, obě na zemi	druha
+#368	375	levá noha pokrčena v koleni, nahoře, pravá téměř natažena	treti
+#376	383	nohy kousek od sebe stojací postoj	
+			#
+#384	391	samotná horní část těla z předchozího kroku	
+
 
 var filter_material: ShaderMaterial
 var data_img: Image

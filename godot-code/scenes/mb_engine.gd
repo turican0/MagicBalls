@@ -11,7 +11,7 @@ var LoadScrRect:TextureRect
 var FlagRect:TextureRect
 
 func init():
-	Engine.max_fps = 60
+	Engine.max_fps = 30
 	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
 	#Global.loadScreenInit()
 	Main_DecodeLevel.MBEXinit()
