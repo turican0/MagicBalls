@@ -1,8 +1,55 @@
 [gd_scene format=3 uid="uid://bwtrsaj0l72pr"]
 
-[ext_resource type="PackedScene" uid="uid://dg01pbjdwm2x5" path="res://entites/sources/fire/Godot-Spatial-Fire-Raymarched-main/Assets/Campfire/campfire.tscn" id="1_arcym"]
+[ext_resource type="Texture2D" uid="uid://ltg14knb2mn8" path="res://assets/fire-animations/FireBall04_8x8.png" id="1_arcym"]
+
+[sub_resource type="Curve" id="Curve_he1fv"]
+_data = [Vector2(0, 0.44943827), 0.0, 0.0, 0, 0, Vector2(0.57803464, 0.19101131), -0.8575676, -0.8575676, 0, 0, Vector2(1, 0), -0.53995043, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_p6xwg"]
+curve = SubResource("Curve_he1fv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g15h1"]
+emission_shape_scale = Vector3(2, 2, 2)
+emission_shape = 3
+emission_box_extents = Vector3(0.1, 0, 0.1)
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 1.5
+initial_velocity_max = 1.5
+gravity = Vector3(0, 0, 0)
+scale_max = 1.8
+scale_curve = SubResource("CurveTexture_p6xwg")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+turbulence_enabled = true
+turbulence_noise_strength = 0.1
+turbulence_noise_scale = 2.0
+turbulence_influence_min = 0.05
+turbulence_influence_max = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o5qj7"]
+transparency = 1
+blend_mode = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_arcym")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 8
+particles_anim_v_frames = 8
+particles_anim_loop = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_8pwev"]
+material = SubResource("StandardMaterial3D_o5qj7")
 
 [node name="Node3D" type="Node3D" unique_id=578660859]
 
-[node name="Campfire" parent="." unique_id=1989401031 instance=ExtResource("1_arcym")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1371416148]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+amount = 100
+process_material = SubResource("ParticleProcessMaterial_g15h1")
+draw_pass_1 = SubResource("QuadMesh_8pwev")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="GPUParticles3D" unique_id=1063344738]
+light_color = Color(1, 0.5058824, 0, 1)
+light_energy = 3.0

@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bysqknbwpuxbd" path="res://entites/sources/bullets/star/star.tscn" id="1_w51rj"]
 
 [sub_resource type="Curve" id="Curve_1opbh"]
-_data = [Vector2(0, 0.28089893), 0.0, 0.0, 0, 0, Vector2(1, 0.123595595), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.28089893), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_to0ql"]
@@ -13,8 +13,8 @@ curve = SubResource("Curve_1opbh")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7hled"]
 direction = Vector3(0, 0, 0)
 spread = 180.0
-initial_velocity_min = 1.5
-initial_velocity_max = 3.0
+initial_velocity_min = 0.5
+initial_velocity_max = 0.5
 gravity = Vector3(0, 0, 0)
 linear_accel_min = 9.999997
 linear_accel_max = 9.999997
@@ -35,7 +35,7 @@ material = SubResource("StandardMaterial3D_to0ql")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1745473769]
 amount = 10
-lifetime = 0.5
+lifetime = 0.3
 process_material = SubResource("ParticleProcessMaterial_7hled")
 draw_pass_1 = SubResource("QuadMesh_6iq6v")
 
