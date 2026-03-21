@@ -24,17 +24,17 @@ grow_amount = 11.26
 
 [node name="Sketchfab_Scene" unique_id=960527081 instance=ExtResource("1_6ldtt")]
 
-[node name="UnstableStarCore" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode" parent_id_path=PackedInt32Array(416510957) index="0" unique_id=118517077]
+[node name="UnstableStarCore" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode" parent_id_path=PackedInt32Array(1685281408) index="0" unique_id=611816359]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 
-[node name="UnstableStarCore_1_0" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode/UnstableStarCore" index="0" unique_id=2029508117]
+[node name="UnstableStarCore_1_0" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode/UnstableStarCore" index="0" unique_id=1325777728]
 surface_material_override/0 = SubResource("StandardMaterial3D_1ogu1")
 
-[node name="UnstableStarref" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode" parent_id_path=PackedInt32Array(416510957) index="1" unique_id=832638965]
+[node name="UnstableStarref" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode" parent_id_path=PackedInt32Array(1685281408) index="1" unique_id=1625957164]
 transform = Transform3D(1.01, 0, 0, 0, -4.4148504e-08, 1.01, 0, -1.01, -4.4148504e-08, 0, 0, 0)
 
-[node name="UnstableStarref_2_0" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode/UnstableStarref" index="0" unique_id=1695024193]
+[node name="UnstableStarref_2_0" parent="Sketchfab_model/3a2aaa22fb3d4b329318a980ad1bf6d1_fbx/Object_2/RootNode/UnstableStarref" index="0" unique_id=562861782]
 surface_material_override/0 = SubResource("StandardMaterial3D_xtlgu")
 
-[node name="AnimationPlayer" parent="." index="1" unique_id=613005901]
+[node name="AnimationPlayer" parent="." index="1" unique_id=585070015]
 autoplay = &"Take 001"

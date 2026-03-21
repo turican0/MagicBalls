@@ -36,3 +36,6 @@ bones/148/rotation = Quaternion(0.88782376, -0.079960264, 0.0886466, 0.44442913)
 bones/149/rotation = Quaternion(0.63994384, -0.07333777, 0.05420299, 0.7629911)
 bones/150/rotation = Quaternion(-0.449677, -0.05654544, -0.034173224, 0.8907444)
 bones/151/rotation = Quaternion(-2.6245349e-08, 0.79918796, -0.60108125, 1.6631124e-07)
+
+[node name="AnimationPlayer" parent="." index="2" unique_id=979453512]
+autoplay = &"336"

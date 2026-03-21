@@ -6,3 +6,7 @@
 
 [node name="Sketchfab_Scene" parent="." unique_id=1086921098 instance=ExtResource("1_vfeaw")]
 transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene" unique_id=1227126532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 98.77896, 0)
+light_energy = 3.0

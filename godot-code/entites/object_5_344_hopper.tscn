@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bygi2xkl6vwm1"]
+
+[ext_resource type="PackedScene" uid="uid://81nqsn6jlnml" path="res://entites/sources/hopper/hopper_poses-344.tscn" id="2_kjxts"]
+
+[node name="Node3D" type="Node3D" unique_id=775536928]
+
+[node name="hopperPoses" parent="." unique_id=1451981561 instance=ExtResource("2_kjxts")]
+transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)

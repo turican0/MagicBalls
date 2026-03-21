@@ -217,11 +217,10 @@ var library = {
 	Vector3i(5,368,0): "res://entites/object_5_368_hopper.tscn",#368-375	levá noha pokrčena v koleni, nahoře, pravá téměř natažena	treti
 	Vector3i(5,376,0): "res://entites/object_5_376_hopper.tscn",#376-383	nohy kousek od sebe stojací postoj	
 	
-	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
-	#Vector3i(5,187,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzzzzzzzzzz
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
 	Vector3i(5,287,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzz
+	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
 	Vector3i(9,64,0): "res://entites/object_9_64_meteor.tscn",#meteor-OK
