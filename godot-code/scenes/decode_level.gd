@@ -208,6 +208,15 @@ var library = {
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
 	Vector3i(5,271,0): "res://entites/object_5_271_stoneHead.tscn",#stone head
+	
+	Vector3i(5,328,0): "res://entites/object_5_328_hopper.tscn",#328-335	levá noha pokrčena v koleni, nahoře	ctvrta
+	Vector3i(5,336,0): "res://entites/object_5_336_hopper.tscn",#336-343	pravá noha mírně za levou, obě na zemi	pata
+	Vector3i(5,344,0): "res://entites/object_5_344_hopper.tscn",#344-351	pravá noha mírně za levou, obě na zemi, tělo mírně přikrčené	sesta
+	Vector3i(5,352,0): "res://entites/object_5_352_hopper.tscn",#352-359	pravá noha mírně za levou, obě na zemi, tělo více přikrčené	první
+	Vector3i(5,360,0): "res://entites/object_5_360_hopper.tscn",#360-367	levá noha před pravou v nákroku, obě na zemi	druha
+	Vector3i(5,368,0): "res://entites/object_5_368_hopper.tscn",#368-375	levá noha pokrčena v koleni, nahoře, pravá téměř natažena	treti
+	Vector3i(5,376,0): "res://entites/object_5_376_hopper.tscn",#376-383	nohy kousek od sebe stojací postoj	
+	
 	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
 	#Vector3i(5,187,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzzzzzzzzzz
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK

@@ -2,26 +2,27 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0wic16n57ibg"
-path="res://.godot/imported/Image_8.png-0d9376ad25e68c1b2a94f6a82fac9d3e.ctex"
+uid="uid://e5f1yahlpqji"
+path.s3tc="res://.godot/imported/Image_8.png-0d9376ad25e68c1b2a94f6a82fac9d3e.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/hopper/textures/Image_8.png"
-dest_files=["res://.godot/imported/Image_8.png-0d9376ad25e68c1b2a94f6a82fac9d3e.ctex"]
+dest_files=["res://.godot/imported/Image_8.png-0d9376ad25e68c1b2a94f6a82fac9d3e.s3tc.ctex"]
 
 [params]
 
-compress/mode=4
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=0
+compress/normal_map=1
 compress/channel_pack=1
 mipmaps/generate=true
 mipmaps/limit=-1
@@ -37,4 +38,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0
