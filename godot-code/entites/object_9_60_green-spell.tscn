@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dvnvhxw7nikvo"]
+
+[ext_resource type="Script" uid="uid://b0nt8f4827naw" path="res://entites/object_9_64_meteor.gd" id="1_mw0ay"]
+[ext_resource type="PackedScene" uid="uid://db6v6n4bi5fwk" path="res://entites/sources/green-spell/dendrimer_nanotech_-_molecular_architecture.glb" id="2_w3skm"]
+
+[node name="Node3D" type="Node3D" unique_id=1822028480]
+transform = Transform3D(-0.05848482, 0.26986971, -0.961126, 0.88181466, -0.43732092, -0.17648797, -0.46794692, -0.8578859, -0.21239, 0, 0, 0)
+script = ExtResource("1_mw0ay")
+rot_speed = 1000.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+light_color = Color(0, 1, 0, 1)
+light_energy = 8.0
+
+[node name="Sketchfab_Scene" parent="." unique_id=386742933 instance=ExtResource("2_w3skm")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

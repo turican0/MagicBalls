@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_01vcg"]
 [ext_resource type="PackedScene" uid="uid://b8mclmj0w8m70" path="res://entites/sources/wizards/necromancer_2.tscn" id="2_01vcg"]
+[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_bjjno"]
 
 [sub_resource type="Gradient" id="Gradient_mwkhn"]
 colors = PackedColorArray(0, 0, 1, 1, 0, 0.74509805, 1, 1)
@@ -14,6 +15,31 @@ color_ramp = SubResource("Gradient_mwkhn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bjjno"]
 albedo_texture = SubResource("NoiseTexture2D_ila4u")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bjjno"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p3t3k"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_bjjno")
+shader_parameter/label_texture = SubResource("ViewportTexture_bjjno")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_01vcg"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjjno"]
+resource_local_to_scene = true
+bg_color = Color(0, 0, 1, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0.5019608, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="Node3D" type="Node3D" unique_id=872675572]
 
@@ -29,3 +55,23 @@ outer_radius = 0.5
 sides = 20
 ring_sides = 10
 material = SubResource("StandardMaterial3D_bjjno")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1516772985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+material_override = SubResource("ShaderMaterial_p3t3k")
+billboard = 1
+texture = SubResource("ViewportTexture_01vcg")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1406402291]
+transparent_bg = true
+size = Vector2i(90, 50)
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewport" unique_id=160368239]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bjjno")
+
+[node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=352848314]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "BELIX"

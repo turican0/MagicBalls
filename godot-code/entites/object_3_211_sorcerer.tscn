@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_mwkhn"]
 [ext_resource type="PackedScene" uid="uid://by5db3rtqgr7c" path="res://entites/sources/wizards/shadow_mage.tscn" id="2_mwkhn"]
+[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_n08pu"]
 
 [sub_resource type="Gradient" id="Gradient_mwkhn"]
 colors = PackedColorArray(0.50980395, 0, 0, 1, 1, 0, 0, 1)
@@ -14,6 +15,30 @@ color_ramp = SubResource("Gradient_mwkhn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kblqu"]
 albedo_texture = SubResource("NoiseTexture2D_ila4u")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_n08pu"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ila4u"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_n08pu")
+shader_parameter/label_texture = SubResource("ViewportTexture_n08pu")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_kblqu"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56uxs"]
+bg_color = Color(1, 0, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.5137255, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="Node3D" type="Node3D" unique_id=872675572]
 
@@ -29,3 +54,23 @@ outer_radius = 0.5
 sides = 20
 ring_sides = 10
 material = SubResource("StandardMaterial3D_kblqu")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=573429327]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+material_override = SubResource("ShaderMaterial_ila4u")
+billboard = 1
+texture = SubResource("ViewportTexture_kblqu")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=136627269]
+transparent_bg = true
+size = Vector2i(160, 50)
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewport" unique_id=1347322782]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_56uxs")
+
+[node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=438276721]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "NYMPHUR"

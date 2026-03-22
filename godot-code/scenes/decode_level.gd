@@ -189,6 +189,7 @@ var library = {
 	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
 	Vector3i(5,67,0): "res://entites/object_10_67_whiteSphere.tscn",
 	Vector3i(5,68,0): "res://entites/object_10_68_redSphere.tscn",
+	Vector3i(5,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
 	Vector3i(5,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
 	Vector3i(5,110,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
 	Vector3i(5,111,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
@@ -219,10 +220,12 @@ var library = {
 	Vector3i(5,384,0): "res://entites/object_5_384_hopper.tscn",#376-383	torso
 	
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
+	Vector3i(5,263,0): "res://entites/object_5_263_darklion.tscn",#lion zzzzzzzzzzzz
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
 	Vector3i(5,287,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzz
 	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
+	Vector3i(9,60,0): "res://entites/object_9_60_green-spell.tscn",#green-spell
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
 	Vector3i(9,64,0): "res://entites/object_9_64_meteor.tscn",#meteor-OK
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
@@ -380,12 +383,21 @@ var library2 = {
 			#
 #384	391	samotná horní část těla z předchozího kroku
 
-#5-384-hopper down part
-#5-263
-#3-243
-#9-60
-#10-69
-#5-70
+#5-384-hopper down part-ok
+#5-263-jakoby lev-ok
+#3-243-predposledni kouzelnik-violet
+#9-60-zelena strela
+#10-69-fialova mana
+#5-70-tmave modra mana-ok
+
+#PLAYER-WHITE-
+#RED-NYMPHUR-OK
+#VIOLET-JARK
+#BLUE-BELIX-OK
+#GREEN-RAHN-OK
+#PINK-ELYSSIA
+#ORANGE-PRISH
+#GRAY-YRAGORE
 
 
 var filter_material: ShaderMaterial

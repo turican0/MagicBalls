@@ -15,6 +15,49 @@ color_ramp = SubResource("Gradient_mwkhn")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kblqu"]
 albedo_texture = SubResource("NoiseTexture2D_ila4u")
 
+[sub_resource type="Shader" id="Shader_flopb"]
+resource_local_to_scene = true
+code = "shader_type spatial;
+render_mode unshaded, depth_test_disabled; 
+
+uniform sampler2D label_texture;
+
+void vertex() {
+	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
+	float dist = length(MODELVIEW_MATRIX[3].xyz);
+	VERTEX *= dist * 0.1;
+}
+
+void fragment() {
+	vec4 color = texture(label_texture, UV);
+	ALBEDO = color.rgb;
+	ALPHA = color.a;
+}"
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5yk3s"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lb5ft"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_flopb")
+shader_parameter/label_texture = SubResource("ViewportTexture_5yk3s")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_6o85i"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gg1ig"]
+bg_color = Color(0, 1, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0.47058824, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [node name="Node3D" type="Node3D" unique_id=872675572]
 
 [node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_p548r")]
@@ -29,3 +72,23 @@ outer_radius = 0.5
 sides = 20
 ring_sides = 10
 material = SubResource("StandardMaterial3D_kblqu")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1106300793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+material_override = SubResource("ShaderMaterial_lb5ft")
+billboard = 1
+texture = SubResource("ViewportTexture_6o85i")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=728256945]
+transparent_bg = true
+size = Vector2i(95, 50)
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewport" unique_id=2102028772]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gg1ig")
+
+[node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=449661065]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "RAHN"

@@ -131,3 +131,9 @@ https://sketchfab.com/3d-models/demon-from-hell-5ef4210b29434347b9d7e776eb36ff37
 
 fire:
 	https://unity.com/blog/engine-platform/free-vfx-image-sequences-flipbooks
+	
+wolf:
+	https://sketchfab.com/3d-models/hell-wolf-551f8788eb3f4b09b644ddf9b6f76db8
+	
+green ball:	
+	https://sketchfab.com/3d-models/dendrimer-nanotech-molecular-architecture-784c311bb4d043e9be32922e2538e0f7#download
