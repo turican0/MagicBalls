@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bilhkp2neqf1v"]
+[gd_scene format=3 uid="uid://bilhkp2neqf1v"]
 
 [ext_resource type="PackedScene" uid="uid://c6nui5damggeg" path="res://entites/sources/archer_shooting.tscn" id="1_fixin"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1945234021]
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_fixin")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+[node name="Sketchfab_Scene" parent="." unique_id=2048615133 instance=ExtResource("1_fixin")]
+transform = Transform3D(-0.4, 0, -6.039832e-08, 0, 0.4, 0, 6.039832e-08, 0, -0.4, 0, 0, 0)

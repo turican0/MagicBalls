@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://cl1htggfs2l8o"]
+
+[ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_8q5pm"]
+[ext_resource type="PackedScene" uid="uid://tr1gmq2c3ga4" path="res://entites/sources/wizards/elder_moonseer/elder_moonseer_2.tscn" id="2_nljls"]
+[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_d8lfi"]
+[ext_resource type="Material" uid="uid://b8ol5xfjawt52" path="res://entites/sources/wizards/torus-violet.tres" id="3_vtivh"]
+[ext_resource type="StyleBox" uid="uid://dgthqlvdnn1t" path="res://entites/sources/wizards/violet-label-style.tres" id="5_vtivh"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bjjno"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p3t3k"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_d8lfi")
+shader_parameter/label_texture = SubResource("ViewportTexture_bjjno")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_01vcg"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Node3D" type="Node3D" unique_id=872675572]
+
+[node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_8q5pm")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+
+[node name="elder_moonseer2" parent="Sketchfab_Scene" unique_id=1027492829 instance=ExtResource("2_nljls")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 0, 0)
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Sketchfab_Scene/elder_moonseer2" unique_id=1213418523]
+transform = Transform3D(-0.45, 0, 6.8099105e-08, 0, 0.6, 0, -6.794811e-08, 0, -0.451, -0.07746397, 1.1828943, -0.037)
+inner_radius = 0.4
+outer_radius = 0.5
+sides = 20
+ring_sides = 10
+material = ExtResource("3_vtivh")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1516772985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+material_override = SubResource("ShaderMaterial_p3t3k")
+billboard = 1
+texture = SubResource("ViewportTexture_01vcg")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1406402291]
+transparent_bg = true
+size = Vector2i(90, 50)
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewport" unique_id=160368239]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = ExtResource("5_vtivh")
+
+[node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=352848314]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "JARK"

@@ -137,3 +137,7 @@ wolf:
 	
 green ball:	
 	https://sketchfab.com/3d-models/dendrimer-nanotech-molecular-architecture-784c311bb4d043e9be32922e2538e0f7#download
+
+splash:
+	https://sketchfab.com/3d-models/splash-a56597d04c8b4c5bb72c78ce442bc190
+	https://sketchfab.com/3d-models/fnaf-world-move-sludge-40e40be7eec04b578c74d37e2d9b0a79

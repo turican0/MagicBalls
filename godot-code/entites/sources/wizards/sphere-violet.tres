@@ -1,0 +1,31 @@
+[gd_resource type="SphereMesh" format=3 uid="uid://dver2oj1ypdi7"]
+
+[sub_resource type="Gradient" id="Gradient_mvjvp"]
+colors = PackedColorArray(0.8766123, 0.35489547, 1, 1, 0.8236359, 0.0005332887, 0.82363003, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6k5vr"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n4ltv"]
+noise = SubResource("FastNoiseLite_6k5vr")
+color_ramp = SubResource("Gradient_mvjvp")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_13w7s"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rkbbe"]
+noise = SubResource("FastNoiseLite_13w7s")
+seamless = true
+as_normal_map = true
+bump_strength = 6.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_860lq"]
+albedo_texture = SubResource("NoiseTexture2D_n4ltv")
+albedo_texture_force_srgb = true
+metallic = 1.0
+roughness = 0.2
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_rkbbe")
+clearcoat_enabled = true
+
+[resource]
+material = SubResource("StandardMaterial3D_860lq")

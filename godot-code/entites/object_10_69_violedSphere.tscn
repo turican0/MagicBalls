@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c748pcw71v63g"]
+
+[ext_resource type="SphereMesh" uid="uid://dver2oj1ypdi7" path="res://entites/sources/wizards/sphere-violet.tres" id="1_suke6"]
+
+[node name="MeshInstance3D" type="Node3D" unique_id=517972840]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=18347612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = ExtResource("1_suke6")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="MeshInstance3D" unique_id=663756586]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 2, 0)
+omni_range = 3.0

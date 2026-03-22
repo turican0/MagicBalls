@@ -44,6 +44,7 @@ corner_radius_bottom_left = 4
 [node name="Node3D" type="Node3D" unique_id=872675572]
 
 [node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_01vcg")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
 [node name="necromancer3" parent="Sketchfab_Scene" unique_id=1365390532 instance=ExtResource("2_01vcg")]
 transform = Transform3D(-2.2, 0, -1.923301e-07, 0, 2.2, 0, 1.923301e-07, 0, -2.2, 0, 0, 0)
@@ -57,7 +58,7 @@ ring_sides = 10
 material = SubResource("StandardMaterial3D_bjjno")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1516772985]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 material_override = SubResource("ShaderMaterial_p3t3k")
 billboard = 1
 texture = SubResource("ViewportTexture_01vcg")

@@ -159,6 +159,7 @@ var library = {
 	Vector3i(3,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#castle -difmodels!!!
 	Vector3i(3,203,0): "res://entites/object_3_203_sorcerer-blue.tscn",
 	Vector3i(3,211,0): "res://entites/object_3_211_sorcerer.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,243,0): "res://entites/object_3_243_sorcerer-violet.tscn",#sorcerer-violet xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "res://entites/object_3_251_sorcerer-green.tscn",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
 	Vector3i(5,9,0): "res://entites/object_5_8_bowman.tscn",#bowman
@@ -189,6 +190,7 @@ var library = {
 	Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
 	Vector3i(5,67,0): "res://entites/object_10_67_whiteSphere.tscn",
 	Vector3i(5,68,0): "res://entites/object_10_68_redSphere.tscn",
+	Vector3i(5,69,0): "res://entites/object_10_69_violedSphere.tscn",#violet sphere xxxxxxxxxxxx
 	Vector3i(5,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
 	Vector3i(5,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
 	Vector3i(5,110,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
@@ -242,8 +244,9 @@ var library = {
 	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1-OK
 	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",#goldMana -OK-standartMana
 	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
-	#Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
+	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
 	Vector3i(10,68,0): "res://entites/object_10_68_redSphere.tscn",#red sphere xxxxxxxxxxxx
+	Vector3i(10,69,0): "res://entites/object_10_69_violedSphere.tscn",#violet sphere xxxxxxxxxxxx
 	Vector3i(10,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
 	Vector3i(10,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -282,6 +285,7 @@ var library2 = {
 	Vector3i(0,58,0): "",#unknown
 	Vector3i(0,67,0): "",#unknowns
 	Vector3i(0,68,0): "",#unknown
+	Vector3i(0,69,0): "",#unknown
 	Vector3i(0,70,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
 	Vector3i(5,14,0): "",#unknown

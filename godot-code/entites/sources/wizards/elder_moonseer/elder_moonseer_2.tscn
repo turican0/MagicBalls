@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://tr1gmq2c3ga4"]
+
+[ext_resource type="PackedScene" uid="uid://tvybq30ok05t" path="res://entites/sources/wizards/elder_moonseer/elder_moonseer2.blend" id="1_mt5h6"]
+
+[node name="elder_moonseer2" unique_id=1027492829 instance=ExtResource("1_mt5h6")]
+
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(1162446918) index="0" unique_id=2112691361]
+bones/4/rotation = Quaternion(0.20173787, 2.3351654e-07, 9.6196096e-08, 0.97943956)
+bones/21/rotation = Quaternion(0.84255093, 0.3012936, -0.15153617, -0.4199608)
+bones/42/rotation = Quaternion(-0.21379212, -0.26038808, 0.89460343, -0.29355732)
+bones/58/rotation = Quaternion(0.72594345, 0.016606115, 0.68643945, -0.039131008)
+bones/64/rotation = Quaternion(0.7236414, -0.44782224, -0.29843903, -0.4321256)
+bones/71/rotation = Quaternion(0.72594345, -0.01660602, -0.68643945, -0.039130926)
+bones/77/rotation = Quaternion(0.7236414, 0.4478221, 0.29843926, -0.4321256)
+bones/81/rotation = Quaternion(0.3648273, 0.82611424, 0.19269495, -0.38380328)
+bones/88/rotation = Quaternion(0.7148365, -0.47336027, 0.50637835, -0.09230274)
+bones/89/rotation = Quaternion(-0.1531724, 0.80448765, -0.5582903, -0.13285337)
+bones/92/rotation = Quaternion(0.7148367, 0.47336027, -0.50637805, -0.09230277)
+bones/100/rotation = Quaternion(-0.047265552, -0.5873652, 0.6822733, -0.4327485)
+bones/101/rotation = Quaternion(0.4073958, 0.38026822, 0.2959187, 0.7757944)
+bones/131/rotation = Quaternion(-0.11210403, -0.6731984, 0.6518736, 0.33060166)
+bones/133/rotation = Quaternion(0.45227924, 0.08202782, -0.47385418, 0.75111735)
+bones/155/rotation = Quaternion(-0.15245518, -0.793331, -0.28550392, 0.51562685)
+bones/156/rotation = Quaternion(-0.1524552, 0.79333067, 0.28550392, 0.5156272)
+bones/157/position = Vector3(0.09126253, -0.049092226, 0.091922164)
+bones/157/rotation = Quaternion(0.8081091, 0.07678797, -0.06451097, 0.5804323)
+bones/158/rotation = Quaternion(0.5591481, 0.086549625, -0.013394142, 0.8244291)
+bones/162/position = Vector3(-0.09126254, 0.06467787, 0.024204504)
+bones/162/rotation = Quaternion(0.9859244, -0.012648671, 0.0021589173, 0.16669908)
+bones/163/rotation = Quaternion(0.4236739, -0.036088433, 0.0577363, 0.9032523)
+bones/164/rotation = Quaternion(-0.7316128, 0.16301379, 0.042742703, 0.6605621)
+bones/165/rotation = Quaternion(-0.03980267, 0.9569065, -0.2727936, -0.09126632)
+bones/181/rotation = Quaternion(0.9999136, 0, 0, -0.013154464)
+bones/185/rotation = Quaternion(0.9996355, 0, 0, -0.026997454)
+
+[node name="AnimationPlayer" parent="." index="2" unique_id=2088826596]
+autoplay = &"metarigAction"
