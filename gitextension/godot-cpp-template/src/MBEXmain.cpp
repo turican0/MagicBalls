@@ -966,6 +966,8 @@ PackedFloat32Array MBEXclass::GetEntites() {
 
 		//v5x->str_0x5E_94.word_0x68_104 = a1x->id_0x1A_26;
 
+		type_WORD_D951C part = particlesParameters_D951C[actEntity->word_0x5A_90];
+
 		int test = particlesParameters_D951C[actEntity->word_0x5A_90].word_0;
 		switch (test) {
 			case 0: //hrac0-ok
@@ -977,6 +979,10 @@ PackedFloat32Array MBEXclass::GetEntites() {
 			case 54: //ohen-ok
 				break;
 			case 57: //kour1(dole)-ok
+				break;
+			case 58: //mana
+				if (actEntity->class_0x3F_63 == 5)//mana snake
+					break;
 				break;
 			case 59: //schranka s kouzlem-ok
 				break;

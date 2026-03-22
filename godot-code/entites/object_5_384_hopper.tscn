@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b6wtdnawd1xt"]
+
+[ext_resource type="PackedScene" uid="uid://dsp1267simer4" path="res://entites/sources/hopper/hopper_poses-376.tscn" id="1_ppxto"]
+
+[node name="Node3D" type="Node3D" unique_id=775536928]
+
+[node name="hopperPoses" parent="." unique_id=1451981561 instance=ExtResource("1_ppxto")]
+transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, -0.77763563, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="hopperPoses" unique_id=1134707150]
+transform = Transform3D(1, 0, 1.7053026e-14, 0, 1, 0, -1.7053026e-14, 0, 1, 0, 12, 3)
+light_energy = 0.5

@@ -216,6 +216,7 @@ var library = {
 	Vector3i(5,360,0): "res://entites/object_5_360_hopper.tscn",#360-367	levá noha před pravou v nákroku, obě na zemi	druha
 	Vector3i(5,368,0): "res://entites/object_5_368_hopper.tscn",#368-375	levá noha pokrčena v koleni, nahoře, pravá téměř natažena	treti
 	Vector3i(5,376,0): "res://entites/object_5_376_hopper.tscn",#376-383	nohy kousek od sebe stojací postoj	
+	Vector3i(5,384,0): "res://entites/object_5_384_hopper.tscn",#376-383	torso
 	
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
@@ -236,9 +237,9 @@ var library = {
 	Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion-final-OK
 	Vector3i(10,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star-special
 	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1-OK
-	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",#goldMana -OK
+	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",#goldMana -OK-standartMana
 	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
-	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
+	#Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
 	Vector3i(10,68,0): "res://entites/object_10_68_redSphere.tscn",#red sphere xxxxxxxxxxxx
 	Vector3i(10,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
 	Vector3i(10,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
@@ -377,7 +378,14 @@ var library2 = {
 #368	375	levá noha pokrčena v koleni, nahoře, pravá téměř natažena	treti
 #376	383	nohy kousek od sebe stojací postoj	
 			#
-#384	391	samotná horní část těla z předchozího kroku	
+#384	391	samotná horní část těla z předchozího kroku
+
+#5-384-hopper down part
+#5-263
+#3-243
+#9-60
+#10-69
+#5-70
 
 
 var filter_material: ShaderMaterial
@@ -697,8 +705,11 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					var s = actBitmapScale * inv_256
 					scale_scene_node.scale = Vector3(s, s, s)
 			var entityScale = 1.0
-			if actState == 0x29 and actClass == 0xA and actModel == 0x27: # manSphere
-				entityScale = pow(actMana, 1.0 / 3.0) * 0.1
+			if actClass == 10 and actModel == 39: # manSphere
+				entityScale = pow(actMana, 1.0 / 3.0) * 0.1 #alternative mana size computing
+				#entityScale = actBitmapScale * inv_256  #original sice mana computing
+			if actClass == 5 and actModel == 22: # manSphere from mana snake
+				entityScale = actBitmapScale * inv_256
 			current_node.scale = Vector3(entityScale, entityScale, entityScale)
 			var base_pos_x = data_array[offset] * inv_256
 			var base_pos_y = data_array[offset + 2] * inv_256
@@ -861,7 +872,7 @@ func gameInit():
 			setFogFall(15)
 			setFogDensity(0.01)
 			setAtmDayTint(Color(0.8,0.9,1.0))
-			setSunMoon(true,true,1.0,1.0)
+			setSunMoon(true,true,0.7,1.0)
 		"Night":
 			Global.Main_Sounds.setSoundBank(1)
 			setTime(2.5)
@@ -882,9 +893,15 @@ func gameInit():
 			setAtmDayTint(Color(0,0,0))
 			setSunMoon(false,true,1.0,0.0)
 		"Final":
-			Global.Main_Sounds.setSoundBank(2)
-			setTime(12.0)
-			setDayEntites()	
+			Global.Main_Sounds.setSoundBank(0)
+			setTime(11.0)
+			setDayEntites()
+			setSkyExposure(0.3)
+			sefFogEnd(200)
+			setFogFall(15)
+			setFogDensity(0.01)
+			setAtmDayTint(Color(0.8,0.9,1.0))
+			setSunMoon(true,true,0.7,1.0)
 	if(Global.getLevelType()=="Cave"):
 		get_parent().get_node("TerrainsMB").mesh_instance_top.show()
 		get_parent().get_node("MultiMeshtop").show()
