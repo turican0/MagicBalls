@@ -141,3 +141,6 @@ green ball:
 splash:
 	https://sketchfab.com/3d-models/splash-a56597d04c8b4c5bb72c78ce442bc190
 	https://sketchfab.com/3d-models/fnaf-world-move-sludge-40e40be7eec04b578c74d37e2d9b0a79
+
+grif/maticore:
+	https://sketchfab.com/3d-models/griffin-fly-eb6b97f432af499ab1dbbb94b3e4825b

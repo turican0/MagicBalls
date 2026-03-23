@@ -212,6 +212,8 @@ var library = {
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
 	Vector3i(5,271,0): "res://entites/object_5_271_stoneHead.tscn",#stone head
 	
+	Vector3i(5,303,0): "res://entites/object_5_303_manticore.tscn",# 5-303-gryf/manticore
+	
 	Vector3i(5,328,0): "res://entites/object_5_328_hopper.tscn",#328-335	levá noha pokrčena v koleni, nahoře	ctvrta
 	Vector3i(5,336,0): "res://entites/object_5_336_hopper.tscn",#336-343	pravá noha mírně za levou, obě na zemi	pata
 	Vector3i(5,344,0): "res://entites/object_5_344_hopper.tscn",#344-351	pravá noha mírně za levou, obě na zemi, tělo mírně přikrčené	sesta
@@ -402,6 +404,8 @@ var library2 = {
 #PINK-ELYSSIA
 #ORANGE-PRISH
 #GRAY-YRAGORE
+
+# 5-303-gryf 5-393-ty male mrchy 5-392
 
 
 var filter_material: ShaderMaterial

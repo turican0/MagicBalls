@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://33bi77lp81gv"]
+
+[ext_resource type="PackedScene" uid="uid://bn3ttw0xi63bo" path="res://entites/sources/gryf/griff_fly_3.tscn" id="1_7wysb"]
+
+[node name="Node3D" type="Node3D" unique_id=490721922]
+
+[node name="griff fly3" parent="." unique_id=885874696 instance=ExtResource("1_7wysb")]
+transform = Transform3D(-4, 0, -6.039832e-07, 0, 4, 0, 6.039832e-07, 0, -4, 0, 1.5, 0)
