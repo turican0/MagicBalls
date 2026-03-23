@@ -754,9 +754,30 @@ var _pending_mouse_changes: Array = []
 #var total_mouse_delta: Vector2 = Vector2.ZERO
 #var mouse_640: Vector2 = Vector2.ZERO
 
+var fog_presets = [
+	{"begin": 10.0, "end": 100.0, "density": 0.01},
+	{"begin": 5.0,  "end": 50.0,  "density": 0.03},
+	{"begin": 2.0,  "end": 30.0,  "density": 0.08},
+	{"begin": 1.0,  "end": 15.0,  "density": 0.2},
+	{"begin": 0.0,  "end": 8.0,   "density": 0.5}
+]
+var current_fog_index: int = 0
+func changeFog():
+	current_fog_index += 1
+	if current_fog_index >= fog_presets.size():
+		current_fog_index = 0
+	var target_values = fog_presets[current_fog_index]
+	sefFogEnd(target_values["end"])
+	setFogFall(target_values["begin"])
+	setFogDensity(target_values["density"])
+	
+
 func _input(event):
-	#if event is InputEventMouseMotion:
-		#total_mouse_delta += event.relative
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.keycode:
+			KEY_F7:
+				changeFog()
+		
 	if event is InputEventKey and not event.echo:
 		if event.keycode in KEY_INDEX:
 			var index = KEY_INDEX[event.keycode]

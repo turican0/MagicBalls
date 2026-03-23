@@ -24,6 +24,8 @@ resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_bjjno")
 shader_parameter/label_texture = SubResource("ViewportTexture_bjjno")
+shader_parameter/start_fading_dist = 10.0
+shader_parameter/max_visible_dist = 20.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_01vcg"]
 viewport_path = NodePath("SubViewport")

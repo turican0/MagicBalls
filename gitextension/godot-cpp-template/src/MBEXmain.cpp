@@ -1213,6 +1213,7 @@ void handleInputs(Dictionary inputs,int type) {
 				break;
 			case 0x256b: //K - kill all creatures - cheat
 				KillAllCreatures_1B5F0();
+				break;
 			case 0x3f00://F5
 				if (type != 0)
 					break;
