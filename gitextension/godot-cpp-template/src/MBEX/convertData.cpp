@@ -427,7 +427,7 @@ void MBEXgraphicConverts(String path, String texture, String palette) {
 	bitmap_pos_struct_tm *contentTMAPStab = (bitmap_pos_struct_tm *)tab_final.data();
 	uint8_t *contentTMAPSdat = (uint8_t*)dat_final.data();
 
-	int count = fileTab_data.size() / sizeof(bitmap_pos_struct_t);
+	int count = fileTab_data.size() / sizeof(bitmap_pos_struct2_t);
 
 	bool success = true;
 	for (int index = 0; index < count; index++) {
