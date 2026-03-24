@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_8q5pm"]
 [ext_resource type="PackedScene" uid="uid://tr1gmq2c3ga4" path="res://entites/sources/wizards/elder_moonseer/elder_moonseer_2.tscn" id="2_nljls"]
-[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_d8lfi"]
+[ext_resource type="Shader" path="res://entites/sorcerer-label-shader.gdshader" id="3_d8lfi"]
 [ext_resource type="Material" uid="uid://b8ol5xfjawt52" path="res://entites/sources/wizards/torus-violet.tres" id="3_vtivh"]
 [ext_resource type="StyleBox" uid="uid://dgthqlvdnn1t" path="res://entites/sources/wizards/violet-label-style.tres" id="5_vtivh"]
 
@@ -14,6 +14,8 @@ resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_d8lfi")
 shader_parameter/label_texture = SubResource("ViewportTexture_bjjno")
+shader_parameter/start_fading_dist = 10.0
+shader_parameter/max_visible_dist = 20.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_01vcg"]
 viewport_path = NodePath("SubViewport")

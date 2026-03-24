@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_01vcg"]
 [ext_resource type="PackedScene" uid="uid://b8mclmj0w8m70" path="res://entites/sources/wizards/necromancer_2.tscn" id="2_01vcg"]
-[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_bjjno"]
+[ext_resource type="Shader" path="res://entites/sorcerer-label-shader.gdshader" id="3_bjjno"]
 
 [sub_resource type="Gradient" id="Gradient_mwkhn"]
 colors = PackedColorArray(0, 0, 1, 1, 0, 0.74509805, 1, 1)
