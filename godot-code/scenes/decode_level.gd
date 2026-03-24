@@ -222,7 +222,8 @@ var library = {
 	Vector3i(5,368,0): "res://entites/object_5_368_hopper.tscn",#368-375	levá noha pokrčena v koleni, nahoře, pravá téměř natažena	treti
 	Vector3i(5,376,0): "res://entites/object_5_376_hopper.tscn",#376-383	nohy kousek od sebe stojací postoj	
 	Vector3i(5,384,0): "res://entites/object_5_384_hopper.tscn",#376-383	torso
-	
+	Vector3i(5,392,0): "res://entites/object_5_392_minibasket.tscn",#mini
+	Vector3i(5,393,0): "res://entites/object_5_393_minibasket.tscn",#mini-torso
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
 	Vector3i(5,263,0): "res://entites/object_5_263_darklion.tscn",#lion zzzzzzzzzzzz
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
@@ -405,7 +406,7 @@ var library2 = {
 #ORANGE-PRISH
 #GRAY-YRAGORE
 
-# 5-303-gryf 5-393-ty male mrchy 5-392
+# 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
 
 
 var filter_material: ShaderMaterial

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b6f1x45sdf53u"]
+
+[ext_resource type="PackedScene" uid="uid://b484no14hmq5g" path="res://entites/sources/minibasket/minibasket.tscn" id="1_0rdmh"]
+
+[node name="Node3D" type="Node3D" unique_id=312192126]
+
+[node name="minibasket" parent="." unique_id=1980334862 instance=ExtResource("1_0rdmh")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

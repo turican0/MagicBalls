@@ -144,3 +144,9 @@ splash:
 
 grif/maticore:
 	https://sketchfab.com/3d-models/griffin-fly-eb6b97f432af499ab1dbbb94b3e4825b
+
+squid:
+	https://sketchfab.com/3d-models/snail-monster-9b2f3909004a4d81ba1806578e7d1ce3#download
+	
+water best:
+	https://sketchfab.com/3d-models/mosasaurus-4a1feecff6c7468b8c07ba0ad439e0e0
