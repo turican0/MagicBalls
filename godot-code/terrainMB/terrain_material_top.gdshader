@@ -5,8 +5,8 @@ uniform sampler2D height_map: filter_nearest, repeat_enable;
 uniform sampler2D control_map : filter_nearest, repeat_enable;
 uniform float height_scale : hint_range(0.0, 100.0) = 1.0;
 
-uniform sampler2D atlas_texture : source_color;
-uniform sampler2D reflect_texture : source_color;
+uniform sampler2D atlas_texture : source_color, filter_linear_mipmap_anisotropic;
+uniform sampler2D reflect_texture : source_color, filter_linear_mipmap;
 uniform vec2 atlas_grid_size;
 uniform vec2 atlas_border_px;
 
