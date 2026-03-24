@@ -228,6 +228,10 @@ var library = {
 	Vector3i(5,263,0): "res://entites/object_5_263_darklion.tscn",#lion zzzzzzzzzzzz
 	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
 	Vector3i(5,287,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzz
+	
+	Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast
+	Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
+	
 	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
 	Vector3i(9,60,0): "res://entites/object_9_60_green-spell.tscn",#green-spell

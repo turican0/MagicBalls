@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bohicpj3j5cbh"]
+
+[ext_resource type="PackedScene" uid="uid://c4lmpqlpon2eu" path="res://entites/sources/water_beast/water_beast_2.tscn" id="1_8e33c"]
+
+[node name="Node3D" type="Node3D" unique_id=711115591]
+
+[node name="water_beast2" parent="." unique_id=285403699 instance=ExtResource("1_8e33c")]
+transform = Transform3D(-0.5, 0, -4.371139e-08, 0, 0.5, 0, 4.371139e-08, 0, -0.5, 0, -11.715598, 6)

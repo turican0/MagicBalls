@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://c6m0687m3t1gd"]
+
+[ext_resource type="PackedScene" uid="uid://bcwolewjq7ljn" path="res://entites/sources/spiders/sketchfab_scene.tscn" id="1_id8ni"]
+
+[node name="Node3D" type="Node3D" unique_id=711115591]
+
+[node name="Sketchfab_Scene2" parent="." unique_id=1473945169 instance=ExtResource("1_id8ni")]
+transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, 0, 0, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene2" unique_id=66598225]
+transform = Transform3D(0.6666667, 0, 1.7763568e-14, 0, 0.6666667, 0, -1.7763568e-14, 0, 0.6666667, 1.1371083e-09, 0.9649543, -0.013007006)
