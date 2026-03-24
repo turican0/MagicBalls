@@ -298,6 +298,10 @@ var library2 = {
 	Vector3i(5,14,0): "",#unknown
 	Vector3i(5,55,0): "",#unknown
 	Vector3i(5,71,0): "",#unknown
+	
+	Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast
+	Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
+	
 	Vector3i(9,64,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
@@ -681,8 +685,10 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var current_node = null
 		if not (actByte1 & 4):
 			var isDraw = (actByte0 & 1) == 0
-			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 251) and actLife <= 0:
+			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
 				isDraw = false#noDraw dead sorcerers
+			if actClass == 5 and (modelIndex == 311 or modelIndex == 319) and actLife <= 0:
+				isDraw = false#noDraw dead water creature
 			var fromlib = false
 			var uid2 = Vector3i(actClass,modelIndex,0)
 			var scene_to_instance = null
