@@ -132,6 +132,8 @@ int MBEXclass::initLanguage(int index) {
 void MBEXclass::changeLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
 	InitLanguage_76A40_mod_only_language();
+	x_D41A0_BYTEARRAY_4_struct.setting_38402 = 1;
+	WriteConfigDat_81DB0();
 }
 
 Dictionary MBEXclass::getLangTexts() {
