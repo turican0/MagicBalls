@@ -443,36 +443,34 @@ void MBEXgraphicConverts(String path, String texture, String palette) {
 		a3.width_4 = contentTMAPStab[index].width_4;
 		a3.height_5 = contentTMAPStab[index].height_5;
 		//GameBitmapDrawTransparentBitmap_2DE80(0, 0, a3, 0);//20ee80
-		memset(pdwScreenBuffer_351628, 0, 640*480);
+
+		static uint8_t buf1[640 * 480];
+		static uint8_t buf2[640 * 480];
+		memset(pdwScreenBuffer_351628, 10, 640*480);
 		GameBitmap::DrawMenuGraphic(contentTMAPStab[index].width_4, contentTMAPStab[index].height_5, 1, stmpdat, pdwScreenBuffer_351628);
+		memcpy(buf1, pdwScreenBuffer_351628, 640 * 480);
+
+		memset(pdwScreenBuffer_351628, 20, 640 * 480);
+		GameBitmap::DrawMenuGraphic(contentTMAPStab[index].width_4, contentTMAPStab[index].height_5, 1, stmpdat, pdwScreenBuffer_351628);
+		memcpy(buf2, pdwScreenBuffer_351628, 640 * 480);
 
 		//--------------------------
 		int p_channels = 4;
 		std::vector<unsigned char> rgba_data((size_t)width * height * p_channels);
-		const uint8_t *indices = pdwScreenBuffer_351628;
-
-		bool alpha = true;
-		bool alpha2 = (indices[0] == 0 ||
-				indices[width - 1] == 0 ||
-				indices[(height - 1) * width] == 0 ||
-				indices[width * height - 1] == 0);
-		if(!alpha2)
-			alpha = false;
 		for (int i = 0; i < width * height; i++) {
-			uint8_t index = indices[i];
-			int pal_idx = index * 3;
+			uint8_t idx1 = buf1[i];
+			uint8_t idx2 = buf2[i];
+
+			bool opaque = (idx1 != 10) && (idx2 != 20);
+
+			uint8_t colorIndex = idx1;
+			int pal_idx = colorIndex * 3;
 			int dest_idx = i * 4;
 
 			rgba_data[dest_idx + 0] = palette_final[pal_idx + 0] * 4; // Red
 			rgba_data[dest_idx + 1] = palette_final[pal_idx + 1] * 4; // Green
 			rgba_data[dest_idx + 2] = palette_final[pal_idx + 2] * 4; // Blue
-
-			rgba_data[dest_idx + 3] = 255;
-			if (alpha) {
-				if (index == 0) {
-					rgba_data[dest_idx + 3] = 0; // transparent
-				}
-			}
+			rgba_data[dest_idx + 3] = opaque ? 255 : 0;
 		}
 		char buf[16];
 		snprintf(buf, sizeof(buf), "%03d", (int)index);

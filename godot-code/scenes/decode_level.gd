@@ -856,6 +856,8 @@ func getInputs():
 	}
 
 func _notification(what):
+	if(!runned):
+		return
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		_release_all_inputs()
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

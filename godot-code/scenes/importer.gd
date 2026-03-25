@@ -8,7 +8,7 @@ var Main_DecodeLevel
 func _ready() -> void:
 	Main_DecodeLevel = get_node("DecodeLevel")
 	await get_tree().process_frame
-	fadeNode=Global.addFadeOut(fadeNode)
+	#fadeNode=Global.addFadeOut(fadeNode)
 	if !check_existing_data():
 		file_dialog.dir_selected.connect(_on_file_dialog_dir_selected)
 		show_default_dialog()
@@ -16,9 +16,9 @@ func _ready() -> void:
 		goFirstMenu()
 
 func goFirstMenu():
-	fadeNode=Global.addFadeIn(fadeNode)
-	await fadeNode.fade_finished
-	Global.last_scene_path = "res://scenes/MainMenu.tscn"
+	#fadeNode=Global.addFadeIn(fadeNode)
+	#await fadeNode.fade_finished
+	Global.last_scene_path = "res://scenes/CodeGeneratedDemo.tscn"
 	get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
 
 func check_existing_data() -> bool:
