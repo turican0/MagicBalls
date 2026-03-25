@@ -688,7 +688,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
 				isDraw = false#noDraw dead sorcerers
 			if actClass == 5 and (modelIndex == 311 or modelIndex == 319) and actLife <= 0:
-				isDraw = false#noDraw dead water creature
+				pass#isDraw = false#noDraw dead water creature
 			var fromlib = false
 			var uid2 = Vector3i(actClass,modelIndex,0)
 			var scene_to_instance = null
