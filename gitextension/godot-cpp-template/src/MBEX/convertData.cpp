@@ -461,7 +461,7 @@ void MBEXgraphicConverts(String path, String texture, String palette) {
 			uint8_t idx1 = buf1[i];
 			uint8_t idx2 = buf2[i];
 
-			bool opaque = (idx1 != 10) && (idx2 != 20);
+			bool opaque = !(idx1 != idx2);
 
 			uint8_t colorIndex = idx1;
 			int pal_idx = colorIndex * 3;
