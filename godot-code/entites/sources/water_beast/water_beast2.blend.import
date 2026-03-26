@@ -50,7 +50,7 @@ _subresources={
 "slice_1/name": "trim_anim",
 "slice_1/save_to_file/enabled": true,
 "slice_1/save_to_file/fallback_path": "res://entites/sources/water_beast/water_anim.anim",
-"slice_1/save_to_file/keep_custom_tracks": false,
+"slice_1/save_to_file/keep_custom_tracks": true,
 "slice_1/save_to_file/path": "uid://ctsv8vluf1ceg",
 "slice_1/start_frame": 34,
 "slice_10/end_frame": 0,
