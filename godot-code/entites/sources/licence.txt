@@ -155,3 +155,7 @@ pot:
 	https://sketchfab.com/3d-models/cauldron-lid-808e2dd43f3249ab9d7aa685d6b2f336
 	https://sketchfab.com/3d-models/vase-rawscan-98a29620a45e47ccb80a75d5416c8255
 	https://sketchfab.com/3d-models/pot-f1af83745cbd4a44b1639fc69ce503f4
+	
+drak-triceratops
+	https://sketchfab.com/3d-models/running-triceratop-4301f25557dd4c4b80b072d9b194d18e
+	https://sketchfab.com/3d-models/overpowered-triceratops-bebfabe3b69b45309f8dbb33da29f0e7
