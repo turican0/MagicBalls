@@ -150,3 +150,8 @@ squid:
 	
 water best:
 	https://sketchfab.com/3d-models/mosasaurus-4a1feecff6c7468b8c07ba0ad439e0e0
+
+pot:	
+	https://sketchfab.com/3d-models/cauldron-lid-808e2dd43f3249ab9d7aa685d6b2f336
+	https://sketchfab.com/3d-models/vase-rawscan-98a29620a45e47ccb80a75d5416c8255
+	https://sketchfab.com/3d-models/pot-f1af83745cbd4a44b1639fc69ce503f4

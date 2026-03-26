@@ -37,7 +37,7 @@ center_offset = Vector3(0, 0.5, 0)
 [node name="Node3D" type="Node3D" unique_id=768478738]
 
 [node name="Sketchfab_Scene2" parent="." unique_id=519552307 instance=ExtResource("1_x0x4s")]
-transform = Transform3D(-1.3113416e-09, 0, 0.05, 0, 0.05, 0, -0.03, 0, -2.1855695e-09, 0, 1, 0)
+transform = Transform3D(-1.3113416e-09, 0, 0.05, 0, 0.05, 0, -0.03, 0, -2.1855695e-09, 0, -0.09759539, 0)
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="Sketchfab_Scene2" unique_id=1361486478]
 transform = Transform3D(1, 0, 6.3948846e-14, 0, 1, 0, -5.3290705e-15, 0, 1, 35.091, 0, 0)

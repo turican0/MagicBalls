@@ -1,16 +1,16 @@
 [gd_scene format=3 uid="uid://nuus84e04y25"]
 
-[ext_resource type="PackedScene" uid="uid://bcup8n61lobcn" path="res://entites/sources/jar.glb" id="2_vh3iw"]
+[ext_resource type="PackedScene" uid="uid://2ln417j1kjhm" path="res://entites/sources/pot/pot.tscn" id="1_4tm7n"]
 
 [node name="Node3D" type="Node3D" unique_id=2079773902]
 
-[node name="Sketchfab_Scene" parent="." unique_id=1804319461 instance=ExtResource("2_vh3iw")]
-transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
+[node name="pot2" parent="." unique_id=529921976 instance=ExtResource("1_4tm7n")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 
 [node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=434172877]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 11.983076, 0)
-light_color = Color(1, 0.49019608, 0, 1)
-light_energy = 16.0
+light_color = Color(0.9999884, 0.34301156, 0.3099802, 1)
+light_energy = 15.0
 light_specular = 5.0
 spot_range = 14.440466
 spot_attenuation = 0.55

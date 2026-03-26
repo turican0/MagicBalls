@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://2ln417j1kjhm"]
+
+[ext_resource type="PackedScene" uid="uid://db5f81cfbg82d" path="res://entites/sources/pot/pot.blend" id="1_b6h7y"]
+
+[sub_resource type="Gradient" id="Gradient_b6h7y"]
+colors = PackedColorArray(0.39215687, 0, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_i6ueh"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ttmhh"]
+noise = SubResource("FastNoiseLite_i6ueh")
+color_ramp = SubResource("Gradient_b6h7y")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rmoq4"]
+albedo_color = Color(1, 0, 0, 1)
+albedo_texture = SubResource("NoiseTexture2D_ttmhh")
+uv1_scale = Vector3(2, 2, 2)
+
+[node name="pot" unique_id=529921976 instance=ExtResource("1_b6h7y")]
+
+[node name="SM_Cauldron_Lid01a_Material_002_0" parent="Sketchfab_model_001/SM_Cauldron_Lid01a_fbx/RootNode/SM_Cauldron_Lid01a" parent_id_path=PackedInt32Array(1203216395) index="0" unique_id=1590631973]
+surface_material_override/0 = SubResource("StandardMaterial3D_rmoq4")
