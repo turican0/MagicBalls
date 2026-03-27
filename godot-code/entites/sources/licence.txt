@@ -159,3 +159,6 @@ pot:
 drak-triceratops
 	https://sketchfab.com/3d-models/running-triceratop-4301f25557dd4c4b80b072d9b194d18e
 	https://sketchfab.com/3d-models/overpowered-triceratops-bebfabe3b69b45309f8dbb33da29f0e7
+	
+lump:
+	https://sketchfab.com/3d-models/clay-lump-6a8b8a78714646d78fff7dd15cb22faa

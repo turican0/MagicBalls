@@ -243,6 +243,8 @@ var library = {
 	Vector3i(9,151,0): "res://entites/object_9_144_posses.tscn",#fix this to better
 	Vector3i(9,419,0): "res://entites/object_9_419_spider_web.tscn",#spide web zzzzzzzzzzzzzzOK
 	Vector3i(9,420,0): "res://entites/object_9_420_walnut.tscn",#walnul ball zzzzzzzzzzzzzzOK
+	Vector3i(9,145,0): "res://entites/object_9_146_lump.tscn",#tremor ball zzzzzzzzzzzzzzOK
+	Vector3i(9,146,0): "res://entites/object_9_146_lump.tscn",#crater ball zzzzzzzzzzzzzzOK
 	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK
@@ -415,6 +417,7 @@ var library2 = {
 #GRAY-YRAGORE
 
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
+#9-146
 
 
 var filter_material: ShaderMaterial

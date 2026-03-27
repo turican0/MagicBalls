@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://bf4iuylyje0t1"]
+
+[ext_resource type="Script" uid="uid://b0nt8f4827naw" path="res://entites/object_9_64_meteor.gd" id="1_s6oxk"]
+[ext_resource type="Texture2D" uid="uid://driqjpamodu6o" path="res://materials/dusty-grunge-collection-1-0.png" id="2_7sesj"]
+[ext_resource type="PackedScene" uid="uid://bafsgmljf11ij" path="res://entites/sources/lump/lump.blend" id="4_7sesj"]
+
+[sub_resource type="Curve" id="Curve_lxcym"]
+_limits = [-2.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_s2q5d"]
+curve = SubResource("Curve_lxcym")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7hled"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 4.0
+initial_velocity_max = 5.0
+orbit_velocity_min = 0.5000001
+orbit_velocity_max = 0.5000001
+orbit_velocity_curve = SubResource("CurveTexture_s2q5d")
+gravity = Vector3(0, 0, 0)
+linear_accel_min = 9.999997
+linear_accel_max = 9.999997
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uo2vq"]
+transparency = 1
+albedo_texture = ExtResource("2_7sesj")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_aeffb"]
+material = SubResource("StandardMaterial3D_uo2vq")
+size = Vector2(2, 2)
+
+[sub_resource type="Skin" id="Skin_tykco"]
+
+[node name="Node3D" type="Node3D" unique_id=1822028480]
+transform = Transform3D(-0.05848482, 0.26986971, -0.961126, 0.88181466, -0.43732092, -0.17648797, -0.46794692, -0.8578859, -0.21239, 0, 0, 0)
+script = ExtResource("1_s6oxk")
+rot_speed = 1000.0
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=454688779]
+amount = 20
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_7hled")
+draw_pass_1 = SubResource("QuadMesh_aeffb")
+draw_skin = SubResource("Skin_tykco")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
+transform = Transform3D(1.000004, -2.5808811e-05, 3.1113625e-05, 0, 0.99997634, -9.402633e-06, 2.2351742e-08, -5.9604645e-08, 0.99998975, 0.07529406, -0.2934563, 1.584132)
+light_energy = 2.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=1060202410]
+transform = Transform3D(1.000004, -2.5808811e-05, 3.1121075e-05, 0, 0.99997634, -9.343028e-06, 3.7252903e-08, -1.1920929e-07, 0.9999896, -0.116009966, 0.5887174, -1.5576555)
+light_energy = 2.0
+
+[node name="lump" parent="." unique_id=883483376 instance=ExtResource("4_7sesj")]
+transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
