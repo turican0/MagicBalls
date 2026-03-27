@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_p548r"]
 [ext_resource type="PackedScene" uid="uid://yvtik6mmymd8" path="res://entites/sources/wizards/goblin/goblin.tscn" id="2_flopb"]
+[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_5yk3s"]
 
 [sub_resource type="Gradient" id="Gradient_mwkhn"]
 colors = PackedColorArray(0, 0.4627451, 0, 1, 0, 1, 0.2, 1)
@@ -15,33 +16,16 @@ color_ramp = SubResource("Gradient_mwkhn")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kblqu"]
 albedo_texture = SubResource("NoiseTexture2D_ila4u")
 
-[sub_resource type="Shader" id="Shader_flopb"]
-resource_local_to_scene = true
-code = "shader_type spatial;
-render_mode unshaded, depth_test_disabled; 
-
-uniform sampler2D label_texture;
-
-void vertex() {
-	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]);
-	float dist = length(MODELVIEW_MATRIX[3].xyz);
-	VERTEX *= dist * 0.1;
-}
-
-void fragment() {
-	vec4 color = texture(label_texture, UV);
-	ALBEDO = color.rgb;
-	ALPHA = color.a;
-}"
-
 [sub_resource type="ViewportTexture" id="ViewportTexture_5yk3s"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lb5ft"]
 resource_local_to_scene = true
 render_priority = 0
-shader = SubResource("Shader_flopb")
+shader = ExtResource("3_5yk3s")
 shader_parameter/label_texture = SubResource("ViewportTexture_5yk3s")
+shader_parameter/start_fading_dist = 10.0
+shader_parameter/max_visible_dist = 20.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_6o85i"]
 viewport_path = NodePath("SubViewport")

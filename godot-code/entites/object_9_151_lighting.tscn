@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b2bewtx52tajc"]
+
+[ext_resource type="PackedScene" uid="uid://c6xsh22616dfc" path="res://entites/sources/lighting/lighting.tscn" id="2_0jd4g"]
+
+[node name="Node3D" type="Node3D" unique_id=1822028480]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0506482, 0)
+light_color = Color(0, 0.6039216, 1, 1)
+
+[node name="Lighting" parent="." unique_id=370734453 instance=ExtResource("2_0jd4g")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)

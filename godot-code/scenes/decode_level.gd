@@ -240,7 +240,7 @@ var library = {
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
 	Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
-	Vector3i(9,151,0): "res://entites/object_9_144_posses.tscn",#fix this to better
+	Vector3i(9,151,0): "res://entites/object_9_151_lighting.tscn",#fix this to better
 	Vector3i(9,419,0): "res://entites/object_9_419_spider_web.tscn",#spide web zzzzzzzzzzzzzzOK
 	Vector3i(9,420,0): "res://entites/object_9_420_walnut.tscn",#walnul ball zzzzzzzzzzzzzzOK
 	Vector3i(9,145,0): "res://entites/object_9_146_lump.tscn",#tremor ball zzzzzzzzzzzzzzOK
@@ -267,6 +267,7 @@ var library = {
 	Vector3i(10,145,0): "res://entites/object_9_64_meteor.tscn",#meteor
 	Vector3i(10,168,0): "res://entites/object_10_168_FacePortal.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
+	Vector3i(10,202,0): "res://entites/object_10_202_blue_orb.tscn",#blue orb
 	Vector3i(10,327,0): "res://entites/object_10_327_tornado.tscn",#tornado xxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,426,0): "res://entites/object_10_426_bubble.tscn",#bubble - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(10,463,0): "res://entites/object_10_463_fireball-object.tscn",#fireball-object xxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -307,6 +308,7 @@ var library2 = {
 	Vector3i(9,64,0): "",#unknown
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
+	Vector3i(10,38,0): "",#unknown
 	Vector3i(10,54,0): "",#fair
 	Vector3i(10,77,0): "",#fair
 	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
@@ -417,7 +419,7 @@ var library2 = {
 #GRAY-YRAGORE
 
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
-#9-146
+#9-146 10-38 10-202-blue orb
 
 
 var filter_material: ShaderMaterial
@@ -920,7 +922,7 @@ func gameInit():
 	match Global.getLevelType():
 		"Day":
 			Global.Main_Sounds.setSoundBank(0)
-			setTime(11.0)
+			setTime(9.0)
 			setDayEntites()
 			setSkyExposure(0.3)
 			sefFogEnd(200)
