@@ -859,13 +859,21 @@ func getInputs():
 	}
 
 func _notification(what):
-	if(!runned):
-		return
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-		_release_all_inputs()
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
-		Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
+	#if(!runned):
+	match what:
+		NOTIFICATION_APPLICATION_FOCUS_OUT:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		NOTIFICATION_WM_MOUSE_EXIT:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		NOTIFICATION_APPLICATION_FOCUS_IN, NOTIFICATION_WM_MOUSE_ENTER:
+			if runned:
+				_release_all_inputs()
+			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+	#if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		#_release_all_inputs()
+		#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	#elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
+		#Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
 
 #func getInputsX():
 	#var changes = []

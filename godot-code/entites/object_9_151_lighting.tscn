@@ -6,7 +6,8 @@
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0506482, 0)
-light_color = Color(0, 0.6039216, 1, 1)
+light_color = Color(0.17000002, 0.17000002, 1, 1)
+omni_range = 3.0
 
 [node name="Lighting" parent="." unique_id=370734453 instance=ExtResource("2_0jd4g")]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
