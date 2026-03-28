@@ -290,6 +290,7 @@ var library2 = {
 	Vector3i(3,88,0): "",#unknown
 	Vector3i(3,203,0): "",#sorcerer-blue xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,211,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,243,0): "",#sorcerer-violet xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
 	Vector3i(0,8,0): "",#unknown
 	Vector3i(0,58,0): "",#unknown
@@ -298,6 +299,7 @@ var library2 = {
 	Vector3i(0,69,0): "",#unknown
 	Vector3i(0,70,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
+	Vector3i(0,80,0): "",#unknown
 	Vector3i(5,14,0): "",#unknown
 	Vector3i(5,55,0): "",#unknown
 	Vector3i(5,71,0): "",#unknown
@@ -419,7 +421,7 @@ var library2 = {
 #GRAY-YRAGORE
 
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
-#9-146 10-38 10-202-blue orb
+#9-146 10-38 10-202-blue orb   3-243-sorceler
 
 
 var filter_material: ShaderMaterial

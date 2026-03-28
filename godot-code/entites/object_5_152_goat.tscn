@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://bbk7kcjidc724"]
+[gd_scene format=3 uid="uid://bbk7kcjidc724"]
 
 [ext_resource type="Texture2D" uid="uid://bbosjtsyvkx76" path="res://entites/sources/TMAPS1-0-152-00.png" id="1_rugex"]
 [ext_resource type="PackedScene" uid="uid://cdvmxvsld75th" path="res://entites/sources/goat.tscn" id="2_t3yui"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1665181033]
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=247996380]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0.5, 0)
 visible = false
 billboard = 1
 texture = ExtResource("1_rugex")
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("2_t3yui")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 0, 0)
+[node name="Sketchfab_Scene" parent="." unique_id=2039156786 instance=ExtResource("2_t3yui")]
+transform = Transform3D(-0.8, 0, -1.2079664e-07, 0, 0.8, 0, 1.2079664e-07, 0, -0.8, 0, 0, 0)
