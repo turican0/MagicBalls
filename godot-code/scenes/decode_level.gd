@@ -303,6 +303,7 @@ var library2 = {
 	Vector3i(5,14,0): "",#unknown
 	Vector3i(5,55,0): "",#unknown
 	Vector3i(5,71,0): "",#unknown
+	Vector3i(5,303,0): "",#unknown
 	
 	Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast
 	Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
@@ -421,7 +422,7 @@ var library2 = {
 #GRAY-YRAGORE
 
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
-#9-146 10-38 10-202-blue orb   3-243-sorceler
+#9-146 10-38 10-202-blue orb   3-243-sorceler 5-303
 
 
 var filter_material: ShaderMaterial

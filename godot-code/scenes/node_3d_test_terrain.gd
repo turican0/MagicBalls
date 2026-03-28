@@ -39,8 +39,13 @@ func updateMeshes():
 	#recalculate_mesh()
 	changeTerrain(Global.getLevelType())
 	
+	mesh_instance_bottom.extra_cull_margin = 1000.0
+	if mesh_instance_top:
+		mesh_instance_top.extra_cull_margin = 1000.0
+	
 	#begin of Multimesh
 	var mmi_bottom:MultiMeshInstance3D = get_parent().get_node("MultiMeshbottom")
+	mmi_bottom.extra_cull_margin = 1000.0
 	if not mmi_bottom.multimesh:
 		mmi_bottom.multimesh = MultiMesh.new()
 		mmi_bottom.multimesh.transform_format = MultiMesh.TRANSFORM_3D
@@ -68,6 +73,7 @@ func updateMeshes():
 		mmi_bottom.multimesh.set_instance_transform(i, t)
 	if(Global.getLevelType()=="Cave"):
 		var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
+		mmi_top.extra_cull_margin = 1000.0
 		if not mmi_top.multimesh:
 			mmi_top.multimesh = MultiMesh.new()
 			mmi_top.multimesh.transform_format = MultiMesh.TRANSFORM_3D
