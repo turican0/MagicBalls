@@ -423,7 +423,7 @@ var library2 = {
 #GRAY-YRAGORE
 
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
-#9-146 10-38 10-202-blue orb   3-243-sorceler 5-303 5-295
+#9-146 10-38 10-202-blue orb   3-243-sorceler 5-303 5-295 5-437 5-445
 
 
 var filter_material: ShaderMaterial

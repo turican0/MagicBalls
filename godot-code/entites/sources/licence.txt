@@ -165,3 +165,6 @@ lump:
 
 crab-baloon:
 	https://sketchfab.com/3d-models/crabsquid-6a7875356e684c348b26e311750b054d
+	
+mummy:
+	https://sketchfab.com/3d-models/mummy1-86bfd05fc8eb426083fd5e12be1bdee3
