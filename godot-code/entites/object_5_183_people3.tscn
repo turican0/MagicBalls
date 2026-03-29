@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ddgq0drjv52ns"]
+[gd_scene format=3 uid="uid://ddgq0drjv52ns"]
 
 [ext_resource type="PackedScene" uid="uid://bmm0xqbietnc6" path="res://entites/sources/turk_villiger_t_pose_2_walking.tscn" id="1_4udiu"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1733047162]
 
-[node name="turk_villiger_t-pose2-Walking" parent="." instance=ExtResource("1_4udiu")]
-transform = Transform3D(-100, 0, -8.742278e-06, 0, 100, 0, 8.742278e-06, 0, -100, 0, 0, 0)
+[node name="turk_villiger_t-pose2-Walking" parent="." unique_id=397214401 instance=ExtResource("1_4udiu")]
+transform = Transform3D(-50, 0, -7.54979e-06, 0, 50, 0, 7.54979e-06, 0, -50, 0, 0, 0)

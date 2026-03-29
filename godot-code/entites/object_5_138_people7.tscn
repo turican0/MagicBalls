@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dkwxkmjc7lxgs"]
+[gd_scene format=3 uid="uid://dkwxkmjc7lxgs"]
 
 [ext_resource type="PackedScene" uid="uid://d0ikt2qycvd4x" path="res://entites/sources/afghan_man_clothed_hazara_walking.tscn" id="1_r2qnw"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=306602985]
 
-[node name="afghan_man_clothed_hazara-Walking" parent="." instance=ExtResource("1_r2qnw")]
+[node name="afghan_man_clothed_hazara-Walking" parent="." unique_id=433481753 instance=ExtResource("1_r2qnw")]
 transform = Transform3D(-1.2, 0, -1.04907336e-07, 0, 1.2, 0, 1.04907336e-07, 0, -1.2, 0, 0, 0)

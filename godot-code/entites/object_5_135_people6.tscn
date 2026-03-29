@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ci21dlqcvo15h"]
+[gd_scene format=3 uid="uid://ci21dlqcvo15h"]
 
 [ext_resource type="PackedScene" uid="uid://d24ia4skxc53j" path="res://entites/sources/traditional_woman_in_black_outfit___low_poly_walking.tscn" id="1_7yqwo"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1366852506]
 
-[node name="traditional_woman_in_black_outfit_-_low_poly-Walking" parent="." instance=ExtResource("1_7yqwo")]
+[node name="traditional_woman_in_black_outfit_-_low_poly-Walking" parent="." unique_id=694776728 instance=ExtResource("1_7yqwo")]
 transform = Transform3D(-1.2, 0, -1.04907336e-07, 0, 1.2, 0, 1.04907336e-07, 0, -1.2, 0, 0, 0)

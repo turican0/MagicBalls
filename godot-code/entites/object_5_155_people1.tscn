@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dnmw7kxhin8x6"]
+[gd_scene format=3 uid="uid://dnmw7kxhin8x6"]
 
 [ext_resource type="PackedScene" uid="uid://btqsg3ug2yn6n" path="res://entites/sources/sareelady_walking.tscn" id="1_r6m8i"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1922367494]
 
-[node name="sareelady-Walking" parent="." instance=ExtResource("1_r6m8i")]
+[node name="sareelady-Walking" parent="." unique_id=55162406 instance=ExtResource("1_r6m8i")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)

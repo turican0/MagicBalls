@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d2jihfohphuue"]
 
 [ext_resource type="Script" uid="uid://dne6na1m4xku8" path="res://scenes/UI.gd" id="1_why5e"]
+[ext_resource type="Script" uid="uid://ietcg0v8r1sk" path="res://scenes/canvas_layer_help.gd" id="2_ro3t7"]
 
 [node name="UI" type="Control" unique_id=66072025 node_paths=PackedStringArray("spell_grid", "sub_spell_grid")]
 layout_mode = 3
@@ -122,3 +123,33 @@ title = ""
 position = Vector2i(300, 55)
 size = Vector2i(261, 100)
 dialog_text = "You are killed, play Level Again?"
+
+[node name="CanvasLayerHelp" type="CanvasLayer" parent="." unique_id=1509597028]
+layer = 999
+script = ExtResource("2_ro3t7")
+
+[node name="PanelContainerHelp" type="PanelContainer" parent="CanvasLayerHelp" unique_id=1324882154]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabelHelp" type="RichTextLabel" parent="CanvasLayerHelp/PanelContainerHelp" unique_id=1427822527]
+layout_mode = 2
+text = "WASD - move
+SPACE - confirm
+ESC - Exit
+CTRL - spell menu
+DELETE - Exit2
+F1 - this help
+F5 - quick save
+F9 - quick load
+I - current objective
+H - chneg graphics type
+P - pause
+O - one step
+Enter - big map
+L - destroy castle
+K - kill all creatures(cheat)
+"

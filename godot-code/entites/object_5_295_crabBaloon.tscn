@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dnh7wfp4uacmb"]
+
+[ext_resource type="PackedScene" uid="uid://l0xgjch8bl7l" path="res://entites/sources/crab-ball/crab_ball.tscn" id="1_67pdn"]
+
+[node name="Node3D" type="Node3D" unique_id=393404257]
+
+[node name="crab-ball" parent="." unique_id=524803659 instance=ExtResource("1_67pdn")]
+transform = Transform3D(-30, 0, -4.529874e-06, 0, 30, 0, 4.529874e-06, 0, -30, 0, 1.8, -0.42851448)

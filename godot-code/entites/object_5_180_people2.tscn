@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bysx1j7fq6pfo"]
+[gd_scene format=3 uid="uid://bysx1j7fq6pfo"]
 
 [ext_resource type="PackedScene" uid="uid://drass40pljleh" path="res://entites/sources/turkish_old_villager_men_t_pose_walking_2.tscn" id="1_u7xnv"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1154030103]
 
-[node name="turkish_old_villager_men_t-pose-Walking2" parent="." instance=ExtResource("1_u7xnv")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+[node name="turkish_old_villager_men_t-pose-Walking2" parent="." unique_id=1770084695 instance=ExtResource("1_u7xnv")]
+transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0, 0, 0)

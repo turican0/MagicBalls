@@ -162,3 +162,6 @@ drak-triceratops
 	
 lump:
 	https://sketchfab.com/3d-models/clay-lump-6a8b8a78714646d78fff7dd15cb22faa
+
+crab-baloon:
+	https://sketchfab.com/3d-models/crabsquid-6a7875356e684c348b26e311750b054d

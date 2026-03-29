@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bpwrl8vhc874v"]
+[gd_scene format=3 uid="uid://bpwrl8vhc874v"]
 
 [ext_resource type="PackedScene" uid="uid://bd8b81qdh802v" path="res://entites/sources/moroccan_boy__stylized_character_tier_i_walking.tscn" id="1_kfjew"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=730263102]
 
-[node name="moroccan_boy__stylized_character_tier_i-Walking" parent="." instance=ExtResource("1_kfjew")]
+[node name="moroccan_boy__stylized_character_tier_i-Walking" parent="." unique_id=480713278 instance=ExtResource("1_kfjew")]
 transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, 0, 0, 0)

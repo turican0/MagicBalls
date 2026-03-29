@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bfj8alx2od4c1"]
+[gd_scene format=3 uid="uid://bfj8alx2od4c1"]
 
 [ext_resource type="PackedScene" uid="uid://bpbfwv5tim0cr" path="res://entites/sources/village_head_walking.tscn" id="1_nglro"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=187965029]
 
-[node name="village_head-Walking" parent="." instance=ExtResource("1_nglro")]
-transform = Transform3D(-0.03, 0, -2.6226832e-09, 0, 0.03, 0, 2.6226832e-09, 0, -0.03, 0, 0, 0)
+[node name="village_head-Walking" parent="." unique_id=129497204 instance=ExtResource("1_nglro")]
+transform = Transform3D(-0.015, 0, -2.264937e-09, 0, 0.015, 0, 2.264937e-09, 0, -0.015, 0, 0, 0)

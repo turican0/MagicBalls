@@ -210,8 +210,9 @@ var library = {
 	Vector3i(5,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
+
 	Vector3i(5,271,0): "res://entites/object_5_271_stoneHead.tscn",#stone head
-	
+	Vector3i(5,295,0): "res://entites/object_5_295_crabBaloon.tscn",#crab baloon
 	Vector3i(5,303,0): "res://entites/object_5_303_manticore.tscn",# 5-303-gryf/manticore
 	
 	Vector3i(5,328,0): "res://entites/object_5_328_hopper.tscn",#328-335	levá noha pokrčena v koleni, nahoře	ctvrta
@@ -422,7 +423,7 @@ var library2 = {
 #GRAY-YRAGORE
 
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
-#9-146 10-38 10-202-blue orb   3-243-sorceler 5-303
+#9-146 10-38 10-202-blue orb   3-243-sorceler 5-303 5-295
 
 
 var filter_material: ShaderMaterial
@@ -860,18 +861,26 @@ func getInputs():
 		"mouse_button_changes": mouse_changes,
 		"mouse_pos2": Vector2(m_x, m_y)
 	}
+	
+	if Input.is_key_pressed(KEY_F1):
+		Main_UI.get_node("CanvasLayerHelp").show()
 
 func _notification(what):
-	#if(!runned):
-	match what:
-		NOTIFICATION_APPLICATION_FOCUS_OUT:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		NOTIFICATION_WM_MOUSE_EXIT:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		NOTIFICATION_APPLICATION_FOCUS_IN, NOTIFICATION_WM_MOUSE_ENTER:
-			if runned:
+	if DL_inGame:
+		match what:
+			NOTIFICATION_APPLICATION_FOCUS_OUT:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			NOTIFICATION_APPLICATION_FOCUS_IN:
 				_release_all_inputs()
-			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+				Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+	else:
+		match what:
+			NOTIFICATION_APPLICATION_FOCUS_OUT:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			NOTIFICATION_WM_MOUSE_EXIT:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			NOTIFICATION_APPLICATION_FOCUS_IN, NOTIFICATION_WM_MOUSE_ENTER:
+				Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	#if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		#_release_all_inputs()
 		#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -1118,7 +1127,9 @@ func anim1Begin(ScrBufferRect:TextureRect,index:int):
 func setLoadScreenBuffer(locTextureRect):
 	Global.MBEX.REMC2SetScrBuffer(locTextureRect)
 
+var DL_inGame=false;
 func MBrun(inGame):
+	DL_inGame=inGame
 	var locGraphicsEnhance = Global.MBEX.REMC2GetGraphicsEenhance()
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())
