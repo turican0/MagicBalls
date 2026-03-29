@@ -126,6 +126,7 @@ dialog_text = "You are killed, play Level Again?"
 
 [node name="CanvasLayerHelp" type="CanvasLayer" parent="." unique_id=1509597028]
 layer = 999
+visible = false
 script = ExtResource("2_ro3t7")
 
 [node name="PanelContainerHelp" type="PanelContainer" parent="CanvasLayerHelp" unique_id=1324882154]

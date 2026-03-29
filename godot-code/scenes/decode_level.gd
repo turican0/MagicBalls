@@ -863,7 +863,7 @@ func getInputs():
 	}
 	
 	if Input.is_key_pressed(KEY_F1):
-		Main_UI.get_node("CanvasLayerHelp").show()
+		Main_UI.get_node("CanvasLayerHelp").start_fade_out()
 
 func _notification(what):
 	if DL_inGame:
