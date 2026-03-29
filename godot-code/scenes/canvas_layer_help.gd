@@ -10,6 +10,6 @@ func start_fade_out() -> void:
 	content.modulate.a = 1.0
 	self.show()
 	fade_tween = create_tween()
-	fade_tween.tween_interval(5.0)
+	fade_tween.tween_interval(3.0)
 	fade_tween.tween_property(content, "modulate:a", 0.0, 2.0)
 	fade_tween.tween_callback(self.hide)

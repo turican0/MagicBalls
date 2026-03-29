@@ -1186,7 +1186,8 @@ void handleInputs(Dictionary inputs,int type) {
 				}
 				break;
 			case 0x1769: //I - objective
-				mainSetPress(is_pressed, key_index);
+				mainSetPress(is_pressed, 0x186f); //O
+				break;
 			case 0x2368: //H - change graphics type
 				if (is_pressed) {
 					graphics_enhance = 1 - graphics_enhance;
@@ -1725,6 +1726,7 @@ Dictionary MBEXclass::REMC2getWarpMouse() {
 	result["x"] = warpMouseX;
 	result["y"] = warpMouseY;
 	result["is"] = warpMouseIs;
+	result["yRevert"] = (x_WORD_18072C_cursor_sizex == 0);
 	warpMouseIs = false;
 	return result;
 }

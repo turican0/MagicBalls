@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://dnh7wfp4uacmb"]
 
 [ext_resource type="PackedScene" uid="uid://l0xgjch8bl7l" path="res://entites/sources/crab-ball/crab_ball.tscn" id="1_67pdn"]
+[ext_resource type="Script" uid="uid://dqec1od0di3nh" path="res://entites/sources/crab-ball/crab_ball.gd" id="2_ajl5h"]
 
 [node name="Node3D" type="Node3D" unique_id=393404257]
 
 [node name="crab-ball" parent="." unique_id=524803659 instance=ExtResource("1_67pdn")]
-transform = Transform3D(-30, 0, -4.529874e-06, 0, 30, 0, 4.529874e-06, 0, -30, 0, 1.8, -0.42851448)
+transform = Transform3D(-20, 0, -3.019916e-06, 0, 20, 0, 3.019916e-06, 0, -20, 0, 0.77423155, -0.42851448)
+script = ExtResource("2_ajl5h")

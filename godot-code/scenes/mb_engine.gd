@@ -86,6 +86,8 @@ func _process(_p_delta) -> void:
 	if(warpMouse["is"]):
 		if get_window().has_focus():
 			var screen_size = get_viewport().get_visible_rect().size
+			if(warpMouse["yRevert"]):
+				warpMouse["y"]=Main_DecodeLevel.SCREEN_HEIGHT-warpMouse["y"]
 			var target_x = (warpMouse["x"] / float(Main_DecodeLevel.SCREEN_WIDTH)) * screen_size.x
 			var target_y = (warpMouse["y"] / float(Main_DecodeLevel.SCREEN_HEIGHT)) * screen_size.y
 			Input.warp_mouse(Vector2(target_x, target_y))
