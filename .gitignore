@@ -25,6 +25,10 @@ gitextension/godot-cpp-template/MBEXout/bin/windows/EXTENSION-NAME.windows.templ
 *.tlog
 *.db
 gitextension/godot-cpp-template/build/
+gitextension/godot-cpp-template/build-android-arm64-debug/
+gitextension/godot-cpp-template/build-android-arm64-release/
+gitextension/godot-cpp-template/build-android-x86_64/
+gitextension/godot-cpp-template/build-x86/
 /test-terrain/convertdata
 /gitextension/godot-cpp-template/data
 gitextension/godot-cpp-template/MBEXout/bin/windows/~EXTENSION-NAME.windows.template_debug.x86_64.dll
