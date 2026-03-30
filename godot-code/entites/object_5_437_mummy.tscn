@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://bg7wjrapovjex"]
+
+[ext_resource type="Script" uid="uid://c066g8t75m7xg" path="res://entites/object_5_411_zombie.gd" id="1_shmms"]
+[ext_resource type="PackedScene" uid="uid://b4dyllk18javr" path="res://entites/sources/zombie-mummy/zomie_mummy.tscn" id="2_2gncy"]
+
+[node name="Node3D" type="Node3D" unique_id=726647630]
+script = ExtResource("1_shmms")
+fade_duration = 0.5
+
+[node name="zomie-mummy" parent="." unique_id=1869227258 instance=ExtResource("2_2gncy")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 0, 0)

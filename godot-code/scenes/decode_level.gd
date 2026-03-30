@@ -234,6 +234,10 @@ var library = {
 	Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
 	
 	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
+	
+	Vector3i(5,437,0): "res://entites/object_5_437_mummy.tscn",#mummy-walk
+	Vector3i(5,445,0): "res://entites/object_5_445_mummy.tscn",#mummy-stay
+	
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
 	Vector3i(9,60,0): "res://entites/object_9_60_green-spell.tscn",#green-spell
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
@@ -423,7 +427,8 @@ var library2 = {
 #GRAY-YRAGORE
 
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
-#9-146 10-38 10-202-blue orb   3-243-sorceler 5-303 5-295 5-437 5-445
+#9-146 10-38 10-202-blue orb   3-243-sorceler 5-303 5-295
+#5-437 5-445 mummy
 
 
 var filter_material: ShaderMaterial

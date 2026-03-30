@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b2js0gbqpysed"]
+
+[ext_resource type="PackedScene" uid="uid://lwxdl22linlh" path="res://entites/sources/mummy/mummy-stay.blend" id="1_muvot"]
+
+[node name="Node3D" type="Node3D" unique_id=726647630]
+
+[node name="mummy-stay" parent="." unique_id=559345762 instance=ExtResource("1_muvot")]
+transform = Transform3D(-0.9, 0, -7.86805e-08, 0, 0.9, 0, 7.86805e-08, 0, -0.9, 0, 0, 0)
