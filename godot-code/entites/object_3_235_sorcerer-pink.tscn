@@ -49,7 +49,7 @@ corner_radius_bottom_left = 4
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
 [node name="draka" parent="Sketchfab_Scene" unique_id=1922955153 instance=ExtResource("2_r6t7b")]
-transform = Transform3D(-1.6, 0, -1.3987645e-07, 0, 1.6, 0, 1.3987645e-07, 0, -1.6, 0, 0, 0)
+transform = Transform3D(-1.6, 0, -1.3987645e-07, 0, 1.6, 0, 1.3987645e-07, 0, -1.6, 0, -0.28369796, 0)
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="Sketchfab_Scene/draka" unique_id=1773880973]
 transform = Transform3D(-0.5, -2.2287475e-08, 3.32576e-08, 0, 0.7846217, 0.1236068, -4.371139e-08, 0.25493902, -0.38042262, 9.087151e-09, 1.2363644, -0.10394493)
