@@ -1066,11 +1066,11 @@ Vector3 get_color(const uint8_t *pal, int index) {
 
 float get_saturation(const Vector3 &col) {
 	float cmax = col.x;
-	cmax = max(cmax, col.y);
-	cmax = max(cmax, col.z);
+	cmax = our_max(cmax, col.y);
+	cmax = our_max(cmax, col.z);
 	float cmin = col.x;
-	cmin = min(cmin, col.y);
-	cmin = min(cmin, col.z);
+	cmin = our_min(cmin, col.y);
+	cmin = our_min(cmin, col.z);
 	float chroma = cmax - cmin;
 	return (cmax > 0.001f) ? chroma / cmax : 0.0f;
 }

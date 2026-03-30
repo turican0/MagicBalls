@@ -31,7 +31,7 @@
 #define strnicmp strncasecmp
 #define __cdecl
 #include <ctype.h>
-#include "../findfirst/findfirst.h"
+//#include "../findfirst/findfirst.h"
 #include <iostream>
 #include <functional>
 #include <type_traits>

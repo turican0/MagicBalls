@@ -818,8 +818,8 @@ template <typename T>
 void LoadAudioEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format)
 {
 	sound_queue_add_action("LoadAudioEffect", 0, 0, 0);
-	ActiveAudioEffects[channel].effect = new SfxEffectWrapper<T>(chunk, speed, frequency, channels, format);
-	Mix_RegisterEffect(channel, SfxEffectWrapper<T>::EffectModifierCallback, SfxEffectWrapper<T>::EffectDoneCallback, nullptr);
+	//ActiveAudioEffects[channel].effect = new SfxEffectWrapper<T>(chunk, speed, frequency, channels, format);
+	//Mix_RegisterEffect(channel, SfxEffectWrapper<T>::EffectModifierCallback, SfxEffectWrapper<T>::EffectDoneCallback, nullptr);
 }
 
 bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs)

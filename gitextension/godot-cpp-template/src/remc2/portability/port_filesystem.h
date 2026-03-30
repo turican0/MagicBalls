@@ -22,13 +22,19 @@
 	#include "dirent-x.h"
 #else
 	#include "dirent.h"
-	extern "C" {
+	/*extern "C" {
     	#include "findfirst.h"
-	}
+	}*/
 	#include <limits.h>
 
 	#define MAX_PATH PATH_MAX
 	#define _chdir chdir
+
+	struct _finddata_t {
+		uint32_t attrib;
+		int64_t size;
+		char name[260];
+	};
 #endif
 
 #include "fake_spdlog.h"
