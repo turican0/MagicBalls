@@ -34,8 +34,19 @@ rmdir /s /q "build-x86" >nul 2>&1
 
 :: ====================== ANDROID (používá Ninja - nutné pro NDK) ======================
 echo [2] Android arm64
-rmdir /s /q "build-android-arm64" >nul 2>&1
-%CMAKE% -S . -B build-android-arm64 -G "Ninja" ^
+:: --- Android arm64 DEBUG ---
+rmdir /s /q "build-android-arm64-debug" >nul 2>&1
+%CMAKE% -S . -B build-android-arm64-debug -G "Ninja" ^
+  -DCMAKE_BUILD_TYPE=Debug ^
+  -DCMAKE_TOOLCHAIN_FILE="%ANDROID_NDK_ROOT%/build/cmake/android.toolchain.cmake" ^
+  -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-24 ^
+  -DGODOTCPP_DISABLE_EXCEPTIONS=OFF ^
+  -DLIBNAME=%LIBNAME% -DGODOT_PROJECT_DIR=%GODOT_PROJECT_DIR%
+
+:: --- Android arm64 RELEASE ---
+rmdir /s /q "build-android-arm64-release" >nul 2>&1
+%CMAKE% -S . -B build-android-arm64-release -G "Ninja" ^
+  -DCMAKE_BUILD_TYPE=Release ^
   -DCMAKE_TOOLCHAIN_FILE="%ANDROID_NDK_ROOT%/build/cmake/android.toolchain.cmake" ^
   -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-24 ^
   -DGODOTCPP_DISABLE_EXCEPTIONS=OFF ^

@@ -261,6 +261,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_LIST_DIR}/src/lib
 
 set_target_properties(${LIBNAME}
     PROPERTIES
+    DEBUG_POSTFIX ".debug"
     # The generator expression here prevents msvc from adding a Debug or Release subdir.
     RUNTIME_OUTPUT_DIRECTORY "$<1:${PROJECT_SOURCE_DIR}/bin/${GODOTCPP_PLATFORM}>"
 
