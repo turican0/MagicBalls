@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bayclgeqt08rj"]
+
+[ext_resource type="PackedScene" uid="uid://cj4n3aw6wk36m" path="res://entites/sources/walnuts/mucus.blend" id="1_bxgli"]
+
+[sub_resource type="Gradient" id="Gradient_h583l"]
+offsets = PackedFloat32Array(0, 0.7919708, 0.94160587, 1)
+colors = PackedColorArray(0.60530114, 0.7358621, 0.57062286, 1, 0, 0.55, 0.11000003, 1, 0.5525, 0.65, 0, 1, 0.0043813903, 0.5497585, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ma1dv"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5s3wc"]
+noise = SubResource("FastNoiseLite_ma1dv")
+color_ramp = SubResource("Gradient_h583l")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0yukl"]
+albedo_texture = SubResource("NoiseTexture2D_5s3wc")
+metallic = 0.41
+roughness = 0.54
+uv1_scale = Vector3(2, 2, 2)
+
+[node name="mucus" unique_id=347933459 instance=ExtResource("1_bxgli")]
+
+[node name="Orange_001" parent="Orange" parent_id_path=PackedInt32Array(732652492) index="0" unique_id=606758055]
+surface_material_override/0 = SubResource("StandardMaterial3D_0yukl")
