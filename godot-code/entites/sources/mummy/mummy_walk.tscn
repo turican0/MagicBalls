@@ -93,4 +93,4 @@ bones/63/rotation = Quaternion(0.30031776, 0.04030046, -0.012707725, 0.95290273)
 
 [node name="AnimationPlayer" parent="." index="2" unique_id=2143280806]
 autoplay = &"mixamo_com"
-speed_scale = 2.0
+speed_scale = 4.0

@@ -242,6 +242,7 @@ var library = {
 	Vector3i(9,60,0): "res://entites/object_9_60_green-spell.tscn",#green-spell
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
 	Vector3i(9,64,0): "res://entites/object_9_64_meteor.tscn",#meteor-OK
+	Vector3i(9,80,0): "res://entites/object_10_80_castle_orb.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
 	Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
@@ -428,7 +429,10 @@ var library2 = {
 
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
 #9-146 10-38 10-202-blue orb   3-243-sorceler 5-303 5-295
-#5-437 5-445 mummy
+#5-437 5-445 mummy 9-80
+#3-235-pink-sorcerer
+#3-101-ping flag
+#10-72-pink sphere
 
 
 var filter_material: ShaderMaterial

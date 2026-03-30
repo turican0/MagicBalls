@@ -168,3 +168,6 @@ crab-baloon:
 	
 mummy:
 	https://sketchfab.com/3d-models/mummy1-86bfd05fc8eb426083fd5e12be1bdee3
+	
+next_sorcerer:
+https://sketchfab.com/3d-models/draconic-sorceress-character-rig-5b9b6ce9036448b59abaf0d2def71441
