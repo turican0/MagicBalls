@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://b8ju5iarq41x4"]
+
+[ext_resource type="Material" uid="uid://beafagoo0r1bi" path="res://materials/sphere-black.tres" id="1_00l0q"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_2ml7a"]
+material = ExtResource("1_00l0q")
+
+[node name="MeshInstance3D" type="Node3D" unique_id=517972840]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=18347612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("SphereMesh_2ml7a")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="MeshInstance3D" unique_id=663756586]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 2, 0)
+omni_range = 3.0

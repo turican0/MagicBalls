@@ -159,6 +159,7 @@ var library = {
 	Vector3i(3,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#castle -difmodels!!!
 	Vector3i(3,203,0): "res://entites/object_3_203_sorcerer-blue.tscn",
 	Vector3i(3,211,0): "res://entites/object_3_211_sorcerer.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,219,0): "res://entites/object_3_219_sorcerer-black.tscn",#sorcerer-black xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,235,0): "res://entites/object_3_235_sorcerer-pink.tscn",#sorcerer-pink xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,243,0): "res://entites/object_3_243_sorcerer-violet.tscn",#sorcerer-violet xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "res://entites/object_3_251_sorcerer-green.tscn",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
@@ -266,6 +267,8 @@ var library = {
 	Vector3i(10,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
 	Vector3i(10,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
 	Vector3i(10,72,0): "res://entites/object_10_72_pinkSphere.tscn",#pink sphere xxxxxxxxxxxx
+	Vector3i(10,73,0): "res://entites/object_10_73_orangeSphere.tscn",#orange sphere xxxxxxxxxxxx
+	Vector3i(10,74,0): "res://entites/object_10_74_blackSphere.tscn",#black sphere xxxxxxxxxxxx	
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,80,0): "res://entites/object_10_80_castle_orb.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
@@ -307,7 +310,9 @@ var library2 = {
 	Vector3i(0,69,0): "",#unknown
 	Vector3i(0,70,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
+	Vector3i(0,72,0): "",#unknown
 	Vector3i(0,80,0): "",#unknown
+	Vector3i(2,422,0): "",#unknown
 	Vector3i(5,14,0): "",#unknown
 	Vector3i(5,55,0): "",#unknown
 	Vector3i(5,71,0): "",#unknown
@@ -432,9 +437,14 @@ var library2 = {
 # 5-303-gryf 5-393-ty male mrchy 5-392 5-319-spicka vodni nestvury 5-311-mensi spicka
 #9-146 10-38 10-202-blue orb   3-243-sorceler 5-303 5-295
 #5-437 5-445 mummy 9-80
-#3-235-pink-sorcerer
+#3-235-pink-sorcerer-ok
+#3-101-ping flag-must add!!!!!
+#10-72-pink sphere-ok
+#2-422-sud
+#0-72-ok
+#3-219-next sorcerer-black-ok
+#3-103-black flag
 #3-101-ping flag
-#10-72-pink sphere 2-422 0-72
 
 
 var filter_material: ShaderMaterial
