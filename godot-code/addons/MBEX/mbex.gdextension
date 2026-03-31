@@ -45,8 +45,8 @@ android.x86_64.double.debug = "../../../gitextension/godot-cpp-template/MBEXout/
 android.x86_64.single.release = "../../../gitextension/godot-cpp-template/MBEXout/bin/android/libEXTENSION-NAME.android.template_release.x86_64.so"
 android.x86_64.double.release = "../../../gitextension/godot-cpp-template/MBEXout/bin/android/libEXTENSION-NAME.android.template_release.x86_64.double.so"
 
-android.arm64.single.debug = "../../../gitextension/godot-cpp-template/MBEXout/bin/android.arm64-v8a/EXTENSION-NAME.android.arm64-v8a.template_debug.arm64.so"
-android.arm64.double.debug = "../../../gitextension/godot-cpp-template/MBEXout/bin/android.arm64-v8a/EXTENSION-NAME.android.arm64-v8a.template_debug.arm64.so"
+android.arm64.single.debug = "../../../gitextension/godot-cpp-template/MBEXout/bin/android.arm64-v8a/EXTENSION-NAME.android.arm64-v8a.template_debug.arm64.debug.so"
+android.arm64.double.debug = "../../../gitextension/godot-cpp-template/MBEXout/bin/android.arm64-v8a/EXTENSION-NAME.android.arm64-v8a.template_debug.arm64.debug.so"
 android.arm64.single.release = "../../../gitextension/godot-cpp-template/MBEXout/bin/android.arm64-v8a/EXTENSION-NAME.android.arm64-v8a.template_debug.arm64.so"
 android.arm64.double.release = "../../../gitextension/godot-cpp-template/MBEXout/bin/android.arm64-v8a/EXTENSION-NAME.android.arm64-v8a.template_debug.arm64.so"
 
