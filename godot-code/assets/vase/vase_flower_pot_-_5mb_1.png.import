@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bcl1xvten7t7m"
 path.s3tc="res://.godot/imported/vase_flower_pot_-_5mb_1.png-32bd3562a10c65867cc49086287b8ec5.s3tc.ctex"
+path.etc2="res://.godot/imported/vase_flower_pot_-_5mb_1.png-32bd3562a10c65867cc49086287b8ec5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/vase/vase_flower_pot_-_5mb_1.png"
-dest_files=["res://.godot/imported/vase_flower_pot_-_5mb_1.png-32bd3562a10c65867cc49086287b8ec5.s3tc.ctex"]
+dest_files=["res://.godot/imported/vase_flower_pot_-_5mb_1.png-32bd3562a10c65867cc49086287b8ec5.s3tc.ctex", "res://.godot/imported/vase_flower_pot_-_5mb_1.png-32bd3562a10c65867cc49086287b8ec5.etc2.ctex"]
 
 [params]
 

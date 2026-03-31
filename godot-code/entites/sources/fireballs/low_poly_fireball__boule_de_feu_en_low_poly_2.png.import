@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cdptr8or26g0f"
 path.s3tc="res://.godot/imported/low_poly_fireball__boule_de_feu_en_low_poly_2.png-f33ecf032ba01010bba9ad9ed5693c13.s3tc.ctex"
+path.etc2="res://.godot/imported/low_poly_fireball__boule_de_feu_en_low_poly_2.png-f33ecf032ba01010bba9ad9ed5693c13.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/fireballs/low_poly_fireball__boule_de_feu_en_low_poly_2.png"
-dest_files=["res://.godot/imported/low_poly_fireball__boule_de_feu_en_low_poly_2.png-f33ecf032ba01010bba9ad9ed5693c13.s3tc.ctex"]
+dest_files=["res://.godot/imported/low_poly_fireball__boule_de_feu_en_low_poly_2.png-f33ecf032ba01010bba9ad9ed5693c13.s3tc.ctex", "res://.godot/imported/low_poly_fireball__boule_de_feu_en_low_poly_2.png-f33ecf032ba01010bba9ad9ed5693c13.etc2.ctex"]
 
 [params]
 

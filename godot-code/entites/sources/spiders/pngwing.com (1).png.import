@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://de23iporf50lt"
 path.s3tc="res://.godot/imported/pngwing.com (1).png-4c8ac79b4c466bda74099e67d635cc0c.s3tc.ctex"
+path.etc2="res://.godot/imported/pngwing.com (1).png-4c8ac79b4c466bda74099e67d635cc0c.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/spiders/pngwing.com (1).png"
-dest_files=["res://.godot/imported/pngwing.com (1).png-4c8ac79b4c466bda74099e67d635cc0c.s3tc.ctex"]
+dest_files=["res://.godot/imported/pngwing.com (1).png-4c8ac79b4c466bda74099e67d635cc0c.s3tc.ctex", "res://.godot/imported/pngwing.com (1).png-4c8ac79b4c466bda74099e67d635cc0c.etc2.ctex"]
 
 [params]
 

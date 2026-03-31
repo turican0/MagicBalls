@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dauy5d7c3hcp2"
 path.s3tc="res://.godot/imported/leather_glossiness.jpg-fd85819a5a2d35ed1da1287cf2cfd487.s3tc.ctex"
+path.etc2="res://.godot/imported/leather_glossiness.jpg-fd85819a5a2d35ed1da1287cf2cfd487.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/hopper/textures/leather_glossiness.jpg"
-dest_files=["res://.godot/imported/leather_glossiness.jpg-fd85819a5a2d35ed1da1287cf2cfd487.s3tc.ctex"]
+dest_files=["res://.godot/imported/leather_glossiness.jpg-fd85819a5a2d35ed1da1287cf2cfd487.s3tc.ctex", "res://.godot/imported/leather_glossiness.jpg-fd85819a5a2d35ed1da1287cf2cfd487.etc2.ctex"]
 
 [params]
 

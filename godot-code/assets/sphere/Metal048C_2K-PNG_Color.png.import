@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1ybnltkj8k3m"
 path.s3tc="res://.godot/imported/Metal048C_2K-PNG_Color.png-407d42d73ab7e77b73fb6e3e9ec1e30f.s3tc.ctex"
+path.etc2="res://.godot/imported/Metal048C_2K-PNG_Color.png-407d42d73ab7e77b73fb6e3e9ec1e30f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sphere/Metal048C_2K-PNG_Color.png"
-dest_files=["res://.godot/imported/Metal048C_2K-PNG_Color.png-407d42d73ab7e77b73fb6e3e9ec1e30f.s3tc.ctex"]
+dest_files=["res://.godot/imported/Metal048C_2K-PNG_Color.png-407d42d73ab7e77b73fb6e3e9ec1e30f.s3tc.ctex", "res://.godot/imported/Metal048C_2K-PNG_Color.png-407d42d73ab7e77b73fb6e3e9ec1e30f.etc2.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d2kvs5n2sd4d"
 path.s3tc="res://.godot/imported/red velvet_Emission.jpg-12f0903f0ea8b39df22b2b4e130d1876.s3tc.ctex"
+path.etc2="res://.godot/imported/red velvet_Emission.jpg-12f0903f0ea8b39df22b2b4e130d1876.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/pot/textures/red velvet_Emission.jpg"
-dest_files=["res://.godot/imported/red velvet_Emission.jpg-12f0903f0ea8b39df22b2b4e130d1876.s3tc.ctex"]
+dest_files=["res://.godot/imported/red velvet_Emission.jpg-12f0903f0ea8b39df22b2b4e130d1876.s3tc.ctex", "res://.godot/imported/red velvet_Emission.jpg-12f0903f0ea8b39df22b2b4e130d1876.etc2.ctex"]
 
 [params]
 

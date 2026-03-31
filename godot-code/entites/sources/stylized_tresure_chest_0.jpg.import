@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cjs2csujkvj6c"
 path.s3tc="res://.godot/imported/stylized_tresure_chest_0.jpg-6266151945bffe32f3e43f5ac03e48dd.s3tc.ctex"
+path.etc2="res://.godot/imported/stylized_tresure_chest_0.jpg-6266151945bffe32f3e43f5ac03e48dd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/stylized_tresure_chest_0.jpg"
-dest_files=["res://.godot/imported/stylized_tresure_chest_0.jpg-6266151945bffe32f3e43f5ac03e48dd.s3tc.ctex"]
+dest_files=["res://.godot/imported/stylized_tresure_chest_0.jpg-6266151945bffe32f3e43f5ac03e48dd.s3tc.ctex", "res://.godot/imported/stylized_tresure_chest_0.jpg-6266151945bffe32f3e43f5ac03e48dd.etc2.ctex"]
 
 [params]
 

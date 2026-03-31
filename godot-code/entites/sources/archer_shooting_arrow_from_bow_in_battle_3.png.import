@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c06o5i3wqui3p"
 path.s3tc="res://.godot/imported/archer_shooting_arrow_from_bow_in_battle_3.png-e444412587325c490c7f81c3fb9b30dd.s3tc.ctex"
+path.etc2="res://.godot/imported/archer_shooting_arrow_from_bow_in_battle_3.png-e444412587325c490c7f81c3fb9b30dd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/archer_shooting_arrow_from_bow_in_battle_3.png"
-dest_files=["res://.godot/imported/archer_shooting_arrow_from_bow_in_battle_3.png-e444412587325c490c7f81c3fb9b30dd.s3tc.ctex"]
+dest_files=["res://.godot/imported/archer_shooting_arrow_from_bow_in_battle_3.png-e444412587325c490c7f81c3fb9b30dd.s3tc.ctex", "res://.godot/imported/archer_shooting_arrow_from_bow_in_battle_3.png-e444412587325c490c7f81c3fb9b30dd.etc2.ctex"]
 
 [params]
 

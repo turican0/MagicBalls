@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cv6f52yrc38sm"
 path.s3tc="res://.godot/imported/astro_projectile_1.png-b71763504ac210dc0da2ef761c375608.s3tc.ctex"
+path.etc2="res://.godot/imported/astro_projectile_1.png-b71763504ac210dc0da2ef761c375608.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/fireballs/astro_projectile_1.png"
-dest_files=["res://.godot/imported/astro_projectile_1.png-b71763504ac210dc0da2ef761c375608.s3tc.ctex"]
+dest_files=["res://.godot/imported/astro_projectile_1.png-b71763504ac210dc0da2ef761c375608.s3tc.ctex", "res://.godot/imported/astro_projectile_1.png-b71763504ac210dc0da2ef761c375608.etc2.ctex"]
 
 [params]
 

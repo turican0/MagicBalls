@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://j1ol6u6saaqb"
 path.s3tc="res://.godot/imported/Image_0.png-8fbbc61c556d60be5f05f6f9d851cf4c.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_0.png-8fbbc61c556d60be5f05f6f9d851cf4c.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/gryf/textures/Image_0.png"
-dest_files=["res://.godot/imported/Image_0.png-8fbbc61c556d60be5f05f6f9d851cf4c.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_0.png-8fbbc61c556d60be5f05f6f9d851cf4c.s3tc.ctex", "res://.godot/imported/Image_0.png-8fbbc61c556d60be5f05f6f9d851cf4c.etc2.ctex"]
 
 [params]
 

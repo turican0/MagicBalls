@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://qe7wsfymuchp"
 path.s3tc="res://.godot/imported/voidbound_necromancer_0.jpg-beb9ac8f1a8232658d868c80675b0d4b.s3tc.ctex"
+path.etc2="res://.godot/imported/voidbound_necromancer_0.jpg-beb9ac8f1a8232658d868c80675b0d4b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/voidbound_necromancer_0.jpg"
-dest_files=["res://.godot/imported/voidbound_necromancer_0.jpg-beb9ac8f1a8232658d868c80675b0d4b.s3tc.ctex"]
+dest_files=["res://.godot/imported/voidbound_necromancer_0.jpg-beb9ac8f1a8232658d868c80675b0d4b.s3tc.ctex", "res://.godot/imported/voidbound_necromancer_0.jpg-beb9ac8f1a8232658d868c80675b0d4b.etc2.ctex"]
 
 [params]
 

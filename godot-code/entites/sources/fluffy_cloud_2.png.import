@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dt6duqkcaw04v"
 path.s3tc="res://.godot/imported/fluffy_cloud_2.png-6bf0b6af44a1273a5c51478dbe51db8b.s3tc.ctex"
+path.etc2="res://.godot/imported/fluffy_cloud_2.png-6bf0b6af44a1273a5c51478dbe51db8b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/fluffy_cloud_2.png"
-dest_files=["res://.godot/imported/fluffy_cloud_2.png-6bf0b6af44a1273a5c51478dbe51db8b.s3tc.ctex"]
+dest_files=["res://.godot/imported/fluffy_cloud_2.png-6bf0b6af44a1273a5c51478dbe51db8b.s3tc.ctex", "res://.godot/imported/fluffy_cloud_2.png-6bf0b6af44a1273a5c51478dbe51db8b.etc2.ctex"]
 
 [params]
 

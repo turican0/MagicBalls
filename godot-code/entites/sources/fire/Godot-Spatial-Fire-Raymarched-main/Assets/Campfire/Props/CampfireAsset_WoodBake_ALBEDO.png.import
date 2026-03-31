@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6u6ib0b31ofj"
 path.s3tc="res://.godot/imported/CampfireAsset_WoodBake_ALBEDO.png-e8b2d55cbafb2beee4d57f09d2ff826b.s3tc.ctex"
+path.etc2="res://.godot/imported/CampfireAsset_WoodBake_ALBEDO.png-e8b2d55cbafb2beee4d57f09d2ff826b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/fire/Godot-Spatial-Fire-Raymarched-main/Assets/Campfire/Props/CampfireAsset_WoodBake_ALBEDO.png"
-dest_files=["res://.godot/imported/CampfireAsset_WoodBake_ALBEDO.png-e8b2d55cbafb2beee4d57f09d2ff826b.s3tc.ctex"]
+dest_files=["res://.godot/imported/CampfireAsset_WoodBake_ALBEDO.png-e8b2d55cbafb2beee4d57f09d2ff826b.s3tc.ctex", "res://.godot/imported/CampfireAsset_WoodBake_ALBEDO.png-e8b2d55cbafb2beee4d57f09d2ff826b.etc2.ctex"]
 
 [params]
 

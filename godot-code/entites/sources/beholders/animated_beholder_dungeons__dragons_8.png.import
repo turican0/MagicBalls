@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://xqov46hfdj4q"
 path.s3tc="res://.godot/imported/animated_beholder_dungeons__dragons_8.png-2da2d0df8a167b0a23b826f686d218dd.s3tc.ctex"
+path.etc2="res://.godot/imported/animated_beholder_dungeons__dragons_8.png-2da2d0df8a167b0a23b826f686d218dd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/beholders/animated_beholder_dungeons__dragons_8.png"
-dest_files=["res://.godot/imported/animated_beholder_dungeons__dragons_8.png-2da2d0df8a167b0a23b826f686d218dd.s3tc.ctex"]
+dest_files=["res://.godot/imported/animated_beholder_dungeons__dragons_8.png-2da2d0df8a167b0a23b826f686d218dd.s3tc.ctex", "res://.godot/imported/animated_beholder_dungeons__dragons_8.png-2da2d0df8a167b0a23b826f686d218dd.etc2.ctex"]
 
 [params]
 

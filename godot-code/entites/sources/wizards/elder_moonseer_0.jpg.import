@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bje1msfsu8qrc"
 path.s3tc="res://.godot/imported/elder_moonseer_0.jpg-5873b83a9f7dd8faf08e4816da7bcd43.s3tc.ctex"
+path.etc2="res://.godot/imported/elder_moonseer_0.jpg-5873b83a9f7dd8faf08e4816da7bcd43.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/elder_moonseer_0.jpg"
-dest_files=["res://.godot/imported/elder_moonseer_0.jpg-5873b83a9f7dd8faf08e4816da7bcd43.s3tc.ctex"]
+dest_files=["res://.godot/imported/elder_moonseer_0.jpg-5873b83a9f7dd8faf08e4816da7bcd43.s3tc.ctex", "res://.godot/imported/elder_moonseer_0.jpg-5873b83a9f7dd8faf08e4816da7bcd43.etc2.ctex"]
 
 [params]
 

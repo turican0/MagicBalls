@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fdb5rvkgo3ae"
 path.s3tc="res://.godot/imported/model_22_TMAPS0-0.png-ba20bad4269537ef641b1033863ac2d6.s3tc.ctex"
+path.etc2="res://.godot/imported/model_22_TMAPS0-0.png-ba20bad4269537ef641b1033863ac2d6.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/centipede/model_22_TMAPS0-0.png"
-dest_files=["res://.godot/imported/model_22_TMAPS0-0.png-ba20bad4269537ef641b1033863ac2d6.s3tc.ctex"]
+dest_files=["res://.godot/imported/model_22_TMAPS0-0.png-ba20bad4269537ef641b1033863ac2d6.s3tc.ctex", "res://.godot/imported/model_22_TMAPS0-0.png-ba20bad4269537ef641b1033863ac2d6.etc2.ctex"]
 
 [params]
 

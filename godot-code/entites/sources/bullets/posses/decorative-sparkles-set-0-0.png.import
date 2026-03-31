@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dqbqldqahnjr1"
 path.s3tc="res://.godot/imported/decorative-sparkles-set-0-0.png-849d2b6378f57fe824b90bd6a4d93708.s3tc.ctex"
+path.etc2="res://.godot/imported/decorative-sparkles-set-0-0.png-849d2b6378f57fe824b90bd6a4d93708.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/bullets/posses/decorative-sparkles-set-0-0.png"
-dest_files=["res://.godot/imported/decorative-sparkles-set-0-0.png-849d2b6378f57fe824b90bd6a4d93708.s3tc.ctex"]
+dest_files=["res://.godot/imported/decorative-sparkles-set-0-0.png-849d2b6378f57fe824b90bd6a4d93708.s3tc.ctex", "res://.godot/imported/decorative-sparkles-set-0-0.png-849d2b6378f57fe824b90bd6a4d93708.etc2.ctex"]
 
 [params]
 

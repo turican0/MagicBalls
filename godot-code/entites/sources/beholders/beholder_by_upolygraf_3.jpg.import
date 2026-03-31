@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://2vn8cysrgp26"
 path.s3tc="res://.godot/imported/beholder_by_upolygraf_3.jpg-ce94478bd034c7f6e96140fa315d5ca5.s3tc.ctex"
+path.etc2="res://.godot/imported/beholder_by_upolygraf_3.jpg-ce94478bd034c7f6e96140fa315d5ca5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/beholders/beholder_by_upolygraf_3.jpg"
-dest_files=["res://.godot/imported/beholder_by_upolygraf_3.jpg-ce94478bd034c7f6e96140fa315d5ca5.s3tc.ctex"]
+dest_files=["res://.godot/imported/beholder_by_upolygraf_3.jpg-ce94478bd034c7f6e96140fa315d5ca5.s3tc.ctex", "res://.godot/imported/beholder_by_upolygraf_3.jpg-ce94478bd034c7f6e96140fa315d5ca5.etc2.ctex"]
 
 [params]
 

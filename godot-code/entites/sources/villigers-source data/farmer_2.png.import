@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cg0am316m3ggv"
 path.s3tc="res://.godot/imported/farmer_2.png-9f6e7c57250b3229c735b1247f05c354.s3tc.ctex"
+path.etc2="res://.godot/imported/farmer_2.png-9f6e7c57250b3229c735b1247f05c354.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/villigers-source data/farmer_2.png"
-dest_files=["res://.godot/imported/farmer_2.png-9f6e7c57250b3229c735b1247f05c354.s3tc.ctex"]
+dest_files=["res://.godot/imported/farmer_2.png-9f6e7c57250b3229c735b1247f05c354.s3tc.ctex", "res://.godot/imported/farmer_2.png-9f6e7c57250b3229c735b1247f05c354.etc2.ctex"]
 
 [params]
 

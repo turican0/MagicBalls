@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://crg1qf8t87mf3"
 path.s3tc="res://.godot/imported/20260226_2017_Image Generation_simple_compose_01kjdp5j7be0krh5wsj0fr85tf.png-9f75be4f3d4d5b5f8f285362e84266bd.s3tc.ctex"
+path.etc2="res://.godot/imported/20260226_2017_Image Generation_simple_compose_01kjdp5j7be0krh5wsj0fr85tf.png-9f75be4f3d4d5b5f8f285362e84266bd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/bullets/clay/20260226_2017_Image Generation_simple_compose_01kjdp5j7be0krh5wsj0fr85tf.png"
-dest_files=["res://.godot/imported/20260226_2017_Image Generation_simple_compose_01kjdp5j7be0krh5wsj0fr85tf.png-9f75be4f3d4d5b5f8f285362e84266bd.s3tc.ctex"]
+dest_files=["res://.godot/imported/20260226_2017_Image Generation_simple_compose_01kjdp5j7be0krh5wsj0fr85tf.png-9f75be4f3d4d5b5f8f285362e84266bd.s3tc.ctex", "res://.godot/imported/20260226_2017_Image Generation_simple_compose_01kjdp5j7be0krh5wsj0fr85tf.png-9f75be4f3d4d5b5f8f285362e84266bd.etc2.ctex"]
 
 [params]
 

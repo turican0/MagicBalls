@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dcgv5ocn03jtr"
 path.s3tc="res://.godot/imported/Bow_DIFF.jpg-159f52eb99a5530578fc45b5381068da.s3tc.ctex"
+path.etc2="res://.godot/imported/Bow_DIFF.jpg-159f52eb99a5530578fc45b5381068da.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/textures/Bow_DIFF.jpg"
-dest_files=["res://.godot/imported/Bow_DIFF.jpg-159f52eb99a5530578fc45b5381068da.s3tc.ctex"]
+dest_files=["res://.godot/imported/Bow_DIFF.jpg-159f52eb99a5530578fc45b5381068da.s3tc.ctex", "res://.godot/imported/Bow_DIFF.jpg-159f52eb99a5530578fc45b5381068da.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dfgnu82g5ikbj"
 path.s3tc="res://.godot/imported/Std_Skin_Body_diffuse.jpg-cf1b36d7187c204640b0b921efc68c73.s3tc.ctex"
+path.etc2="res://.godot/imported/Std_Skin_Body_diffuse.jpg-cf1b36d7187c204640b0b921efc68c73.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/textures/Std_Skin_Body_diffuse.jpg"
-dest_files=["res://.godot/imported/Std_Skin_Body_diffuse.jpg-cf1b36d7187c204640b0b921efc68c73.s3tc.ctex"]
+dest_files=["res://.godot/imported/Std_Skin_Body_diffuse.jpg-cf1b36d7187c204640b0b921efc68c73.s3tc.ctex", "res://.godot/imported/Std_Skin_Body_diffuse.jpg-cf1b36d7187c204640b0b921efc68c73.etc2.ctex"]
 
 [params]
 

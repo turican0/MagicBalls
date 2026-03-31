@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://byur6nv2ulhuj"
 path.s3tc="res://.godot/imported/ancient_portal_frame_3.png-c58ac2f7a85c055440aa619fa4ce42a6.s3tc.ctex"
+path.etc2="res://.godot/imported/ancient_portal_frame_3.png-c58ac2f7a85c055440aa619fa4ce42a6.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/portals/ancient_portal_frame_3.png"
-dest_files=["res://.godot/imported/ancient_portal_frame_3.png-c58ac2f7a85c055440aa619fa4ce42a6.s3tc.ctex"]
+dest_files=["res://.godot/imported/ancient_portal_frame_3.png-c58ac2f7a85c055440aa619fa4ce42a6.s3tc.ctex", "res://.godot/imported/ancient_portal_frame_3.png-c58ac2f7a85c055440aa619fa4ce42a6.etc2.ctex"]
 
 [params]
 

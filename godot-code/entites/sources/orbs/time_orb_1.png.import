@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dpcejpw6242x"
 path.s3tc="res://.godot/imported/time_orb_1.png-207ed970a50a1c4b877e3c0e9bd03272.s3tc.ctex"
+path.etc2="res://.godot/imported/time_orb_1.png-207ed970a50a1c4b877e3c0e9bd03272.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/orbs/time_orb_1.png"
-dest_files=["res://.godot/imported/time_orb_1.png-207ed970a50a1c4b877e3c0e9bd03272.s3tc.ctex"]
+dest_files=["res://.godot/imported/time_orb_1.png-207ed970a50a1c4b877e3c0e9bd03272.s3tc.ctex", "res://.godot/imported/time_orb_1.png-207ed970a50a1c4b877e3c0e9bd03272.etc2.ctex"]
 
 [params]
 

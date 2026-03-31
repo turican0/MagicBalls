@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://be8suqq7cu0tb"
 path.s3tc="res://.godot/imported/adam_warlock_magus_0.png-cb24139b2e45d6c784aec23d133d6158.s3tc.ctex"
+path.etc2="res://.godot/imported/adam_warlock_magus_0.png-cb24139b2e45d6c784aec23d133d6158.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/adam_warlock_magus_0.png"
-dest_files=["res://.godot/imported/adam_warlock_magus_0.png-cb24139b2e45d6c784aec23d133d6158.s3tc.ctex"]
+dest_files=["res://.godot/imported/adam_warlock_magus_0.png-cb24139b2e45d6c784aec23d133d6158.s3tc.ctex", "res://.godot/imported/adam_warlock_magus_0.png-cb24139b2e45d6c784aec23d133d6158.etc2.ctex"]
 
 [params]
 

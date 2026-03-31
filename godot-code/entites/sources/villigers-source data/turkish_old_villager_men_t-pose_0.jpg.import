@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dn3nfvc24y8cr"
 path.s3tc="res://.godot/imported/turkish_old_villager_men_t-pose_0.jpg-513c7a7c7e6818a346bf28d193a0e9cb.s3tc.ctex"
+path.etc2="res://.godot/imported/turkish_old_villager_men_t-pose_0.jpg-513c7a7c7e6818a346bf28d193a0e9cb.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/villigers-source data/turkish_old_villager_men_t-pose_0.jpg"
-dest_files=["res://.godot/imported/turkish_old_villager_men_t-pose_0.jpg-513c7a7c7e6818a346bf28d193a0e9cb.s3tc.ctex"]
+dest_files=["res://.godot/imported/turkish_old_villager_men_t-pose_0.jpg-513c7a7c7e6818a346bf28d193a0e9cb.s3tc.ctex", "res://.godot/imported/turkish_old_villager_men_t-pose_0.jpg-513c7a7c7e6818a346bf28d193a0e9cb.etc2.ctex"]
 
 [params]
 

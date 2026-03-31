@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://17ipegky5mtu"
 path.s3tc="res://.godot/imported/animated_spider_0.png-4ab84f199f92ca0869e08cc5171812e1.s3tc.ctex"
+path.etc2="res://.godot/imported/animated_spider_0.png-4ab84f199f92ca0869e08cc5171812e1.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/spiders/animated_spider_0.png"
-dest_files=["res://.godot/imported/animated_spider_0.png-4ab84f199f92ca0869e08cc5171812e1.s3tc.ctex"]
+dest_files=["res://.godot/imported/animated_spider_0.png-4ab84f199f92ca0869e08cc5171812e1.s3tc.ctex", "res://.godot/imported/animated_spider_0.png-4ab84f199f92ca0869e08cc5171812e1.etc2.ctex"]
 
 [params]
 

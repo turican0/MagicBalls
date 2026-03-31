@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bl65wpj2d5m0w"
 path.s3tc="res://.godot/imported/schwarznuss_juglans_nigra_0.jpg-f8dece56986a20e57adb9f03d6c44c75.s3tc.ctex"
+path.etc2="res://.godot/imported/schwarznuss_juglans_nigra_0.jpg-f8dece56986a20e57adb9f03d6c44c75.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/walnuts/schwarznuss_juglans_nigra_0.jpg"
-dest_files=["res://.godot/imported/schwarznuss_juglans_nigra_0.jpg-f8dece56986a20e57adb9f03d6c44c75.s3tc.ctex"]
+dest_files=["res://.godot/imported/schwarznuss_juglans_nigra_0.jpg-f8dece56986a20e57adb9f03d6c44c75.s3tc.ctex", "res://.godot/imported/schwarznuss_juglans_nigra_0.jpg-f8dece56986a20e57adb9f03d6c44c75.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fn36l2382gjq"
 path.s3tc="res://.godot/imported/goblin_1.png-54461bb07e1b74d24725e1d1c92bd903.s3tc.ctex"
+path.etc2="res://.godot/imported/goblin_1.png-54461bb07e1b74d24725e1d1c92bd903.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/goblin/goblin_1.png"
-dest_files=["res://.godot/imported/goblin_1.png-54461bb07e1b74d24725e1d1c92bd903.s3tc.ctex"]
+dest_files=["res://.godot/imported/goblin_1.png-54461bb07e1b74d24725e1d1c92bd903.s3tc.ctex", "res://.godot/imported/goblin_1.png-54461bb07e1b74d24725e1d1c92bd903.etc2.ctex"]
 
 [params]
 

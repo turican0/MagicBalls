@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c3fnvxc52pt1b"
 path.s3tc="res://.godot/imported/pbr_stylized_statue_-_mage__wizard_2.png-080be85754daef8a9288c8ffde6c887f.s3tc.ctex"
+path.etc2="res://.godot/imported/pbr_stylized_statue_-_mage__wizard_2.png-080be85754daef8a9288c8ffde6c887f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/pbr_stylized_statue_-_mage__wizard_2.png"
-dest_files=["res://.godot/imported/pbr_stylized_statue_-_mage__wizard_2.png-080be85754daef8a9288c8ffde6c887f.s3tc.ctex"]
+dest_files=["res://.godot/imported/pbr_stylized_statue_-_mage__wizard_2.png-080be85754daef8a9288c8ffde6c887f.s3tc.ctex", "res://.godot/imported/pbr_stylized_statue_-_mage__wizard_2.png-080be85754daef8a9288c8ffde6c887f.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cfb3weblkyttk"
 path.s3tc="res://.godot/imported/mouth_of_marrow_hollow_-_nightmare_0.jpg-8edf3e192d27d13b6e49ef7ca6aa24a9.s3tc.ctex"
+path.etc2="res://.godot/imported/mouth_of_marrow_hollow_-_nightmare_0.jpg-8edf3e192d27d13b6e49ef7ca6aa24a9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/mouth_of_marrow_hollow_-_nightmare_0.jpg"
-dest_files=["res://.godot/imported/mouth_of_marrow_hollow_-_nightmare_0.jpg-8edf3e192d27d13b6e49ef7ca6aa24a9.s3tc.ctex"]
+dest_files=["res://.godot/imported/mouth_of_marrow_hollow_-_nightmare_0.jpg-8edf3e192d27d13b6e49ef7ca6aa24a9.s3tc.ctex", "res://.godot/imported/mouth_of_marrow_hollow_-_nightmare_0.jpg-8edf3e192d27d13b6e49ef7ca6aa24a9.etc2.ctex"]
 
 [params]
 

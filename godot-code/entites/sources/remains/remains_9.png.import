@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://defg2jlxt43rm"
 path.s3tc="res://.godot/imported/remains_9.png-fb786a2920505c7418d4e89195a9a621.s3tc.ctex"
+path.etc2="res://.godot/imported/remains_9.png-fb786a2920505c7418d4e89195a9a621.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/remains/remains_9.png"
-dest_files=["res://.godot/imported/remains_9.png-fb786a2920505c7418d4e89195a9a621.s3tc.ctex"]
+dest_files=["res://.godot/imported/remains_9.png-fb786a2920505c7418d4e89195a9a621.s3tc.ctex", "res://.godot/imported/remains_9.png-fb786a2920505c7418d4e89195a9a621.etc2.ctex"]
 
 [params]
 

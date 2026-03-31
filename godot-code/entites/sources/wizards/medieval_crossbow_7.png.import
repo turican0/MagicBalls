@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://clgxvsu1r5a7r"
 path.s3tc="res://.godot/imported/medieval_crossbow_7.png-269a3407157c7dd35544578d8029d088.s3tc.ctex"
+path.etc2="res://.godot/imported/medieval_crossbow_7.png-269a3407157c7dd35544578d8029d088.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/medieval_crossbow_7.png"
-dest_files=["res://.godot/imported/medieval_crossbow_7.png-269a3407157c7dd35544578d8029d088.s3tc.ctex"]
+dest_files=["res://.godot/imported/medieval_crossbow_7.png-269a3407157c7dd35544578d8029d088.s3tc.ctex", "res://.godot/imported/medieval_crossbow_7.png-269a3407157c7dd35544578d8029d088.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dpxxhiyxjmasx"
 path.s3tc="res://.godot/imported/Std_Lower_Teeth_diffuse.png-f9c9b9d5ac80c2822ed34ddf00266e07.s3tc.ctex"
+path.etc2="res://.godot/imported/Std_Lower_Teeth_diffuse.png-f9c9b9d5ac80c2822ed34ddf00266e07.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/textures/Std_Lower_Teeth_diffuse.png"
-dest_files=["res://.godot/imported/Std_Lower_Teeth_diffuse.png-f9c9b9d5ac80c2822ed34ddf00266e07.s3tc.ctex"]
+dest_files=["res://.godot/imported/Std_Lower_Teeth_diffuse.png-f9c9b9d5ac80c2822ed34ddf00266e07.s3tc.ctex", "res://.godot/imported/Std_Lower_Teeth_diffuse.png-f9c9b9d5ac80c2822ed34ddf00266e07.etc2.ctex"]
 
 [params]
 

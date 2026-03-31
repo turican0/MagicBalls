@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://di5vwl2wy7sn4"
 path.s3tc="res://.godot/imported/Image_3.png-89ab80d03f47d8d6797925d7c07cecd5.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_3.png-89ab80d03f47d8d6797925d7c07cecd5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/zombie-mummy/textures/Image_3.png"
-dest_files=["res://.godot/imported/Image_3.png-89ab80d03f47d8d6797925d7c07cecd5.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_3.png-89ab80d03f47d8d6797925d7c07cecd5.s3tc.ctex", "res://.godot/imported/Image_3.png-89ab80d03f47d8d6797925d7c07cecd5.etc2.ctex"]
 
 [params]
 

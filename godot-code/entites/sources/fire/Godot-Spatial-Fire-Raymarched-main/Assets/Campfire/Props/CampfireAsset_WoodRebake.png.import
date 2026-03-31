@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dcd22qjwg5ecp"
 path.s3tc="res://.godot/imported/CampfireAsset_WoodRebake.png-529c5a64f07b024926950b3ee646031b.s3tc.ctex"
+path.etc2="res://.godot/imported/CampfireAsset_WoodRebake.png-529c5a64f07b024926950b3ee646031b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/fire/Godot-Spatial-Fire-Raymarched-main/Assets/Campfire/Props/CampfireAsset_WoodRebake.png"
-dest_files=["res://.godot/imported/CampfireAsset_WoodRebake.png-529c5a64f07b024926950b3ee646031b.s3tc.ctex"]
+dest_files=["res://.godot/imported/CampfireAsset_WoodRebake.png-529c5a64f07b024926950b3ee646031b.s3tc.ctex", "res://.godot/imported/CampfireAsset_WoodRebake.png-529c5a64f07b024926950b3ee646031b.etc2.ctex"]
 
 [params]
 

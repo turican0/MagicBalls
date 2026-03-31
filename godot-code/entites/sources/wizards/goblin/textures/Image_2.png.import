@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dqmo24datxl0f"
 path.s3tc="res://.godot/imported/Image_2.png-a366b5bddf349bdb07840fb6ba48469d.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_2.png-a366b5bddf349bdb07840fb6ba48469d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/wizards/goblin/textures/Image_2.png"
-dest_files=["res://.godot/imported/Image_2.png-a366b5bddf349bdb07840fb6ba48469d.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_2.png-a366b5bddf349bdb07840fb6ba48469d.s3tc.ctex", "res://.godot/imported/Image_2.png-a366b5bddf349bdb07840fb6ba48469d.etc2.ctex"]
 
 [params]
 
