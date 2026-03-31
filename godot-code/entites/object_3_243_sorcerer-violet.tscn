@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_8q5pm"]
 [ext_resource type="PackedScene" uid="uid://tr1gmq2c3ga4" path="res://entites/sources/wizards/elder_moonseer/elder_moonseer_2.tscn" id="2_nljls"]
-[ext_resource type="Shader" path="res://entites/sorcerer-label-shader.gdshader" id="3_d8lfi"]
+[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_d8lfi"]
 [ext_resource type="Material" uid="uid://b8ol5xfjawt52" path="res://entites/sources/wizards/torus-violet.tres" id="3_vtivh"]
 [ext_resource type="StyleBox" uid="uid://dgthqlvdnn1t" path="res://entites/sources/wizards/violet-label-style.tres" id="5_vtivh"]
 
@@ -53,5 +53,6 @@ theme_override_styles/panel = ExtResource("5_vtivh")
 
 [node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=352848314]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "JARK"

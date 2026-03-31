@@ -32,12 +32,12 @@ viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjjno"]
 resource_local_to_scene = true
-bg_color = Color(0.5659171, 0.00012345538, 0.52144146, 1)
+bg_color = Color(0.9882353, 0.8, 0.76862746, 1)
 border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(0.26121473, 7.224426e-05, 0.27920803, 1)
+border_color = Color(0.78431374, 0.45490196, 0.45490196, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -76,5 +76,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_bjjno")
 
 [node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=352848314]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "ELYSSIA"

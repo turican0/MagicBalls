@@ -31,12 +31,12 @@ shader_parameter/max_visible_dist = 20.0
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gg1ig"]
-bg_color = Color(0, 1, 0, 1)
+bg_color = Color(0.1882353, 0.34509805, 0.15686275, 1)
 border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(0, 0.47058824, 0, 1)
+border_color = Color(0.14117648, 0.2509804, 0.10980392, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -75,5 +75,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_gg1ig")
 
 [node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=449661065]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "RAHN"

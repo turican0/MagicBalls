@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_mwkhn"]
 [ext_resource type="PackedScene" uid="uid://by5db3rtqgr7c" path="res://entites/sources/wizards/shadow_mage.tscn" id="2_mwkhn"]
-[ext_resource type="Shader" path="res://entites/sorcerer-label-shader.gdshader" id="3_n08pu"]
+[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_n08pu"]
 
 [sub_resource type="Gradient" id="Gradient_mwkhn"]
 colors = PackedColorArray(0.50980395, 0, 0, 1, 1, 0, 0, 1)
@@ -31,12 +31,12 @@ shader_parameter/max_visible_dist = 20.0
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56uxs"]
-bg_color = Color(1, 0, 0, 1)
+bg_color = Color(0.9882353, 0.078431375, 0.078431375, 1)
 border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(0.5137255, 0, 0, 1)
+border_color = Color(0.76862746, 0.03137255, 0.03137255, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -75,5 +75,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_56uxs")
 
 [node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=438276721]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "NYMPHUR"
