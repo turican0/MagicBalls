@@ -1,7 +1,8 @@
 [gd_resource type="SphereMesh" format=3 uid="uid://dver2oj1ypdi7"]
 
 [sub_resource type="Gradient" id="Gradient_mvjvp"]
-colors = PackedColorArray(0.8766123, 0.35489547, 1, 1, 0.8236359, 0.0005332887, 0.82363003, 1)
+offsets = PackedFloat32Array(0, 0.9886364)
+colors = PackedColorArray(0.92713565, 0.8345959, 0.89125144, 1, 0.32941177, 0.15686275, 0.28235295, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6k5vr"]
 

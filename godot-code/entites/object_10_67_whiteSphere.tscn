@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bdw3j48jhug0b"]
 
 [sub_resource type="Gradient" id="Gradient_mvjvp"]
-colors = PackedColorArray(0.8474744, 0.84747446, 0.84747446, 1, 1, 1, 1, 1)
+colors = PackedColorArray(0.8784314, 0.8784314, 0.9098039, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6k5vr"]
 

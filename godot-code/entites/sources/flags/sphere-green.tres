@@ -1,7 +1,7 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://48nblu0jplpm"]
 
 [sub_resource type="Gradient" id="Gradient_mvjvp"]
-colors = PackedColorArray(0, 1, 0, 1, 1.6364455e-06, 0.6387936, 0.36056066, 1)
+colors = PackedColorArray(0.52970207, 0.86587065, 0.46276242, 1, 0.14117648, 0.2509804, 0.10980392, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6k5vr"]
 

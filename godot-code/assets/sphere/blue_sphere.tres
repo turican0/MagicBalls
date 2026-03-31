@@ -1,7 +1,8 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bfihdtwiqivu7"]
 
 [sub_resource type="Gradient" id="Gradient_qrfx1"]
-colors = PackedColorArray(1, 1, 1, 1, 0.3019608, 0, 0.7882353, 1)
+offsets = PackedFloat32Array(0, 0.9886364)
+colors = PackedColorArray(0.6681192, 0.7518775, 0.8822666, 1, 0.1882353, 0.28235295, 0.3764706, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wc08t"]
 
