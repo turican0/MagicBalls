@@ -171,3 +171,5 @@ mummy:
 	
 next_sorcerer:
 https://sketchfab.com/3d-models/draconic-sorceress-character-rig-5b9b6ce9036448b59abaf0d2def71441
+https://sketchfab.com/3d-models/skeleton-gore-model-f80e51109cf04f38869adb1d0de90daa
+https://sketchfab.com/3d-models/skeleton-warrior-4f0bcf2feb8345539017eaab62392900
