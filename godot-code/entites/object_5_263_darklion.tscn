@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=393404257]
 
 [node name="wolf2" parent="." unique_id=1128752852 instance=ExtResource("1_435jb")]
-transform = Transform3D(-0.012, 0, -1.8119497e-09, 0, 0.012, 0, 1.8119497e-09, 0, -0.012, 0, 0, 0.7)
+transform = Transform3D(-0.01, 0, -1.5099579e-09, 0, 0.01, 0, 1.5099579e-09, 0, -0.01, 0, 0, 0.7)
