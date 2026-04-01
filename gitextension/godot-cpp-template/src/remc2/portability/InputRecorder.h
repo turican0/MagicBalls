@@ -1,14 +1,13 @@
 #pragma once
+#include "../engine/GameState.h"
+#include "../engine/RecordedEvent.h"
 #include <cstdint>
 #include <cstring>
-#include <map>
 #include <fstream>
+#include <map>
 #include <vector>
-#include "../engine/InputEvent.h"
-#include "../engine/GameState.h"
 
-class InputRecorder
-{
+class InputRecorder {
 private:
 	const std::string m_FileSignature = "MC2-HD-Recording";
 	std::string m_FilePath;
@@ -18,7 +17,7 @@ public:
 	bool m_IsRecording = false;
 	bool m_IsPlaying = false;
 
-	InputRecorder(const char* filePath);
+	InputRecorder(const char *filePath);
 	~InputRecorder();
 
 	void PlayPause(const GameState state);
@@ -26,14 +25,16 @@ public:
 	bool StopRecording();
 	void PauseRecording(bool pause);
 	void ClearInputEvents();
-	
+
 	bool StartPlayback();
 	void StopPlayback();
 
-	InputTurn* GetCurrentPlayerActions(int level, int playerIdx, int turn);
-	void RecordPlayerActions(uint16_t level, uint16_t playerIdx, uint32_t turn, uint64_t sizeBytes, uint8_t* buffer);
+	RecordedEventPlayer *GetCurrentPlayer(int level, int playerIdx);
+	RecordedEventTurn *GetCurrentPlayerActions(int level, int playerIdx, int turn);
 
-	bool SaveRecordingToFile(const char* outputFileName);
-	bool LoadRecordingFile(const char* inputFileName);
+	void RecordPlayerActions(uint16_t level, uint16_t playerIdx, uint32_t turn, uint64_t sizeBytes, uint8_t *buffer);
+	void RecordPlayerSpells(int level, int playerIdx, int16_t *spellsEnabled, uint8_t *spellIndexes, uint8_t *spellLevels, int32_t *spellsExperience);
+
+	bool SaveRecordingToFile(const char *outputFileName);
+	bool LoadRecordingFile(const char *inputFileName);
 };
-

@@ -1,5 +1,5 @@
 #pragma once
-
+#define NOMINMAX
 #include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/classes/wrapped.hpp"
 #include "godot_cpp/variant/variant.hpp"
@@ -119,7 +119,7 @@ public:
 	bool REMC2IsHiddenLevel();
 
 
-	void REMC2BeginGame_old(String cdPath);
+	void REMC2BeginGame_old(String cdPath, String gamePath);
 
 	void REMC2SetScrBuffer(TextureRect *scrBufferRect);
 	//void REMC2SetCDPath(String cdPath);

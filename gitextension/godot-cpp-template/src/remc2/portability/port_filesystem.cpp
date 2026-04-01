@@ -12,11 +12,12 @@ using namespace std;
 #endif
 */
 
-char gameFolder[512] = "NETHERW";
-char cdFolder[512] = "CD_Files";
-char bigGraphicsFolder[512] = "bigGraphics";
-char forceRender[512] = "";
-spdlog::logger* Logger = nullptr;
+std::string gameFolder = "NETHERW";
+std::string cdFolder = "CD_Files";
+std::string highResGraphicsFolder = "graphics/high-res";
+std::string fixedMenuGraphicsFolder = "graphics/fixed/menu";
+std::string forceRender = "";
+spdlog::logger *Logger = nullptr;
 
 #ifndef _MSC_VER
 	#include <libgen.h>

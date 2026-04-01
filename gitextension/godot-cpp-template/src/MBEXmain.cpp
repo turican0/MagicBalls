@@ -404,7 +404,7 @@ void MBEXclass::setPlayerActiveSubSpell(int spell_index, int sub_spell_index, in
 			actEvent->dword_0xA4_164x->str_611.SubSpellIndexLeft_1109 = sub_spell_index;
 			//actEvent->dword_0xA4_164x->str_611.leftSubSpellIndex_0x455_1109 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
 			x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400 = 8;
-			SetSpell_6D5E0(Entities_EA3E4[actEvent->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[spell_index]], sub_spell_index);
+			SetSpell_6D5E0(Entities_EA3E4[actEvent->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[spell_index]], sub_spell_index);
 			break;
 		}
 		case 1: //right
@@ -414,7 +414,7 @@ void MBEXclass::setPlayerActiveSubSpell(int spell_index, int sub_spell_index, in
 			actEvent->dword_0xA4_164x->str_611.SubSpellIndexRight_1110 = sub_spell_index;
 			//actEvent->dword_0xA4_164x->str_611.SubSpellIndexRight_1110 = D41A0_0.array_0x6E3E[D41A0_0.LevelIndex_0xc].str_0x6E3E_byte2;
 			x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401 = 8;
-			SetSpell_6D5E0(Entities_EA3E4[actEvent->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[spell_index]], sub_spell_index);
+			SetSpell_6D5E0(Entities_EA3E4[actEvent->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[spell_index]], sub_spell_index);
 			break;
 		}
 	}
@@ -463,7 +463,7 @@ Array MBEXclass::getSelectedSpells() {
 	drawSpellInfoType spellIndex;
 	type_entity_0x6E8E* playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	//if (x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400) {
-	spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105]]);
+	spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105]]);
 	Dictionary dl;
 	dl["spellIndex"] = spellIndex.spellIndex;
 	dl["glow"] = spellIndex.glow;
@@ -474,7 +474,7 @@ Array MBEXclass::getSelectedSpells() {
 		result.append(dl);
 	//}
 	//if (x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401) {
-		spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]]);
+		spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]]);
 		Dictionary dr;
 		dr["spellIndex"] = spellIndex.spellIndex;
 		dr["glow"] = spellIndex.glow;
@@ -501,7 +501,7 @@ Array MBEXclass::getActiveSpells() {
 		uint32_t sub_spell_mana[3] = { 0, 0, 0 };
 		int spellIndex2 = spellIndex_D94FF[spellIconIndex];
 		if (SPELLS_BEGIN_BUFFER_str[spellIndex_D94FF[spellIconIndex]].byte_0 && !(!isCaveLevel_D41B6 && spellIndex2 == 25)) {
-			type_entity_0x6E8E *spellEntity = Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[spellIndex_D94FF[spellIconIndex]]];
+			type_entity_0x6E8E *spellEntity = Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[spellIndex_D94FF[spellIconIndex]]];
 			if (spellEntity > Entities_EA3E4[0])
 			{
 				int subSpellIndex;
@@ -558,7 +558,7 @@ Array MBEXclass::getActiveSpells() {
 			//int selectedSpellIndex = spellIconIndex;
 			//if (selectedSpellIndex != -1)
 			//spellIndex = spellIndex_D94FF[spellIconIndex];
-			signed __int16 spellIndex3 = playerEntity->dword_0xA4_164x->str_611.array_0x41D_1053z.SpellIndex[spellIconIndex];
+			signed __int16 spellIndex3 = playerEntity->dword_0xA4_164x->str_611.SpellLevels_0x41D_1053z.SpellIndex[spellIconIndex];
 			for (int subSpellIconIndex = 0; subSpellIconIndex < 3; subSpellIconIndex++)
 			{
 				int manaPart = 0;
@@ -592,7 +592,7 @@ Array MBEXclass::getActiveSpells() {
 				/*
 			for (int subSpellIconIndex = 0; subSpellIconIndex < 3; subSpellIconIndex++)
 			{
-				type_entity_0x6E8E *spellEntity = Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[spellIndex_D94FF[spellIconIndex]]];
+				type_entity_0x6E8E *spellEntity = Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[spellIndex_D94FF[spellIconIndex]]];
 				if (spellEntity > Entities_EA3E4[0])
 				{
 					bool skipToLabel43 = false;
@@ -1066,11 +1066,11 @@ Vector3 get_color(const uint8_t *pal, int index) {
 
 float get_saturation(const Vector3 &col) {
 	float cmax = col.x;
-	cmax = max(cmax, col.y);
-	cmax = max(cmax, col.z);
+	cmax = std::max(cmax, col.y);
+	cmax = std::max(cmax, col.z);
 	float cmin = col.x;
-	cmin = min(cmin, col.y);
-	cmin = min(cmin, col.z);
+	cmin = std::min(cmin, col.y);
+	cmin = std::min(cmin, col.z);
 	float chroma = cmax - cmin;
 	return (cmax > 0.001f) ? chroma / cmax : 0.0f;
 }
@@ -1403,10 +1403,11 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	initposistruct();
 	//end - code from sub_main
 
-	sprintf(gameFolder, "%sGAME/NETHERW", real_cdPath.utf8().get_data());
-	sprintf(cdFolder, "%sCD_Files", real_cdPath.utf8().get_data());
-	gameDataPath = GetSubDirectoryPath(gameFolder);
-	cdDataPath = GetSubDirectoryPath(cdFolder);
+	gameFolder = std::string(real_cdPath.utf8().get_data()) + "GAME/NETHERW";
+	cdFolder = std::string(real_cdPath.utf8().get_data()) + "CD_Files";
+
+	gameDataPath = GetSubDirectoryPath(gameFolder.c_str());
+	cdDataPath = GetSubDirectoryPath(cdFolder.c_str());
 
 	//begin - code from Initialize
 	DataFileIO::SetCDFilePaths(cdDataPath.c_str(), pstr);
@@ -1494,7 +1495,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	//end - code from LevelInitGame_56A30
 
 	//begin - sub_46830_main_loop
-	sub_47160();
+	LoadSpr_47160();
 	//end - sub_46830_main_loop
 
 	char dataPath[MAX_PATH];
@@ -1527,8 +1528,9 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
-void MBEXclass::REMC2BeginGame_old(String cdPath) {//OK!!
+void MBEXclass::REMC2BeginGame_old(String cdPath, String gamePath) { //OK!!
 	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+	String real_gamePath = ProjectSettings::get_singleton()->globalize_path(gamePath);
 
 	int argc = 3;
 	char *argv[3];
@@ -1543,7 +1545,7 @@ void MBEXclass::REMC2BeginGame_old(String cdPath) {//OK!!
 
 	support_begin();
 
-	sub_main_mod_begin(argc, argv,(char *) real_cdPath.utf8().get_data());
+	sub_main_mod_begin(argc, argv, (char *)real_cdPath.utf8().get_data(), (char *)real_gamePath.utf8().get_data());
 	//MBEXstate = 1;
 
 	//changeLanguage(2);//added code

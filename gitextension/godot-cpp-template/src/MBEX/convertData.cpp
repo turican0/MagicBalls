@@ -192,7 +192,7 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 	if (!make_dir_godot(path)) {
 		return;
 	}
-	String cdFullLangPath = String(cdFolder) + cdLangPath;
+	String cdFullLangPath = String(cdFolder.c_str()) + cdLangPath;
 	Ref<DirAccess> cleanup_dir = DirAccess::open(cdFullLangPath);
 	if (cleanup_dir.is_valid()) {
 		cleanup_dir->list_dir_begin();
@@ -269,8 +269,8 @@ void MBEXextractLang(String path, String langPath, String cdLangPath) {
 //TITBASF-ok
 
 void MBEXsmatConverts(String path, int inWidth, int inHeight, String texture, String palette) {
-	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
-	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
+	std::string textPath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", texture.utf8().get_data());
+	std::string palettePath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", palette.utf8().get_data());
 	String outPath = path + "/" + texture + ".png";
 	std::string stdOutPath = outPath.utf8().get_data();
 
@@ -363,9 +363,9 @@ typedef struct {
 #pragma pack(pop)
 
 void MBEXgraphicConverts(String path, String texture, String palette) {
-	std::string datPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
+	std::string datPath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", texture.utf8().get_data());
 	std::string tabPath = datPath.substr(0, datPath.length() - 3) + "TAB";
-	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());	
+	std::string palettePath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", palette.utf8().get_data());	
 
 	if (!make_dir_godot(path)) {
 		return;
@@ -787,9 +787,9 @@ void MBEXsmatsConverts(String path) {
 }
 
 void MBEXbullConverts(String path, String texture, String palette, int max_images) {
-	std::string datPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
+	std::string datPath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", texture.utf8().get_data());
 	std::string tabPath = datPath.substr(0, datPath.length() - 3) + "TAB";
-	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
+	std::string palettePath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", palette.utf8().get_data());
 
 	uint8_t *tempTMAPS00TAB_BEGIN_BUFFER;
 	type_E9C08 *temp_E9C08x;
@@ -1001,9 +1001,9 @@ void MBEXtmapsCompare(String folder0, String folder1, String folder2, String out
 }
 
 void MBEXfontConverts(String path, String texture, String palette) {
-	std::string datPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
+	std::string datPath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", texture.utf8().get_data());
 	std::string tabPath = datPath.substr(0, datPath.length() - 3) + "TAB";
-	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
+	std::string palettePath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", palette.utf8().get_data());
 
 	String outPath = path + "/" + texture + ".png";
 
@@ -1171,8 +1171,8 @@ void MBEXtexturesConverts(String path) {
 }
 
 void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture, String palette, bool makeBorders) {
-	std::string textPath = GetSubDirectoryFile(cdFolder, "DATA", texture.utf8().get_data());
-	std::string palettePath = GetSubDirectoryFile(cdFolder, "DATA", palette.utf8().get_data());
+	std::string textPath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", texture.utf8().get_data());
+	std::string palettePath = GetSubDirectoryFile(cdFolder.c_str(), "DATA", palette.utf8().get_data());
 
 	String outPath = path + "/" + texture + ".png";
 	String outPath2 = path + "/" + texture + "-borders.png";
@@ -1418,7 +1418,7 @@ bool MBLoadSound(uint8_t soundIndex) //265300
 	int32_t lastSoundBankPos;
 	uint8_t soundIndex2 = 0;
 
-	std::string soundPath = GetSubDirectoryFile(cdFolder, "SOUND", "SOUND.DAT");
+	std::string soundPath = GetSubDirectoryFile(cdFolder.c_str(), "SOUND", "SOUND.DAT");
 	file = DataFileIO::CreateOrOpenFile(soundPath.c_str(), 512);
 
 	if (file != NULL) {

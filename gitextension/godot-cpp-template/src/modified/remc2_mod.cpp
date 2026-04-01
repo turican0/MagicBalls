@@ -85,7 +85,7 @@ void InitLanguage_76A40_mod_only_language() //257A40
 int REMC2_tempa2;
 int REMC2_tempa3;
 
-void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
+void sub_main_mod_begin(int argc, char **argv, char *real_cdPathch, char *gamePath) {
 	SetTimeStart();
 
 	begin_plugin();
@@ -106,8 +106,10 @@ void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
 
 	//SetConfig();
 	//next code can be replaced SetConfig in future
-	sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
-	sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
+	gameFolder = std::string(real_cdPathch) + "GAME/NETHERW";
+	cdFolder = std::string(real_cdPathch) + "CD_Files";
+	highResGraphicsFolder = std::string(gamePath) + "GAME/NETHERW";
+	fixedMenuGraphicsFolder = std::string(gamePath) + "CD_Files";
 	windowResWidth = 640;//added
 	windowResHeight = 480;//added
 	gameResWidth = 640;//added
@@ -120,12 +122,16 @@ void sub_main_mod_begin(int argc, char **argv,char *real_cdPathch) {
 		texturepixels = 32;
 	}
 	//Set Paths for game data
-	gameDataPath = GetSubDirectoryPath(gameFolder);
-	cdDataPath = GetSubDirectoryPath(cdFolder);
-	bigGraphicsPath = GetSubDirectoryPath(bigGraphicsFolder);
+	Logger->debug("Getting Game data paths");
+	gameDataPath = GetSubDirectoryPath(gameFolder.c_str());
+	cdDataPath = GetSubDirectoryPath(cdFolder.c_str());
+	highResGraphicsPath = GetSubDirectoryPath(highResGraphicsFolder.c_str());
+	fixedMenuGraphicsPath = GetSubDirectoryPath(fixedMenuGraphicsFolder.c_str());
+
+
 	VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
 	gamepad_init(gameResWidth, gameResHeight);
-	if (std::string mainfile = GetSubDirectoryFile(gameFolder, "CDATA", "TMAPS0-0.DAT"); !file_exists(mainfile.c_str())) //test original file
+	if (std::string mainfile = GetSubDirectoryFile(gameFolder.c_str(), "CDATA", "TMAPS0-0.DAT"); !file_exists(mainfile.c_str())) //test original file
 	{
 	} else {
 	}
@@ -1469,7 +1475,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 					DrawSpellIcon_2E260(
 							spellLeftPosX,
 							2 * scale,
-							Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105]],
+							Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105]],
 							false,
 							scale);
 
@@ -1477,7 +1483,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 					DrawSpellIcon_2E260(
 							spellRightPosX,
 							2 * scale,
-							Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]],
+							Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]],
 							false,
 							scale);
 
@@ -1685,14 +1691,14 @@ void DrawGameFrame_2BE30_mod() //20CE30
 				DrawSpellIcon_2E260(
 						spellLeftPosX,
 						2,
-						Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105]],
+						Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105]],
 						false,
 						scale);
 			if (x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401)
 				DrawSpellIcon_2E260(
 						spellRightPosX,
 						2,
-						Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.array_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]],
+						Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]],
 						false,
 						scale);
 			break;
@@ -2528,7 +2534,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 				resindex_begin = 0;
 			}
 
-			sub_47160();
+			LoadSpr_47160();
 
 			while (!D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234) {
 				if (musicAble_E37FC && musicActive_E37FD && m_iNumberOfTracks) {
@@ -2546,11 +2552,11 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 				}
 				SetCenterScreenForFlyAssistant_6EDB0();
 				if (m_ptrGameRender == nullptr) {
-					if (!strcmp(forceRender, "NG"))
+					if (!strcmp(forceRender.c_str(), "NG"))
 						m_ptrGameRender = (GameRenderInterface *)new GameRenderNG();
-					else if (!strcmp(forceRender, "Original"))
+					else if (!strcmp(forceRender.c_str(), "Original"))
 						m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
-					else if (!strcmp(forceRender, "HD"))
+					else if (!strcmp(forceRender.c_str(), "HD"))
 						m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
 					else {
 						if ((gameResWidth <= 640) && (gameResHeight <= 480)) {
@@ -2618,7 +2624,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 
 							sub_47FC0_load_screen_mod(true);
 							LevelInitGame_56A30(actLevel);
-							sub_47160();
+							LoadSpr_47160();
 						}
 					}
 				} else if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0xA) {
@@ -2655,8 +2661,8 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 		EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
 
 		//SetConfig();
-		sprintf(gameFolder, "%sGAME/NETHERW", real_cdPathch); //added
-		sprintf(cdFolder, "%sCD_Files", real_cdPathch); //added
+		gameFolder = std::string(real_cdPathch) + "GAME/NETHERW";
+		cdFolder = std::string(real_cdPathch) + "CD_Files";
 		inputMapping.Forward = 0x1a; //added
 		inputMapping.Backwards = 0x16; //added
 		inputMapping.Left = 0x04; //added
@@ -2677,12 +2683,14 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 			texturepixels = 32;
 		}
 		//Set Paths for game data
-		gameDataPath = GetSubDirectoryPath(gameFolder);
-		cdDataPath = GetSubDirectoryPath(cdFolder);
-		bigGraphicsPath = GetSubDirectoryPath(bigGraphicsFolder);
+		Logger->debug("Getting Game data paths");
+		gameDataPath = GetSubDirectoryPath(gameFolder.c_str());
+		cdDataPath = GetSubDirectoryPath(cdFolder.c_str());
+		highResGraphicsPath = GetSubDirectoryPath(highResGraphicsFolder.c_str());
+		fixedMenuGraphicsPath = GetSubDirectoryPath(fixedMenuGraphicsFolder.c_str());
 		VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
 		gamepad_init(gameResWidth, gameResHeight);
-		if (std::string mainfile = GetSubDirectoryFile(gameFolder, "CDATA", "TMAPS0-0.DAT"); !file_exists(mainfile.c_str())) //test original file
+		if (std::string mainfile = GetSubDirectoryFile(gameFolder.c_str(), "CDATA", "TMAPS0-0.DAT"); !file_exists(mainfile.c_str())) //test original file
 		{
 			/*
 			if (std::filesystem::is_directory(gameDataPath)) {
