@@ -33,3 +33,5 @@ gitextension/godot-cpp-template/build-x86/
 /gitextension/godot-cpp-template/data
 gitextension/godot-cpp-template/MBEXout/bin/windows/~EXTENSION-NAME.windows.template_debug.x86_64.dll
 gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
+/gitextension/godot-cpp-template/bin/windows
+/gitextension/godot-cpp-template/MBEXout
