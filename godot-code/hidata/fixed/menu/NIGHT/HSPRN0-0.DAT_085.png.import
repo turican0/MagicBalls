@@ -2,32 +2,31 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ct6dnen72n8ln"
-path.s3tc="res://.godot/imported/Image_2.003.png-211821ee1dd703a29c14d5f80ba1911b.s3tc.ctex"
+uid="uid://biu85odhcatjf"
+path="res://.godot/imported/HSPRN0-0.DAT_085.png-e30bb54f01d9912b59c84f890057567c.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://entites/sources/wizards/skeleton-sorcerer/textures/Image_2.003.png"
-dest_files=["res://.godot/imported/Image_2.003.png-211821ee1dd703a29c14d5f80ba1911b.s3tc.ctex"]
+source_file="res://hidata/fixed/menu/NIGHT/HSPRN0-0.DAT_085.png"
+dest_files=["res://.godot/imported/HSPRN0-0.DAT_085.png-e30bb54f01d9912b59c84f890057567c.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=4
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
-compress/normal_map=1
+compress/normal_map=0
 compress/channel_pack=1
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=1
-roughness/src_normal="res://entites/sources/wizards/skeleton-sorcerer/textures/Image_2.003.png"
+roughness/mode=0
+roughness/src_normal=""
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2
@@ -38,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1
