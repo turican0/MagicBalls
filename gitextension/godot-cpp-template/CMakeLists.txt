@@ -26,6 +26,12 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src")
 endif()
 add_subdirectory(godot-cpp SYSTEM)
 
+# Fix pro Android NDK
+if(ANDROID)
+    target_compile_options(godot-cpp PRIVATE -fexceptions)
+    target_compile_options(godot::cpp INTERFACE -fexceptions)
+endif()
+
 # Add godot-cpp's module path and include the exported functions.
 # This is made available for documentation generation
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${godot-cpp_SOURCE_DIR}/cmake")
@@ -44,6 +50,28 @@ project(godot-cpp-template
 )
 
 add_library(${LIBNAME} SHARED)
+
+target_compile_options(${LIBNAME} PRIVATE
+    -fsigned-char
+    -fexceptions
+    $<$<CXX_COMPILER_ID:Clang>:
+        -Wno-error
+        -Wno-c++11-narrowing
+        -Wno-narrowing
+        -Wno-pragma-pack
+        -Wno-delete-abstract-non-virtual-dtor
+        -Wno-pointer-bool-conversion
+	-Wno-int-to-pointer-cast
+        -Wno-pointer-to-int-cast
+        -Wno-tautological-constant-out-of-range-compare
+	-Wno-switch
+	-Wno-fortify-source
+        -Wno-shift-op-parentheses
+        -Wno-constant-conversion
+        -Wno-parentheses
+        -Wno-unused-command-line-argument
+    >
+)
 
 target_sources(${LIBNAME}
     PRIVATE
@@ -210,7 +238,9 @@ target_sources(${LIBNAME}
     src/MBEX/convertData.h
     src/libxmi/xmi2mid.cpp
     src/libxmi/xmi2mid.h
+    src/lib/stb_image.h
     src/lib/stb_image_write.h
+    src/lib/stb_impl.cpp
     src/lib/lib9660.cpp
     src/lib/lib9660.h
 
@@ -235,6 +265,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_LIST_DIR}/src/lib
 
 set_target_properties(${LIBNAME}
     PROPERTIES
+    DEBUG_POSTFIX ".debug"
     # The generator expression here prevents msvc from adding a Debug or Release subdir.
     RUNTIME_OUTPUT_DIRECTORY "$<1:${PROJECT_SOURCE_DIR}/bin/${GODOTCPP_PLATFORM}>"
 
@@ -247,3 +278,9 @@ set(GODOT_PROJECT_BINARY_DIR "${PROJECT_SOURCE_DIR}/${GODOT_PROJECT_DIR}/bin/${G
 add_custom_command(TARGET ${LIBNAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${LIBNAME}>" "${GODOT_PROJECT_BINARY_DIR}/$<TARGET_FILE_NAME:${LIBNAME}>"
 )
+
+if(ANDROID)
+    target_compile_definitions(${LIBNAME} PRIVATE _LIBCPP_HAS_THREAD_API_PTHREAD)
+    target_link_libraries(${LIBNAME} PRIVATE log android)
+    target_link_options(${LIBNAME} PRIVATE -pthread)  # ← přidej toto
+endif()

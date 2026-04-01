@@ -59,6 +59,7 @@ static l9660_file *last_file;
 static char        gbuf[2048];
 #endif
 
+#ifdef _WIN32
 static char *strchrnul(const char *s, int c)
 {
     while (*s) {
@@ -67,6 +68,7 @@ static char *strchrnul(const char *s, int c)
     }
     return (char *) s;
 }
+#endif
 
 static inline uint16_t fsectoff(l9660_file *f)
 {

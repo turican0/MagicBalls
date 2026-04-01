@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../lib/lib9660.h"
 
 #include "../remc2/utilities/DataFileRNC.h"

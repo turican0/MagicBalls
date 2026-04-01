@@ -1,3 +1,6 @@
+#include "../lib/stb_image.h"
+#include "../lib/stb_image_write.h"
+
 #include "BitmapIO.h"
 
 #include <stdio.h>
@@ -182,85 +185,82 @@ void BitmapIO::WritePaletteAsImageBMP(const char* path, int numColors, uint8_t* 
 }
 
 #ifdef _DEBUG
-void BitmapIO::WritePosistructToPng(uint8_t* ptrPalette, uint8_t* ptrBuffer, int width, int height, char* filename, char* title, int padding, double multiplier)
-{
+// --- PNG Writing Methods (STB Implementation) ---
+
+void BitmapIO::WritePosistructToPng(uint8_t *ptrPalette, uint8_t *ptrBuffer, int width, int height, char *filename, char *title, int padding, double multiplier) {
 	BitmapIO::WritePosistructToPng(ptrPalette, ptrBuffer, width, height, filename, title, padding, multiplier, 0, 255, 0);
 }
 
-void BitmapIO::WritePosistructToPng(uint8_t* ptrPalette, uint8_t* ptrBuffer, int width, int height, char* filename, char* title, int padding, double multiplier, uint8_t transColR, uint8_t transColG, uint8_t transColB)
-{
+void BitmapIO::WritePosistructToPng(uint8_t *ptrPalette, uint8_t *ptrBuffer, int width, int height, char *filename, char *title, int padding, double multiplier, uint8_t transColR, uint8_t transColG, uint8_t transColB) {
 	char textbuffer[512];
-	std::vector<uint8_t> buffer2((width + (2 * padding)) * (height + (2 * padding)) * 4);
+	int newWidth = width + (2 * padding);
+	int newHeight = height + (2 * padding);
+	std::vector<uint8_t> buffer2(newWidth * newHeight * 4);
 
-	for (int y = 0; y < height + (2 * padding); y++)
-	{
-		for (int x = 0; x < width + (2 * padding); x++)
-		{
+	for (int y = 0; y < newHeight; y++) {
+		for (int x = 0; x < newWidth; x++) {
 			int x2 = x - padding;
 			int y2 = y - padding;
+			int destIdx = (y * newWidth + x) * 4;
 
 			if ((x < padding) || (y < padding) || (x >= width + padding) || (y >= height + padding)) {
-				buffer2[(y * (width + (2 * padding)) + x) * 4 + 0] = transColR;
-				buffer2[(y * (width + (2 * padding)) + x) * 4 + 1] = transColG;
-				buffer2[(y * (width + (2 * padding)) + x) * 4 + 2] = transColB;
-				buffer2[(y * (width + (2 * padding)) + x) * 4 + 3] = 255;
-			}
-			else
-			{
+				buffer2[destIdx + 0] = transColR;
+				buffer2[destIdx + 1] = transColG;
+				buffer2[destIdx + 2] = transColB;
+				buffer2[destIdx + 3] = 255;
+			} else {
 				bool isWhite = false;
-				buffer2[(y * (width + (2 * padding)) + x) * 4 + 0] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[y2 * width + x2] * 3], multiplier);
-				buffer2[(y * (width + (2 * padding)) + x) * 4 + 1] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[y2 * width + x2] * 3 + 1], multiplier);
-				buffer2[(y * (width + (2 * padding)) + x) * 4 + 2] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[y2 * width + x2] * 3 + 2], multiplier);
-				buffer2[(y * (width + (2 * padding)) + x) * 4 + 3] = 255;
-				if (ptrBuffer[(y2 * width + x2)] == TRANSPARENT_COLOUR)
-				{
+				int srcIdx = y2 * width + x2;
+				uint8_t paletteIdx = ptrBuffer[srcIdx];
+
+				buffer2[destIdx + 0] = BitmapIO::MultiplyValue(ptrPalette[paletteIdx * 3], multiplier);
+				buffer2[destIdx + 1] = BitmapIO::MultiplyValue(ptrPalette[paletteIdx * 3 + 1], multiplier);
+				buffer2[destIdx + 2] = BitmapIO::MultiplyValue(ptrPalette[paletteIdx * 3 + 2], multiplier);
+				buffer2[destIdx + 3] = 255;
+
+				if (paletteIdx == TRANSPARENT_COLOUR) {
 					isWhite = true;
-					if (y2 > 0)
-						if ((ptrBuffer[((y2 - 1) * width + x2)] != TRANSPARENT_COLOUR) && (ptrBuffer[y2 * width + x2] == TRANSPARENT_COLOUR))
-						{
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 0] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[((y2 - 1) * width + x2)] * 3], multiplier);
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 1] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[((y2 - 1) * width + x2)] * 3 + 1], multiplier);
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 2] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[((y2 - 1) * width + x2)] * 3 + 2], multiplier);
-							isWhite = false;
-						}
-					if (y2 < height - 1)
-						if ((ptrBuffer[((y2 + 1) * width + x2)] != TRANSPARENT_COLOUR) && (ptrBuffer[y2 * width + x2] == TRANSPARENT_COLOUR))
-						{
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 0] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[((y2 + 1) * width + x2)] * 3], multiplier);
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 1] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[((y2 + 1) * width + x2)] * 3 + 1], multiplier);
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 2] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[((y2 + 1) * width + x2)] * 3 + 2], multiplier);
-							isWhite = false;
-						}
-					if (x2 > 0)
-						if ((ptrBuffer[(y2 * width + (x2 - 1))] != TRANSPARENT_COLOUR) && (ptrBuffer[y2 * width + x2] == TRANSPARENT_COLOUR))
-						{
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 0] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[(y2 * width + (x2 - 1))] * 3], multiplier);
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 1] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[(y2 * width + (x2 - 1))] * 3 + 1], multiplier);
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 2] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[(y2 * width + (x2 - 1))] * 3 + 2], multiplier);
-							isWhite = false;
-						}
-					if (x2 < width - 1)
-						if ((ptrBuffer[(y2 * width + (x2 + 1))] != TRANSPARENT_COLOUR) && (ptrBuffer[y2 * width + x2] == TRANSPARENT_COLOUR))
-						{
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 0] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[(y2 * width + (x2 + 1))] * 3], multiplier);
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 1] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[(y2 * width + (x2 + 1))] * 3 + 1], multiplier);
-							buffer2[(y * (width + (2 * padding)) + x) * 4 + 2] = BitmapIO::MultiplyValue(ptrPalette[ptrBuffer[(y2 * width + (x2 + 1))] * 3 + 2], multiplier);
-							isWhite = false;
-						}
+					// Check neighboring pixels for transparency logic
+					if (y2 > 0 && ptrBuffer[(y2 - 1) * width + x2] != TRANSPARENT_COLOUR) {
+						int nIdx = ptrBuffer[(y2 - 1) * width + x2] * 3;
+						buffer2[destIdx + 0] = BitmapIO::MultiplyValue(ptrPalette[nIdx], multiplier);
+						buffer2[destIdx + 1] = BitmapIO::MultiplyValue(ptrPalette[nIdx + 1], multiplier);
+						buffer2[destIdx + 2] = BitmapIO::MultiplyValue(ptrPalette[nIdx + 2], multiplier);
+						isWhite = false;
+					} else if (y2 < height - 1 && ptrBuffer[(y2 + 1) * width + x2] != TRANSPARENT_COLOUR) {
+						int nIdx = ptrBuffer[(y2 + 1) * width + x2] * 3;
+						buffer2[destIdx + 0] = BitmapIO::MultiplyValue(ptrPalette[nIdx], multiplier);
+						buffer2[destIdx + 1] = BitmapIO::MultiplyValue(ptrPalette[nIdx + 1], multiplier);
+						buffer2[destIdx + 2] = BitmapIO::MultiplyValue(ptrPalette[nIdx + 2], multiplier);
+						isWhite = false;
+					} else if (x2 > 0 && ptrBuffer[y2 * width + (x2 - 1)] != TRANSPARENT_COLOUR) {
+						int nIdx = ptrBuffer[y2 * width + (x2 - 1)] * 3;
+						buffer2[destIdx + 0] = BitmapIO::MultiplyValue(ptrPalette[nIdx], multiplier);
+						buffer2[destIdx + 1] = BitmapIO::MultiplyValue(ptrPalette[nIdx + 1], multiplier);
+						buffer2[destIdx + 2] = BitmapIO::MultiplyValue(ptrPalette[nIdx + 2], multiplier);
+						isWhite = false;
+					} else if (x2 < width - 1 && ptrBuffer[y2 * width + (x2 + 1)] != TRANSPARENT_COLOUR) {
+						int nIdx = ptrBuffer[y2 * width + (x2 + 1)] * 3;
+						buffer2[destIdx + 0] = BitmapIO::MultiplyValue(ptrPalette[nIdx], multiplier);
+						buffer2[destIdx + 1] = BitmapIO::MultiplyValue(ptrPalette[nIdx + 1], multiplier);
+						buffer2[destIdx + 2] = BitmapIO::MultiplyValue(ptrPalette[nIdx + 2], multiplier);
+						isWhite = false;
+					}
 				}
-				if (isWhite)
-				{
-					buffer2[(y * (width + (2 * padding)) + x) * 4 + 0] = transColR;
-					buffer2[(y * (width + (2 * padding)) + x) * 4 + 1] = transColG;
-					buffer2[(y * (width + (2 * padding)) + x) * 4 + 2] = transColB;
-					buffer2[(y * (width + (2 * padding)) + x) * 4 + 3] = 0;
+
+				if (isWhite) {
+					buffer2[destIdx + 0] = transColR;
+					buffer2[destIdx + 1] = transColG;
+					buffer2[destIdx + 2] = transColB;
+					buffer2[destIdx + 3] = 0; // Transparent
 				}
 			}
 		}
 	}
 	sprintf(textbuffer, "%s.png", filename);
-	WriteImagePNG(textbuffer, width + (2 * padding), height + (2 * padding), buffer2.data(), title);
+	WriteImagePNG(textbuffer, newWidth, newHeight, buffer2.data());
 }
+
 
 void BitmapIO::WriteImagePNG(const char* filename, int width, int height, uint8_t* buffer, char* title)
 {
@@ -352,120 +352,21 @@ void BitmapIO::setRGBA(png_byte* ptr, uint8_t* val)
 	ptr[3] = val[3];
 }
 
-#endif
+#endif //_DEBUG
 
-bool BitmapIO::ReadImagePNG(const char* filename, RGBAImage& out)
-{
-	FILE* fp = fopen(filename, "rb");
-	if (!fp)
-	{
-		fprintf(stderr, "ReadImagePNG: could not open '%s'\n", filename);
+void BitmapIO::WriteImagePNG(const char *filename, int width, int height, uint8_t *buffer) {
+	// buffer očekáván jako RGBA (4 bajty/pixel)
+	stbi_write_png(filename, width, height, 4, buffer, width * 4);
+}
+
+bool BitmapIO::ReadImagePNG(const char *filename, RGBAImage &out) {
+	int channels;
+	uint8_t *data = stbi_load(filename, &out.width, &out.height, &channels, 4);
+	if (!data)
 		return false;
-	}
-
-	// Ověř PNG signaturu (prvních 8 bytů).
-	png_byte sig[8];
-	if (fread(sig, 1, 8, fp) != 8 || png_sig_cmp(sig, 0, 8))
-	{
-		fprintf(stderr, "ReadImagePNG: '%s' is not a valid PNG file\n", filename);
-		fclose(fp);
-		return false;
-	}
-
-	png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
-		nullptr, nullptr, nullptr);
-	if (!png_ptr)
-	{
-		fprintf(stderr, "ReadImagePNG: png_create_read_struct failed\n");
-		fclose(fp);
-		return false;
-	}
-
-	png_infop info_ptr = png_create_info_struct(png_ptr);
-	if (!info_ptr)
-	{
-		fprintf(stderr, "ReadImagePNG: png_create_info_struct failed\n");
-		png_destroy_read_struct(&png_ptr, nullptr, nullptr);
-		fclose(fp);
-		return false;
-	}
-
-	if (setjmp(png_jmpbuf(png_ptr)))
-	{
-		fprintf(stderr, "ReadImagePNG: error during read of '%s'\n", filename);
-		png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-		fclose(fp);
-		return false;
-	}
-
-	png_init_io(png_ptr, fp);
-	png_set_sig_bytes(png_ptr, 8);   // prvních 8 bytů jsme už přečetli
-	png_read_info(png_ptr, info_ptr);
-
-	int width = (int)png_get_image_width(png_ptr, info_ptr);
-	int height = (int)png_get_image_height(png_ptr, info_ptr);
-	png_byte colorType = png_get_color_type(png_ptr, info_ptr);
-	png_byte bitDepth = png_get_bit_depth(png_ptr, info_ptr);
-
-	// Zaznamenej ještě před transformacemi, zda měl originál alpha.
-	bool sourceHasAlpha = (colorType & PNG_COLOR_MASK_ALPHA) != 0
-		|| colorType == PNG_COLOR_TYPE_GRAY_ALPHA;
-
-	// ---- Normalizace na RGBA 8-bit ----------------------------------------
-	// 16-bit -> 8-bit
-	if (bitDepth == 16)
-		png_set_strip_16(png_ptr);
-
-	// Paletový -> RGB
-	if (colorType == PNG_COLOR_TYPE_PALETTE)
-	{
-		png_set_palette_to_rgb(png_ptr);
-		// tRNS chunk v paletovém PNG je transparentnost -> alpha
-		if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-		{
-			png_set_tRNS_to_alpha(png_ptr);
-			sourceHasAlpha = true;
-		}
-	}
-
-	// Grayscale < 8-bit -> 8-bit
-	if (colorType == PNG_COLOR_TYPE_GRAY && bitDepth < 8)
-		png_set_expand_gray_1_2_4_to_8(png_ptr);
-
-	// tRNS chunk v RGB PNG -> alpha
-	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-	{
-		png_set_tRNS_to_alpha(png_ptr);
-		sourceHasAlpha = true;
-	}
-
-	// Grayscale (s i bez alpha) -> RGB
-	if (colorType == PNG_COLOR_TYPE_GRAY ||
-		colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
-		png_set_gray_to_rgb(png_ptr);
-
-	// RGB bez alpha -> RGBA (alpha = 255)
-	if (colorType == PNG_COLOR_TYPE_RGB ||
-		colorType == PNG_COLOR_TYPE_GRAY)
-		png_set_filler(png_ptr, 0xFF, PNG_FILLER_AFTER);
-
-	png_read_update_info(png_ptr, info_ptr);
-
-	// ---- Alokace a čtení řádků -------------------------------------------
-	out.pixels.resize(width * height * 4);
-	out.width = width;
-	out.height = height;
-	out.hasAlpha = sourceHasAlpha;
-
-	std::vector<png_bytep> rowPtrs(height);
-	for (int y = 0; y < height; ++y)
-		rowPtrs[y] = out.pixels.data() + y * width * 4;
-
-	png_read_image(png_ptr, rowPtrs.data());
-	png_read_end(png_ptr, nullptr);
-
-	png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-	fclose(fp);
+	out.pixels.assign(data, data + out.width * out.height * 4);
+	out.hasAlpha = (channels == 4);
+	stbi_image_free(data);
 	return true;
 }
 

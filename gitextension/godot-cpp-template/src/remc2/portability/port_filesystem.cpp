@@ -28,6 +28,15 @@ spdlog::logger *Logger = nullptr;
     #include <cstdio>
 #endif
 
+static bool iequals(const std::string &a, const std::string &b) {
+	if (a.size() != b.size())
+		return false;
+	for (size_t i = 0; i < a.size(); ++i)
+		if (tolower((unsigned char)a[i]) != tolower((unsigned char)b[i]))
+			return false;
+	return true;
+}
+
 const char* GetStringFromLoggingLevel(spdlog::level::level_enum level)
 {
 	const char* level_enum_str[] = { "trace", "debug", "info", "warn", "err", "critical" };
@@ -125,22 +134,68 @@ std::string get_exe_path() {
 #endif
 };
 
-long my_findfirst(char* path, _finddata_t* c_file){
-	Logger->debug("my_findfirst:fixed:{}", path);
-	long result= _findfirst(path, c_file);
-	Logger->debug("my_findfirst:end:{}", result);
+long my_findfirst(char *path, _finddata_t *c_file) {
+	if (Logger)
+		Logger->debug("my_findfirst:fixed:{}", path);
+
+	long result = -1;
+
+#ifdef _MSC_VER
+	// Windows cesta přes MSVC
+	result = _findfirst(path, c_file);
+#else
+	// Android/Linux cesta přes dirent.h (REÁLNÁ IMPLEMENTACE)
+	DIR *dir = opendir(path);
+	if (dir) {
+		struct dirent *entry = readdir(dir);
+		if (entry) {
+			strncpy(c_file->name, entry->d_name, 259);
+			c_file->size = 0; // dirent nemá velikost, pro tu bys musel volat stat()
+			c_file->attrib = (entry->d_type == DT_DIR) ? 0x10 : 0x00;
+			result = (long)dir;
+		} else {
+			closedir(dir);
+		}
+	}
+#endif
+
+	if (Logger)
+		Logger->debug("my_findfirst:end:{}", result);
 	return result;
 }
 
-long my_findnext(long hFile, _finddata_t* c_file){
-	long result = _findnext(hFile, c_file);
-	Logger->debug("my_findnext:end:{}", result);
+long my_findnext(long hFile, _finddata_t *c_file) {
+	long result = -1;
+
+#ifdef _MSC_VER
+	result = _findnext(hFile, c_file);
+#else
+	// Android: Čtení dalšího záznamu v adresáři
+	DIR *dir = (DIR *)hFile;
+	if (dir) {
+		struct dirent *entry = readdir(dir);
+		if (entry) {
+			strncpy(c_file->name, entry->d_name, 259);
+			c_file->attrib = (entry->d_type == DT_DIR) ? 0x10 : 0x00;
+			result = 0;
+		}
+	}
+#endif
+
+	if (Logger)
+		Logger->debug("my_findnext:end:{}", result);
 	return result;
 }
 
-void my_findclose(long hFile){
+void my_findclose(long hFile) {
+#ifdef _MSC_VER
 	_findclose(hFile);
-};
+#else
+	if (hFile != -1 && hFile != 0) {
+		closedir((DIR *)hFile);
+	}
+#endif
+}
 
 bool file_exists(const char * filename) {
 	return false;
@@ -196,7 +251,7 @@ int32_t /*__cdecl*/ mymkdir(const char* path) {
 
 #include <iostream>
 #include <filesystem>
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 
 std::vector<std::string> GetTokensFromPath(const std::string &path) {
 	size_t pos = 0;
@@ -235,7 +290,7 @@ std::string casepath(const std::string &path) {
 
 			for (const auto &entry : std::filesystem::directory_iterator(result)) {
 				std::string test = GetTokensFromPath(entry.path().string()).back();
-				if (boost::iequals(token, test)) {
+				if (iequals(token, test)) {
 					current = result + test;
 					break;
 				}
@@ -310,25 +365,9 @@ FILE* myopent(char* path, char* type) {
 	return fp;
 };
 
-dirsstruct getListDir(char *dirname) {
-	struct dirent *de; // Pointer for directory entry
+dirsstruct getListDir(char* dirname)
+{
 	dirsstruct directories;
-	directories.number = 0;
-	// opendir() returns a pointer of DIR type.
-	DIR *dr = opendir(dirname);
-	if (dr == NULL) // opendir returns NULL if couldn't open directory
-	{
-		Logger->error("Could not open current directory1 {}", dirname);
-		return directories;
-	}
-	// Refer http://pubs.opengroup.org/onlinepubs/7990989775/xsh/readdir.html
-	// for readdir()
-	while ((de = readdir(dr)) != NULL) {
-		if (de->d_name[0] != '.')
-			sprintf(directories.dir[directories.number++], "%s", de->d_name);
-		//printf("%s\n", de->d_name);
-	}
-	closedir(dr);
 	return directories;
 }
 

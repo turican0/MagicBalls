@@ -1,6 +1,4 @@
 #include "convertData.h"
-
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../lib/stb_image_write.h"
 /*
 #include "remc2/utilities/DataFileRNC.h"
