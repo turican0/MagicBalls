@@ -203,6 +203,7 @@ var library = {
 	Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
 	Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
 	Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
+	Vector3i(5,124,0): "res://entites/object_5_124_dragon.tscn",#dragon
 	Vector3i(5,132,0): "res://entites/object_5_132_people5.tscn",#people5 132 133 134-OK
 	Vector3i(5,135,0): "res://entites/object_5_135_people6.tscn",#people6 135 136 137-OK
 	Vector3i(5,138,0): "res://entites/object_5_138_people7.tscn",#people7 138 139 140-OK
@@ -212,7 +213,7 @@ var library = {
 	Vector3i(5,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
 	Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
-
+	
 	Vector3i(5,271,0): "res://entites/object_5_271_stoneHead.tscn",#stone head
 	Vector3i(5,295,0): "res://entites/object_5_295_crabBaloon.tscn",#crab baloon
 	Vector3i(5,303,0): "res://entites/object_5_303_manticore.tscn",# 5-303-gryf/manticore
@@ -301,6 +302,8 @@ var library2 = {
 	Vector3i(3,88,0): "",#unknown
 	Vector3i(3,203,0): "",#sorcerer-blue xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,211,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,219,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,235,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,243,0): "",#sorcerer-violet xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
 	Vector3i(0,8,0): "",#unknown
@@ -311,11 +314,13 @@ var library2 = {
 	Vector3i(0,70,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
 	Vector3i(0,72,0): "",#unknown
+	Vector3i(0,74,0): "",#unknown
 	Vector3i(0,80,0): "",#unknown
 	Vector3i(2,422,0): "",#unknown
 	Vector3i(5,14,0): "",#unknown
 	Vector3i(5,55,0): "",#unknown
 	Vector3i(5,71,0): "",#unknown
+	Vector3i(5,279,0): "",#unknown
 	Vector3i(5,303,0): "",#unknown
 	
 	Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast
@@ -444,7 +449,7 @@ var library2 = {
 #0-72-ok
 #3-219-next sorcerer-black-ok
 #3-103-black flag
-#3-101-ping flag
+#3-101-ping flag 0-74 5-279 5-124
 
 
 var filter_material: ShaderMaterial
@@ -715,7 +720,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var current_node = null
 		if not (actByte1 & 4):
 			var isDraw = (actByte0 & 1) == 0
-			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
+			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
 				isDraw = false#noDraw dead sorcerers
 			var fromlib = false
 			var uid2 = Vector3i(actClass,modelIndex,0)

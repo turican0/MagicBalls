@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://chus8y0cjqkmw"]
+
+[ext_resource type="PackedScene" uid="uid://buo3vmg3ib7og" path="res://entites/sources/dragon/animated_dragon.tscn" id="1_5sban"]
+
+[node name="Node3D" type="Node3D" unique_id=1922367494]
+
+[node name="Sketchfab_Scene" parent="." unique_id=941374220 instance=ExtResource("1_5sban")]
+transform = Transform3D(-2, 0, -3.019916e-07, 0, 2, 0, 3.019916e-07, 0, -2, 0, -2.486992, 0)
