@@ -2,21 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dl5y387lc80sw"
-path.s3tc="res://.godot/imported/Image_0.003.png-353818258f9c1bdb469cbe66a2f75c7d.s3tc.ctex"
+uid="uid://bj6rppxsjv4kn"
+path="res://.godot/imported/HSPRN0-0.DAT_261.png-0a8df70ea9d5af7c61277e7e2a082591.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://entites/sources/wizards/skeleton-sorcerer/textures/Image_0.003.png"
-dest_files=["res://.godot/imported/Image_0.003.png-353818258f9c1bdb469cbe66a2f75c7d.s3tc.ctex"]
+source_file="res://hidata/fixed/menu/NIGHT/HSPRN0-0.DAT_261.png"
+dest_files=["res://.godot/imported/HSPRN0-0.DAT_261.png-0a8df70ea9d5af7c61277e7e2a082591.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=4
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -38,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1
