@@ -1,5 +1,4 @@
 #pragma once
-#define NOMINMAX
 #include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/classes/wrapped.hpp"
 #include "godot_cpp/variant/variant.hpp"
@@ -31,6 +30,7 @@ class MBEXclass : public RefCounted {
 private:
 	std::thread t2;
 	String saved_real_cdPath;
+	String saved_real_gamePath;
 	int saved_argc;
 	char *saved_argv[3];
 
@@ -109,7 +109,7 @@ public:
 	int initLanguage(int index);
 	void changeLanguage(int index);
 
-	void REMC2BeginGame(String cdPath);
+	void REMC2BeginGame(String cdPath, String gamePath);
 	void REMC2EndGame();
 	//void REMC2BeginItem();
 	//void REMC2EndItem();

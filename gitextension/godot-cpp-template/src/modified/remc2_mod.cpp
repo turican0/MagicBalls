@@ -2640,7 +2640,7 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 }
 
 
-int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
+int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath) {
 	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
 	int exitCode = 0;
 	SetTimeStart();
@@ -2663,6 +2663,8 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch) {
 		//SetConfig();
 		gameFolder = std::string(real_cdPathch) + "GAME/NETHERW";
 		cdFolder = std::string(real_cdPathch) + "CD_Files";
+		highResGraphicsFolder = std::string(real_gamePath) + "";
+		fixedMenuGraphicsFolder = std::string(real_gamePath) + "fixed/menu";
 		inputMapping.Forward = 0x1a; //added
 		inputMapping.Backwards = 0x16; //added
 		inputMapping.Left = 0x04; //added

@@ -310,9 +310,25 @@ FILE* myopent(char* path, char* type) {
 	return fp;
 };
 
-dirsstruct getListDir(char* dirname)
-{
+dirsstruct getListDir(char *dirname) {
+	struct dirent *de; // Pointer for directory entry
 	dirsstruct directories;
+	directories.number = 0;
+	// opendir() returns a pointer of DIR type.
+	DIR *dr = opendir(dirname);
+	if (dr == NULL) // opendir returns NULL if couldn't open directory
+	{
+		Logger->error("Could not open current directory1 {}", dirname);
+		return directories;
+	}
+	// Refer http://pubs.opengroup.org/onlinepubs/7990989775/xsh/readdir.html
+	// for readdir()
+	while ((de = readdir(dr)) != NULL) {
+		if (de->d_name[0] != '.')
+			sprintf(directories.dir[directories.number++], "%s", de->d_name);
+		//printf("%s\n", de->d_name);
+	}
+	closedir(dr);
 	return directories;
 }
 

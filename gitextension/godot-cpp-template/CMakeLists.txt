@@ -40,7 +40,7 @@ project(godot-cpp-template
     VERSION 1.0
     DESCRIPTION "This repository serves as a quickstart template for GDExtension development with Godot 4.0+."
     HOMEPAGE_URL "https://github.com/enetheru/godot-cpp-template/tree/main"
-    LANGUAGES CXX
+    LANGUAGES CXX C
 )
 
 add_library(${LIBNAME} SHARED)
@@ -177,6 +177,8 @@ target_sources(${LIBNAME}
     src/remc2/engine/UVTable_D4350.h
     src/remc2/utilities/DataFileRNC.cpp
     src/remc2/utilities/DataFileRNC.h
+    src/remc2/portability/dirent.c
+    src/remc2/portability/dirent-x.h
     src/remc2/portability/InputRecorder.cpp
     src/remc2/portability/InputRecorder.h
     src/remc2/portability/fcaseopen.cpp

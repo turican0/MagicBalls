@@ -1283,7 +1283,7 @@ func getVGABuffer():
 func MBEXinit():
 	if !Global.MBEX:
 		Global.MBEX = MBEXclass.new()
-		Global.MBEX.REMC2BeginGame(Global.cdPath)
+		Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata)
 		#Global.MBEX.REMC2SetCDPath(Global.cdPath)
 
 func MBEXconvert(path, path2):

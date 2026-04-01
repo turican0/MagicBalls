@@ -1557,14 +1557,17 @@ String saved_real_cdPath;
 int saved_argc;
 char *saved_argv[3];*/
 
-void MBEXclass::REMC2BeginGame(String cdPath) { //OK!!
+void MBEXclass::REMC2BeginGame(String cdPath, String gamePath) { //OK!!
 	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+	saved_real_gamePath = ProjectSettings::get_singleton()->globalize_path(gamePath);
 	saved_argc = 3;
 	saved_argv[0] = (char *)"game.exe";
 	saved_argv[1] = (char *)"";
 	saved_argv[2] = (char *)"--auto_change_res";
 
 	CommandLineParams.Init(saved_argc, saved_argv);
+
+	fixedMenuGraphics = true;
 
 	support_begin();
 
@@ -1579,7 +1582,7 @@ void MBEXclass::REMC2BeginGame(String cdPath) { //OK!!
     printf("REMC2BeginGame: spoustim vlakno 2\n");
 	t2 = std::thread([this]() {
 		printf("Vlakno 2: startuje\n");
-		sub_main_mod(saved_argc, saved_argv, (char *)saved_real_cdPath.utf8().get_data());
+		sub_main_mod(saved_argc, saved_argv, (char *)saved_real_cdPath.utf8().get_data(), (char *)saved_real_gamePath.utf8().get_data());
 		printf("Vlakno 2: skoncilo\n");
 	});
 	t2.detach();
