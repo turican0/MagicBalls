@@ -20,8 +20,8 @@ windows.x86_32.double.debug = "../../../gitextension/godot-cpp-template/bin/wind
 windows.x86_32.single.release = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_release.x86_32.dll"
 windows.x86_32.double.release = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_release.x86_32.double.dll"
 
-windows.x86_64.single.debug = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
-windows.x86_64.double.debug = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
+windows.x86_64.single.debug = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.debug.dll"
+windows.x86_64.double.debug = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.debug.dll"
 windows.x86_64.single.release = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
 windows.x86_64.double.release = "../../../gitextension/godot-cpp-template/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
 

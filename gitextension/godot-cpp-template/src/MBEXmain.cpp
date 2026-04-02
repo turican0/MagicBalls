@@ -53,7 +53,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("changeLanguage", "Int"), &MBEXclass::changeLanguage);
 	godot::ClassDB::bind_method(D_METHOD("initLanguage", "Int"), &MBEXclass::initLanguage);
 
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text"), &MBEXclass::REMC2BeginGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text", "text"), &MBEXclass::REMC2BeginGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
