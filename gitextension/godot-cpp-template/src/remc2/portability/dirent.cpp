@@ -13,10 +13,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+//#ifdef __cplusplus
+//extern "C"
+//{
+//#endif
 
 typedef ptrdiff_t handle_type; /* C99's intptr_t not sufficiently portable */
 
@@ -128,9 +128,9 @@ void rewinddir(DIR *dir)
     }
 }
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 /*
 
