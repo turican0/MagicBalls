@@ -1042,7 +1042,7 @@ func setDayEntites():
 	
 	updateLibrary(3,96,0,"res://entites/object_3_96_posses_building-whiteD.tscn")
 	updateLibrary(3,97,0,"res://entites/object_3_97_posses_building-redD.tscn")#castle -difmodels!!!
-	updateLibrary(3,98,0,"res://entites/object_3_98_posses_buildingD-violet.tscn")#building -difmodels!!!
+	updateLibrary(3,98,0,"res://entites/object_3_98_posses_building-violetD.tscn")#building -difmodels!!!
 	updateLibrary(3,99,0,"res://entites/object_3_99_posses_building-blueD.tscn")#castle -difmodels!!!
 	updateLibrary(3,100,0,"res://entites/object_3_100_posses_building-greenD.tscn")#castle -difmodels!!!
 	updateLibrary(3,101,0,"res://entites/object_3_101_posses_building-pinkD.tscn")#castle -difmodels!!!
@@ -1051,7 +1051,7 @@ func setDayEntites():
 	
 	updateLibrary(10,96,0,"res://entites/object_3_96_posses_building-whiteD.tscn")
 	updateLibrary(10,97,0,"res://entites/object_3_97_posses_building-redD.tscn")#building -difmodels!!!
-	updateLibrary(10,98,0,"res://entites/object_10_98_posses_building-violetD.tscn")#building -difmodels!!!
+	updateLibrary(10,98,0,"res://entites/object_3_98_posses_building-violetD.tscn")#building -difmodels!!!
 	updateLibrary(10,99,0,"res://entites/object_3_99_posses_building-blueD.tscn")#castle -difmodels!!!
 	updateLibrary(10,100,0,"res://entites/object_3_100_posses_building-greenD.tscn")#castle -difmodels!!!
 	updateLibrary(10,101,0,"res://entites/object_3_101_posses_building-pinkD.tscn")#castle -difmodels!!!
