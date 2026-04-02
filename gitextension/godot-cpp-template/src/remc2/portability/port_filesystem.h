@@ -21,14 +21,11 @@
 	#include <io.h>
 	#include "dirent-x.h"
 #else
-	//#include "dirent.h"
-	#include <dirent.h>
+	#include "dirent.h"
 	/*extern "C" {
-    //	#include "findfirst.h"
+    	#include "findfirst.h"
 	}*/
 	#include <limits.h>
-	#include <sys/stat.h>
-	#include <unistd.h>
 
 	#define MAX_PATH PATH_MAX
 	#define _chdir chdir
@@ -38,7 +35,6 @@
 		int64_t size;
 		char name[260];
 	};
-	typedef long intptr_t;
 #endif
 
 #include "fake_spdlog.h"
@@ -57,7 +53,6 @@ extern std::string cdFolder;
 extern std::string highResGraphicsFolder;
 extern std::string fixedMenuGraphicsFolder;
 extern std::string forceRender;
-
 //extern spdlog::logger* Logger;
 
 //const char* GetStringFromLoggingLevel(spdlog::level::level_enum level);

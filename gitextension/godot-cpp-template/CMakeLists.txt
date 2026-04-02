@@ -205,8 +205,6 @@ target_sources(${LIBNAME}
     src/remc2/engine/UVTable_D4350.h
     src/remc2/utilities/DataFileRNC.cpp
     src/remc2/utilities/DataFileRNC.h
-    src/remc2/portability/dirent.c
-    src/remc2/portability/dirent-x.h
     src/remc2/portability/InputRecorder.cpp
     src/remc2/portability/InputRecorder.h
     src/remc2/portability/fcaseopen.cpp

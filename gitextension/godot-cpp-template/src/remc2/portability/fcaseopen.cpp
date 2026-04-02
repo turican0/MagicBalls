@@ -11,8 +11,20 @@
 
 #include <iostream>
 #include <filesystem>
-#include <boost/algorithm/string.hpp>
+#include <algorithm>
+#include <string>
+#include <cctype>
 
+static bool iequals(const std::string &a, const std::string &b) {
+	if (a.size() != b.size())
+		return false;
+	for (size_t i = 0; i < a.size(); ++i)
+		if (tolower((unsigned char)a[i]) != tolower((unsigned char)b[i]))
+			return false;
+	return true;
+}
+
+#if !defined(__ANDROID__)
 
 std::vector<std::string> GetTokensFromPath(const std::string &path) {
     size_t pos = 0;
@@ -52,7 +64,7 @@ std::string casepath(const std::string &path)
 
             for (const auto &entry: std::filesystem::directory_iterator(result)) {
                 std::string test = GetTokensFromPath(entry.path().string()).back();
-                if (boost::iequals(token, test)) {
+                if (iequals(token, test)) {
                     current = result + test;
                     break;
                 }
@@ -67,6 +79,7 @@ std::string casepath(const std::string &path)
 
     return result;
 }
+#endif//!defined(__ANDROID__)
 #endif
 
 FILE* fcaseopenx(char const* path, char const* mode)
