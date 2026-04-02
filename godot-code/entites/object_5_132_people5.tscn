@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=730263102]
 
 [node name="moroccan_boy__stylized_character_tier_i-Walking" parent="." unique_id=480713278 instance=ExtResource("1_kfjew")]
-transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, 0, 0, 0)
+transform = Transform3D(-0.75, 0, -1.13246855e-07, 0, 0.75, 0, 1.13246855e-07, 0, -0.75, 0, 0, 0)

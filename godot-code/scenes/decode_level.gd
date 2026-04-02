@@ -341,10 +341,12 @@ var library2 = {
 	Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
 	
 	Vector3i(9,64,0): "",#unknown
-	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
+	Vector3i(5,463,0): "",#unknown
+	Vector3i(10,8,0): "",#fair
 	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair
 	Vector3i(10,38,0): "",#unknown
 	Vector3i(10,54,0): "",#fair
+	Vector3i(10,58,0): "",#fair
 	Vector3i(10,77,0): "",#fair
 	#Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building
 	Vector3i(10,96,0): "",#building
@@ -463,7 +465,7 @@ var library2 = {
 #0-72-ok
 #3-219-next sorcerer-black-ok
 #3-103-black flag
-#3-101-ping flag 0-74 5-279 5-124
+#3-101-ping flag 0-74 5-279 5-124 50-58
 
 
 var filter_material: ShaderMaterial

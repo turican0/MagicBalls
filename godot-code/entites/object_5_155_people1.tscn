@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=1922367494]
 
 [node name="sareelady-Walking" parent="." unique_id=55162406 instance=ExtResource("1_r6m8i")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0, 0, 0)

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c5av6njem6v0b"]
 
-[ext_resource type="PackedScene" uid="uid://4wf386i8tqtd" path="res://entites/sources/sketchfab_scene-burned-tree.tscn" id="1_nqwki"]
+[ext_resource type="PackedScene" uid="uid://c0gy5611825en" path="res://entites/sources/sketchfab_scene-burned-tree.tscn" id="1_nqwki"]
 
 [node name="Node3D" type="Node3D" unique_id=1736587549]
 
 [node name="Sketchfab_Scene2" parent="." unique_id=402199383 instance=ExtResource("1_nqwki")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)

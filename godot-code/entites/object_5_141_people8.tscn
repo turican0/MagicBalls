@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://lyh7ab5smsgu" path="res://entites/sources/sarah_1_walking.tscn" id="1_qr8u5"]
 
 [node name="Node3D" type="Node3D" unique_id=1957304260]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [node name="sarah-1-Walking" parent="." unique_id=1040253702 instance=ExtResource("1_qr8u5")]
 transform = Transform3D(-0.8, 0, -1.2079664e-07, 0, 0.8, 0, 1.2079664e-07, 0, -0.8, 0, 0, 0)
