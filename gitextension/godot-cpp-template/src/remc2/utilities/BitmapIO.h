@@ -24,7 +24,7 @@ private:
 	static unsigned char* CreateBitBitmapInfoHeader(int infoHeaderSize, int width, int height, int bytesPerPixel);	
 	static void WriteImagePNG(const char* filename, int width, int height, uint8_t* buffer);
 #ifdef REMC2_CODE
-	static void setRGBA(png_byte* ptr, uint8_t* val);
+	static void setRGBA(uint8_t* ptr, uint8_t* val);
 #endif //REMC2_CODE	
 
 public:
