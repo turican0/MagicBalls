@@ -127,9 +127,9 @@ _surfaces = [{
 shadow_mesh = SubResource("ArrayMesh_csfrv")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_krhds"]
-albedo_color = Color(0, 0, 1, 1)
+albedo_color = Color(0.28235295, 0.39215687, 0.5647059, 1)
 emission_enabled = true
-emission = Color(0, 0, 1, 1)
+emission = Color(0.44063854, 0.5621717, 0.75247973, 1)
 emission_energy_multiplier = 10.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_11ve0"]
@@ -221,7 +221,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_krhds")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Sphere" unique_id=2064826755]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1784892, 0)
-light_color = Color(0, 0.8509804, 1, 1)
+light_color = Color(0.8342495, 0.8773631, 0.94439316, 1)
 light_energy = 5.0
 
 [node name="Sphere_001" type="MeshInstance3D" parent="." unique_id=1200801727]

@@ -154,9 +154,14 @@ var library = {
 	Vector3i(3,93,0): "res://entites/object_3_93_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,94,0): "res://entites/object_3_94_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,95,0): "res://entites/object_3_95_ballon.tscn",#ballon -difColors!!!
-	Vector3i(3,96,0): "res://entites/object_10_96_posses_building.tscn",#castle -difmodels!!!
+	Vector3i(3,96,0): "res://entites/object_3_96_posses_building-whiteD.tscn",#castle -difmodels!!!
 	Vector3i(3,97,0): "res://entites/object_3_97_posses_building-redD.tscn",#castle -difmodels!!!
+	Vector3i(3,98,0): "res://entites/object_3_98_posses_building-violetD.tscn",#castle -difmodels!!!
+	Vector3i(3,99,0): "res://entites/object_3_99_posses_building-blueD.tscn",#castle -difmodels!!!
 	Vector3i(3,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#castle -difmodels!!!
+	Vector3i(3,101,0): "res://entites/object_3_101_posses_building-pinkD.tscn",#castle -difmodels!!!
+	Vector3i(3,102,0): "res://entites/object_3_102_posses_building-orangeD.tscn",#castle -difmodels!!!
+	Vector3i(3,103,0): "res://entites/object_3_103_posses_building-blackD.tscn",#castle -difmodels!!!
 	Vector3i(3,203,0): "res://entites/object_3_203_sorcerer-blue.tscn",
 	Vector3i(3,211,0): "res://entites/object_3_211_sorcerer.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,219,0): "res://entites/object_3_219_sorcerer-black.tscn",#sorcerer-black xxxxxxxxxxxxxxxxxxxx
@@ -195,6 +200,9 @@ var library = {
 	Vector3i(5,69,0): "res://entites/object_10_69_violedSphere.tscn",#violet sphere xxxxxxxxxxxx
 	Vector3i(5,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
 	Vector3i(5,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
+	Vector3i(5,72,0): "res://entites/object_10_72_pinkSphere.tscn",#pink sphere xxxxxxxxxxxx
+	Vector3i(5,73,0): "res://entites/object_10_73_orangeSphere.tscn",#orange sphere xxxxxxxxxxxx
+	Vector3i(5,74,0): "res://entites/object_10_74_blackSphere.tscn",#black sphere xxxxxxxxxxxx
 	Vector3i(5,110,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
 	Vector3i(5,111,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
 	Vector3i(5,112,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
@@ -273,9 +281,14 @@ var library = {
 	Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,80,0): "res://entites/object_10_80_castle_orb.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
-	Vector3i(10,96,0): "res://entites/object_10_96_posses_building.tscn",#building -difmodels!!!
-	#Vector3i(10,97,0): "res://entites/object_10_97_posses_buildingD.tscn",#building -difmodels!!!
-	Vector3i(10,98,0): "res://entites/object_10_98_posses_buildingD-violet.tscn",#building -difmodels!!!
+	Vector3i(10,96,0): "res://entites/object_3_96_posses_building-whiteD.tscn",#building -difmodels!!!
+	Vector3i(10,97,0): "res://entites/object_3_97_posses_building-redD.tscn",#building -difmodels!!!
+	Vector3i(10,98,0): "res://entites/object_3_98_posses_building-violetD.tscn",#building -difmodels!!!
+	Vector3i(10,99,0): "res://entites/object_3_99_posses_building-blueD.tscn",#building -difmodels!!!
+	Vector3i(10,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#building -difmodels!!!
+	Vector3i(10,101,0): "res://entites/object_3_101_posses_building-pinkD.tscn",#building -difmodels!!!
+	Vector3i(10,102,0): "res://entites/object_3_102_posses_building-orangeD.tscn",#building -difmodels!!!
+	Vector3i(10,103,0): "res://entites/object_3_103_posses_building-blackD.tscn",#building -difmodels!!!
 	Vector3i(10,145,0): "res://entites/object_9_64_meteor.tscn",#meteor
 	Vector3i(10,168,0): "res://entites/object_10_168_FacePortal.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
@@ -314,6 +327,7 @@ var library2 = {
 	Vector3i(0,70,0): "",#unknown
 	Vector3i(0,71,0): "",#unknown
 	Vector3i(0,72,0): "",#unknown
+	Vector3i(0,73,0): "",#unknown
 	Vector3i(0,74,0): "",#unknown
 	Vector3i(0,80,0): "",#unknown
 	Vector3i(2,422,0): "",#unknown
@@ -1026,17 +1040,24 @@ func setDayEntites():
 	updateLibrary(10,57,0,"res://entites/object_10_57_smoke.tscn")
 	updateLibrary(10,63,0,"res://entites/object_10_63_smoke.tscn")
 	
-	updateLibrary(3,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
+	updateLibrary(3,96,0,"res://entites/object_3_96_posses_building-whiteD.tscn")
 	updateLibrary(3,97,0,"res://entites/object_3_97_posses_building-redD.tscn")#castle -difmodels!!!
-	updateLibrary(3,98,0,"res://entites/object_10_98_posses_buildingD-violet.tscn")#building -difmodels!!!
+	updateLibrary(3,98,0,"res://entites/object_3_98_posses_buildingD-violet.tscn")#building -difmodels!!!
 	updateLibrary(3,99,0,"res://entites/object_3_99_posses_building-blueD.tscn")#castle -difmodels!!!
 	updateLibrary(3,100,0,"res://entites/object_3_100_posses_building-greenD.tscn")#castle -difmodels!!!
+	updateLibrary(3,101,0,"res://entites/object_3_101_posses_building-pinkD.tscn")#castle -difmodels!!!
+	updateLibrary(3,102,0,"res://entites/object_3_102_posses_building-orangeD.tscn")#castle -difmodels!!!
+	updateLibrary(3,103,0,"res://entites/object_3_103_posses_building-blackD.tscn")#castle -difmodels!!!
 	
-	updateLibrary(10,96,0,"res://entites/object_10_96_posses_buildingD.tscn")
+	updateLibrary(10,96,0,"res://entites/object_3_96_posses_building-whiteD.tscn")
 	updateLibrary(10,97,0,"res://entites/object_3_97_posses_building-redD.tscn")#building -difmodels!!!
-	updateLibrary(10,98,0,"res://entites/object_10_98_posses_buildingD-violet.tscn")#building -difmodels!!!
+	updateLibrary(10,98,0,"res://entites/object_10_98_posses_building-violetD.tscn")#building -difmodels!!!
 	updateLibrary(10,99,0,"res://entites/object_3_99_posses_building-blueD.tscn")#castle -difmodels!!!
 	updateLibrary(10,100,0,"res://entites/object_3_100_posses_building-greenD.tscn")#castle -difmodels!!!
+	updateLibrary(10,101,0,"res://entites/object_3_101_posses_building-pinkD.tscn")#castle -difmodels!!!
+	updateLibrary(10,102,0,"res://entites/object_3_102_posses_building-orangeD.tscn")#castle -difmodels!!!
+	updateLibrary(10,103,0,"res://entites/object_3_103_posses_building-blackD.tscn")#castle -difmodels!!!
+	
 	
 func setNightEntites():
 	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
@@ -1051,17 +1072,24 @@ func setNightEntites():
 	updateLibrary(10,57,0,"res://entites/object_10_57_smoke.tscn")
 	updateLibrary(10,63,0,"res://entites/object_10_63_smoke.tscn")
 	
-	updateLibrary(3,96,0,"res://entites/object_10_96_posses_building.tscn")	
+	updateLibrary(3,96,0,"res://entites/object_3_96_posses_building-white.tscn")	
 	updateLibrary(3,97,0,"res://entites/object_3_97_posses_building-red.tscn")#castle -difmodels!!!
 	updateLibrary(3,98,0,"res://entites/object_3_98_posses_building-violet.tscn")#building -difmodels!!!
 	updateLibrary(3,99,0,"res://entites/object_3_99_posses_building-blue.tscn")#castle -difmodels!!!
 	updateLibrary(3,100,0,"res://entites/object_3_100_posses_building-green.tscn")#castle -difmodels!!!
+	updateLibrary(3,101,0,"res://entites/object_3_101_posses_building-pink.tscn")#castle -difmodels!!!
+	updateLibrary(3,102,0,"res://entites/object_3_102_posses_building-orange.tscn")#castle -difmodels!!!
+	updateLibrary(3,103,0,"res://entites/object_3_103_posses_building-black.tscn")#castle -difmodels!!!
 	
-	updateLibrary(10,96,0,"res://entites/object_10_96_posses_building.tscn")	
+	
+	updateLibrary(10,96,0,"res://entites/object_3_96_posses_building-white.tscn")	
 	updateLibrary(10,97,0,"res://entites/object_3_97_posses_building-red.tscn")#building -difmodels!!!
 	updateLibrary(10,98,0,"res://entites/object_3_98_posses_building-violet.tscn")#building -difmodels!!!
 	updateLibrary(10,99,0,"res://entites/object_3_99_posses_building-blue.tscn")#castle -difmodels!!!
 	updateLibrary(10,100,0,"res://entites/object_3_100_posses_building-green.tscn")#castle -difmodels!!!
+	updateLibrary(10,101,0,"res://entites/object_3_101_posses_building-pink.tscn")#castle -difmodels!!!
+	updateLibrary(10,102,0,"res://entites/object_3_102_posses_building-orange.tscn")#castle -difmodels!!!
+	updateLibrary(10,103,0,"res://entites/object_3_103_posses_building-black.tscn")#castle -difmodels!!!
 
 func setCaveEntites():
 	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
@@ -1072,21 +1100,28 @@ func setCaveEntites():
 	updateLibrary(5,19,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,20,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,21,0,"res://entites/object_5_11_bowman.tscn")
-	updateLibrary(3,96,0,"res://entites/object_10_96_posses_building.tscn")
+	updateLibrary(3,96,0,"res://entites/object_3_96_posses_building-white.tscn")
 	updateLibrary(10,57,0,"res://entites/object_10_57_smokeC.tscn")
 	updateLibrary(10,63,0,"res://entites/object_10_63_smokeC.tscn")
 	
-	updateLibrary(3,96,0,"res://entites/object_10_96_posses_building.tscn")	
+	updateLibrary(3,96,0,"res://entites/object_3_96_posses_building-white.tscn")	
 	updateLibrary(3,97,0,"res://entites/object_3_97_posses_building-red.tscn")#castle -difmodels!!!
 	updateLibrary(3,98,0,"res://entites/object_3_98_posses_building-violet.tscn")#building -difmodels!!!
 	updateLibrary(3,99,0,"res://entites/object_3_99_posses_building-blue.tscn")#castle -difmodels!!!
 	updateLibrary(3,100,0,"res://entites/object_3_100_posses_building-green.tscn")#castle -difmodels!!!
+	updateLibrary(3,101,0,"res://entites/object_3_101_posses_building-pink.tscn")#castle -difmodels!!!
+	updateLibrary(3,102,0,"res://entites/object_3_102_posses_building-orange.tscn")#castle -difmodels!!!
+	updateLibrary(3,103,0,"res://entites/object_3_103_posses_building-black.tscn")#castle -difmodels!!!
 	
-	updateLibrary(10,96,0,"res://entites/object_10_96_posses_building.tscn")	
+	
+	updateLibrary(10,96,0,"res://entites/object_3_96_posses_building-white.tscn")	
 	updateLibrary(10,97,0,"res://entites/object_3_97_posses_building-red.tscn")#building -difmodels!!!
 	updateLibrary(10,98,0,"res://entites/object_3_98_posses_building-violet.tscn")#building -difmodels!!!
 	updateLibrary(10,99,0,"res://entites/object_3_99_posses_building-blue.tscn")#castle -difmodels!!!
 	updateLibrary(10,100,0,"res://entites/object_3_100_posses_building-green.tscn")#castle -difmodels!!!
+	updateLibrary(10,101,0,"res://entites/object_3_101_posses_building-pink.tscn")#castle -difmodels!!!
+	updateLibrary(10,102,0,"res://entites/object_3_102_posses_building-orange.tscn")#castle -difmodels!!!
+	updateLibrary(10,103,0,"res://entites/object_3_103_posses_building-black.tscn")#castle -difmodels!!!
 
 func setTime(time:float):
 	time = fposmod(time, 24.0)  # zajistí 0–24 hodin, žádný crash

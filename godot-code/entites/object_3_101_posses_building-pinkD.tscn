@@ -1,13 +1,22 @@
-[gd_scene format=3 uid="uid://la15xr27ga4e"]
+[gd_scene format=3 uid="uid://cepjpkmbkmjld"]
 
-[ext_resource type="Script" uid="uid://b2f4a3jyswfec" path="res://entites/object_10_96_posses_building_d.gd" id="1_xg3og"]
-[ext_resource type="PackedScene" uid="uid://doorqiwdu45hw" path="res://entites/sources/flags/flag-green.tscn" id="3_yg3bp"]
-[ext_resource type="Material" uid="uid://c8oflscoawuyf" path="res://entites/sources/flags/perl-green.tres" id="4_xg3og"]
+[ext_resource type="Script" uid="uid://b2f4a3jyswfec" path="res://entites/object_10_96_posses_building_d.gd" id="1_scy8o"]
+[ext_resource type="PackedScene" uid="uid://dfe50qdkh4k5v" path="res://entites/sources/flags/flag-pink.tscn" id="2_d3j24"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scy8o"]
+albedo_color = Color(0.979685, 0.6527292, 0.75843376, 1)
+metallic = 0.5
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v067o"]
+albedo_color = Color(0.9882353, 0.8, 0.76862746, 1)
+metallic = 0.5
+roughness = 0.5
 
 [node name="Node3D" type="Node3D" unique_id=1032799002]
-script = ExtResource("1_xg3og")
+script = ExtResource("1_scy8o")
 
-[node name="flag" parent="." unique_id=1504280980 instance=ExtResource("3_yg3bp")]
+[node name="flag" parent="." unique_id=1504280980 instance=ExtResource("2_d3j24")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.2, 0)
 
 [node name="CSGPolygon3D2" type="CSGPolygon3D" parent="flag" unique_id=1888472363]
@@ -16,7 +25,7 @@ polygon = PackedVector2Array(0.33271074, 1.133889, 0.2435562, 0.7767403, 0.70090
 mode = 1
 spin_degrees = 360.0
 spin_sides = 3
-material = ExtResource("4_xg3og")
+material = SubResource("StandardMaterial3D_scy8o")
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="flag/CSGPolygon3D2" unique_id=523552488]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
@@ -24,4 +33,4 @@ polygon = PackedVector2Array(0.33271074, 1.133889, 0.2435562, 0.7767403, 0.70090
 mode = 1
 spin_degrees = 360.0
 spin_sides = 3
-material = ExtResource("4_xg3og")
+material = SubResource("StandardMaterial3D_v067o")

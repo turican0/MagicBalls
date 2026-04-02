@@ -217,7 +217,7 @@ surface_material_override/0 = ExtResource("4_c43rm")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Sphere2" unique_id=485494623]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1784892, 0)
-light_color = Color(0, 1, 0, 1)
+light_color = Color(0.44670868, 0.75708, 0.38475332, 1)
 light_energy = 5.0
 
 [node name="Sphere_001" type="MeshInstance3D" parent="." unique_id=1200801727]
