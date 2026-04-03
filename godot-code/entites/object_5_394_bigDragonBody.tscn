@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=775536928]
 
 [node name="big-dragon-body" parent="." unique_id=260332023 instance=ExtResource("1_2vxbj")]
-transform = Transform3D(-0.13, 0, -1.9629454e-08, 0, 0.13, 0, 1.9629454e-08, 0, -0.13, 1.5043616, 0, -1.3588395)
+transform = Transform3D(-0.13, 0, -1.9629454e-08, 0, 0.13, 0, 1.9629454e-08, 0, -0.13, 1.8761201, -0.08579016, -1.3588395)

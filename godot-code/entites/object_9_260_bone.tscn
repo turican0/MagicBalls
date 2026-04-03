@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://creln2kgf25re"]
+
+[ext_resource type="Script" uid="uid://b0nt8f4827naw" path="res://entites/object_9_64_meteor.gd" id="1_6nnvb"]
+[ext_resource type="PackedScene" uid="uid://drixursj18iag" path="res://entites/sources/spells/bone/horse_bone.glb" id="2_85n5p"]
+
+[node name="Node3D" type="Node3D" unique_id=1822028480]
+transform = Transform3D(-0.05848482, 0.26986971, -0.961126, 0.88181466, -0.43732092, -0.17648797, -0.46794692, -0.8578859, -0.21239, 0, 0, 0)
+script = ExtResource("1_6nnvb")
+rot_speed = 1000.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
+transform = Transform3D(1, 4.440984e-16, -1.4901316e-08, 0, 1, 2.980263e-08, 1.4901316e-08, -2.980263e-08, 1, -0.18566258, -0.7954658, 0.08294901)
+light_energy = 3.0
+
+[node name="Sketchfab_Scene2" parent="." unique_id=1158167932 instance=ExtResource("2_85n5p")]
+transform = Transform3D(1, 0, 2.9802322e-08, -8.940697e-08, 1, -2.9802322e-08, 1.4901161e-08, -1.4901161e-08, 1, -0.3763988, -0.105872184, -0.24038489)

@@ -173,3 +173,12 @@ next_sorcerer:
 https://sketchfab.com/3d-models/draconic-sorceress-character-rig-5b9b6ce9036448b59abaf0d2def71441
 https://sketchfab.com/3d-models/skeleton-gore-model-f80e51109cf04f38869adb1d0de90daa
 https://sketchfab.com/3d-models/skeleton-warrior-4f0bcf2feb8345539017eaab62392900
+
+big-dragon:
+	https://sketchfab.com/3d-models/dragon-king-f39f3a5353cc401e8699e46dbeee9849
+	
+bone:
+	https://sketchfab.com/3d-models/horse-bone-d51e7216a5bb41bea3ee2576fa92eedc
+	
+hand:
+	https://sketchfab.com/3d-models/hand-046563449b144c67a2f8cc54bf86835b

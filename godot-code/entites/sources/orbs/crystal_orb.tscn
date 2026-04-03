@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://rkvd0jpeqlg1"]
+
+[ext_resource type="PackedScene" uid="uid://rkwy7vrkc30c" path="res://entites/sources/orbs/crystal_orb.glb" id="1_x6v70"]
+
+[sub_resource type="Gradient" id="Gradient_x6v70"]
+colors = PackedColorArray(0.8086372, 0.41677025, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qv0st"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fpsf0"]
+noise = SubResource("FastNoiseLite_qv0st")
+color_ramp = SubResource("Gradient_x6v70")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ckb8e"]
+albedo_texture = SubResource("NoiseTexture2D_fpsf0")
+uv1_scale = Vector3(10, 10, 10)
+
+[node name="Sketchfab_Scene" unique_id=1328573478 instance=ExtResource("1_x6v70")]
+
+[node name="Icosphere_0" parent="Sketchfab_model/root/GLTF_SceneRootNode" parent_id_path=PackedInt32Array(1688873752) index="0" unique_id=453995998]
+transform = Transform3D(0.69277006, 0.7126784, 0.11026851, -0.6703595, 0.69277006, -0.26587182, -0.26587182, 0.11026849, 0.95768106, 0, 0, 0)
+
+[node name="Object_4" parent="Sketchfab_model/root/GLTF_SceneRootNode/Icosphere_0" index="0" unique_id=1509555992]
+surface_material_override/0 = SubResource("StandardMaterial3D_ckb8e")
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=2137457032]
+autoplay = &"Action"
+speed_scale = 5.0

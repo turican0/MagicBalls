@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://wcy1oyye304o"]
+
+[ext_resource type="PackedScene" uid="uid://fg3jq27wgc7b" path="res://entites/sources/spells/hand/hand2.blend" id="1_cfu5t"]
+
+[sub_resource type="Gradient" id="Gradient_cfu5t"]
+offsets = PackedFloat32Array(0, 0.06392694, 0.14611872, 0.2283105, 0.29223743, 1)
+colors = PackedColorArray(0.8150195, 5.246252e-06, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0.46101677, 0.3927373, 1, 1, 0, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8wrvh"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2hupa"]
+noise = SubResource("FastNoiseLite_8wrvh")
+color_ramp = SubResource("Gradient_cfu5t")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pv7vl"]
+albedo_texture = SubResource("NoiseTexture2D_2hupa")
+uv1_scale = Vector3(5, 5, 5)
+
+[node name="hand2" unique_id=1470693957 instance=ExtResource("1_cfu5t")]
+
+[node name="handlow__0" parent="Armature" parent_id_path=PackedInt32Array(2076500629) index="0" unique_id=1956956099]
+surface_material_override/0 = SubResource("StandardMaterial3D_pv7vl")
+
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(2076500629) index="1" unique_id=1269373059]
+bones/1/rotation = Quaternion(-0.024464244, -0.042303722, 0.35161695, 0.93486756)
+bones/2/rotation = Quaternion(-0.08513304, -0.04136074, 0.16565382, 0.9816315)
+bones/3/rotation = Quaternion(0.056672074, -0.020497475, 0.0037602743, 0.9981754)
+bones/5/rotation = Quaternion(-0.0615917, -0.042383038, -0.023861542, 0.99691564)
+bones/6/rotation = Quaternion(0.0066236625, -0.008985474, 0.0043505626, 0.99992824)
+bones/7/rotation = Quaternion(0.009363096, -0.011754614, -0.10985816, 0.9938337)
+bones/9/rotation = Quaternion(-0.04544164, -0.021985788, 0.12597932, 0.99074763)
+bones/10/rotation = Quaternion(-0.02159612, -0.07950475, -0.07153939, 0.9940296)
+bones/11/rotation = Quaternion(-0.03169132, 0.12982103, 0.02063307, 0.99081606)
+bones/13/rotation = Quaternion(-0.041656345, -0.0040504695, 0.0078799445, 0.99909276)
+bones/14/rotation = Quaternion(0.0013028178, 0.25112224, 0.04181329, 0.96705097)
+bones/15/rotation = Quaternion(0.032840338, -0.032282706, 0.028793048, 0.99852407)
+bones/17/rotation = Quaternion(0.06124332, -0.08013008, -0.043399386, 0.9939542)
+bones/18/rotation = Quaternion(-0.014513036, 0.27689505, 0.087627634, 0.95678633)
+bones/19/rotation = Quaternion(0.008777563, -0.058940683, -0.027766434, 0.99783665)

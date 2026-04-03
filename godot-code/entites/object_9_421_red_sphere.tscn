@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c2e7gyvleafbw"]
+
+[ext_resource type="PackedScene" uid="uid://dgwl1xbo5jnb5" path="res://entites/sources/orbs/red_orb.tscn" id="1_78gjo"]
+
+[node name="Node3D" type="Node3D" unique_id=1822028480]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04043913, -1.467041)
+light_color = Color(1, 0, 0, 1)
+light_energy = 4.0
+
+[node name="Sketchfab_Scene2" parent="." unique_id=587415694 instance=ExtResource("1_78gjo")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

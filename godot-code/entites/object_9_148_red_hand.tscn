@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bsb8csp3dtr1"]
+
+[ext_resource type="PackedScene" uid="uid://wcy1oyye304o" path="res://entites/sources/spells/hand/hand_2.tscn" id="1_qkc5h"]
+
+[node name="Node3D" type="Node3D" unique_id=1822028480]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04043913, -1.467041)
+light_color = Color(1, 0, 0, 1)
+light_energy = 4.0
+
+[node name="hand2" parent="." unique_id=1470693957 instance=ExtResource("1_qkc5h")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)

@@ -244,9 +244,9 @@ var library = {
 	Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast
 	Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
 	
-	Vector3i(5,394,0): "res://entites/object_5_394_bigDragonBody.tscn",
-	Vector3i(5,402,0): "res://entites/object_5_402_bigDragonHead.tscn",
-	Vector3i(5,410,0): "res://entites/object_5_410_bigDragonNeck.tscn",
+	Vector3i(5,394,0): "res://entites/object_5_394_bigDragonBody.tscn",#bigDragon-body-move
+	Vector3i(5,402,0): "res://entites/object_5_402_bigDragonHead.tscn",#bigDragon-head
+	Vector3i(5,410,0): "res://entites/object_5_410_bigDragonNeck.tscn",#bigDragon-neck
 	
 	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
 	
@@ -263,11 +263,15 @@ var library = {
 	Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
 	Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
 	Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
+	Vector3i(9,148,0): "res://entites/object_9_148_red_hand.tscn",#red hand-OK
+	Vector3i(9,149,0): "res://entites/object_9_149_violet_orb.tscn",#violet orb-OK
 	Vector3i(9,151,0): "res://entites/object_9_151_lighting.tscn",#fix this to better
 	Vector3i(9,419,0): "res://entites/object_9_419_spider_web.tscn",#spide web zzzzzzzzzzzzzzOK
 	Vector3i(9,420,0): "res://entites/object_9_420_walnut.tscn",#walnul ball zzzzzzzzzzzzzzOK
+	Vector3i(9,421,0): "res://entites/object_9_421_red_sphere.tscn",#red sphere-OK
 	Vector3i(9,145,0): "res://entites/object_9_146_lump.tscn",#tremor ball zzzzzzzzzzzzzzOK
 	Vector3i(9,146,0): "res://entites/object_9_146_lump.tscn",#crater ball zzzzzzzzzzzzzzOK
+	Vector3i(9,260,0): "res://entites/object_9_260_bone.tscn",#bone spell zzzzzzzzzzzzzzOK
 	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK
@@ -296,6 +300,7 @@ var library = {
 	Vector3i(10,102,0): "res://entites/object_3_102_posses_building-orangeD.tscn",#building -difmodels!!!
 	Vector3i(10,103,0): "res://entites/object_3_103_posses_building-blackD.tscn",#building -difmodels!!!
 	Vector3i(10,145,0): "res://entites/object_9_64_meteor.tscn",#meteor
+	Vector3i(10,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,168,0): "res://entites/object_10_168_FacePortal.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
 	Vector3i(10,202,0): "res://entites/object_10_202_blue_orb.tscn",#blue orb
@@ -337,14 +342,28 @@ var library2 = {
 	Vector3i(0,74,0): "",#unknown
 	Vector3i(0,80,0): "",#unknown
 	Vector3i(2,422,0): "",#unknown
+	
+	Vector3i(5,8,0): "",#bowman-test it live?
+	
 	Vector3i(5,14,0): "",#unknown
 	Vector3i(5,55,0): "",#unknown
 	Vector3i(5,71,0): "",#unknown
+	Vector3i(5,124,0): "",#unknown
 	Vector3i(5,279,0): "",#unknown
 	Vector3i(5,303,0): "",#unknown
 	
 	Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast
 	Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
+	
+	#Vector3i(5,394,0): "res://entites/object_5_394_bigDragonBody.tscn",#bigDragon-body-move
+	#Vector3i(5,402,0): "res://entites/object_5_402_bigDragonHead.tscn",#bigDragon-head
+	#Vector3i(5,410,0): "res://entites/object_5_410_bigDragonNeck.tscn",#bigDragon-neck
+	#Vector3i(5,453,0): "res://entites/object_5_453_bigDragonBody.tscn",#bigDragon-body-stay
+	
+	Vector3i(5,394,0): "",#bigDragon-body-move
+	Vector3i(5,402,0): "",#bigDragon-head
+	Vector3i(5,410,0): "",#bigDragon-neck
+	Vector3i(5,453,0): "",#bigDragon-body-stay
 	
 	Vector3i(9,64,0): "",#unknown
 	Vector3i(5,463,0): "",#unknown
@@ -475,7 +494,15 @@ var library2 = {
 
 #5-394-bigDragonBody
 #5-402-bigDragonHead
-#5-410-bigDragonNeck 5-453
+#5-410-bigDragonNeck 5-453 5-402 5-410
+
+#5-124-ok
+#9-149-violet mine
+#9-148-red hand-ok
+#9-260-bone-ok
+#10-158-puerla-ok
+#5-8-bowmans???????????????????-ok?
+#9-421-red sphere-ok
 
 
 var filter_material: ShaderMaterial
@@ -748,6 +775,11 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			var isDraw = (actByte0 & 1) == 0
 			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
 				isDraw = false#noDraw dead sorcerers
+			if actClass == 5:
+				if actLife <= 0:
+					isDraw = false
+				else:
+					isDraw = true
 			var fromlib = false
 			var uid2 = Vector3i(actClass,modelIndex,0)
 			var scene_to_instance = null
