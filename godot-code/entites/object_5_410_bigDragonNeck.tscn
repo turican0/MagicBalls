@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bhqpqheqxeuei"]
+
+[ext_resource type="PackedScene" uid="uid://b4v2wiy8boc34" path="res://entites/sources/big-dragon/big-dragon-neck.glb" id="1_l1214"]
+
+[node name="Node3D" type="Node3D" unique_id=775536928]
+
+[node name="big-dragon-neck" parent="." unique_id=936327208 instance=ExtResource("1_l1214")]
+transform = Transform3D(-0.09, 0, -1.3589623e-08, 0, 0.09, 0, 1.3589623e-08, 0, -0.09, 0, -1.9537518, 0.8845291)

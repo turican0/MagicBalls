@@ -244,10 +244,16 @@ var library = {
 	Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast
 	Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
 	
+	Vector3i(5,394,0): "res://entites/object_5_394_bigDragonBody.tscn",
+	Vector3i(5,402,0): "res://entites/object_5_402_bigDragonHead.tscn",
+	Vector3i(5,410,0): "res://entites/object_5_410_bigDragonNeck.tscn",
+	
 	Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
 	
 	Vector3i(5,437,0): "res://entites/object_5_437_mummy.tscn",#mummy-walk
 	Vector3i(5,445,0): "res://entites/object_5_445_mummy.tscn",#mummy-stay
+	
+	Vector3i(5,453,0): "res://entites/object_5_453_bigDragonBody.tscn",#bigDragon-body-stay
 	
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
 	Vector3i(9,60,0): "res://entites/object_9_60_green-spell.tscn",#green-spell
@@ -466,6 +472,10 @@ var library2 = {
 #3-219-next sorcerer-black-ok
 #3-103-black flag
 #3-101-ping flag 0-74 5-279 5-124 50-58
+
+#5-394-bigDragonBody
+#5-402-bigDragonHead
+#5-410-bigDragonNeck 5-453
 
 
 var filter_material: ShaderMaterial
