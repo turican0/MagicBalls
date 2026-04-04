@@ -165,6 +165,7 @@ var library = {
 	Vector3i(3,203,0): "res://entites/object_3_203_sorcerer-blue.tscn",
 	Vector3i(3,211,0): "res://entites/object_3_211_sorcerer.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,219,0): "res://entites/object_3_219_sorcerer-black.tscn",#sorcerer-black xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,227,0): "res://entites/object_3_227_sorcerer-orange.tscn",#sorcerer-orange xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,235,0): "res://entites/object_3_235_sorcerer-pink.tscn",#sorcerer-pink xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,243,0): "res://entites/object_3_243_sorcerer-violet.tscn",#sorcerer-violet xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "res://entites/object_3_251_sorcerer-green.tscn",#sorcerer-green xxxxxxxxxxxxxxxxxxxx

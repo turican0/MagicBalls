@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://dgyrj7jxrssbx"]
+
+[ext_resource type="PackedScene" uid="uid://c4o6wvtqqiikx" path="res://entites/sources/sorceree8/sorvcerer-woman.blend" id="1_ubi6m"]
+
+[node name="sorvcerer-woman" unique_id=185084340 instance=ExtResource("1_ubi6m")]
+
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(1125086480) index="0" unique_id=1658758978]
+bones/1/rotation = Quaternion(-0.012126958, 2.1708669e-18, 1.142406e-17, 0.9999265)
+bones/2/rotation = Quaternion(0.016625913, 9.543223e-19, 2.0856888e-17, 0.99986184)
+bones/3/rotation = Quaternion(0.07600153, 1.1886446e-07, 9.0601e-09, 0.99710774)
+bones/4/rotation = Quaternion(-0.054847963, 7.508296e-05, -0.00053807354, 0.99849457)
+bones/5/rotation = Quaternion(-0.12877463, -0.00017226658, 0.00051520765, 0.9916738)
+bones/24/rotation = Quaternion(0.91049707, -0.39605466, -0.10716511, -0.05149251)
+bones/29/rotation = Quaternion(0.90642637, 0.40737006, 0.10263874, -0.043659765)
+bones/42/rotation = Quaternion(-0.21657588, -0.4227812, 0.8534555, -0.21439375)
+bones/81/rotation = Quaternion(0.2785038, 0.7866491, 0.2440812, -0.49400726)
+bones/100/rotation = Quaternion(0.25843894, -0.56977177, 0.6866589, -0.3702283)
+bones/101/rotation = Quaternion(0.7187313, -0.42476633, 0.008483149, 0.5503881)
+bones/123/rotation = Quaternion(-0.2603653, -0.56898147, 0.6876874, 0.36817938)
+bones/124/rotation = Quaternion(0.7187972, 0.43406236, -0.011589491, 0.54294217)
+bones/149/rotation = Quaternion(0.8711288, 0.04622855, 0.012246173, 0.4887204)
+bones/150/rotation = Quaternion(0.79243726, 7.9911433e-10, -1.5033511e-09, 0.6099536)
+bones/151/rotation = Quaternion(-0.8984099, 3.8209036e-09, -3.6603204e-10, 0.43915775)
+bones/154/rotation = Quaternion(0.701675, -0.0496451, -0.029697295, 0.7101448)
+bones/155/rotation = Quaternion(0.6152539, 2.1733532e-10, -3.5643521e-09, 0.78832906)
+bones/156/rotation = Quaternion(-0.5078348, 4.579777e-09, -8.341437e-09, 0.8614544)
+
+[node name="AnimationPlayer" parent="." index="2" unique_id=18725076]
+autoplay = &"metarigAction"
