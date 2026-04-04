@@ -502,7 +502,7 @@ var library2 = {
 #9-260-bone-ok
 #10-158-puerla-ok
 #5-8-bowmans???????????????????-ok?
-#9-421-red sphere-ok
+#9-421-red sphere-ok 3-227-sorcerer 5-113-vampire bowman 5-110 5-287 3-227 5-411
 
 
 var filter_material: ShaderMaterial
@@ -775,11 +775,11 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			var isDraw = (actByte0 & 1) == 0
 			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
 				isDraw = false#noDraw dead sorcerers
-			if actClass == 5:
-				if actLife <= 0:
-					isDraw = false
-				else:
-					isDraw = true
+			#if actClass == 5:
+				#if actLife <= 0:
+					#isDraw = false
+				#else:
+					#isDraw = true
 			var fromlib = false
 			var uid2 = Vector3i(actClass,modelIndex,0)
 			var scene_to_instance = null

@@ -150,7 +150,6 @@ transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0, 
 transform = Transform3D(1, 0, 0, 0, 2.220446e-16, -1, 0, 1, 2.220446e-16, 0, 0, 0)
 
 [node name="Icosphere_0" type="Node3D" parent="Sketchfab_model/root/GLTF_SceneRootNode" unique_id=2105219010]
-transform = Transform3D(0.12525566, 0.7588625, 0.63909215, 0.9349374, 0.12525603, -0.33196825, -0.33196843, 0.63909215, -0.6937999, 0, 0, 0)
 
 [node name="Object_4" type="MeshInstance3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Icosphere_0" unique_id=2099298518]
 mesh = SubResource("ArrayMesh_2onkt")
@@ -161,7 +160,6 @@ mesh = SubResource("ArrayMesh_4seld")
 skeleton = NodePath("")
 
 [node name="Icosphere_001_1" type="Node3D" parent="Sketchfab_model/root/GLTF_SceneRootNode" unique_id=1915466412]
-transform = Transform3D(0.12584794, 0.99181694, -0.02147901, -0.9354381, 0.12584794, 0.33032987, 0.33032984, -0.021479044, 0.9436211, 0, 0, 0)
 
 [node name="Object_7" type="MeshInstance3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Icosphere_001_1" unique_id=1135315095]
 mesh = SubResource("ArrayMesh_gg0lx")
