@@ -328,6 +328,7 @@ var library2 = {
 	Vector3i(3,203,0): "",#sorcerer-blue xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,211,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,219,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
+	Vector3i(3,227,0): "",#sorcerer-orange xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,235,0): "",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,243,0): "",#sorcerer-violet xxxxxxxxxxxxxxxxxxxx
 	Vector3i(3,251,0): "",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
@@ -774,7 +775,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var current_node = null
 		if not (actByte1 & 4):
 			var isDraw = (actByte0 & 1) == 0
-			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
+			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 227 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
 				isDraw = false#noDraw dead sorcerers
 			#if actClass == 5:
 				#if actLife <= 0:

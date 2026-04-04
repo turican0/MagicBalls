@@ -43,7 +43,7 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="Node3D" type="Node3D" unique_id=872675572]
+[node name="Node3D2" type="Node3D" unique_id=872675572]
 
 [node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_4jxed")]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
@@ -67,7 +67,7 @@ texture = SubResource("ViewportTexture_01vcg")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1406402291]
 transparent_bg = true
-size = Vector2i(146, 50)
+size = Vector2i(94, 50)
 
 [node name="PanelContainer" type="PanelContainer" parent="SubViewport" unique_id=160368239]
 offset_right = 40.0
