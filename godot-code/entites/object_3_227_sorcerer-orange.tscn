@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cyrnvavre5syl"]
+[gd_scene format=3 uid="uid://byt1xa12pucii"]
 
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_4jxed"]
 [ext_resource type="PackedScene" uid="uid://dgyrj7jxrssbx" path="res://entites/sources/sorceree8/sorvcerer_woman.tscn" id="2_4jxed"]
@@ -9,12 +9,12 @@ colors = PackedColorArray(0.9098039, 0.59607846, 0.17254902, 1, 0.6431373, 0.345
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_n08pu"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ila4u"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dy47r"]
 noise = SubResource("FastNoiseLite_n08pu")
 color_ramp = SubResource("Gradient_mwkhn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dy47r"]
-albedo_texture = SubResource("NoiseTexture2D_ila4u")
+albedo_texture = SubResource("NoiseTexture2D_dy47r")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_bjjno"]
 viewport_path = NodePath("SubViewport")
