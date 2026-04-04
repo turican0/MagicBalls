@@ -187,3 +187,6 @@ sorcere last:
 	https://sketchfab.com/3d-models/fantasy-woman-ae7f296300ff4bad8364e562bac1f3dc
 	https://sketchfab.com/3d-models/tia-dalma-92ddd6adb9504c358027fb69350d081c
 	https://sketchfab.com/3d-models/gart220-female-viking-29f88c37b399483dbaba79b4650d4752
+
+vivisuth:
+	https://sketchfab.com/3d-models/male-basemesh-de1db382a8b0444199ecc3a3c51f5a43

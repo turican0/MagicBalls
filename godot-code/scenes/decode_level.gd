@@ -504,7 +504,8 @@ var library2 = {
 #9-260-bone-ok
 #10-158-puerla-ok
 #5-8-bowmans???????????????????-ok?
-#9-421-red sphere-ok 3-227-sorcerer 5-113-vampire bowman 5-110 5-287 3-227 5-411
+#9-421-red sphere-ok 3-227-sorcerer 5-113-vampire bowman 5-110 5-287 3-227 5-411 10-67 2-424 2-425 2-198
+#5-464 5-472 5-480 5-488
 
 
 var filter_material: ShaderMaterial
@@ -753,6 +754,10 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actByte3 = int(data_array[offset+20])
 		var modelIndex = int(data_array[offset+21])
 		var rot2 = Vector3(data_array[offset+22], 0, 0)
+		#if((modelIndex>=22)&&(modelIndex<=56)):#flying centipede
+			#rot2 = Vector3(data_array[offset+22], data_array[offset+23], data_array[offset+24])
+		if((modelIndex==105)&&(modelIndex==116)):#arrow
+			rot2 = Vector3(data_array[offset+22], data_array[offset+23], data_array[offset+24])
 		#if((actClass==10)&&(modelIndex==58)||(modelIndex==67)):
 			#rot2 = Vector3(data_array[offset+22], data_array[offset+23], data_array[offset+24])
 		var actMana = int(data_array[offset+24])
