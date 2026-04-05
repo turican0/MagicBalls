@@ -24,6 +24,8 @@ var langTexts:Dictionary
 var defaultLangIndex = 1
 var countLang = 0
 
+var canNotification=true;
+
 func getLevelType():
 	return LevelType
 

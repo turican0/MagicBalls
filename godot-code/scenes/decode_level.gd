@@ -965,6 +965,8 @@ func getInputs():
 		Main_UI.get_node("CanvasLayerHelp").start_fade_out()
 
 func _notification(what):
+	if !Global.canNotification:
+		return;
 	if DL_inGame:
 		match what:
 			NOTIFICATION_APPLICATION_FOCUS_OUT:

@@ -6,6 +6,8 @@ var fadeNode: Node3D
 
 var Main_DecodeLevel
 func _ready() -> void:
+	Global.canNotification=false
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Main_DecodeLevel = get_node("DecodeLevel")
 	await get_tree().process_frame
 	#fadeNode=Global.addFadeOut(fadeNode)
@@ -31,7 +33,7 @@ func check_existing_data() -> bool:
 func show_default_dialog():
 	var dialog = AcceptDialog.new()
 	dialog.dialog_text = "Find the installation path for the GOG version of Magic Carpet 2"
-	dialog.ok_button_text = "GO"	
+	dialog.ok_button_text = "GO"
 	dialog.confirmed.connect(_on_select_manual)	
 	add_child(dialog)
 	dialog.popup_centered()
@@ -59,13 +61,18 @@ func _on_select_manual():
 	file_dialog.popup_centered()
 
 func _on_file_dialog_dir_selected(dir):
+	file_dialog.hide()
+	await get_tree().process_frame
+	await get_tree().process_frame
 	Global.MBEX = MBEXclass.new()
 	#Main_DecodeLevel.MBEXinit()
 	Main_DecodeLevel.MBEXextractCD(Global.cdPath, dir)
 	#Main_DecodeLevel.init()
-	Global.MBEX.REMC2BeginGame(Global.cdPath)
+	Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata)
 	#Global.MBEX.REMC2BeginItem()
 	#Global.MBEX.REMC2BeginInGame()
 	Main_DecodeLevel.MBEXconvert(Global.convertdata,dir)
 	#Global.MBEX.REMC2EndItem()
+	Global.canNotification=true
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	goFirstMenu()

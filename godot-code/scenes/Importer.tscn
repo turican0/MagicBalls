@@ -2,6 +2,121 @@
 
 [ext_resource type="Script" uid="uid://2yrfqycvjjrs" path="res://scenes/importer.gd" id="1_ikn2j"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_jt0sq"]
+[ext_resource type="Texture2D" uid="uid://bhn6d62ufpwqr" path="res://scenes/hourglass/hourglass.png" id="3_ygh8h"]
+[ext_resource type="Script" uid="uid://lqss1mlac4ov" path="res://scenes/hourglass/hourglass.gd" id="4_k48jq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k48jq"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(0, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_psbgx"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(42, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chiic"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(84, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sru0r"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(126, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g304a"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(168, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtnmb"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(210, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gb1fm"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(252, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dcuau"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(294, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7oe4l"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(336, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ddtn"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(378, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lbt15"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(420, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_80bhy"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(462, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucsef"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(504, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6yehm"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(546, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kk14l"]
+atlas = ExtResource("3_ygh8h")
+region = Rect2(588, 0, 42, 42)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vb2tk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k48jq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_psbgx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chiic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sru0r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g304a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dtnmb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gb1fm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dcuau")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7oe4l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ddtn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lbt15")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_80bhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ucsef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6yehm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kk14l")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Importer" type="Node3D" unique_id=1606233981]
 script = ExtResource("1_ikn2j")
@@ -27,3 +142,20 @@ access = 2
 script = ExtResource("2_jt0sq")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1967988982]
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=183985570]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="CanvasLayer/CenterContainer" unique_id=224034708]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/CenterContainer/Control" unique_id=866215561]
+sprite_frames = SubResource("SpriteFrames_vb2tk")
+script = ExtResource("4_k48jq")
