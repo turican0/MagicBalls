@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bgk3mr3qbhdh8"]
+
+[ext_resource type="Script" uid="uid://udn2sfd371fu" path="res://scenes/play_anim.gd" id="1_b8mwy"]
+[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_tboif"]
+
+[node name="PlayAnim" type="Node3D" unique_id=1484951253]
+script = ExtResource("1_b8mwy")
+
+[node name="Control" type="Control" parent="." unique_id=399428067]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Foreground" type="TextureRect" parent="Control" unique_id=1241082400]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DecodeLevel" type="Node3D" parent="." unique_id=1278233267]
+script = ExtResource("2_tboif")
+levels_tab_path = "res://mclevels/LEVELS.TAB"
+levels_dat_path = "res://mclevels/LEVELS.DAT"

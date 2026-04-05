@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://drgilicsox87e"]
+
+[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_dg4tg"]
+
+[sub_resource type="GDScript" id="GDScript_uton3"]
+script/source = "extends Node3D
+
+@onready var foreground = $Control/Foreground
+
+var runned = false
+
+var fadeNode: Node3D
+
+var Main_DecodeLevel
+func _ready():
+	await get_tree().process_frame
+	Engine.max_fps = 25	
+	Main_DecodeLevel = get_node(\"DecodeLevel\")
+	fadeNode = Global.addFadeOut(fadeNode)
+	startMenuLoop()
+
+func startMenuLoop():
+	runned = true
+	menuInit()
+
+func menuInit():
+	Main_DecodeLevel.init()
+	Global.initSound()
+	Global.Main_Sounds.setSoundBank(0)
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	Main_DecodeLevel.mapMenuBegin($Control/Foreground)
+	Main_DecodeLevel.changeLanguage(2)
+	Main_DecodeLevel.getLangTexts()
+
+func _process(delta) -> void:
+	if(!runned):
+		return
+	var mapMenuAction = Main_DecodeLevel.mapMenuStep()
+
+	match mapMenuAction:
+		1:
+			runned=false
+			goGame()
+		2:
+			runned=false
+			exitMenu()
+		3:
+			runned=false
+		4:
+			runned=false
+		5:
+			runned=false
+		#endSpritesrender()
+
+func endMapMenu():
+	#Main_DecodeLevel.mapMenuEnd()
+	Global.Main_Sounds.stopAllSounds()
+	#endAnim()
+
+func goGame():
+	fadeNode = Global.addFadeIn(fadeNode)
+	endMapMenu()
+	await fadeNode.fade_finished
+	
+	#if is_instance_valid(fadeNode):
+		#fadeNode.queue_free()
+		#fadeNode = null # Vyčistíme referenci	
+	fadeNode = Global.addFadeOut(fadeNode)
+	if(Global.MBEX.REMC2IsHiddenLevel()):
+		Global.setLoadingScreenStr(\"SMATITL2.DAT.png\")
+	else:
+		Global.setLoadingScreenStr(\"SMATITLE.DAT.png\")
+	await fadeNode.fade_finished
+	Global.last_scene_path = get_tree().current_scene.scene_file_path
+	get_tree().change_scene_to_file(\"res://scenes/CodeGeneratedDemo.tscn\")
+
+func exitMenu():
+	fadeNode = Global.addFadeIn(fadeNode)
+	endMapMenu()
+	await fadeNode.fade_finished
+	Global.last_scene_path = get_tree().current_scene.scene_file_path
+	get_tree().change_scene_to_file(\"res://scenes/MainMenu.tscn\")
+"
+
+[node name="MapMenu" type="Node3D" unique_id=1941747587]
+script = SubResource("GDScript_uton3")
+
+[node name="Control" type="Control" parent="." unique_id=1475894817]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Foreground" type="TextureRect" parent="Control" unique_id=1924248961]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DecodeLevel" type="Node3D" parent="." unique_id=516358933]
+script = ExtResource("2_dg4tg")
+levels_tab_path = "res://mclevels/LEVELS.TAB"
+levels_dat_path = "res://mclevels/LEVELS.DAT"
