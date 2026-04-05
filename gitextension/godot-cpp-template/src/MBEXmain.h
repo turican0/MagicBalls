@@ -130,4 +130,5 @@ public:
 	int REMC2GetGraphicsEenhance();
 
 	Dictionary REMC2getWarpMouse();
+	void MBEXfixLang(char *path, int index);
 	};

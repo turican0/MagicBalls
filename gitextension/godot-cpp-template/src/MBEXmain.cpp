@@ -85,7 +85,8 @@ void MBEXclass::_bind_methods() {
 void MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 	String real_path = ProjectSettings::get_singleton()->globalize_path(path);
 	String real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
-	MBEXcdExtract((char *)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
+	MBEXcdExtract((char*)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
+	MBEXfixLang((char*)real_path.utf8().get_data(), 2);
 }
 
 String MBEXclass::REMC2GetLevelType() {
@@ -127,6 +128,29 @@ int MBEXclass::initLanguage(int index) {
 	x_D41A0_BYTEARRAY_4_struct.langIndex_4 = index;
 	InitLanguage_76A40_mod_only_language();
 	return index;
+}
+
+void MBEXclass::MBEXfixLang(char* path,int index) {
+
+	char pathBuffer[512];
+	sprintf(pathBuffer, "%s%s", path, "GAME/NETHERW");
+	FILE *configFile2;
+	char configFilePath[MAX_PATH];
+	TypeConfigDat configDat;
+	sprintf(configFilePath, "%s/%s", pathBuffer, "CONFIG.DAT");
+	configFile2 = DataFileIO::CreateOrOpenFile(configFilePath, 512);
+	if (configFile2 != nullptr) {
+		DataFileIO::Read(configFile2, (uint8_t *)&configDat, sizeof(TypeConfigDat));
+		DataFileIO::Close(configFile2);
+		if (configDat.configDatSign_0 == 0xfffffff7) {
+			configDat.langIndex_4 = index;
+			configFile2 = DataFileIO::CreateOrOpenFile(configFilePath, 546);
+			if (configFile2 != nullptr) {
+				DataFileIO::WriteFile_98CAA(configFile2, (uint8_t *)&configDat, sizeof(TypeConfigDat));
+				DataFileIO::Close(configFile2);
+			}
+		}
+	}
 }
 
 void MBEXclass::changeLanguage(int index) {
