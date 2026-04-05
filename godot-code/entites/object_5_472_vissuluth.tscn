@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://q20ywbuu2o5x"]
+
+[ext_resource type="PackedScene" uid="uid://cvoey25c5scfi" path="res://entites/sources/vissuluth/vissuluth-472.tscn" id="1_gqipx"]
+
+[node name="Node3D" type="Node3D" unique_id=775536928]
+
+[node name="vissuluth" parent="." unique_id=505768597 instance=ExtResource("1_gqipx")]
+transform = Transform3D(-0.35, 0, 5.284853e-08, 0, 0.35, 0, -5.284853e-08, 0, -0.35, 0, -6.326727, 3.0860767)

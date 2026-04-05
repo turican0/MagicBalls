@@ -256,6 +256,12 @@ var library = {
 	
 	Vector3i(5,453,0): "res://entites/object_5_453_bigDragonBody.tscn",#bigDragon-body-stay
 	
+	Vector3i(5,464,0): "res://entites/object_5_464_vissuluth.tscn",#vissuluth
+	Vector3i(5,472,0): "res://entites/object_5_472_vissuluth.tscn",#vissuluth
+	Vector3i(5,480,0): "res://entites/object_5_480_vissuluth.tscn",#vissuluth
+	Vector3i(5,488,0): "res://entites/object_5_488_vissuluth.tscn",#vissuluth
+	Vector3i(5,496,0): "res://entites/object_5_496_vissuluth.tscn",#vissuluth
+	
 	Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
 	Vector3i(9,60,0): "res://entites/object_9_60_green-spell.tscn",#green-spell
 	Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
@@ -366,6 +372,8 @@ var library2 = {
 	Vector3i(5,402,0): "",#bigDragon-head
 	Vector3i(5,410,0): "",#bigDragon-neck
 	Vector3i(5,453,0): "",#bigDragon-body-stay
+	
+	Vector3i(5,496,0): "res://entites/object_5_496_vissuluth.tscn",#vissuluth
 	
 	Vector3i(9,64,0): "",#unknown
 	Vector3i(5,463,0): "",#unknown

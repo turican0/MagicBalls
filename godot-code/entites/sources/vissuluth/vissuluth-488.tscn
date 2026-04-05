@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://ddpcs0b5v380w"]
+
+[ext_resource type="PackedScene" uid="uid://rklc2fpgqxdw" path="res://entites/sources/vissuluth/vissuluth.blend" id="1_xhqu0"]
+[ext_resource type="Material" uid="uid://8ddqnfuv540m" path="res://entites/sources/vissuluth/vissuluth-bone.tres" id="2_p4wdl"]
+[ext_resource type="Material" uid="uid://dcgieq3cs2bab" path="res://entites/sources/vissuluth/vissuluth-eye.tres" id="3_hlh8p"]
+
+[node name="vissuluth" unique_id=505768597 instance=ExtResource("1_xhqu0")]
+
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(458848739) index="0" unique_id=1750272675]
+bones/1/rotation = Quaternion(-0.064476304, 0, 0, 0.99791926)
+bones/4/position = Vector3(0, 2.352092, -0.5332382)
+bones/5/rotation = Quaternion(0.35093173, -1.11627635e-07, 4.1834337e-08, 0.936401)
+bones/6/rotation = Quaternion(0.024320439, -3.8144326e-14, 8.228294e-16, 0.9997043)
+bones/27/rotation = Quaternion(0.85162455, -0.12408723, 0.21421744, -0.46200535)
+bones/42/rotation = Quaternion(-0.21739301, -0.4192901, 0.85539705, -0.21267869)
+bones/81/rotation = Quaternion(0.28086454, 0.78566945, 0.24428846, -0.49412733)
+bones/100/rotation = Quaternion(-0.2781129, 0.6758324, -0.28347886, 0.6209217)
+bones/101/rotation = Quaternion(0.5373759, -0.0913233, -0.03586077, 0.8376164)
+bones/102/rotation = Quaternion(-0.046176285, -0.60178375, 0.07264422, 0.79400694)
+bones/123/position = Vector3(-0.029962184, 3.7778945, -0.379355)
+bones/123/rotation = Quaternion(-0.27353635, -0.66777, 0.30177543, 0.6230511)
+bones/124/rotation = Quaternion(0.55218685, 0.09528342, 0.01246288, 0.828164)
+bones/125/rotation = Quaternion(-0.09884418, 0.414878, -0.008901057, 0.9044484)
+bones/157/rotation = Quaternion(6.0684336e-08, 0.9612488, -0.2756822, -7.257226e-08)
+
+[node name="Object_3" parent="metarig/Skeleton3D" index="1" unique_id=771414470]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_3_001" parent="metarig/Skeleton3D" index="2" unique_id=405374010]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4" parent="metarig/Skeleton3D" index="3" unique_id=823976852]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_001" parent="metarig/Skeleton3D" index="4" unique_id=1003206729]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_002" parent="metarig/Skeleton3D" index="5" unique_id=1126241967]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_003" parent="metarig/Skeleton3D" index="6" unique_id=1923061057]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_004" parent="metarig/Skeleton3D" index="7" unique_id=1955812811]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_005" parent="metarig/Skeleton3D" index="8" unique_id=348070307]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_006" parent="metarig/Skeleton3D" index="9" unique_id=614337656]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_007" parent="metarig/Skeleton3D" index="10" unique_id=2090250159]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_008" parent="metarig/Skeleton3D" index="11" unique_id=644426628]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Object_4_009" parent="metarig/Skeleton3D" index="12" unique_id=593834223]
+surface_material_override/0 = ExtResource("2_p4wdl")
+
+[node name="Sphere_001__0" parent="metarig/Skeleton3D" index="13" unique_id=296957641]
+surface_material_override/0 = ExtResource("3_hlh8p")
+
+[node name="Sphere__0" parent="metarig/Skeleton3D" index="15" unique_id=1771274452]
+surface_material_override/0 = ExtResource("3_hlh8p")
+
+[node name="AnimationPlayer" parent="." index="15" unique_id=2064709168]
+autoplay = &"488"
+speed_scale = 20.0
