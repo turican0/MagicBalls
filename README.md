@@ -16,6 +16,7 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 5) Some features from the original game are missing, and the keyboard shortcuts listed in the original help menu don’t work either. Press F1 to see which keys are currently in use.
 6) Please also add suggestions for improvements or additions to the original features in the issues.
 7) If you’d like to contribute to development—whether you’re a graphic designer or a programmer—please reach out on Discord; any help is welcome.
+8) Expect that I’ll be a bit clueless at times and will need to ask for help :)
 
 
 # Information for testers:
