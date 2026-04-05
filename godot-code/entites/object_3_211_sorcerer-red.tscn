@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c3idbqpxfggth"]
 
-[ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_mwkhn"]
-[ext_resource type="PackedScene" uid="uid://by5db3rtqgr7c" path="res://entites/sources/wizards/shadow_mage.tscn" id="2_mwkhn"]
-[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_n08pu"]
+[ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_dj1eu"]
+[ext_resource type="PackedScene" uid="uid://by5db3rtqgr7c" path="res://entites/sources/wizards/shadow_mage.tscn" id="2_xvmhd"]
+[ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_1l52h"]
 
 [sub_resource type="Gradient" id="Gradient_mwkhn"]
 colors = PackedColorArray(0.50980395, 0, 0, 1, 1, 0, 0, 1)
@@ -22,7 +22,7 @@ viewport_path = NodePath("SubViewport")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ila4u"]
 resource_local_to_scene = true
 render_priority = 0
-shader = ExtResource("3_n08pu")
+shader = ExtResource("3_1l52h")
 shader_parameter/label_texture = SubResource("ViewportTexture_n08pu")
 shader_parameter/start_fading_dist = 10.0
 shader_parameter/max_visible_dist = 20.0
@@ -44,10 +44,10 @@ corner_radius_bottom_left = 4
 
 [node name="Node3D" type="Node3D" unique_id=872675572]
 
-[node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_mwkhn")]
+[node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_dj1eu")]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
-[node name="shadow_mage" parent="Sketchfab_Scene" unique_id=2109155494 instance=ExtResource("2_mwkhn")]
+[node name="shadow_mage" parent="Sketchfab_Scene" unique_id=2109155494 instance=ExtResource("2_xvmhd")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 0, 0)
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="Sketchfab_Scene/shadow_mage" unique_id=1773880973]

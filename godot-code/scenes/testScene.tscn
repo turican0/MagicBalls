@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cxhx1qfntfsgj"]
 
-[ext_resource type="PackedScene" uid="uid://c3idbqpxfggth" path="res://entites/object_3_211_sorcerer.tscn" id="1_4lyoc"]
+[ext_resource type="PackedScene" uid="uid://c3idbqpxfggth" path="res://entites/object_3_211_sorcerer-red.tscn" id="1_4lyoc"]
 
 [node name="TestScene" type="Node3D" unique_id=950006661]
 
