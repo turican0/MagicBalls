@@ -17,11 +17,17 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 6) Please also add suggestions for improvements or additions to the original features in the issues.
 7) If you’d like to contribute to development—whether you’re a graphic designer or a programmer—please reach out on Discord; any help is welcome.
 
+
+# Information for testers:
+
 ---
 
 ## What needs to be done to complete the game:
 -Add gamepad controls, etc.<br>
 -Add first-person/third-person camera options<br>
+-Clean UP code and unused models<br>
+-Optimalizatins<br>
+-Some better 3D models<br>
 
 ---
 
