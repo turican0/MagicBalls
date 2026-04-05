@@ -3,7 +3,7 @@
 # MagicBalls
 Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and REMC2 engine [REMC2](https://github.com/turican0/remc2)
 
-# Usefull:
+# Usefull links:
 [Diskord of projects MDmod/remc2 and MagicBalls](https://discord.com/channels/1005849681995255878/1005849682464997378)
 [REMC2](https://github.com/turican0/remc2)
 [MC2 HDmod](https://github.com/thobbsinteractive/magic-carpet-2-hd)
