@@ -3,18 +3,31 @@
 # MagicBalls
 Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and REMC2 engine [REMC2](https://github.com/turican0/remc2)
 
+# Usefull:
+[Diskord of projects MDmod/remc2 and MagicBalls](https://discord.com/channels/1005849681995255878/1005849682464997378)
+[REMC2](https://github.com/turican0/remc2)
+[MC2 HDmod](https://github.com/thobbsinteractive/magic-carpet-2-hd)
+
+# Information for testers:
+1) Please be patient, but don’t hesitate to report bugs. The game’s optimization is still poor; I’ll continue to tune some models’ triangle counts and see if I can optimize the lighting and fire effects (especially in Meteor III), but don’t expect miracles :)
+2) Document everything in an issue on GitHub. For specific bugs, note the level and location; for particularly random bugs, save the game using F5 before the crash and then attach the zipped folder "user\AppData\Roaming\Godot\app_userdata\MagicBalls\CDdata\GAME\NETHERW\SAVE\"
+3) Report everything: bad models, incorrect sizes, wrong music, etc.
+4) If you see text with numbers instead of an object, try to take a screenshot
+5) Some features from the original game are missing, and the keyboard shortcuts listed in the original help menu don’t work either. Press F1 to see which keys are currently in use.
+6) Please also add suggestions for improvements or additions to the original features in the issues.
+7) If you’d like to contribute to development—whether you’re a graphic designer or a programmer—please reach out on Discord; any help is welcome.
+
 ---
 
 ## What needs to be done to complete the game:
--Create 3D models of all entities.<br>
 -Add gamepad controls, etc.<br>
 -Add first-person/third-person camera options<br>
--Draw healt<br>
 
 ---
 
-## Next version:
--Update UI<br>
+## Version 260405-alfa version - first release:
+-There are so many improvements that it doesn't make sense to list them all<br>
+-You can play through the game from start to finish<br>
 
 ## Version 260302:
 -Many fixes and updates<br>
