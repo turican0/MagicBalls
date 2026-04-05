@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://32p4n0y7te4s"]
+[gd_scene format=4 uid="uid://32p4n0y7te4s"]
 
 [ext_resource type="Texture2D" uid="uid://bkip5lfi3rmfu" path="res://entites/sources/96_steel03_basecolor.jpg" id="1_h3dgi"]
 [ext_resource type="Texture2D" uid="uid://c4w15wqmllhnq" path="res://entites/sources/96_steel_metallic-steel_glossiness.png" id="2_4derb"]
@@ -187,44 +187,44 @@ emission = Color(1, 1, 1, 1)
 emission_energy_multiplier = 10.0
 grow_amount = 0.227
 
-[node name="96" type="Node3D"]
+[node name="96" type="Node3D" unique_id=509314395]
 
-[node name="Light" type="Node3D" parent="."]
+[node name="Light" type="Node3D" parent="." unique_id=2019481289]
 transform = Transform3D(-0.29086468, -0.7711008, 0.5663931, -0.055189036, 0.6045246, 0.79467225, -0.9551711, 0.1998834, -0.21839117, 4.0762453, 5.903862, -1.005454)
 
-[node name="Camera" type="Camera3D" parent="."]
+[node name="Camera" type="Camera3D" parent="." unique_id=137771620]
 transform = Transform3D(0.68592066, -0.32401344, 0.6515582, -1.4901163e-08, 0.8953955, 0.44527137, -0.7276764, -0.30542082, 0.6141703, 7.3588915, 4.958309, 6.925791)
 fov = 22.895193
 near = 0.1
 far = 100.0
 
-[node name="Empty" type="Node3D" parent="."]
+[node name="Empty" type="Node3D" parent="." unique_id=500042060]
 transform = Transform3D(1, 0, 0, 0, -3.5762787e-07, -0.99999994, 0, 0.99999994, -3.5762787e-07, 0, 0, 0)
 
-[node name="Empty_001" type="Node3D" parent="."]
+[node name="Empty_001" type="Node3D" parent="." unique_id=545475913]
 transform = Transform3D(0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0)
 
-[node name="Cylinder" type="MeshInstance3D" parent="."]
+[node name="Cylinder" type="MeshInstance3D" parent="." unique_id=104735972]
 transform = Transform3D(-0.28454566, 0, 0, 0, 0.57944274, 0, 0, 0, -0.28454566, 0, -1.9388785, 0)
 mesh = SubResource("ArrayMesh_7x21m")
 skeleton = NodePath("")
 
-[node name="Torus" type="MeshInstance3D" parent="."]
+[node name="Torus" type="MeshInstance3D" parent="." unique_id=1126485841]
 transform = Transform3D(0.3090796, 0, 0, 0, 0.3090796, 0, 0, 0, 0.3090796, 0, -2.3587444, 0)
 mesh = SubResource("ArrayMesh_oaqte")
 skeleton = NodePath("")
 
-[node name="Sphere" type="MeshInstance3D" parent="."]
+[node name="Sphere" type="MeshInstance3D" parent="." unique_id=2049158331]
 transform = Transform3D(1.235807, 0, 0, 0, 1.0694846, 0, 0, 0, 1.235807, 0, -0.4822902, 0)
 mesh = SubResource("ArrayMesh_ho077")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_h3dgi")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Sphere"]
+[node name="OmniLight3D" type="OmniLight3D" parent="Sphere" unique_id=860889984]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1784892, 0)
 light_energy = 5.0
 
-[node name="Sphere_001" type="MeshInstance3D" parent="."]
+[node name="Sphere_001" type="MeshInstance3D" parent="." unique_id=619905480]
 transform = Transform3D(2.0983818, 0, 0, 0, 1.8159689, 0, 0, 0, 2.0983818, 0, -0.4822902, 0)
 mesh = SubResource("ArrayMesh_vd55q")
 skeleton = NodePath("")

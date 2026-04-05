@@ -141,7 +141,7 @@ func changeTerrain(levelType:String):
 			material_top.set_shader_parameter("atlas_texture", atlas_tex)
 			material_bottom = load("res://terrainMB/terrain_material_bottomC.tres")
 		else:
-			if(levelType=="Night"):
+			if(levelType=="Night" or levelType=="Final"):
 				material_bottom = load("res://terrainMB/terrain_material_bottomN.tres")
 			else:
 				material_bottom = load("res://terrainMB/terrain_material_bottom.tres")
