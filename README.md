@@ -18,8 +18,14 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 7) If you’d like to contribute to development—whether you’re a graphic designer or a programmer—please reach out on Discord; any help is welcome.
 8) Expect that I’ll be a bit clueless at times and will need to ask for help :)
 
-
-# Information for testers:
+# How to install the game:
+1) The game requires data from the original Magic Carpet™ 2: The Netherworlds. The installation now supports the GOG version https://www.gog.com/en/game/magic_carpet_2_the_netherworlds.
+Please install that version. If you have a different version and can’t get it to install, create an issue, take a screenshot of the game folder, and I’ll add more options to the engine.
+2) Download and extract the game from [the releases)](https://github.com/turican0/MagicBalls/releases) (currently only the Windows version):
+4) Run the .exe; the first time, the game will ask you for the installation path for MC2 (from GOG). Find it and confirm.
+5) The first time, you’ll need to wait for the game to extract the files; subsequent launches will be faster.
+6) The game saves user files to this folder, which also contains save files, etc. If you want to transfer them between the original game and the remake, or if you no longer need the game, you can delete this folder:
+user\AppData\Roaming\Godot\app_userdata\MagicBalls\
 
 ---
 
