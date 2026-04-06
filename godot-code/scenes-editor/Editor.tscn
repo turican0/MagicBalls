@@ -10,8 +10,8 @@
 [sub_resource type="TorusMesh" id="TorusMesh_wa12f"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhayq"]
-transparency = 1
-albedo_color = Color(1, 1, 1, 0.45490196)
+transparency = 4
+albedo_color = Color(1, 0, 0, 0.7882353)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_jhayq"]
 material = SubResource("StandardMaterial3D_jhayq")

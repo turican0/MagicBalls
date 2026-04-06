@@ -16,9 +16,9 @@ var Ray_Cylinder: MeshInstance3D = null
 @export var collision_mask : int   = 1
 
 @export_group("Cylinder")
-@export var cylinder_radius_min  : float = 0.5
-@export var cylinder_radius_max  : float = 50.0
-@export var cylinder_scroll_step : float = 0.5
+@export var cylinder_radius_min  : float = 0.1
+@export var cylinder_radius_max  : float = 1
+@export var cylinder_scroll_step : float = 0.01
 
 # ═══════════════════════════════════════════════════════════
 #  INTERNAL STATE
@@ -29,7 +29,7 @@ var _pitch : float = 0.0
 var terrain_hit_position : Vector3 = Vector3.ZERO
 var terrain_hit_valid    : bool    = false
 
-var _cylinder_radius : float = 5.0
+var _cylinder_radius : float = 0.1
 
 var _space_state : PhysicsDirectSpaceState3D
 
@@ -127,14 +127,14 @@ func _cast_center_ray() -> void:
 func _update_ray_position() -> void:
 	if Ray_Cylinder == null:
 		return
-	if not terrain_hit_valid:
-		Ray_Cylinder.visible = false
-		return
+	#if not terrain_hit_valid:
+		#Ray_Cylinder.visible = false
+		#return
 
 	Ray_Cylinder.visible = true
 
 	# Move cylinder to hit point (Y stays at terrain level)
-	Ray_Cylinder.global_position = terrain_hit_position
+	#Ray_Cylinder.global_position = terrain_hit_position
 
 	# Resize the CylinderMesh radius via the mesh resource
 	var cyl := Ray_Cylinder.mesh as CylinderMesh

@@ -3,6 +3,9 @@ extends Node3D
 @export_file("*.tab") var levels_tab_path: String = ""
 @export_file("*.dat") var levels_dat_path: String = ""
 
+@export_file("*.json") var key_mapping_path_res: String = "res://hidata/key_mapping.json"
+@export_file("*.json") var key_mapping_path_user: String = "user://key_mapping.json"
+
 var game_data_path: String = ""
 var cd_data_path: String = ""
 
@@ -109,6 +112,160 @@ const KEY_INDEX := {
 	KEY_INSERT: 0x5200,
 	KEY_DELETE: 0x5300
 }
+
+const KEY_NAMES := {
+	"KEY_ESCAPE":     KEY_ESCAPE,
+	"KEY_BACKSPACE":  KEY_BACKSPACE,
+	"KEY_TAB":        KEY_TAB,
+	"KEY_ENTER":      KEY_ENTER,
+	"KEY_CTRL":       KEY_CTRL,
+	"KEY_SHIFT":      KEY_SHIFT,
+	"KEY_ALT":        KEY_ALT,
+	"KEY_SPACE":      KEY_SPACE,
+	"KEY_1":          KEY_1,
+	"KEY_2":          KEY_2,
+	"KEY_3":          KEY_3,
+	"KEY_4":          KEY_4,
+	"KEY_5":          KEY_5,
+	"KEY_6":          KEY_6,
+	"KEY_7":          KEY_7,
+	"KEY_8":          KEY_8,
+	"KEY_9":          KEY_9,
+	"KEY_0":          KEY_0,
+	"KEY_Q":          KEY_Q,
+	"KEY_W":          KEY_W,
+	"KEY_E":          KEY_E,
+	"KEY_R":          KEY_R,
+	"KEY_T":          KEY_T,
+	"KEY_Y":          KEY_Y,
+	"KEY_U":          KEY_U,
+	"KEY_I":          KEY_I,
+	"KEY_O":          KEY_O,
+	"KEY_P":          KEY_P,
+	"KEY_A":          KEY_A,
+	"KEY_S":          KEY_S,
+	"KEY_D":          KEY_D,
+	"KEY_F":          KEY_F,
+	"KEY_G":          KEY_G,
+	"KEY_H":          KEY_H,
+	"KEY_J":          KEY_J,
+	"KEY_K":          KEY_K,
+	"KEY_L":          KEY_L,
+	"KEY_Z":          KEY_Z,
+	"KEY_X":          KEY_X,
+	"KEY_C":          KEY_C,
+	"KEY_V":          KEY_V,
+	"KEY_B":          KEY_B,
+	"KEY_N":          KEY_N,
+	"KEY_M":          KEY_M,
+	"KEY_MINUS":      KEY_MINUS,
+	"KEY_EQUAL":      KEY_EQUAL,
+	"KEY_BRACELEFT":  KEY_BRACELEFT,
+	"KEY_BRACERIGHT": KEY_BRACERIGHT,
+	"KEY_SEMICOLON":  KEY_SEMICOLON,
+	"KEY_APOSTROPHE": KEY_APOSTROPHE,
+	"KEY_QUOTELEFT":  KEY_QUOTELEFT,
+	"KEY_BACKSLASH":  KEY_BACKSLASH,
+	"KEY_COMMA":      KEY_COMMA,
+	"KEY_PERIOD":     KEY_PERIOD,
+	"KEY_SLASH":      KEY_SLASH,
+	"KEY_F1":         KEY_F1,
+	"KEY_F2":         KEY_F2,
+	"KEY_F3":         KEY_F3,
+	"KEY_F4":         KEY_F4,
+	"KEY_F5":         KEY_F5,
+	"KEY_F6":         KEY_F6,
+	"KEY_F7":         KEY_F7,
+	"KEY_F8":         KEY_F8,
+	"KEY_F9":         KEY_F9,
+	"KEY_F10":        KEY_F10,
+	"KEY_HOME":       KEY_HOME,
+	"KEY_UP":         KEY_UP,
+	"KEY_PAGEUP":     KEY_PAGEUP,
+	"KEY_LEFT":       KEY_LEFT,
+	"KEY_RIGHT":      KEY_RIGHT,
+	"KEY_END":        KEY_END,
+	"KEY_DOWN":       KEY_DOWN,
+	"KEY_PAGEDOWN":   KEY_PAGEDOWN,
+	"KEY_INSERT":     KEY_INSERT,
+	"KEY_DELETE":     KEY_DELETE,
+}
+
+# Remapping table: physical_key -> virtual_key (both from KEY_NAMES)
+var key_remap: Dictionary = {}
+
+# Generate default remap from KEY_NAMES (1:1 mapping) and save it
+func create_default_key_remap() -> void:
+	var key_remap_path = key_mapping_path_res
+	var data: Dictionary = {}
+	for key_name in KEY_NAMES:
+		data[key_name] = key_name   # default = no remap (same key)
+	var json = JSON.new()
+	var text = json.stringify(data, "    ", true)
+	var dir = key_remap_path.get_base_dir()
+	if not DirAccess.dir_exists_absolute(dir):
+		DirAccess.make_dir_recursive_absolute(dir)
+	var file = FileAccess.open(key_remap_path, FileAccess.WRITE)
+	if file:
+		file.store_string(text)
+		file.close()
+		print("Default key remap created and saved to: " + key_remap_path)
+	else:
+		push_error("Failed to create default key_remap.json")
+
+# Load key remapping from JSON file
+func load_key_remap(path) -> void:#key_mapping_path_res
+	var key_remap_path = path
+	key_remap.clear()
+	if not FileAccess.file_exists(key_remap_path):
+		print("Key remap file not found: ", key_remap_path, " → using default mapping")
+		return
+	var file = FileAccess.open(key_remap_path, FileAccess.READ)
+	var json_text = file.get_as_text()
+	file.close()
+	var json = JSON.new()
+	var err = json.parse(json_text)
+	if err != OK:
+		push_error("Failed to parse key_remap.json")
+		return
+	var data = json.data
+	if not data is Dictionary:
+		push_error("key_remap.json root must be a Dictionary")
+		return
+	for original_name in data:
+		var new_name = data[original_name]
+		if KEY_NAMES.has(original_name) and KEY_NAMES.has(new_name):
+			var original_key = KEY_NAMES[original_name]
+			var new_key = KEY_NAMES[new_name]
+			key_remap[original_key] = new_key
+		else:
+			push_warning("Unknown key name in remap: " + original_name + " → " + str(new_name))
+
+# Save current remapping to JSON file
+func save_key_remap(path) -> void:#key_mapping_path_user
+	var key_remap_path = path
+	var data: Dictionary = {}
+	for original_key in key_remap:
+		var new_key = key_remap[original_key]
+		var original_name = ""
+		var new_name = ""
+		for n in KEY_NAMES:
+			if KEY_NAMES[n] == original_key:
+				original_name = n
+			if KEY_NAMES[n] == new_key:
+				new_name = n
+		if original_name != "" and new_name != "":
+			data[original_name] = new_name
+	var json = JSON.new()
+	var text = json.stringify(data, "    ", true)
+	var dir = key_remap_path.get_base_dir()
+	if not DirAccess.dir_exists_absolute(dir):
+		DirAccess.make_dir_recursive_absolute(dir)
+	var file = FileAccess.open(key_remap_path, FileAccess.WRITE)
+	if file:
+		file.store_string(text)
+		file.close()
+		print("Key remapping saved to: ", key_remap_path)
 
 const MOUSE_BUTTON_INDEX := {
 	MOUSE_BUTTON_LEFT: 0,
@@ -526,12 +683,21 @@ func _preload_library(source_dict: Dictionary, target_dict: Dictionary):
 		if path != "":
 			target_dict[key] = load(path)
 
-func _ready():	
+func _ready():
+	updateRemap()
 	_preload_library(library, library_scenes)
-	_preload_library(library2, library2_scenes)
+	_preload_library(library2, library2_scenes)	
+	#create_default_key_remap()
 	#node_pool.resize(pool_size)
 	#for i in range(pool_size):
 		#node_pool[i] = null
+		
+func updateRemap() -> void:
+	if FileAccess.file_exists(key_mapping_path_user):
+		load_key_remap(key_mapping_path_user)
+	else:
+		load_key_remap(key_mapping_path_res)
+		save_key_remap(key_mapping_path_user)
 
 var last_spell_index:int =-1
 var last_button:int =-1
@@ -895,13 +1061,19 @@ func changeFog():
 
 func _input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
-		match event.keycode:
+		var physical_key = event.keycode
+		if key_remap.has(physical_key):
+			physical_key = key_remap[physical_key]
+		match physical_key:
 			KEY_F7:
 				changeFog()
 		
 	if event is InputEventKey and not event.echo:
-		if event.keycode in KEY_INDEX:
-			var index = KEY_INDEX[event.keycode]
+		var physical_key = event.keycode
+		if key_remap.has(physical_key):
+			physical_key = key_remap[physical_key]
+		if physical_key in KEY_INDEX:
+			var index = KEY_INDEX[physical_key]
 			var is_pressed: bool = event.pressed
 			if last_keys_state.get(index, false) != is_pressed:
 				last_keys_state[index] = is_pressed
