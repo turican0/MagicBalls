@@ -965,6 +965,13 @@ func getInputs():
 		Main_UI.get_node("CanvasLayerHelp").start_fade_out()
 
 func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		for child in get_tree().root.get_children():
+			if child is Window:
+				child.hide()
+		set_process(false)
+		set_physics_process(false)
+		get_tree().quit()
 	if !Global.canNotification:
 		return;
 	if DL_inGame:
