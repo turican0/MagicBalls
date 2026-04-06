@@ -214,24 +214,23 @@ func create_default_key_remap() -> void:
 		push_error("Failed to create default key_remap.json")
 
 # Load key remapping from JSON file
-func load_key_remap(path) -> void:#key_mapping_path_res
-	var key_remap_path = path
+func load_key_remap(path: String) -> void:
 	key_remap.clear()
-	if not FileAccess.file_exists(key_remap_path):
-		print("Key remap file not found: ", key_remap_path, " → using default mapping")
+	if not FileAccess.file_exists(path):
+		print("Key remap file not found: ", path, " → using default mapping")
 		return
-	var file = FileAccess.open(key_remap_path, FileAccess.READ)
+	var file = FileAccess.open(path, FileAccess.READ)
 	var json_text = file.get_as_text()
-	file.close()
+	file.close()    
 	var json = JSON.new()
 	var err = json.parse(json_text)
 	if err != OK:
-		push_error("Failed to parse key_remap.json")
-		return
+		push_error("Failed to parse key_remap.json: " + path)
+		return    
 	var data = json.data
 	if not data is Dictionary:
-		push_error("key_remap.json root must be a Dictionary")
-		return
+		push_error("key_remap.json root must be a Dictionary: " + path)
+		return    
 	for original_name in data:
 		var new_name = data[original_name]
 		if KEY_NAMES.has(original_name) and KEY_NAMES.has(new_name):
@@ -241,31 +240,39 @@ func load_key_remap(path) -> void:#key_mapping_path_res
 		else:
 			push_warning("Unknown key name in remap: " + original_name + " → " + str(new_name))
 
-# Save current remapping to JSON file
-func save_key_remap(path) -> void:#key_mapping_path_user
-	var key_remap_path = path
-	var data: Dictionary = {}
+# Save current remapping to JSON file - FIXED (handles KEY_S vs KEY_SHIFT etc.)
+func save_key_remap(path: String) -> void:
+	var data: Dictionary = {}    
 	for original_key in key_remap:
 		var new_key = key_remap[original_key]
-		var original_name = ""
-		var new_name = ""
-		for n in KEY_NAMES:
+		var original_name: String = ""
+		var new_name: String = ""
+		var names_sorted = KEY_NAMES.keys()
+		names_sorted.sort_custom(func(a, b): return a.length() > b.length())  # delší názvy první
+		for n in names_sorted:
 			if KEY_NAMES[n] == original_key:
 				original_name = n
+				break
+		for n in names_sorted:
 			if KEY_NAMES[n] == new_key:
 				new_name = n
+				break
 		if original_name != "" and new_name != "":
 			data[original_name] = new_name
+		else:
+			push_warning("Could not find name for keycode: " + str(original_key))
 	var json = JSON.new()
 	var text = json.stringify(data, "    ", true)
-	var dir = key_remap_path.get_base_dir()
+	var dir = path.get_base_dir()
 	if not DirAccess.dir_exists_absolute(dir):
 		DirAccess.make_dir_recursive_absolute(dir)
-	var file = FileAccess.open(key_remap_path, FileAccess.WRITE)
+	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
 		file.store_string(text)
 		file.close()
-		print("Key remapping saved to: ", key_remap_path)
+		print("Key remapping saved to: ", path)
+	else:
+		push_error("Failed to save key remapping to: " + path)
 
 const MOUSE_BUTTON_INDEX := {
 	MOUSE_BUTTON_LEFT: 0,
@@ -1060,18 +1067,14 @@ func changeFog():
 	
 
 func _input(event):
-	if event is InputEventKey and event.pressed and not event.echo:
-		var physical_key = event.keycode
-		if key_remap.has(physical_key):
-			physical_key = key_remap[physical_key]
-		match physical_key:
-			KEY_F7:
-				changeFog()
-		
 	if event is InputEventKey and not event.echo:
 		var physical_key = event.keycode
 		if key_remap.has(physical_key):
 			physical_key = key_remap[physical_key]
+		if event.pressed:
+			match physical_key:
+				KEY_F7:
+					changeFog()
 		if physical_key in KEY_INDEX:
 			var index = KEY_INDEX[physical_key]
 			var is_pressed: bool = event.pressed
