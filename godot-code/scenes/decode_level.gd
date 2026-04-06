@@ -1069,8 +1069,9 @@ func changeFog():
 func _input(event):
 	if event is InputEventKey and not event.echo:
 		var physical_key = event.keycode
-		if key_remap.has(physical_key):
-			physical_key = key_remap[physical_key]
+		if DL_inGame:
+			if key_remap.has(physical_key):
+				physical_key = key_remap[physical_key]
 		if event.pressed:
 			match physical_key:
 				KEY_F7:
@@ -1114,8 +1115,9 @@ func _release_all_inputs():
 func getInputs():
 	for keycode in KEY_INDEX:
 		var physical_key = keycode
-		if key_remap.has(keycode):
-			keycode = key_remap[keycode]
+		if DL_inGame:
+			if key_remap.has(keycode):
+				keycode = key_remap[keycode]
 		var index = KEY_INDEX[keycode]
 		var is_actually_pressed = Input.is_key_pressed(physical_key)
 		var last_state = last_keys_state.get(index, false)
