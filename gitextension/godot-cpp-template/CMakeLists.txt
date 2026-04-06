@@ -234,6 +234,8 @@ target_sources(${LIBNAME}
     src/modified/remc2_mod.h
     src/MBEX/convertData.cpp
     src/MBEX/convertData.h
+    src/MBEX/editor.cpp
+    src/MBEX/editor.h
     src/libxmi/xmi2mid.cpp
     src/libxmi/xmi2mid.h
     src/lib/stb_image.h
