@@ -1,20 +1,18 @@
 extends Node3D
 
-var Main_DecodeLevel
-var MBEngine
-var Main_TerrainsMB
-var Main_Camera
+@onready var Main_DecodeLevel: Node3D = $DecodeLevel
+@onready var MBEngine: Node3D = $MBEngine
+@onready var Main_TerrainsMB: Node3D = $TerrainsMB
+@onready var Main_Player: Node3D = $PlayerEditor
+@onready var Main_Camera: Camera3D = $PlayerEditor/Camera3D
+@onready var Ray_Cylinder: MeshInstance3D = $RayCylinder
 
 func _ready() -> void:
 	await get_tree().process_frame
-	Main_Camera = get_node("Camera3D")
-	Main_DecodeLevel = get_node("DecodeLevel")
-	MBEngine = get_node("MBEngine")
-	Main_TerrainsMB = $TerrainsMB
 	Main_DecodeLevel.NodeSky3D = $NodeSky3D/Sky3D
+	Main_Camera.Ray_Cylinder = Ray_Cylinder
 	Global.setLevelType("Day")
 	gameInit()
-	
 
 func gameInit():
 	match Global.getLevelType():

@@ -4,10 +4,20 @@
 [ext_resource type="Script" uid="uid://kwr82wuj0j7e" path="res://scenes/mb_engine.gd" id="2_j6dse"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="3_wa12f"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="4_6tdr8"]
-[ext_resource type="Script" uid="uid://bsobig8ajdrl6" path="res://scenes/camera_3d_editor.gd" id="5_j6dse"]
+[ext_resource type="PackedScene" uid="uid://cw1g07ahbhkck" path="res://scenes-editor/PlayerEditor.tscn" id="6_jhayq"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="6_wa12f"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_wa12f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhayq"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.45490196)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jhayq"]
+material = SubResource("StandardMaterial3D_jhayq")
+top_radius = 0.1
+bottom_radius = 0.1
+height = 20.0
 
 [node name="Editor" type="Node3D" unique_id=310193630]
 script = ExtResource("1_wmxca")
@@ -26,7 +36,9 @@ levels_dat_path = "res://mclevels/LEVELS.DAT"
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=974961556]
 mesh = SubResource("TorusMesh_wa12f")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1656205657]
-script = ExtResource("5_j6dse")
-
 [node name="NodeSky3D" parent="." unique_id=1508260845 instance=ExtResource("6_wa12f")]
+
+[node name="RayCylinder" type="MeshInstance3D" parent="." unique_id=349329190]
+mesh = SubResource("CylinderMesh_jhayq")
+
+[node name="PlayerEditor" parent="." unique_id=1031186005 instance=ExtResource("6_jhayq")]
