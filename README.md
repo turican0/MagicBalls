@@ -24,7 +24,7 @@ Please install that version. If you have a different version and can’t get it 
 2) Download and extract the game from [the releases)](https://github.com/turican0/MagicBalls/releases) (currently only the Windows version):
 4) Run the .exe; the first time, the game will ask you for the installation path for MC2 (from GOG). Find it and confirm.
 5) The first time, you’ll need to wait for the game to extract the files; subsequent launches will be faster.
-6) The game saves user files to this folder, which also contains save files, etc. If you want to transfer them between the original game and the remake, or if you no longer need the game, you can delete this folder:
+6) The game saves user files to this folder, which also contains save files, etc. If you want to transfer them between the original game and the remake, or if you no longer need the game, you can delete this folder(you can use script removeUserMBFolder.bat):
 user\AppData\Roaming\Godot\app_userdata\MagicBalls\
 
 ---
