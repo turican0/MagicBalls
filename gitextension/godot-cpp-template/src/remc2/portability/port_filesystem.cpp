@@ -365,6 +365,7 @@ FILE* myopent(char* path, char* type) {
 	return fp;
 };
 
+/*
 dirsstruct getListDir(char *dirname) {
 	struct dirent *de; // Pointer for directory entry
 	dirsstruct directories;
@@ -384,6 +385,24 @@ dirsstruct getListDir(char *dirname) {
 		//printf("%s\n", de->d_name);
 	}
 	closedir(dr);
+	return directories;
+}*/
+
+dirsstruct getListDir(char *dirname) {
+	dirsstruct directories;
+	directories.number = 0;
+
+	try {
+		for (const auto &entry : std::filesystem::directory_iterator(dirname)) {
+			std::string name = entry.path().filename().string();
+			if (name[0] == '.')
+				continue;
+			sprintf(directories.dir[directories.number++], "%s", name.c_str());
+		}
+	} catch (const std::exception &e) {
+		Logger->error("Could not open directory: {}", e.what());
+	}
+
 	return directories;
 }
 
