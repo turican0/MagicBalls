@@ -79,25 +79,25 @@ var remove_rot:float = 0.5
 			#global_position.y+=1*p_delta
 
 # Returns the input vector relative to the camera. Forward is always the direction the camera is facing
-func get_camera_relative_input(p_delta):
-	#var input_dir: Vector3 = Vector3.ZERO
-	if Input.is_key_pressed(KEY_A): # Left
-		ROTATION_SPEED=ROTATION_SPEED+accel_rot*p_delta
-		if(ROTATION_SPEED>max_rot):
-			ROTATION_SPEED=max_rot
-	if Input.is_key_pressed(KEY_D): # Right
-		ROTATION_SPEED=ROTATION_SPEED-accel_rot*p_delta
-		if(ROTATION_SPEED<-max_rot):
-			ROTATION_SPEED=-max_rot
-	if Input.is_key_pressed(KEY_W): # Forward
-		MOVE_SPEED=MOVE_SPEED+accel_speed*p_delta
-		if(MOVE_SPEED>max_speed):
-			MOVE_SPEED=max_speed
-		#input_dir -= %Camera3D.global_transform.basis.z
-	if Input.is_key_pressed(KEY_S): # Backward
-		MOVE_SPEED=MOVE_SPEED-accel_speed*p_delta
-		if(MOVE_SPEED<-max_speed):
-			MOVE_SPEED=-max_speed
+#func get_camera_relative_input(p_delta):
+	##var input_dir: Vector3 = Vector3.ZERO
+	#if Input.is_key_pressed(KEY_A): # Left
+		#ROTATION_SPEED=ROTATION_SPEED+accel_rot*p_delta
+		#if(ROTATION_SPEED>max_rot):
+			#ROTATION_SPEED=max_rot
+	#if Input.is_key_pressed(KEY_D): # Right
+		#ROTATION_SPEED=ROTATION_SPEED-accel_rot*p_delta
+		#if(ROTATION_SPEED<-max_rot):
+			#ROTATION_SPEED=-max_rot
+	#if Input.is_key_pressed(KEY_W): # Forward
+		#MOVE_SPEED=MOVE_SPEED+accel_speed*p_delta
+		#if(MOVE_SPEED>max_speed):
+			#MOVE_SPEED=max_speed
+		##input_dir -= %Camera3D.global_transform.basis.z
+	#if Input.is_key_pressed(KEY_S): # Backward
+		#MOVE_SPEED=MOVE_SPEED-accel_speed*p_delta
+		#if(MOVE_SPEED<-max_speed):
+			#MOVE_SPEED=-max_speed
 			
 #func shoot_bullet() -> void:
 	#if bullet_scene == null:

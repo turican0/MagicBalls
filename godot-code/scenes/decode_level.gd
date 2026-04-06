@@ -1113,8 +1113,11 @@ func _release_all_inputs():
 
 func getInputs():
 	for keycode in KEY_INDEX:
+		var physical_key = keycode
+		if key_remap.has(keycode):
+			keycode = key_remap[keycode]
 		var index = KEY_INDEX[keycode]
-		var is_actually_pressed = Input.is_key_pressed(keycode)
+		var is_actually_pressed = Input.is_key_pressed(physical_key)
 		var last_state = last_keys_state.get(index, false)
 		if last_state == true and not is_actually_pressed:
 			_pending_key_changes.append({
