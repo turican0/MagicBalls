@@ -1,0 +1,82 @@
+name: Build GDExtension, Godot Export & Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggered on tags like v1.0.0
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # 1. ENVIRONMENT SETUP
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # 2. COMPILE C++ LIBRARY (GDExtension)
+      - name: Build C++ Library (Debug & Release)
+        shell: pwsh
+        run: |
+          # Build Release
+          cmake -B build-cpp-release -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls"
+          cmake --build build-cpp-release --config Release
+          
+          # Build Debug
+          cmake -B build-cpp-debug -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls"
+          cmake --build build-cpp-debug --config Debug
+
+      # 3. SETUP GODOT
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.2.1
+
+      # 4. EXPORT GODOT PROJECT
+      - name: Godot Export
+        run: |
+          mkdir -p exports/debug
+          mkdir -p exports/release
+          godot --headless --path godot-code --export-debug "Windows Desktop" ../exports/debug/MagicBalls-Debug.exe
+          godot --headless --path godot-code --export-release "Windows Desktop" ../exports/release/MagicBalls.exe
+
+      # 5. PREPARE RELEASE PACKAGES (ZIP)
+      - name: Package Artifacts with Tag Name
+        shell: pwsh
+        run: |
+          $tagName = "${{ github.ref_name }}"
+          $debugZip = "MagicBalls-$tagName-Windows-Debug.zip"
+          $releaseZip = "MagicBalls-$tagName-Windows-Release.zip"
+
+          # Copy .bat files from scripts folder to export directories
+          # Based on your screenshots: scripts/editor.bat and scripts/removeUserMBFolder.bat
+          Copy-Item "scripts/editor.bat" "exports/debug/"
+          Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/"
+          
+          Copy-Item "scripts/editor.bat" "exports/release/"
+          Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/"
+          
+          # Compress everything in the export folders into ZIPs
+          Compress-Archive -Path exports/debug/* -DestinationPath "exports/$debugZip"
+          Compress-Archive -Path exports/release/* -DestinationPath "exports/$releaseZip"
+
+      # 6. CREATE GITHUB RELEASE AND UPLOAD ASSETS
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: exports/*.zip
+          body: "Automated build for MagicBalls version ${{ github.ref_name }}."
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
