@@ -65,8 +65,14 @@ jobs:
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
-          godot --headless --path godot-code --export-debug   "Windows Desktop" ../exports/debug/MagicBalls-Debug.exe
-          godot --headless --path godot-code --export-release "Windows Desktop" ../exports/release/MagicBalls.exe
+          Write-Host "=== Available export presets ==="
+          godot --headless --path godot-code --list-export-presets
+
+          Write-Host "=== Starting DEBUG export ==="
+          godot --headless --verbose --path godot-code --export-debug "Windows Desktop" "../exports/debug/MagicBalls-Debug.exe"
+
+          Write-Host "=== Starting RELEASE export ==="
+          godot --headless --verbose --path godot-code --export-release "Windows Desktop" "../exports/release/MagicBalls.exe"
 
           # Kontrola výsledku
           if (-not (Test-Path "exports/debug/MagicBalls-Debug.exe")) {
