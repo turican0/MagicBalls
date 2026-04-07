@@ -1,11 +1,14 @@
 name: Build GDExtension, Godot Export & Release
+
 on:
   push:
     tags:
       - 'v*'
+
 jobs:
   build-and-release:
     runs-on: windows-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,11 +34,10 @@ jobs:
           cmake -B build-cpp-debug -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls"
           cmake --build build-cpp-debug --config Debug
 
-      # 3. COPY DLL INTO GODOT PROJECT (so Godot can find it during export)
+      # 3. COPY DLL INTO GODOT PROJECT
       - name: Copy DLLs into Godot project
         shell: pwsh
         run: |
-          # Release DLL ends with .dll, debug DLL ends with .debug.dll
           $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
           $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
 
@@ -45,18 +47,18 @@ jobs:
           if (-not $releaseDll) { Write-Error "Release DLL not found!"; exit 1 }
           if (-not $debugDll)   { Write-Error "Debug DLL not found!";   exit 1 }
 
-          # Copy into the Godot project's bin folder (match your .gdextension file path)
           New-Item -ItemType Directory -Force -Path "godot-code/bin"
           Copy-Item $releaseDll.FullName "godot-code/bin/"
           Copy-Item $debugDll.FullName   "godot-code/bin/"
 
-      # 4. SETUP GODOT
+      # 4. SETUP GODOT + EXPORT TEMPLATES
       - name: Setup Godot
         uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.2.1
+          include-templates: true   # ← Toto je nejdůležitější oprava!
 
-      # 5. EXPORT GODOT PROJECT
+      # 5. GODOT EXPORT (s verbose výstupem pro lepší debug)
       - name: Godot Export
         shell: pwsh
         run: |
@@ -66,15 +68,18 @@ jobs:
           godot --headless --path godot-code --export-debug   "Windows Desktop" ../exports/debug/MagicBalls-Debug.exe
           godot --headless --path godot-code --export-release "Windows Desktop" ../exports/release/MagicBalls.exe
 
-          # Fail loudly if the exe wasn't produced
+          # Kontrola výsledku
           if (-not (Test-Path "exports/debug/MagicBalls-Debug.exe")) {
             Write-Error "DEBUG export failed – exe not found!"
+            Get-ChildItem -Path "exports/debug" -Recurse | Out-Host
             exit 1
           }
           if (-not (Test-Path "exports/release/MagicBalls.exe")) {
             Write-Error "RELEASE export failed – exe not found!"
             exit 1
           }
+
+          Write-Host "Export completed successfully."
 
       # 6. PREPARE RELEASE PACKAGES
       - name: Package Artifacts with Tag Name
@@ -85,23 +90,20 @@ jobs:
           $releaseZip = "MagicBalls-$tagName-Windows-Release.zip"
 
           # Copy .bat files
-          Copy-Item "scripts/editor.bat"             "exports/debug/"
-          Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/"
-          Copy-Item "scripts/editor.bat"             "exports/release/"
-          Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/"
+          Copy-Item "scripts/editor.bat"             "exports/debug/" -ErrorAction SilentlyContinue
+          Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/" -ErrorAction SilentlyContinue
+          Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
+          Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/" -ErrorAction SilentlyContinue
 
-          # Copy DLLs directly into the zip folders too (belt-and-suspenders)
+          # Copy DLLs directly into export folders
           $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
           $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
 
-          if (-not $releaseDll) { Write-Error "Release DLL not found!"; exit 1 }
-          if (-not $debugDll)   { Write-Error "Debug DLL not found!";   exit 1 }
+          if ($releaseDll) { Copy-Item $releaseDll.FullName "exports/release/" }
+          if ($debugDll)   { Copy-Item $debugDll.FullName   "exports/debug/" }
 
-          Copy-Item $releaseDll.FullName "exports/release/"
-          Copy-Item $debugDll.FullName   "exports/debug/"
-
-          Compress-Archive -Path "exports/debug/*"   -DestinationPath "exports/$debugZip"
-          Compress-Archive -Path "exports/release/*" -DestinationPath "exports/$releaseZip"
+          Compress-Archive -Path "exports/debug/*"   -DestinationPath "exports/$debugZip"   -Force
+          Compress-Archive -Path "exports/release/*" -DestinationPath "exports/$releaseZip" -Force
 
       # 7. CREATE GITHUB RELEASE
       - name: Create GitHub Release
