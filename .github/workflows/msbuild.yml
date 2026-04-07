@@ -35,13 +35,15 @@ jobs:
       - name: Copy DLLs into Godot project
         shell: pwsh
         run: |
-          # Adjust the source paths to wherever CMake actually outputs the .dll
-          # Common output locations: build-cpp-release/Release/ or build-cpp-release/bin/
-          $releaseDll = Get-ChildItem -Path "build-cpp-release" -Recurse -Filter "MagicBalls*.dll" | Select-Object -First 1
-          $debugDll   = Get-ChildItem -Path "build-cpp-debug"   -Recurse -Filter "MagicBalls*.dll" | Select-Object -First 1
+          # CMake outputs DLLs into gitextension/godot-cpp-template/bin/
+          $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -notlike "*debug*" } | Select-Object -First 1
+          $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -like "*debug*" }   | Select-Object -First 1
 
           Write-Host "Release DLL: $($releaseDll.FullName)"
           Write-Host "Debug DLL:   $($debugDll.FullName)"
+
+          if (-not $releaseDll) { Write-Error "Release DLL not found!"; exit 1 }
+          if (-not $debugDll)   { Write-Error "Debug DLL not found!";   exit 1 }
 
           # Copy into the Godot project's bin folder (match your .gdextension file path)
           New-Item -ItemType Directory -Force -Path "godot-code/bin"
@@ -89,8 +91,12 @@ jobs:
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/"
 
           # Copy DLLs directly into the zip folders too (belt-and-suspenders)
-          $releaseDll = Get-ChildItem -Path "build-cpp-release" -Recurse -Filter "MagicBalls*.dll" | Select-Object -First 1
-          $debugDll   = Get-ChildItem -Path "build-cpp-debug"   -Recurse -Filter "MagicBalls*.dll" | Select-Object -First 1
+          $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -notlike "*debug*" } | Select-Object -First 1
+          $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -like "*debug*" }   | Select-Object -First 1
+
+          if (-not $releaseDll) { Write-Error "Release DLL not found!"; exit 1 }
+          if (-not $debugDll)   { Write-Error "Debug DLL not found!";   exit 1 }
+
           Copy-Item $releaseDll.FullName "exports/release/"
           Copy-Item $debugDll.FullName   "exports/debug/"
 
