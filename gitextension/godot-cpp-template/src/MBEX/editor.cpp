@@ -174,7 +174,7 @@ void editor_run() {
 	loadlevel(0);
 	terrain_recalculate();
 
-	//toto se musi PRIDAT main_x();
+	main_x();
 
 
 
@@ -2239,7 +2239,11 @@ std::vector<int> SetValidMc2LevelIndexes() {
 	return mc2validLevelIndexes;
 }
 
-bool first = true;
+void main_x() {
+	terrain_recalculate();
+}
+
+//bool first = true;
 /*
 int main_x() {
 	SDL_Event e;

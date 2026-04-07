@@ -7,12 +7,23 @@ extends Node3D
 @onready var Main_Camera: Camera3D = $PlayerEditor/Camera3D
 @onready var Ray_Cylinder: MeshInstance3D = $RayCylinder
 
+var editor_runned=false
+
 func _ready() -> void:
 	await get_tree().process_frame
+	Global.MBEX = MBEXclass.new()
 	Main_DecodeLevel.NodeSky3D = $NodeSky3D/Sky3D
 	Main_Camera.Ray_Cylinder = Ray_Cylinder
 	Global.setLevelType("Day")
+	Main_TerrainsMB.init(false)
+	Main_DecodeLevel.gameInit(false)
 	gameInit()
+	EditorInit(Global.cdPath)
+	editor_runned=true
+
+func _process(delta: float) -> void:
+	if editor_runned:
+		EditorStep()
 
 func gameInit():
 	match Global.getLevelType():
@@ -51,3 +62,14 @@ func gameInit():
 			Main_DecodeLevel.setFogDensity(0.01)
 			Main_DecodeLevel.setAtmDayTint(Color(0.8,0.9,1.0))
 			Main_DecodeLevel.setSunMoon(true,true,1.0,1.0)
+
+func EditorInit(cdPath):
+	Global.MBEX.REMC2EditorBegin(cdPath)
+
+func EditorStep():
+	Global.MBEX.REMC2EditorLoop()
+	var isCave:bool = false
+	Global.MBEX.renew_terrain(isCave)
+
+func EditorEnd():
+	Global.MBEX.REMC2EditorEnd()

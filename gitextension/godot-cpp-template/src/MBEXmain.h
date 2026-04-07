@@ -119,8 +119,6 @@ public:
 	bool REMC2IsHiddenLevel();
 
 
-	void REMC2BeginGame_old(String cdPath, String gamePath);
-
 	void REMC2SetScrBuffer(TextureRect *scrBufferRect);
 	//void REMC2SetCDPath(String cdPath);
 	int REMC2Run(Dictionary inputs, int stage);
@@ -130,7 +128,7 @@ public:
 	Dictionary REMC2getWarpMouse();
 	void MBEXfixLang(char *path, int index);
 
-	void REMC2EditorBegin();
+	void REMC2EditorBegin(String cdPath);
 	void REMC2EditorEnd();
 	void REMC2EditorLoop();
 

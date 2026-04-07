@@ -737,7 +737,7 @@ var runned: bool
 
 func SetRunned(sendRunned) -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	gameInit()
+	gameInit(true)
 	runned = sendRunned
 
 #func getSpritesActions():
@@ -822,7 +822,7 @@ func _process(_p_delta) -> void:
 			Global.setLevelType(Global.MBEX.REMC2GetLevelType())
 			Global.Main_Sounds.stopAllSounds()
 			get_parent().get_node("TerrainsMB").updateMeshes()
-			gameInit()
+			gameInit(true)
 			fadeNode = Global.addFadeIn(fadeNode)
 			await fadeNode.fade_finished
 			Global.setLoadingScreenStr("")
@@ -1226,7 +1226,7 @@ func init():
 	MBEXinit()
 	Global.initSound()
 
-func gameInit():
+func gameInit(useMultimesh):
 	match Global.getLevelType():
 		"Day":
 			Global.Main_Sounds.setSoundBank(0)
@@ -1269,10 +1269,12 @@ func gameInit():
 			setSunMoon(true,true,1.0,1.0)
 	if(Global.getLevelType()=="Cave"):
 		get_parent().get_node("TerrainsMB").mesh_instance_top.show()
-		get_parent().get_node("MultiMeshtop").show()
+		if useMultimesh:
+			get_parent().get_node("MultiMeshtop").show()
 	else:
 		get_parent().get_node("TerrainsMB").mesh_instance_top.hide()
-		get_parent().get_node("MultiMeshtop").hide()
+		if useMultimesh:
+			get_parent().get_node("MultiMeshtop").hide()
 	clear_entites_pool()
 
 func setDayEntites():

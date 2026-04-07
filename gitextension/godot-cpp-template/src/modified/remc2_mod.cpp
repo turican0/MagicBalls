@@ -42,7 +42,6 @@ void sub_main_mod_end() {
 	delete EventDispatcher::I;
 }
 
-
 std::vector<GraphicsAction> graphics_queue;
 
 std::vector<GraphicsAction> graphics_queue_get_pending_actions() {

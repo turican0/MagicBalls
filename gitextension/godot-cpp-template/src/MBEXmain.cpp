@@ -17,6 +17,8 @@
 
 #include "modified/remc2_mod.h"
 
+#include "MBEX/editor.h"
+
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
@@ -30,7 +32,6 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &MBEXclass::GetEntites);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &MBEXclass::GetPlayerPositionRotation);
 	godot::ClassDB::bind_method(D_METHOD("set_mesh_instances", "Node3D", "Node3D", "bool"), &MBEXclass::set_mesh_instances);
-	godot::ClassDB::bind_method(D_METHOD("initialize_grid_data"), &MBEXclass::initialize_grid_data);
 	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh", "bool"), &MBEXclass::recalculate_mesh);
 	godot::ClassDB::bind_method(D_METHOD("renew_terrain", "bool"), &MBEXclass::renew_terrain);
 	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &MBEXclass::getActiveSpells);
@@ -66,7 +67,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetGraphicsEenhance"), &MBEXclass::REMC2GetGraphicsEenhance);
 	godot::ClassDB::bind_method(D_METHOD("REMC2getWarpMouse"), &MBEXclass::REMC2getWarpMouse);
 
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorBegin"), &MBEXclass::REMC2EditorBegin);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorBegin", "text"), &MBEXclass::REMC2EditorBegin);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorEnd"), &MBEXclass::REMC2EditorEnd);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoop"), &MBEXclass::REMC2EditorLoop);
 }
@@ -133,7 +134,6 @@ int MBEXclass::initLanguage(int index) {
 }
 
 void MBEXclass::MBEXfixLang(char* path,int index) {
-
 	char pathBuffer[512];
 	sprintf(pathBuffer, "%s%s", path, "GAME/NETHERW");
 	FILE *configFile2;
@@ -242,23 +242,6 @@ Array MBEXclass::getPendingSoundActions() {
 	sound_queue_clear();
 	return result;	
 }
-/*
-Array MBEXclass::getPendingGraphicsActions() {
-	Array result;
-	std::vector<GraphicsAction> pending = graphics_queue_get_pending_actions();
-	for (size_t i = 0; i < pending.size(); i++) {
-		const GraphicsAction &ga = pending[i];
-		Dictionary d;
-		d["action"] = String(ga.action.c_str());
-		d["posx"] = ga.x;
-		d["posy"] = ga.y;
-		d["index"] = ga.index;
-		d["type"] = ga.type;
-		result.append(d);
-	}
-	graphics_queue_clear();
-	return result;
-}*/
 
 typedef struct {
 	int spellIndex;
@@ -575,9 +558,6 @@ void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool i
 			UtilityFunctions::printerr("Error: The provided node is not a MeshInstance3D!");
 		}
 	}
-}
-
-void MBEXclass::initialize_grid_data() {
 }
 
 void MBEXclass::recalculate_mesh(bool isCave) {
@@ -1689,14 +1669,21 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 	return -1;
 }
 
-void MBEXclass::REMC2EditorBegin()
+void MBEXclass::REMC2EditorBegin(String cdPath)
 {
+	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+	gameFolder = std::string(real_cdPath.utf8().get_data()) + "GAME/NETHERW";
+	cdFolder = std::string(real_cdPath.utf8().get_data()) + "CD_Files";
+	support_begin();
+	editor_run();
 };
 
 void MBEXclass::REMC2EditorEnd()
 {
+	support_end();
 };
 
 void MBEXclass::REMC2EditorLoop()
 {
+	main_x();
 };

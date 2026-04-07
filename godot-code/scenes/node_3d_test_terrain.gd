@@ -16,7 +16,7 @@ var mesh_instance_bottom: MeshInstance3D
 var mesh_instance_top: MeshInstance3D
 var surface_tool: SurfaceTool
 
-func init():
+func init(useMultimesh):
 	# 1. Inicializace a nastavení uzlů	
 	
 	# 2. Inicializace dat sítě (vrcholy a textury)
@@ -26,12 +26,12 @@ func init():
 	get_parent().get_node("DecodeLevel").init()
 	await get_parent().get_node("DecodeLevel").inGameBegin()
 
-	updateMeshes()
+	updateMeshes(useMultimesh)
 
 	#get_parent().get_node("DecodeLevel").SetRunned(true)
 	#end of Multimesh
 
-func updateMeshes():
+func updateMeshes(useMultimesh):
 	initialize_nodes()
 	Global.initSound()
 	get_parent().get_node("DecodeLevel").setMesh()
@@ -43,54 +43,55 @@ func updateMeshes():
 	if mesh_instance_top:
 		mesh_instance_top.extra_cull_margin = 1000.0
 	
-	#begin of Multimesh
-	var mmi_bottom:MultiMeshInstance3D = get_parent().get_node("MultiMeshbottom")
-	mmi_bottom.extra_cull_margin = 1000.0
-	if not mmi_bottom.multimesh:
-		mmi_bottom.multimesh = MultiMesh.new()
-		mmi_bottom.multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	else:
-		mmi_bottom.multimesh.instance_count = 0
-	mmi_bottom.multimesh.mesh = mesh_instance_bottom.mesh	
-	mmi_bottom.material_override = mesh_instance_bottom.material_override 
-	if not mmi_bottom.material_override:
-		mmi_bottom.material_override = mesh_instance_bottom.mesh.surface_get_material(0)
-	var offset = GRID_SIZE * CELL_SCALE
-	var positions = []
-	if(Global.getLevelType()=="Cave"):
-		for x in [-1, 0, 1, 2]:
-			for z in [-1, 0, 1, 2]:
-				if x == 0 and z == 0: continue
-				positions.append(Vector3(x * offset, 0, z * offset))
-	else:
-		for x in [-2, -1, 0, 1, 2]:
-			for z in [-2, -1, 0, 1, 2]:
-				if x == 0 and z == 0: continue
-				positions.append(Vector3(x * offset, 0, z * offset))
-	mmi_bottom.multimesh.instance_count = positions.size()
-	for i in range(positions.size()):
-		var t = Transform3D(Basis(), positions[i])
-		mmi_bottom.multimesh.set_instance_transform(i, t)
-	if(Global.getLevelType()=="Cave"):
-		var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
-		mmi_top.extra_cull_margin = 1000.0
-		if not mmi_top.multimesh:
-			mmi_top.multimesh = MultiMesh.new()
-			mmi_top.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	if useMultimesh:
+		#begin of Multimesh
+		var mmi_bottom:MultiMeshInstance3D = get_parent().get_node("MultiMeshbottom")
+		mmi_bottom.extra_cull_margin = 1000.0
+		if not mmi_bottom.multimesh:
+			mmi_bottom.multimesh = MultiMesh.new()
+			mmi_bottom.multimesh.transform_format = MultiMesh.TRANSFORM_3D
 		else:
-			mmi_top.multimesh.instance_count = 0
-		mmi_top.multimesh.mesh = mesh_instance_top.mesh	
-		mmi_top.material_override = mesh_instance_top.material_override 
-		if not mmi_top.material_override:
-			mmi_top.material_override = mesh_instance_top.mesh.surface_get_material(0)
-		mmi_top.multimesh.instance_count = positions.size()
+			mmi_bottom.multimesh.instance_count = 0
+		mmi_bottom.multimesh.mesh = mesh_instance_bottom.mesh	
+		mmi_bottom.material_override = mesh_instance_bottom.material_override 
+		if not mmi_bottom.material_override:
+			mmi_bottom.material_override = mesh_instance_bottom.mesh.surface_get_material(0)
+		var offset = GRID_SIZE * CELL_SCALE
+		var positions = []
+		if(Global.getLevelType()=="Cave"):
+			for x in [-1, 0, 1, 2]:
+				for z in [-1, 0, 1, 2]:
+					if x == 0 and z == 0: continue
+					positions.append(Vector3(x * offset, 0, z * offset))
+		else:
+			for x in [-2, -1, 0, 1, 2]:
+				for z in [-2, -1, 0, 1, 2]:
+					if x == 0 and z == 0: continue
+					positions.append(Vector3(x * offset, 0, z * offset))
+		mmi_bottom.multimesh.instance_count = positions.size()
 		for i in range(positions.size()):
 			var t = Transform3D(Basis(), positions[i])
-			mmi_top.multimesh.set_instance_transform(i, t)
-	else:
-		var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
-		if mmi_top.multimesh:
-			mmi_top.multimesh.instance_count = 0
+			mmi_bottom.multimesh.set_instance_transform(i, t)
+		if(Global.getLevelType()=="Cave"):
+			var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
+			mmi_top.extra_cull_margin = 1000.0
+			if not mmi_top.multimesh:
+				mmi_top.multimesh = MultiMesh.new()
+				mmi_top.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+			else:
+				mmi_top.multimesh.instance_count = 0
+			mmi_top.multimesh.mesh = mesh_instance_top.mesh	
+			mmi_top.material_override = mesh_instance_top.material_override 
+			if not mmi_top.material_override:
+				mmi_top.material_override = mesh_instance_top.mesh.surface_get_material(0)
+			mmi_top.multimesh.instance_count = positions.size()
+			for i in range(positions.size()):
+				var t = Transform3D(Basis(), positions[i])
+				mmi_top.multimesh.set_instance_transform(i, t)
+		else:
+			var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
+			if mmi_top.multimesh:
+				mmi_top.multimesh.instance_count = 0
 
 ## --- FÁZE 1: Inicializace ---
 var material_bottom
