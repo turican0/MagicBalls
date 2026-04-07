@@ -45,8 +45,6 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &MBEXclass::getPendingSoundActions);
 	//godot::ClassDB::bind_method(D_METHOD("getPendingGraphicsActions"), &MBEXclass::getPendingGraphicsActions);
 	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &MBEXclass::updateFreeSoundPlayers);
-	godot::ClassDB::bind_method(D_METHOD("playAnim", "Int"), &MBEXclass::playAnim);
-	godot::ClassDB::bind_method(D_METHOD("playAnimStep", "Int"), &MBEXclass::playAnimStep);
 	godot::ClassDB::bind_method(D_METHOD("getVGABuffer"), &MBEXclass::getVGABuffer);
 
 	godot::ClassDB::bind_method(D_METHOD("getLangTexts"), &MBEXclass::getLangTexts);
@@ -67,6 +65,10 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetGraphicsEenhance"), &MBEXclass::REMC2GetGraphicsEenhance);
 	godot::ClassDB::bind_method(D_METHOD("REMC2getWarpMouse"), &MBEXclass::REMC2getWarpMouse);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorBegin"), &MBEXclass::REMC2EditorBegin);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorEnd"), &MBEXclass::REMC2EditorEnd);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoop"), &MBEXclass::REMC2EditorLoop);
 }
 
 
@@ -168,136 +170,6 @@ Dictionary MBEXclass::getLangTexts() {
 	}
 
 	return result;
-}
-
-/*
-FILE *animTempfile;
-Type_SoundEvent_E17CC* tempPSoundEvent;
-void PlayInfoFmvBegin(__int16 a1, __int16 a2, Type_SoundEvent_E17CC *pSoundEvent, char *path)
-{
-	tempPSoundEvent = pSoundEvent;
-	x_WORD_E12FC = a2;
-	x_WORD_D4004 = 0;
-	x_WORD_17DB58 = 0;
-	ActualKeyframe_17DB60 = 0;
-	x_DWORD_E12F4x = (TColor *)pdwScreenBuffer_351628;
-	animTempfile = DataFileIO::CreateOrOpenFile(path, 512);
-	x_DWORD_17DB38_intro_file_handle = animTempfile;
-	if (animTempfile) {
-		DataFileIO::Read(animTempfile, unk_17DB40, 12); //ecx=12
-		LastKeyframe_17DB46 = *(int16_t *)&unk_17DB40[6];
-		x_WORD_17DB48 = *(int16_t *)&unk_17DB40[8];
-		x_WORD_17DB4A = *(int16_t *)&unk_17DB40[10];
-
-		x_WORD_180744_mouse_right_button = 0;
-		x_WORD_180746_mouse_left_button = 0;
-		x_DWORD_E1300 += 12;
-		LastPressedKey_1806E4 = 0;
-		x_WORD_17DB5A = 0;
-		FlvInitSet_473B0(); //2283b0
-		x_WORD_17DB5C = a1;
-	}
-}
-*/
-/*
-bool endAnim = false;
-
-void PlayInfoFmvStep() {
-	if ((LastPressedKey_1806E4 != 1) && (!endAnim) && animTempfile)
-	{
-		SetFrameStart(std::chrono::system_clock::now());
-		if (x_WORD_17DB5A)
-			endAnim=true;
-		else {
-			if (ActualKeyframe_17DB60 >= LastKeyframe_17DB46 - 1) //34eb60 a 34eb46
-				endAnim = true;
-			else {
-				PlayIntoSoundEvents_1B280(tempPSoundEvent);
-				sub_75DB0();
-				sub_75E70();
-				ActualKeyframe_17DB60++;
-			}
-		}
-	} else
-		endAnim = true;
-}
-*/
-int oldScreenWidth;
-int old_VGA_type_resolution;
-
-void PlayInfoFmvEnd() {
-	/*
-	if (animTempfile) {
-		DataFileIO::Close(x_DWORD_17DB38_intro_file_handle);
-	}
-	screenWidth_18062C = oldScreenWidth;
-	x_WORD_180660_VGA_type_resolution = old_VGA_type_resolution;
-	*/
-}
-
-void MBEXclass::playAnim(int index) {
-	/*
-	memset(pdwScreenBuffer_351628, 0, 640 * 480); //clear screen buffer
-
-	old_VGA_type_resolution = x_WORD_180660_VGA_type_resolution;
-	oldScreenWidth = screenWidth_18062C;
-	screenWidth_18062C = 320;
-	x_WORD_180660_VGA_type_resolution = 1;
-	InitLanguage_76A40();
-
-	char dataPath[MAX_PATH];
-	x_DWORD_17DE38str.x_DWORD_17DE54 = &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787];
-	x_DWORD_17DE38str.x_DWORD_17DEC0 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[308527];
-	x_DWORD_17DE38str.x_DWORD_17DEC4 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[310159];
-	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
-	sub_7AA70_load_and_decompres_dat_file(dataPath, &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787], 0x164FCD, 0x35C);
-	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DEC0, 0x165329, 0x224);
-	sub_7AA70_load_and_decompres_dat_file(0, 0, 0, 0);
-	if (x_WORD_180660_VGA_type_resolution & 1)
-		sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
-	else
-		sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
-
-	sub_2EB40();
-	if (soundAble_E3798 && x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex == 2) {
-		x_BYTE_D41C1 = 0;
-		x_BYTE_D41C0 = 0;
-	} else {
-		x_BYTE_D41C0 = 1;
-		x_BYTE_D41C1 = 1;
-	}
-
-
-	//char dataPath[MAX_PATH];
-	switch(index)
-		{
-		case 0:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTEL.DAT");
-			PlayInfoFmvBegin(1, 1, str_E17CC_0, dataPath);
-			break;
-		case 1:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO.DAT");
-			PlayInfoFmvBegin(1, 1, str_E17CC_0, dataPath);
-			break;
-		case 2:
-			sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "INTRO/INTRO2.DAT");
-			PlayInfoFmvBegin(1, 1, str_E17CC_0x160, dataPath);
-			break;
-	}
-	*/
-}
-
-int MBEXclass::playAnimStep(int run) {
-	/*
-	if (run)
-		LastPressedKey_1806E4 = 20;
-	PlayInfoFmvStep();
-	if (endAnim) {
-		PlayInfoFmvEnd();
-		return 1;
-	}
-	*/
-	return 0;
 }
 
 PackedByteArray MBEXclass::getVGABuffer() {
@@ -1552,35 +1424,6 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
-void MBEXclass::REMC2BeginGame_old(String cdPath, String gamePath) { //OK!!
-	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
-	String real_gamePath = ProjectSettings::get_singleton()->globalize_path(gamePath);
-
-	int argc = 3;
-	char *argv[3];
-	char arg1[] = "game.exe";
-	char arg2[] = "";
-	char arg3[] = "--auto_change_res";
-	argv[0] = arg1;
-	argv[1] = arg2;
-	argv[2] = arg3;
-
-	CommandLineParams.Init(argc, argv);
-
-	support_begin();
-
-	sub_main_mod_begin(argc, argv, (char *)real_cdPath.utf8().get_data(), (char *)real_gamePath.utf8().get_data());
-	//MBEXstate = 1;
-
-	//changeLanguage(2);//added code
-}
-
-/*
-std::thread t2;
-String saved_real_cdPath;
-int saved_argc;
-char *saved_argv[3];*/
-
 void MBEXclass::REMC2BeginGame(String cdPath, String gamePath) { //OK!!
 	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 	saved_real_gamePath = ProjectSettings::get_singleton()->globalize_path(gamePath);
@@ -1845,3 +1688,15 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 	}
 	return -1;
 }
+
+void MBEXclass::REMC2EditorBegin()
+{
+};
+
+void MBEXclass::REMC2EditorEnd()
+{
+};
+
+void MBEXclass::REMC2EditorLoop()
+{
+};

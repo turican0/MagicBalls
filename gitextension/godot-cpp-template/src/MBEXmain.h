@@ -102,9 +102,7 @@ public:
 	Array getPendingSoundActions();
 		//void soundQueueClear();
 	void updateFreeSoundPlayers(const godot::Array &p_indices);
-	void playAnim(int index);
 	PackedByteArray getVGABuffer();
-	int playAnimStep(int run);
 	//void mapMenuInit();
 	//int mapMenuStep(int run);
 	Dictionary getLangTexts();
@@ -131,4 +129,9 @@ public:
 
 	Dictionary REMC2getWarpMouse();
 	void MBEXfixLang(char *path, int index);
-	};
+
+	void REMC2EditorBegin();
+	void REMC2EditorEnd();
+	void REMC2EditorLoop();
+
+};
