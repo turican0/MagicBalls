@@ -20,10 +20,10 @@ height = 20.0
 [node name="Editor" type="Node3D" unique_id=310193630]
 script = ExtResource("1_wmxca")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1939798825]
+[node name="TerrainEdit" type="CanvasLayer" parent="." unique_id=1939798825]
 visible = false
 
-[node name="Control" type="Control" parent="CanvasLayer" unique_id=1978053754]
+[node name="Control" type="Control" parent="TerrainEdit" unique_id=1978053754]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,26 +31,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Control" unique_id=2114364083]
+[node name="Panel" type="Panel" parent="TerrainEdit/Control" unique_id=2114364083]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 311.0
 
-[node name="Button" type="Button" parent="CanvasLayer/Control/Panel" unique_id=699835573]
+[node name="Button" type="Button" parent="TerrainEdit/Control/Panel" unique_id=699835573]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 7.0
 offset_right = 55.0
 offset_bottom = 47.0
 
-[node name="Button2" type="Button" parent="CanvasLayer/Control/Panel" unique_id=1391950073]
+[node name="Button2" type="Button" parent="TerrainEdit/Control/Panel" unique_id=1391950073]
 layout_mode = 0
 offset_left = 133.0
 offset_top = 8.0
 offset_right = 186.0
 offset_bottom = 48.0
 
-[node name="TextEdit" type="TextEdit" parent="CanvasLayer/Control/Panel" unique_id=809454073]
+[node name="TextEdit" type="TextEdit" parent="TerrainEdit/Control/Panel" unique_id=809454073]
 layout_mode = 0
 offset_left = 68.0
 offset_top = 12.0

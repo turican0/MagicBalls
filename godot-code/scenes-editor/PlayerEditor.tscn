@@ -4,7 +4,6 @@
 
 [node name="PlayerEditor" type="Node3D" unique_id=1031186005]
 
-[node name="YawPivot" type="Node3D" parent="." unique_id=220054344]
-
-[node name="Camera3D" type="Camera3D" parent="YawPivot" unique_id=167963423]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=167963423]
+transform = Transform3D(-0.7071068, 0, -0.7071068, 0, 1, 0, 0.7071068, 0, -0.7071068, 0, 10, 0)
 script = ExtResource("1_8cogr")

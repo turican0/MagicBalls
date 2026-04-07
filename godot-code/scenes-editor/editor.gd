@@ -4,10 +4,13 @@ extends Node3D
 @onready var MBEngine: Node3D = $MBEngine
 @onready var Main_TerrainsMB: Node3D = $TerrainsMB
 @onready var Main_Player: Node3D = $PlayerEditor
-@onready var Main_Camera: Camera3D = $PlayerEditor/YawPivot/Camera3D
+@onready var Main_Camera: Camera3D = $PlayerEditor/Camera3D
 @onready var Ray_Cylinder: MeshInstance3D = $RayCylinder
 
+@onready var Terrain_Edit_Panel: CanvasLayer = $TerrainEdit
+
 var editor_runned=false
+var is_ui_visible = false
 
 func _ready() -> void:
 	await get_tree().process_frame
@@ -21,7 +24,24 @@ func _ready() -> void:
 	Main_DecodeLevel.gameInit(false)
 	gameInit()
 	EditorInit(Global.cdPath)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	editor_runned=true
+	
+func _input(event: InputEvent) -> void:
+	# M pressed
+	if (event is InputEventKey and event.keycode == KEY_M and event.pressed):
+		toggle_terrain_editor()
+
+func toggle_terrain_editor():
+	is_ui_visible = !is_ui_visible
+	if is_ui_visible:
+		Terrain_Edit_Panel.show()
+		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+	else:
+		Terrain_Edit_Panel.hide()
+		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+		var center = get_viewport().get_visible_rect().size / 2.0
+		get_viewport().warp_mouse(center)
 
 func _process(delta: float) -> void:
 	if editor_runned:
