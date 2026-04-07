@@ -56,23 +56,36 @@ jobs:
         uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.2.1
-          include-templates: true   # ← Toto je nejdůležitější oprava!
+          include-templates: true
 
-      # 5. GODOT EXPORT (s verbose výstupem pro lepší debug)
+      # 4.5. INITIALIZE GODOT PROJECT (důležitý krok – vygeneruje .godot/imported/)
+      - name: Initialize Godot project (force resource import)
+        shell: pwsh
+        run: |
+          Write-Host "=== Initializing Godot project (force import) ==="
+          godot --headless --path godot-code --editor --quit || true
+          Start-Sleep -Seconds 8   # počkáme, až se vše uloží
+
+          Write-Host "=== Godot version ==="
+          godot --version
+
+          Write-Host "=== Available export presets ==="
+          godot --headless --path godot-code --list-export-presets
+
+      # 5. GODOT EXPORT
       - name: Godot Export
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
-          Write-Host "=== Available export presets ==="
-          godot --headless --path godot-code --list-export-presets
-
           Write-Host "=== Starting DEBUG export ==="
           godot --headless --verbose --path godot-code --export-debug "Windows Desktop" "../exports/debug/MagicBalls-Debug.exe"
+          Write-Host "Godot DEBUG exit code: $LASTEXITCODE"
 
           Write-Host "=== Starting RELEASE export ==="
           godot --headless --verbose --path godot-code --export-release "Windows Desktop" "../exports/release/MagicBalls.exe"
+          Write-Host "Godot RELEASE exit code: $LASTEXITCODE"
 
           # Kontrola výsledku
           if (-not (Test-Path "exports/debug/MagicBalls-Debug.exe")) {
@@ -95,13 +108,11 @@ jobs:
           $debugZip   = "MagicBalls-$tagName-Windows-Debug.zip"
           $releaseZip = "MagicBalls-$tagName-Windows-Release.zip"
 
-          # Copy .bat files
           Copy-Item "scripts/editor.bat"             "exports/debug/" -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/" -ErrorAction SilentlyContinue
           Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/" -ErrorAction SilentlyContinue
 
-          # Copy DLLs directly into export folders
           $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
           $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
 
