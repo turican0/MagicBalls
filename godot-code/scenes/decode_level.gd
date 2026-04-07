@@ -784,6 +784,8 @@ func _process(_p_delta) -> void:
 	var gameState=Global.MBEX.REMC2StepInGame(input_state,nextState)
 	match gameState:
 		1:
+			updatePlayer(getPlayerPosRot())
+			renderEntites(getEntites())
 			Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))
 			var mods = Global.MBEX.getPaletteModifications()
 			var current_gain = mods[0]
@@ -802,8 +804,6 @@ func _process(_p_delta) -> void:
 			#var offset_vec = Vector3(offset_rgb.r, offset_rgb.g, offset_rgb.b)	
 			#Main_Filter.material_override.set_shader_parameter("MyGain", gain_vec)
 			#Main_Filter.material_override.set_shader_parameter("MyOffset", offset_vec)
-			updatePlayer(getPlayerPosRot())
-			renderEntites(getEntites())
 			get_parent().get_node("UILayer/UI").updateSpells(Global.MBEX.getActiveSpells())
 			get_parent().get_node("UILayer/UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
 			get_parent().get_node("UILayer/UI").updateMinimap(Global.MBEX.getMinimap())
@@ -1468,6 +1468,8 @@ func MBrun(inGame):
 				get_parent().get_node("SpiderWeb").show()
 			else:
 				get_parent().get_node("SpiderWeb").hide()
+			updatePlayer(getPlayerPosRot())
+			renderEntites(getEntites())
 			Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))
 			var mods = Global.MBEX.getPaletteModifications()
 			var current_gain = mods[0]
@@ -1482,8 +1484,6 @@ func MBrun(inGame):
 				last_gain = current_gain
 				last_offset = current_offset
 				last_saturation = current_saturation
-			updatePlayer(getPlayerPosRot())
-			renderEntites(getEntites())
 		else:
 			Main_Filter.hide()
 	else:
