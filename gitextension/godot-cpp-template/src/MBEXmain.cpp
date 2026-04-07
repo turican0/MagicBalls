@@ -56,6 +56,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
+	godot::ClassDB::bind_method(D_METHOD("REMC2SetLevelType", "text"), &MBEXclass::REMC2SetLevelType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetWebInfo"), &MBEXclass::REMC2GetWebInfo);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2IsHiddenLevel"), &MBEXclass::REMC2IsHiddenLevel);
@@ -102,6 +103,15 @@ String MBEXclass::REMC2GetLevelType() {
 			return String("Night");
 		} else
 			return String("Cave");
+}
+
+void MBEXclass::REMC2SetLevelType(String level) {
+	if (level == "Day") {
+		D41A0_0.terrain_2FECE.MapType = MapType_t::Day;
+	} else if (level == "Night") {
+		D41A0_0.terrain_2FECE.MapType = MapType_t::Night;
+	} else
+		D41A0_0.terrain_2FECE.MapType = MapType_t::Cave;
 }
 
 int MBEXclass::initLanguage(int index) {

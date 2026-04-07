@@ -19,7 +19,8 @@ func _ready() -> void:
 	Main_Camera.Ray_Cylinder = Ray_Cylinder
 	Main_Camera.terrain_node = Main_TerrainsMB
 	var Ray_Cylinder: MeshInstance3D = null
-	Global.setLevelType("Day")
+	Global.setLevelType("Night")
+	Global.MBEX.REMC2SetLevelType("Night")
 	Main_TerrainsMB.init(false)
 	Main_DecodeLevel.gameInit(false)
 	gameInit()

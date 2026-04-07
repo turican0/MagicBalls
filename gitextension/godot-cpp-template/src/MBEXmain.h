@@ -114,6 +114,7 @@ public:
 	//void REMC2BeginItem();
 	//void REMC2EndItem();
 	String REMC2GetLevelType();
+	void REMC2SetLevelType(String level);
 	bool REMC2GetWebInfo();
 
 	bool REMC2IsHiddenLevel();
