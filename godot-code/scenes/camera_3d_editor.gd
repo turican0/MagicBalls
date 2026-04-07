@@ -9,7 +9,7 @@ var Ray_Cylinder: MeshInstance3D = null
 @export var move_speed        : float = 10.0
 @export var sprint_multiplier : float = 3.0
 @export var mouse_sensitivity : float = 0.002
-@export var pitch_limit       : float = 85.0
+@export var pitch_limit       : float = 90.0
 
 @export_group("Ray / Cone")
 @export var ray_length     : float = 500.0
