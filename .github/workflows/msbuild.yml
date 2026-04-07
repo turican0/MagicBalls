@@ -1,14 +1,11 @@
 name: Build GDExtension, Godot Export & Release
-
 on:
   push:
     tags:
-      - 'v*' # Triggered on tags like v1.0.0
-
+      - 'v*'
 jobs:
   build-and-release:
     runs-on: windows-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,53 +21,83 @@ jobs:
         with:
           python-version: '3.x'
 
-      # 2. COMPILE C++ LIBRARY (GDExtension)
+      # 2. COMPILE C++ LIBRARY
       - name: Build C++ Library (Debug & Release)
         shell: pwsh
         run: |
-          # Build Release
           cmake -B build-cpp-release -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls"
           cmake --build build-cpp-release --config Release
-          
-          # Build Debug
+
           cmake -B build-cpp-debug -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls"
           cmake --build build-cpp-debug --config Debug
 
-      # 3. SETUP GODOT
+      # 3. COPY DLL INTO GODOT PROJECT (so Godot can find it during export)
+      - name: Copy DLLs into Godot project
+        shell: pwsh
+        run: |
+          # Adjust the source paths to wherever CMake actually outputs the .dll
+          # Common output locations: build-cpp-release/Release/ or build-cpp-release/bin/
+          $releaseDll = Get-ChildItem -Path "build-cpp-release" -Recurse -Filter "MagicBalls*.dll" | Select-Object -First 1
+          $debugDll   = Get-ChildItem -Path "build-cpp-debug"   -Recurse -Filter "MagicBalls*.dll" | Select-Object -First 1
+
+          Write-Host "Release DLL: $($releaseDll.FullName)"
+          Write-Host "Debug DLL:   $($debugDll.FullName)"
+
+          # Copy into the Godot project's bin folder (match your .gdextension file path)
+          New-Item -ItemType Directory -Force -Path "godot-code/bin"
+          Copy-Item $releaseDll.FullName "godot-code/bin/"
+          Copy-Item $debugDll.FullName   "godot-code/bin/"
+
+      # 4. SETUP GODOT
       - name: Setup Godot
         uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.2.1
 
-      # 4. EXPORT GODOT PROJECT
+      # 5. EXPORT GODOT PROJECT
       - name: Godot Export
+        shell: pwsh
         run: |
-          mkdir -p exports/debug
-          mkdir -p exports/release
-          godot --headless --path godot-code --export-debug "Windows Desktop" ../exports/debug/MagicBalls-Debug.exe
+          New-Item -ItemType Directory -Force -Path "exports/debug"
+          New-Item -ItemType Directory -Force -Path "exports/release"
+
+          godot --headless --path godot-code --export-debug   "Windows Desktop" ../exports/debug/MagicBalls-Debug.exe
           godot --headless --path godot-code --export-release "Windows Desktop" ../exports/release/MagicBalls.exe
 
-      # 5. PREPARE RELEASE PACKAGES (ZIP)
+          # Fail loudly if the exe wasn't produced
+          if (-not (Test-Path "exports/debug/MagicBalls-Debug.exe")) {
+            Write-Error "DEBUG export failed – exe not found!"
+            exit 1
+          }
+          if (-not (Test-Path "exports/release/MagicBalls.exe")) {
+            Write-Error "RELEASE export failed – exe not found!"
+            exit 1
+          }
+
+      # 6. PREPARE RELEASE PACKAGES
       - name: Package Artifacts with Tag Name
         shell: pwsh
         run: |
-          $tagName = "${{ github.ref_name }}"
-          $debugZip = "MagicBalls-$tagName-Windows-Debug.zip"
+          $tagName    = "${{ github.ref_name }}"
+          $debugZip   = "MagicBalls-$tagName-Windows-Debug.zip"
           $releaseZip = "MagicBalls-$tagName-Windows-Release.zip"
 
-          # Copy .bat files from scripts folder to export directories
-          # Based on your screenshots: scripts/editor.bat and scripts/removeUserMBFolder.bat
-          Copy-Item "scripts/editor.bat" "exports/debug/"
+          # Copy .bat files
+          Copy-Item "scripts/editor.bat"             "exports/debug/"
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/"
-          
-          Copy-Item "scripts/editor.bat" "exports/release/"
+          Copy-Item "scripts/editor.bat"             "exports/release/"
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/"
-          
-          # Compress everything in the export folders into ZIPs
-          Compress-Archive -Path exports/debug/* -DestinationPath "exports/$debugZip"
-          Compress-Archive -Path exports/release/* -DestinationPath "exports/$releaseZip"
 
-      # 6. CREATE GITHUB RELEASE AND UPLOAD ASSETS
+          # Copy DLLs directly into the zip folders too (belt-and-suspenders)
+          $releaseDll = Get-ChildItem -Path "build-cpp-release" -Recurse -Filter "MagicBalls*.dll" | Select-Object -First 1
+          $debugDll   = Get-ChildItem -Path "build-cpp-debug"   -Recurse -Filter "MagicBalls*.dll" | Select-Object -First 1
+          Copy-Item $releaseDll.FullName "exports/release/"
+          Copy-Item $debugDll.FullName   "exports/debug/"
+
+          Compress-Archive -Path "exports/debug/*"   -DestinationPath "exports/$debugZip"
+          Compress-Archive -Path "exports/release/*" -DestinationPath "exports/$releaseZip"
+
+      # 7. CREATE GITHUB RELEASE
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
