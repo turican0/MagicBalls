@@ -4,7 +4,7 @@ extends Node3D
 @onready var MBEngine: Node3D = $MBEngine
 @onready var Main_TerrainsMB: Node3D = $TerrainsMB
 @onready var Main_Player: Node3D = $PlayerEditor
-@onready var Main_Camera: Camera3D = $PlayerEditor/Camera3D
+@onready var Main_Camera: Camera3D = $PlayerEditor/YawPivot/Camera3D
 @onready var Ray_Cylinder: MeshInstance3D = $RayCylinder
 
 var editor_runned=false
@@ -14,6 +14,8 @@ func _ready() -> void:
 	Global.MBEX = MBEXclass.new()
 	Main_DecodeLevel.NodeSky3D = $NodeSky3D/Sky3D
 	Main_Camera.Ray_Cylinder = Ray_Cylinder
+	Main_Camera.terrain_node = Main_TerrainsMB
+	var Ray_Cylinder: MeshInstance3D = null
 	Global.setLevelType("Day")
 	Main_TerrainsMB.init(false)
 	Main_DecodeLevel.gameInit(false)

@@ -7,11 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://cw1g07ahbhkck" path="res://scenes-editor/PlayerEditor.tscn" id="6_jhayq"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="6_wa12f"]
 
-[sub_resource type="TorusMesh" id="TorusMesh_wa12f"]
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhayq"]
 transparency = 4
-albedo_color = Color(1, 0, 0, 0.7882353)
+albedo_color = Color(1, 0, 0, 0.45882353)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_jhayq"]
 material = SubResource("StandardMaterial3D_jhayq")
@@ -21,6 +19,43 @@ height = 20.0
 
 [node name="Editor" type="Node3D" unique_id=310193630]
 script = ExtResource("1_wmxca")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1939798825]
+visible = false
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1978053754]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control" unique_id=2114364083]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 311.0
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/Panel" unique_id=699835573]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 7.0
+offset_right = 55.0
+offset_bottom = 47.0
+
+[node name="Button2" type="Button" parent="CanvasLayer/Control/Panel" unique_id=1391950073]
+layout_mode = 0
+offset_left = 133.0
+offset_top = 8.0
+offset_right = 186.0
+offset_bottom = 48.0
+
+[node name="TextEdit" type="TextEdit" parent="CanvasLayer/Control/Panel" unique_id=809454073]
+layout_mode = 0
+offset_left = 68.0
+offset_top = 12.0
+offset_right = 120.0
+offset_bottom = 37.0
 
 [node name="MBEngine" type="Node3D" parent="." unique_id=973372086]
 script = ExtResource("2_j6dse")
@@ -32,9 +67,6 @@ script = ExtResource("3_wa12f")
 script = ExtResource("4_6tdr8")
 levels_tab_path = "res://mclevels/LEVELS.TAB"
 levels_dat_path = "res://mclevels/LEVELS.DAT"
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=974961556]
-mesh = SubResource("TorusMesh_wa12f")
 
 [node name="NodeSky3D" parent="." unique_id=1508260845 instance=ExtResource("6_wa12f")]
 
