@@ -1559,7 +1559,6 @@ func inGameBegin():
 
 func setMesh():
 	Global.MBEX.set_mesh_instances(get_parent().get_node("TerrainsMB").mesh_instance_bottom,get_parent().get_node("TerrainsMB").mesh_instance_top,Global.getLevelType()=="Cave")
-	Global.MBEX.initialize_grid_data()
 	Global.MBEX.recalculate_mesh(Global.getLevelType()=="Cave")
 
 #func loadlevel(levelnumber: int):
