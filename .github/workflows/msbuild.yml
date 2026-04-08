@@ -140,4 +140,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: exports/*.zip
-          body: "Automated
+          body: "Automated build for MagicBalls version ${{ github.ref_name }}."
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
