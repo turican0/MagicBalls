@@ -83,7 +83,7 @@ jobs:
           $godotDir = Split-Path $env:GODOT
           Get-ChildItem $godotDir
 
--       name: Initialize Godot project
+      - name: Initialize Godot project
         shell: pwsh
         run: |
           $godotDir     = Split-Path $env:GODOT
