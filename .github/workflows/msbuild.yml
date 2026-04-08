@@ -34,6 +34,20 @@ jobs:
           cmake -B build-cpp-debug -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls"
           cmake --build build-cpp-debug --config Debug
 
+      # 2.5. RENAME DLLs TO MATCH .gdextension (EXTENSION-NAME)
+      - name: Rename DLLs to EXTENSION-NAME (pro .gdextension)
+        shell: pwsh
+        run: |
+          $binDir = "gitextension/godot-cpp-template/bin/windows"
+
+          Get-ChildItem -Path $binDir -Filter "MagicBalls*.dll" | ForEach-Object {
+            $newName = $_.Name -replace '^MagicBalls', 'EXTENSION-NAME'
+            Rename-Item -Path $_.FullName -NewName $newName -Force
+            Write-Host "Přejmenováno: $($_.Name) → $newName"
+          }
+
+          Write-Host "DLL přejmenování dokončeno."
+
       # 3. COPY DLL INTO GODOT PROJECT
       - name: Copy DLLs into Godot project
         shell: pwsh
@@ -108,7 +122,6 @@ jobs:
             exit 1
           }
 
-          # finální kontrola
           if (-not (Test-Path $debugExe)) {
             Write-Error "DEBUG export failed – exe not found!"
             Get-ChildItem -Path "exports" -Recurse | Out-Host
