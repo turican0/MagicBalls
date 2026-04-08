@@ -83,12 +83,20 @@ jobs:
           $godotDir = Split-Path $env:GODOT
           Get-ChildItem $godotDir
 
-      - name: Initialize Godot project
+-       name: Initialize Godot project
         shell: pwsh
         run: |
-          & $env:GODOT --headless --path godot-code --editor --quit
+          $godotDir     = Split-Path $env:GODOT
+          # Najdi skutečný adresář (symlink může ukazovat jinam)
+          $godotInstall = "C:\Users\runneradmin\godot"
+          $godotConsole = Get-ChildItem -Path $godotInstall -Filter "*console*.exe" | Select-Object -First 1
+          Write-Host "Console exe: $($godotConsole.FullName)"
+          
+          $env:GODOT_CONSOLE = $godotConsole.FullName
+          echo "GODOT_CONSOLE=$($godotConsole.FullName)" >> $env:GITHUB_ENV
+          
+          & $godotConsole.FullName --headless --path godot-code --editor --quit
           Start-Sleep -Seconds 8
-          Write-Host "Godot version: $(& $env:GODOT --version)"
 
       - name: Godot Export
         shell: pwsh
@@ -96,10 +104,12 @@ jobs:
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
+          $godot      = $env:GODOT_CONSOLE
           $workspace  = "${{ github.workspace }}"
           $debugExe   = "$workspace\exports\debug\MagicBalls-Debug.exe"
           $releaseExe = "$workspace\exports\release\MagicBalls.exe"
-          $godot      = $env:GODOT
+
+          Write-Host "Godot console: $godot"
 
           Write-Host "=== DEBUG export ==="
           & $godot --headless --verbose --path godot-code --export-debug "MagicBalls" "$debugExe"
