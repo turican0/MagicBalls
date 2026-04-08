@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bc4iq8agolxia"]
+
+[ext_resource type="Script" uid="uid://cnsp8b0hooeao" path="res://scenes-editor/my_16_bit_spinbox.gd" id="1_wjh8w"]
+
+[node name="HBoxContainer" type="HBoxContainer" unique_id=1265312090]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_wjh8w")
+
+[node name="Label" type="Label" parent="." unique_id=100190105]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Value1"
+
+[node name="SpinBox" type="SpinBox" parent="." unique_id=466986000]
+layout_mode = 2
+
+[node name="HSlider" type="HSlider" parent="." unique_id=2111734875]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+max_value = 65535.0
