@@ -71,11 +71,7 @@ jobs:
           Write-Host "GODOT path: $env:GODOT"
           Write-Host "Soubor existuje: $(Test-Path $env:GODOT)"
 
-          $proc = Start-Process -FilePath $env:GODOT `
-            -ArgumentList "--version" `
-            -NoNewWindow -Wait -PassThru `
-            -RedirectStandardOutput "godot_stdout.txt" `
-            -RedirectStandardError  "godot_stderr.txt"
+          $proc = Start-Process -FilePath $env:GODOT -ArgumentList "--version" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "godot_stdout.txt" -RedirectStandardError "godot_stderr.txt"
 
           Write-Host "Exit code: $($proc.ExitCode)"
           Write-Host "=== STDOUT ==="
