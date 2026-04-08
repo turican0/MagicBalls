@@ -79,27 +79,47 @@ jobs:
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
+          $workspace   = "${{ github.workspace }}"
+          $debugExe    = "$workspace/exports/debug/MagicBalls-Debug.exe"
+          $releaseExe  = "$workspace/exports/release/MagicBalls.exe"
+
+          Write-Host "=== Export paths ==="
+          Write-Host "DEBUG  → $debugExe"
+          Write-Host "RELEASE→ $releaseExe"
+          Write-Host ""
+
           Write-Host "=== Starting DEBUG export ==="
-          godot --headless --verbose --path godot-code `
-            --export-debug "MagicBalls" `
-            "${{ github.workspace }}/exports/debug/MagicBalls-Debug.exe"
-          Write-Host "Godot DEBUG exit code: $LASTEXITCODE"
+          godot --headless --verbose --path godot-code --export-debug "MagicBalls" "$debugExe"
+          $debugExit = $LASTEXITCODE
+          Write-Host "Godot DEBUG exit code: $debugExit"
+
+          if ($debugExit -ne 0) {
+            Write-Error "DEBUG export selhal s exit code $debugExit"
+            exit 1
+          }
 
           Write-Host "=== Starting RELEASE export ==="
-          godot --headless --verbose --path godot-code `
-            --export-release "MagicBalls" `
-            "${{ github.workspace }}/exports/release/MagicBalls.exe"
-          Write-Host "Godot RELEASE exit code: $LASTEXITCODE"
+          godot --headless --verbose --path godot-code --export-release "MagicBalls" "$releaseExe"
+          $releaseExit = $LASTEXITCODE
+          Write-Host "Godot RELEASE exit code: $releaseExit"
 
-          if (-not (Test-Path "exports/debug/MagicBalls-Debug.exe")) {
+          if ($releaseExit -ne 0) {
+            Write-Error "RELEASE export selhal s exit code $releaseExit"
+            exit 1
+          }
+
+          # finální kontrola
+          if (-not (Test-Path $debugExe)) {
             Write-Error "DEBUG export failed – exe not found!"
             Get-ChildItem -Path "exports" -Recurse | Out-Host
             exit 1
           }
-          if (-not (Test-Path "exports/release/MagicBalls.exe")) {
+          if (-not (Test-Path $releaseExe)) {
             Write-Error "RELEASE export failed – exe not found!"
             exit 1
           }
+
+          Write-Host "Export completed successfully."
 
       # 6. PREPARE RELEASE PACKAGES
       - name: Package Artifacts with Tag Name
