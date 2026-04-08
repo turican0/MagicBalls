@@ -15,7 +15,6 @@ jobs:
         with:
           submodules: recursive
 
-      # 1. ENVIRONMENT SETUP
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
@@ -24,7 +23,6 @@ jobs:
         with:
           python-version: '3.x'
 
-      # 2. COMPILE C++ LIBRARY
       - name: Build C++ Library (Debug & Release)
         shell: pwsh
         run: |
@@ -34,8 +32,7 @@ jobs:
           cmake -B build-cpp-debug -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls"
           cmake --build build-cpp-debug --config Debug
 
-      # 2.5. RENAME DLLs TO MATCH .gdextension (EXTENSION-NAME)
-      - name: Rename DLLs to EXTENSION-NAME (pro .gdextension)
+      - name: Rename DLLs to EXTENSION-NAME
         shell: pwsh
         run: |
           $binDir = "gitextension/godot-cpp-template/bin/windows"
@@ -46,9 +43,6 @@ jobs:
             Write-Host "Přejmenováno: $($_.Name) → $newName"
           }
 
-          Write-Host "DLL přejmenování dokončeno."
-
-      # 3. COPY DLL INTO GODOT PROJECT
       - name: Copy DLLs into Godot project
         shell: pwsh
         run: |
@@ -65,76 +59,54 @@ jobs:
           Copy-Item $releaseDll.FullName "godot-code/bin/"
           Copy-Item $debugDll.FullName   "godot-code/bin/"
 
-      # 4. SETUP GODOT + EXPORT TEMPLATES
+      # ↓ OPRAVA 1: use-dotnet: false → stáhne standard Godot, ne Mono
       - name: Setup Godot
         uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.2.1
+          use-dotnet: false
           include-templates: true
 
-      # 4.5. INITIALIZE GODOT PROJECT (důležitý krok – vygeneruje .godot/imported/)
-      - name: Initialize Godot project (force resource import)
+      - name: Initialize Godot project
         shell: pwsh
         run: |
-          Write-Host "=== Initializing Godot project (force import) ==="
-          godot --headless --path godot-code --editor --quit || true
-          Start-Sleep -Seconds 8   # počkáme, až se vše uloží
+          # ↓ OPRAVA 2: $env:GODOT místo holého 'godot'
+          & $env:GODOT --headless --path godot-code --editor --quit
+          Start-Sleep -Seconds 8
+          Write-Host "Godot version:"
+          & $env:GODOT --version
 
-          Write-Host "=== Godot version ==="
-          godot --version
-
-          Write-Host "=== Available export presets ==="
-          godot --headless --path godot-code --list-export-presets
-
-      # 5. GODOT EXPORT
       - name: Godot Export
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
-          $workspace   = "${{ github.workspace }}"
-          $debugExe    = "$workspace/exports/debug/MagicBalls-Debug.exe"
-          $releaseExe  = "$workspace/exports/release/MagicBalls.exe"
+          $workspace  = "${{ github.workspace }}"
+          $debugExe   = "$workspace\exports\debug\MagicBalls-Debug.exe"
+          $releaseExe = "$workspace\exports\release\MagicBalls.exe"
+          # ↓ OPRAVA 2: $env:GODOT místo holého 'godot'
+          $godot      = $env:GODOT
 
-          Write-Host "=== Export paths ==="
-          Write-Host "DEBUG  → $debugExe"
-          Write-Host "RELEASE→ $releaseExe"
-          Write-Host ""
+          Write-Host "Godot binary: $godot"
+          & $godot --version
 
-          Write-Host "=== Starting DEBUG export ==="
-          godot --headless --verbose --path godot-code --export-debug "MagicBalls" "$debugExe"
-          $debugExit = $LASTEXITCODE
-          Write-Host "Godot DEBUG exit code: $debugExit"
+          Write-Host "=== DEBUG export ==="
+          & $godot --headless --verbose --path godot-code --export-debug "MagicBalls" "$debugExe"
+          Write-Host "Exit code: $LASTEXITCODE"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
 
-          if ($debugExit -ne 0) {
-            Write-Error "DEBUG export selhal s exit code $debugExit"
-            exit 1
-          }
+          Write-Host "=== RELEASE export ==="
+          & $godot --headless --verbose --path godot-code --export-release "MagicBalls" "$releaseExe"
+          Write-Host "Exit code: $LASTEXITCODE"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
 
-          Write-Host "=== Starting RELEASE export ==="
-          godot --headless --verbose --path godot-code --export-release "MagicBalls" "$releaseExe"
-          $releaseExit = $LASTEXITCODE
-          Write-Host "Godot RELEASE exit code: $releaseExit"
+          if (-not (Test-Path $debugExe))   { Write-Error "Debug exe chybí!";   exit 1 }
+          if (-not (Test-Path $releaseExe)) { Write-Error "Release exe chybí!"; exit 1 }
 
-          if ($releaseExit -ne 0) {
-            Write-Error "RELEASE export selhal s exit code $releaseExit"
-            exit 1
-          }
+          Write-Host "=== Obsah exports/ ==="
+          Get-ChildItem -Recurse "exports/"
 
-          if (-not (Test-Path $debugExe)) {
-            Write-Error "DEBUG export failed – exe not found!"
-            Get-ChildItem -Path "exports" -Recurse | Out-Host
-            exit 1
-          }
-          if (-not (Test-Path $releaseExe)) {
-            Write-Error "RELEASE export failed – exe not found!"
-            exit 1
-          }
-
-          Write-Host "Export completed successfully."
-
-      # 6. PREPARE RELEASE PACKAGES
       - name: Package Artifacts with Tag Name
         shell: pwsh
         run: |
@@ -142,13 +114,13 @@ jobs:
           $debugZip   = "MagicBalls-$tagName-Windows-Debug.zip"
           $releaseZip = "MagicBalls-$tagName-Windows-Release.zip"
 
-          Copy-Item "scripts/editor.bat"             "exports/debug/" -ErrorAction SilentlyContinue
-          Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/" -ErrorAction SilentlyContinue
+          Copy-Item "scripts/editor.bat"             "exports/debug/"   -ErrorAction SilentlyContinue
+          Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/"   -ErrorAction SilentlyContinue
           Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/" -ErrorAction SilentlyContinue
 
-          $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
-          $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
+          $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "EXTENSION-NAME*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
+          $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "EXTENSION-NAME*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
 
           if ($releaseDll) { Copy-Item $releaseDll.FullName "exports/release/" }
           if ($debugDll)   { Copy-Item $debugDll.FullName   "exports/debug/" }
@@ -156,7 +128,6 @@ jobs:
           Compress-Archive -Path "exports/debug/*"   -DestinationPath "exports/$debugZip"   -Force
           Compress-Archive -Path "exports/release/*" -DestinationPath "exports/$releaseZip" -Force
 
-      # 7. CREATE GITHUB RELEASE
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
