@@ -52,8 +52,8 @@ jobs:
       - name: Copy DLLs into Godot project
         shell: pwsh
         run: |
-          $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
-          $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "MagicBalls*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
+          $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "EXTENSION-NAME*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
+          $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "EXTENSION-NAME*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
 
           Write-Host "Release DLL: $($releaseDll.FullName)"
           Write-Host "Debug DLL:   $($debugDll.FullName)"
