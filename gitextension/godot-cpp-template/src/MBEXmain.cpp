@@ -71,6 +71,9 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorBegin", "text"), &MBEXclass::REMC2EditorBegin);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorEnd"), &MBEXclass::REMC2EditorEnd);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoop"), &MBEXclass::REMC2EditorLoop);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
 }
 
 
@@ -1697,3 +1700,79 @@ void MBEXclass::REMC2EditorLoop()
 {
 	main_x();
 };
+
+int MBEXclass::REMC2EditorGetTerrainValue(int type) {
+	switch (type) {
+		case 0:
+			return D41A0_0.terrain_2FECE.seed_0x2FEE5;
+		case 1:
+			return D41A0_0.terrain_2FECE.offset_0x2FEE9;
+		case 2:
+			return D41A0_0.terrain_2FECE.raise_0x2FEED;
+		case 3:
+			return D41A0_0.terrain_2FECE.gnarl_0x2FEF1;
+		case 4:
+			return D41A0_0.terrain_2FECE.river_0x2FEF5;
+		case 5:
+			return D41A0_0.terrain_2FECE.lriver_0x2FEF9;
+		case 6:
+			return D41A0_0.terrain_2FECE.source_0x2FEFD;
+		case 7:
+			return D41A0_0.terrain_2FECE.snLin_0x2FF01;
+		case 8:
+			return D41A0_0.terrain_2FECE.snFlt_0x2FF05;
+		case 9:
+			return D41A0_0.terrain_2FECE.bhLin_0x2FF09;
+		case 10:
+			return D41A0_0.terrain_2FECE.bhFlt_0x2FF0D;
+		case 11:
+			return D41A0_0.terrain_2FECE.rkSte_0x2FF11;
+		default:
+			return 0;
+	}
+}
+
+void MBEXclass::REMC2EditorSetTerrainValue(int type, int value) {
+	switch (type) {
+		case 0:
+			D41A0_0.terrain_2FECE.seed_0x2FEE5 = (uint16_t)value;
+			break;
+		case 1:
+			D41A0_0.terrain_2FECE.offset_0x2FEE9 = (uint16_t)value;
+			break;
+		case 2:
+			D41A0_0.terrain_2FECE.raise_0x2FEED = (uint16_t)value;
+			break;
+		case 3:
+			D41A0_0.terrain_2FECE.gnarl_0x2FEF1 = (uint16_t)value;
+			break;
+		case 4:
+			D41A0_0.terrain_2FECE.river_0x2FEF5 = (uint32_t)value;
+			break;
+		case 5:
+			D41A0_0.terrain_2FECE.lriver_0x2FEF9 = (uint16_t)value;
+			break;
+		case 6:
+			D41A0_0.terrain_2FECE.source_0x2FEFD = (uint16_t)value;
+			break;
+		case 7:
+			D41A0_0.terrain_2FECE.snLin_0x2FF01 = (uint16_t)value;
+			break;
+		case 8:
+			D41A0_0.terrain_2FECE.snFlt_0x2FF05 = (uint16_t)value;
+			break;
+		case 9:
+			D41A0_0.terrain_2FECE.bhLin_0x2FF09 = (uint16_t)value;
+			break;
+		case 10:
+			D41A0_0.terrain_2FECE.bhFlt_0x2FF0D = (uint16_t)value;
+			break;
+		case 11:
+			D41A0_0.terrain_2FECE.rkSte_0x2FF11 = (uint16_t)value;
+			break;
+	}
+}
+
+int getTerrainEntites() {
+	return D41A0_0.terrain_2FECE.entity_0x30311[0].axis2d_4.x;
+}

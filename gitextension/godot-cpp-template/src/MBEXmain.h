@@ -133,4 +133,7 @@ public:
 	void REMC2EditorEnd();
 	void REMC2EditorLoop();
 
+	int REMC2EditorGetTerrainValue(int type);
+	void REMC2EditorSetTerrainValue(int type, int value);
+
 };

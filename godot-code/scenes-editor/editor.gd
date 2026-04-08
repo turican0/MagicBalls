@@ -10,7 +10,22 @@ extends Node3D
 @onready var Terrain_Edit_Panel: CanvasLayer = $TerrainEdit
 
 
-@onready var value1Selector = $TerrainEdit/Control/Panel/VBoxContainer/HBoxContainer
+@onready var container = $TerrainEdit/Control/Panel/VBoxContainer
+@onready var selectors = [
+	container.get_node("Seed_0"),
+	container.get_node("Offset_1"),
+	container.get_node("Raise_2"),
+	container.get_node("Gnarl_3"),
+	container.get_node("River_4"),
+	container.get_node("Lriver_5"),
+	container.get_node("Source_6"),
+	container.get_node("SnLin_7"),
+	container.get_node("SnFlt_8"),
+	container.get_node("BhLin_9"),
+	container.get_node("BhFlt_10"),
+	container.get_node("RkSte_11")
+]
+
 var editor_runned=false
 var is_ui_visible = false
 
@@ -29,7 +44,12 @@ func _ready() -> void:
 	EditorInit(Global.cdPath)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	#Main_TerrainsMB.updateMeshes(false)
-	value1Selector.current_value = 42000
+	for i in range(selectors.size()):
+		var selector = selectors[i]
+		selector.current_value = Global.MBEX.REMC2EditorGetTerrainValue(i)
+		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
+			selector.value_changed.connect(_on_h_box_container_value_changed)
+			
 	editor_runned=true
 	
 func _input(event: InputEvent) -> void:
@@ -111,5 +131,5 @@ func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
 	
 
 
-func _on_h_box_container_value_changed(new_value: int) -> void:
-	Global.MBEX.REMC2EditorSetTerrainValue(0,new_value)
+func _on_h_box_container_value_changed(terrainVarIndex: int,new_value: int) -> void:
+	Global.MBEX.REMC2EditorSetTerrainValue(terrainVarIndex,new_value)

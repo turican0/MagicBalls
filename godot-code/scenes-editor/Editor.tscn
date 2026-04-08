@@ -65,7 +65,40 @@ text = "Night"
 layout_mode = 2
 text = ">"
 
-[node name="HBoxContainer" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1265312090 instance=ExtResource("3_8pqvr")]
+[node name="Seed_0" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1265312090 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="Offset_1" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=889099180 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="Raise_2" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=930166442 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="Gnarl_3" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=718115529 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="River_4" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1044352470 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="Lriver_5" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=431296785 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="Source_6" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=786195978 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="SnLin_7" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=674345592 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="SnFlt_8" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1838833166 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="BhLin_9" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=665209309 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="BhFlt_10" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1499304382 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="RkSte_11" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=275042693 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
 [node name="MBEngine" type="Node3D" parent="." unique_id=973372086]
@@ -87,4 +120,15 @@ mesh = SubResource("CylinderMesh_jhayq")
 [node name="PlayerEditor" parent="." unique_id=1031186005 instance=ExtResource("6_jhayq")]
 
 [connection signal="state_changed_graphicsType" from="TerrainEdit/Control/Panel/VBoxContainer/TerrainType" to="." method="_on_terrain_type_state_changed_graphics_type"]
-[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/HBoxContainer" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/Seed_0" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/Offset_1" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/Raise_2" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/Gnarl_3" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/River_4" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/Lriver_5" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/Source_6" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/SnLin_7" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/SnFlt_8" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/BhLin_9" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/BhFlt_10" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/RkSte_11" to="." method="_on_h_box_container_value_changed"]
