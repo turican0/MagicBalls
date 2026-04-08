@@ -79,26 +79,30 @@ jobs:
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
+          Write-Host "=== Available export presets ==="
+          godot --headless --path godot-code --list-export-presets
+
           Write-Host "=== Starting DEBUG export ==="
-          godot --headless --verbose --path godot-code --export-debug "Windows Desktop" "../exports/debug/MagicBalls-Debug.exe"
+          godot --headless --verbose --path godot-code `
+            --export-debug "Windows Desktop" `
+            "${{ github.workspace }}/exports/debug/MagicBalls-Debug.exe"
           Write-Host "Godot DEBUG exit code: $LASTEXITCODE"
 
           Write-Host "=== Starting RELEASE export ==="
-          godot --headless --verbose --path godot-code --export-release "Windows Desktop" "../exports/release/MagicBalls.exe"
+          godot --headless --verbose --path godot-code `
+            --export-release "Windows Desktop" `
+            "${{ github.workspace }}/exports/release/MagicBalls.exe"
           Write-Host "Godot RELEASE exit code: $LASTEXITCODE"
 
-          # Kontrola výsledku
           if (-not (Test-Path "exports/debug/MagicBalls-Debug.exe")) {
             Write-Error "DEBUG export failed – exe not found!"
-            Get-ChildItem -Path "exports/debug" -Recurse | Out-Host
+            Get-ChildItem -Path "exports" -Recurse | Out-Host
             exit 1
           }
           if (-not (Test-Path "exports/release/MagicBalls.exe")) {
             Write-Error "RELEASE export failed – exe not found!"
             exit 1
           }
-
-          Write-Host "Export completed successfully."
 
       # 6. PREPARE RELEASE PACKAGES
       - name: Package Artifacts with Tag Name
