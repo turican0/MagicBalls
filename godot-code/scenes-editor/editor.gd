@@ -26,7 +26,7 @@ func _ready() -> void:
 	gameInit()
 	EditorInit(Global.cdPath)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
-	SetTerrainType()
+	#Main_TerrainsMB.updateMeshes(false)
 	editor_runned=true
 	
 func _input(event: InputEvent) -> void:
@@ -87,9 +87,6 @@ func gameInit():
 			Main_DecodeLevel.setAtmDayTint(Color(0.8,0.9,1.0))
 			Main_DecodeLevel.setSunMoon(true,true,1.0,1.0)
 
-func SetTerrainType():
-	Main_TerrainsMB.changeTerrain("Day")
-
 func EditorInit(cdPath):
 	Global.MBEX.REMC2EditorBegin(cdPath)
 
@@ -101,13 +98,11 @@ func EditorStep():
 func EditorEnd():
 	Global.MBEX.REMC2EditorEnd()
 
-
-func _on_spin_box_state_changed_graphics_type(new_state_name: String, index: int) -> void:
-	print("Weather changed to: ", new_state_name)	
-	match index:
-		0: # Day
-			Main_TerrainsMB.changeTerrain("Day")
-		1: # Night
-			Main_TerrainsMB.changeTerrain("Night")
-		2: # Cave
-			Main_TerrainsMB.changeTerrain("Cave")
+func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
+	if(!Main_TerrainsMB):
+		return
+	Global.setLevelType(state_name)
+	Global.MBEX.REMC2SetLevelType(state_name)
+	Main_DecodeLevel.gameInit(false)
+	Main_TerrainsMB.updateMeshes(false)
+	

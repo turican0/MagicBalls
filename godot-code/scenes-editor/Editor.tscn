@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dgwygcjmuwppm"]
 
 [ext_resource type="Script" uid="uid://ck41p2c40j4gy" path="res://scenes-editor/editor.gd" id="1_wmxca"]
+[ext_resource type="Script" uid="uid://qpmv1s8echb2" path="res://scenes-editor/terrain_type.gd" id="2_8pqvr"]
 [ext_resource type="Script" uid="uid://kwr82wuj0j7e" path="res://scenes/mb_engine.gd" id="2_j6dse"]
-[ext_resource type="Script" uid="uid://dkycsipwwcyyu" path="res://scenes-editor/spin_box_day_time.gd" id="2_kf265"]
 [ext_resource type="PackedScene" uid="uid://bc4iq8agolxia" path="res://scenes-editor/my16bit spinbox.tscn" id="3_8pqvr"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="3_wa12f"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="4_6tdr8"]
@@ -43,17 +43,27 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1749833685]
+[node name="TerrainType" type="HBoxContainer" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1749833685]
 layout_mode = 2
+script = ExtResource("2_8pqvr")
 
-[node name="Label" type="Label" parent="TerrainEdit/Control/Panel/VBoxContainer/HBoxContainer2" unique_id=880158843]
+[node name="Label" type="Label" parent="TerrainEdit/Control/Panel/VBoxContainer/TerrainType" unique_id=880158843]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "DayTime"
 
-[node name="SpinBox" type="SpinBox" parent="TerrainEdit/Control/Panel/VBoxContainer/HBoxContainer2" unique_id=639343367]
+[node name="BtnLess" type="Button" parent="TerrainEdit/Control/Panel/VBoxContainer/TerrainType" unique_id=1321199649]
 layout_mode = 2
-script = ExtResource("2_kf265")
+text = "<"
+
+[node name="StateLabel" type="Label" parent="TerrainEdit/Control/Panel/VBoxContainer/TerrainType" unique_id=1577261135]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "Night"
+
+[node name="BtnMore" type="Button" parent="TerrainEdit/Control/Panel/VBoxContainer/TerrainType" unique_id=584506679]
+layout_mode = 2
+text = ">"
 
 [node name="HBoxContainer" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1265312090 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
@@ -76,4 +86,4 @@ mesh = SubResource("CylinderMesh_jhayq")
 
 [node name="PlayerEditor" parent="." unique_id=1031186005 instance=ExtResource("6_jhayq")]
 
-[connection signal="state_changed_graphicsType" from="TerrainEdit/Control/Panel/VBoxContainer/HBoxContainer2/SpinBox" to="." method="_on_spin_box_state_changed_graphics_type"]
+[connection signal="state_changed_graphicsType" from="TerrainEdit/Control/Panel/VBoxContainer/TerrainType" to="." method="_on_terrain_type_state_changed_graphics_type"]
