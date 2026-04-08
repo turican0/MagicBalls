@@ -49,7 +49,6 @@ jobs:
           Write-Host "=== DLL po přejmenování ==="
           Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
 
-          # Ověření že soubory existují přesně jak .gdextension očekává
           $expected = @(
             "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll",
             "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"
@@ -65,6 +64,28 @@ jobs:
           version: 4.2.1
           use-dotnet: false
           include-templates: true
+
+      - name: Debug Godot binary
+        shell: pwsh
+        run: |
+          Write-Host "GODOT path: $env:GODOT"
+          Write-Host "Soubor existuje: $(Test-Path $env:GODOT)"
+
+          $proc = Start-Process -FilePath $env:GODOT `
+            -ArgumentList "--version" `
+            -NoNewWindow -Wait -PassThru `
+            -RedirectStandardOutput "godot_stdout.txt" `
+            -RedirectStandardError  "godot_stderr.txt"
+
+          Write-Host "Exit code: $($proc.ExitCode)"
+          Write-Host "=== STDOUT ==="
+          if (Test-Path "godot_stdout.txt") { Get-Content "godot_stdout.txt" }
+          Write-Host "=== STDERR ==="
+          if (Test-Path "godot_stderr.txt") { Get-Content "godot_stderr.txt" }
+
+          Write-Host "=== Obsah Godot adresáře ==="
+          $godotDir = Split-Path $env:GODOT
+          Get-ChildItem $godotDir
 
       - name: Initialize Godot project
         shell: pwsh
@@ -112,7 +133,6 @@ jobs:
           Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/" -ErrorAction SilentlyContinue
 
-          # DLL do ZIPu pro spuštění bez instalace
           $binDir = "gitextension/godot-cpp-template/bin/windows"
           Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"       "exports/release/"
           Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll" "exports/debug/"
@@ -124,8 +144,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: exports/*.zip
-          body: "Automated build for MagicBalls version ${{ github.ref_name }}."
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          body: "Automated
