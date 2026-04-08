@@ -9,6 +9,8 @@ extends Node3D
 
 @onready var Terrain_Edit_Panel: CanvasLayer = $TerrainEdit
 
+
+@onready var value1Selector = $TerrainEdit/Control/Panel/VBoxContainer/HBoxContainer
 var editor_runned=false
 var is_ui_visible = false
 
@@ -27,6 +29,7 @@ func _ready() -> void:
 	EditorInit(Global.cdPath)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	#Main_TerrainsMB.updateMeshes(false)
+	value1Selector.current_value = 42000
 	editor_runned=true
 	
 func _input(event: InputEvent) -> void:
@@ -106,3 +109,7 @@ func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
 	Main_DecodeLevel.gameInit(false)
 	Main_TerrainsMB.updateMeshes(false)
 	
+
+
+func _on_h_box_container_value_changed(new_value: int) -> void:
+	Global.MBEX.REMC2EditorSetTerrainValue(0,new_value)

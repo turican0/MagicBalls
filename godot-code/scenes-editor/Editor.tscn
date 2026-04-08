@@ -87,3 +87,4 @@ mesh = SubResource("CylinderMesh_jhayq")
 [node name="PlayerEditor" parent="." unique_id=1031186005 instance=ExtResource("6_jhayq")]
 
 [connection signal="state_changed_graphicsType" from="TerrainEdit/Control/Panel/VBoxContainer/TerrainType" to="." method="_on_terrain_type_state_changed_graphics_type"]
+[connection signal="value_changed" from="TerrainEdit/Control/Panel/VBoxContainer/HBoxContainer" to="." method="_on_h_box_container_value_changed"]

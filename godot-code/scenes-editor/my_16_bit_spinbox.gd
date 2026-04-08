@@ -1,22 +1,46 @@
 extends HBoxContainer
 
+# Signal for the rest of your app
+signal value_changed(new_value: int)
+
 @onready var slider = $HSlider
 @onready var spin_box = $SpinBox
 
+# This variable holds the state. 
+# Using a setter allows you to update the UI by simply calling: 
+# your_component.current_value = 500
+@export var current_value: int = 0:
+	set(v):
+		current_value = clampi(v, 0, 65535)
+		_update_ui()
+
 func _ready():
-	# Nastavení stejných limitů
+	# Configure limits
 	for node in [slider, spin_box]:
 		node.min_value = 0
 		node.max_value = 65535
+		node.step = 1
 	
-	# Propojení signálů
-	slider.value_changed.connect(_on_slider_changed)
-	spin_box.value_changed.connect(_on_spin_box_changed)
+	# Connect internal signals
+	slider.value_changed.connect(_on_ui_value_changed)
+	spin_box.value_changed.connect(_on_ui_value_changed)
+	
+	# Set initial state
+	_update_ui()
 
-func _on_slider_changed(value):
-	if spin_box.value != value:
-		spin_box.value = value
+# One function to handle both UI elements
+func _on_ui_value_changed(value: float):
+	var new_val = int(value)
+	if current_value != new_val:
+		current_value = new_val # This triggers the setter
+		value_changed.emit(current_value)
 
-func _on_spin_box_changed(value):
-	if slider.value != value:
-		slider.value = value
+# Keeps UI elements in sync with the current_value variable
+func _update_ui():
+	# Basic check to prevent errors before @onready nodes are ready
+	if not is_inside_tree(): return
+	
+	if slider.value != current_value:
+		slider.value = current_value
+	if spin_box.value != current_value:
+		spin_box.value = current_value
