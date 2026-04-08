@@ -37,29 +37,28 @@ jobs:
         run: |
           $binDir = "gitextension/godot-cpp-template/bin/windows"
 
+          Write-Host "=== DLL před přejmenováním ==="
+          Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
+
           Get-ChildItem -Path $binDir -Filter "MagicBalls*.dll" | ForEach-Object {
             $newName = $_.Name -replace '^MagicBalls', 'EXTENSION-NAME'
             Rename-Item -Path $_.FullName -NewName $newName -Force
             Write-Host "Přejmenováno: $($_.Name) → $newName"
           }
 
-      - name: Copy DLLs into Godot project
-        shell: pwsh
-        run: |
-          $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "EXTENSION-NAME*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
-          $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "EXTENSION-NAME*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
+          Write-Host "=== DLL po přejmenování ==="
+          Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
 
-          Write-Host "Release DLL: $($releaseDll.FullName)"
-          Write-Host "Debug DLL:   $($debugDll.FullName)"
+          # Ověření že soubory existují přesně jak .gdextension očekává
+          $expected = @(
+            "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll",
+            "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"
+          )
+          foreach ($f in $expected) {
+            if (Test-Path $f) { Write-Host "✓ Nalezen: $f" }
+            else              { Write-Error "✗ CHYBÍ: $f"; exit 1 }
+          }
 
-          if (-not $releaseDll) { Write-Error "Release DLL not found!"; exit 1 }
-          if (-not $debugDll)   { Write-Error "Debug DLL not found!";   exit 1 }
-
-          New-Item -ItemType Directory -Force -Path "godot-code/bin"
-          Copy-Item $releaseDll.FullName "godot-code/bin/"
-          Copy-Item $debugDll.FullName   "godot-code/bin/"
-
-      # ↓ OPRAVA 1: use-dotnet: false → stáhne standard Godot, ne Mono
       - name: Setup Godot
         uses: chickensoft-games/setup-godot@v2
         with:
@@ -70,11 +69,9 @@ jobs:
       - name: Initialize Godot project
         shell: pwsh
         run: |
-          # ↓ OPRAVA 2: $env:GODOT místo holého 'godot'
           & $env:GODOT --headless --path godot-code --editor --quit
           Start-Sleep -Seconds 8
-          Write-Host "Godot version:"
-          & $env:GODOT --version
+          Write-Host "Godot version: $(& $env:GODOT --version)"
 
       - name: Godot Export
         shell: pwsh
@@ -85,11 +82,7 @@ jobs:
           $workspace  = "${{ github.workspace }}"
           $debugExe   = "$workspace\exports\debug\MagicBalls-Debug.exe"
           $releaseExe = "$workspace\exports\release\MagicBalls.exe"
-          # ↓ OPRAVA 2: $env:GODOT místo holého 'godot'
           $godot      = $env:GODOT
-
-          Write-Host "Godot binary: $godot"
-          & $godot --version
 
           Write-Host "=== DEBUG export ==="
           & $godot --headless --verbose --path godot-code --export-debug "MagicBalls" "$debugExe"
@@ -119,11 +112,10 @@ jobs:
           Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/" -ErrorAction SilentlyContinue
 
-          $releaseDll = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "EXTENSION-NAME*.dll" | Where-Object { $_.Name -notlike "*.debug.dll" } | Select-Object -First 1
-          $debugDll   = Get-ChildItem -Path "gitextension/godot-cpp-template/bin" -Recurse -Filter "EXTENSION-NAME*.dll" | Where-Object { $_.Name -like "*.debug.dll" }   | Select-Object -First 1
-
-          if ($releaseDll) { Copy-Item $releaseDll.FullName "exports/release/" }
-          if ($debugDll)   { Copy-Item $debugDll.FullName   "exports/debug/" }
+          # DLL do ZIPu pro spuštění bez instalace
+          $binDir = "gitextension/godot-cpp-template/bin/windows"
+          Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"       "exports/release/"
+          Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll" "exports/debug/"
 
           Compress-Archive -Path "exports/debug/*"   -DestinationPath "exports/$debugZip"   -Force
           Compress-Archive -Path "exports/release/*" -DestinationPath "exports/$releaseZip" -Force
