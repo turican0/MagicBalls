@@ -79,18 +79,15 @@ jobs:
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
-          Write-Host "=== Available export presets ==="
-          godot --headless --path godot-code --list-export-presets
-
           Write-Host "=== Starting DEBUG export ==="
           godot --headless --verbose --path godot-code `
-            --export-debug "Windows Desktop" `
+            --export-debug "MagicBalls" `
             "${{ github.workspace }}/exports/debug/MagicBalls-Debug.exe"
           Write-Host "Godot DEBUG exit code: $LASTEXITCODE"
 
           Write-Host "=== Starting RELEASE export ==="
           godot --headless --verbose --path godot-code `
-            --export-release "Windows Desktop" `
+            --export-release "MagicBalls" `
             "${{ github.workspace }}/exports/release/MagicBalls.exe"
           Write-Host "Godot RELEASE exit code: $LASTEXITCODE"
 
