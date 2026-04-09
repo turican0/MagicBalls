@@ -1,5 +1,7 @@
 # Godot 4+ specific ignores
-.godot/
+other/MagicBalls/.godot/*
+!other/MagicBalls/.godot/imported/
+
 .nomedia
 
 # Godot-specific ignores
