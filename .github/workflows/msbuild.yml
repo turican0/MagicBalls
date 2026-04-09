@@ -97,20 +97,26 @@ jobs:
           $debugExe   = "$workspace\exports\debug\MagicBalls-Debug.exe"
           $releaseExe = "$workspace\exports\release\MagicBalls.exe"
 
-          Write-Host "Godot console: $godot"
-          if (-not $godot) { Write-Error "GODOT_CONSOLE neni nastaveno!"; exit 1 }
-
           Write-Host "=== DEBUG export ==="
-          & $godot --headless --verbose --path godot-code --export-debug "MagicBalls" "$debugExe"
-          Write-Host "Exit code: $LASTEXITCODE"
-          if ($LASTEXITCODE -ne 0) { exit 1 }
+          $proc = Start-Process -FilePath $godot -ArgumentList "--headless --verbose --path godot-code --export-debug MagicBalls $debugExe" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "debug_stdout.txt" -RedirectStandardError "debug_stderr.txt"
+          Write-Host "Exit code: $($proc.ExitCode)"
+          Write-Host "=== STDOUT ==="
+          if (Test-Path "debug_stdout.txt") { Get-Content "debug_stdout.txt" }
+          Write-Host "=== STDERR ==="
+          if (Test-Path "debug_stderr.txt") { Get-Content "debug_stderr.txt" }
+
+          if ($proc.ExitCode -ne 0) { exit 1 }
+          if (-not (Test-Path $debugExe)) { Write-Error "Debug exe chybi!"; exit 1 }
 
           Write-Host "=== RELEASE export ==="
-          & $godot --headless --verbose --path godot-code --export-release "MagicBalls" "$releaseExe"
-          Write-Host "Exit code: $LASTEXITCODE"
-          if ($LASTEXITCODE -ne 0) { exit 1 }
+          $proc2 = Start-Process -FilePath $godot -ArgumentList "--headless --verbose --path godot-code --export-release MagicBalls $releaseExe" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "release_stdout.txt" -RedirectStandardError "release_stderr.txt"
+          Write-Host "Exit code: $($proc2.ExitCode)"
+          Write-Host "=== STDOUT ==="
+          if (Test-Path "release_stdout.txt") { Get-Content "release_stdout.txt" }
+          Write-Host "=== STDERR ==="
+          if (Test-Path "release_stderr.txt") { Get-Content "release_stderr.txt" }
 
-          if (-not (Test-Path $debugExe))   { Write-Error "Debug exe chybi!";   exit 1 }
+          if ($proc2.ExitCode -ne 0) { exit 1 }
           if (-not (Test-Path $releaseExe)) { Write-Error "Release exe chybi!"; exit 1 }
 
           Write-Host "=== Obsah exports/ ==="
