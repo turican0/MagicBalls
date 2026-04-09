@@ -65,16 +65,26 @@ jobs:
           use-dotnet: false
           include-templates: true
 
-      - name: Initialize Godot project
+      - name: Initialize Godot project (force resource import)
         shell: pwsh
         run: |
+          Write-Host "=== Forcing full resource import (headless) ==="
+
+          # Vymažeme staré importy (nutné v CI)
+          Remove-Item -Recurse -Force -Path "godot-code/.godot/imported" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force -Path "godot-code/.godot/editor" -ErrorAction SilentlyContinue
+
           $godotInstall = "C:\Users\runneradmin\godot"
           $godotConsole = Get-ChildItem -Path $godotInstall -Filter "*console*.exe" | Select-Object -First 1
-          Write-Host "Console exe: $($godotConsole.FullName)"
-          echo "GODOT_CONSOLE=$($godotConsole.FullName)" >> $env:GITHUB_ENV
+          Write-Host "Using Godot console: $($godotConsole.FullName)"
 
-          & $godotConsole.FullName --headless --path godot-code --editor --quit
-          Start-Sleep -Seconds 10
+          # NOVÉ: --import je oficiální flag přesně pro CI (Godot 4.3+)
+          & $godotConsole.FullName --headless --verbose --path godot-code --import --quit
+
+          Start-Sleep -Seconds 15   # dáváme Godotu čas dokončit vše
+
+          Write-Host "=== Import dokončen ==="
+          Write-Host "Velikost .godot/imported: $( (Get-ChildItem -Path 'godot-code/.godot/imported' -Recurse -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum / 1MB ) MB"
 
       - name: Godot Export
         shell: pwsh
