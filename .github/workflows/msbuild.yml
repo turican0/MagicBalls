@@ -68,22 +68,39 @@ jobs:
       - name: Import Godot project (robust import)
         shell: pwsh
         run: |
-          $godot = $env:GODOT_CONSOLE
+          # === 1. Najdeme godot_console.exe (stejně jako v původním workflow) ===
+          $godotMain = (Get-Item $env:GODOT).Target
+          if (-not $godotMain) { $godotMain = $env:GODOT }
+          $godotDir = Split-Path $godotMain
+
+          $godotConsole = Get-ChildItem -Path $godotDir -Filter "*console*.exe" | Select-Object -First 1
+          if (-not $godotConsole) {
+            Write-Host "Console exe nenalezen, používám hlavní binary"
+            $godotConsole = Get-Item $godotMain
+          }
+
+          $godotConsolePath = $godotConsole.FullName
+          Write-Host "Používám Godot console: $godotConsolePath"
+
+          # Uložíme do GITHUB_ENV pro další kroky
+          echo "GODOT_CONSOLE=$godotConsolePath" >> $env:GITHUB_ENV
+
+          # === 2. Robustní import ===
           $proj = "godot-code"
 
           Write-Host "=== Mazání starého .godot cache ==="
           Remove-Item -Recurse -Force "$proj/.godot" -ErrorAction SilentlyContinue
 
           Write-Host "=== Spouštím robustní import ==="
-          # --quit-after 5 je v praxi nejstabilnější pro Godot 4.6 v CI
-          & $godot --headless --path $proj --editor --quit-after 5 --verbose
+          & $godotConsolePath --headless --path $proj --editor --quit-after 5 --verbose
 
           Write-Host "=== Kontrola výsledku importu ==="
           $importedDir = "$proj/.godot/imported"
+          
           if (Test-Path $importedDir) {
             $count = (Get-ChildItem $importedDir -Recurse -File -ErrorAction SilentlyContinue).Count
             Write-Host "Počet importovaných souborů: $count"
-           
+      
             if ($count -gt 100) {
               Write-Host "✅ Import vypadá dobře (dost souborů)"
             } else {
@@ -97,7 +114,7 @@ jobs:
           # Volitelně: druhý pokus, pokud je málo souborů
           if ($count -lt 80) {
             Write-Host "Dělám druhý pokus importu..."
-            & $godot --headless --path $proj --editor --quit-after 3 --verbose
+            & $godotConsolePath --headless --path $proj --editor --quit-after 3 --verbose
           }
 
       - name: Godot Export
