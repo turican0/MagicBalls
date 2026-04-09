@@ -74,6 +74,7 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
 }
 
 
@@ -1773,6 +1774,27 @@ void MBEXclass::REMC2EditorSetTerrainValue(int type, int value) {
 	}
 }
 
-int getTerrainEntites() {
-	return D41A0_0.terrain_2FECE.entity_0x30311[0].axis2d_4.x;
+PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
+	PackedFloat32Array result;
+	int count = 1200;
+	result.resize(count * 10);
+	float *write_ptr = result.ptrw();
+	int idx = 0;
+	for (int i = 0; i < count; i++) {
+		type_entity_0x30311 *actEntity = &D41A0_0.terrain_2FECE.entity_0x30311[i];
+		write_ptr[idx++] = (float)actEntity->type_0x30311; //1
+		write_ptr[idx++] = (float)actEntity->subtype_0x30311; //2
+		write_ptr[idx++] = (float)actEntity->axis2d_4.x;//3
+		write_ptr[idx++] = (float)actEntity->axis2d_4.y;//4
+		write_ptr[idx++] = (float)actEntity->DisId;//5
+		write_ptr[idx++] = (float)actEntity->word_10;//6
+		write_ptr[idx++] = (float)actEntity->stageTag_12;//7
+		write_ptr[idx++] = (float)actEntity->par1_14;//8
+		write_ptr[idx++] = (float)actEntity->par2_16;//9
+		write_ptr[idx++] = (float)actEntity->par3_18;//10
+		axis_3d position = axis_3d{ actEntity->axis2d_4.x, actEntity->axis2d_4.y, 0 };
+		int position2 = getTerrainAlt_10C40(&position);
+	}
+	D41A0_0.terrain_2FECE.entity_0x30311[0].axis2d_4.x;
+	return result;
 }

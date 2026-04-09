@@ -136,4 +136,6 @@ public:
 	int REMC2EditorGetTerrainValue(int type);
 	void REMC2EditorSetTerrainValue(int type, int value);
 
+	PackedFloat32Array REMC2EditorGetTerrainEntites();
+
 };
