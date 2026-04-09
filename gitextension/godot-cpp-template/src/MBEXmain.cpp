@@ -75,6 +75,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
+	godot::ClassDB::bind_method(D_METHOD("EditorDeleteEntites", "Array"), &MBEXclass::EditorDeleteEntites);
 }
 
 
@@ -1777,24 +1778,49 @@ void MBEXclass::REMC2EditorSetTerrainValue(int type, int value) {
 PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	PackedFloat32Array result;
 	int count = 1200;
-	result.resize(count * 10);
+	result.resize(count * 11);
 	float *write_ptr = result.ptrw();
 	int idx = 0;
-	for (int i = 0; i < count; i++) {
+	for (int i = 1; i < count; i++) {
 		type_entity_0x30311 *actEntity = &D41A0_0.terrain_2FECE.entity_0x30311[i];
 		write_ptr[idx++] = (float)actEntity->type_0x30311; //1
 		write_ptr[idx++] = (float)actEntity->subtype_0x30311; //2
 		write_ptr[idx++] = (float)actEntity->axis2d_4.x;//3
 		write_ptr[idx++] = (float)actEntity->axis2d_4.y;//4
-		write_ptr[idx++] = (float)actEntity->DisId;//5
-		write_ptr[idx++] = (float)actEntity->word_10;//6
-		write_ptr[idx++] = (float)actEntity->stageTag_12;//7
-		write_ptr[idx++] = (float)actEntity->par1_14;//8
-		write_ptr[idx++] = (float)actEntity->par2_16;//9
-		write_ptr[idx++] = (float)actEntity->par3_18;//10
-		axis_3d position = axis_3d{ actEntity->axis2d_4.x, actEntity->axis2d_4.y, 0 };
-		int position2 = getTerrainAlt_10C40(&position);
+		axis_3d position;
+		position.x = actEntity->axis2d_4.x * 256;
+		position.y = actEntity->axis2d_4.y * 256;
+		position.z = 0;
+		int positionZ = getTerrainAlt_10C40(&position) / 256;
+		write_ptr[idx++] = (float)positionZ;//5
+		write_ptr[idx++] = (float)actEntity->DisId;//6
+		write_ptr[idx++] = (float)actEntity->word_10;//7
+		write_ptr[idx++] = (float)actEntity->stageTag_12;//8
+		write_ptr[idx++] = (float)actEntity->par1_14;//9
+		write_ptr[idx++] = (float)actEntity->par2_16;//10
+		write_ptr[idx++] = (float)actEntity->par3_18;//11
 	}
-	D41A0_0.terrain_2FECE.entity_0x30311[0].axis2d_4.x;
 	return result;
+}
+
+void MBEXclass::EditorDeleteEntites(Array p_indices)
+{
+	if (p_indices.is_empty())
+		return;
+	std::vector<int> to_delete;
+	for (int i = 0; i < p_indices.size(); i++) {
+		to_delete.push_back(p_indices[i]);
+	}
+	std::sort(to_delete.begin(), to_delete.end(), std::greater<int>());
+	int current_count = 1200;
+	for (int index_to_remove : to_delete) {
+		if (index_to_remove < 0 || index_to_remove >= current_count)
+			continue;
+		for (int j = index_to_remove; j < current_count - 1; j++) {
+			D41A0_0.terrain_2FECE.entity_0x30311[j] = D41A0_0.terrain_2FECE.entity_0x30311[j + 1];
+		}
+		current_count--;
+	}
+
+	memcpy(&temparray_0x30311, &D41A0_0.terrain_2FECE.entity_0x30311, sizeof(type_entity_0x30311) * 1200);
 }

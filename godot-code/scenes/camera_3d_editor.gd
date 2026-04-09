@@ -3,6 +3,7 @@ extends Camera3D
 # References assigned from the main script
 var Ray_Cylinder: MeshInstance3D = null
 var terrain_node: Node3D = null
+var editor: Node3D = null
 
 # ═══════════════════════════════════════════════════════════
 # SETTINGS
@@ -14,7 +15,7 @@ var terrain_node: Node3D = null
 @export var pitch_limit : float = 89.0
 
 @export_group("Ray")
-@export var ray_length : float = 200.0
+@export var ray_length : float = 300.0
 @export var collision_mask : int = 1
 
 @export_group("Cylinder")
@@ -156,3 +157,5 @@ func _update_ray_position() -> void:
 	
 	# Keep it straight
 	Ray_Cylinder.global_rotation = Vector3.ZERO
+	
+	editor.select_entities_in_radius_2D(Ray_Cylinder.global_position, _cylinder_radius)

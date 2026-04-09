@@ -137,5 +137,6 @@ public:
 	void REMC2EditorSetTerrainValue(int type, int value);
 
 	PackedFloat32Array REMC2EditorGetTerrainEntites();
+	void EditorDeleteEntites(Array p_indices);
 
 };

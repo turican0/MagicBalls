@@ -172,6 +172,7 @@ void editor_run() {
 	//init_pal();
 	clean_terrain();
 	loadlevel(0);
+	cloneTerrain();
 	terrain_recalculate();
 
 	main_x();
@@ -4165,3 +4166,9 @@ int main(int argc, char* argv[])
 	return 0;
 }
 */
+Type_Level_2FECE tempTerrain;
+
+void cloneTerrain() {
+	memcpy(&tempTerrain, &D41A0_0.terrain_2FECE, sizeof(Type_Level_2FECE));
+}
+

@@ -11,7 +11,7 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhayq"]
 transparency = 4
-albedo_color = Color(1, 0, 0, 0.45882353)
+albedo_color = Color(1, 0.3254902, 0.25882354, 0.11372549)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_jhayq"]
 material = SubResource("StandardMaterial3D_jhayq")
@@ -90,6 +90,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="SnFlt_8" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=1838833166 instance=ExtResource("3_8pqvr")]
+visible = false
 layout_mode = 2
 
 [node name="BhLin_9" parent="TerrainEdit/Control/Panel/VBoxContainer" unique_id=665209309 instance=ExtResource("3_8pqvr")]

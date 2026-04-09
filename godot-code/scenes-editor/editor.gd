@@ -35,6 +35,7 @@ func _ready() -> void:
 	Main_DecodeLevel.NodeSky3D = $NodeSky3D/Sky3D
 	Main_Camera.Ray_Cylinder = Ray_Cylinder
 	Main_Camera.terrain_node = Main_TerrainsMB
+	Main_Camera.editor = self
 	var Ray_Cylinder: MeshInstance3D = null
 	Global.setLevelType("Night")
 	Global.MBEX.REMC2SetLevelType("Night")
@@ -57,6 +58,8 @@ func _input(event: InputEvent) -> void:
 	# M pressed
 	if (event is InputEventKey and event.keycode == KEY_M and event.pressed):
 		toggle_terrain_editor()
+	if (event is InputEventKey and event.keycode == KEY_X and event.pressed):
+		delete_selected_entities()
 
 func toggle_terrain_editor():
 	is_ui_visible = !is_ui_visible
@@ -136,6 +139,7 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 
 var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
+	Vector3i(0,1000,0): "res://entites/object_textEditor.tscn",
 	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree -difColors!!!
 	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue -difmodels!!!
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
@@ -383,22 +387,77 @@ func generate_unique_id() -> int:
 	_next_uid += 1
 	return _next_uid
 
+func select_entities_in_radius_2D(center_pos_3d: Vector3, radius: float):
+	var center_2d = Vector2(center_pos_3d.x, center_pos_3d.z)
+	var radius_squared = radius * radius
+	
+	var found_any_in_radius = false
+	var closest_node = null
+	var min_dist_sq = INF # Nastavíme na nekonečno
+	
+	# 1. Průchod: Zjistíme co je v kruhu a najdeme nejbližšího kandidáta
+	for node in get_tree().get_nodes_in_group("entities"):
+		var node_pos_2d = Vector2(node.global_position.x, node.global_position.z)
+		var dist_sq = center_2d.distance_squared_to(node_pos_2d)
+		unmark_as_selected(node)
+		if dist_sq < min_dist_sq:
+			min_dist_sq = dist_sq
+			closest_node = node
+		if dist_sq <= radius_squared:
+			mark_as_selected(node)
+			found_any_in_radius = true
+	if not found_any_in_radius and closest_node != null:
+		mark_as_selected(closest_node)
+			
+func mark_as_selected(node: Node3D):
+	if node.is_in_group("selected_entities"):
+		return
+	node.add_to_group("selected_entities")	
+	var mesh = node.get_node_or_null("MeshInstance3D")
+	if mesh:
+		var mat = mesh.get_surface_override_material(0)
+		if not mat:
+			mat = mesh.mesh.surface_get_material(0).duplicate()
+			mesh.set_surface_override_material(0, mat)
+		mat.albedo_color = Color(1.0, 1.0, 0.0)
+		
+func unmark_as_selected(node: Node3D):
+	if not node.is_in_group("selected_entities"): return
+	node.remove_from_group("selected_entities")	
+	var mesh = node.get_node_or_null("MeshInstance3D")
+	if mesh:
+		var mat = mesh.get_surface_override_material(0)
+		if mat:
+			mat.albedo_color = Color(1, 1, 1) 
+			
+func delete_selected_entities():
+	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")
+	if selected_nodes.is_empty():
+		print("Nic není označeno ke smazání.")
+		return
+	var myArray:Array 
+	for node in selected_nodes:
+		if node.has_meta("index"):
+			var index = node.get_meta("index")
+			myArray.append(index)
+	Global.MBEX.EditorDeleteEntites(myArray)
+			
+	print("Deleted entites: ", selected_nodes.size())
+
 func RenderEditorEntites(data_array: PackedFloat32Array):
 	var entites_per_frame=0;
-	var stride = 10
+	var stride = 11
 	var inv_256 = 1.0 / 256.0
 	var camera = get_viewport().get_camera_3d()
 	var has_camera = camera != null
 	var cam_pos = camera.global_position if has_camera else Vector3.ZERO
 	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
-	var default_key = Vector3i(0, 999, 0)
+	var default_key = Vector3i(0, 1000, 0)
 	for i in range(pool_size):
-		if i!=1:
-			continue
-		var offset = i * stride		
+		var offset = i * stride
 		var type_0x30311 = data_array[offset]
 		var subtype_0x30311 = data_array[offset+1]
-		var pos = Vector3(data_array[offset+2], 0, data_array[offset+3])
+		var pos = Vector3(data_array[offset+2], data_array[offset+4], data_array[offset+3])
 		var DisId = data_array[offset+4]
 		var word_10 = data_array[offset+5]
 		var stageTag_12 = data_array[offset+6]
@@ -424,8 +483,19 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 			if current_node == null:
 				var new_node = scene_to_instance.instantiate()
 				if not fromlib:
-					new_node.get_node("Label3D").text = "M:%d_C:%d_M:%d_S:%d_B0:%d" % [type_0x30311, subtype_0x30311, DisId, word_10, stageTag_12]
+					new_node.get_node("Label3D").text = (
+						"T,ST: %d, %d\n" +
+						"Pos: %d,%d,%d\n" +
+						"DisId,W10,Stage: %d,%d,%d\n" +
+						"Pars: %d,%d,%d"
+					) % [
+						type_0x30311, subtype_0x30311, 
+						pos.x,pos.y,pos.z,
+						DisId, word_10, stageTag_12, 
+						par1_14, par2_16, par3_18
+					]
 				new_node.set_meta("uid",uid2)
+				new_node.set_meta("index",i)
 				add_child(new_node)
 				current_node = new_node
 				add_to_entites_pool(uid2,new_node)
@@ -434,10 +504,11 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 				add_pool_index(uid2)
 				updateObject=true
 		if (current_node&&updateObject):
+			current_node.add_to_group("entities")
 			var entityScale = 1.0
 			current_node.scale = Vector3(entityScale, entityScale, entityScale)
 			var base_pos_x = pos.x# * inv_256
-			var base_pos_y = 0 * inv_256
+			var base_pos_y = pos.y# * inv_256
 			var base_pos_z = pos.z# * inv_256
 			#if has_camera:
 				#var new_x = cam_pos.x + fposmod(base_pos_x - cam_pos.x + 128.0, 256.0) - 128.0
