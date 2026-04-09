@@ -94,11 +94,11 @@ jobs:
             exit 1
           }
 
-    # Volitelně: druhý pokus, pokud je málo souborů
-    if ($count -lt 80) {
-      Write-Host "Dělám druhý pokus importu..."
-      & $godot --headless --path $proj --editor --quit-after 3 --verbose
-    }
+          # Volitelně: druhý pokus, pokud je málo souborů
+          if ($count -lt 80) {
+            Write-Host "Dělám druhý pokus importu..."
+            & $godot --headless --path $proj --editor --quit-after 3 --verbose
+          }
 
       - name: Godot Export
         shell: pwsh
