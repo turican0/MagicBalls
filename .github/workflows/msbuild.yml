@@ -54,49 +54,27 @@ jobs:
             "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"
           )
           foreach ($f in $expected) {
-            if (Test-Path $f) { Write-Host "✓ Nalezen: $f" }
-            else              { Write-Error "✗ CHYBÍ: $f"; exit 1 }
+            if (Test-Path $f) { Write-Host "OK: $f" }
+            else              { Write-Error "CHYBI: $f"; exit 1 }
           }
 
       - name: Setup Godot
         uses: chickensoft-games/setup-godot@v2
         with:
-          version: 4.2.1
+          version: 4.6.1
           use-dotnet: false
           include-templates: true
-
-      - name: Debug Godot binary
-        shell: pwsh
-        run: |
-          Write-Host "GODOT path: $env:GODOT"
-          Write-Host "Soubor existuje: $(Test-Path $env:GODOT)"
-
-          $proc = Start-Process -FilePath $env:GODOT -ArgumentList "--version" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "godot_stdout.txt" -RedirectStandardError "godot_stderr.txt"
-
-          Write-Host "Exit code: $($proc.ExitCode)"
-          Write-Host "=== STDOUT ==="
-          if (Test-Path "godot_stdout.txt") { Get-Content "godot_stdout.txt" }
-          Write-Host "=== STDERR ==="
-          if (Test-Path "godot_stderr.txt") { Get-Content "godot_stderr.txt" }
-
-          Write-Host "=== Obsah Godot adresáře ==="
-          $godotDir = Split-Path $env:GODOT
-          Get-ChildItem $godotDir
 
       - name: Initialize Godot project
         shell: pwsh
         run: |
-          $godotDir     = Split-Path $env:GODOT
-          # Najdi skutečný adresář (symlink může ukazovat jinam)
           $godotInstall = "C:\Users\runneradmin\godot"
           $godotConsole = Get-ChildItem -Path $godotInstall -Filter "*console*.exe" | Select-Object -First 1
           Write-Host "Console exe: $($godotConsole.FullName)"
-          
-          $env:GODOT_CONSOLE = $godotConsole.FullName
           echo "GODOT_CONSOLE=$($godotConsole.FullName)" >> $env:GITHUB_ENV
-          
+
           & $godotConsole.FullName --headless --path godot-code --editor --quit
-          Start-Sleep -Seconds 8
+          Start-Sleep -Seconds 10
 
       - name: Godot Export
         shell: pwsh
@@ -121,8 +99,8 @@ jobs:
           Write-Host "Exit code: $LASTEXITCODE"
           if ($LASTEXITCODE -ne 0) { exit 1 }
 
-          if (-not (Test-Path $debugExe))   { Write-Error "Debug exe chybí!";   exit 1 }
-          if (-not (Test-Path $releaseExe)) { Write-Error "Release exe chybí!"; exit 1 }
+          if (-not (Test-Path $debugExe))   { Write-Error "Debug exe chybi!";   exit 1 }
+          if (-not (Test-Path $releaseExe)) { Write-Error "Release exe chybi!"; exit 1 }
 
           Write-Host "=== Obsah exports/ ==="
           Get-ChildItem -Recurse "exports/"
@@ -150,7 +128,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: exports/*.zip
-          body: "Automated build for MagicBalls version ${{ github.ref_name }}."
+          body: 'Automated build for MagicBalls version ${{ github.ref_name }}.'
           draft: false
           prerelease: false
         env:
