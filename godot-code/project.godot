@@ -20,6 +20,10 @@ config/features=PackedStringArray("4.6")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
+[audio]
+
+driver/output_latency=30
+
 [autoload]
 
 Global="*res://scenes/Global.gd"
