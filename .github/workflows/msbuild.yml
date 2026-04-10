@@ -65,6 +65,18 @@ jobs:
           use-dotnet: false
           include-templates: true
 
+      - name: Install Blender
+        shell: pwsh
+        run: |
+          # Stáhni přímo z blender.org - verze 5.1
+          $url = "https://download.blender.org/release/Blender5.1/blender-5.1.0-windows-x64.msi"
+          Invoke-WebRequest -Uri $url -OutFile "blender.msi"
+          Start-Process msiexec -ArgumentList "/i blender.msi /quiet /norestart" -Wait
+          
+          $blenderPath = "C:\Program Files\Blender Foundation\Blender 5.1\blender.exe"
+          Write-Host "Blender: $blenderPath"
+          echo "BLENDER_PATH=$blenderPath" >> $env:GITHUB_ENV
+
       - name: Import Godot project
         shell: pwsh
         run: |
