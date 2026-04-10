@@ -94,7 +94,7 @@ jobs:
           Remove-Item -Recurse -Force "$proj/.godot" -ErrorAction SilentlyContinue
 
           # HLAVNÍ IMPORT – 30 sekund (dost času na všechny .blend + .glb)
-         Write-Host "=== Spouštím import (--quit-after 30) ==="
+          Write-Host "=== Spouštím import (--quit-after 30) ==="
           & $godotPath --headless --path $proj --editor --quit-after 30 --verbose
 
           # Kontrola
