@@ -68,53 +68,59 @@ jobs:
       - name: Import Godot project (robust import)
         shell: pwsh
         run: |
-          # === 1. Najdeme godot_console.exe (stejně jako v původním workflow) ===
+          # 1. Najdeme Godot binary (stejně jako dřív)
           $godotMain = (Get-Item $env:GODOT).Target
           if (-not $godotMain) { $godotMain = $env:GODOT }
           $godotDir = Split-Path $godotMain
 
           $godotConsole = Get-ChildItem -Path $godotDir -Filter "*console*.exe" | Select-Object -First 1
           if (-not $godotConsole) {
-            Write-Host "Console exe nenalezen, používám hlavní binary"
+            Write-Host "Console exe nenalezen → používám hlavní binary"
             $godotConsole = Get-Item $godotMain
           }
+          $godotPath = $godotConsole.FullName
+          Write-Host "Používám Godot: $godotPath"
 
-          $godotConsolePath = $godotConsole.FullName
-          Write-Host "Používám Godot console: $godotConsolePath"
+          echo "GODOT_CONSOLE=$godotPath" >> $env:GITHUB_ENV
 
-          # Uložíme do GITHUB_ENV pro další kroky
-          echo "GODOT_CONSOLE=$godotConsolePath" >> $env:GITHUB_ENV
-
-          # === 2. Robustní import ===
           $proj = "godot-code"
 
+          # Debug: co je v projektu?
+          Write-Host "=== Obsah projektu godot-code ==="
+          Get-ChildItem $proj -Depth 1 | Select-Object Name
+
+          # Mazání starého cache
           Write-Host "=== Mazání starého .godot cache ==="
           Remove-Item -Recurse -Force "$proj/.godot" -ErrorAction SilentlyContinue
 
-          Write-Host "=== Spouštím robustní import ==="
-          & $godotConsolePath --headless --path $proj --editor --quit-after 5 --verbose
+          # HLAVNÍ IMPORT – 30 sekund (dost času na všechny .blend + .glb)
+         Write-Host "=== Spouštím import (--quit-after 30) ==="
+          & $godotPath --headless --path $proj --editor --quit-after 30 --verbose
 
+          # Kontrola
           Write-Host "=== Kontrola výsledku importu ==="
           $importedDir = "$proj/.godot/imported"
-          
           if (Test-Path $importedDir) {
             $count = (Get-ChildItem $importedDir -Recurse -File -ErrorAction SilentlyContinue).Count
             Write-Host "Počet importovaných souborů: $count"
-      
-            if ($count -gt 100) {
-              Write-Host "✅ Import vypadá dobře (dost souborů)"
+
+            if ($count -gt 150) {
+              Write-Host "✅ Import vypadá dobře!"
+            } elseif ($count -gt 50) {
+              Write-Warning "⚠️ Málo souborů ($count) — import možná nebyl úplný."
             } else {
-              Write-Warning "⚠️ Podezřele málo importovaných souborů ($count). Import možná nebyl kompletní."
+              Write-Error "❌ Import selhal — skoro žádné soubory!"
+              exit 1
             }
           } else {
-            Write-Error "❌ Složka .godot/imported nevznikla! Import selhal."
+            Write-Error "❌ Složka .godot/imported nevznikla!"
             exit 1
           }
 
-          # Volitelně: druhý pokus, pokud je málo souborů
-          if ($count -lt 80) {
-            Write-Host "Dělám druhý pokus importu..."
-            & $godotConsolePath --headless --path $proj --editor --quit-after 3 --verbose
+          # Druhý pokus (pokud bylo málo souborů)
+          if ($count -lt 100) {
+            Write-Host "Dělám druhý pokus importu (dalších 20 sekund)..."
+            & $godotPath --headless --path $proj --editor --quit-after 20 --verbose
           }
 
       - name: Godot Export
