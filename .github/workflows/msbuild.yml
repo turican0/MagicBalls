@@ -86,12 +86,14 @@ jobs:
           $settingsPath = "C:\Users\runneradmin\AppData\Roaming\Godot\editor_settings-4.tres"
           $blenderDir = Split-Path $env:BLENDER_PATH
           New-Item -ItemType Directory -Force -Path (Split-Path $settingsPath)
-          @"
+$content = @"
 [gd_resource type="EditorSettings" format=3]
 
 [resource]
 filesystem/import/blender/blender3_path = "$($blenderDir -replace '\\', '/')"
-"@ | Set-Content $settingsPath -Encoding UTF8
+"@
+
+          $content | Set-Content $settingsPath -Encoding UTF8
           Write-Host "Editor settings vytvořeny s Blender cestou: $blenderDir"
 
           # Spusť import
