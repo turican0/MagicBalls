@@ -440,7 +440,7 @@ func delete_selected_entities():
 		if node.has_meta("index"):
 			var index = node.get_meta("index")
 			myArray.append(index)
-	Global.MBEX.EditorDeleteEntites(myArray)
+	Global.MBEX.REMC2EditorDeleteEntites(myArray)
 			
 	print("Deleted entites: ", selected_nodes.size())
 
@@ -453,17 +453,17 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 	var cam_pos = camera.global_position if has_camera else Vector3.ZERO
 	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
 	var default_key = Vector3i(0, 1000, 0)
-	for i in range(pool_size):
+	for i in range(1, pool_size):
 		var offset = i * stride
 		var type_0x30311 = data_array[offset]
 		var subtype_0x30311 = data_array[offset+1]
 		var pos = Vector3(data_array[offset+2], data_array[offset+4], data_array[offset+3])
-		var DisId = data_array[offset+4]
-		var word_10 = data_array[offset+5]
-		var stageTag_12 = data_array[offset+6]
-		var par1_14 = data_array[offset+7]
-		var par2_16 = data_array[offset+8]
-		var par3_18 = data_array[offset+9]
+		var DisId = data_array[offset+5]
+		var word_10 = data_array[offset+6]
+		var stageTag_12 = data_array[offset+7]
+		var par1_14 = data_array[offset+8]
+		var par2_16 = data_array[offset+9]
+		var par3_18 = data_array[offset+10]
 		
 		var updateObject=false
 		var current_node = null
@@ -495,7 +495,6 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 						par1_14, par2_16, par3_18
 					]
 				new_node.set_meta("uid",uid2)
-				new_node.set_meta("index",i)
 				add_child(new_node)
 				current_node = new_node
 				add_to_entites_pool(uid2,new_node)
@@ -504,6 +503,7 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 				add_pool_index(uid2)
 				updateObject=true
 		if (current_node&&updateObject):
+			current_node.set_meta("index",i)
 			current_node.add_to_group("entities")
 			var entityScale = 1.0
 			current_node.scale = Vector3(entityScale, entityScale, entityScale)

@@ -75,7 +75,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
-	godot::ClassDB::bind_method(D_METHOD("EditorDeleteEntites", "Array"), &MBEXclass::EditorDeleteEntites);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
 }
 
 
@@ -1781,7 +1781,7 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	result.resize(count * 11);
 	float *write_ptr = result.ptrw();
 	int idx = 0;
-	for (int i = 1; i < count; i++) {
+	for (int i = 0; i < count; i++) {
 		type_entity_0x30311 *actEntity = &D41A0_0.terrain_2FECE.entity_0x30311[i];
 		write_ptr[idx++] = (float)actEntity->type_0x30311; //1
 		write_ptr[idx++] = (float)actEntity->subtype_0x30311; //2
@@ -1803,8 +1803,7 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	return result;
 }
 
-void MBEXclass::EditorDeleteEntites(Array p_indices)
-{
+void MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	if (p_indices.is_empty())
 		return;
 	std::vector<int> to_delete;
@@ -1816,11 +1815,33 @@ void MBEXclass::EditorDeleteEntites(Array p_indices)
 	for (int index_to_remove : to_delete) {
 		if (index_to_remove < 0 || index_to_remove >= current_count)
 			continue;
+
+		/*
+		bool haveChildren = false;
+		for (int k = 0; k < 1200; k++) {
+			if (temparray_0x30311[k].par1_14 == index_to_remove)
+				haveChildren = true;
+		}
+		if (haveChildren)
+			continue;
+		*/
+
+		// --- KOREKCE INDEXŮ par1_14 ---
+		for (int k = 0; k < current_count; k++) {
+			// 1. Pokud potomek ukazoval na právě mazaný prvek, vazba zaniká
+			if (temparray_0x30311[k].par1_14 == index_to_remove) {
+				temparray_0x30311[k].par1_14 = 0;
+			}
+			// 2. Pokud ukazoval na jakýkoliv prvek ZA smazaným indexem,
+			// musí se jeho reference snížit o 1, protože se to tam posune.
+			else if (temparray_0x30311[k].par1_14 > index_to_remove) {
+				temparray_0x30311[k].par1_14--;
+			}
+		}
+
 		for (int j = index_to_remove; j < current_count - 1; j++) {
-			D41A0_0.terrain_2FECE.entity_0x30311[j] = D41A0_0.terrain_2FECE.entity_0x30311[j + 1];
+			temparray_0x30311[j] = temparray_0x30311[j + 1];
 		}
 		current_count--;
 	}
-
-	memcpy(&temparray_0x30311, &D41A0_0.terrain_2FECE.entity_0x30311, sizeof(type_entity_0x30311) * 1200);
 }

@@ -172,10 +172,15 @@ void editor_run() {
 	//init_pal();
 	clean_terrain();
 	loadlevel(0);
-	cloneTerrain();
+
+	/*
+	for (int i = 5; i < 1200-1;i++)
+		memcpy(&D41A0_0.terrain_2FECE.entity_0x30311[i], &D41A0_0.terrain_2FECE.entity_0x30311[1200-1], sizeof(type_entity_0x30311));
+		*/
+
 	terrain_recalculate();
 
-	main_x();
+	//main_x();
 
 
 
@@ -188,6 +193,7 @@ void editor_run() {
 
 void terrain_recalculate() {
 	int j = 0;
+	
 	for (int i = 0; i < 0x4b0; i++) {
 		if (temparray_0x30311_inactive[i])
 			j++;
@@ -4166,9 +4172,5 @@ int main(int argc, char* argv[])
 	return 0;
 }
 */
-Type_Level_2FECE tempTerrain;
 
-void cloneTerrain() {
-	memcpy(&tempTerrain, &D41A0_0.terrain_2FECE, sizeof(Type_Level_2FECE));
-}
 
