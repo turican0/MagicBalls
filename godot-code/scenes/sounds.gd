@@ -137,7 +137,7 @@ func setSoundBank(bank):
 #	9-VIDEO6
 
 
-const MAX_SIMULTANEOUS_SOUNDS := 30
+const MAX_SIMULTANEOUS_SOUNDS := 10
 
 func init() -> void:
 	for i in MAX_SIMULTANEOUS_SOUNDS:
