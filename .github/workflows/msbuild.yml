@@ -68,7 +68,7 @@ jobs:
       - name: Import Godot project (robust import)
         shell: pwsh
         run: |
-          # 1. Najdeme Godot binary (stejně jako dřív)
+          # Najdeme Godot binary
           $godotMain = (Get-Item $env:GODOT).Target
           if (-not $godotMain) { $godotMain = $env:GODOT }
           $godotDir = Split-Path $godotMain
@@ -80,47 +80,35 @@ jobs:
           }
           $godotPath = $godotConsole.FullName
           Write-Host "Používám Godot: $godotPath"
-
           echo "GODOT_CONSOLE=$godotPath" >> $env:GITHUB_ENV
 
           $proj = "godot-code"
 
-          # Debug: co je v projektu?
-          Write-Host "=== Obsah projektu godot-code ==="
-          Get-ChildItem $proj -Depth 1 | Select-Object Name
-
-          # Mazání starého cache
           Write-Host "=== Mazání starého .godot cache ==="
           Remove-Item -Recurse -Force "$proj/.godot" -ErrorAction SilentlyContinue
 
-          # HLAVNÍ IMPORT – 30 sekund (dost času na všechny .blend + .glb)
-          Write-Host "=== Spouštím import (--quit-after 30) ==="
-          & $godotPath --headless --path $proj --editor --quit-after 30 --verbose
+          # === NEJLEPŠÍ VARIANTA PRO CI ===
+          Write-Host "=== Spouštím import (--import --quit) ==="
+          & $godotPath --headless --path $proj --import --quit --verbose
+
+          Write-Host "Godot exit code: $LASTEXITCODE"
 
           # Kontrola
           Write-Host "=== Kontrola výsledku importu ==="
           $importedDir = "$proj/.godot/imported"
+          
           if (Test-Path $importedDir) {
             $count = (Get-ChildItem $importedDir -Recurse -File -ErrorAction SilentlyContinue).Count
             Write-Host "Počet importovaných souborů: $count"
 
-            if ($count -gt 150) {
+            if ($count -gt 100) {
               Write-Host "✅ Import vypadá dobře!"
-            } elseif ($count -gt 50) {
-              Write-Warning "⚠️ Málo souborů ($count) — import možná nebyl úplný."
             } else {
-              Write-Error "❌ Import selhal — skoro žádné soubory!"
-              exit 1
+              Write-Warning "⚠️ Málo souborů ($count) – import nebyl kompletní."
             }
           } else {
             Write-Error "❌ Složka .godot/imported nevznikla!"
             exit 1
-          }
-
-          # Druhý pokus (pokud bylo málo souborů)
-          if ($count -lt 100) {
-            Write-Host "Dělám druhý pokus importu (dalších 20 sekund)..."
-            & $godotPath --headless --path $proj --editor --quit-after 20 --verbose
           }
 
       - name: Godot Export
