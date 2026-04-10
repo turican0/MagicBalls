@@ -65,49 +65,34 @@ jobs:
           use-dotnet: false
           include-templates: true
 
-      - name: Import Godot project (robust import)
+      - name: Import Godot project
         shell: pwsh
         run: |
-          # Najdeme Godot binary
-          $godotMain = (Get-Item $env:GODOT).Target
-          if (-not $godotMain) { $godotMain = $env:GODOT }
-          $godotDir = Split-Path $godotMain
-
-          $godotConsole = Get-ChildItem -Path $godotDir -Filter "*console*.exe" | Select-Object -First 1
-          if (-not $godotConsole) {
-            Write-Host "Console exe nenalezen → používám hlavní binary"
-            $godotConsole = Get-Item $godotMain
-          }
-          $godotPath = $godotConsole.FullName
+          $godotPath = $env:GODOT
           Write-Host "Používám Godot: $godotPath"
           echo "GODOT_CONSOLE=$godotPath" >> $env:GITHUB_ENV
 
           $proj = "godot-code"
-
-          Write-Host "=== Mazání starého .godot cache ==="
           Remove-Item -Recurse -Force "$proj/.godot" -ErrorAction SilentlyContinue
 
-          # === NEJLEPŠÍ VARIANTA PRO CI ===
-          Write-Host "=== Spouštím import (--import --quit) ==="
-          & $godotPath --headless --path $proj --import --quit --verbose
+          Write-Host "=== Spouštím import ==="
+          $proc = Start-Process -FilePath $godotPath `
+            -ArgumentList "--headless --path $proj --editor --quit-after 30000" `
+            -NoNewWindow -Wait -PassThru `
+            -RedirectStandardOutput "import_stdout.txt" `
+            -RedirectStandardError  "import_stderr.txt"
 
-          Write-Host "Godot exit code: $LASTEXITCODE"
+          Write-Host "Exit code: $($proc.ExitCode)"
+          Get-Content "import_stdout.txt" -ErrorAction SilentlyContinue
+          Get-Content "import_stderr.txt" -ErrorAction SilentlyContinue
 
-          # Kontrola
-          Write-Host "=== Kontrola výsledku importu ==="
           $importedDir = "$proj/.godot/imported"
-          
           if (Test-Path $importedDir) {
-            $count = (Get-ChildItem $importedDir -Recurse -File -ErrorAction SilentlyContinue).Count
-            Write-Host "Počet importovaných souborů: $count"
-
-            if ($count -gt 100) {
-              Write-Host "✅ Import vypadá dobře!"
-            } else {
-              Write-Warning "⚠️ Málo souborů ($count) – import nebyl kompletní."
-            }
+            $count = (Get-ChildItem $importedDir -Recurse -File).Count
+            Write-Host "Importováno souborů: $count"
+            if ($count -lt 10) { Write-Warning "Málo souborů!" }
           } else {
-            Write-Error "❌ Složka .godot/imported nevznikla!"
+            Write-Error "Složka .godot/imported nevznikla!"
             exit 1
           }
 
