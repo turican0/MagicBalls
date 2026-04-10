@@ -68,11 +68,9 @@ jobs:
       - name: Install Blender
         shell: pwsh
         run: |
-          # Stáhni přímo z blender.org - verze 5.1
           $url = "https://download.blender.org/release/Blender5.1/blender-5.1.0-windows-x64.msi"
           Invoke-WebRequest -Uri $url -OutFile "blender.msi"
           Start-Process msiexec -ArgumentList "/i blender.msi /quiet /norestart" -Wait
-          
           $blenderPath = "C:\Program Files\Blender Foundation\Blender 5.1\blender.exe"
           Write-Host "Blender: $blenderPath"
           echo "BLENDER_PATH=$blenderPath" >> $env:GITHUB_ENV
@@ -81,19 +79,23 @@ jobs:
         shell: pwsh
         run: |
           $godotPath = $env:GODOT
-          Write-Host "Používám Godot: $godotPath"
           echo "GODOT_CONSOLE=$godotPath" >> $env:GITHUB_ENV
-
           $proj = "godot-code"
-          Remove-Item -Recurse -Force "$proj/.godot" -ErrorAction SilentlyContinue
 
+          # Nastav Blender v editor settings PŘED importem
+          $settingsPath = "C:\Users\runneradmin\AppData\Roaming\Godot\editor_settings-4.tres"
+          $blenderDir = Split-Path $env:BLENDER_PATH
+          New-Item -ItemType Directory -Force -Path (Split-Path $settingsPath)
+          @" | [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          filesystem/import/blender/blender3_path = "$($blenderDir -replace '\\', '/')"
+          "@ | Set-Content $settingsPath -Encoding UTF8
+          Write-Host "Editor settings vytvořeny s Blender cestou: $blenderDir"
+
+          # Spusť import
           Write-Host "=== Spouštím import ==="
-          $proc = Start-Process -FilePath $godotPath `
-            -ArgumentList "--headless --path $proj --editor --quit-after 30000" `
-            -NoNewWindow -Wait -PassThru `
-            -RedirectStandardOutput "import_stdout.txt" `
-            -RedirectStandardError  "import_stderr.txt"
-
+          $proc = Start-Process -FilePath $godotPath -ArgumentList "--headless --path $proj --editor --quit-after 120000" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "import_stdout.txt" -RedirectStandardError "import_stderr.txt"
           Write-Host "Exit code: $($proc.ExitCode)"
           Get-Content "import_stdout.txt" -ErrorAction SilentlyContinue
           Get-Content "import_stderr.txt" -ErrorAction SilentlyContinue
@@ -102,7 +104,6 @@ jobs:
           if (Test-Path $importedDir) {
             $count = (Get-ChildItem $importedDir -Recurse -File).Count
             Write-Host "Importováno souborů: $count"
-            if ($count -lt 10) { Write-Warning "Málo souborů!" }
           } else {
             Write-Error "Složka .godot/imported nevznikla!"
             exit 1
