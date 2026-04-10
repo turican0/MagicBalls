@@ -1,6 +1,5 @@
 # Godot 4+ specific ignores
-godot-code/.godot/*
-!godot-code/.godot/imported/
+godot-code/.godot/
 
 .nomedia
 
