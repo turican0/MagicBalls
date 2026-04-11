@@ -143,8 +143,8 @@ jobs:
         shell: pwsh
         run: |
           $tagName    = "${{ github.ref_name }}"
-          $debugZip   = "MagicBalls-$tagName-Windows-Debug.zip"
-          $releaseZip = "MagicBalls-$tagName-Windows-Release.zip"
+          $debugZip   = "exports\MagicBalls-$tagName-Windows-Debug.zip"
+          $releaseZip = "exports\MagicBalls-$tagName-Windows-Release.zip"
 
           Copy-Item "scripts/editor.bat"             "exports/debug/"   -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/"   -ErrorAction SilentlyContinue
@@ -155,8 +155,8 @@ jobs:
           Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"       "exports/release/"
           Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll" "exports/debug/"
 
-          Compress-Archive -Path "exports/debug/*"   -DestinationPath "exports/$debugZip"   -Force
-          Compress-Archive -Path "exports/release/*" -DestinationPath "exports/$releaseZip" -Force
+          & "C:\Program Files\7-Zip\7z.exe" a "$debugZip"   ".\exports\debug\*"
+          & "C:\Program Files\7-Zip\7z.exe" a "$releaseZip" ".\exports\release\*"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
