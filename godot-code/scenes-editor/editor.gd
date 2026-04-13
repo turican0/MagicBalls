@@ -7,10 +7,12 @@ extends Node3D
 @onready var Main_Camera: Camera3D = $PlayerEditor/Camera3D
 @onready var Ray_Cylinder: MeshInstance3D = $RayCylinder
 
+@onready var Tree_View: Tree = $TreeView/Control/PanelContainer/MarginContainer/Tree
+
 @onready var Terrain_Edit_Panel: CanvasLayer = $TerrainEdit
 
 
-@onready var container = $TerrainEdit/Control/Panel/VBoxContainer
+@onready var container = $TerrainEdit/Control/PanelContainer/MarginContainer/VBoxContainer
 @onready var selectors = [
 	container.get_node("Seed_0"),
 	container.get_node("Offset_1"),
@@ -72,9 +74,39 @@ func toggle_terrain_editor():
 		var center = get_viewport().get_visible_rect().size / 2.0
 		get_viewport().warp_mouse(center)
 
+func update_tree():
+	var all_sections: Array = []
+
+	# Terrain sekce (pokud selectors obsahuje terrain data)
+	var terrain_items = []
+	for entity in selectors:
+		if is_instance_valid(entity):
+			terrain_items.append({
+				"name": str(entity.name),
+				"value": str(entity.current_value),
+				"id": entity.name.get_slice("_", 1).to_int()
+			})
+
+	all_sections.append({ "title": "Terrain", "items": terrain_items })
+
+	# Entities sekce – všechny entity z grupy
+	var entity_items = []
+	for entity in get_tree().get_nodes_in_group("entities"):
+		if is_instance_valid(entity):
+			entity_items.append({
+				"name": str(entity.name),
+				"value": str(entity.current_value if "current_value" in entity else entity.position),
+				"id": entity.get_meta("index", -1)   # lepší použít meta "index", které tam ukládáš
+			})
+
+	all_sections.append({ "title": "Entities", "items": entity_items })
+
+	Tree_View.update_tree_view(all_sections)
+
 func _process(delta: float) -> void:
 	if editor_runned:
 		EditorStep()
+	update_tree()
 
 func gameInit():
 	match Global.getLevelType():
