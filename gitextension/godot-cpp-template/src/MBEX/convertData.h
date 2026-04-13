@@ -50,7 +50,7 @@ using namespace godot;
 
 void MBEXconvertData(String path, String path2);
 void MBEXsoundConverts(String path);
-void MBEXmusicConverts(String path);
+void MBEXmusicConverts(String path, char cardType);
 bool MBEXsoundConvert(int i,String path);
 bool MBLoadSound(uint8_t soundIndex);
 bool make_dir_godot(const String &path);
