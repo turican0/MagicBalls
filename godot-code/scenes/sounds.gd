@@ -57,8 +57,26 @@ func load_musics_hi_from_dir(path: String):
 					Global.music_hi_map[music_idx] = full_path
 					print("Ogg track readed: ", music_idx)
 			file_name = dir.get_next()
+		dir.list_dir_end()
 	else:
-		print("Chyba: Adresář nebyl nalezen.")
+		print("DirAccess selhal!")  # toto se vypíše pokud adresář nejde otevřít
+	# Fallback – pokud DirAccess selhal v exportu, načti natvrdo
+	if Global.music_hi_map.is_empty():
+		print("DirAccess selhal, používám fallback seznam")
+		var fallback = [
+			"000_C2GAME1.ogg",
+			"001_C2GAME2.ogg",
+			"002_C2GAME3.ogg",
+			"003_C2SETUP.ogg",
+			"004_C2INTRO.ogg",
+			"005_C2CUTS.ogg"
+		]
+		for file_name2 in fallback:
+			var parts = file_name2.get_basename().split("_")
+			if parts.size() >= 2:
+				var music_idx = parts[0].to_int()
+				Global.music_hi_map[music_idx] = path + file_name2
+				print("Fallback loaded: ", music_idx, " -> ", path + file_name2)
 
 func load_sounds_from_dir(path: String):
 	var dir = DirAccess.open(path)
@@ -226,13 +244,19 @@ func stop_music() -> void:
 			MainMusic.stop()
 
 func start_music(index: int) -> void:
-	if(Global.himusic):
-		if MainMusicHi.playing:
-			MainMusicHi.stop()
-		MainMusicHi.stream = Global.load_external_audio(Global.music_hi_map[index])
-		MainMusicHi.play()
-	else:
-		if MainMusic.playing:
-			MainMusic.stop()
-		MainMusic.file = Global.music_map[index]
-		MainMusic.play()
+	if Global.himusic:
+		print("=== START MUSIC DEBUG ===")
+		print("Index: ", index)
+		print("music_hi_map: ", Global.music_hi_map)
+		print("Has index: ", Global.music_hi_map.has(index))
+
+		if Global.music_hi_map.has(index):
+			var path = Global.music_hi_map[index]
+			print("Path: ", path)
+			print("ResourceLoader exists: ", ResourceLoader.exists(path))
+			var stream = ResourceLoader.load(path, "AudioStream")
+			print("Stream loaded: ", stream)
+			MainMusicHi.stream = stream
+			print("Stream set, playing...")
+			MainMusicHi.play()
+			print("Playing: ", MainMusicHi.playing)
