@@ -1,0 +1,4 @@
+﻿  decodeXMI2.cpp
+C:\COMPUTES\140\prenos\godot-zyllan\MagicBalls\mytools\decodeXMI2\decodeXMI2\decodeXMI2.cpp(296,30): warning C4267: '=': conversion from 'size_t' to 'long', possible loss of data
+C:\COMPUTES\140\prenos\godot-zyllan\MagicBalls\mytools\decodeXMI2\decodeXMI2\decodeXMI2.cpp(173,9): warning C4101: 'rncsize': unreferenced local variable
+  decodeXMI2.vcxproj -> C:\COMPUTES\140\prenos\godot-zyllan\MagicBalls\mytools\decodeXMI2\decodeXMI2\x64\Debug\decodeXMI2.exe

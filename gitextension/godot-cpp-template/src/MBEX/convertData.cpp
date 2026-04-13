@@ -171,7 +171,10 @@ void MBEXconvertData(String path, String path2) {
 	//MBEXcdExtract((char *)path2.utf8().get_data(), "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/"); //user some path
 	MBEXfontsConverts(path + "/fonts");
 	MBEXsoundConverts(path + "/sounds");
-	MBEXmusicConverts(path + "/musics");
+	MBEXmusicConverts(path + "/musics", 'g');
+	MBEXmusicConverts(path + "/musics", 'r');
+	MBEXmusicConverts(path + "/musics", 'f');
+	MBEXmusicConverts(path + "/musics", 'w');
 	MBEXtexturesConverts(path + "/textures");
 	MBEXgraphicsConverts(path + "/HSPR");
 	MBEXwebConverts(path + "/web");
@@ -1263,7 +1266,9 @@ void MBEXtextureConverts(String path, int inWidth, int inHeight, String texture,
 	}
 }
 
-void MBEXmusicConverts(String path) {
+void MBEXmusicConverts(String path,char cardType) {
+	musicDriverType_180C84 = cardType;
+	InitMusicBank_8EAD0(0);
 	for (int i = 1; i <= m_iNumberOfTracks; i++)
 	{
 		uint8_t *buffer = musicHeader_E3808->str_8.track_10[i - 1].xmiData_0;
@@ -1273,8 +1278,8 @@ void MBEXmusicConverts(String path) {
 			break;
 		}
 		String filename = String::utf8((const char *)filename_c);
-		String midi_filename = filename.get_basename() + ".mid";
-		String xmi_filename = filename.get_basename() + ".xmi";
+		String midi_filename = filename.get_basename() + "_" + cardType + ".mid";
+		String xmi_filename = filename.get_basename() + "_" + cardType + ".xmi";
 		String full_path_mid = path + "/" + vformat("%03d_%s", i - 1, midi_filename);
 		String full_path_xmi = path + "/" + vformat("%03d_%s", i - 1, xmi_filename);
 		//String full_path = path + "/" + vformat("%03d_%s", i - 1, midi_filename);
