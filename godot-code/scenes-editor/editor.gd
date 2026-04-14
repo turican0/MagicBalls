@@ -170,6 +170,7 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 	library_scenes[Vector3i(a, b, c)] = load(path)
 
 var library = {
+	Vector3i(0,998,0): "res://entites/object_arrow_parent.tscn",  # parent arrow
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(0,1000,0): "res://entites/object_textEditor.tscn",
 	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree -difColors!!!
@@ -535,6 +536,7 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 				add_pool_index(uid2)
 				updateObject=true
 		if (current_node&&updateObject):
+			current_node.set_meta("parent",int(par1_14))
 			current_node.set_meta("index",i)
 			current_node.add_to_group("entities")
 			var entityScale = 1.0
@@ -550,7 +552,37 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 			current_node.position = Vector3(base_pos_x, base_pos_y, base_pos_z)
 			#var yaw = -rot2.x * rad_mult
 			#current_node.rotation = Vector3(0, yaw, 0)
+	AddParentsArrows()
 	show_hide_entites()
+
+func AddParentsArrows():
+	var index_to_pos: Dictionary = {}
+	for entity in get_tree().get_nodes_in_group("entities"):
+		index_to_pos[entity.get_meta("index")] = entity.position
+		
+	for entity in get_tree().get_nodes_in_group("entities"):
+		var current_node = null
+		var updateObject: bool = false
+		if entity.get_meta("parent") in index_to_pos:
+			var parent_index = entity.get_meta("parent")
+			var uid2=Vector3i(0,998,0)
+			current_node = get_first_entity_with_uid(uid2)
+			if current_node == null:
+				var scene_to_instance = library_scenes[uid2]
+				var new_node = scene_to_instance.instantiate()
+				add_child(new_node)
+				current_node = new_node
+				add_to_entites_pool(uid2,new_node)
+				updateObject=true
+			else:
+				add_pool_index(uid2)
+				updateObject=true
+			var parent_pos = index_to_pos.get(parent_index, null)
+			current_node.set_meta("start", entity.position+Vector3(0,2,0))
+			current_node.set_meta("end", parent_pos+Vector3(0,2,0)) 
+		if (current_node&&updateObject):
+			current_node.get_node("Arrow").start_pos = current_node.get_meta("start")
+			current_node.get_node("Arrow").end_pos = current_node.get_meta("end")
 
 func EditorEnd():
 	Global.MBEX.REMC2EditorEnd()
