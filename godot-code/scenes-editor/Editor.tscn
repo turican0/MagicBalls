@@ -50,6 +50,7 @@ layout_mode = 2
 script = ExtResource("2_ydsuf")
 
 [node name="TerrainEdit" type="CanvasLayer" parent="." unique_id=1939798825]
+visible = false
 
 [node name="Control" type="Control" parent="TerrainEdit" unique_id=1978053754]
 layout_mode = 3

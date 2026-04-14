@@ -43,23 +43,23 @@ func load_musics_from_dir(path: String):
 		print("Chyba: Adresář nebyl nalezen.")
 		
 func load_musics_hi_from_dir(path: String):
-	#var dir = DirAccess.open(path)
-	#if dir:
-		#dir.list_dir_begin()
-		#var file_name = dir.get_next()
-		#
-		#while file_name != "":
-			#if !dir.current_is_dir() and file_name.ends_with(".ogg"):
-				#var parts = file_name.split("_")
-				#if parts.size() >= 2:
-					#var music_idx = parts[0].to_int()
-					#var full_path = path + file_name
-					#Global.music_hi_map[music_idx] = full_path
-					#print("Ogg track readed: ", music_idx)
-			#file_name = dir.get_next()
-		#dir.list_dir_end()
-	#else:
-		#print("DirAccess selhal!")  # toto se vypíše pokud adresář nejde otevřít
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		
+		while file_name != "":
+			if !dir.current_is_dir() and file_name.ends_with(".ogg"):
+				var parts = file_name.split("_")
+				if parts.size() >= 2:
+					var music_idx = parts[0].to_int()
+					var full_path = path + file_name
+					Global.music_hi_map[music_idx] = full_path
+					print("Ogg track readed: ", music_idx)
+			file_name = dir.get_next()
+		dir.list_dir_end()
+	else:
+		print("DirAccess selhal!")  # toto se vypíše pokud adresář nejde otevřít
 	# Fallback – pokud DirAccess selhal v exportu, načti natvrdo
 	if Global.music_hi_map.is_empty():
 		print("DirAccess selhal, používám fallback seznam")
@@ -260,3 +260,5 @@ func start_music(index: int) -> void:
 			print("Stream set, playing...")
 			MainMusicHi.play()
 			print("Playing: ", MainMusicHi.playing)
+			
+#war channels - SONG 0 - channels  7,8,9(NIGHT)   |   SONG 1 - channels 8,9(DAY)   |   SONG 2 - channels 8,9(CAVE)

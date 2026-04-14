@@ -82,6 +82,8 @@ func _apply_absolute_rotation() -> void:
 # MOVEMENT & INPUT
 # ═══════════════════════════════════════════════════════════
 func _handle_movement(delta: float) -> void:
+	if editor.is_ui_visible:
+		return
 	var speed := move_speed * (sprint_multiplier if Input.is_key_pressed(KEY_SHIFT) else 1.0)
 	var dir := Vector3.ZERO
 	

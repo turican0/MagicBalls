@@ -6,8 +6,15 @@ func _ready():
 	set_column_title(0, "Název")
 	set_column_title(1, "Hodnota")
 	hide_root = true # Schováme prázdný root uzel
-
+	
 func update_tree_view(all_sections: Array):
+	var collapsed_states: Dictionary = {}
+	var itemColapse = get_root()
+	if itemColapse:
+		itemColapse = itemColapse.get_first_child()
+		while itemColapse:
+			collapsed_states[itemColapse.get_text(0)] = itemColapse.is_collapsed()
+			itemColapse = itemColapse.get_next()
 	clear()
 
 	var root = create_item()
@@ -37,6 +44,8 @@ func update_tree_view(all_sections: Array):
 
 			# Volitelně: lepší zarovnání hodnoty doprava
 			item.set_text_alignment(1, HORIZONTAL_ALIGNMENT_RIGHT)
+		var title = str(section["title"])
+		category.set_collapsed(collapsed_states.get(title, false))
 
 # Příklad volání (např. odjinud nebo pro test):
 # update_tree("Zbraně", [{"jmeno": "Dýka", "sila": 5}, {"jmeno": "Meč", "sila": 15}])

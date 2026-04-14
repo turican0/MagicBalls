@@ -58,21 +58,27 @@ func _ready() -> void:
 	
 func _input(event: InputEvent) -> void:
 	# M pressed
+	if (event is InputEventKey and event.keycode == KEY_SPACE and event.pressed):
+		toggle_editor_control_style()
 	if (event is InputEventKey and event.keycode == KEY_M and event.pressed):
 		toggle_terrain_editor()
 	if (event is InputEventKey and event.keycode == KEY_X and event.pressed):
 		delete_selected_entities()
-
-func toggle_terrain_editor():
+		
+func toggle_editor_control_style():
 	is_ui_visible = !is_ui_visible
 	if is_ui_visible:
-		Terrain_Edit_Panel.show()
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	else:
-		Terrain_Edit_Panel.hide()
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 		var center = get_viewport().get_visible_rect().size / 2.0
 		get_viewport().warp_mouse(center)
+
+func toggle_terrain_editor():
+	if !Terrain_Edit_Panel.visible:
+		Terrain_Edit_Panel.show()
+	else:
+		Terrain_Edit_Panel.hide()
 
 func update_tree():
 	var all_sections: Array = []

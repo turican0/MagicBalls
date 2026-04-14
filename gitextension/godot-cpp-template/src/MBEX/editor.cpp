@@ -38,8 +38,8 @@ int edited_line2 = -1;
 int edited_line2_old = -1;
 
 type_entity_0x30311 temparray_0x30311[1200];
-bool temparray_0x30311_inactive[1200];
-bool temparray_0x30311_selected[1200];
+//bool temparray_0x30311_inactive[1200];
+//bool temparray_0x30311_selected[1200];
 
 int max_subtype_buttons = 64;
 int max_subsubtype_buttons = 128;
@@ -58,6 +58,92 @@ typedef struct {
 std::vector<int> m_mc2validLevelIndexes;
 
 TypePos RelPos[21];
+
+
+
+#include <deque>
+#include <stdexcept>
+
+class UndoRedoManager {
+public:
+	explicit UndoRedoManager(Type_Level_2FECE &terrain, size_t maxSteps = 100) :
+			terrain_2FECE(terrain), maxSteps(maxSteps) {
+		// Uložíme počáteční stav
+		undoStack.push_back(terrain_2FECE);
+	}
+
+	// Uloží aktuální stav (volej po každé změně)
+	void saveState() {
+		// Při nové akci smažeme redo historii
+		redoStack.clear();
+
+		undoStack.push_back(terrain_2FECE);
+
+		// Omezíme počet kroků
+		if (undoStack.size() > maxSteps + 1) {
+			undoStack.pop_front();
+		}
+	}
+
+	// Vrátí změnu zpět
+	bool undo() {
+		if (undoStack.size() <= 1)
+			return false; // Není co vrátit
+
+		redoStack.push_back(undoStack.back());
+		undoStack.pop_back();
+
+		terrain_2FECE = undoStack.back();
+		return true;
+	}
+
+	// Zopakuje vrácenou změnu
+	bool redo() {
+		if (redoStack.empty())
+			return false;
+
+		undoStack.push_back(redoStack.back());
+		redoStack.pop_back();
+
+		terrain_2FECE = undoStack.back();
+		return true;
+	}
+
+	bool canUndo() const { return undoStack.size() > 1; }
+	bool canRedo() const { return !redoStack.empty(); }
+
+	size_t undoCount() const { return undoStack.size() - 1; }
+	size_t redoCount() const { return redoStack.size(); }
+
+	void setMaxSteps(size_t steps) { maxSteps = steps; }
+
+private:
+	Type_Level_2FECE &terrain_2FECE;
+	std::deque<Type_Level_2FECE> undoStack;
+	std::deque<Type_Level_2FECE> redoStack;
+	size_t maxSteps;
+};
+
+
+/*
+USING EXAMPLE:
+// Inicializace
+UndoRedoManager manager(D41A0_0.terrain_2FECE); // výchozí 100 kroků
+
+// Po každé změně terrain_2FECE zavolej:
+D41A0_0.terrain_2FECE.neco_zmen();
+manager.saveState();
+
+// Undo
+if (manager.canUndo()) {
+	manager.undo();
+}
+
+// Redo
+if (manager.canRedo()) {
+	manager.redo();
+}
+*/
 
 /*
 void SetPixelMapSurface(int x, int y, int nx, int ny, uint8_t *adress, SDL_Surface *mapsurface) {
