@@ -38,8 +38,8 @@ int edited_line2 = -1;
 int edited_line2_old = -1;
 
 type_entity_0x30311 temparray_0x30311[1200];
-//bool temparray_0x30311_inactive[1200];
-//bool temparray_0x30311_selected[1200];
+bool temparray_0x30311_inactive[1200];
+bool temparray_0x30311_selected[1200];
 
 int max_subtype_buttons = 64;
 int max_subsubtype_buttons = 128;
