@@ -38,8 +38,8 @@ int edited_line2 = -1;
 int edited_line2_old = -1;
 
 type_entity_0x30311 temparray_0x30311[1200];
-bool temparray_0x30311_inactive[1200];
-bool temparray_0x30311_selected[1200];
+//bool temparray_0x30311_inactive[1200];
+//bool temparray_0x30311_selected[1200];
 
 int max_subtype_buttons = 64;
 int max_subsubtype_buttons = 128;
@@ -190,10 +190,11 @@ void clean_terrain() {
 	}
 
 	memcpy(temparray_0x30311, empty, sizeof(type_entity_0x30311) * 0x4b0);
+	/*
 	for (int i = 0; i < 0x4b0; i++)
 		temparray_0x30311_inactive[i] = 0;
 	for (int i = 0; i < 0x4b0; i++)
-		temparray_0x30311_selected[i] = 0;
+		temparray_0x30311_selected[i] = 0;*/
 }
 
 void editor_loop();
@@ -204,10 +205,12 @@ void terrain_recalculate();
 void loadlevel(int levelnumber) {
 	LevelDecompress_533B0(levelnumber, &D41A0_0.terrain_2FECE);
 	memcpy(temparray_0x30311, D41A0_0.terrain_2FECE.entity_0x30311, sizeof(type_entity_0x30311) * 0x4b0);
+	/*
 	for (int i = 0; i < 0x4b0; i++)
 		temparray_0x30311_inactive[i] = 0;
 	for (int i = 0; i < 0x4b0; i++)
 		temparray_0x30311_selected[i] = 0;
+	*/
 }
 
 void editor_run() {
@@ -281,9 +284,11 @@ void terrain_recalculate() {
 	int j = 0;
 	
 	for (int i = 0; i < 0x4b0; i++) {
+		/*
 		if (temparray_0x30311_inactive[i])
 			j++;
-		else {
+		else*/
+		{
 			D41A0_0.terrain_2FECE.entity_0x30311[j] = temparray_0x30311[i];
 			j++;
 		}
@@ -1022,7 +1027,7 @@ bool change_14(type_entity_0x30311 *entity) {
 		return false;
 	return true;
 }
-
+/*
 bool delete_entity(int index) {
 	for (int i = 0; i < 0x4b0; i++)
 		if (((temparray_0x30311[i].par3_18 != 0) && (temparray_0x30311[i].par3_18 == index) && change_14(&temparray_0x30311[i])) ||
@@ -1030,12 +1035,6 @@ bool delete_entity(int index) {
 				((temparray_0x30311[i].par2_16 != 0) && (temparray_0x30311[i].par2_16 == index) && change_14(&temparray_0x30311[i])))
 			return 0; //can not delete used entity
 	for (int i = index + 1; i < 0x4b0; i++) {
-		/*for (int j = 0; j < 0x4b0; j++)
-		{
-			if ((temparray_0x30311[j].type_0x30311 == 0xa) && (temparray_0x30311[j].subtype_0x30311 == 0x1d))
-				if (temparray_0x30311[j].word_14 == i)
-					temparray_0x30311[j].word_14--;
-		}*/
 		for (int j = 0; j < 8; j++) {
 			if ((D41A0_0.terrain_2FECE.stages_0x36442[j].index_0 == 1) ||
 					(D41A0_0.terrain_2FECE.stages_0x36442[j].index_0 == 7) ||
@@ -1059,7 +1058,7 @@ bool delete_entity(int index) {
 	}
 	return 1;
 }
-
+*/
 /*
 static int button_cleanselectedlevelfeat_event(kiss_button *button, SDL_Event *e, int *draw) {
 	if (kiss_button_event(button, e, draw)) {
@@ -2282,6 +2281,7 @@ void set_button_image_subsubtype(kiss_image **img, uint16_t acttype, uint16_t ac
 		}
 }*/
 
+/*
 void SetUndoPoint() {
 	if (indexUndoPoint <= MaxUndoPoints) {
 		memcpy(D41A0_0.terrain_2FECE.entity_0x30311, temparray_0x30311, sizeof(D41A0_0.terrain_2FECE.entity_0x30311));
@@ -2292,6 +2292,7 @@ void SetUndoPoint() {
 		MaxUndoPoints2 = indexUndoPoint;
 	}
 };
+*/
 
 std::vector<int> SetValidMc2LevelIndexes() {
 	std::vector<int> mc2validLevelIndexes;
