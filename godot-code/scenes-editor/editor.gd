@@ -579,7 +579,7 @@ func AddParentsArrows():
 				updateObject=true
 			var parent_pos = index_to_pos.get(parent_index, null)
 			current_node.set_meta("start", entity.position+Vector3(0,2,0))
-			current_node.set_meta("end", parent_pos+Vector3(0,2,0)) 
+			current_node.set_meta("end", parent_pos+Vector3(0,2,0))
 		if (current_node&&updateObject):
 			current_node.get_node("Arrow").start_pos = current_node.get_meta("start")
 			current_node.get_node("Arrow").end_pos = current_node.get_meta("end")
