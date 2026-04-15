@@ -277,5 +277,10 @@ func start_music(index: int) -> void:
 			print("Playing MIDI track: ", path, " (Looping enabled)")
 		else:
 			print("Error: MIDI track index ", index, " not found in music_map.")
+			
+func play_at_pcm_byte(byte_offset: int):
+	var bytes_per_second = 44100 * 2 * 2
+	var target_time = float(byte_offset) / bytes_per_second
+	$AudioStreamPlayer.play(target_time)
 
 #war channels - SONG 0 - channels  7,8,9(NIGHT)   |   SONG 1 - channels 8,9(DAY)   |   SONG 2 - channels 8,9(CAVE)

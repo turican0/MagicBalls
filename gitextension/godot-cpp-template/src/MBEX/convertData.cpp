@@ -1598,42 +1598,43 @@ void MBEXcdExtract(char* pathGOG, char* pathOut) {
 	g_image_file.close();
 	std::cout << "\nDone!" << std::endl;
 }
-
+/*
 typedef struct { //lenght 4
 	int32_t startPos_0;
 	int32_t length_2;
 } Type_WavTrack_Info;
 
 Type_WavTrack_Info WavTracks_DB080[27] = {
-	{ 0, 9008160 }, // Track01
-	{ 9008160, 11028528 }, // Track02
-	{ 20036688, 9572640 }, // Track03
-	{ 29609328, 5496624 }, // Track04
-	{ 35105952, 6039936 }, // Track05
-	{ 41145888, 8476608 }, // Track06
-	{ 49622496, 5654208 }, // Track07
-	{ 55276704, 10616928 }, // Track08
-	{ 65893632, 9377424 }, // Track09
-	{ 75271056, 8497776 }, // Track10
-	{ 83768832, 7625184 }, // Track11
-	{ 91394016, 7279440 }, // Track12
-	{ 98673456, 8260224 }, // Track13
-	{ 106933680, 9172800 }, // Track14
-	{ 116106480, 6759648 }, // Track15
-	{ 122866128, 8446032 }, // Track16
-	{ 131312160, 5108544 }, // Track17
-	{ 136420704, 9417408 }, // Track18
-	{ 145838112, 3363360 }, // Track19
-	{ 149201472, 6552672 }, // Track20
-	{ 155754144, 7248864 }, // Track21
-	{ 163003008, 6552672 }, // Track22
-	{ 169555680, 11120256 }, // Track23
-	{ 180675936, 8742384 }, // Track24
-	{ 189418320, 9186912 }, // Track25
-	{ 198605232, 1324176 }, // Track26
-	{ 199929408, 971376 } // Track27
+	{ 0, 9360960 }, // Track01 (na screenu Track 02)
+	{ 9360960, 11028528 }, // Track02 (na screenu Track 03)
+	{ 20389488, 9572640 }, // Track03 (na screenu Track 04)
+	{ 29962128, 5496624 }, // Track04 (na screenu Track 05)
+	{ 35458752, 6039936 }, // Track05 (na screenu Track 06)
+	{ 41498688, 8476608 }, // Track06 (na screenu Track 07)
+	{ 49975296, 5654208 }, // Track07 (na screenu Track 08)
+	{ 55629504, 10616928 }, // Track08 (na screenu Track 09)
+	{ 66246432, 9377424 }, // Track09 (na screenu Track 10)
+	{ 75623856, 8497776 }, // Track10 (na screenu Track 11)
+	{ 84121632, 7625184 }, // Track11 (na screenu Track 12)
+	{ 91746816, 7279440 }, // Track12 (na screenu Track 13)
+	{ 99026256, 8260224 }, // Track13 (na screenu Track 14)
+	{ 107286480, 9172800 }, // Track14 (na screenu Track 15)
+	{ 116459280, 6759648 }, // Track15 (na screenu Track 16)
+	{ 123218928, 8446032 }, // Track16 (na screenu Track 17)
+	{ 131664960, 5108544 }, // Track17 (na screenu Track 18)
+	{ 136773504, 9417408 }, // Track18 (na screenu Track 19)
+	{ 146190912, 3363360 }, // Track19 (na screenu Track 20)
+	{ 149554272, 6552672 }, // Track20 (na screenu Track 21)
+	{ 156106944, 7248864 }, // Track21 (na screenu Track 22)
+	{ 163355808, 6552672 }, // Track22 (na screenu Track 23)
+	{ 169908480, 11120256 }, // Track23 (na screenu Track 24)
+	{ 181028736, 8742384 }, // Track24 (na screenu Track 25)
+	{ 189771120, 9186912 }, // Track25 (na screenu Track 26)
+	{ 198958032, 1324176 }, // Track26 (na screenu Track 27)
+	{ 200282208, 1324176 } // Track27 (na screenu Track 28)
 };
 
+bool useWavHeader=false;
 void MBEXaudioExtract(char *pathGOG, char *pathOut) {
 	// 1. Najdeme největší soubor v adresáři
 	std::string binPath;
@@ -1656,14 +1657,11 @@ void MBEXaudioExtract(char *pathGOG, char *pathOut) {
 	const int SECTOR_SIZE = 2352;
 	unsigned char sector[SECTOR_SIZE];
 	const unsigned char syncPattern[12] = { 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00 };
-
 	uint64_t audioStartOffset = 0;
 	uint64_t currentOffset = 0;
 
 	std::cout << "Scanning for audio start offset...\n";
-
 	while (src.read((char *)sector, SECTOR_SIZE)) {
-		// Pokud sektor NEZAČÍNÁ synchronizační značkou, našli jsme začátek audia
 		if (std::memcmp(sector, syncPattern, 12) != 0) {
 			audioStartOffset = currentOffset;
 			break;
@@ -1672,68 +1670,67 @@ void MBEXaudioExtract(char *pathGOG, char *pathOut) {
 	}
 
 	if (audioStartOffset == 0) {
-		std::cerr << "Could not find audio start offset (no non-data sectors found).\n";
+		std::cerr << "Could not find audio start offset.\n";
 		return;
 	}
 
-	std::cout << "Audio start detected at offset: " << std::hex << audioStartOffset << std::dec << "\n";
-
-	// 3. Extrakce tracků podle tabulky
-	fs::path outDir = fs::path(pathOut) / "Extracted_Tracks";
+	// 3. Extrakce tracků
+	fs::path outDir = fs::path(pathOut) / (useWavHeader ? "Extracted_WAV" : "Extracted_RAW");
 	fs::create_directories(outDir);
 
 	for (int i = 0; i < 27; ++i) {
 		Type_WavTrack_Info &track = WavTracks_DB080[i];
-
-		// Výpočet pozice: Začátek audia + offset v tabulce
 		uint64_t absoluteStart = audioStartOffset + track.startPos_0 - 0x12A8;
 		uint32_t dataSize = track.length_2;
 
-		// Načtení dat
 		src.seekg(absoluteStart);
 		std::vector<char> trackDataBuffer(dataSize);
 		src.read(trackDataBuffer.data(), dataSize);
 
 		if (!trackDataBuffer.empty()) {
-			// Toto zajistí název "Track01.wav", "Track02.wav" atd.
+			// Dynamická přípona podle volby
+			std::string extension = useWavHeader ? ".wav" : ".raw";
 			std::ostringstream oss;
-			oss << "Track" << std::setw(2) << std::setfill('0') << (int)(i+1) << ".wav";
+			oss << "Track" << std::setw(2) << std::setfill('0') << (i + 1) << extension;
 			std::string fileName = oss.str();
 
-			// Vytvoření souboru v cílové složce
 			std::ofstream dst(outDir / fileName, std::ios::binary);
 			if (!dst) {
 				std::cerr << "Chyba: Nelze vytvorit soubor " << fileName << std::endl;
 				continue;
 			}
 
+			if (useWavHeader) {
 #pragma pack(push, 1)
-			struct {
-				char riff[4] = { 'R', 'I', 'F', 'F' };
-				uint32_t fileSize;
-				char wave[4] = { 'W', 'A', 'V', 'E' };
-				char fmt[4] = { 'f', 'm', 't', ' ' };
-				uint32_t fmtLen = 16;
-				uint16_t formatTag = 1;
-				uint16_t channels = 2;
-				uint32_t sampleRate = 44100;
-				uint32_t byteRate = 176400;
-				uint16_t blockAlign = 4;
-				uint16_t bitsPerSample = 16;
-				char dataLabel[4] = { 'd', 'a', 't', 'a' };
-				uint32_t dataLen;
-			} header;
+				struct {
+					char riff[4] = { 'R', 'I', 'F', 'F' };
+					uint32_t fileSize;
+					char wave[4] = { 'W', 'A', 'V', 'E' };
+					char fmt[4] = { 'f', 'm', 't', ' ' };
+					uint32_t fmtLen = 16;
+					uint16_t formatTag = 1;
+					uint16_t channels = 2;
+					uint32_t sampleRate = 44100;
+					uint32_t byteRate = 176400;
+					uint16_t blockAlign = 4;
+					uint16_t bitsPerSample = 16;
+					char dataLabel[4] = { 'd', 'a', 't', 'a' };
+					uint32_t dataLen;
+				} header;
 #pragma pack(pop)
 
-			header.dataLen = (uint32_t)trackDataBuffer.size();
-			header.fileSize = header.dataLen + 36;
+				header.dataLen = (uint32_t)trackDataBuffer.size();
+				header.fileSize = header.dataLen + 36;
 
-			// Zápis hlavičky a následně surových audio dat
-			dst.write((char *)&header, sizeof(header));
+				dst.write((char *)&header, sizeof(header));
+			}
+
+			// Zápis samotných dat (společné pro obě varianty)
 			dst.write(trackDataBuffer.data(), trackDataBuffer.size());
-
 			dst.close();
-			std::cout << "Extrahovano: " << fileName << " (Velikost: " << header.dataLen << " bajtu)" << std::endl;
+
+			std::cout << "Extrahovano: " << fileName << " (" << trackDataBuffer.size() << " bytes)" << std::endl;
 		}
 	}
-}
+}*/
+

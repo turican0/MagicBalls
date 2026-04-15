@@ -95,7 +95,6 @@ void MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 	String real_path = ProjectSettings::get_singleton()->globalize_path(path);
 	String real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
 	MBEXcdExtract((char*)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
-	MBEXaudioExtract((char *)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data());
 	MBEXfixLang((char*)real_path.utf8().get_data(), 2);
 }
 
@@ -234,6 +233,7 @@ void convertPost() {
 void MBEXclass::convertOriginalData(String path, String path2) {
 	convertPre();
 	MBEXconvertData(path, path2);
+	MBEXaudioExtract(path);
 	convertPost();
 }
 
@@ -1844,5 +1844,70 @@ void MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 			temparray_0x30311[j] = temparray_0x30311[j + 1];
 		}
 		current_count--;
+	}
+}
+
+#include <godot_cpp/classes/zip_reader.hpp>
+//#include <godot_cpp/classes/dir_access.hpp>
+//#include <godot_cpp/classes/file_access.hpp>
+//#include <godot_cpp/variant/utility_functions.hpp>
+
+void MBEXaudioExtract(String path) {
+	String source_path = "res://hidata/speech/";
+	String target_path = path.path_join("speech");
+
+	// 1. Kontrola a vytvoření cílové složky
+	Ref<DirAccess> da_target = DirAccess::open(path);
+	if (da_target.is_valid()) {
+		if (!da_target->dir_exists("speech")) {
+			da_target->make_dir("speech");
+			UtilityFunctions::print("Slozka vytvorena: ", target_path);
+		}
+	} else {
+		UtilityFunctions::printerr("Nelze pristoupit k zakladni ceste: ", path);
+		return;
+	}
+
+	// 1. Otevřeme složku se ZIPy
+	Ref<DirAccess> dir = DirAccess::open(source_path);
+	if (dir.is_null()) {
+		UtilityFunctions::printerr("Nelze otevrit slozku: ", source_path);
+		return;
+	}
+
+	dir->list_dir_begin();
+	String file_name = dir->get_next();
+
+	while (file_name != "") {
+		// Zpracujeme pouze .zip soubory
+		if (!dir->current_is_dir() && file_name.ends_with(".zip")) {
+			String full_zip_path = source_path + file_name;
+
+			Ref<ZIPReader> zip_reader;
+			zip_reader.instantiate();
+
+			if (zip_reader->open(full_zip_path) == OK) {
+				// Získáme seznam souborů uvnitř ZIPu (měly by tam být ty s01.dat atd.)
+				PackedStringArray files = zip_reader->get_files();
+
+				for (int i = 0; i < files.size(); i++) {
+					String internal_file = files[i];
+					PackedByteArray data = zip_reader->read_file(internal_file);
+
+					if (data.size() > 0) {
+						String out_path = target_path.path_join(internal_file);
+						Ref<FileAccess> f_out = FileAccess::open(out_path, FileAccess::WRITE);
+						if (f_out.is_valid()) {
+							f_out->store_buffer(data);
+							UtilityFunctions::print("Rozbaleno: ", out_path);
+						}
+					}
+				}
+				zip_reader->close();
+			} else {
+				UtilityFunctions::printerr("Nelze otevrit ZIP: ", file_name);
+			}
+		}
+		file_name = dir->get_next();
 	}
 }

@@ -84,7 +84,7 @@ public:
 	PackedByteArray TerrainGetAngle();
 
 	void set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool isCave);
-	void initialize_grid_data();
+	//void initialize_grid_data();
 	void recalculate_mesh(bool isCave);
 	void renew_terrain(bool isCave);
 	void update_gpu_heightmap(bool isCave);
@@ -140,3 +140,5 @@ public:
 	void REMC2EditorDeleteEntites(Array p_indices);
 
 };
+
+void MBEXaudioExtract(String path);
