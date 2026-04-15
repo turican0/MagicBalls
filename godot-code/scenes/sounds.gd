@@ -163,7 +163,7 @@ func init() -> void:
 		player.name = "SFXPlayer" + str(i)
 		player.bus = "SFX"
 		add_child(player)
-		Global.sfx_players.append(player)
+		Global.sfx_players.append(player)	
 		
 func stopAllSounds():
 	stop_music()
@@ -256,9 +256,26 @@ func start_music(index: int) -> void:
 			print("ResourceLoader exists: ", ResourceLoader.exists(path))
 			var stream = ResourceLoader.load(path, "AudioStream")
 			print("Stream loaded: ", stream)
+			if stream is AudioStreamOggVorbis:
+				stream.loop = true
+			elif stream is AudioStreamWAV:
+				stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 			MainMusicHi.stream = stream
 			print("Stream set, playing...")
 			MainMusicHi.play()
 			print("Playing: ", MainMusicHi.playing)
-			
+	else:
+		# --- MIDI SECTION (MainMusic) ---
+		print("=== START MIDI MUSIC ===")
+		if Global.music_map.has(index):
+			var path = Global.music_map[index]
+			# Assuming MainMusic is a MidiPlayer node
+			MainMusic.file = path
+			# Most Godot MIDI players use 'loop' or 'loop_selection'
+			MainMusic.loop = true
+			MainMusic.play()
+			print("Playing MIDI track: ", path, " (Looping enabled)")
+		else:
+			print("Error: MIDI track index ", index, " not found in music_map.")
+
 #war channels - SONG 0 - channels  7,8,9(NIGHT)   |   SONG 1 - channels 8,9(DAY)   |   SONG 2 - channels 8,9(CAVE)
