@@ -16,7 +16,6 @@
 #include "../remc2/engine/Sound.h"
 #include "../remc2/engine/Basic.h"
 #include "../libxmi/xmi2mid.h"
-#include "../remc2/engine/Type_DB080_CdTrack.h"
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
