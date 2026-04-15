@@ -7,25 +7,25 @@ extends Node3D
 @onready var Main_Camera: Camera3D = $PlayerEditor/Camera3D
 @onready var Ray_Cylinder: MeshInstance3D = $RayCylinder
 
-@onready var Tree_View: Tree = $TreeView/Control/PanelContainer/MarginContainer/Tree
+@onready var Tree_View: Tree = $UI/TreeView/PanelContainer/MarginContainer/Tree
 
-@onready var Terrain_Edit_Panel: CanvasLayer = $TerrainEdit
+@onready var Terrain_Edit_Panel: Control = $UI/TerrainEdit
 
 
-@onready var container = $TerrainEdit/Control/PanelContainer/MarginContainer/VBoxContainer
+@onready var Terrain_Edit = $UI/TerrainEdit/PanelContainer/MarginContainer/VBoxContainer
 @onready var selectors = [
-	container.get_node("Seed_0"),
-	container.get_node("Offset_1"),
-	container.get_node("Raise_2"),
-	container.get_node("Gnarl_3"),
-	container.get_node("River_4"),
-	container.get_node("Lriver_5"),
-	container.get_node("Source_6"),
-	container.get_node("SnLin_7"),
-	container.get_node("SnFlt_8"),
-	container.get_node("BhLin_9"),
-	container.get_node("BhFlt_10"),
-	container.get_node("RkSte_11")
+	Terrain_Edit.get_node("Seed_0"),
+	Terrain_Edit.get_node("Offset_1"),
+	Terrain_Edit.get_node("Raise_2"),
+	Terrain_Edit.get_node("Gnarl_3"),
+	Terrain_Edit.get_node("River_4"),
+	Terrain_Edit.get_node("Lriver_5"),
+	Terrain_Edit.get_node("Source_6"),
+	Terrain_Edit.get_node("SnLin_7"),
+	Terrain_Edit.get_node("SnFlt_8"),
+	Terrain_Edit.get_node("BhLin_9"),
+	Terrain_Edit.get_node("BhFlt_10"),
+	Terrain_Edit.get_node("RkSte_11")
 ]
 
 var editor_runned=false
