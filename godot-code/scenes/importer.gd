@@ -63,7 +63,7 @@ func _go_to_main_menu():
 	get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
 
 func check_existing_data() -> bool:
-	var music_path = Global.convertdata + "musics/"
+	var music_path = Global.convertdata + "musicsX/"
 	return DirAccess.dir_exists_absolute(music_path)
 
 # =============================================
@@ -265,7 +265,7 @@ func _heavy_work(dir):
 func _on_work_done():
 	_thread.wait_to_finish()
 	Global.canNotification = true
-	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+	#Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	await _run_ending()
 	OS.create_process(OS.get_executable_path(), OS.get_cmdline_args())
 	get_tree().quit()

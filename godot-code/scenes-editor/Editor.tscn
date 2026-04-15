@@ -25,8 +25,52 @@ script = ExtResource("1_wmxca")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=790257779]
 
+[node name="Control" type="Control" parent="UI" unique_id=1983027188]
+layout_mode = 3
+anchor_right = 1.0
+offset_bottom = 70.0
+
+[node name="MenuBar" type="MenuBar" parent="UI/Control" unique_id=745250942]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="File" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1089930277]
+
+[node name="View" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1249348343]
+
+[node name="Filter" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1885130967]
+
+[node name="Label" type="RichTextLabel" parent="UI/Control" unique_id=1733416364]
+layout_mode = 0
+offset_left = 357.0
+offset_top = 16.0
+offset_right = 988.0
+offset_bottom = 79.0
+text = "WASD - move, SPACE  - change control(2D/3D), X - delete objects, N - new objects H - hide all , M - show/hide terrain setting"
+
+[node name="Undo" type="Button" parent="UI/Control" unique_id=1018523640]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 33.0
+offset_right = 146.0
+offset_bottom = 64.0
+text = "UNDO <- (CTRL+Z)"
+
+[node name="Redo" type="Button" parent="UI/Control" unique_id=497831643]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 33.0
+offset_right = 297.0
+offset_bottom = 64.0
+text = "REDO -> (CTRL+Y)"
+
 [node name="TreeView" type="Control" parent="UI" unique_id=639034540]
 layout_mode = 3
+anchors_preset = 9
 anchor_bottom = 1.0
 offset_top = 70.0
 offset_right = 400.0
@@ -52,6 +96,7 @@ script = ExtResource("2_ydsuf")
 
 [node name="TerrainEdit" type="Control" parent="UI" unique_id=1978053754]
 layout_mode = 3
+anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0

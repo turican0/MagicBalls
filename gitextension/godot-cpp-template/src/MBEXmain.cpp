@@ -95,6 +95,7 @@ void MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 	String real_path = ProjectSettings::get_singleton()->globalize_path(path);
 	String real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
 	MBEXcdExtract((char*)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
+	MBEXaudioExtract((char *)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data());
 	MBEXfixLang((char*)real_path.utf8().get_data(), 2);
 }
 
