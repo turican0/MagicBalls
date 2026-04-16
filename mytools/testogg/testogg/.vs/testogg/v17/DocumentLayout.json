@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\COMPUTES\\140\\prenos\\testogg\\testogg\\",
+  "WorkspaceRootPath": "C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\testogg\\testogg\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D1E19D6B-8046-4CD1-8213-AD9DC965E546}|testogg.vcxproj|C:\\COMPUTES\\140\\prenos\\testogg\\testogg\\testogg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{D1E19D6B-8046-4CD1-8213-AD9DC965E546}|testogg.vcxproj|C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\testogg\\testogg\\testogg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D1E19D6B-8046-4CD1-8213-AD9DC965E546}|testogg.vcxproj|solutionrelative:testogg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -14,12 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
@@ -28,11 +24,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "testogg.cpp",
-              "DocumentMoniker": "C:\\COMPUTES\\140\\prenos\\testogg\\testogg\\testogg.cpp",
+              "DocumentMoniker": "C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\testogg\\testogg\\testogg.cpp",
               "RelativeDocumentMoniker": "testogg.cpp",
-              "ToolTip": "C:\\COMPUTES\\140\\prenos\\testogg\\testogg\\testogg.cpp",
+              "ToolTip": "C:\\prenos\\godot-zyllan\\MagicBalls\\mytools\\testogg\\testogg\\testogg.cpp",
               "RelativeToolTip": "testogg.cpp",
-              "ViewState": "AgIAAA4BAAAAAAAAAAApwCIBAABEAAAAAAAAAA==",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAnwDEAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-04-16T10:23:17.085Z",
               "EditorCaption": ""

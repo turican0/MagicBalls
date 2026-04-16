@@ -1,2 +1,6 @@
 ﻿  testogg.cpp
-  testogg.vcxproj -> C:\COMPUTES\140\prenos\testogg\testogg\x64\Debug\testogg.exe
+C:\prenos\godot-zyllan\MagicBalls\mytools\testogg\testogg\testogg.cpp(320,20): warning C4566: Znak, který reprezentuje universal-character-name \u2192, nemůže být reprezentovaný v aktuální znakové stránce (1250).
+C:\prenos\godot-zyllan\MagicBalls\mytools\testogg\testogg\testogg.cpp(328,16): warning C4566: Znak, který reprezentuje universal-character-name \u2192, nemůže být reprezentovaný v aktuální znakové stránce (1250).
+  testogg.vcxproj -> C:\prenos\godot-zyllan\MagicBalls\mytools\testogg\testogg\x64\Debug\testogg.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.

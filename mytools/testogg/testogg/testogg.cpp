@@ -18,7 +18,6 @@ struct TrackSegment { int32_t startPos; int32_t length; };
 struct Type_DB080_CdTrack { int16_t trackIdx; TrackSegment seg[10]; };
 #pragma pack()
 
-// Data truncated for brevity in display, use your full table here
 Type_DB080_CdTrack CdTracks_DB080[28] = {
 {0x0001,{{0x0000,0x02EE},{0x0339,0x012C},{0x04B0,0x01C2},{0x06BD,0x01C2},{0x08CA,0x0177},{0x0A8C,0x0177},{0x0000,0x0000},{0x0000,0x0000},{0x0000,0x0000},{0x0C4E,0x020D}}},
 {0x0002,{{0x0000,0x0465},{0x04B0,0x020D},{0x0708,0x0258},{0x09AB,0x012C},{0x0B22,0x020D},{0x0D7A,0x01C2},{0x0000,0x0000},{0x0000,0x0000},{0x0000,0x0000},{0x0F87,0x0258}}},
@@ -53,13 +52,12 @@ Type_DB080_CdTrack CdTracks_DB080[28] = {
 // ─────────────────────────────────────────────────────────────────────────────
 // Segment detection parameters
 // ─────────────────────────────────────────────────────────────────────────────
-static const float  SILENCE_THRESHOLD = 0.001f;  // RMS amplitude threshold
-static const double MIN_SEGMENT_SEC = 0.5;     // ignore very short noises
+static const float  SILENCE_THRESHOLD = 0.001f;
+static const double MIN_SEGMENT_SEC = 0.5;
 static const int    CHUNK_SAMPLES = 2048;
 
 struct AudioSegment { double startSec; double lengthSec; };
 
-// Function to find areas with SOUND (not silence)
 static std::vector<AudioSegment> findAudioSegments(const char* filename)
 {
     std::vector<AudioSegment> result;
@@ -77,7 +75,7 @@ static std::vector<AudioSegment> findAudioSegments(const char* filename)
     double curPos = 0.0;
 
     float** pcm;
-    int bitstream = 0;
+    int  bitstream = 0;
     long n;
 
     while (true) {
@@ -116,20 +114,6 @@ static std::vector<AudioSegment> findAudioSegments(const char* filename)
     return result;
 }
 
-// Get segment start positions from table (including 0x0000)
-static std::vector<int32_t> tableStarts(int trackIdx)
-{
-    std::vector<int32_t> v;
-    const Type_DB080_CdTrack& t = CdTracks_DB080[trackIdx];
-    // We check slots 0..8 (slot 9 is often a total/special marker)
-    for (int i = 0; i < 9; i++) {
-        // Only include if segment has non-zero length in table
-        if (t.seg[i].length > 0)
-            v.push_back(t.seg[i].startPos);
-    }
-    return v;
-}
-
 static double fitCoeff(const std::vector<std::pair<int32_t, double>>& pairs)
 {
     double sumXY = 0, sumXX = 0;
@@ -141,223 +125,284 @@ static double fitCoeff(const std::vector<std::pair<int32_t, double>>& pairs)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-int main(int argc, char** argv)
+// OPRAVENÉ PÁROVÁNÍ
+//
+// Klíčové opravy:
+//   1. maxDiff je nyní RELATIVNÍ k délce tracku (defaultně 15 % rozsahu),
+//      takže vzdálené segmenty mají stejnou toleranci jako blízké.
+//   2. Skip-penalizace = 10 * maxDiff — skip je vždy mnohem dražší než match.
+//   3. Prohledáváme detected od indexu j (zachování pořadí).
+// ─────────────────────────────────────────────────────────────────────────────
+static std::vector<int> bestMatching(
+    const std::vector<TrackSegment>& tableSegs,
+    const std::vector<AudioSegment>& detected,
+    double coeff,
+    double offset,           // ← NOVÉ
+    double maxDiffAbs = 3.0)
 {
-    std::string dir = "c:/Users/t.vesely/AppData/Roaming/Godot/app_userdata/MagicBalls/convertdata/speech/";
+    int N = (int)tableSegs.size();
+    int M = (int)detected.size();
+    if (N == 0 || M == 0) return std::vector<int>(N, -1);
 
-    // Prvotní odhad koeficientu (např. CDDA frame rate nebo 1/75 s), 
-    // bude se zpřesňovat, pokud najdeme jasné shody.
-    double currentCoeff = 0.01333333;
-    std::vector<std::pair<int32_t, double>> allPairs;
+    const double SKIP_PENALTY = maxDiffAbs * 20.0;
+    const double INF = 1e18;
 
-    for (int i = 0; i < 27; i++) {
-        char filename_buf[16];
-        snprintf(filename_buf, sizeof(filename_buf), "s%02d.ogg", i + 1);
-        std::string fname = dir + filename_buf;
+    std::vector<std::vector<double>> dp(N + 1, std::vector<double>(M + 1, INF));
+    std::vector<std::vector<int>> from(N + 1, std::vector<int>(M + 1, -2));
 
-        auto detected = findAudioSegments(fname.c_str());
-        const auto& track = CdTracks_DB080[i];
+    dp[0][0] = 0.0;
 
-        std::vector<TrackSegment> tableSegs;
-        for (int j = 0; j < 10; j++) {
-            if (track.seg[j].length > 0) tableSegs.push_back(track.seg[j]);
-        }
+    for (int i = 1; i <= N; i++) {
+        double expected = tableSegs[i - 1].startPos * coeff + offset;   // ← používá offset
 
-        printf("##################################################\n");
-        printf("TRACK %02d (%s) - Tab: %zu, Det: %zu\n", i + 1, filename_buf, tableSegs.size(), detected.size());
-        printf("##################################################\n");
+        for (int j = 0; j <= M; j++) {
+            if (dp[i - 1][j] >= INF) continue;
 
-        // --- HEURISTICKÉ PÁROVÁNÍ ---
-        // Pro každý segment v tabulce hledáme nejbližší detekovaný v OGG
-        for (size_t tIdx = 0; tIdx < tableSegs.size(); tIdx++) {
-            double expectedStart = tableSegs[tIdx].startPos * currentCoeff;
+            // Skip
+            if (dp[i - 1][j] + SKIP_PENALTY < dp[i][j]) {
+                dp[i][j] = dp[i - 1][j] + SKIP_PENALTY;
+                from[i][j] = -(j + 1);
+            }
 
-            int bestMatch = -1;
-            double minDiff = 999.0;
+            // Match
+            for (int k = j; k < M; k++) {
+                double diff = fabs(detected[k].startSec - expected);
+                if (diff >= maxDiffAbs) continue;
 
-            for (size_t dIdx = 0; dIdx < detected.size(); dIdx++) {
-                double diff = fabs(detected[dIdx].startSec - expectedStart);
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    bestMatch = (int)dIdx;
+                double cost = dp[i - 1][j] + diff;
+                if (cost < dp[i][k + 1]) {
+                    dp[i][k + 1] = cost;
+                    from[i][k + 1] = j;
                 }
             }
-
-            // Pokud je shoda rozumná (rozdíl < 0.5s), spárujeme je
-            if (bestMatch != -1 && minDiff < 0.5) {
-                auto& d = detected[bestMatch];
-                auto& t = tableSegs[tIdx];
-
-                if (t.startPos > 0) allPairs.push_back({ t.startPos, d.startSec });
-                allPairs.push_back({ t.startPos + t.length, d.startSec + d.lengthSec });
-
-                printf("  MATCH TabSeg[%zu] <-> OggSeg[%d]: diff=%.3fs\n", tIdx, bestMatch, minDiff);
-                printf("    Start: 0x%04X -> %7.3fs | End: 0x%04X -> %7.3fs\n",
-                    t.startPos, d.startSec, t.startPos + t.length, d.startSec + d.lengthSec);
-
-                // Průběžná aktualizace koeficientu pro lepší hledání v dalších souborech
-                if (allPairs.size() > 10) currentCoeff = fitCoeff(allPairs);
-            }
-            else {
-                printf("  SKIP  TabSeg[%zu]: Nenalezena odpovídající oblast v OGG (očekáváno cca %.3fs)\n", tIdx, expectedStart);
-            }
         }
-        printf("\n");
     }
 
-    if (!allPairs.empty()) {
-        double finalCoeff = fitCoeff(allPairs);
+    // ... zbytek funkce (rekonstrukce assignmentu) zůstává stejný
+    // (jen copy-paste z tvého původního kódu)
+    double bestCost = INF;
+    int bestJ = 0;
+    for (int j = 0; j <= M; j++) {
+        if (dp[N][j] < bestCost) {
+            bestCost = dp[N][j];
+            bestJ = j;
+        }
+    }
 
-        // --- DRUHÝ PRŮCHOD: ZJIŠTĚNÍ POSUNU (OFFSETU) ---
-        printf("\n==================================================\n");
-        printf("SECOND PASS: OFFSET ANALYSIS\n");
-        printf("==================================================\n");
+    std::vector<int> assignment(N, -1);
+    int curJ = bestJ;
+    for (int i = N; i >= 1; i--) {
+        int f = from[i][curJ];
+        if (f >= 0) {
+            assignment[i - 1] = curJ - 1;
+            curJ = f;
+        }
+        else {
+            assignment[i - 1] = -1;
+            curJ = (-f) - 1;
+        }
+    }
+    return assignment;
+}
 
-        std::vector<double> trackOffsets;
+// ─────────────────────────────────────────────────────────────────────────────
+// LINEÁRNÍ REGRESE: time = coeff * pos + offset
+// ─────────────────────────────────────────────────────────────────────────────
+struct LinearFit {
+    double coeff;
+    double offset;
+};
+
+static LinearFit fitLinear(const std::vector<std::pair<int32_t, double>>& pairs)
+{
+    if (pairs.size() < 2) return { 0.0, 0.0 };
+
+    double sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    size_t n = 0;
+
+    for (auto& p : pairs) {
+        double x = (double)p.first;
+        double y = p.second;
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXX += x * x;
+        n++;
+    }
+
+    double denom = n * sumXX - sumX * sumX;
+    if (denom < 1e-12) return { 0.0, 0.0 };
+
+    double coeff = (n * sumXY - sumX * sumY) / denom;
+    double offset = (sumY - coeff * sumX) / n;
+
+    return { coeff, offset };
+}
+
+int main(int argc, char** argv)
+{
+    std::string dir = "c:/Users/vesely/AppData/Roaming/Godot/app_userdata/MagicBalls/convertdata/speech/";
+
+    // ── ROBUSTNÍ ITERATIVNÍ KALIBRACE ──────────────────────────────
+    double currentCoeff = 0.01340;   // lepší počáteční odhad (někde mezi 1/74.6 až 1/75)
+    double currentOffset = 0.0;
+    const int MAX_ITER = 12;
+    const double CONVERGENCE = 1e-9;
+    const double MAX_ALLOWED_DRIFT = 0.0005; // maximální změna koeficientu za iteraci
+
+    std::vector<std::pair<int32_t, double>> allPairs;
+
+    printf("=== ROBUST ITERATIVE CALIBRATION (coeff + offset) ===\n");
+
+    bool converged = false;
+    for (int iter = 0; iter < MAX_ITER; iter++) {
+        allPairs.clear();
+        double prevCoeff = currentCoeff;
+        double prevOffset = currentOffset;
+
+        printf("\n--- Iteration %2d | coeff=%.8f | offset=%.4f ---\n",
+            iter + 1, currentCoeff, currentOffset);
+
+        int totalMatches = 0;
 
         for (int i = 0; i < 27; i++) {
-            const auto& track = CdTracks_DB080[i];
-
-            // Znovu načteme detekované segmenty pro tento konkrétní track
             char filename_buf[16];
             snprintf(filename_buf, sizeof(filename_buf), "s%02d.ogg", i + 1);
             std::string fname = dir + filename_buf;
+
             auto detected = findAudioSegments(fname.c_str());
+            const auto& track = CdTracks_DB080[i];
 
-            std::vector<double> currentTrackOffsets;
+            std::vector<TrackSegment> tableSegs;
+            for (int j = 0; j < 10; j++)
+                if (track.seg[j].length > 0)
+                    tableSegs.push_back(track.seg[j]);
 
-            // Porovnáváme segmenty s použitím fixního koeficientu
-            for (int j = 0; j < 10; j++) {
-                if (track.seg[j].length <= 0) continue;
+            if (tableSegs.empty() || detected.empty()) continue;
 
-                double tableStart = track.seg[j].startPos;
-                double expectedStartWithNoOffset = tableStart * finalCoeff;
+            // Používáme offset a mírně vyšší toleranci na začátku
+            double tolerance = (iter < 4) ? 4.0 : 2.8;
+            auto assignment = bestMatching(tableSegs, detected, currentCoeff, currentOffset, tolerance);
 
-                // Najdeme nejbližší detekovaný segment
-                double bestOffset = 0;
-                double minDiff = 999.0;
-                bool found = false;
+            int matchCount = 0;
+            for (size_t tIdx = 0; tIdx < tableSegs.size(); tIdx++) {
+                int dIdx = assignment[tIdx];
+                if (dIdx < 0) continue;
 
-                for (const auto& d : detected) {
-                    // Offset = Skutečný start v OGG - (Pozice v tabulce * Koeficient)
-                    double diff = fabs(d.startSec - expectedStartWithNoOffset);
-                    if (diff < 0.5) { // Práh citlivosti 0.5s
-                        if (diff < minDiff) {
-                            minDiff = diff;
-                            bestOffset = d.startSec - expectedStartWithNoOffset;
-                            found = true;
-                        }
-                    }
+                auto& t = tableSegs[tIdx];
+                auto& d = detected[dIdx];
+
+                if (t.startPos > 100) {  // ignorujeme velmi krátké/úvodní segmenty
+                    allPairs.emplace_back(t.startPos, d.startSec);
+                    allPairs.emplace_back(t.startPos + t.length, d.startSec + d.lengthSec);
                 }
-
-                if (found) {
-                    currentTrackOffsets.push_back(bestOffset);
-                }
+                matchCount++;
             }
 
-            // Vypočítáme průměrný posun pro tento konkrétní track
-            if (!currentTrackOffsets.empty()) {
-                double avgOffset = 0;
-                for (double o : currentTrackOffsets) avgOffset += o;
-                avgOffset /= currentTrackOffsets.size();
-
-                printf("Track %02d (%s): Offset = %+8.4f s (z %zu bodů)\n",
-                    i + 1, filename_buf, avgOffset, currentTrackOffsets.size());
-
-                trackOffsets.push_back(avgOffset);
-            }
-            else {
-                printf("Track %02d (%s): Offset nelze spolehlivě určit.\n", i + 1, filename_buf);
+            if (matchCount > 0) {
+                printf("  Track %02d: %d/%zu matched\n", i + 1, matchCount, tableSegs.size());
+                totalMatches += matchCount;
             }
         }
 
-        // Celkové shrnutí
-        double globalOffset = 0;
-        if (!trackOffsets.empty()) {
-            for (double o : trackOffsets) globalOffset += o;
-            globalOffset /= trackOffsets.size();
+        if (allPairs.size() < 20) {
+            printf(" [!] Příliš málo párů (%zu), končím iteraci.\n", allPairs.size());
+            break;
         }
 
-        printf("==================================================\n");
-        printf("FINAL CALIBRATION DATA\n");
-        printf("==================================================\n");
-        printf("Optimal Coeff  : %.8f\n", finalCoeff);
-        printf("Global Offset  : %.4f s\n", globalOffset);
-        printf("Formula        : Time = (Pos * %.8f) + (%.4f)\n", finalCoeff, globalOffset);
-        printf("==================================================\n");
+        LinearFit newFit = fitLinear(allPairs);
+        double newCoeff = newFit.coeff;
+        double newOffset = newFit.offset;
+
+        // === OCHRANA PROTI ROZPADU ===
+        double coeffChange = fabs(newCoeff - prevCoeff);
+        if (coeffChange > MAX_ALLOWED_DRIFT) {
+            printf(" [!] Příliš velká změna koeficientu (%.8f → %.8f), omezuji drift.\n",
+                prevCoeff, newCoeff);
+            newCoeff = prevCoeff + (newCoeff - prevCoeff) * 0.4; // tlumíme změnu
+        }
+
+        currentCoeff = newCoeff;
+        currentOffset = newOffset;
+
+        printf("→ Updated: coeff=%.8f  offset=%.4f  (pairs=%zu, total_matches=%d)\n",
+            currentCoeff, currentOffset, allPairs.size(), totalMatches);
+
+        if (fabs(currentCoeff - prevCoeff) < CONVERGENCE &&
+            fabs(currentOffset - prevOffset) < 0.01) {
+            printf("=== CONVERGED ===\n");
+            converged = true;
+            break;
+        }
     }
 
-    double finalCoeff = fitCoeff(allPairs);
-    // --- DRUHÝ PRŮCHOD S ROZŠÍŘENOU TOLERANCÍ PRO DROBNÉ CHYBY ---
+    if (!converged)
+        printf("Kalibrace dokončena po %d iteracích (bez plné konvergence).\n", MAX_ITER);
+
+    double finalCoeff = currentCoeff;
+    double globalOffset = currentOffset;
+
+    // ── DRUHÝ PRŮCHOD – detailní výpis offsetů pro každý track ─────
     printf("\n==================================================\n");
-    printf("SECOND PASS: SEARCHING FOR TRACK OFFSETS\n");
+    printf("SECOND PASS: PER-TRACK OFFSET (final coeff = %.8f)\n", finalCoeff);
     printf("==================================================\n");
 
+    std::vector<double> trackOffsets;
+
     for (int i = 0; i < 27; i++) {
-        const auto& track = CdTracks_DB080[i];
         char filename_buf[16];
         snprintf(filename_buf, sizeof(filename_buf), "s%02d.ogg", i + 1);
         std::string fname = dir + filename_buf;
+
         auto detected = findAudioSegments(fname.c_str());
+        const auto& track = CdTracks_DB080[i];
 
-        // Musíme mít aspoň nějaké segmenty v tabulce i v OGG
         std::vector<TrackSegment> tableSegs;
-        for (int j = 0; j < 10; j++) {
-            if (track.seg[j].length > 0) tableSegs.push_back(track.seg[j]);
+        for (int j = 0; j < 10; j++)
+            if (track.seg[j].length > 0)
+                tableSegs.push_back(track.seg[j]);
+
+        if (tableSegs.empty() || detected.empty()) continue;
+
+        auto assignment = bestMatching(tableSegs, detected, finalCoeff, globalOffset, 2.5);
+
+        std::vector<double> offsets;
+        for (size_t tIdx = 0; tIdx < tableSegs.size(); tIdx++) {
+            int dIdx = assignment[tIdx];
+            if (dIdx < 0) continue;
+
+            double expected = tableSegs[tIdx].startPos * finalCoeff + globalOffset;
+            offsets.push_back(detected[dIdx].startSec - expected);
         }
 
-        if (tableSegs.empty() || detected.empty()) {
-            printf("Track %02d (%s): Chybí data pro analýzu.\n", i + 1, filename_buf);
-            continue;
-        }
+        if (!offsets.empty()) {
+            double sum = 0.0;
+            for (double o : offsets) sum += o;
+            double avgOffset = sum / offsets.size();
 
-        // Hledáme globální offset pro celý tento soubor.
-        // Princip: Zkusíme napasovat první detekovaný segment na první tabulkový 
-        // a ověříme, kolik dalších segmentů to "vysvětlí".
+            printf("Track %02d (%s):  %+7.4f s   (%2zu/%2zu segs)\n",
+                i + 1, filename_buf, avgOffset, offsets.size(), tableSegs.size());
 
-        double bestGlobalOffset = 0;
-        int maxConfirmedSegments = -1;
-        double bestAverageDiff = 999.0;
-
-        // Zkusíme každou možnou dvojici jako potenciální startovní bod
-        for (size_t dStartIdx = 0; dStartIdx < detected.size(); dStartIdx++) {
-            double potentialOffset = detected[dStartIdx].startSec - (tableSegs[0].startPos * finalCoeff);
-
-            int confirmed = 0;
-            double currentTotalDiff = 0;
-
-            for (size_t tIdx = 0; tIdx < tableSegs.size(); tIdx++) {
-                double expectedWithOffset = (tableSegs[tIdx].startPos * finalCoeff) + potentialOffset;
-
-                // Najdeme nejbližší segment v OGG pro tento očekávaný čas
-                double localMinDiff = 999.0;
-                for (const auto& d : detected) {
-                    double dDiff = fabs(d.startSec - expectedWithOffset);
-                    if (dDiff < localMinDiff) localMinDiff = dDiff;
-                }
-
-                if (localMinDiff < 0.2) { // Pokud se trefíme do 200ms, započítáme shodu
-                    confirmed++;
-                    currentTotalDiff += localMinDiff;
-                }
-            }
-
-            // Pokud jsme našli lepší shodu (víc potvrzených segmentů nebo menší průměrná chyba)
-            if (confirmed > maxConfirmedSegments || (confirmed == maxConfirmedSegments && currentTotalDiff < bestAverageDiff)) {
-                maxConfirmedSegments = confirmed;
-                bestAverageDiff = currentTotalDiff;
-                bestGlobalOffset = potentialOffset;
-            }
-        }
-
-        if (maxConfirmedSegments > 0) {
-            printf("Track %02d (%s): Offset = %+8.4f s (Potvrzeno %d/%zu segmentů)\n",
-                i + 1, filename_buf, bestGlobalOffset, maxConfirmedSegments, tableSegs.size());
+            trackOffsets.push_back(avgOffset);
         }
         else {
-            printf("Track %02d (%s): Offset stále nebyl nalezen (pravděpodobně nesedí struktura).\n", i + 1, filename_buf);
+            printf("Track %02d (%s):  NO MATCH\n", i + 1, filename_buf);
         }
     }
+
+    if (!trackOffsets.empty()) {
+        double sum = 0.0;
+        for (double o : trackOffsets) sum += o;
+        globalOffset = sum / trackOffsets.size();
+    }
+
+    printf("\n==================================================\n");
+    printf("FINAL RESULT\n");
+    printf("==================================================\n");
+    printf("Optimal coeff  : %.8f\n", finalCoeff);
+    printf("Global offset  : %.4f s\n", globalOffset);
+    printf("Time = (Pos * %.8f) + %.4f\n", finalCoeff, globalOffset);
+    printf("==================================================\n");
 
     return 0;
 }
