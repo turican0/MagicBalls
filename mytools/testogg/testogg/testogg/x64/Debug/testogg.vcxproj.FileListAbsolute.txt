@@ -1,0 +1,5 @@
+C:\COMPUTES\140\prenos\testogg\testogg\x64\Debug\ogg.dll
+C:\COMPUTES\140\prenos\testogg\testogg\x64\Debug\vorbis.dll
+C:\COMPUTES\140\prenos\testogg\testogg\x64\Debug\vorbisenc.dll
+C:\COMPUTES\140\prenos\testogg\testogg\x64\Debug\vorbisfile.dll
+C:\COMPUTES\140\prenos\testogg\testogg\testogg\x64\Debug\testogg.vcxproj.Up2Date
