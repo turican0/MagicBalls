@@ -14,3 +14,5 @@ soundfont = "res://soundfont/GeneralUser GS v1.472.sf2"
 metadata/_custom_type_script = "uid://bf1vnufu7na6x"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=381617792]
+
+[node name="AudioStreamPlayerSpeech" type="AudioStreamPlayer" parent="." unique_id=1495720093]

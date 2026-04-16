@@ -2,6 +2,7 @@ extends Node3D
 
 var MainMusic:MidiPlayer
 var MainMusicHi:AudioStreamPlayer
+var MainSpeech:AudioStreamPlayer
 
 #func _load_wav_as_sample(file_path: String) -> AudioStream:
 	#var file = FileAccess.open(file_path, FileAccess.READ)
@@ -23,13 +24,41 @@ func get_free_player_indices() -> Array:
 	for i in range(Global.sfx_players.size()):
 		status[i] = Global.sfx_players[i].playing
 	return status
+
+func load_external_audio(file_path: String) -> AudioStream:
+	if FileAccess.file_exists(file_path):
+		var stream = AudioStreamOggVorbis.load_from_file(file_path)
+		if stream:
+			return stream
+	return null
+
+func load_speech_from_dir(path: String):
+	if not path.ends_with("/"):
+		path += "/"
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if !dir.current_is_dir() and file_name.ends_with(".ogg"):
+				var base_name = file_name.get_basename()
+				var raw_idx = base_name.substr(1).to_int()
+				var final_idx = raw_idx - 1
+				var full_path = path + file_name
+				var audio_resource = Global.load_external_audio(full_path)	
+				if audio_resource:
+					Global.speech_map[final_idx] = audio_resource
+					print("Speech loaded: ", file_name, " as index: ", final_idx)
+			file_name = dir.get_next()
+		dir.list_dir_end()
+	else:
+		print("Chyba: Adresář nelze otevřít: ", path)
 	
 func load_musics_from_dir(path: String):
 	var dir = DirAccess.open(path)
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
-		
 		while file_name != "":
 			if !dir.current_is_dir() and file_name.ends_with(".mid"):
 				var parts = file_name.split("_")
@@ -137,6 +166,15 @@ func updateSounds(soundActions:Array):
 			"SetSamplePosition":
 				set_sample_position(p1, p2, p3)
 				matchok=true
+			"PlayCdTrackSegment":
+				start_speech(p1, p2, p3)
+				matchok=true
+			"EndPlayingCdTrackSegment":
+				stop_speech()
+				matchok=true
+			#sound_queue_add_action("PlayCdTrackSegment", trackIdx, startPosMs, lengthMs);
+			#sound_queue_add_action("EndPlayingCdTrackSegment", 0, 0, 0);
+			#sound_queue_add_action("ClearCdTrackSegment", 0, 0, 0);
 		if(!matchok):
 			matchok=true
 
@@ -242,6 +280,39 @@ func stop_music() -> void:
 	else:
 		if MainMusic.playing:
 			MainMusic.stop()
+
+func start_speech(index: int, startPosMs: int, lengthMs: int) -> void:
+	MainSpeech.volume_db = linear_to_db(1.0)
+	print("=== START SPEECH DEBUG ===")
+	print("Index: ", index)	
+	if Global.speech_map.has(index):
+		var stream = Global.speech_map[index]
+		if stream:
+			if stream is AudioStreamOggVorbis:
+				stream.loop = false
+			elif stream is AudioStreamWAV:
+				stream.loop_mode = AudioStreamWAV.LOOP_DISABLED
+			MainSpeech.stream = stream
+			var start_pos_sec : float = startPosMs / 1000.0
+			var length_sec : float = lengthMs / 1000.0
+			MainSpeech.play(start_pos_sec)
+			print("Playing from: ", start_pos_sec, "s")
+			if lengthMs > 0:
+				await get_tree().create_timer(length_sec).timeout
+				if MainSpeech.stream == stream:
+					MainSpeech.stop()
+					print("Speech stopped after ", length_sec, "s")
+		else:
+			print("Error: Stream load failed!")
+	else:
+		print("Error: Index ", index, " not found in speech_map.")
+
+func stop_speech() -> void:
+	if MainSpeech.playing:
+		MainSpeech.stop()
+		print("Speech manually stopped.")
+	else:
+		print("Stop requested, but no speech was playing.")
 
 func start_music(index: int) -> void:
 	if Global.himusic:

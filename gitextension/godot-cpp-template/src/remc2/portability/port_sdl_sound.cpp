@@ -824,7 +824,9 @@ void LoadAudioEffect(int channel, const Mix_Chunk* chunk, float speed, int frequ
 
 bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs)
 {
-	sound_queue_add_action("PlayCdTrackSegment", 0, 0, 0);
+	sound_queue_add_action("PlayCdTrackSegment", trackIdx-1, startPosMs, lengthMs);
+	return true;
+	/*
 	try
 	{
 		double startPosSec = startPosMs / 1000;
@@ -848,19 +850,20 @@ bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs)
 	{
 		return false;
 	}
+	*/
 }
 
 bool IsCdTrackPlaying()
 {
 	sound_queue_add_action("IsCdTrackPlaying", 0, 0, 0);
 	//return Mix_Playing(maxSimultaniousSounds) == 1;
-	return 0;
+	return 1;
 }
 
 bool EndPlayingCdTrackSegment()
 {
 	sound_queue_add_action("EndPlayingCdTrackSegment", 0, 0, 0);
-	//if (IsCdTrackPlaying())
+	if (IsCdTrackPlaying())
 	{
 		//auto success = Mix_HaltChannel(maxSimultaniousSounds) == 0;
 		//if (success)
@@ -887,14 +890,13 @@ bool ClearCdTrackSegment()
 
 bool AreCdTracksAvailable()
 {
-	return false;
-	//sound_queue_add_action("AreCdTracksAvailable", 0, 0, 0);
 	return GetCdTrackCount() > 0;
 }
 
 int GetCdTrackCount()
 {
-	sound_queue_add_action("GetCdTrackCount", 0, 0, 0);
+	return 27;
+	/*
 	char speechPath[512];
 	int count = 0;
 	try
@@ -917,7 +919,7 @@ int GetCdTrackCount()
 	{
 		return count;
 	}
-	return count;
+	return count;*/
 }
 
 AIL_DRIVER* ac_AIL_API_install_driver(int  /*a1*/, uint8_t*  /*a2*/, int  /*a3*/)/*driver_image,n_bytes*///27f720

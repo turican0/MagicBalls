@@ -8,6 +8,7 @@ var LevelType: String = ""
 var soundInited:bool = false
 var sounds_map = {}
 var music_map = {}
+var speech_map = {}
 var music_hi_map = {}
 var himusic = true
 var sfx_players: Array[AudioStreamPlayer2D] = []
@@ -43,10 +44,12 @@ func initSound():
 		Main_Sounds=get_tree().root.get_node_or_null("Sounds")
 	Main_Sounds.MainMusic = Main_Sounds.get_node("MidiPlayer")
 	Main_Sounds.MainMusicHi = Main_Sounds.get_node("AudioStreamPlayer")
+	Main_Sounds.MainSpeech = Main_Sounds.get_node("AudioStreamPlayerSpeech")
 	
 	Main_Sounds.load_sounds_from_dir(Global.convertdata+"sounds/")
 	Main_Sounds.load_musics_from_dir(Global.convertdata+"musics/")
-	Main_Sounds.load_musics_hi_from_dir(Global.hidata+"musics/")	
+	Main_Sounds.load_musics_hi_from_dir(Global.hidata+"musics/")
+	Main_Sounds.load_speech_from_dir(Global.convertdata+"speech/")
 	Main_Sounds.init()
 	Main_Sounds.setSoundBank(1)#Night
 	Global.soundInited = true
