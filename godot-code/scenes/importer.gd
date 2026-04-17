@@ -156,6 +156,29 @@ func _show_custom_dir_picker():
 	title.add_theme_font_size_override("font_size", UI_TITLE_FONT_SIZE)
 	vbox.add_child(title)
 
+	# --- DRIVE SELECTOR (Windows only) ---
+	if OS.get_name() == "Windows":
+		var drive_hbox = HBoxContainer.new()
+		drive_hbox.add_theme_constant_override("separation", 6)
+		vbox.add_child(drive_hbox)
+
+		var drive_label = Label.new()
+		drive_label.text = "Drive:"
+		drive_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
+		drive_label.add_theme_font_size_override("font_size", 14)
+		drive_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		drive_hbox.add_child(drive_label)
+
+		for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+			var drive_path = letter + ":/"
+			if DirAccess.dir_exists_absolute(drive_path):
+				var btn_drive = Button.new()
+				btn_drive.text = letter + ":"
+				btn_drive.custom_minimum_size = Vector2(48, 30)
+				_apply_button_theme(btn_drive)
+				btn_drive.pressed.connect(func(): _picker_navigate(drive_path))
+				drive_hbox.add_child(btn_drive)
+
 	_picker_path_label = Label.new()
 	_picker_path_label.text = "Path: /"
 	_picker_path_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6))
