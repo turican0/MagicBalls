@@ -33,4 +33,8 @@ func _ready() -> void:
 	MBEngine.Main_Filter = Main_Filter
 	MBEngine.init()
 	
+	var loader = get_tree().root.get_node_or_null("GlobalLoadingCanvas")
+	if loader:
+		loader.queue_free()
+	
 	#$CanvasUI.init()

@@ -59,11 +59,11 @@ func _ready() -> void:
 		_go_to_main_menu()
 
 func _go_to_main_menu():
-	Global.last_scene_path = "res://scenes/CodeGeneratedDemo.tscn"
-	get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
+	Global.last_scene_path = "res://scenes/Settings.tscn"
+	get_tree().change_scene_to_file("res://scenes/Settings.tscn")
 
 func check_existing_data() -> bool:
-	var music_path = Global.convertdata + "musicsX/"
+	var music_path = Global.convertdata + "musics/"
 	return DirAccess.dir_exists_absolute(music_path)
 
 # =============================================

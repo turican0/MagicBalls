@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bvugxfwp60tqc"]
+
+[ext_resource type="Script" uid="uid://cw45x7rq5lqpu" path="res://scenes/settings.gd" id="1_rbmmp"]
+
+[node name="Settings" type="Node3D" unique_id=2084375607]
+script = ExtResource("1_rbmmp")
