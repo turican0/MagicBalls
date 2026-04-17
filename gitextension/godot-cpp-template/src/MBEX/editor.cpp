@@ -64,67 +64,6 @@ TypePos RelPos[21];
 #include <deque>
 #include <stdexcept>
 
-class UndoRedoManager {
-public:
-	explicit UndoRedoManager(Type_Level_2FECE &terrain, size_t maxSteps = 100) :
-			terrain_2FECE(terrain), maxSteps(maxSteps) {
-		// Uložíme počáteční stav
-		undoStack.push_back(terrain_2FECE);
-	}
-
-	// Uloží aktuální stav (volej po každé změně)
-	void saveState() {
-		// Při nové akci smažeme redo historii
-		redoStack.clear();
-
-		undoStack.push_back(terrain_2FECE);
-
-		// Omezíme počet kroků
-		if (undoStack.size() > maxSteps + 1) {
-			undoStack.pop_front();
-		}
-	}
-
-	// Vrátí změnu zpět
-	bool undo() {
-		if (undoStack.size() <= 1)
-			return false; // Není co vrátit
-
-		redoStack.push_back(undoStack.back());
-		undoStack.pop_back();
-
-		terrain_2FECE = undoStack.back();
-		return true;
-	}
-
-	// Zopakuje vrácenou změnu
-	bool redo() {
-		if (redoStack.empty())
-			return false;
-
-		undoStack.push_back(redoStack.back());
-		redoStack.pop_back();
-
-		terrain_2FECE = undoStack.back();
-		return true;
-	}
-
-	bool canUndo() const { return undoStack.size() > 1; }
-	bool canRedo() const { return !redoStack.empty(); }
-
-	size_t undoCount() const { return undoStack.size() - 1; }
-	size_t redoCount() const { return redoStack.size(); }
-
-	void setMaxSteps(size_t steps) { maxSteps = steps; }
-
-private:
-	Type_Level_2FECE &terrain_2FECE;
-	std::deque<Type_Level_2FECE> undoStack;
-	std::deque<Type_Level_2FECE> redoStack;
-	size_t maxSteps;
-};
-
-
 /*
 USING EXAMPLE:
 // Inicializace
@@ -213,6 +152,8 @@ void loadlevel(int levelnumber) {
 	*/
 }
 
+std::unique_ptr<UndoRedoManager> urManager;
+
 void editor_run() {
 	*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it 3x256 ?
 
@@ -278,6 +219,7 @@ void editor_run() {
 	//InGameLoop_47320(0);//run game
 
 	//restore D41A0_BYTESTR_0
+	urManager = std::make_unique<UndoRedoManager>(D41A0_0.terrain_2FECE, temparray_0x30311);
 }
 
 void terrain_recalculate() {

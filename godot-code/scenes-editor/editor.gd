@@ -7,12 +7,16 @@ extends Node3D
 @onready var Main_Camera: Camera3D = $PlayerEditor/Camera3D
 @onready var Ray_Cylinder: MeshInstance3D = $RayCylinder
 
-@onready var Tree_View: Tree = $UI/TreeView/PanelContainer/MarginContainer/Tree
+@onready var Tree_View: Tree = $UI/TreeView/PreContainer/PanelContainer/MarginContainer/Tree
 
 @onready var Terrain_Edit_Panel: Control = $UI/TerrainEdit
 
+@onready var Console: RichTextLabel = $UI/Console/RichTextLabel
 
-@onready var Terrain_Edit = $UI/TerrainEdit/PanelContainer/MarginContainer/VBoxContainer
+@onready var Terrain_Edit = $UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
+
+@onready var EntityEdit: Control = $UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
+
 @onready var selectors = [
 	Terrain_Edit.get_node("Seed_0"),
 	Terrain_Edit.get_node("Offset_1"),
@@ -53,7 +57,7 @@ func _ready() -> void:
 		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
 			selector.value_changed.connect(_on_h_box_container_value_changed)
 	
-	_preload_library(library, library_scenes)	
+	_preload_library(library, library_scenes)
 	editor_runned=true
 	
 func _input(event: InputEvent) -> void:
@@ -64,6 +68,16 @@ func _input(event: InputEvent) -> void:
 		toggle_terrain_editor()
 	if (event is InputEventKey and event.keycode == KEY_X and event.pressed):
 		delete_selected_entities()
+	# UNDO & REDO
+	if event is InputEventKey and event.pressed:
+		var command_or_ctrl = event.ctrl_pressed or event.meta_pressed
+		if command_or_ctrl and event.keycode == KEY_Z:
+			if event.shift_pressed: # CTRL+SHIFT+Z maybe as redo
+				_on_redo_button_down()
+			else:
+				_on_undo_button_down()
+		if command_or_ctrl and event.keycode == KEY_Y:
+			_on_redo_button_down()
 		
 func toggle_editor_control_style():
 	is_ui_visible = !is_ui_visible
@@ -113,6 +127,7 @@ func _process(delta: float) -> void:
 	if editor_runned:
 		EditorStep()
 	update_tree()
+	Global.MBEX.REMC2EditorTimedSaveState(1.0)
 
 func gameInit():
 	match Global.getLevelType():
@@ -405,9 +420,9 @@ func show_hide_entites() -> void:
 				node.hide()
 				node.set_process(false)
 				node.set_physics_process(false)
-				if(node.get_meta("uid")==Vector3i(14,461,0) or node.get_meta("uid")==Vector3i(14,462,0)):#remove entites with start script
-					node.queue_free()
-					arr.remove_at(i)
+				#if(node.get_meta("uid")==Vector3i(14,461,0) or node.get_meta("uid")==Vector3i(14,462,0)):#remove entites with start script
+					#node.queue_free()
+					#arr.remove_at(i)
 		if arr.is_empty():
 			entites_pool.erase(bucket)
 		bucket["act_index"] = 0
@@ -447,7 +462,12 @@ func select_entities_in_radius_2D(center_pos_3d: Vector3, radius: float):
 			found_any_in_radius = true
 	if not found_any_in_radius and closest_node != null:
 		mark_as_selected(closest_node)
-			
+		
+		
+	if closest_node != null and closest_node.has_meta("index"):
+		var idx = closest_node.get_meta("index")
+		fillEntityDetails(idx)
+
 func mark_as_selected(node: Node3D):
 	if node.is_in_group("selected_entities"):
 		return
@@ -459,7 +479,7 @@ func mark_as_selected(node: Node3D):
 			mat = mesh.mesh.surface_get_material(0).duplicate()
 			mesh.set_surface_override_material(0, mat)
 		mat.albedo_color = Color(1.0, 1.0, 0.0)
-		
+
 func unmark_as_selected(node: Node3D):
 	if not node.is_in_group("selected_entities"): return
 	node.remove_from_group("selected_entities")	
@@ -468,7 +488,7 @@ func unmark_as_selected(node: Node3D):
 		var mat = mesh.get_surface_override_material(0)
 		if mat:
 			mat.albedo_color = Color(1, 1, 1) 
-			
+
 func delete_selected_entities():
 	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")
 	if selected_nodes.is_empty():
@@ -482,6 +502,7 @@ func delete_selected_entities():
 	Global.MBEX.REMC2EditorDeleteEntites(myArray)
 			
 	print("Deleted entites: ", selected_nodes.size())
+	log_message("Deleted entites: " + str(selected_nodes.size()))
 
 func RenderEditorEntites(data_array: PackedFloat32Array):
 	var entites_per_frame=0;
@@ -542,8 +563,17 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 				add_pool_index(uid2)
 				updateObject=true
 		if (current_node&&updateObject):
-			current_node.set_meta("parent",int(par1_14))
-			current_node.set_meta("index",i)
+			current_node.set_meta("index",int(i))
+			
+			current_node.set_meta("type_0x30311",int(type_0x30311))
+			current_node.set_meta("subtype_0x30311",int(subtype_0x30311))
+			current_node.set_meta("DisId",int(DisId))
+			current_node.set_meta("word_10",int(word_10))
+			current_node.set_meta("stageTag_12",int(stageTag_12))
+			current_node.set_meta("par1_14",int(par1_14))
+			current_node.set_meta("par2_16",int(par2_16))
+			current_node.set_meta("par3_18",int(par3_18))
+			
 			current_node.add_to_group("entities")
 			var entityScale = 1.0
 			current_node.scale = Vector3(entityScale, entityScale, entityScale)
@@ -569,8 +599,8 @@ func AddParentsArrows():
 	for entity in get_tree().get_nodes_in_group("entities"):
 		var current_node = null
 		var updateObject: bool = false
-		if entity.get_meta("parent") in index_to_pos:
-			var parent_index = entity.get_meta("parent")
+		if entity.get_meta("par1_14") in index_to_pos:
+			var parent_index = entity.get_meta("par1_14")
 			var uid2=Vector3i(0,998,0)
 			current_node = get_first_entity_with_uid(uid2)
 			if current_node == null:
@@ -600,8 +630,40 @@ func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
 	Global.MBEX.REMC2SetLevelType(state_name)
 	Main_DecodeLevel.gameInit(false)
 	Main_TerrainsMB.updateMeshes(false)
-	
-
 
 func _on_h_box_container_value_changed(terrainVarIndex: int,new_value: int) -> void:
 	Global.MBEX.REMC2EditorSetTerrainValue(terrainVarIndex,new_value)
+
+func _on_undo_button_down() -> void:
+	Global.MBEX.REMC2EditorUndo()
+	log_message("UNDO")
+
+func _on_redo_button_down() -> void:
+	Global.MBEX.REMC2EditorRedo()
+	log_message("REDO")
+
+func SaveState() -> void:
+	Global.MBEX.REMC2EditorSaveState()
+
+func log_message(text: String, color: String = "white"):
+	var formatted_text = "[color=" + color + "]" + text + "[/color]\n"
+	Console.append_text(formatted_text)
+	var scrollbar = Console.get_v_scroll_bar()
+	scrollbar.value = scrollbar.max_value
+
+func fillEntityDetails(index:int):
+	var entities = get_tree().get_nodes_in_group("entities")
+	var finded_node = null
+	for node in entities:
+		if node.has_meta("index") and node.get_meta("index") == index:
+			finded_node=node
+	if finded_node:
+		EntityEdit.get_node_or_null("IDX/SpinBox").value = finded_node.get_meta("index")
+		EntityEdit.get_node_or_null("type_0x30311/SpinBox").value = finded_node.get_meta("type_0x30311")
+		EntityEdit.get_node_or_null("subtype_0x30311/SpinBox").value = finded_node.get_meta("subtype_0x30311")
+		EntityEdit.get_node_or_null("DisId/SpinBox").value = finded_node.get_meta("DisId")
+		EntityEdit.get_node_or_null("word_10/SpinBox").value = finded_node.get_meta("word_10")
+		EntityEdit.get_node_or_null("stageTag_12/SpinBox").value = finded_node.get_meta("stageTag_12")
+		EntityEdit.get_node_or_null("par1_14/SpinBox").value = finded_node.get_meta("par1_14")
+		EntityEdit.get_node_or_null("par2_16/SpinBox").value = finded_node.get_meta("par2_16")
+		EntityEdit.get_node_or_null("par3_18/SpinBox").value = finded_node.get_meta("par3_18")

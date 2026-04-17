@@ -139,6 +139,11 @@ public:
 	PackedFloat32Array REMC2EditorGetTerrainEntites();
 	void REMC2EditorDeleteEntites(Array p_indices);
 
+	void REMC2EditorUndo();
+	void REMC2EditorRedo();
+	void REMC2EditorSaveState();
+	void REMC2EditorTimedSaveState(float time);
+
 };
 
 void MBEXaudioExtract(String path);

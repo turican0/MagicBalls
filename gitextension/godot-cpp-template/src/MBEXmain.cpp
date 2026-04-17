@@ -76,6 +76,11 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorUndo"), &MBEXclass::REMC2EditorUndo);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorRedo"), &MBEXclass::REMC2EditorRedo);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSaveState"), &MBEXclass::REMC2EditorSaveState);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorTimedSaveState", "Float"), &MBEXclass::REMC2EditorTimedSaveState);
 }
 
 
@@ -1909,5 +1914,35 @@ void MBEXaudioExtract(String path) {
 			}
 		}
 		file_name = dir->get_next();
+	}
+}
+
+void MBEXclass::REMC2EditorUndo() {
+	if (urManager->canUndo()) {
+		urManager->undo();
+	}
+}
+
+void MBEXclass::REMC2EditorRedo() {
+	if (urManager->canRedo()) {
+		urManager->redo();
+	}
+}
+
+std::chrono::steady_clock::time_point lastSaveTime;
+
+void MBEXclass::REMC2EditorSaveState() {
+	urManager->saveState();
+	lastSaveTime = std::chrono::steady_clock::now();
+}
+
+void MBEXclass::REMC2EditorTimedSaveState(float seconds) {
+	if (!urManager) {
+		return;
+	}
+	auto now = std::chrono::steady_clock::now();
+	std::chrono::duration<float> elapsed = now - lastSaveTime;
+	if (elapsed.count() >= seconds) {
+		REMC2EditorSaveState();
 	}
 }

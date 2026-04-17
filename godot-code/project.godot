@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MagicBalls"
-run/main_scene="uid://bkpm1emxwwamr"
+run/main_scene="uid://dgwygcjmuwppm"
 config/features=PackedStringArray("4.6")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
@@ -31,7 +31,7 @@ Global="*res://scenes/Global.gd"
 [display]
 
 window/size/viewport_width=1400
-window/size/viewport_height=1000
+window/size/viewport_height=900
 
 [editor_plugins]
 
