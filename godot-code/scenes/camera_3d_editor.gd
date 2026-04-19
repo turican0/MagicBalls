@@ -9,8 +9,8 @@ var editor: Node3D = null
 # SETTINGS
 # ═══════════════════════════════════════════════════════════
 @export_group("Movement")
-@export var move_speed : float = 10.0
-@export var sprint_multiplier : float = 3.0
+@export var move_speed : float = 20.0
+@export var sprint_multiplier : float = 5.0
 @export var mouse_sensitivity : float = 0.002
 @export var pitch_limit : float = 89.0
 
@@ -99,23 +99,6 @@ func _handle_movement(delta: float) -> void:
 	
 	if dir.length_squared() > 0.0:
 		global_position += dir.normalized() * speed * delta
-
-func _unhandled_input(event: InputEvent) -> void:
-	# Escape key toggles mouse
-	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_CONFINED_HIDDEN:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
-			get_viewport().warp_mouse(get_viewport().get_visible_rect().size * 0.5)
-
-	# Scroll wheel to change brush/cylinder size
-	if event is InputEventMouseButton:
-		match event.button_index:
-			MOUSE_BUTTON_WHEEL_UP:
-				_cylinder_radius = clamp(_cylinder_radius + cylinder_scroll_step, cylinder_radius_min, cylinder_radius_max)
-			MOUSE_BUTTON_WHEEL_DOWN:
-				_cylinder_radius = clamp(_cylinder_radius - cylinder_scroll_step, cylinder_radius_min, cylinder_radius_max)
 
 # ═══════════════════════════════════════════════════════════
 # RAYCASTING & CYLINDER (THE MISSING STUFF)

@@ -76,6 +76,9 @@ func _apply() -> void:
 		global_transform.basis = Basis(axis, angle)
 
 	var shaft_len: float = max(dist - head_height, 0.01)
+	var head_visible: bool = _cone.visible
+	if not head_visible:
+		shaft_len = dist
 
 	# Shaft
 	var cyl_mesh := _cylinder.mesh as CylinderMesh
@@ -84,6 +87,8 @@ func _apply() -> void:
 		cyl_mesh.bottom_radius = shaft_radius
 	_cylinder.scale = Vector3(1.0, shaft_len, 1.0)
 	_cylinder.position = Vector3(0.0, -head_height * 0.5, 0.0)
+	if not head_visible:
+		_cylinder.position = Vector3(0.0, 0.0, 0.0)
 
 	# Head
 	var cone_mesh := _cone.mesh as CylinderMesh

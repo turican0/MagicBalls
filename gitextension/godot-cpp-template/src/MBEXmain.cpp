@@ -1809,47 +1809,71 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	return result;
 }
 
-void MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
+int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	if (p_indices.is_empty())
-		return;
-	std::vector<int> to_delete;
+		return -1;
+	int result = 1;
+
+	auto is_parent_type = [](int type) -> bool {
+		return type != 0 && type != 2 && type != 10 && type != 11;
+	};
+	// Sestav set indexů ke smazání
+	std::set<int> selected_set;
 	for (int i = 0; i < p_indices.size(); i++) {
-		to_delete.push_back(p_indices[i]);
+		selected_set.insert((int)p_indices[i]);
 	}
-	std::sort(to_delete.begin(), to_delete.end(), std::greater<int>());
 	int current_count = 1200;
+	// Přidej děti vybraných entit
+	for (int i = 0; i < current_count; i++) {
+		/*
+		if (!is_parent_type(temparray_0x30311[i].type_0x30311))
+			continue;
+		*/
+		if (selected_set.count(temparray_0x30311[i].par1_14) > 0) {
+			result |= 2;
+			selected_set.insert(i);
+		}
+	}
+	// Pokud má entita rodiče který NENÍ v seznamu ke smazání -> odstraň ji ze setu, změň result
+	std::set<int> final_set;
+	for (int idx : selected_set) {
+		int par = temparray_0x30311[idx].par1_14;
+		int type = temparray_0x30311[idx].type_0x30311;
+		if (is_parent_type(type) && par != 0 && selected_set.count(par) == 0) {
+			// má rodiče mimo seznam -> nesmazat
+			result |= 4;
+			continue;
+		}
+		final_set.insert(idx);
+	}
+
+	if (final_set.empty()) {
+		result  |= 8;
+		return result;
+	}
+
+	// Seřaď sestupně
+	std::vector<int> to_delete(final_set.begin(), final_set.end());
+	std::sort(to_delete.begin(), to_delete.end(), std::greater<int>());
+
 	for (int index_to_remove : to_delete) {
 		if (index_to_remove < 0 || index_to_remove >= current_count)
 			continue;
-
-		/*
-		bool haveChildren = false;
-		for (int k = 0; k < 1200; k++) {
-			if (temparray_0x30311[k].par1_14 == index_to_remove)
-				haveChildren = true;
-		}
-		if (haveChildren)
-			continue;
-		*/
-
-		// --- KOREKCE INDEXŮ par1_14 ---
 		for (int k = 0; k < current_count; k++) {
-			// 1. Pokud potomek ukazoval na právě mazaný prvek, vazba zaniká
+			if (!is_parent_type(temparray_0x30311[k].type_0x30311))
+				continue;
 			if (temparray_0x30311[k].par1_14 == index_to_remove) {
 				temparray_0x30311[k].par1_14 = 0;
-			}
-			// 2. Pokud ukazoval na jakýkoliv prvek ZA smazaným indexem,
-			// musí se jeho reference snížit o 1, protože se to tam posune.
-			else if (temparray_0x30311[k].par1_14 > index_to_remove) {
+			} else if (temparray_0x30311[k].par1_14 > index_to_remove) {
 				temparray_0x30311[k].par1_14--;
 			}
 		}
-
 		for (int j = index_to_remove; j < current_count - 1; j++) {
 			temparray_0x30311[j] = temparray_0x30311[j + 1];
 		}
 		current_count--;
 	}
+	return result;
 }
 
 #include <godot_cpp/classes/zip_reader.hpp>
