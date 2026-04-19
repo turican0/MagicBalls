@@ -207,8 +207,11 @@ func init() -> void:
 		var player := AudioStreamPlayer2D.new()
 		player.name = "SFXPlayer" + str(i)
 		player.bus = "SFX"
+		player.position = Vector2.ZERO
+		player.attenuation = 0.0
+		player.max_distance = 100000.0
 		add_child(player)
-		Global.sfx_players.append(player)	
+		Global.sfx_players.append(player)
 		
 func stopAllSounds():
 	stop_music()
@@ -234,7 +237,7 @@ func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 	player.stream = stream
 	player.play()
 	print("Playing stream:%d:%d" % [player_index, sound_idx])
-	
+
 func play_sound_end(pack_idx: int, player_index: int):
 	if player_index >= 0 and player_index < MAX_SIMULTANEOUS_SOUNDS:
 		var player = Global.sfx_players[player_index]
@@ -254,9 +257,9 @@ func set_sound_panning(index: int, pan_int: int) -> void:
 	if index >= 0 and index < Global.sfx_players.size():
 		var player = Global.sfx_players[index]
 		var pan_x : float = (float(pan_int) - 64.0) * 10.0
-		if player is AudioStreamPlayer2D:
-			player.position.x = pan_x
-			player.attenuation = 0.0001
+		player.position.x = pan_x
+		player.attenuation = 0.0000
+		player.max_distance = 100000.0
 
 func set_sample_position(index: int, angle: int, distance: int) -> void:
 	if index < 0 or index >= Global.sfx_players.size():
@@ -272,7 +275,7 @@ func set_sample_position(index: int, angle: int, distance: int) -> void:
 		cos(rad) * dist,
 		sin(rad) * dist
 	)
-	player.attenuation = 0.001
+	player.attenuation = 0.000
 
 func set_music_volume(volume_int: int) -> void:
 	if(Global.himusic):
