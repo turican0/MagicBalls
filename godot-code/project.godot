@@ -30,7 +30,8 @@ Global="*res://scenes/Global.gd"
 
 [display]
 
-window/stretch/scale=0.5
+window/size/viewport_width=1400
+window/size/viewport_height=900
 
 [editor_plugins]
 

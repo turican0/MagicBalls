@@ -2,9 +2,7 @@
 extends TextureButton
 
 func _ready():
-	# Nastavení fixní velikosti (např. 64x64 pixelů)
-	# Můžeš to změnit na jakoukoliv velikost potřebuješ
-	custom_minimum_size = Vector2(64, 64)
+	custom_minimum_size = Vector2(40, 40)
 	
 	var fixed_name = self.name.replace("_DAT", ".DAT")
 	fixed_name = fixed_name.replace("_png", ".png")
