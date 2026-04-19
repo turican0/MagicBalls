@@ -75,6 +75,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainPlayers"), &MBEXclass::REMC2EditorGetTerrainPlayers);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorUndo"), &MBEXclass::REMC2EditorUndo);
@@ -1807,6 +1808,26 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 		write_ptr[idx++] = (float)actEntity->par3_18;//11
 	}
 	return result;
+}
+
+PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
+		PackedFloat32Array data;
+		data.resize(8 * 110);
+		for (int i = 0; i < 8; ++i) {
+			Type_WizardMapSettings_0x360D2 &w = D41A0_0.terrain_2FECE.WizardMapSettings_0x360D2[i];
+			int offset = i * 110;
+			data.push_back((float)w.Aggression_0x360D5);
+			data.push_back((float)w.Reflexes_0x360D9);
+			data.push_back((float)w.Perception_0x360DD);
+			for (int s = 0; s < 26; ++s)
+				data.push_back((float)w.StartingSpells_0x360E1x[s]);
+			for (int s = 0; s < 26; ++s)
+				data.push_back((float)w.byte_0x360FBx[s]);
+			for (int s = 0; s < 26; ++s)
+				data.push_back((float)w.BlockedSpells_0x36115x[s]);
+			data.push_back((float)w.Life_0x3612F);
+		}
+		return data;
 }
 
 int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {

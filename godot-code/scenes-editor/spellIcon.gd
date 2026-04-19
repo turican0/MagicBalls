@@ -1,18 +1,28 @@
-@tool
 extends TextureButton
 
+# Proměnná pro sledování stavu
+var is_active: bool = true
+
 func _ready():
+	# Velikost a signály
 	custom_minimum_size = Vector2(40, 40)
 	
-	var fixed_name = self.name.replace("_DAT", ".DAT")
-	fixed_name = fixed_name.replace("_png", ".png")
-	var image_path = "user://convertdata/HSPR/HSPR-day/" + fixed_name
+	# Propojíme signál stisknutí se funkcí, pokud ještě není připojen
+	if not self.pressed.is_connected(_on_pressed):
+		self.pressed.connect(_on_pressed)
 	
-	if FileAccess.file_exists(image_path):
-		var image = Image.load_from_file(image_path)
-		var texture = ImageTexture.create_from_image(image)
-		texture_normal = texture
-		
-		# DŮLEŽITÉ: Aby se textura neroztáhla nebo nesmrštila divně
-		ignore_texture_size = true
-		stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	# Nastavíme výchozí vizuál při startu
+	_update_visuals()
+
+func _on_pressed():
+	# Přepneme true/false
+	is_active = !is_active
+	_update_visuals()
+
+func _update_visuals():
+	if is_active:
+		# Normální barvy
+		self.modulate = Color(1, 1, 1, 1)
+	else:
+		# Ztmavení/zašednutí
+		self.modulate = Color(0.3, 0.3, 0.3, 1)

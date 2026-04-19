@@ -57,12 +57,33 @@ func _ready() -> void:
 		selector.current_value = Global.MBEX.REMC2EditorGetTerrainValue(i)
 		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
 			selector.value_changed.connect(_on_h_box_container_value_changed)
-
+	SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
 	toggle_editor_control_style()
-	
 	_preload_library(library, library_scenes)
 	Tree_View.item_selected.connect(_on_tree_item_selected)
 	editor_runned=true
+	
+func SetPlayerValues(data: PackedFloat32Array):
+	if data.is_empty():
+		push_error("Žádná data z MBEX nebyla přijata!")
+		return
+	Global.players_settings.clear()
+	var floats_per_player = 82 
+	var num_players = data.size() / floats_per_player
+	for i in range(num_players):
+		var wizard = Global.WizardSettings.new()
+		var offset = i * floats_per_player
+		wizard.aggression = int(data[offset + 0])
+		wizard.reflexes   = int(data[offset + 1])
+		wizard.perception = int(data[offset + 2])
+		for s in range(26):
+			wizard.starting_spells[s] = int(data[offset + 3 + s])
+		for s in range(26):
+			wizard.unknown_bytes[s]   = int(data[offset + 3 + 26 + s])
+		for s in range(26):
+			wizard.blocked_spells[s]  = int(data[offset + 3 + 26 + 26 + s])
+		wizard.life = int(data[offset + 81])
+		Global.players_settings.append(wizard)
 	
 func _input(event: InputEvent) -> void:
 	# M pressed

@@ -197,3 +197,19 @@ func _input(event):
 		while c:
 			print("GUI chain: ", c.get_path())
 			c = c.get_parent()
+			
+class WizardSettings:
+	var aggression: int
+	var reflexes: int
+	var perception: int
+	var starting_spells: Array = []
+	var unknown_bytes: Array = []
+	var blocked_spells: Array = []
+	var life: int
+
+	func _init():
+		starting_spells.resize(26)
+		unknown_bytes.resize(26)
+		blocked_spells.resize(26)
+
+var players_settings: Array[WizardSettings] = []
