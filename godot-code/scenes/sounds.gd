@@ -208,7 +208,7 @@ func init() -> void:
 		player.name = "SFXPlayer" + str(i)
 		player.bus = "SFX"
 		player.position = Vector2.ZERO
-		player.attenuation = 0.0
+		player.attenuation = 0.0001
 		player.max_distance = 100000.0
 		add_child(player)
 		Global.sfx_players.append(player)
@@ -256,26 +256,26 @@ func set_sound_volume(index: int, volume_int: int) -> void:
 func set_sound_panning(index: int, pan_int: int) -> void:
 	if index >= 0 and index < Global.sfx_players.size():
 		var player = Global.sfx_players[index]
-		var pan_x : float = (float(pan_int) - 64.0) * 10.0
-		player.position.x = pan_x
+		var screen_width = get_viewport().get_visible_rect().size.x
+		var pan_factor : float = (float(pan_int) - 64.0) / 64.0
+		player.position.x = pan_factor * (screen_width / 2.0)
 		player.attenuation = 0.0000
-		player.max_distance = 100000.0
+		player.max_distance = screen_width * 4.0
 
 func set_sample_position(index: int, angle: int, distance: int) -> void:
-	if index < 0 or index >= Global.sfx_players.size():
-		return
-	var player := Global.sfx_players[index]
-	if not (player is AudioStreamPlayer2D):
-		return
-	var rad := deg_to_rad(float(angle) - 90.0)
-	var max_dist: float = 400.0
-	var norm_dist: float = clamp(float(distance) / 255.0, 0.0, 1.0)
-	var dist: float = norm_dist * max_dist
-	player.position = Vector2(
-		cos(rad) * dist,
-		sin(rad) * dist
-	)
-	player.attenuation = 0.000
+	if index >= 0 and index < Global.sfx_players.size():
+		var player := Global.sfx_players[index]
+		var rad := deg_to_rad(float(angle) - 90.0)
+		var viewport_size = get_viewport().get_visible_rect().size
+		var max_dist: float = viewport_size.length() / 2.0	
+		var norm_dist: float = clamp(float(distance) / 255.0, 0.0, 1.0)
+		var dist: float = norm_dist * max_dist	
+		player.position = Vector2(
+			cos(rad) * dist,
+			sin(rad) * dist
+		)
+		player.max_distance = max_dist * 1.5
+		player.attenuation = 0.0001
 
 func set_music_volume(volume_int: int) -> void:
 	if(Global.himusic):
