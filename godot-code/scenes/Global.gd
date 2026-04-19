@@ -150,15 +150,19 @@ func load_external_audio(file_path: String) -> AudioStream:
 		_:
 			print("Error: Unsupported audio format: ", ext)
 			return null
+
 func _parse_wav(buffer: PackedByteArray) -> AudioStreamWAV:
+	if buffer.size() < 44:
+		print("Error: Buffer too small for WAV")
+		return null
 	if buffer.slice(0, 4).get_string_from_ascii() != "RIFF" or buffer.slice(8, 12).get_string_from_ascii() != "WAVE":
 		print("Error: Not a valid WAV file")
-		return null		
+		return null	
 	var stream = AudioStreamWAV.new()
 	var channels = buffer.decode_u16(22)
-	stream.stereo = (channels == 2)	
+	stream.stereo = (channels == 2)
 	var sample_rate = buffer.decode_u32(24)
-	stream.mix_rate = sample_rate	
+	stream.mix_rate = sample_rate
 	var bits_per_sample = buffer.decode_u16(34)
 	if bits_per_sample == 8:
 		stream.format = AudioStreamWAV.FORMAT_8_BITS
@@ -166,25 +170,25 @@ func _parse_wav(buffer: PackedByteArray) -> AudioStreamWAV:
 		stream.format = AudioStreamWAV.FORMAT_16_BITS
 	else:
 		print("Error: Unsupported WAV bit depth: ", bits_per_sample)
-		return null	
+		return null
 	var pos = 12
 	var data_found = false	
 	while pos < buffer.size() - 8:
 		var chunk_id = buffer.slice(pos, pos + 4).get_string_from_ascii()
-		var chunk_size = buffer.decode_u32(pos + 4)		
+		var chunk_size = buffer.decode_u32(pos + 4)
 		if chunk_id == "data":
 			var raw_data = buffer.slice(pos + 8, pos + 8 + chunk_size)
 			if bits_per_sample == 8:
 				for i in range(raw_data.size()):
 					var val = raw_data[i]
-					raw_data[i] = (val + 128) % 256			
+					raw_data[i] = (val + 128) % 256
 			stream.data = raw_data
 			data_found = true
-			break			
-		pos += 8 + chunk_size	
+			break
+		pos += 8 + chunk_size
 	if not data_found:
 		print("Error: Could not find 'data' chunk in WAV")
-		return null		
+		return null
 	return stream
 	
 func _input(event):

@@ -1364,53 +1364,91 @@ bool make_dir_godot(const String &path) {
 }
 
 bool MBEXsoundConvert(int index, String path) {
-	bool result = false;
-	char *OUT_PATH = (char*)path.utf8().get_data();
-	if (!MBLoadSound(index))
+	if (!MBLoadSound(index)) {
+		UtilityFunctions::push_error(vformat("Failed to load sound index: %d", index));
 		return false;
-	bool subSoundExists = true;
+	}
+
 	int j = 1;
-	while (subSoundExists) {
+	while (true) {
 		uint8_t *buffer = soundIndex_E37A0->str_8.wavs_10[j].wavData_18;
 		int32_t size = soundIndex_E37A0->str_8.wavs_10[j].wavSize_26;
 		int8_t *filename_c = soundIndex_E37A0->str_8.wavs_10[j].filename_0;
-		/*
-		if (!soundIndex_E37A0->str_8.wavs_10[j].word_30) {
-			j++;
-			continue;
-		}*/
-		if (!buffer || size <= 0 || !filename_c) {
+
+		if (!buffer || size <= 0 || !filename_c)
 			break;
-		}
+
 		String filename = String::utf8((const char *)filename_c);
-		//String dir_path = "user://convertdata/sounds";
-		String full_path = path + "/" + vformat("%03d_%03d_%s", index, j, filename);
-		if (!make_dir_godot(path)) {
+		if (!make_dir_godot(path))
 			break;
+
+		// --- KROK 1: ULOŽENÍ PŮVODNÍ VERZE (Original 8-bit) ---
+		// Tento soubor zůstane přesně tak, jak byl v paměti
+		String full_path_orig = path + "/" + vformat("%03d_%03d_%s", index, j, filename);
+		Ref<FileAccess> file_orig = FileAccess::open(full_path_orig, FileAccess::WRITE);
+		if (file_orig.is_valid()) {
+			file_orig->store_buffer(buffer, size);
+			file_orig->flush();
+			UtilityFunctions::print(vformat("Step 1/2 - Original saved: %s", full_path_orig));
 		}
-		Ref<FileAccess> file = FileAccess::open(full_path, FileAccess::WRITE);
-		if (!file.is_valid()) {
-			break;
+
+		// --- KROK 2: PŘÍPRAVA A ULOŽENÍ RESAMPLED VERZE (16-bit, 44.1kHz) ---
+		int new_sample_count = size * 2;
+		int data_chunk_size = new_sample_count * 2;
+
+		PackedByteArray resampled_data;
+		resampled_data.resize(data_chunk_size);
+		int16_t *dst = reinterpret_cast<int16_t *>(resampled_data.ptrw());
+
+		for (int i = 0; i < size; i++) {
+			// Upscaling bitové hloubky
+			int16_t sample_current = (static_cast<int16_t>(buffer[i]) - 128) << 8;
+			int16_t sample_next = (i < size - 1) ? (static_cast<int16_t>(buffer[i + 1]) - 128) << 8 : sample_current;
+
+			// Interpolace frekvence
+			dst[i * 2] = sample_current;
+			dst[i * 2 + 1] = (int16_t)(((int32_t)sample_current + (int32_t)sample_next) / 2);
 		}
-		/*
-		PackedByteArray mutable_buffer;
-		mutable_buffer.resize(size);
-		memcpy(mutable_buffer.ptrw(), buffer, size);
-		file->store_buffer(mutable_buffer.ptr(), size);
-		*/
-		file->store_buffer(buffer, size);
-		Error err = file->get_error();
-		if (err != OK) {
-			UtilityFunctions::push_error(vformat("CHYBA při zápisu do souboru: %s (Error: %d, zapsáno před chybou)", full_path, (int)err));
-			break;
+
+		String resampled_path = path + "/" + vformat("%03d_%03d_%s_441.WAV", index, j, filename.get_basename());
+		Ref<FileAccess> file_res = FileAccess::open(resampled_path, FileAccess::WRITE);
+
+		if (file_res.is_valid()) {
+			// Zápis hlavičky manuálně
+			file_res->store_8('R');
+			file_res->store_8('I');
+			file_res->store_8('F');
+			file_res->store_8('F');
+			file_res->store_32(36 + data_chunk_size);
+			file_res->store_8('W');
+			file_res->store_8('A');
+			file_res->store_8('V');
+			file_res->store_8('E');
+			file_res->store_8('f');
+			file_res->store_8('m');
+			file_res->store_8('t');
+			file_res->store_8(' ');
+			file_res->store_32(16);
+			file_res->store_16(1); // PCM
+			file_res->store_16(1); // Mono
+			file_res->store_32(44100);
+			file_res->store_32(44100 * 2);
+			file_res->store_16(2);
+			file_res->store_16(16);
+			file_res->store_8('d');
+			file_res->store_8('a');
+			file_res->store_8('t');
+			file_res->store_8('a');
+			file_res->store_32(data_chunk_size);
+
+			file_res->store_buffer(resampled_data);
+			file_res->flush();
+			UtilityFunctions::print(vformat("Step 2/2 - Resampled saved: %s", resampled_path));
 		}
-		file->flush();
-		UtilityFunctions::print(vformat("Úspěšně zapsáno: %s (%d bajtů)", full_path, size));
+
 		j++;
 	}
-	if (j == 0)
-		return false;
-	return true;
+	return (j > 1);
 }
 
 bool MBLoadSound(uint8_t soundIndex) //265300

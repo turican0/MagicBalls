@@ -45,7 +45,7 @@ func load_speech_from_dir(path: String):
 				var raw_idx = base_name.substr(1).to_int()
 				var final_idx = raw_idx - 1
 				var full_path = path + file_name
-				var audio_resource = Global.load_external_audio(full_path)	
+				var audio_resource = Global.load_external_audio(full_path)
 				if audio_resource:
 					Global.speech_map[final_idx] = audio_resource
 					print("Speech loaded: ", file_name, " as index: ", final_idx)
@@ -112,24 +112,31 @@ func load_sounds_from_dir(path: String):
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
-		
 		while file_name != "":
-			if !dir.current_is_dir() and file_name.ends_with(".WAV"):
-				var parts = file_name.split("_")
-				if parts.size() >= 2:
-					var pack_idx = parts[0].to_int()
-					var sound_idx = parts[1].to_int()
-					#var full_path = path + file_name
-					#var stream = _load_wav_as_sample(full_path)  
-					#var stream = ResourceLoader.load(full_path, "AudioStream", ResourceLoader.CACHE_MODE_REUSE)
-					var stream = Global.load_external_audio(path + file_name)
-					if not Global.sounds_map.has(pack_idx):
-						Global.sounds_map[pack_idx] = {}
-					Global.sounds_map[pack_idx][sound_idx] = stream
-					print("Načten zvuk: Pack ", pack_idx, " Index ", sound_idx)			
+			if !dir.current_is_dir() and file_name.to_upper().ends_with(".WAV"):
+				if "441" in file_name:
+					var parts = file_name.split("_")
+					if parts.size() >= 2:
+						var pack_idx = parts[0].to_int()
+						var sound_idx = parts[1].to_int()
+						var stream = Global.load_external_audio(path + file_name)
+						if stream:
+							if not Global.sounds_map.has(pack_idx):
+								Global.sounds_map[pack_idx] = {}
+							Global.sounds_map[pack_idx][sound_idx] = stream
+							print("Loaded file: ", file_name) # UPDATE: Success log
+						else:
+							print("Not loaded file (parse error): ", file_name) # UPDATE: Fail log
+					else:
+						print("Not loaded file (bad name format): ", file_name) # UPDATE: Fail log
+				else:
+					# Skip files without 441 silently or log them as skipped
+					print("Not loaded file (missing 441): ", file_name) # UPDATE: Skip log
+			
 			file_name = dir.get_next()
+		dir.list_dir_end()
 	else:
-		print("Chyba: Adresář nebyl nalezen.")
+		print("Error: Directory not found: ", path)
 
 func updateSounds(soundActions:Array):
 	for action_dict in soundActions:
@@ -241,7 +248,7 @@ func stop_sound(index: int) -> void:
 
 func set_sound_volume(index: int, volume_int: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
-		Global.sfx_players[index].volume_linear = float(volume_int) / 128.0
+		Global.sfx_players[index].volume_db = linear_to_db(float(volume_int) / 128.0)
 
 func set_sound_panning(index: int, pan_int: int) -> void:
 	if index >= 0 and index < Global.sfx_players.size():
