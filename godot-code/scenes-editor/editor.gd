@@ -623,7 +623,7 @@ func delete_selected_entities():
 	if selected_nodes.is_empty():
 		print("Nic není označeno ke smazání.")
 		return
-	var myArray:Array 
+	var myArray:Array
 	for node in selected_nodes:
 		if node.has_meta("index"):
 			var index = node.get_meta("index")
@@ -641,6 +641,8 @@ func delete_selected_entities():
 		
 
 func RenderEditorEntites(data_array: PackedFloat32Array):
+	for node in get_tree().get_nodes_in_group("entities"):
+		node.remove_from_group("entities")
 	var entites_per_frame=0;
 	var stride = 11
 	var inv_256 = 1.0 / 256.0
@@ -667,13 +669,15 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 		var uid2 = Vector3i(type_0x30311,subtype_0x30311,0)
 		var scene_to_instance = null
 		var libType:int = 0
-
+		
 		libType = 1
 		if library_scenes.has(uid2):
 			scene_to_instance = library_scenes[uid2]
 			fromlib = true
 		elif not library.has(uid2):
 			scene_to_instance = library_scenes.get(default_key)
+		if(type_0x30311==0)&&(subtype_0x30311==0):
+			scene_to_instance = null
 		if scene_to_instance != null:
 			current_node = get_first_entity_with_uid(uid2)
 			if current_node == null:
