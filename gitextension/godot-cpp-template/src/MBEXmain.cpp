@@ -1823,13 +1823,14 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
 	PackedFloat32Array data;
 
 	int players_count = 8;
-	int floats_per_player = 82; // 3 (vlastnosti) + 26 + 26 + 26 (spelly) + 1 (life)
+	int floats_per_player = 86; // 3 (vlastnosti) + 26 + 26 + 26 (spelly) + 1 (life) + 4 (stages)
 
 	data.resize(players_count * floats_per_player); // Alokace přesné velikosti (656 prvků)
 
 	int idx = 0;
 	for (int i = 0; i < players_count; ++i) {
 		Type_WizardMapSettings_0x360D2 &w = D41A0_0.terrain_2FECE.WizardMapSettings_0x360D2[i];
+		type_str_0x36442 &s = D41A0_0.terrain_2FECE.stages_0x36442[i];
 
 		// Přímý zápis na indexy
 		data.set(idx++, (float)w.Aggression_0x360D5);
@@ -1846,6 +1847,11 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
 			data.set(idx++, (float)w.BlockedSpells_0x36115x[s]);
 
 		data.set(idx++, (float)w.Life_0x3612F);
+
+		data.set(idx++, (float)s.index_0);
+		data.set(idx++, (float)s.stage_1);
+		data.set(idx++, (float)s._axis_2d.x);
+		data.set(idx++, (float)s._axis_2d.y);
 	}
 
 	return data;
