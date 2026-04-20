@@ -139,6 +139,7 @@ public:
 
 	PackedFloat32Array REMC2EditorGetTerrainEntites();
 	PackedFloat32Array REMC2EditorGetTerrainPlayers();
+	PackedFloat32Array REMC2EditorGetTerrainStages();
 	int REMC2EditorDeleteEntites(Array p_indices);
 
 	void REMC2EditorUndo();

@@ -63,8 +63,6 @@ target_compile_options(${LIBNAME} PRIVATE
         # Potlacime jako warning, ne error.
         -Wno-narrowing
         -Wno-error=narrowing
-        # lib9660.h je C99 header - flexible array member je v C++ pedantic error
-        -Wno-pedantic
     >
     $<$<CXX_COMPILER_ID:Clang>:
         -Wno-error
@@ -252,7 +250,7 @@ target_sources(${LIBNAME}
     src/lib/stb_image.h
     src/lib/stb_image_write.h
     src/lib/stb_impl.cpp
-    src/lib/lib9660.c
+    src/lib/lib9660.cpp
     src/lib/lib9660.h
 
 )

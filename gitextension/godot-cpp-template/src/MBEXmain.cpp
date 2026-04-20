@@ -78,6 +78,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainPlayers"), &MBEXclass::REMC2EditorGetTerrainPlayers);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorUndo"), &MBEXclass::REMC2EditorUndo);
@@ -1852,6 +1853,29 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
 		data.set(idx++, (float)s.stage_1);
 		data.set(idx++, (float)s._axis_2d.x);
 		data.set(idx++, (float)s._axis_2d.y);
+	}
+
+	return data;
+}
+
+PackedFloat32Array MBEXclass::REMC2EditorGetTerrainStages() {
+	PackedFloat32Array data;
+
+	int stages_count = 11;
+	int floats_per_stage = 6; // 3 (vlastnosti) + 26 + 26 + 26 (spelly) + 1 (life) + 4 (stages)
+
+	data.resize(stages_count * floats_per_stage); // Alokace přesné velikosti (656 prvků)
+
+	int idx = 0;
+	for (int i = 0; i < stages_count; ++i) {
+		type_str_0x3647Ac &s = D41A0_0.terrain_2FECE.StageVars_0x3647A[i];
+
+		data.set(idx++, (float)s.index_0x3647A_0);
+		data.set(idx++, (float)s.stage_0x3647A_1);
+		data.set(idx++, (float)s.str_0x3647A_2._axis_2d.x);
+		data.set(idx++, (float)s.str_0x3647A_2._axis_2d.y);
+		data.set(idx++, (float)s.str_0x3647C_4.axis.x);
+		data.set(idx++, (float)s.str_0x3647C_4.axis.y);
 	}
 
 	return data;
