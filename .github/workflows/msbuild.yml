@@ -362,15 +362,25 @@ jobs:
           sed -i 's/-fno-exceptions/-fexceptions/g' "$GODOT_CPP_CMAKE"
           sed -i 's/-fno-rtti/-frtti/g'             "$GODOT_CPP_CMAKE"
 
-          # Patch NDK toolchain file - tohle je zdroj -fno-exceptions ktery prebiji vse ostatni
+          # Patch VSECH NDK toolchain souboru - NDK r23 pouziva vice cmake souboru
+          find "$ANDROID_NDK_HOME/build/cmake" -name "*.cmake" | while read f; do
+            sed -i 's/-fno-exceptions/-fexceptions/g' "$f"
+            sed -i 's/-fno-rtti/-frtti/g'             "$f"
+          done
+          echo "=== Patch NDK cmake files ==="
+          grep -rn "fexceptions\|frtti" "$ANDROID_NDK_HOME/build/cmake/" | head -20
+
+          # cmake initial cache - nastavi se PRED toolchainem a neda se prebyt
+          cat > /tmp/android_init.cmake << 'INITEOF'
+          set(CMAKE_CXX_FLAGS_INIT "-fexceptions -frtti -include cmath" CACHE STRING "" FORCE)
+          set(CMAKE_C_FLAGS_INIT "" CACHE STRING "" FORCE)
+          INITEOF
+
           NDK_TOOLCHAIN="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake"
-          sed -i 's/-fno-exceptions/-fexceptions/g' "$NDK_TOOLCHAIN"
-          sed -i 's/-fno-rtti/-frtti/g'             "$NDK_TOOLCHAIN"
-          echo "=== Patch NDK toolchain ==="
-          grep -n "exceptions\|rtti" "$NDK_TOOLCHAIN" | head -20
 
           for ABI in arm64-v8a x86_64; do
             cmake -B "build-android-$ABI" \
+              -C /tmp/android_init.cmake \
               -S gitextension/godot-cpp-template \
               -DCMAKE_TOOLCHAIN_FILE="$NDK_TOOLCHAIN" \
               -DANDROID_ABI="$ABI" \
@@ -378,7 +388,6 @@ jobs:
               -DANDROID_CPP_FEATURES="exceptions rtti" \
               -DCMAKE_BUILD_TYPE=Release \
               -DLIBNAME="MagicBalls" \
-              -DCMAKE_CXX_FLAGS="-include cmath -fexceptions -frtti" \
               -DCMAKE_EXE_LINKER_FLAGS="-lm" \
               -GNinja
             ninja -C "build-android-$ABI"
