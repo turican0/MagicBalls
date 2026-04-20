@@ -777,6 +777,54 @@ text = "Life"
 layout_mode = 2
 max_value = 65535.0
 
+[node name="StageIndex" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1925007844]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageIndex" unique_id=1443861603]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "StageIndex"
+
+[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageIndex" unique_id=187605508]
+layout_mode = 2
+max_value = 65535.0
+
+[node name="StageStage" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=729549288]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageStage" unique_id=79062092]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "StageStage"
+
+[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageStage" unique_id=1450131364]
+layout_mode = 2
+max_value = 65535.0
+
+[node name="StageX" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=306412774]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX" unique_id=1168289504]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "StageX"
+
+[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX" unique_id=1566181987]
+layout_mode = 2
+max_value = 65535.0
+
+[node name="StageY" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=795641651]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY" unique_id=592165409]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "StageY"
+
+[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY" unique_id=125753527]
+layout_mode = 2
+max_value = 65535.0
+
 [node name="LabelStartingSpells" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1057108797]
 layout_mode = 2
 text = "StartingSpell"

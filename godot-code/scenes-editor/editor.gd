@@ -69,7 +69,7 @@ func SetPlayerValues(data: PackedFloat32Array):
 		push_error("Žádná data z MBEX nebyla přijata!")
 		return
 	Global.players_settings.clear()
-	var floats_per_player = 82 
+	var floats_per_player = 86
 	var num_players = data.size() / floats_per_player
 	for i in range(num_players):
 		var wizard = Global.WizardSettings.new()
@@ -84,6 +84,12 @@ func SetPlayerValues(data: PackedFloat32Array):
 		for s in range(26):
 			wizard.blocked_spells[s]  = int(data[offset + 3 + 26 + 26 + s])
 		wizard.life = int(data[offset + 81])
+		
+		wizard.stageIndex = int(data[offset + 82])
+		wizard.stageStage = int(data[offset + 83])
+		wizard.stageX = int(data[offset + 84])
+		wizard.stageY = int(data[offset + 85])
+		
 		Global.players_settings.append(wizard)
 	
 func _input(event: InputEvent) -> void:

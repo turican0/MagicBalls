@@ -215,6 +215,11 @@ class WizardSettings:
 	var unknown_bytes: Array = []
 	var blocked_spells: Array = []
 	var life: int
+	
+	var stageIndex: int
+	var stageStage: int
+	var stageX: int
+	var stageY: int
 
 	func _init():
 		starting_spells.resize(26)

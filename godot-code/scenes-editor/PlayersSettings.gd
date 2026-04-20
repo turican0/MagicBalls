@@ -17,6 +17,11 @@ func display_player_data(idx: int):
 	$Reflexes/SpinBox.value   = data.reflexes
 	$Perception/SpinBox.value = data.perception
 	$Life/SpinBox.value       = data.life
+	
+	$StageIndex/SpinBox.value = data.stageIndex
+	$StageStage/SpinBox.value = data.stageStage
+	$StageX/SpinBox.value     = data.stageX
+	$StageY/SpinBox.value     = data.stageY
 
 	# 2. Kouzla (TextureButtony v panelech)
 	# Použijeme tvé proměnné ze třídy WizardSettings
