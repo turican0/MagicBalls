@@ -22,6 +22,10 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef L9660_HAVE_STDIO
 #include <stdio.h>
 #define L9660_SEEK_END SEEK_END
@@ -200,5 +204,9 @@ l9660_status l9660_read(l9660_file *file, void* buf, size_t size, size_t *read);
 l9660_status l9660_seek(l9660_file *file, int whence, int32_t offset);
 /*! Return the current position (suitable for passing to l9660_seek(file, SEEK_SET, ...)) */
 uint32_t     l9660_tell(l9660_file *file);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif

@@ -244,14 +244,10 @@ target_sources(${LIBNAME}
     src/lib/stb_image.h
     src/lib/stb_image_write.h
     src/lib/stb_impl.cpp
-    src/lib/lib9660.cpp
+    src/lib/lib9660.c
     src/lib/lib9660.h
 
 )
-
-# lib9660 je C99 knihovna - flexible array members jsou v C++ ilegalni,
-# ale v C99 legalni. Nastavime LANGUAGE na C aby se kompilovala spravne.
-set_source_files_properties(src/lib/lib9660.cpp PROPERTIES LANGUAGE C)
 
 # Fetch a list of the xml files to use for documentation and add to our target
 file(GLOB_RECURSE DOC_XML LIST_DIRECTORIES NO CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/doc_classes/*.xml")
