@@ -26,26 +26,11 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src")
 endif()
 add_subdirectory(godot-cpp SYSTEM)
 
-# Android NDK i godot-cpp oba hardcodujou -fno-exceptions do COMPILE_OPTIONS.
-# Musime ho odstranit az po add_subdirectory(godot-cpp), pote co jsou targety definovany,
-# a pouzit add_compile_options ktere se aplikuje na vsechny nasledne kompilace.
-if(ANDROID)
-    # Odstran -fno-exceptions z globalnich cmake flags
-    foreach(_flag CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-        string(REPLACE "-fno-exceptions" "-fexceptions" ${_flag} "${${_flag}}")
-        set(${_flag} "${${_flag}}" CACHE STRING "" FORCE)
-    endforeach()
-    # Globalni compile option - aplikuje se na vsechny targety vcetne godot-cpp
-    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fexceptions>)
-    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-frtti>)
-    # Odstran -fno-exceptions primo z godot-cpp target properties
-    get_target_property(_godot_opts godot-cpp COMPILE_OPTIONS)
-    if(_godot_opts)
-        list(REMOVE_ITEM _godot_opts "-fno-exceptions" "-fno-rtti")
-        list(APPEND _godot_opts "-fexceptions" "-frtti")
-        set_target_properties(godot-cpp PROPERTIES COMPILE_OPTIONS "${_godot_opts}")
-    endif()
-endif()
+# godot-cpp pouziva generator expressions pro -fno-exceptions/-fno-rtti a
+# -Wnarrowing, ktere nelze odstranit pres list(REMOVE_ITEM).
+# Jedine spolehlivé reseni: pridat nase flagy az v target_compile_options
+# na samotny LIBNAME target (po jeho definici) a potlacit chyby globalne.
+# Toto se provede dole u definice ${LIBNAME} targetu.
 
 # Add godot-cpp's module path and include the exported functions.
 # This is made available for documentation generation
@@ -68,16 +53,22 @@ add_library(${LIBNAME} SHARED)
 
 target_compile_options(${LIBNAME} PRIVATE
     -fsigned-char
+    # -fexceptions musi byt az ZDE na urovni naseho targetu - godot-cpp
+    # propaguje -fno-exceptions pres INTERFACE a prebiji globalni nastaveni.
+    # Flag pridany primo na target ma prednost pred INTERFACE flags z dependencies.
     -fexceptions
-    $<$<CXX_COMPILER_ID:GNU>:
-        # lib9660.h je C99 header includovany z C++ kodu - GCC si stezuje na
-        # flexible array member (char name[]). Potlacime jako warning, ne error.
+    -frtti
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:
+        # Narrowing conversions: Level.cpp ma hodne int->int16_t konverzi (legacy kod).
+        # Potlacime jako warning, ne error.
+        -Wno-narrowing
+        -Wno-error=narrowing
+        # lib9660.h je C99 header - flexible array member je v C++ pedantic error
         -Wno-pedantic
     >
     $<$<CXX_COMPILER_ID:Clang>:
         -Wno-error
         -Wno-c++11-narrowing
-        -Wno-narrowing
         -Wno-pragma-pack
         -Wno-delete-abstract-non-virtual-dtor
         -Wno-pointer-bool-conversion
@@ -305,7 +296,7 @@ if(ANDROID)
     target_compile_definitions(${LIBNAME} PRIVATE _LIBCPP_HAS_THREAD_API_PTHREAD)
     target_link_libraries(${LIBNAME} PRIVATE log android)
     target_link_options(${LIBNAME} PRIVATE -pthread)
-    # Explicitne vynutit -fexceptions na urovni targetu jako posledni slovo
-    target_compile_options(${LIBNAME} PRIVATE -fexceptions -frtti)
+    # -fexceptions je uz v target_compile_options nahore, toto je pojistka
+    # pro godot-cpp ktery ma vlastni -fno-exceptions v PRIVATE options
     target_compile_options(godot-cpp PRIVATE -fexceptions -frtti)
 endif()

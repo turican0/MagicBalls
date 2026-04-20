@@ -1,28 +1,20 @@
 extends TextureButton
 
-# Proměnná pro sledování stavu
-var is_active: bool = true
-
 func _ready():
-	# Velikost a signály
 	custom_minimum_size = Vector2(40, 40)
+	toggle_mode = true # Důležité: aby tlačítko drželo stav
 	
-	# Propojíme signál stisknutí se funkcí, pokud ještě není připojen
-	if not self.pressed.is_connected(_on_pressed):
-		self.pressed.connect(_on_pressed)
+	# Signál pro změnu stavu (toggled funguje pro zapnutí i vypnutí)
+	if not self.toggled.is_connected(_on_toggled):
+		self.toggled.connect(_on_toggled)
 	
-	# Nastavíme výchozí vizuál při startu
-	_update_visuals()
+	_update_visuals(button_pressed)
 
-func _on_pressed():
-	# Přepneme true/false
-	is_active = !is_active
-	_update_visuals()
+func _on_toggled(toggled_on: bool):
+	_update_visuals(toggled_on)
 
-func _update_visuals():
-	if is_active:
-		# Normální barvy
+func _update_visuals(active: bool):
+	if active:
 		self.modulate = Color(1, 1, 1, 1)
 	else:
-		# Ztmavení/zašednutí
 		self.modulate = Color(0.3, 0.3, 0.3, 1)

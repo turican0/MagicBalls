@@ -26,15 +26,16 @@ func display_player_data(idx: int):
 
 # Pomocná funkce pro iteraci přes kontejnery
 func _update_spell_buttons(container: Control, spell_array: Array):
-	if not container: return
-	
-	var panels = container.get_children()
-	
+	if not container: return	
+	var panels = container.get_children()	
 	for i in range(min(panels.size(), spell_array.size())):
 		# Předpokládáme strukturu: Panel -> TextureButton
-		var btn = panels[i].get_child(0) as TextureButton
-		
+		var btn = panels[i].get_child(0) as TextureButton		
 		if btn:
 			btn.toggle_mode = true
 			# Pokud je hodnota v poli > 0, tlačítko se zapne
 			btn.button_pressed = (spell_array[i] > 0)
+
+
+func _on_spin_box_value_changed(value: float) -> void:
+	display_player_data(value-1)
