@@ -18,7 +18,7 @@ config/name="MagicBalls"
 run/main_scene="uid://dcu8ag8i1d602"
 config/features=PackedStringArray("4.6")
 boot_splash/show_image=false
-config/icon="res://icon.svg"
+config/icon="uid://o8aiatyr7j2j"
 
 [audio]
 
