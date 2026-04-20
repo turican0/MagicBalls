@@ -12,12 +12,14 @@ extends Node3D
 @onready var Terrain_Edit_Panel: Control = $UI/TerrainEdit
 @onready var Entity_Edit_Panel: Control = $UI/EntityEdit
 @onready var Wizards_Edit_Panel: Control = $UI/WizardsEdit
+@onready var Stages_Edit_Panel: Control = $UI/StagesEdit
 
 @onready var Console: RichTextLabel = $UI/Console/RichTextLabel
 
 @onready var Terrain_Edit = $UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 @onready var Entity_Edit: Control = $UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 @onready var Wizards_Edit: Control = $UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
+@onready var Stages_Edit: Control = $UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 
 @onready var selectors = [
 	Terrain_Edit.get_node("Seed_0"),
@@ -58,7 +60,9 @@ func _ready() -> void:
 		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
 			selector.value_changed.connect(_on_h_box_container_value_changed)
 	SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
+	SetStagesValues(Global.MBEX.REMC2EditorGetTerrainStages())
 	Wizards_Edit.display_player_data(0)
+	Stages_Edit.display_stages_data(0)
 	toggle_editor_control_style()
 	_preload_library(library, library_scenes)
 	Tree_View.item_selected.connect(_on_tree_item_selected)
@@ -91,6 +95,25 @@ func SetPlayerValues(data: PackedFloat32Array):
 		wizard.stageY = int(data[offset + 85])
 		
 		Global.players_settings.append(wizard)
+
+func SetStagesValues(data: PackedFloat32Array):
+	if data.is_empty():
+		push_error("Žádná data z MBEX nebyla přijata!")
+		return
+	Global.stages_settings.clear()
+	var floats_per_stage = 6
+	var num_stages = data.size() / floats_per_stage
+	for i in range(num_stages):
+		var stage = Global.StagesSettings.new()
+		var offset = i * floats_per_stage
+		stage.index = int(data[offset + 0])
+		stage.stage = int(data[offset + 1])
+		stage.x1 = int(data[offset + 2])
+		stage.y1 = int(data[offset + 3])
+		stage.x2 = int(data[offset + 4])
+		stage.y2 = int(data[offset + 5])
+		
+		Global.stages_settings.append(stage)
 	
 func _input(event: InputEvent) -> void:
 	# M pressed

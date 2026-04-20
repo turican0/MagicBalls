@@ -225,5 +225,14 @@ class WizardSettings:
 		starting_spells.resize(26)
 		unknown_bytes.resize(26)
 		blocked_spells.resize(26)
-
+		
+class StagesSettings:
+	var index: int
+	var stage: int
+	var x1: int
+	var y1: int
+	var x2: int
+	var y2: int
+		
 var players_settings: Array[WizardSettings] = []
+var stages_settings: Array[StagesSettings] = []
