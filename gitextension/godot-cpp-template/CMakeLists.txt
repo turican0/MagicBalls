@@ -26,13 +26,18 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src")
 endif()
 add_subdirectory(godot-cpp SYSTEM)
 
-# Android NDK defaultne kompiluje s -fno-exceptions, ale zdrojovy kod
-# pouziva try/catch. Musime -fexceptions vynutit globalne PRED tim, nez
-# godot-cpp zkompiluje svuj kod - jinak -fno-exceptions prebije nas flag.
+# Android NDK r23 pridava -fno-exceptions pres toolchain file na konec flags.
+# Jedine spolehlivé reseni: pouzit add_compile_options s SHELL: prefixem,
+# ktery zajisti ze -fexceptions pride az po -fno-exceptions a prebije ho.
+# Zaroven odstranime -fno-exceptions z CMAKE_CXX_FLAGS pro jistotu.
 if(ANDROID)
     string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" CACHE STRING "" FORCE)
-    target_compile_options(godot-cpp PUBLIC -fexceptions)
+    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING "" FORCE)
+    # add_compile_options se aplikuje GLOBALNE a POZDEJI nez toolchain - prebiji -fno-exceptions
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fexceptions>)
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-frtti>)
 endif()
 
 # Add godot-cpp's module path and include the exported functions.
@@ -57,6 +62,11 @@ add_library(${LIBNAME} SHARED)
 target_compile_options(${LIBNAME} PRIVATE
     -fsigned-char
     -fexceptions
+    $<$<CXX_COMPILER_ID:GNU>:
+        # lib9660.h je C99 header includovany z C++ kodu - GCC si stezuje na
+        # flexible array member (char name[]). Potlacime jako warning, ne error.
+        -Wno-pedantic
+    >
     $<$<CXX_COMPILER_ID:Clang>:
         -Wno-error
         -Wno-c++11-narrowing
@@ -249,6 +259,8 @@ target_sources(${LIBNAME}
 
 )
 
+# lib9660.c je C99 knihovna - kompiluje se jako C diky pripone .c (zadny CMake hack nepotrebujes).
+
 # Fetch a list of the xml files to use for documentation and add to our target
 file(GLOB_RECURSE DOC_XML LIST_DIRECTORIES NO CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/doc_classes/*.xml")
 
@@ -285,5 +297,8 @@ add_custom_command(TARGET ${LIBNAME} POST_BUILD
 if(ANDROID)
     target_compile_definitions(${LIBNAME} PRIVATE _LIBCPP_HAS_THREAD_API_PTHREAD)
     target_link_libraries(${LIBNAME} PRIVATE log android)
-    target_link_options(${LIBNAME} PRIVATE -pthread)  # ← přidej toto
+    target_link_options(${LIBNAME} PRIVATE -pthread)
+    # Explicitne vynutit -fexceptions na urovni targetu jako posledni slovo
+    target_compile_options(${LIBNAME} PRIVATE -fexceptions -frtti)
+    target_compile_options(godot-cpp PRIVATE -fexceptions -frtti)
 endif()
