@@ -358,9 +358,10 @@ jobs:
               -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \
               -DANDROID_ABI="$ABI" \
               -DANDROID_PLATFORM=android-24 \
+              -DANDROID_CPP_FEATURES="exceptions rtti" \
               -DCMAKE_BUILD_TYPE=Release \
               -DLIBNAME="MagicBalls" \
-              -DCMAKE_CXX_FLAGS="-include cmath -fexceptions" \
+              -DCMAKE_CXX_FLAGS="-include cmath" \
               -DCMAKE_EXE_LINKER_FLAGS="-lm" \
               -GNinja
             ninja -C "build-android-$ABI"
