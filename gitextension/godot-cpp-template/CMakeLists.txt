@@ -26,18 +26,25 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src")
 endif()
 add_subdirectory(godot-cpp SYSTEM)
 
-# Android NDK r23 pridava -fno-exceptions pres toolchain file na konec flags.
-# Jedine spolehlivé reseni: pouzit add_compile_options s SHELL: prefixem,
-# ktery zajisti ze -fexceptions pride az po -fno-exceptions a prebije ho.
-# Zaroven odstranime -fno-exceptions z CMAKE_CXX_FLAGS pro jistotu.
+# Android NDK i godot-cpp oba hardcodujou -fno-exceptions do COMPILE_OPTIONS.
+# Musime ho odstranit az po add_subdirectory(godot-cpp), pote co jsou targety definovany,
+# a pouzit add_compile_options ktere se aplikuje na vsechny nasledne kompilace.
 if(ANDROID)
-    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" CACHE STRING "" FORCE)
-    # add_compile_options se aplikuje GLOBALNE a POZDEJI nez toolchain - prebiji -fno-exceptions
+    # Odstran -fno-exceptions z globalnich cmake flags
+    foreach(_flag CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+        string(REPLACE "-fno-exceptions" "-fexceptions" ${_flag} "${${_flag}}")
+        set(${_flag} "${${_flag}}" CACHE STRING "" FORCE)
+    endforeach()
+    # Globalni compile option - aplikuje se na vsechny targety vcetne godot-cpp
     add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fexceptions>)
     add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-frtti>)
+    # Odstran -fno-exceptions primo z godot-cpp target properties
+    get_target_property(_godot_opts godot-cpp COMPILE_OPTIONS)
+    if(_godot_opts)
+        list(REMOVE_ITEM _godot_opts "-fno-exceptions" "-fno-rtti")
+        list(APPEND _godot_opts "-fexceptions" "-frtti")
+        set_target_properties(godot-cpp PROPERTIES COMPILE_OPTIONS "${_godot_opts}")
+    endif()
 endif()
 
 # Add godot-cpp's module path and include the exported functions.

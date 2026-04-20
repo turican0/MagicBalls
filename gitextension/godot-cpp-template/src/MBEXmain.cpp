@@ -1820,23 +1820,35 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 }
 
 PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
-		PackedFloat32Array data;
-		data.resize(8 * 110);
-		for (int i = 0; i < 8; ++i) {
-			Type_WizardMapSettings_0x360D2 &w = D41A0_0.terrain_2FECE.WizardMapSettings_0x360D2[i];
-			int offset = i * 110;
-			data.push_back((float)w.Aggression_0x360D5);
-			data.push_back((float)w.Reflexes_0x360D9);
-			data.push_back((float)w.Perception_0x360DD);
-			for (int s = 0; s < 26; ++s)
-				data.push_back((float)w.StartingSpells_0x360E1x[s]);
-			for (int s = 0; s < 26; ++s)
-				data.push_back((float)w.byte_0x360FBx[s]);
-			for (int s = 0; s < 26; ++s)
-				data.push_back((float)w.BlockedSpells_0x36115x[s]);
-			data.push_back((float)w.Life_0x3612F);
-		}
-		return data;
+	PackedFloat32Array data;
+
+	int players_count = 8;
+	int floats_per_player = 82; // 3 (vlastnosti) + 26 + 26 + 26 (spelly) + 1 (life)
+
+	data.resize(players_count * floats_per_player); // Alokace přesné velikosti (656 prvků)
+
+	int idx = 0;
+	for (int i = 0; i < players_count; ++i) {
+		Type_WizardMapSettings_0x360D2 &w = D41A0_0.terrain_2FECE.WizardMapSettings_0x360D2[i];
+
+		// Přímý zápis na indexy
+		data.set(idx++, (float)w.Aggression_0x360D5);
+		data.set(idx++, (float)w.Reflexes_0x360D9);
+		data.set(idx++, (float)w.Perception_0x360DD);
+
+		for (int s = 0; s < 26; ++s)
+			data.set(idx++, (float)w.StartingSpells_0x360E1x[s]);
+
+		for (int s = 0; s < 26; ++s)
+			data.set(idx++, (float)w.byte_0x360FBx[s]);
+
+		for (int s = 0; s < 26; ++s)
+			data.set(idx++, (float)w.BlockedSpells_0x36115x[s]);
+
+		data.set(idx++, (float)w.Life_0x3612F);
+	}
+
+	return data;
 }
 
 int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
