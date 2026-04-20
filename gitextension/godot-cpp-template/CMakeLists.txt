@@ -26,6 +26,15 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src")
 endif()
 add_subdirectory(godot-cpp SYSTEM)
 
+if(TARGET godot::cpp)
+    get_target_property(godot_opts godot::cpp COMPILE_OPTIONS)
+    if(godot_opts)
+        list(REMOVE_ITEM godot_opts "-fno-exceptions" "-fno-rtti")
+        set_target_properties(godot::cpp PROPERTIES COMPILE_OPTIONS "${godot_opts}")
+    endif()
+    target_compile_options(godot::cpp INTERFACE -fexceptions -frtti)
+endif()
+
 # godot-cpp pouziva generator expressions pro -fno-exceptions/-fno-rtti a
 # -Wnarrowing, ktere nelze odstranit pres list(REMOVE_ITEM).
 # Jedine spolehlivé reseni: pridat nase flagy az v target_compile_options
@@ -63,8 +72,6 @@ target_compile_options(${LIBNAME} PRIVATE
         # Potlacime jako warning, ne error.
         -Wno-narrowing
         -Wno-error=narrowing
-        -Wno-int-to-pointer-cast
-        -Wno-pointer-to-int-cast
         -Wno-return-type
         -Wno-error
     >
