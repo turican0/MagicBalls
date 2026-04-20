@@ -199,13 +199,16 @@ jobs:
 
       - name: Build C++ Library (Debug & Release)
         run: |
-          # GCC 13 (ubuntu-latest) je prísnější na C++ standardy:
-          # - netransitivne includuje <atomic> a <cmath>
-          # - lib9660.h (systémová) obsahuje flexible array member který GCC 13 odmítá
-          # Fix: použít GCC 12 + -Wno-error pro potlačení non-fatal warningů třetích stran
-          # -include atomic: GCC 13 (ubuntu-latest) uz netransitivne includuje
-          # <atomic>, coz zpusobuje "incomplete type std::atomic<bool>"
-          EXTRA_FLAGS="-include atomic -include cmath"
+          # Patch godot-cpp CMakeLists: odstran -fno-exceptions/-fno-rtti ktere
+          # se propagujou pres INTERFACE target a blokuji exceptions v nasem kodu.
+          GODOT_CPP_CMAKE="gitextension/godot-cpp-template/godot-cpp/CMakeLists.txt"
+          sed -i 's/-fno-exceptions/-fexceptions/g' "$GODOT_CPP_CMAKE"
+          sed -i 's/-fno-rtti/-frtti/g'             "$GODOT_CPP_CMAKE"
+          echo "=== Patch godot-cpp CMakeLists ==="
+          grep -n "exceptions\|rtti" "$GODOT_CPP_CMAKE" | head -20
+
+          # GCC 13: -include atomic + cmath kvuli chybejicim transitnim includum
+          EXTRA_FLAGS="-include atomic -include cmath -fexceptions -frtti"
 
           cmake -B build-cpp-release -S gitextension/godot-cpp-template \
             -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls" \
@@ -352,6 +355,15 @@ jobs:
 
       - name: Build C++ Library for Android (arm64-v8a + x86_64)
         run: |
+          # godot-cpp hardcoduje -fno-exceptions/-fno-rtti do svych CMakeLists.
+          # NDK toolchain pak prida dalsi -fno-exceptions na konec flagů.
+          # Jediné spolehlivé reseni: patch godot-cpp CMakeLists pred buildem.
+          GODOT_CPP_CMAKE="gitextension/godot-cpp-template/godot-cpp/CMakeLists.txt"
+          sed -i 's/-fno-exceptions/-fexceptions/g' "$GODOT_CPP_CMAKE"
+          sed -i 's/-fno-rtti/-frtti/g'             "$GODOT_CPP_CMAKE"
+          echo "=== Patch godot-cpp CMakeLists ==="
+          grep -n "exceptions\|rtti" "$GODOT_CPP_CMAKE" | head -20
+
           for ABI in arm64-v8a x86_64; do
             cmake -B "build-android-$ABI" \
               -S gitextension/godot-cpp-template \
@@ -361,7 +373,7 @@ jobs:
               -DANDROID_CPP_FEATURES="exceptions rtti" \
               -DCMAKE_BUILD_TYPE=Release \
               -DLIBNAME="MagicBalls" \
-              -DCMAKE_CXX_FLAGS="-include cmath" \
+              -DCMAKE_CXX_FLAGS="-include cmath -fexceptions -frtti" \
               -DCMAKE_EXE_LINKER_FLAGS="-lm" \
               -GNinja
             ninja -C "build-android-$ABI"
