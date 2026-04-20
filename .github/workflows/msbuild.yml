@@ -191,7 +191,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             cmake ninja-build \
-            gcc g++ \
+            gcc-12 g++-12 \
             libx11-dev libxcursor-dev libxinerama-dev \
             libgl1-mesa-dev libglu1-mesa-dev \
             libasound2-dev libpulse-dev \
@@ -199,19 +199,22 @@ jobs:
 
       - name: Build C++ Library (Debug & Release)
         run: |
-          # -include atomic a -include cmath: GCC 13 (ubuntu-latest) uz netransitivne
-          # includuje tyto hlavicky, coz zpusobuje "incomplete type std::atomic<bool>"
-          # a "no member named round in namespace std"
-          EXTRA_FLAGS="-include atomic -include cmath"
+          # GCC 13 (ubuntu-latest) je prísnější na C++ standardy:
+          # - netransitivne includuje <atomic> a <cmath>
+          # - lib9660.h (systémová) obsahuje flexible array member který GCC 13 odmítá
+          # Fix: použít GCC 12 + -Wno-error pro potlačení non-fatal warningů třetích stran
+          EXTRA_FLAGS="-include atomic -include cmath -Wno-error"
 
           cmake -B build-cpp-release -S gitextension/godot-cpp-template \
             -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls" \
+            -DCMAKE_C_COMPILER=gcc-12 -DCMAKE_CXX_COMPILER=g++-12 \
             -DCMAKE_CXX_FLAGS="$EXTRA_FLAGS" \
             -GNinja
           ninja -C build-cpp-release
 
           cmake -B build-cpp-debug -S gitextension/godot-cpp-template \
             -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls" \
+            -DCMAKE_C_COMPILER=gcc-12 -DCMAKE_CXX_COMPILER=g++-12 \
             -DCMAKE_CXX_FLAGS="$EXTRA_FLAGS" \
             -GNinja
           ninja -C build-cpp-debug
@@ -357,7 +360,7 @@ jobs:
               -DANDROID_PLATFORM=android-24 \
               -DCMAKE_BUILD_TYPE=Release \
               -DLIBNAME="MagicBalls" \
-              -DCMAKE_CXX_FLAGS="-include cmath" \
+              -DCMAKE_CXX_FLAGS="-include cmath -fexceptions" \
               -DCMAKE_EXE_LINKER_FLAGS="-lm" \
               -GNinja
             ninja -C "build-android-$ABI"
