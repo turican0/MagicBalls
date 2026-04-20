@@ -191,7 +191,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             cmake ninja-build \
-            gcc-12 g++-12 \
+            gcc g++ \
             libx11-dev libxcursor-dev libxinerama-dev \
             libgl1-mesa-dev libglu1-mesa-dev \
             libasound2-dev libpulse-dev \
@@ -203,18 +203,18 @@ jobs:
           # - netransitivne includuje <atomic> a <cmath>
           # - lib9660.h (systémová) obsahuje flexible array member který GCC 13 odmítá
           # Fix: použít GCC 12 + -Wno-error pro potlačení non-fatal warningů třetích stran
-          EXTRA_FLAGS="-include atomic -include cmath -Wno-error"
+          # -include atomic: GCC 13 (ubuntu-latest) uz netransitivne includuje
+          # <atomic>, coz zpusobuje "incomplete type std::atomic<bool>"
+          EXTRA_FLAGS="-include atomic -include cmath"
 
           cmake -B build-cpp-release -S gitextension/godot-cpp-template \
             -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls" \
-            -DCMAKE_C_COMPILER=gcc-12 -DCMAKE_CXX_COMPILER=g++-12 \
             -DCMAKE_CXX_FLAGS="$EXTRA_FLAGS" \
             -GNinja
           ninja -C build-cpp-release
 
           cmake -B build-cpp-debug -S gitextension/godot-cpp-template \
             -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls" \
-            -DCMAKE_C_COMPILER=gcc-12 -DCMAKE_CXX_COMPILER=g++-12 \
             -DCMAKE_CXX_FLAGS="$EXTRA_FLAGS" \
             -GNinja
           ninja -C build-cpp-debug

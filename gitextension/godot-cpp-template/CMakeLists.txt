@@ -26,10 +26,13 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src")
 endif()
 add_subdirectory(godot-cpp SYSTEM)
 
-# Fix pro Android NDK
+# Android NDK defaultne kompiluje s -fno-exceptions, ale zdrojovy kod
+# pouziva try/catch. Musime -fexceptions vynutit globalne PRED tim, nez
+# godot-cpp zkompiluje svuj kod - jinak -fno-exceptions prebije nas flag.
 if(ANDROID)
-    target_compile_options(godot-cpp PRIVATE -fexceptions)
-    target_compile_options(godot::cpp INTERFACE -fexceptions)
+    string(REPLACE "-fno-exceptions" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" CACHE STRING "" FORCE)
+    target_compile_options(godot-cpp PUBLIC -fexceptions)
 endif()
 
 # Add godot-cpp's module path and include the exported functions.
@@ -245,6 +248,10 @@ target_sources(${LIBNAME}
     src/lib/lib9660.h
 
 )
+
+# lib9660 je C99 knihovna - flexible array members jsou v C++ ilegalni,
+# ale v C99 legalni. Nastavime LANGUAGE na C aby se kompilovala spravne.
+set_source_files_properties(src/lib/lib9660.cpp PROPERTIES LANGUAGE C)
 
 # Fetch a list of the xml files to use for documentation and add to our target
 file(GLOB_RECURSE DOC_XML LIST_DIRECTORIES NO CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/doc_classes/*.xml")
