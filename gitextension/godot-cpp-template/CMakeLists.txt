@@ -63,6 +63,10 @@ target_compile_options(${LIBNAME} PRIVATE
         # Potlacime jako warning, ne error.
         -Wno-narrowing
         -Wno-error=narrowing
+        -Wno-int-to-pointer-cast
+        -Wno-pointer-to-int-cast
+        -Wno-return-type
+        -Wno-error
     >
     $<$<CXX_COMPILER_ID:Clang>:
         -Wno-error
@@ -297,4 +301,5 @@ if(ANDROID)
     # -fexceptions je uz v target_compile_options nahore, toto je pojistka
     # pro godot-cpp ktery ma vlastni -fno-exceptions v PRIVATE options
     target_compile_options(godot-cpp PRIVATE -fexceptions -frtti)
+	target_compile_options(${LIBNAME} PRIVATE -include cmath)
 endif()
