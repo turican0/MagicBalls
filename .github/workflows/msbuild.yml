@@ -199,8 +199,7 @@ jobs:
 
       - name: Build C++ Library (Debug & Release)
         run: |
-          # Patch godot-cpp CMakeLists: odstran -fno-exceptions/-fno-rtti ktere
-          # se propagujou pres INTERFACE target a blokuji exceptions v nasem kodu.
+          # Patch godot-cpp CMakeLists
           GODOT_CPP_CMAKE="gitextension/godot-cpp-template/godot-cpp/CMakeLists.txt"
           sed -i 's/-fno-exceptions/-fexceptions/g' "$GODOT_CPP_CMAKE"
           sed -i 's/-fno-rtti/-frtti/g'             "$GODOT_CPP_CMAKE"
@@ -208,17 +207,20 @@ jobs:
           grep -n "exceptions\|rtti" "$GODOT_CPP_CMAKE" | head -20
 
           # GCC 13: -include atomic + cmath kvuli chybejicim transitnim includum
+          # -fexceptions -frtti: vynuceni exceptions (godot-cpp je jinak vypina)
           EXTRA_FLAGS="-include atomic -include cmath -fexceptions -frtti"
 
           cmake -B build-cpp-release -S gitextension/godot-cpp-template \
             -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls" \
             -DCMAKE_CXX_FLAGS="$EXTRA_FLAGS" \
+            -DCMAKE_CXX_FLAGS_RELEASE="" \
             -GNinja
           ninja -C build-cpp-release
 
           cmake -B build-cpp-debug -S gitextension/godot-cpp-template \
             -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls" \
             -DCMAKE_CXX_FLAGS="$EXTRA_FLAGS" \
+            -DCMAKE_CXX_FLAGS_DEBUG="" \
             -GNinja
           ninja -C build-cpp-debug
 
@@ -355,19 +357,22 @@ jobs:
 
       - name: Build C++ Library for Android (arm64-v8a + x86_64)
         run: |
-          # godot-cpp hardcoduje -fno-exceptions/-fno-rtti do svych CMakeLists.
-          # NDK toolchain pak prida dalsi -fno-exceptions na konec flagů.
-          # Jediné spolehlivé reseni: patch godot-cpp CMakeLists pred buildem.
+          # Patch godot-cpp CMakeLists
           GODOT_CPP_CMAKE="gitextension/godot-cpp-template/godot-cpp/CMakeLists.txt"
           sed -i 's/-fno-exceptions/-fexceptions/g' "$GODOT_CPP_CMAKE"
           sed -i 's/-fno-rtti/-frtti/g'             "$GODOT_CPP_CMAKE"
-          echo "=== Patch godot-cpp CMakeLists ==="
-          grep -n "exceptions\|rtti" "$GODOT_CPP_CMAKE" | head -20
+
+          # Patch NDK toolchain file - tohle je zdroj -fno-exceptions ktery prebiji vse ostatni
+          NDK_TOOLCHAIN="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake"
+          sed -i 's/-fno-exceptions/-fexceptions/g' "$NDK_TOOLCHAIN"
+          sed -i 's/-fno-rtti/-frtti/g'             "$NDK_TOOLCHAIN"
+          echo "=== Patch NDK toolchain ==="
+          grep -n "exceptions\|rtti" "$NDK_TOOLCHAIN" | head -20
 
           for ABI in arm64-v8a x86_64; do
             cmake -B "build-android-$ABI" \
               -S gitextension/godot-cpp-template \
-              -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake" \
+              -DCMAKE_TOOLCHAIN_FILE="$NDK_TOOLCHAIN" \
               -DANDROID_ABI="$ABI" \
               -DANDROID_PLATFORM=android-24 \
               -DANDROID_CPP_FEATURES="exceptions rtti" \
