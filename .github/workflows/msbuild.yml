@@ -199,12 +199,21 @@ jobs:
 
       - name: Build C++ Library (Debug & Release)
         run: |
+          # -include atomic a -include cmath: GCC 13 (ubuntu-latest) uz netransitivne
+          # includuje tyto hlavicky, coz zpusobuje "incomplete type std::atomic<bool>"
+          # a "no member named round in namespace std"
+          EXTRA_FLAGS="-include atomic -include cmath"
+
           cmake -B build-cpp-release -S gitextension/godot-cpp-template \
-            -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls" -GNinja
+            -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls" \
+            -DCMAKE_CXX_FLAGS="$EXTRA_FLAGS" \
+            -GNinja
           ninja -C build-cpp-release
 
           cmake -B build-cpp-debug -S gitextension/godot-cpp-template \
-            -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls" -GNinja
+            -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls" \
+            -DCMAKE_CXX_FLAGS="$EXTRA_FLAGS" \
+            -GNinja
           ninja -C build-cpp-debug
 
       - name: Rename .so files to EXTENSION-NAME
@@ -348,6 +357,8 @@ jobs:
               -DANDROID_PLATFORM=android-24 \
               -DCMAKE_BUILD_TYPE=Release \
               -DLIBNAME="MagicBalls" \
+              -DCMAKE_CXX_FLAGS="-include cmath" \
+              -DCMAKE_EXE_LINKER_FLAGS="-lm" \
               -GNinja
             ninja -C "build-android-$ABI"
           done
