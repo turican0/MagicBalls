@@ -68,6 +68,8 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetGraphicsEenhance"), &MBEXclass::REMC2GetGraphicsEenhance);
 	godot::ClassDB::bind_method(D_METHOD("REMC2getWarpMouse"), &MBEXclass::REMC2getWarpMouse);
 
+	godot::ClassDB::bind_method(D_METHOD("REMC2SetInverseMouse", "Bool"), &MBEXclass::REMC2SetInverseMouse);
+
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorBegin", "text"), &MBEXclass::REMC2EditorBegin);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorEnd"), &MBEXclass::REMC2EditorEnd);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoop"), &MBEXclass::REMC2EditorLoop);
@@ -1031,8 +1033,7 @@ Array MBEXclass::getPaletteModifications() {
 	return result;
 }
 
-int game_paused = 0;
-bool oneFrameRun = false;
+bool inverse_mouseY;
 
 void handleInputs(Dictionary inputs,int type) {
 	LastPressedKey_1806E4 = 0;
@@ -1095,7 +1096,6 @@ void handleInputs(Dictionary inputs,int type) {
 						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
 					} else
 						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
-					oneFrameRun = true;
 				}
 				break;
 			case 0x1970: //P - pause
@@ -1190,7 +1190,7 @@ void handleInputs(Dictionary inputs,int type) {
 	{
 		//mouse_pos = inputs["mouse_pos"];
 		mouse_pos = inputs["mouse_pos2"];
-		if (x_WORD_18072C_cursor_sizex == 0)
+		if (x_WORD_18072C_cursor_sizex == 0 && inverse_mouseY)
 			MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y);
 		else
 			MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
@@ -1606,6 +1606,13 @@ Dictionary MBEXclass::REMC2getWarpMouse() {
 	return result;
 }
 
+void MBEXclass::REMC2SetInverseMouse(bool locInverse_mouseY) {
+	if (locInverse_mouseY)
+		inverse_mouseY = 0;
+	else
+		inverse_mouseY = 1;
+}
+
 int inGameBeginSteps = 0;
 
 int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
@@ -1627,10 +1634,11 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			}
 
 			//thread2_continue(Thread1_State::CONTINUE);
-			if (!game_paused || oneFrameRun) {
+			//if (!game_paused || oneFrameRun)
+			//{
 				thread1_wait_for_continue(Thread1_State::CONTINUE);
 				oneFrameRun = false;
-			}
+			//}
 				Ref<Image> img;
 				if (inGameBeginSteps > 1 && graphics_enhance)
 					img = getScrBufferImg(MyUiBackGroundColorIdx);//NIGHT 254 or 10, cave 254 or 10, day 254 or 28

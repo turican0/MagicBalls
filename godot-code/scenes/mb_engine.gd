@@ -15,6 +15,7 @@ func init():
 	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
 	#Global.loadScreenInit()
 	Main_DecodeLevel.MBEXinit()
+	Global.MBEX.REMC2SetInverseMouse(Global.inverse_mouseY)
 	Global.initSound()
 	#Main_DecodeLevel.anim1Begin($Control/Foreground)
 	Main_DecodeLevel.setLoadScreenBuffer(LoadScrRect)

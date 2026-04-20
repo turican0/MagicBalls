@@ -127,6 +127,7 @@ public:
 	int REMC2GetGraphicsEenhance();
 
 	Dictionary REMC2getWarpMouse();
+	void REMC2SetInverseMouse(bool locInverse_mouseY);
 	void MBEXfixLang(char *path, int index);
 
 	void REMC2EditorBegin(String cdPath);

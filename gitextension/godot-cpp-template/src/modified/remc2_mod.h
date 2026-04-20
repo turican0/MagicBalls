@@ -118,6 +118,9 @@ const int GRAPHICS_ENHANCE_OFF = 0;
 extern int graphics_enhance;
 extern int numberOfIntroVideos;
 
+extern int game_paused;
+extern bool oneFrameRun;
+
 void InitLanguage_76A40_mod_only_language();
 
 void sub_main_mod_end();

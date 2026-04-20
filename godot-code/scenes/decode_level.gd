@@ -1440,7 +1440,7 @@ func setLoadScreenBuffer(locTextureRect):
 
 var DL_inGame=false;
 func MBrun(inGame):
-	DL_inGame=inGame
+	DL_inGame=inGame	
 	var locGraphicsEnhance = Global.MBEX.REMC2GetGraphicsEenhance()
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())

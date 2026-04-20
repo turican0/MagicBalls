@@ -4,6 +4,9 @@
 
 int graphics_enhance = 0;
 
+int game_paused = 0;
+bool oneFrameRun = false;
+
 void InitLanguage_76A40_mod_only_language() //257A40
 {	
 	FILE *langfile;
@@ -2195,16 +2198,18 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 	//adress 228588
 	sub_848A0(); //nothing draw
 	//adress 22858d
-	uint8_t speed = x_D41A0_BYTEARRAY_4_struct.speedIndex;
-	if (speed == 0) {
-		if (!speed)
-			UpdateEntities_57730();
-	} else if (speed == 1) {
-		for (int i = 0; i < 4; i++)
-			UpdateEntities_57730();
-	} else if (speed == 2) {
-		for (int j = 0; j < 8; j++)
-			UpdateEntities_57730();
+	if (!game_paused || oneFrameRun) {
+		uint8_t speed = x_D41A0_BYTEARRAY_4_struct.speedIndex;
+		if (speed == 0) {
+			if (!speed)
+				UpdateEntities_57730();
+		} else if (speed == 1) {
+			for (int i = 0; i < 4; i++)
+				UpdateEntities_57730();
+		} else if (speed == 2) {
+			for (int j = 0; j < 8; j++)
+				UpdateEntities_57730();
+		}
 	}
 	sub_84B80(); //prepare lightting
 	sub_58F00_game_objectives(); //nothing draw
