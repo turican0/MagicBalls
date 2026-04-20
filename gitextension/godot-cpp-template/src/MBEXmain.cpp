@@ -1723,29 +1723,29 @@ void MBEXclass::REMC2EditorLoop()
 int MBEXclass::REMC2EditorGetTerrainValue(int type) {
 	switch (type) {
 		case 0:
-			return D41A0_0.terrain_2FECE.seed_0x2FEE5;
+			return tempTerrain.seed_0x2FEE5;
 		case 1:
-			return D41A0_0.terrain_2FECE.offset_0x2FEE9;
+			return tempTerrain.offset_0x2FEE9;
 		case 2:
-			return D41A0_0.terrain_2FECE.raise_0x2FEED;
+			return tempTerrain.raise_0x2FEED;
 		case 3:
-			return D41A0_0.terrain_2FECE.gnarl_0x2FEF1;
+			return tempTerrain.gnarl_0x2FEF1;
 		case 4:
-			return D41A0_0.terrain_2FECE.river_0x2FEF5;
+			return tempTerrain.river_0x2FEF5;
 		case 5:
-			return D41A0_0.terrain_2FECE.lriver_0x2FEF9;
+			return tempTerrain.lriver_0x2FEF9;
 		case 6:
-			return D41A0_0.terrain_2FECE.source_0x2FEFD;
+			return tempTerrain.source_0x2FEFD;
 		case 7:
-			return D41A0_0.terrain_2FECE.snLin_0x2FF01;
+			return tempTerrain.snLin_0x2FF01;
 		case 8:
-			return D41A0_0.terrain_2FECE.snFlt_0x2FF05;
+			return tempTerrain.snFlt_0x2FF05;
 		case 9:
-			return D41A0_0.terrain_2FECE.bhLin_0x2FF09;
+			return tempTerrain.bhLin_0x2FF09;
 		case 10:
-			return D41A0_0.terrain_2FECE.bhFlt_0x2FF0D;
+			return tempTerrain.bhFlt_0x2FF0D;
 		case 11:
-			return D41A0_0.terrain_2FECE.rkSte_0x2FF11;
+			return tempTerrain.rkSte_0x2FF11;
 		default:
 			return 0;
 	}
@@ -1754,40 +1754,40 @@ int MBEXclass::REMC2EditorGetTerrainValue(int type) {
 void MBEXclass::REMC2EditorSetTerrainValue(int type, int value) {
 	switch (type) {
 		case 0:
-			D41A0_0.terrain_2FECE.seed_0x2FEE5 = (uint16_t)value;
+			tempTerrain.seed_0x2FEE5 = (uint16_t)value;
 			break;
 		case 1:
-			D41A0_0.terrain_2FECE.offset_0x2FEE9 = (uint16_t)value;
+			tempTerrain.offset_0x2FEE9 = (uint16_t)value;
 			break;
 		case 2:
-			D41A0_0.terrain_2FECE.raise_0x2FEED = (uint16_t)value;
+			tempTerrain.raise_0x2FEED = (uint16_t)value;
 			break;
 		case 3:
-			D41A0_0.terrain_2FECE.gnarl_0x2FEF1 = (uint16_t)value;
+			tempTerrain.gnarl_0x2FEF1 = (uint16_t)value;
 			break;
 		case 4:
-			D41A0_0.terrain_2FECE.river_0x2FEF5 = (uint32_t)value;
+			tempTerrain.river_0x2FEF5 = (uint32_t)value;
 			break;
 		case 5:
-			D41A0_0.terrain_2FECE.lriver_0x2FEF9 = (uint16_t)value;
+			tempTerrain.lriver_0x2FEF9 = (uint16_t)value;
 			break;
 		case 6:
-			D41A0_0.terrain_2FECE.source_0x2FEFD = (uint16_t)value;
+			tempTerrain.source_0x2FEFD = (uint16_t)value;
 			break;
 		case 7:
-			D41A0_0.terrain_2FECE.snLin_0x2FF01 = (uint16_t)value;
+			tempTerrain.snLin_0x2FF01 = (uint16_t)value;
 			break;
 		case 8:
-			D41A0_0.terrain_2FECE.snFlt_0x2FF05 = (uint16_t)value;
+			tempTerrain.snFlt_0x2FF05 = (uint16_t)value;
 			break;
 		case 9:
-			D41A0_0.terrain_2FECE.bhLin_0x2FF09 = (uint16_t)value;
+			tempTerrain.bhLin_0x2FF09 = (uint16_t)value;
 			break;
 		case 10:
-			D41A0_0.terrain_2FECE.bhFlt_0x2FF0D = (uint16_t)value;
+			tempTerrain.bhFlt_0x2FF0D = (uint16_t)value;
 			break;
 		case 11:
-			D41A0_0.terrain_2FECE.rkSte_0x2FF11 = (uint16_t)value;
+			tempTerrain.rkSte_0x2FF11 = (uint16_t)value;
 			break;
 	}
 }
@@ -1799,7 +1799,7 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	float *write_ptr = result.ptrw();
 	int idx = 0;
 	for (int i = 0; i < count; i++) {
-		type_entity_0x30311 *actEntity = &D41A0_0.terrain_2FECE.entity_0x30311[i];
+		type_entity_0x30311 *actEntity = &tempTerrain.entity_0x30311[i];
 		write_ptr[idx++] = (float)actEntity->type_0x30311; //1
 		write_ptr[idx++] = (float)actEntity->subtype_0x30311; //2
 		write_ptr[idx++] = (float)actEntity->axis2d_4.x;//3
@@ -1830,8 +1830,8 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
 
 	int idx = 0;
 	for (int i = 0; i < players_count; ++i) {
-		Type_WizardMapSettings_0x360D2 &w = D41A0_0.terrain_2FECE.WizardMapSettings_0x360D2[i];
-		type_str_0x36442 &s = D41A0_0.terrain_2FECE.stages_0x36442[i];
+		Type_WizardMapSettings_0x360D2 &w = tempTerrain.WizardMapSettings_0x360D2[i];
+		type_str_0x36442 &s = tempTerrain.stages_0x36442[i];
 
 		// Přímý zápis na indexy
 		data.set(idx++, (float)w.Aggression_0x360D5);
@@ -1868,7 +1868,7 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainStages() {
 
 	int idx = 0;
 	for (int i = 0; i < stages_count; ++i) {
-		type_str_0x3647Ac &s = D41A0_0.terrain_2FECE.StageVars_0x3647A[i];
+		type_str_0x3647Ac &s = tempTerrain.StageVars_0x3647A[i];
 
 		data.set(idx++, (float)(uint8)s.index_0x3647A_0);
 		data.set(idx++, (float)s.stage_0x3647A_1);
@@ -1887,7 +1887,7 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	int result = 1;
 
 	auto is_parent_type = [](int type) -> bool {
-		return type != 0 && type != 2 && type != 10 && type != 11;
+		return type != 2 && type != 11;
 	};
 	// Sestav set indexů ke smazání
 	std::set<int> selected_set;
@@ -1901,7 +1901,7 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 		if (!is_parent_type(temparray_0x30311[i].type_0x30311))
 			continue;
 		*/
-		if (selected_set.count(temparray_0x30311[i].par1_14) > 0) {
+		if (selected_set.count(tempTerrain.entity_0x30311[i].par1_14) > 0) {
 			result |= 2;
 			selected_set.insert(i);
 		}
@@ -1909,8 +1909,8 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	// Pokud má entita rodiče který NENÍ v seznamu ke smazání -> odstraň ji ze setu, změň result
 	std::set<int> final_set;
 	for (int idx : selected_set) {
-		int par = temparray_0x30311[idx].par1_14;
-		int type = temparray_0x30311[idx].type_0x30311;
+		int par = tempTerrain.entity_0x30311[idx].par1_14;
+		int type = tempTerrain.entity_0x30311[idx].type_0x30311;
 		if (is_parent_type(type) && par != 0 && selected_set.count(par) == 0) {
 			// má rodiče mimo seznam -> nesmazat
 			result |= 4;
@@ -1932,16 +1932,16 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 		if (index_to_remove < 0 || index_to_remove >= current_count)
 			continue;
 		for (int k = 0; k < current_count; k++) {
-			if (!is_parent_type(temparray_0x30311[k].type_0x30311))
+			if (!is_parent_type(tempTerrain.entity_0x30311[k].type_0x30311))
 				continue;
-			if (temparray_0x30311[k].par1_14 == index_to_remove) {
-				temparray_0x30311[k].par1_14 = 0;
-			} else if (temparray_0x30311[k].par1_14 > index_to_remove) {
-				temparray_0x30311[k].par1_14--;
+			if (tempTerrain.entity_0x30311[k].par1_14 == index_to_remove) {
+				tempTerrain.entity_0x30311[k].par1_14 = 0;
+			} else if (tempTerrain.entity_0x30311[k].par1_14 > index_to_remove) {
+				tempTerrain.entity_0x30311[k].par1_14--;
 			}
 		}
 		for (int j = index_to_remove; j < current_count - 1; j++) {
-			temparray_0x30311[j] = temparray_0x30311[j + 1];
+			tempTerrain.entity_0x30311[j] = tempTerrain.entity_0x30311[j + 1];
 		}
 		current_count--;
 	}

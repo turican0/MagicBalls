@@ -745,7 +745,7 @@ func AddParentsArrows():
 	for entity in get_tree().get_nodes_in_group("entities"):
 		var current_node = null
 		var updateObject: bool = false
-		if entity.get_meta("type_0x30311") == 0 || entity.get_meta("type_0x30311") == 2 || entity.get_meta("type_0x30311") == 10 || entity.get_meta("type_0x30311") == 11:
+		if entity.get_meta("type_0x30311") == 2 || entity.get_meta("type_0x30311") == 11:
 			continue
 		if entity.get_meta("par1_14") in index_to_pos:
 			var parent_index = entity.get_meta("par1_14")
@@ -929,11 +929,13 @@ func _on_tree_terrain_spells(index: int, value: String):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
+
 func _on_tree_terrain_stages(index: int, value: String):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.show()
 	Stages_Edit_Panel.hide()
+ 
 func _on_tree_terrain_stagesVars(index: int, value: String):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()

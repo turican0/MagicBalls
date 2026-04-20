@@ -37,7 +37,8 @@ int edited_line_old = -1;
 int edited_line2 = -1;
 int edited_line2_old = -1;
 
-type_entity_0x30311 temparray_0x30311[1200];
+Type_Level_2FECE tempTerrain;
+//type_entity_0x30311 temparray_0x30311[1200];
 //bool temparray_0x30311_inactive[1200];
 //bool temparray_0x30311_selected[1200];
 
@@ -113,37 +114,17 @@ void init_pal() {
 };
 
 void clean_terrain() {
-	type_entity_0x30311 *empty = new type_entity_0x30311[1200];
-
-	for (int i = 0; i < 0x4b0; i++) {
-		empty->axis2d_4.x = 0;
-		empty->axis2d_4.y = 0;
-		empty->DisId = 0;
-		empty->par1_14 = 0;
-		empty->par2_16 = 0;
-		empty->par3_18 = 0;
-		empty->stageTag_12 = 0;
-		empty->subtype_0x30311 = 0;
-		empty->type_0x30311 = 0;
-		empty->word_10 = 0;
-	}
-
-	memcpy(temparray_0x30311, empty, sizeof(type_entity_0x30311) * 0x4b0);
-	/*
-	for (int i = 0; i < 0x4b0; i++)
-		temparray_0x30311_inactive[i] = 0;
-	for (int i = 0; i < 0x4b0; i++)
-		temparray_0x30311_selected[i] = 0;*/
+	memset(&tempTerrain, 0, sizeof(Type_Level_2FECE));
 }
 
-void editor_loop();
+//void editor_loop();
 void terrain_recalculate();
 
 //int main_x();
 
 void loadlevel(int levelnumber) {
 	LevelDecompress_533B0(levelnumber, &D41A0_0.terrain_2FECE);
-	memcpy(temparray_0x30311, D41A0_0.terrain_2FECE.entity_0x30311, sizeof(type_entity_0x30311) * 0x4b0);
+	memcpy(&tempTerrain, &D41A0_0.terrain_2FECE, sizeof(Type_Level_2FECE));
 	/*
 	for (int i = 0; i < 0x4b0; i++)
 		temparray_0x30311_inactive[i] = 0;
@@ -219,22 +200,11 @@ void editor_run() {
 	//InGameLoop_47320(0);//run game
 
 	//restore D41A0_BYTESTR_0
-	urManager = std::make_unique<UndoRedoManager>(D41A0_0.terrain_2FECE, temparray_0x30311);
+	urManager = std::make_unique<UndoRedoManager>(D41A0_0.terrain_2FECE);
 }
 
 void terrain_recalculate() {
-	int j = 0;
-	
-	for (int i = 0; i < 0x4b0; i++) {
-		/*
-		if (temparray_0x30311_inactive[i])
-			j++;
-		else*/
-		{
-			D41A0_0.terrain_2FECE.entity_0x30311[j] = temparray_0x30311[i];
-			j++;
-		}
-	}
+	D41A0_0.terrain_2FECE = tempTerrain;
 
 	rand2_17B4E0 = D41A0_0.terrain_2FECE.seed_0x2FEE5;
 	D41A0_0.rand_0x8 = D41A0_0.terrain_2FECE.seed_0x2FEE5;
@@ -890,7 +860,7 @@ static void SaveLevelFile(char const text[], char fullPath[PATH_MAX_LENGTH]) {
 	FixDir(fullPath, fileName);
 
 	FILE *file = fopen(fullPath, "wb");
-	memcpy(D41A0_0.terrain_2FECE.entity_0x30311, temparray_0x30311, sizeof(type_entity_0x30311) * 0x4b0);
+	memcpy(&D41A0_0.terrain_2FECE, &tempTerrain, sizeof(Type_Level_2FECE));
 	fwrite((void *)&D41A0_0.terrain_2FECE, 1, sizeof(Type_Level_2FECE), file);
 	fclose(file);
 }
@@ -904,7 +874,7 @@ static bool LoadLevelFile(char const text[]) {
 	if (std::filesystem::exists(path)) {
 		FILE *file = fopen(path, "rb");
 		fread(&D41A0_0.terrain_2FECE, sizeof(D41A0_0.terrain_2FECE), 1, file);
-		memcpy(temparray_0x30311, D41A0_0.terrain_2FECE.entity_0x30311, sizeof(D41A0_0.terrain_2FECE.entity_0x30311));
+		memcpy(&tempTerrain, &D41A0_0.terrain_2FECE, sizeof(Type_Level_2FECE));
 		fclose(file);
 		return true;
 	}
