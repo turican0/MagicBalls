@@ -61,12 +61,26 @@ func _ready() -> void:
 			selector.value_changed.connect(_on_h_box_container_value_changed)
 	SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
 	SetStagesValues(Global.MBEX.REMC2EditorGetTerrainStages())
-	Wizards_Edit.display_player_data(0)
-	Stages_Edit.display_stages_data(0)
-	toggle_editor_control_style()
+
+	toggle_editor_control_styleSt(true)
+	$UI.visible=true
 	_preload_library(library, library_scenes)
 	Tree_View.item_selected.connect(_on_tree_item_selected)
+	
+	get_window().focus_entered.connect(_on_window_focus_entered)
+	get_window().focus_exited.connect(_on_window_focus_exited)
+	
+	Wizards_Edit.display_player_data(0)
+	Stages_Edit.display_stages_data(0)
 	editor_runned=true
+
+func _on_window_focus_entered() -> void:
+	toggle_editor_control_styleSt(is_ui_visible)
+	log_message("Aplikace opět aktivní - myš nastavena.")
+
+func _on_window_focus_exited() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	log_message("Aplikace ztratila focus - myš uvolněna.")
 	
 func SetPlayerValues(data: PackedFloat32Array):
 	if data.is_empty():
@@ -143,7 +157,10 @@ func _input(event: InputEvent) -> void:
 
 func toggle_editor_control_style():
 	is_ui_visible = !is_ui_visible
-	if is_ui_visible:
+	toggle_editor_control_styleSt(is_ui_visible)
+		
+func toggle_editor_control_styleSt(state):
+	if state:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
@@ -183,11 +200,26 @@ func update_tree():
 	#type_str_0x3647Ac StageVars_0x3647A[11];//8x11
 	var next_items = []
 	all_sections.append({ "title": "Next", "items": next_items })
-	var spells_items = []
+	var spells_items = []	
+	spells_items.append({
+		"name": "Speels",
+		"value": "X",
+		"id": 0
+	})	
 	all_sections.append({ "title": "Spells", "items": spells_items })
 	var stages_items = []
+	stages_items.append({
+		"name": "Stages",
+		"value": "X",
+		"id": 0
+	})	
 	all_sections.append({ "title": "Stages", "items": stages_items })
 	var stagesvars_items = []
+	stagesvars_items.append({
+		"name": "StagesVars",
+		"value": "X",
+		"id": 0
+	})	
 	all_sections.append({ "title": "StagesVars", "items": stagesvars_items })
 
 	Tree_View.update_tree_view(all_sections)
@@ -870,14 +902,40 @@ func _on_tree_item_selected() -> void:
 			_on_tree_terrain_selected(item_index, item_value.to_int())
 		"Entities":
 			_on_tree_entity_selected(item_index, item_value)
+		"Spells":
+			_on_tree_terrain_spells(item_index, item_value)
+		"Stages":
+			_on_tree_terrain_stages(item_index, item_value)
+		"StagesVars":
+			_on_tree_terrain_stagesVars(item_index, item_value)
 
 func _on_tree_terrain_selected(index: int, value: int) -> void:
 	log_message("Terrain selected: index=%d value=%d" % [index, value])
 	Terrain_Edit_Panel.show()
 	Entity_Edit_Panel.hide()
+	Wizards_Edit_Panel.hide()
+	Stages_Edit_Panel.hide()
 
 func _on_tree_entity_selected(index: int, value: String) -> void:
 	log_message("Entity selected: index=%d value=%s" % [index, value])
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.show()
+	Wizards_Edit_Panel.hide()
+	Stages_Edit_Panel.hide()
 	fillEntityDetails(index)
+	
+func _on_tree_terrain_spells(index: int, value: String):
+	Wizards_Edit_Panel.show()
+	Terrain_Edit_Panel.hide()
+	Entity_Edit_Panel.hide()
+	Stages_Edit_Panel.hide()
+func _on_tree_terrain_stages(index: int, value: String):
+	Terrain_Edit_Panel.hide()
+	Entity_Edit_Panel.hide()
+	Wizards_Edit_Panel.show()
+	Stages_Edit_Panel.hide()
+func _on_tree_terrain_stagesVars(index: int, value: String):
+	Terrain_Edit_Panel.hide()
+	Entity_Edit_Panel.hide()
+	Wizards_Edit_Panel.hide()
+	Stages_Edit_Panel.show()
