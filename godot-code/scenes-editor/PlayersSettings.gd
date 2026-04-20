@@ -3,10 +3,6 @@ extends VBoxContainer
 # Index hráče, kterého chceme zobrazit (0-7)
 @export var player_index: int = 0
 
-func _ready():
-	# Zavoláme zobrazení dat hned při startu
-	display_player_data(player_index)
-
 func display_player_data(idx: int):
 	# Kontrola, zda pole obsahuje data pro daný index
 	if idx >= Global.players_settings.size():

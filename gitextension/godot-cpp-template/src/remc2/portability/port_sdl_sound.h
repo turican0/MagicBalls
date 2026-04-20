@@ -32,6 +32,7 @@ struct SoundAction {
 	int p1 = 0;
 	int p2 = 0;
 	int p3 = 0;
+	int p4 = 0;
 };
 
 #pragma pack (1)
@@ -246,7 +247,7 @@ void ALSOUND_play(int which, Mix_Chunk* chunk, int loops);
 void ALSOUND_init();
 #endif//SOUND_OPENAL
 
-void sound_queue_add_action(const std::string &action, int p1, int p2, int p3);
+void sound_queue_add_action(const std::string &action, int p1, int p2, int p3, int p4);
 void sound_queue_clear();
 void sound_update_playing(const std::vector<int> &free_indices);
 std::vector<SoundAction> sound_queue_get_pending_actions();

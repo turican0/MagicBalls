@@ -5,6 +5,13 @@ var MBEX = null
 
 var LevelType: String = ""
 
+var master_volume:float
+var music_volume:float
+var	sounds_volume:float
+var speech_volume:float
+
+var inverse_mouseY
+
 var soundInited:bool = false
 var sounds_map = {}
 var music_map = {}
@@ -36,6 +43,8 @@ func setLevelType(levelType):
 func initSound():
 	if(soundInited):
 		return
+	var master_bus_idx = AudioServer.get_bus_index("Master")
+	AudioServer.set_bus_volume_db(master_bus_idx, linear_to_db(master_volume))	
 	if(!get_tree().root.get_node_or_null("Sounds")):
 		var sounds_scene = preload("res://scenes/Sounds.tscn")
 		var new_layer = sounds_scene.instantiate()

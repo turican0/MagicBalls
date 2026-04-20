@@ -146,10 +146,11 @@ func updateSounds(soundActions:Array):
 		var p1: int = action_dict.get("p1", 0)
 		var p2: int = action_dict.get("p2", 0)
 		var p3: int = action_dict.get("p3", 0)
+		var p4: int = action_dict.get("p4", 0)
 		var matchok=false
 		match action:
 			"SOUND_start_sample":
-				play_sound(soundBank, p1, p2)
+				play_sound(soundBank, p1, p2, p4)
 				set_sound_volume(p1, p3)
 				matchok=true
 			"SOUND_end_sample":
@@ -218,7 +219,7 @@ func stopAllSounds():
 	for i in MAX_SIMULTANEOUS_SOUNDS:
 		stop_sound(i)
 
-func play_sound(pack_idx: int, player_index: int, sound_idx: int):
+func play_sound(pack_idx: int, player_index: int, sound_idx: int, playback_rate: int):
 	if player_index < 0 or player_index >= MAX_SIMULTANEOUS_SOUNDS:
 		push_warning("Neplatný channel %d! Musí být 0-%d." % [player_index, MAX_SIMULTANEOUS_SOUNDS - 1])
 		return
@@ -235,6 +236,10 @@ func play_sound(pack_idx: int, player_index: int, sound_idx: int):
 	if player.playing:
 		player.stop()
 	player.stream = stream
+	if playback_rate > 0:
+		player.pitch_scale = float(playback_rate) / 22050.0
+	else:
+		player.pitch_scale = 1.0
 	player.play()
 	print("Playing stream:%d:%d" % [player_index, sound_idx])
 
@@ -251,7 +256,7 @@ func stop_sound(index: int) -> void:
 
 func set_sound_volume(index: int, volume_int: int) -> void:
 	if index >= 0 and index < MAX_SIMULTANEOUS_SOUNDS:
-		Global.sfx_players[index].volume_db = linear_to_db(float(volume_int) / 128.0)
+		Global.sfx_players[index].volume_db = linear_to_db(float(volume_int) / 128.0 * Global.sounds_volume)
 
 func set_sound_panning(index: int, pan_int: int) -> void:
 	if index >= 0 and index < Global.sfx_players.size():
@@ -279,9 +284,9 @@ func set_sample_position(index: int, angle: int, distance: int) -> void:
 
 func set_music_volume(volume_int: int) -> void:
 	if(Global.himusic):
-		MainMusicHi.volume_db = linear_to_db(float(volume_int) / 128.0)
+		MainMusicHi.volume_db = linear_to_db(float(volume_int) / 128.0 * Global.music_volume)
 	else:
-		MainMusic.volume_db = linear_to_db(float(volume_int) / 128.0)
+		MainMusic.volume_db = linear_to_db(float(volume_int) / 128.0 * Global.music_volume)
 			
 func stop_music() -> void:
 	if(Global.himusic):
@@ -292,7 +297,7 @@ func stop_music() -> void:
 			MainMusic.stop()
 
 func start_speech(index: int, startPosMs: int, lengthMs: int) -> void:
-	MainSpeech.volume_db = linear_to_db(1.0)
+	MainSpeech.volume_db = linear_to_db(Global.speech_volume)
 	print("=== START SPEECH DEBUG ===")
 	print("Index: ", index)	
 	if Global.speech_map.has(index):

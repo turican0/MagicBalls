@@ -1374,7 +1374,6 @@ bool MBEXsoundConvert(int index, String path) {
 		uint8_t *buffer = soundIndex_E37A0->str_8.wavs_10[j].wavData_18;
 		int32_t size = soundIndex_E37A0->str_8.wavs_10[j].wavSize_26;
 		int8_t *filename_c = soundIndex_E37A0->str_8.wavs_10[j].filename_0;
-
 		if (!buffer || size <= 0 || !filename_c)
 			break;
 
@@ -1382,8 +1381,7 @@ bool MBEXsoundConvert(int index, String path) {
 		if (!make_dir_godot(path))
 			break;
 
-		// --- KROK 1: ULOŽENÍ PŮVODNÍ VERZE (Original 8-bit) ---
-		// Tento soubor zůstane přesně tak, jak byl v paměti
+		// --- STEP 1: SAVE ORIGINAL VERSION (as-is from buffer) ---
 		String full_path_orig = path + "/" + vformat("%03d_%03d_%s", index, j, filename);
 		Ref<FileAccess> file_orig = FileAccess::open(full_path_orig, FileAccess::WRITE);
 		if (file_orig.is_valid()) {
@@ -1392,55 +1390,111 @@ bool MBEXsoundConvert(int index, String path) {
 			UtilityFunctions::print(vformat("Step 1/2 - Original saved: %s", full_path_orig));
 		}
 
-		// --- KROK 2: PŘÍPRAVA A ULOŽENÍ RESAMPLED VERZE (16-bit, 44.1kHz) ---
-		int new_sample_count = size * 2;
-		int data_chunk_size = new_sample_count * 2;
+		// --- STEP 2: EXTRACT RAW PCM FROM BUFFER ---
+		// Buffer may already contain a full WAV file - parse it to find raw audio data
+		uint8_t *audio_data = buffer;
+		int32_t audio_size = size;
+
+		if (size > 44 && buffer[0] == 'R' && buffer[1] == 'I' &&
+				buffer[2] == 'F' && buffer[3] == 'F') {
+			// Skip RIFF + WAVE identifier (12 bytes), then scan for "data" chunk
+			int offset = 12;
+			while (offset + 8 <= size) {
+				uint32_t chunk_size = buffer[offset + 4] | (buffer[offset + 5] << 8) | (buffer[offset + 6] << 16) | (buffer[offset + 7] << 24);
+				if (buffer[offset] == 'd' && buffer[offset + 1] == 'a' &&
+						buffer[offset + 2] == 't' && buffer[offset + 3] == 'a') {
+					audio_data = buffer + offset + 8;
+					audio_size = (int32_t)chunk_size;
+					UtilityFunctions::print(vformat("WAV detected: data offset=%d, audio_size=%d", offset + 8, audio_size));
+					break;
+				}
+				// Advance to next chunk (8 byte header + chunk body)
+				offset += 8 + (int)chunk_size;
+			}
+		}
+
+		// Safety check - make sure we didn't go out of bounds
+		if (audio_data + audio_size > buffer + size) {
+			UtilityFunctions::push_error(vformat("Audio data out of bounds for index %d, entry %d", index, j));
+			j++;
+			continue;
+		}
+
+		// --- STEP 3: RESAMPLE TO 16-bit 44.1kHz ---
+		const int FADE_SAMPLES = 64;
+		int new_sample_count = audio_size * 2;
+		int data_chunk_size = new_sample_count * 2; // each sample is int16 = 2 bytes
 
 		PackedByteArray resampled_data;
 		resampled_data.resize(data_chunk_size);
 		int16_t *dst = reinterpret_cast<int16_t *>(resampled_data.ptrw());
 
-		for (int i = 0; i < size; i++) {
-			// Upscaling bitové hloubky
-			int16_t sample_current = (static_cast<int16_t>(buffer[i]) - 128) << 8;
-			int16_t sample_next = (i < size - 1) ? (static_cast<int16_t>(buffer[i + 1]) - 128) << 8 : sample_current;
+		for (int i = 0; i < audio_size; i++) {
+			// Convert unsigned 8-bit to signed 16-bit
+			int16_t sample_current = (static_cast<int16_t>(audio_data[i]) - 128) << 8;
 
-			// Interpolace frekvence
-			dst[i * 2] = sample_current;
-			dst[i * 2 + 1] = (int16_t)(((int32_t)sample_current + (int32_t)sample_next) / 2);
+			// Last sample fades to silence instead of copying itself -> no click at the end
+			int16_t sample_next = (i < audio_size - 1)
+					? (static_cast<int16_t>(audio_data[i + 1]) - 128) << 8
+					: 0;
+
+			int16_t s0 = sample_current;
+			int16_t s1 = (int16_t)(((int32_t)sample_current + (int32_t)sample_next) / 2);
+
+			// Fade-in: prevent click at the start (jump from silence)
+			if (i < FADE_SAMPLES) {
+				float t = (float)i / (float)FADE_SAMPLES;
+				s0 = (int16_t)((float)s0 * t);
+				s1 = (int16_t)((float)s1 * t);
+			}
+
+			// Fade-out: prevent click at the end
+			if (i >= audio_size - FADE_SAMPLES) {
+				float t = (float)(audio_size - 1 - i) / (float)FADE_SAMPLES;
+				s0 = (int16_t)((float)s0 * t);
+				s1 = (int16_t)((float)s1 * t);
+			}
+
+			dst[i * 2] = s0;
+			dst[i * 2 + 1] = s1;
 		}
 
+		// --- STEP 4: WRITE WAV HEADER + RESAMPLED DATA ---
 		String resampled_path = path + "/" + vformat("%03d_%03d_%s_441.WAV", index, j, filename.get_basename());
 		Ref<FileAccess> file_res = FileAccess::open(resampled_path, FileAccess::WRITE);
-
 		if (file_res.is_valid()) {
-			// Zápis hlavičky manuálně
+			// RIFF chunk
 			file_res->store_8('R');
 			file_res->store_8('I');
 			file_res->store_8('F');
 			file_res->store_8('F');
-			file_res->store_32(36 + data_chunk_size);
+			file_res->store_32(36 + data_chunk_size); // total size minus 8 bytes of RIFF header
+
+			// WAVE identifier
 			file_res->store_8('W');
 			file_res->store_8('A');
 			file_res->store_8('V');
 			file_res->store_8('E');
+
+			// fmt chunk
 			file_res->store_8('f');
 			file_res->store_8('m');
 			file_res->store_8('t');
 			file_res->store_8(' ');
-			file_res->store_32(16);
-			file_res->store_16(1); // PCM
+			file_res->store_32(16); // fmt chunk size
+			file_res->store_16(1); // PCM format
 			file_res->store_16(1); // Mono
-			file_res->store_32(44100);
-			file_res->store_32(44100 * 2);
-			file_res->store_16(2);
-			file_res->store_16(16);
+			file_res->store_32(44100); // sample rate
+			file_res->store_32(44100 * 2); // byte rate = SampleRate * NumChannels * BitsPerSample/8
+			file_res->store_16(2); // block align = NumChannels * BitsPerSample/8
+			file_res->store_16(16); // bits per sample
+
+			// data chunk
 			file_res->store_8('d');
 			file_res->store_8('a');
 			file_res->store_8('t');
 			file_res->store_8('a');
 			file_res->store_32(data_chunk_size);
-
 			file_res->store_buffer(resampled_data);
 			file_res->flush();
 			UtilityFunctions::print(vformat("Step 2/2 - Resampled saved: %s", resampled_path));
@@ -1448,9 +1502,9 @@ bool MBEXsoundConvert(int index, String path) {
 
 		j++;
 	}
+
 	return (j > 1);
 }
-
 bool MBLoadSound(uint8_t soundIndex) //265300
 {
 	FILE *file;

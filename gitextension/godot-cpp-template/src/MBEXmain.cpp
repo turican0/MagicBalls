@@ -259,6 +259,7 @@ Array MBEXclass::getPendingSoundActions() {
 		d["p1"] = sa.p1;
 		d["p2"] = sa.p2;
 		d["p3"] = sa.p3;
+		d["p4"] = sa.p4;
 		result.append(d);
 	}
 	sound_queue_clear();

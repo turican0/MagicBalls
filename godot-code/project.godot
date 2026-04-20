@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MagicBalls"
-run/main_scene="uid://dgwygcjmuwppm"
+run/main_scene="uid://bvugxfwp60tqc"
 config/features=PackedStringArray("4.6")
 boot_splash/show_image=false
 config/icon="res://icon.svg"

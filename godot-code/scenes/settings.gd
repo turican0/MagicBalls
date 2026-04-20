@@ -53,13 +53,14 @@ const DEFAULTS = {
 		#"fps_limit":        2,   # 0=30 1=60 2=144 3=Unlimited
 	},
 	"audio": {
-		"master_volume":    80,
-		"music_volume":     70,
-		"sfx_volume":       90,
+		"master_volume":    100,
+		"music_volume":     100,
+		"sfx_volume":       100,
+		"speech_volume":       100,
 	},
 	"input": {
 		"mouse_sensitivity": 8,
-		"invert_y":          0#,  # 0=No 1=Yes
+		"invert_y":          1#,  # 0=No 1=Yes
 		#"gamepad":           0,  # 0=Auto 1=Always 2=Never
 	}#,
 	#"game": {
@@ -116,6 +117,7 @@ var _sel_fps:           OptionButton
 var _sl_master:         HSlider
 var _sl_music:          HSlider
 var _sl_sfx:            HSlider
+var _sl_speech:         HSlider
 
 var _sl_sensitivity:    HSlider
 var _sel_invert_y:      OptionButton
@@ -229,9 +231,9 @@ func _apply_settings() -> void:
 		#3: Engine.max_fps = 0  # Unlimited
 
 	# Master volume
-	var master_idx = AudioServer.get_bus_index("Master")
-	AudioServer.set_bus_volume_db(master_idx,
-		linear_to_db(_settings["audio"]["master_volume"] / 100.0))
+	#var master_idx = AudioServer.get_bus_index("Master")
+	#AudioServer.set_bus_volume_db(master_idx,
+		#linear_to_db(_settings["audio"]["master_volume"] / 100.0))
 
 	# Add Music / SFX buses here if you have them:
 	# var music_idx = AudioServer.get_bus_index("Music")
@@ -249,6 +251,7 @@ func _read_controls_into_settings() -> void:
 	_settings["audio"]["master_volume"]    = int(_sl_master.value)
 	_settings["audio"]["music_volume"]     = int(_sl_music.value)
 	_settings["audio"]["sfx_volume"]       = int(_sl_sfx.value)
+	_settings["audio"]["speech_volume"]       = int(_sl_speech.value)
 
 	#_settings["input"]["mouse_sensitivity"] = int(_sl_sensitivity.value)
 	_settings["input"]["invert_y"]          = _sel_invert_y.selected
@@ -355,9 +358,17 @@ func _launch_game() -> void:
 	spinner.add_theme_color_override("font_color", UI_SPINNER_COLOR)
 	canvas.add_child(spinner)
 	_animate_simple_spinner(spinner)
+	SetGlobals()
 	await get_tree().create_timer(0.1).timeout
 	get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
 	
+func SetGlobals():
+	Global.master_volume=_settings["audio"]["master_volume"]/100.0
+	Global.music_volume=_settings["audio"]["music_volume"]/100.0
+	Global.sounds_volume=_settings["audio"]["sfx_volume"]/100.0
+	Global.speech_volume=_settings["audio"]["speech_volume"]/100.0
+	Global.inverse_mouseY=_settings["input"]["invert_y"]
+
 func _animate_simple_spinner(spinner: Label):
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
 
@@ -466,7 +477,8 @@ func _build_audio_tab(tc: TabContainer) -> void:
 	vbox.add_child(_section("VOLUME"))
 	_sl_master = _slider(vbox, "Master Volume", 0, 100, _settings["audio"]["master_volume"])
 	_sl_music  = _slider(vbox, "Music",         0, 100, _settings["audio"]["music_volume"])
-	_sl_sfx    = _slider(vbox, "Sound Effects", 0, 100, _settings["audio"]["sfx_volume"])
+	_sl_sfx    = _slider(vbox, "Sounds", 0, 100, _settings["audio"]["sfx_volume"])
+	_sl_speech    = _slider(vbox, "Speech", 0, 100, _settings["audio"]["speech_volume"])
 
 func _build_input_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("INPUT", tc)

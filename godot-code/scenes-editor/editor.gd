@@ -10,14 +10,14 @@ extends Node3D
 @onready var Tree_View: Tree = $UI/TreeView/PreContainer/PanelContainer/MarginContainer/Tree
 
 @onready var Terrain_Edit_Panel: Control = $UI/TerrainEdit
-
 @onready var Entity_Edit_Panel: Control = $UI/EntityEdit
+@onready var Wizards_Edit_Panel: Control = $UI/WizardsEdit
 
 @onready var Console: RichTextLabel = $UI/Console/RichTextLabel
 
 @onready var Terrain_Edit = $UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
-
-@onready var EntityEdit: Control = $UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
+@onready var Entity_Edit: Control = $UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
+@onready var Wizards_Edit: Control = $UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 
 @onready var selectors = [
 	Terrain_Edit.get_node("Seed_0"),
@@ -58,6 +58,7 @@ func _ready() -> void:
 		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
 			selector.value_changed.connect(_on_h_box_container_value_changed)
 	SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
+	Wizards_Edit.display_player_data(0)
 	toggle_editor_control_style()
 	_preload_library(library, library_scenes)
 	Tree_View.item_selected.connect(_on_tree_item_selected)
@@ -815,15 +816,15 @@ func fillEntityDetails(index:int):
 		if node.has_meta("index") and node.get_meta("index") == index:
 			finded_node=node
 	if finded_node:
-		EntityEdit.get_node_or_null("IDX/SpinBox").value = finded_node.get_meta("index")
-		EntityEdit.get_node_or_null("type_0x30311/SpinBox").value = finded_node.get_meta("type_0x30311")
-		EntityEdit.get_node_or_null("subtype_0x30311/SpinBox").value = finded_node.get_meta("subtype_0x30311")
-		EntityEdit.get_node_or_null("DisId/SpinBox").value = finded_node.get_meta("DisId")
-		EntityEdit.get_node_or_null("word_10/SpinBox").value = finded_node.get_meta("word_10")
-		EntityEdit.get_node_or_null("stageTag_12/SpinBox").value = finded_node.get_meta("stageTag_12")
-		EntityEdit.get_node_or_null("par1_14/SpinBox").value = finded_node.get_meta("par1_14")
-		EntityEdit.get_node_or_null("par2_16/SpinBox").value = finded_node.get_meta("par2_16")
-		EntityEdit.get_node_or_null("par3_18/SpinBox").value = finded_node.get_meta("par3_18")
+		Entity_Edit.get_node_or_null("IDX/SpinBox").value = finded_node.get_meta("index")
+		Entity_Edit.get_node_or_null("type_0x30311/SpinBox").value = finded_node.get_meta("type_0x30311")
+		Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox").value = finded_node.get_meta("subtype_0x30311")
+		Entity_Edit.get_node_or_null("DisId/SpinBox").value = finded_node.get_meta("DisId")
+		Entity_Edit.get_node_or_null("word_10/SpinBox").value = finded_node.get_meta("word_10")
+		Entity_Edit.get_node_or_null("stageTag_12/SpinBox").value = finded_node.get_meta("stageTag_12")
+		Entity_Edit.get_node_or_null("par1_14/SpinBox").value = finded_node.get_meta("par1_14")
+		Entity_Edit.get_node_or_null("par2_16/SpinBox").value = finded_node.get_meta("par2_16")
+		Entity_Edit.get_node_or_null("par3_18/SpinBox").value = finded_node.get_meta("par3_18")
 		
 func _on_tree_item_selected() -> void:
 	var selected = Tree_View.get_selected()
