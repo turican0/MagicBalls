@@ -150,12 +150,6 @@ func toggle_editor_control_style():
 		var center = get_viewport().get_visible_rect().size / 2.0
 		get_viewport().warp_mouse(center)
 
-func toggle_terrain_editor():
-	if !Terrain_Edit_Panel.visible:
-		Terrain_Edit_Panel.show()
-	else:
-		Terrain_Edit_Panel.hide()
-
 func update_tree():
 	var all_sections: Array = []
 
