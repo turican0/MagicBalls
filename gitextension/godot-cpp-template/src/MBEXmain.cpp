@@ -1870,7 +1870,7 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainStages() {
 	for (int i = 0; i < stages_count; ++i) {
 		type_str_0x3647Ac &s = D41A0_0.terrain_2FECE.StageVars_0x3647A[i];
 
-		data.set(idx++, (float)s.index_0x3647A_0);
+		data.set(idx++, (float)(uint8)s.index_0x3647A_0);
 		data.set(idx++, (float)s.stage_0x3647A_1);
 		data.set(idx++, (float)s.str_0x3647A_2._axis_2d.x);
 		data.set(idx++, (float)s.str_0x3647A_2._axis_2d.y);

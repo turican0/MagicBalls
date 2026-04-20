@@ -16,7 +16,7 @@ func display_stages_data(idx: int):
 	$StageIndex/SpinBox.value = data.index
 	$StageStage/SpinBox.value = data.stage
 	$StageX1/SpinBox.value = data.x1
-	$StageY1/SpinBox.value = data.y1	
+	$StageY1/SpinBox.value = data.y1
 	$StageX2/SpinBox.value = data.x2
 	$StageY2/SpinBox.value = data.y2
 	
