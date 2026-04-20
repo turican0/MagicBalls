@@ -26,13 +26,15 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src")
 endif()
 add_subdirectory(godot-cpp SYSTEM)
 
-if(TARGET godot::cpp)
-    get_target_property(godot_opts godot::cpp COMPILE_OPTIONS)
+get_target_property(GODOT_CPP_LIB godot::cpp ALIASED_TARGET)
+
+if(GODOT_CPP_LIB AND TARGET ${GODOT_CPP_LIB})
+    get_target_property(godot_opts ${GODOT_CPP_LIB} COMPILE_OPTIONS)
     if(godot_opts)
         list(REMOVE_ITEM godot_opts "-fno-exceptions" "-fno-rtti")
-        set_target_properties(godot::cpp PROPERTIES COMPILE_OPTIONS "${godot_opts}")
+        set_target_properties(${GODOT_CPP_LIB} PROPERTIES COMPILE_OPTIONS "${godot_opts}")
     endif()
-    target_compile_options(godot::cpp INTERFACE -fexceptions -frtti)
+    target_compile_options(${GODOT_CPP_LIB} INTERFACE -fexceptions -frtti)
 endif()
 
 # godot-cpp pouziva generator expressions pro -fno-exceptions/-fno-rtti a
