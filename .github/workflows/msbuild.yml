@@ -228,6 +228,9 @@ jobs:
       - name: Rename .so files to EXTENSION-NAME
         run: |
           binDir="gitextension/godot-cpp-template/bin/linux"
+          destDir="gitextension/godot-cpp-template/MBEXout/bin/linux"
+          mkdir -p "$destDir"
+
           echo "=== .so před přejmenováním ==="
           ls "$binDir"/*.so 2>/dev/null || true
 
@@ -238,8 +241,11 @@ jobs:
             echo "Přejmenováno: $(basename $f) → $newName"
           done
 
+          # Kopíruj do MBEXout/bin/linux/ kde je očekává mbex.gdextension
+          cp "$binDir"/EXTENSION-NAME*.so "$destDir/" 2>/dev/null || true
+
           echo "=== .so po přejmenování ==="
-          ls "$binDir"/*.so 2>/dev/null || true
+          ls "$destDir"/*.so 2>/dev/null || true
 
       - name: Install Godot + export templates
         run: |
@@ -378,12 +384,23 @@ jobs:
         run: |
           for ABI in arm64-v8a x86_64; do
             binDir="gitextension/godot-cpp-template/bin/android/$ABI"
+            # .gdextension ocekava android.arm64 / android.x86_64 - mapujeme ABI
+            case "$ABI" in
+              arm64-v8a) destABI="arm64" ;;
+              x86_64)    destABI="x86_64" ;;
+            esac
+            destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
+            mkdir -p "$destDir"
+
             for f in "$binDir"/MagicBalls*.so; do
               [ -e "$f" ] || continue
               newName=$(basename "$f" | sed 's/^MagicBalls/EXTENSION-NAME/')
               mv "$f" "$binDir/$newName"
               echo "Přejmenováno: $(basename $f) → $newName [$ABI]"
             done
+
+            # Kopíruj do MBEXout/bin/android/ kde je očekává mbex.gdextension
+            cp "$binDir"/EXTENSION-NAME*.so "$destDir/" 2>/dev/null || true
           done
 
       - name: Install Godot + Android export templates
