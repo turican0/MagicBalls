@@ -26,23 +26,15 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src")
 endif()
 add_subdirectory(godot-cpp SYSTEM)
 
-option(GODOTCPP_DISABLE_EXCEPTIONS "Force disable exceptions in godot-cpp" OFF)
+get_target_property(GODOT_CPP_LIB godot::cpp ALIASED_TARGET)
 
-if(GODOTCPP_DISABLE_EXCEPTIONS)
-    message(STATUS "Exceptions in godot-cpp are DISABLED (as requested)")
-else()
-    message(STATUS "Forcing -fexceptions and -frtti for godot-cpp")
-
-    # Nejčistší cesta v novějším godot-cpp: předat option při konfiguraci
-    set(GODOTCPP_DISABLE_EXCEPTIONS OFF CACHE BOOL "" FORCE)
-
-    # Dodatečně přidáme flagy globálně (přes INTERFACE na náš target)
-    target_compile_options(${LIBNAME} PRIVATE -fexceptions -frtti)
-    
-    # Pro jistotu i na godot-cpp (pokud je přístupný reálný target)
-    if(TARGET godot-cpp)
-        target_compile_options(godot-cpp PRIVATE -fexceptions -frtti)
+if(GODOT_CPP_LIB AND TARGET ${GODOT_CPP_LIB})
+    get_target_property(godot_opts ${GODOT_CPP_LIB} COMPILE_OPTIONS)
+    if(godot_opts)
+        list(REMOVE_ITEM godot_opts "-fno-exceptions" "-fno-rtti")
+        set_target_properties(${GODOT_CPP_LIB} PROPERTIES COMPILE_OPTIONS "${godot_opts}")
     endif()
+    target_compile_options(${GODOT_CPP_LIB} INTERFACE -fexceptions -frtti)
 endif()
 
 # godot-cpp pouziva generator expressions pro -fno-exceptions/-fno-rtti a
@@ -84,8 +76,6 @@ target_compile_options(${LIBNAME} PRIVATE
         -Wno-error=narrowing
         -Wno-return-type
         -Wno-error
-		-include cmath
-        -include string
     >
     $<$<CXX_COMPILER_ID:Clang>:
         -Wno-error
@@ -93,11 +83,11 @@ target_compile_options(${LIBNAME} PRIVATE
         -Wno-pragma-pack
         -Wno-delete-abstract-non-virtual-dtor
         -Wno-pointer-bool-conversion
-        -Wno-int-to-pointer-cast
+	-Wno-int-to-pointer-cast
         -Wno-pointer-to-int-cast
         -Wno-tautological-constant-out-of-range-compare
-        -Wno-switch
-        -Wno-fortify-source
+	-Wno-switch
+	-Wno-fortify-source
         -Wno-shift-op-parentheses
         -Wno-constant-conversion
         -Wno-parentheses
