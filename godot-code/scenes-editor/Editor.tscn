@@ -427,7 +427,6 @@ layout_mode = 2
 script = ExtResource("2_ydsuf")
 
 [node name="TerrainEdit" type="Control" parent="UI" unique_id=1978053754]
-visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -482,6 +481,83 @@ text = "Night"
 [node name="BtnMore" type="Button" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" unique_id=584506679]
 layout_mode = 2
 text = ">"
+
+[node name="word_2FECE" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=438271473]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_2FECE" unique_id=377447829]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "word_2FECE"
+
+[node name="SpinBox" type="SpinBox" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_2FECE" unique_id=947435025]
+layout_mode = 2
+
+[node name="levelID" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=356633859]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/levelID" unique_id=1244326803]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "levelID"
+
+[node name="SpinBox" type="SpinBox" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/levelID" unique_id=882792091]
+layout_mode = 2
+
+[node name="byte_2FED2" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1456040977]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/byte_2FED2" unique_id=1828855822]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "byte_2FED2"
+
+[node name="SpinBox" type="SpinBox" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/byte_2FED2" unique_id=801065303]
+layout_mode = 2
+
+[node name="byte_2FED3" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1455130468]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/byte_2FED3" unique_id=146112375]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "byte_2FED3"
+
+[node name="SpinBox" type="SpinBox" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/byte_2FED3" unique_id=2116682637]
+layout_mode = 2
+
+[node name="map_type" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=149952370]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" unique_id=1697419120]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "map_type"
+
+[node name="SpinBox" type="SpinBox" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" unique_id=70974915]
+layout_mode = 2
+
+[node name="word_2FED5" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1952536437]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_2FED5" unique_id=2118839536]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "word_2FED5"
+
+[node name="SpinBox" type="SpinBox" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_2FED5" unique_id=1398970843]
+layout_mode = 2
+
+[node name="word_2FED7" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1391783056]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_2FED7" unique_id=1673267817]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "word_2FED7"
+
+[node name="SpinBox" type="SpinBox" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_2FED7" unique_id=1546827089]
+layout_mode = 2
 
 [node name="seed" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1265312090 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
@@ -1948,6 +2024,7 @@ stretch_mode = 5
 script = ExtResource("5_ydsuf")
 
 [node name="StagesEdit" type="Control" parent="UI" unique_id=847596794]
+visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0

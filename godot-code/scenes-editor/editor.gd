@@ -36,6 +36,16 @@ extends Node3D
 	Terrain_Edit.get_node("rkSte")
 ]
 
+@onready var TEselector2 = [
+	Terrain_Edit.get_node("word_2FECE"),
+	Terrain_Edit.get_node("levelID"),
+	Terrain_Edit.get_node("byte_2FED2"),
+	Terrain_Edit.get_node("byte_2FED3"),
+	Terrain_Edit.get_node("map_type"),
+	Terrain_Edit.get_node("word_2FED5"),
+	Terrain_Edit.get_node("word_2FED7")
+]
+
 var editor_runned=false
 var is_ui_visible = false
 
@@ -61,6 +71,14 @@ func _ready() -> void:
 		selector.current_value = Global.editorLevel[selectors[i].name]
 		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
 			selector.value_changed.connect(_on_h_box_container_value_changed)
+	
+	for i in range(TEselector2.size()):
+		var selector = TEselector2[i]
+		selector.get_node_or_null("SpinBox").value = Global.editorLevel[selectors[i].name]
+		if not selector.get_node_or_null("SpinBox").value_changed.is_connected(_on_h_box_container_value_changed2):
+			selector.get_node_or_null("SpinBox").value_changed.connect(_on_h_box_container_value_changed2.bind(i))
+	
+	
 	
 	#SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
 	#SetStagesValues(Global.MBEX.REMC2EditorGetTerrainStages())
@@ -642,8 +660,6 @@ func delete_selected_entities():
 	if (result & 4):
 		nexttext = nexttext + " some entities not deleted, have parent"
 	log_message(nexttext)
-	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
-	RenderEditorEntites()
 
 func RenderEditorEntites():
 	for node in get_tree().get_nodes_in_group("entities"):
@@ -852,9 +868,17 @@ func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
 	Global.MBEX.REMC2SetLevelType(state_name)
 	Main_DecodeLevel.gameInit(false)
 	Main_TerrainsMB.updateMeshes(false)
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	RenderEditorEntites()
 
 func _on_h_box_container_value_changed(terrainVarIndex: int,new_value: int) -> void:
 	Global.editorLevel[selectors[terrainVarIndex].name] = new_value
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	RenderEditorEntites()
+
+func _on_h_box_container_value_changed2(new_value: int,terrainVarIndex: int) -> void:
+	Global.editorLevel[TEselector2[terrainVarIndex].name] = new_value
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 
 func _on_undo_button_down() -> void:
