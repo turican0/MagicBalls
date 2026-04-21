@@ -1792,6 +1792,9 @@ void MBEXclass::REMC2EditorSetTerrainValue(int type, int value) {
 	}
 }
 
+PackedFloat32Array MBEXclass::REMC2EditorGetTerrainBegins() {
+}
+
 PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	PackedFloat32Array result;
 	int count = 1200;
