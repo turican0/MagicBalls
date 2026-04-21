@@ -128,7 +128,7 @@ jobs:
           $releaseExe = "$workspace\exports\release\MagicBalls.exe"
 
           Write-Host "=== DEBUG export ==="
-          $proc = Start-Process -FilePath $godot -ArgumentList "--headless --verbose --path godot-code --export-debug MagicBalls $debugExe" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "debug_stdout.txt" -RedirectStandardError "debug_stderr.txt"
+          $proc = Start-Process -FilePath $godot -ArgumentList "--headless --verbose --path godot-code --export-debug Windows $debugExe" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "debug_stdout.txt" -RedirectStandardError "debug_stderr.txt"
           Write-Host "Exit code: $($proc.ExitCode)"
           if (Test-Path "debug_stdout.txt") { Get-Content "debug_stdout.txt" }
           if (Test-Path "debug_stderr.txt") { Get-Content "debug_stderr.txt" }
@@ -136,7 +136,7 @@ jobs:
           if (-not (Test-Path $debugExe)) { Write-Error "Debug exe chybi!"; exit 1 }
 
           Write-Host "=== RELEASE export ==="
-          $proc2 = Start-Process -FilePath $godot -ArgumentList "--headless --verbose --path godot-code --export-release MagicBalls $releaseExe" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "release_stdout.txt" -RedirectStandardError "release_stderr.txt"
+          $proc2 = Start-Process -FilePath $godot -ArgumentList "--headless --verbose --path godot-code --export-release Windows $releaseExe" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "release_stdout.txt" -RedirectStandardError "release_stderr.txt"
           Write-Host "Exit code: $($proc2.ExitCode)"
           if (Test-Path "release_stdout.txt") { Get-Content "release_stdout.txt" }
           if (Test-Path "release_stderr.txt") { Get-Content "release_stderr.txt" }
@@ -298,7 +298,7 @@ jobs:
 
           echo "=== RELEASE export ==="
           godot --headless --verbose --path godot-code \
-            --export-release MagicBalls "$RELEASE_BIN" \
+            --export-release Linux "$RELEASE_BIN" \
             > release_stdout.txt 2> release_stderr.txt
           cat release_stdout.txt || true
           cat release_stderr.txt || true
@@ -440,19 +440,28 @@ jobs:
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
+          PRESETS_FILE="godot-code/export_presets.cfg"
+
+          echo "=== Modify export_presets.cfg for GitHub Actions ==="
+          sed -i "s|keystore/release=\".*\"|keystore/release=\"$KEYSTORE_PATH\"|" "$PRESETS_FILE"
+          sed -i "s|keystore/release_user=\".*\"|keystore/release_user=\"$KEY_ALIAS\"|" "$PRESETS_FILE"
+          sed -i "s|keystore/release_password=\".*\"|keystore/release_password=\"$KEYSTORE_PASSWORD\"|" "$PRESETS_FILE"
+          sed -i "s|keystore/release_key_password=\".*\"|keystore/release_key_password=\"$KEY_PASSWORD\"|" "$PRESETS_FILE"
+
           mkdir -p exports/android
           TAG="${{ github.ref_name }}"
           APK_PATH="${{ github.workspace }}/exports/android/MagicBalls-${TAG}-Android-Release.apk"
 
           echo "=== ANDROID RELEASE export ==="
           godot --headless --verbose --path godot-code \
-            --export-release Android "$APK_PATH" \
-            > android_stdout.txt 2> android_stderr.txt
-          cat android_stdout.txt || true
-          cat android_stderr.txt || true
+            --export-release Android "$APK_PATH"
 
-          [ -f "$APK_PATH" ] || { echo "ERROR: APK chybí!"; exit 1; }
-          echo "=== APK sestaveno: $APK_PATH ==="
+          if [ -f "$APK_PATH" ]; then
+            echo "=== APK ÚSPĚŠNĚ VYTVOŘENO: $APK_PATH ==="
+          else
+            echo "ERROR: APK se nepodařilo vygenerovat! Export pravděpodobně selhal."
+            exit 1
+          fi
 
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
