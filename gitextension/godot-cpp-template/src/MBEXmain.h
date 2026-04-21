@@ -138,8 +138,8 @@ public:
 	//void REMC2EditorSetTerrainValue(int type, int value);
 
 	//PackedFloat32Array REMC2EditorGetTerrainEntites();
-	PackedFloat32Array REMC2EditorGetTerrainPlayers();
-	PackedFloat32Array REMC2EditorGetTerrainStages();
+	//PackedFloat32Array REMC2EditorGetTerrainPlayers();
+	//PackedFloat32Array REMC2EditorGetTerrainStages();
 	int REMC2EditorDeleteEntites(Array p_indices);
 
 	Dictionary REMC2EditorGetLevelData();

@@ -77,8 +77,8 @@ void MBEXclass::_bind_methods() {
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainPlayers"), &MBEXclass::REMC2EditorGetTerrainPlayers);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainPlayers"), &MBEXclass::REMC2EditorGetTerrainPlayers);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetLevelData"), &MBEXclass::REMC2EditorGetLevelData);
@@ -1825,6 +1825,7 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	return result;
 }
 */
+/*
 PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
 	PackedFloat32Array data;
 
@@ -1862,7 +1863,8 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
 
 	return data;
 }
-
+*/
+/*
 PackedFloat32Array MBEXclass::REMC2EditorGetTerrainStages() {
 	PackedFloat32Array data;
 
@@ -1885,7 +1887,7 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainStages() {
 
 	return data;
 }
-
+*/
 int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	if (p_indices.is_empty())
 		return -1;
@@ -2118,7 +2120,10 @@ Dictionary MBEXclass::REMC2EditorGetLevelData() {
 		Dictionary vd;
 		vd["index"] = (int)v.index_0x3647A_0;
 		vd["stage"] = (int)v.stage_0x3647A_1;
-		vd["union_dword"] = (int64_t)v.str_0x3647C_4.dword;
+		vd["union_axis_2d_x"] = (int)v.str_0x3647A_2._axis_2d.x;
+		vd["union_axis_2d_y"] = (int)v.str_0x3647A_2._axis_2d.y;
+		vd["union_dword_axis_x"] = (int)v.str_0x3647C_4.axis.x;
+		vd["union_dword_axis_y"] = (int)v.str_0x3647C_4.axis.y;
 		stage_vars.push_back(vd);
 	}
 	d["stage_vars"] = stage_vars;
@@ -2265,8 +2270,14 @@ void MBEXclass::REMC2EditorSetLevelData(Dictionary d) {
 				v.index_0x3647A_0 = (int8_t)(int)vd["index"];
 			if (vd.has("stage"))
 				v.stage_0x3647A_1 = (int8_t)(int)vd["stage"];
-			if (vd.has("union_dword"))
-				v.str_0x3647C_4.dword = (uint32_t)(int64_t)vd["union_dword"];
+			if (vd.has("union_axis_2d_x"))
+				v.str_0x3647A_2._axis_2d.x = (uint8_t)(int)vd["union_axis_2d_x"];
+			if (vd.has("union_axis_2d_y"))
+				v.str_0x3647A_2._axis_2d.y = (uint8_t)(int)vd["union_axis_2d_y"];
+			if (vd.has("union_dword_axis_x"))
+				v.str_0x3647C_4.axis.x = (uint16_t)(int)vd["union_dword_axis_x"];
+			if (vd.has("union_dword_axis_y"))
+				v.str_0x3647C_4.axis.x = (uint16_t)(int)vd["union_dword_axis_y"];
 		}
 	}
 }

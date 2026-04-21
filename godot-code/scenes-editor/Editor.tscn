@@ -1981,6 +1981,7 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer" unique_id=319321999]
 layout_mode = 2
 script = ExtResource("8_wqm82")
+player_index = null
 
 [node name="IDX" type="HBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=915971275]
 layout_mode = 2

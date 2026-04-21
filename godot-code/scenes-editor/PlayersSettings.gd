@@ -5,29 +5,25 @@ extends VBoxContainer
 
 func display_player_data(idx: int):
 	# Kontrola, zda pole obsahuje data pro daný index
-	if idx >= Global.players_settings.size():
+	if idx >= 8:
 		push_error("Hráč s indexem %d není v Global.players_settings načten!" % idx)
 		return
 
-	# Přímý přístup k objektu ve tvém poli
-	var data = Global.players_settings[idx]
-
-	# 1. Číselné hodnoty (SpinBoxy)
-	$Aggression/SpinBox.value = data.aggression
-	$Reflexes/SpinBox.value   = data.reflexes
-	$Perception/SpinBox.value = data.perception
-	$Life/SpinBox.value       = data.life
+	$Aggression/SpinBox.value = Global.editorLevel["wizards"][idx]["aggression"]
+	$Reflexes/SpinBox.value   = Global.editorLevel["wizards"][idx]["reflexes"]
+	$Perception/SpinBox.value = Global.editorLevel["wizards"][idx]["perception"]
+	$Life/SpinBox.value       = Global.editorLevel["wizards"][idx]["life"]
 	
-	$StageIndex/SpinBox.value = data.stageIndex
-	$StageStage/SpinBox.value = data.stageStage
-	$StageX/SpinBox.value     = data.stageX
-	$StageY/SpinBox.value     = data.stageY
+	$StageIndex/SpinBox.value = Global.editorLevel["stages"][idx]["index"]
+	$StageStage/SpinBox.value = Global.editorLevel["stages"][idx]["stage"]
+	$StageX/SpinBox.value     = Global.editorLevel["stages"][idx]["axis_x"]
+	$StageY/SpinBox.value     = Global.editorLevel["stages"][idx]["axis_y"]
 
 	# 2. Kouzla (TextureButtony v panelech)
 	# Použijeme tvé proměnné ze třídy WizardSettings
-	_update_spell_buttons($StartingSpells, data.starting_spells)
-	_update_spell_buttons($AvailableSpells, data.unknown_bytes)
-	_update_spell_buttons($BlockedSpells, data.blocked_spells)
+	_update_spell_buttons($StartingSpells, Global.editorLevel["wizards"][idx]["starting_spells"])
+	_update_spell_buttons($AvailableSpells, Global.editorLevel["wizards"][idx]["byte_array"])
+	_update_spell_buttons($BlockedSpells, Global.editorLevel["wizards"][idx]["blocked_spells"])
 
 # Pomocná funkce pro iteraci přes kontejnery
 func _update_spell_buttons(container: Control, spell_array: Array):

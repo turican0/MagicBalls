@@ -236,5 +236,5 @@ class StagesSettings:
 	var x2: int
 	var y2: int
 		
-var players_settings: Array[WizardSettings] = []
-var stages_settings: Array[StagesSettings] = []
+#var players_settings: Array[WizardSettings] = []
+#var stages_settings: Array[StagesSettings] = []
