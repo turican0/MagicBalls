@@ -134,13 +134,16 @@ public:
 	void REMC2EditorEnd();
 	void REMC2EditorLoop();
 
-	int REMC2EditorGetTerrainValue(int type);
-	void REMC2EditorSetTerrainValue(int type, int value);
+	//int REMC2EditorGetTerrainValue(int type);
+	//void REMC2EditorSetTerrainValue(int type, int value);
 
 	PackedFloat32Array REMC2EditorGetTerrainEntites();
 	PackedFloat32Array REMC2EditorGetTerrainPlayers();
 	PackedFloat32Array REMC2EditorGetTerrainStages();
 	int REMC2EditorDeleteEntites(Array p_indices);
+
+	Dictionary REMC2EditorGetLevelData();
+	void REMC2EditorSetLevelData(Dictionary d);
 
 	void REMC2EditorUndo();
 	void REMC2EditorRedo();

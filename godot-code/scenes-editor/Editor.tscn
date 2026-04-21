@@ -483,40 +483,40 @@ text = "Night"
 layout_mode = 2
 text = ">"
 
-[node name="Seed_0" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1265312090 instance=ExtResource("3_8pqvr")]
+[node name="seed" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1265312090 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="Offset_1" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=889099180 instance=ExtResource("3_8pqvr")]
+[node name="offset" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=889099180 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="Raise_2" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=930166442 instance=ExtResource("3_8pqvr")]
+[node name="raise" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=930166442 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="Gnarl_3" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=718115529 instance=ExtResource("3_8pqvr")]
+[node name="gnarl" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=718115529 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="River_4" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1044352470 instance=ExtResource("3_8pqvr")]
+[node name="river" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1044352470 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="Lriver_5" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=431296785 instance=ExtResource("3_8pqvr")]
+[node name="lriver" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=431296785 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="Source_6" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=786195978 instance=ExtResource("3_8pqvr")]
+[node name="source" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=786195978 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="SnLin_7" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=674345592 instance=ExtResource("3_8pqvr")]
+[node name="snLin" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=674345592 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="SnFlt_8" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1838833166 instance=ExtResource("3_8pqvr")]
+[node name="snFlt" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1838833166 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="BhLin_9" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=665209309 instance=ExtResource("3_8pqvr")]
+[node name="bhLin" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=665209309 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="BhFlt_10" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1499304382 instance=ExtResource("3_8pqvr")]
+[node name="bhFlt" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1499304382 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
-[node name="RkSte_11" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=275042693 instance=ExtResource("3_8pqvr")]
+[node name="rkSte" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=275042693 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
 [node name="EntityEdit" type="Control" parent="UI" unique_id=169198194]
@@ -2107,17 +2107,17 @@ mesh = SubResource("CylinderMesh_jhayq")
 [connection signal="button_down" from="UI/Control/Undo" to="." method="_on_undo_button_down"]
 [connection signal="button_down" from="UI/Control/Redo" to="." method="_on_redo_button_down"]
 [connection signal="state_changed_graphicsType" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" to="." method="_on_terrain_type_state_changed_graphics_type"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Seed_0" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Offset_1" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Raise_2" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Gnarl_3" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/River_4" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Lriver_5" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Source_6" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/SnLin_7" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/SnFlt_8" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/BhLin_9" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/BhFlt_10" to="." method="_on_h_box_container_value_changed"]
-[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/RkSte_11" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/seed" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/offset" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/raise" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/gnarl" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/river" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/lriver" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/source" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/snLin" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/snFlt" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/bhLin" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/bhFlt" to="." method="_on_h_box_container_value_changed"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/rkSte" to="." method="_on_h_box_container_value_changed"]
 [connection signal="value_changed" from="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]

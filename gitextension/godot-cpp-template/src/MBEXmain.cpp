@@ -74,12 +74,15 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorEnd"), &MBEXclass::REMC2EditorEnd);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoop"), &MBEXclass::REMC2EditorLoop);
 
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainPlayers"), &MBEXclass::REMC2EditorGetTerrainPlayers);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetLevelData"), &MBEXclass::REMC2EditorGetLevelData);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetLevelData", "Dictionary"), &MBEXclass::REMC2EditorSetLevelData);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorUndo"), &MBEXclass::REMC2EditorUndo);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorRedo"), &MBEXclass::REMC2EditorRedo);
@@ -1720,6 +1723,7 @@ void MBEXclass::REMC2EditorLoop()
 	main_x();
 };
 
+/*
 int MBEXclass::REMC2EditorGetTerrainValue(int type) {
 	switch (type) {
 		case 0:
@@ -1791,9 +1795,7 @@ void MBEXclass::REMC2EditorSetTerrainValue(int type, int value) {
 			break;
 	}
 }
-
-PackedFloat32Array MBEXclass::REMC2EditorGetTerrainBegins() {
-}
+*/
 
 PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	PackedFloat32Array result;
@@ -2016,6 +2018,255 @@ void MBEXaudioExtract(String path) {
 	}
 }
 
+Dictionary MBEXclass::REMC2EditorGetLevelData() {
+	Dictionary d;
+
+	// ── Hlavička ────────────────────────────────────────────────
+	d["word_2FECE"] = (int)tempTerrain.word_2FECE;
+	d["levelID"] = (int)tempTerrain.levelID_2FED0;
+	d["byte_2FED2"] = (int)tempTerrain.byte_0x2FED2;
+	d["byte_2FED3"] = (int)tempTerrain.byte_0x2FED3;
+	d["map_type"] = (int)tempTerrain.MapType;
+	d["word_2FED5"] = (int)tempTerrain.word_0x2FED5;
+	d["word_2FED7"] = (int)tempTerrain.word_0x2FED7;
+	d["seed"] = (int)tempTerrain.seed_0x2FEE5;
+	d["offset"] = (int)tempTerrain.offset_0x2FEE9;
+	d["raise"] = (int)tempTerrain.raise_0x2FEED;
+	d["gnarl"] = (int)tempTerrain.gnarl_0x2FEF1;
+	d["river"] = (int64_t)tempTerrain.river_0x2FEF5;
+	d["lriver"] = (int)tempTerrain.lriver_0x2FEF9;
+	d["source"] = (int)tempTerrain.source_0x2FEFD;
+	d["snLin"] = (int)tempTerrain.snLin_0x2FF01;
+	d["snFlt"] = (int)tempTerrain.snFlt_0x2FF05;
+	d["bhLin"] = (int)tempTerrain.bhLin_0x2FF09;
+	d["bhFlt"] = (int)tempTerrain.bhFlt_0x2FF0D;
+	d["rkSte"] = (int)tempTerrain.rkSte_0x2FF11;
+	d["next_360D1"] = (int)tempTerrain.next_0x360D1;
+
+	// ── Hráči ───────────────────────────────────────────────────
+	Array players;
+	for (int i = 0; i < 8; i++)
+		players.push_back((int)tempTerrain.player_0x2FED9[i]);
+	d["players"] = players;
+
+	// ── Entity (1200) ───────────────────────────────────────────
+	Array entities;
+	for (int i = 0; i < 1200; i++) {
+		auto &e = tempTerrain.entity_0x30311[i];
+		Dictionary ed;
+		ed["type"] = (int)e.type_0x30311;
+		ed["subtype"] = (int)e.subtype_0x30311;
+		ed["axis_x"] = (int)e.axis2d_4.x;
+		ed["axis_y"] = (int)e.axis2d_4.y;
+		ed["dis_id"] = (int)e.DisId;
+		ed["word10"] = (int)e.word_10;
+		ed["stage_tag"] = (int)e.stageTag_12;
+		ed["par1"] = (int)e.par1_14;
+		ed["par2"] = (int)e.par2_16;
+		ed["par3"] = (int)e.par3_18;
+		entities.push_back(ed);
+	}
+	d["entities"] = entities;
+
+	// ── WizardMapSettings (8) ───────────────────────────────────
+	Array wizards;
+	for (int i = 0; i < 8; i++) {
+		auto &w = tempTerrain.WizardMapSettings_0x360D2[i];
+		Dictionary wd;
+		wd["aggression"] = (int)w.Aggression_0x360D5;
+		wd["reflexes"] = (int)w.Reflexes_0x360D9;
+		wd["perception"] = (int)w.Perception_0x360DD;
+		wd["life"] = (int)w.Life_0x3612F;
+
+		PackedByteArray starting, byte_arr, blocked;
+		starting.resize(26);
+		byte_arr.resize(26);
+		blocked.resize(26);
+		memcpy(starting.ptrw(), w.StartingSpells_0x360E1x, 26);
+		memcpy(byte_arr.ptrw(), w.byte_0x360FBx, 26);
+		memcpy(blocked.ptrw(), w.BlockedSpells_0x36115x, 26);
+		wd["starting_spells"] = starting;
+		wd["byte_array"] = byte_arr;
+		wd["blocked_spells"] = blocked;
+		wizards.push_back(wd);
+	}
+	d["wizards"] = wizards;
+
+	// ── Stages (8) ──────────────────────────────────────────────
+	Array stages;
+	for (int i = 0; i < 8; i++) {
+		auto &s = tempTerrain.stages_0x36442[i];
+		Dictionary sd;
+		sd["index"] = (int)s.index_0;
+		sd["stage"] = (int)s.stage_1;
+		sd["axis_x"] = (int)s._axis_2d.x;
+		sd["axis_y"] = (int)s._axis_2d.y;
+		stages.push_back(sd);
+	}
+	d["stages"] = stages;
+
+	// ── StageVars (11) ──────────────────────────────────────────
+	Array stage_vars;
+	for (int i = 0; i < 11; i++) {
+		auto &v = tempTerrain.StageVars_0x3647A[i];
+		Dictionary vd;
+		vd["index"] = (int)v.index_0x3647A_0;
+		vd["stage"] = (int)v.stage_0x3647A_1;
+		vd["union_dword"] = (int64_t)v.str_0x3647C_4.dword;
+		stage_vars.push_back(vd);
+	}
+	d["stage_vars"] = stage_vars;
+
+	return d;
+}
+
+void MBEXclass::REMC2EditorSetLevelData(Dictionary d) {
+	// ── Hlavička ────────────────────────────────────────────────
+	if (d.has("word_2FECE"))
+		tempTerrain.word_2FECE = (uint16_t)(int)d["word_2FECE"];
+	if (d.has("levelID"))
+		tempTerrain.levelID_2FED0 = (uint16_t)(int)d["levelID"];
+	if (d.has("byte_2FED2"))
+		tempTerrain.byte_0x2FED2 = (uint8_t)(int)d["byte_2FED2"];
+	if (d.has("byte_2FED3"))
+		tempTerrain.byte_0x2FED3 = (uint8_t)(int)d["byte_2FED3"];
+	if (d.has("map_type"))
+		tempTerrain.MapType = (MapType_t)(int)d["map_type"];
+	if (d.has("word_2FED5"))
+		tempTerrain.word_0x2FED5 = (int16_t)(int)d["word_2FED5"];
+	if (d.has("word_2FED7"))
+		tempTerrain.word_0x2FED7 = (int16_t)(int)d["word_2FED7"];
+	if (d.has("seed"))
+		tempTerrain.seed_0x2FEE5 = (uint16_t)(int)d["seed"];
+	if (d.has("offset"))
+		tempTerrain.offset_0x2FEE9 = (uint16_t)(int)d["offset"];
+	if (d.has("raise"))
+		tempTerrain.raise_0x2FEED = (uint16_t)(int)d["raise"];
+	if (d.has("gnarl"))
+		tempTerrain.gnarl_0x2FEF1 = (uint16_t)(int)d["gnarl"];
+	if (d.has("river"))
+		tempTerrain.river_0x2FEF5 = (uint32_t)(int64_t)d["river"];
+	if (d.has("lriver"))
+		tempTerrain.lriver_0x2FEF9 = (uint16_t)(int)d["lriver"];
+	if (d.has("source"))
+		tempTerrain.source_0x2FEFD = (uint16_t)(int)d["source"];
+	if (d.has("snLin"))
+		tempTerrain.snLin_0x2FF01 = (uint16_t)(int)d["snLin"];
+	if (d.has("snFlt"))
+		tempTerrain.snFlt_0x2FF05 = (uint16_t)(int)d["snFlt"];
+	if (d.has("bhLin"))
+		tempTerrain.bhLin_0x2FF09 = (uint16_t)(int)d["bhLin"];
+	if (d.has("bhFlt"))
+		tempTerrain.bhFlt_0x2FF0D = (uint16_t)(int)d["bhFlt"];
+	if (d.has("rkSte"))
+		tempTerrain.rkSte_0x2FF11 = (uint16_t)(int)d["rkSte"];
+	if (d.has("next_360D1"))
+		tempTerrain.next_0x360D1 = (uint8_t)(int)d["next_360D1"];
+
+	// ── Hráči ───────────────────────────────────────────────────
+	if (d.has("players")) {
+		Array players = d["players"];
+		for (int i = 0; i < 8 && i < players.size(); i++)
+			tempTerrain.player_0x2FED9[i] = (int8_t)(int)players[i];
+	}
+
+	// ── Entity ──────────────────────────────────────────────────
+	if (d.has("entities")) {
+		Array entities = d["entities"];
+		for (int i = 0; i < 1200 && i < entities.size(); i++) {
+			Dictionary ed = entities[i];
+			auto &e = tempTerrain.entity_0x30311[i];
+			if (ed.has("type"))
+				e.type_0x30311 = (uint16_t)(int)ed["type"];
+			if (ed.has("subtype"))
+				e.subtype_0x30311 = (int16_t)(int)ed["subtype"];
+			if (ed.has("axis_x"))
+				e.axis2d_4.x = (int16_t)(int)ed["axis_x"];
+			if (ed.has("axis_y"))
+				e.axis2d_4.y = (int16_t)(int)ed["axis_y"];
+			if (ed.has("dis_id"))
+				e.DisId = (int16_t)(int)ed["dis_id"];
+			if (ed.has("word10"))
+				e.word_10 = (uint16_t)(int)ed["word10"];
+			if (ed.has("stage_tag"))
+				e.stageTag_12 = (int16_t)(int)ed["stage_tag"];
+			if (ed.has("par1"))
+				e.par1_14 = (uint16_t)(int)ed["par1"];
+			if (ed.has("par2"))
+				e.par2_16 = (uint16_t)(int)ed["par2"];
+			if (ed.has("par3"))
+				e.par3_18 = (uint16_t)(int)ed["par3"];
+		}
+	}
+
+	// ── Wizards ─────────────────────────────────────────────────
+	if (d.has("wizards")) {
+		Array wizards = d["wizards"];
+		for (int i = 0; i < 8 && i < wizards.size(); i++) {
+			Dictionary wd = wizards[i];
+			auto &w = tempTerrain.WizardMapSettings_0x360D2[i];
+			if (wd.has("aggression"))
+				w.Aggression_0x360D5 = (int16_t)(int)wd["aggression"];
+			if (wd.has("reflexes"))
+				w.Reflexes_0x360D9 = (int16_t)(int)wd["reflexes"];
+			if (wd.has("perception"))
+				w.Perception_0x360DD = (int16_t)(int)wd["perception"];
+			if (wd.has("life"))
+				w.Life_0x3612F = (int16_t)(int)wd["life"];
+
+			auto copySpells = [](PackedByteArray &src, uint8_t *dst) {
+				memcpy(dst, src.ptr(), MIN(src.size(), 26));
+			};
+			if (wd.has("starting_spells")) {
+				PackedByteArray v = wd["starting_spells"];
+				copySpells(v, w.StartingSpells_0x360E1x);
+			}
+			if (wd.has("byte_array")) {
+				PackedByteArray v = wd["byte_array"];
+				copySpells(v, w.byte_0x360FBx);
+			}
+			if (wd.has("blocked_spells")) {
+				PackedByteArray v = wd["blocked_spells"];
+				copySpells(v, w.BlockedSpells_0x36115x);
+			}
+		}
+	}
+
+	// ── Stages ──────────────────────────────────────────────────
+	if (d.has("stages")) {
+		Array stages = d["stages"];
+		for (int i = 0; i < 8 && i < stages.size(); i++) {
+			Dictionary sd = stages[i];
+			auto &s = tempTerrain.stages_0x36442[i];
+			if (sd.has("index"))
+				s.index_0 = (int8_t)(int)sd["index"];
+			if (sd.has("stage"))
+				s.stage_1 = (int16_t)(int)sd["stage"];
+			if (sd.has("axis_x"))
+				s._axis_2d.x = (int16_t)(int)sd["axis_x"];
+			if (sd.has("axis_y"))
+				s._axis_2d.y = (int16_t)(int)sd["axis_y"];
+		}
+	}
+
+	// ── StageVars ───────────────────────────────────────────────
+	if (d.has("stage_vars")) {
+		Array stage_vars = d["stage_vars"];
+		for (int i = 0; i < 11 && i < stage_vars.size(); i++) {
+			Dictionary vd = stage_vars[i];
+			auto &v = tempTerrain.StageVars_0x3647A[i];
+			if (vd.has("index"))
+				v.index_0x3647A_0 = (int8_t)(int)vd["index"];
+			if (vd.has("stage"))
+				v.stage_0x3647A_1 = (int8_t)(int)vd["stage"];
+			if (vd.has("union_dword"))
+				v.str_0x3647C_4.dword = (uint32_t)(int64_t)vd["union_dword"];
+		}
+	}
+}
+
+
+
 void MBEXclass::REMC2EditorUndo() {
 	if (urManager->canUndo()) {
 		urManager->undo();
@@ -2045,3 +2296,5 @@ void MBEXclass::REMC2EditorTimedSaveState(float seconds) {
 		REMC2EditorSaveState();
 	}
 }
+
+

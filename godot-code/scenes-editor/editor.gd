@@ -22,18 +22,18 @@ extends Node3D
 @onready var Stages_Edit: Control = $UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 
 @onready var selectors = [
-	Terrain_Edit.get_node("Seed_0"),
-	Terrain_Edit.get_node("Offset_1"),
-	Terrain_Edit.get_node("Raise_2"),
-	Terrain_Edit.get_node("Gnarl_3"),
-	Terrain_Edit.get_node("River_4"),
-	Terrain_Edit.get_node("Lriver_5"),
-	Terrain_Edit.get_node("Source_6"),
-	Terrain_Edit.get_node("SnLin_7"),
-	Terrain_Edit.get_node("SnFlt_8"),
-	Terrain_Edit.get_node("BhLin_9"),
-	Terrain_Edit.get_node("BhFlt_10"),
-	Terrain_Edit.get_node("RkSte_11")
+	Terrain_Edit.get_node("seed"),
+	Terrain_Edit.get_node("offset"),
+	Terrain_Edit.get_node("raise"),
+	Terrain_Edit.get_node("gnarl"),
+	Terrain_Edit.get_node("river"),
+	Terrain_Edit.get_node("lriver"),
+	Terrain_Edit.get_node("source"),
+	Terrain_Edit.get_node("snLin"),
+	Terrain_Edit.get_node("snFlt"),
+	Terrain_Edit.get_node("bhLin"),
+	Terrain_Edit.get_node("bhFlt"),
+	Terrain_Edit.get_node("rkSte")
 ]
 
 var editor_runned=false
@@ -53,10 +53,12 @@ func _ready() -> void:
 	Main_DecodeLevel.gameInit(false)
 	gameInit()
 	EditorInit(Global.cdPath)
+	
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	#Main_TerrainsMB.updateMeshes(false)
 	for i in range(selectors.size()):
 		var selector = selectors[i]
-		selector.current_value = Global.MBEX.REMC2EditorGetTerrainValue(i)
+		selector.current_value = Global.editorLevel[selectors[i].name]
 		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
 			selector.value_changed.connect(_on_h_box_container_value_changed)
 	SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
@@ -849,7 +851,8 @@ func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
 	Main_TerrainsMB.updateMeshes(false)
 
 func _on_h_box_container_value_changed(terrainVarIndex: int,new_value: int) -> void:
-	Global.MBEX.REMC2EditorSetTerrainValue(terrainVarIndex,new_value)
+	Global.editorLevel[selectors[terrainVarIndex].name] = new_value
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 
 func _on_undo_button_down() -> void:
 	Global.MBEX.REMC2EditorUndo()

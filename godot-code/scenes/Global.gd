@@ -34,6 +34,8 @@ var countLang = 0
 
 var canNotification=true;
 
+var editorLevel: Dictionary
+
 func getLevelType():
 	return LevelType
 
