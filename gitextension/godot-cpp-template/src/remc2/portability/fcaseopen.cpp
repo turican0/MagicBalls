@@ -24,8 +24,6 @@ static bool iequals(const std::string &a, const std::string &b) {
 	return true;
 }
 
-#if !defined(__ANDROID__)
-
 std::vector<std::string> GetTokensFromPath(const std::string &path) {
     size_t pos = 0;
     size_t start = 0;
@@ -79,7 +77,6 @@ std::string casepath(const std::string &path)
 
     return result;
 }
-#endif//!defined(__ANDROID__)
 #endif
 
 FILE* fcaseopenx(char const* path, char const* mode)
