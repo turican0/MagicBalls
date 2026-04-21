@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bvrkxdue0p64s"
 path.s3tc="res://.godot/imported/meteor_3.png-b4c9e6c9e7262a34cda48e7b04cc6228.s3tc.ctex"
+path.etc2="res://.godot/imported/meteor_3.png-b4c9e6c9e7262a34cda48e7b04cc6228.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/bullets/clay/meteor_3.png"
-dest_files=["res://.godot/imported/meteor_3.png-b4c9e6c9e7262a34cda48e7b04cc6228.s3tc.ctex"]
+dest_files=["res://.godot/imported/meteor_3.png-b4c9e6c9e7262a34cda48e7b04cc6228.s3tc.ctex", "res://.godot/imported/meteor_3.png-b4c9e6c9e7262a34cda48e7b04cc6228.etc2.ctex"]
 
 [params]
 

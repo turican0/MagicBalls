@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ddukt83x56cm2"
 path.s3tc="res://.godot/imported/vecteezy_vibrant-sun-with-bright-rays-and-a-warm-orange-yellow_51442460.png-cafb2a52eac3bba2d4f9658f997d305d.s3tc.ctex"
+path.etc2="res://.godot/imported/vecteezy_vibrant-sun-with-bright-rays-and-a-warm-orange-yellow_51442460.png-cafb2a52eac3bba2d4f9658f997d305d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/fire/vecteezy_vibrant-sun-with-bright-rays-and-a-warm-orange-yellow_51442460.png"
-dest_files=["res://.godot/imported/vecteezy_vibrant-sun-with-bright-rays-and-a-warm-orange-yellow_51442460.png-cafb2a52eac3bba2d4f9658f997d305d.s3tc.ctex"]
+dest_files=["res://.godot/imported/vecteezy_vibrant-sun-with-bright-rays-and-a-warm-orange-yellow_51442460.png-cafb2a52eac3bba2d4f9658f997d305d.s3tc.ctex", "res://.godot/imported/vecteezy_vibrant-sun-with-bright-rays-and-a-warm-orange-yellow_51442460.png-cafb2a52eac3bba2d4f9658f997d305d.etc2.ctex"]
 
 [params]
 

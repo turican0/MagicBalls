@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://o1vnho40ljy8"
 path.s3tc="res://.godot/imported/adam_warlock_immortal_avatar_2.png-675e7f9fc0e1fd9b97e17b439fe07107.s3tc.ctex"
+path.etc2="res://.godot/imported/adam_warlock_immortal_avatar_2.png-675e7f9fc0e1fd9b97e17b439fe07107.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/adam_warlock_immortal_avatar_2.png"
-dest_files=["res://.godot/imported/adam_warlock_immortal_avatar_2.png-675e7f9fc0e1fd9b97e17b439fe07107.s3tc.ctex"]
+dest_files=["res://.godot/imported/adam_warlock_immortal_avatar_2.png-675e7f9fc0e1fd9b97e17b439fe07107.s3tc.ctex", "res://.godot/imported/adam_warlock_immortal_avatar_2.png-675e7f9fc0e1fd9b97e17b439fe07107.etc2.ctex"]
 
 [params]
 

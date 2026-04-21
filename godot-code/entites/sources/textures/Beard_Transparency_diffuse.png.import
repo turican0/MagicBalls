@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bajjokcoaawqt"
 path.s3tc="res://.godot/imported/Beard_Transparency_diffuse.png-aa1870f101de1140c0d03b802b422fe7.s3tc.ctex"
+path.etc2="res://.godot/imported/Beard_Transparency_diffuse.png-aa1870f101de1140c0d03b802b422fe7.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/textures/Beard_Transparency_diffuse.png"
-dest_files=["res://.godot/imported/Beard_Transparency_diffuse.png-aa1870f101de1140c0d03b802b422fe7.s3tc.ctex"]
+dest_files=["res://.godot/imported/Beard_Transparency_diffuse.png-aa1870f101de1140c0d03b802b422fe7.s3tc.ctex", "res://.godot/imported/Beard_Transparency_diffuse.png-aa1870f101de1140c0d03b802b422fe7.etc2.ctex"]
 
 [params]
 

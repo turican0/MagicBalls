@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://5pq2chgsu4lb"
 path.s3tc="res://.godot/imported/asian_giant_hornet_11.png-2f14bd0cdf5aef471e76c1eb4677a6c4.s3tc.ctex"
+path.etc2="res://.godot/imported/asian_giant_hornet_11.png-2f14bd0cdf5aef471e76c1eb4677a6c4.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/hornet/asian_giant_hornet_11.png"
-dest_files=["res://.godot/imported/asian_giant_hornet_11.png-2f14bd0cdf5aef471e76c1eb4677a6c4.s3tc.ctex"]
+dest_files=["res://.godot/imported/asian_giant_hornet_11.png-2f14bd0cdf5aef471e76c1eb4677a6c4.s3tc.ctex", "res://.godot/imported/asian_giant_hornet_11.png-2f14bd0cdf5aef471e76c1eb4677a6c4.etc2.ctex"]
 
 [params]
 

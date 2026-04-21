@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ct6dnen72n8ln"
 path.s3tc="res://.godot/imported/Image_2.003.png-211821ee1dd703a29c14d5f80ba1911b.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_2.003.png-211821ee1dd703a29c14d5f80ba1911b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/wizards/skeleton-sorcerer/textures/Image_2.003.png"
-dest_files=["res://.godot/imported/Image_2.003.png-211821ee1dd703a29c14d5f80ba1911b.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_2.003.png-211821ee1dd703a29c14d5f80ba1911b.s3tc.ctex", "res://.godot/imported/Image_2.003.png-211821ee1dd703a29c14d5f80ba1911b.etc2.ctex"]
 
 [params]
 

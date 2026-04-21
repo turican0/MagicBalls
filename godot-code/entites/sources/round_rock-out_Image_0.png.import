@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://kmqjo3ou37ee"
 path.s3tc="res://.godot/imported/round_rock-out_Image_0.png-6dcecdf4b68b18215b1907e5719941ed.s3tc.ctex"
+path.etc2="res://.godot/imported/round_rock-out_Image_0.png-6dcecdf4b68b18215b1907e5719941ed.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/round_rock-out_Image_0.png"
-dest_files=["res://.godot/imported/round_rock-out_Image_0.png-6dcecdf4b68b18215b1907e5719941ed.s3tc.ctex"]
+dest_files=["res://.godot/imported/round_rock-out_Image_0.png-6dcecdf4b68b18215b1907e5719941ed.s3tc.ctex", "res://.godot/imported/round_rock-out_Image_0.png-6dcecdf4b68b18215b1907e5719941ed.etc2.ctex"]
 
 [params]
 

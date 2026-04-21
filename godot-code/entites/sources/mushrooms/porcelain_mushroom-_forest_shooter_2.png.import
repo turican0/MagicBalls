@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dmx8ix8jr8mo4"
 path.s3tc="res://.godot/imported/porcelain_mushroom-_forest_shooter_2.png-f9b59fd51e326f88e396f6e01407ea80.s3tc.ctex"
+path.etc2="res://.godot/imported/porcelain_mushroom-_forest_shooter_2.png-f9b59fd51e326f88e396f6e01407ea80.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/mushrooms/porcelain_mushroom-_forest_shooter_2.png"
-dest_files=["res://.godot/imported/porcelain_mushroom-_forest_shooter_2.png-f9b59fd51e326f88e396f6e01407ea80.s3tc.ctex"]
+dest_files=["res://.godot/imported/porcelain_mushroom-_forest_shooter_2.png-f9b59fd51e326f88e396f6e01407ea80.s3tc.ctex", "res://.godot/imported/porcelain_mushroom-_forest_shooter_2.png-f9b59fd51e326f88e396f6e01407ea80.etc2.ctex"]
 
 [params]
 

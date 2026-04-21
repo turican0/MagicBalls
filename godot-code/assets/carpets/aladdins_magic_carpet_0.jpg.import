@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://q3m6lxsgo4l2"
 path.s3tc="res://.godot/imported/aladdins_magic_carpet_0.jpg-447bb73ac8a4c0267a4907937e8c62dc.s3tc.ctex"
+path.etc2="res://.godot/imported/aladdins_magic_carpet_0.jpg-447bb73ac8a4c0267a4907937e8c62dc.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/carpets/aladdins_magic_carpet_0.jpg"
-dest_files=["res://.godot/imported/aladdins_magic_carpet_0.jpg-447bb73ac8a4c0267a4907937e8c62dc.s3tc.ctex"]
+dest_files=["res://.godot/imported/aladdins_magic_carpet_0.jpg-447bb73ac8a4c0267a4907937e8c62dc.s3tc.ctex", "res://.godot/imported/aladdins_magic_carpet_0.jpg-447bb73ac8a4c0267a4907937e8c62dc.etc2.ctex"]
 
 [params]
 

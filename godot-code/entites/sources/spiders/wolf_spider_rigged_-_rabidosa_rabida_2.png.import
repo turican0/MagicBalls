@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0uvlwr4x75yy"
 path.s3tc="res://.godot/imported/wolf_spider_rigged_-_rabidosa_rabida_2.png-26f1cd50c8188e18593f0ff497e5cb4c.s3tc.ctex"
+path.etc2="res://.godot/imported/wolf_spider_rigged_-_rabidosa_rabida_2.png-26f1cd50c8188e18593f0ff497e5cb4c.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/spiders/wolf_spider_rigged_-_rabidosa_rabida_2.png"
-dest_files=["res://.godot/imported/wolf_spider_rigged_-_rabidosa_rabida_2.png-26f1cd50c8188e18593f0ff497e5cb4c.s3tc.ctex"]
+dest_files=["res://.godot/imported/wolf_spider_rigged_-_rabidosa_rabida_2.png-26f1cd50c8188e18593f0ff497e5cb4c.s3tc.ctex", "res://.godot/imported/wolf_spider_rigged_-_rabidosa_rabida_2.png-26f1cd50c8188e18593f0ff497e5cb4c.etc2.ctex"]
 
 [params]
 

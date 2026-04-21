@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c8nbkt65gyamt"
 path.s3tc="res://.godot/imported/Std_Tongue_diffuse.png-01ac4af3b4828553edd75c81f2e96cb9.s3tc.ctex"
+path.etc2="res://.godot/imported/Std_Tongue_diffuse.png-01ac4af3b4828553edd75c81f2e96cb9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/textures/Std_Tongue_diffuse.png"
-dest_files=["res://.godot/imported/Std_Tongue_diffuse.png-01ac4af3b4828553edd75c81f2e96cb9.s3tc.ctex"]
+dest_files=["res://.godot/imported/Std_Tongue_diffuse.png-01ac4af3b4828553edd75c81f2e96cb9.s3tc.ctex", "res://.godot/imported/Std_Tongue_diffuse.png-01ac4af3b4828553edd75c81f2e96cb9.etc2.ctex"]
 
 [params]
 

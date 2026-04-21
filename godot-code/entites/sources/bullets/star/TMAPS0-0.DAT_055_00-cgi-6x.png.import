@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bvhcqxg5nnxyv"
 path.s3tc="res://.godot/imported/TMAPS0-0.DAT_055_00-cgi-6x.png-7c81bfd3dd7e40e83a73c81b9e327c3e.s3tc.ctex"
+path.etc2="res://.godot/imported/TMAPS0-0.DAT_055_00-cgi-6x.png-7c81bfd3dd7e40e83a73c81b9e327c3e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/bullets/star/TMAPS0-0.DAT_055_00-cgi-6x.png"
-dest_files=["res://.godot/imported/TMAPS0-0.DAT_055_00-cgi-6x.png-7c81bfd3dd7e40e83a73c81b9e327c3e.s3tc.ctex"]
+dest_files=["res://.godot/imported/TMAPS0-0.DAT_055_00-cgi-6x.png-7c81bfd3dd7e40e83a73c81b9e327c3e.s3tc.ctex", "res://.godot/imported/TMAPS0-0.DAT_055_00-cgi-6x.png-7c81bfd3dd7e40e83a73c81b9e327c3e.etc2.ctex"]
 
 [params]
 

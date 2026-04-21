@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://claaro4djny40"
 path.s3tc="res://.godot/imported/Image_0.001.jpg-630989275aa781853ef0f94487f36049.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_0.001.jpg-630989275aa781853ef0f94487f36049.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/wizards/textures/Image_0.001.jpg"
-dest_files=["res://.godot/imported/Image_0.001.jpg-630989275aa781853ef0f94487f36049.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_0.001.jpg-630989275aa781853ef0f94487f36049.s3tc.ctex", "res://.godot/imported/Image_0.001.jpg-630989275aa781853ef0f94487f36049.etc2.ctex"]
 
 [params]
 

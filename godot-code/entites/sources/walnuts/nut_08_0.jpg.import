@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cclhwrqwmd4ub"
 path.s3tc="res://.godot/imported/nut_08_0.jpg-a99d53046daa777fc192e336694b68d2.s3tc.ctex"
+path.etc2="res://.godot/imported/nut_08_0.jpg-a99d53046daa777fc192e336694b68d2.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/walnuts/nut_08_0.jpg"
-dest_files=["res://.godot/imported/nut_08_0.jpg-a99d53046daa777fc192e336694b68d2.s3tc.ctex"]
+dest_files=["res://.godot/imported/nut_08_0.jpg-a99d53046daa777fc192e336694b68d2.s3tc.ctex", "res://.godot/imported/nut_08_0.jpg-a99d53046daa777fc192e336694b68d2.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://trp6c41a5qxh"
 path.s3tc="res://.godot/imported/dark_fantasy_green_santa_wizard_0.jpg-26c3b92db5b10bfdfdf77ced79190275.s3tc.ctex"
+path.etc2="res://.godot/imported/dark_fantasy_green_santa_wizard_0.jpg-26c3b92db5b10bfdfdf77ced79190275.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/dark_fantasy_green_santa_wizard_0.jpg"
-dest_files=["res://.godot/imported/dark_fantasy_green_santa_wizard_0.jpg-26c3b92db5b10bfdfdf77ced79190275.s3tc.ctex"]
+dest_files=["res://.godot/imported/dark_fantasy_green_santa_wizard_0.jpg-26c3b92db5b10bfdfdf77ced79190275.s3tc.ctex", "res://.godot/imported/dark_fantasy_green_santa_wizard_0.jpg-26c3b92db5b10bfdfdf77ced79190275.etc2.ctex"]
 
 [params]
 

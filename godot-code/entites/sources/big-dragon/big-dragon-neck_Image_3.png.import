@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ciq7gaf4xieh3"
 path.s3tc="res://.godot/imported/big-dragon-neck_Image_3.png-075ff9d32682b6e6e9297e8cdbabe454.s3tc.ctex"
+path.etc2="res://.godot/imported/big-dragon-neck_Image_3.png-075ff9d32682b6e6e9297e8cdbabe454.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/big-dragon/big-dragon-neck_Image_3.png"
-dest_files=["res://.godot/imported/big-dragon-neck_Image_3.png-075ff9d32682b6e6e9297e8cdbabe454.s3tc.ctex"]
+dest_files=["res://.godot/imported/big-dragon-neck_Image_3.png-075ff9d32682b6e6e9297e8cdbabe454.s3tc.ctex", "res://.godot/imported/big-dragon-neck_Image_3.png-075ff9d32682b6e6e9297e8cdbabe454.etc2.ctex"]
 
 [params]
 

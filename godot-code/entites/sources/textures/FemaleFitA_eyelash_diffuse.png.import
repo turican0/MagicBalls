@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1eo4t17ekboj"
 path.s3tc="res://.godot/imported/FemaleFitA_eyelash_diffuse.png-a424ca743a93d3c1338be0fad45f34e5.s3tc.ctex"
+path.etc2="res://.godot/imported/FemaleFitA_eyelash_diffuse.png-a424ca743a93d3c1338be0fad45f34e5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/textures/FemaleFitA_eyelash_diffuse.png"
-dest_files=["res://.godot/imported/FemaleFitA_eyelash_diffuse.png-a424ca743a93d3c1338be0fad45f34e5.s3tc.ctex"]
+dest_files=["res://.godot/imported/FemaleFitA_eyelash_diffuse.png-a424ca743a93d3c1338be0fad45f34e5.s3tc.ctex", "res://.godot/imported/FemaleFitA_eyelash_diffuse.png-a424ca743a93d3c1338be0fad45f34e5.etc2.ctex"]
 
 [params]
 

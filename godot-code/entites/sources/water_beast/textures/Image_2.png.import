@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://rw7c8cec418l"
 path.s3tc="res://.godot/imported/Image_2.png-e3fcb1f8ebb5774b30b28625b687022d.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_2.png-e3fcb1f8ebb5774b30b28625b687022d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/water_beast/textures/Image_2.png"
-dest_files=["res://.godot/imported/Image_2.png-e3fcb1f8ebb5774b30b28625b687022d.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_2.png-e3fcb1f8ebb5774b30b28625b687022d.s3tc.ctex", "res://.godot/imported/Image_2.png-e3fcb1f8ebb5774b30b28625b687022d.etc2.ctex"]
 
 [params]
 

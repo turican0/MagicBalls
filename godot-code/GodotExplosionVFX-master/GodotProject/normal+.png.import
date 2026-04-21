@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bp33fhgkifm6y"
 path.s3tc="res://.godot/imported/normal+.png-3084d539925d39bc042a4ac6325ef7a6.s3tc.ctex"
+path.etc2="res://.godot/imported/normal+.png-3084d539925d39bc042a4ac6325ef7a6.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://GodotExplosionVFX-master/GodotProject/normal+.png"
-dest_files=["res://.godot/imported/normal+.png-3084d539925d39bc042a4ac6325ef7a6.s3tc.ctex"]
+dest_files=["res://.godot/imported/normal+.png-3084d539925d39bc042a4ac6325ef7a6.s3tc.ctex", "res://.godot/imported/normal+.png-3084d539925d39bc042a4ac6325ef7a6.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bwoherj00m6n1"
 path.s3tc="res://.godot/imported/pbr_shadowkin_mage_rigged_5.png-1120b4bc259e961bfc1ac6e457cc511b.s3tc.ctex"
+path.etc2="res://.godot/imported/pbr_shadowkin_mage_rigged_5.png-1120b4bc259e961bfc1ac6e457cc511b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/pbr_shadowkin_mage_rigged_5.png"
-dest_files=["res://.godot/imported/pbr_shadowkin_mage_rigged_5.png-1120b4bc259e961bfc1ac6e457cc511b.s3tc.ctex"]
+dest_files=["res://.godot/imported/pbr_shadowkin_mage_rigged_5.png-1120b4bc259e961bfc1ac6e457cc511b.s3tc.ctex", "res://.godot/imported/pbr_shadowkin_mage_rigged_5.png-1120b4bc259e961bfc1ac6e457cc511b.etc2.ctex"]
 
 [params]
 

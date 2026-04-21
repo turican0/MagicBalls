@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b5t61nxer470a"
 path.s3tc="res://.godot/imported/flying_carpet_3.png-5448732700db326663015cc23a0b2d83.s3tc.ctex"
+path.etc2="res://.godot/imported/flying_carpet_3.png-5448732700db326663015cc23a0b2d83.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/carpets/flying_carpet_3.png"
-dest_files=["res://.godot/imported/flying_carpet_3.png-5448732700db326663015cc23a0b2d83.s3tc.ctex"]
+dest_files=["res://.godot/imported/flying_carpet_3.png-5448732700db326663015cc23a0b2d83.s3tc.ctex", "res://.godot/imported/flying_carpet_3.png-5448732700db326663015cc23a0b2d83.etc2.ctex"]
 
 [params]
 

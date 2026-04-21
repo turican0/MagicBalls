@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cxgy0xvd1utuq"
 path.s3tc="res://.godot/imported/big-dragon-body_Image_3.png-58683aa93ad1da0881cac5b92bc49b7f.s3tc.ctex"
+path.etc2="res://.godot/imported/big-dragon-body_Image_3.png-58683aa93ad1da0881cac5b92bc49b7f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/big-dragon/big-dragon-body_Image_3.png"
-dest_files=["res://.godot/imported/big-dragon-body_Image_3.png-58683aa93ad1da0881cac5b92bc49b7f.s3tc.ctex"]
+dest_files=["res://.godot/imported/big-dragon-body_Image_3.png-58683aa93ad1da0881cac5b92bc49b7f.s3tc.ctex", "res://.godot/imported/big-dragon-body_Image_3.png-58683aa93ad1da0881cac5b92bc49b7f.etc2.ctex"]
 
 [params]
 

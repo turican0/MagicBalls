@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dg14vt42edas6"
 path.s3tc="res://.godot/imported/female_wizard_18.jpg-00de60f21bbdf803e760b79ee6c4363d.s3tc.ctex"
+path.etc2="res://.godot/imported/female_wizard_18.jpg-00de60f21bbdf803e760b79ee6c4363d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/female_wizard_18.jpg"
-dest_files=["res://.godot/imported/female_wizard_18.jpg-00de60f21bbdf803e760b79ee6c4363d.s3tc.ctex"]
+dest_files=["res://.godot/imported/female_wizard_18.jpg-00de60f21bbdf803e760b79ee6c4363d.s3tc.ctex", "res://.godot/imported/female_wizard_18.jpg-00de60f21bbdf803e760b79ee6c4363d.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cowy4agy27h6y"
 path.s3tc="res://.godot/imported/fantastic_castle_14.png-88a753fea4557da84d0945c072c5d7f9.s3tc.ctex"
+path.etc2="res://.godot/imported/fantastic_castle_14.png-88a753fea4557da84d0945c072c5d7f9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/castle/fantastic_castle_14.png"
-dest_files=["res://.godot/imported/fantastic_castle_14.png-88a753fea4557da84d0945c072c5d7f9.s3tc.ctex"]
+dest_files=["res://.godot/imported/fantastic_castle_14.png-88a753fea4557da84d0945c072c5d7f9.s3tc.ctex", "res://.godot/imported/fantastic_castle_14.png-88a753fea4557da84d0945c072c5d7f9.etc2.ctex"]
 
 [params]
 

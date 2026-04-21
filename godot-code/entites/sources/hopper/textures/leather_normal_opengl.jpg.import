@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cm067xh7j82o7"
 path.s3tc="res://.godot/imported/leather_normal_opengl.jpg-91a74ba8664550ac9cb2d3e3baf67cb5.s3tc.ctex"
+path.etc2="res://.godot/imported/leather_normal_opengl.jpg-91a74ba8664550ac9cb2d3e3baf67cb5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/hopper/textures/leather_normal_opengl.jpg"
-dest_files=["res://.godot/imported/leather_normal_opengl.jpg-91a74ba8664550ac9cb2d3e3baf67cb5.s3tc.ctex"]
+dest_files=["res://.godot/imported/leather_normal_opengl.jpg-91a74ba8664550ac9cb2d3e3baf67cb5.s3tc.ctex", "res://.godot/imported/leather_normal_opengl.jpg-91a74ba8664550ac9cb2d3e3baf67cb5.etc2.ctex"]
 
 [params]
 

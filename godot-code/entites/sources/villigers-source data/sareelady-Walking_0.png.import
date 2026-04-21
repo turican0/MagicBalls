@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bja5n1d3xdhye"
 path.s3tc="res://.godot/imported/sareelady-Walking_0.png-25c4f4f908e6e1356593eb310b617c32.s3tc.ctex"
+path.etc2="res://.godot/imported/sareelady-Walking_0.png-25c4f4f908e6e1356593eb310b617c32.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/villigers-source data/sareelady-Walking_0.png"
-dest_files=["res://.godot/imported/sareelady-Walking_0.png-25c4f4f908e6e1356593eb310b617c32.s3tc.ctex"]
+dest_files=["res://.godot/imported/sareelady-Walking_0.png-25c4f4f908e6e1356593eb310b617c32.s3tc.ctex", "res://.godot/imported/sareelady-Walking_0.png-25c4f4f908e6e1356593eb310b617c32.etc2.ctex"]
 
 [params]
 

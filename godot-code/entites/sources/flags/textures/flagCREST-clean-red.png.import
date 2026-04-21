@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cpwp0yrqkqek6"
 path.s3tc="res://.godot/imported/flagCREST-clean-red.png-a9a830199f20d97431e0fdfc30c1af71.s3tc.ctex"
+path.etc2="res://.godot/imported/flagCREST-clean-red.png-a9a830199f20d97431e0fdfc30c1af71.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/flags/textures/flagCREST-clean-red.png"
-dest_files=["res://.godot/imported/flagCREST-clean-red.png-a9a830199f20d97431e0fdfc30c1af71.s3tc.ctex"]
+dest_files=["res://.godot/imported/flagCREST-clean-red.png-a9a830199f20d97431e0fdfc30c1af71.s3tc.ctex", "res://.godot/imported/flagCREST-clean-red.png-a9a830199f20d97431e0fdfc30c1af71.etc2.ctex"]
 
 [params]
 

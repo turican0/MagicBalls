@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bwc02jli6t77g"
 path.s3tc="res://.godot/imported/archer-walk_FemaleFitA_Body_diffuse.png-0265b0c83278006a0bd43fe9ca90e7c2.s3tc.ctex"
+path.etc2="res://.godot/imported/archer-walk_FemaleFitA_Body_diffuse.png-0265b0c83278006a0bd43fe9ca90e7c2.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/archer-walk_FemaleFitA_Body_diffuse.png"
-dest_files=["res://.godot/imported/archer-walk_FemaleFitA_Body_diffuse.png-0265b0c83278006a0bd43fe9ca90e7c2.s3tc.ctex"]
+dest_files=["res://.godot/imported/archer-walk_FemaleFitA_Body_diffuse.png-0265b0c83278006a0bd43fe9ca90e7c2.s3tc.ctex", "res://.godot/imported/archer-walk_FemaleFitA_Body_diffuse.png-0265b0c83278006a0bd43fe9ca90e7c2.etc2.ctex"]
 
 [params]
 

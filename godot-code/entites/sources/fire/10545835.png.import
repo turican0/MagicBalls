@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d33kh1f8xr0ta"
 path.s3tc="res://.godot/imported/10545835.png-10ed5a80ed24ce18015f33e5ca2984ee.s3tc.ctex"
+path.etc2="res://.godot/imported/10545835.png-10ed5a80ed24ce18015f33e5ca2984ee.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/fire/10545835.png"
-dest_files=["res://.godot/imported/10545835.png-10ed5a80ed24ce18015f33e5ca2984ee.s3tc.ctex"]
+dest_files=["res://.godot/imported/10545835.png-10ed5a80ed24ce18015f33e5ca2984ee.s3tc.ctex", "res://.godot/imported/10545835.png-10ed5a80ed24ce18015f33e5ca2984ee.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bkrhk1bggljxf"
 path.s3tc="res://.godot/imported/monster__dark_elf__mage__vari02_kings_raid_0.png-1d35a235a7febce4f39f2cddd024d910.s3tc.ctex"
+path.etc2="res://.godot/imported/monster__dark_elf__mage__vari02_kings_raid_0.png-1d35a235a7febce4f39f2cddd024d910.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/wizards/monster__dark_elf__mage__vari02_kings_raid_0.png"
-dest_files=["res://.godot/imported/monster__dark_elf__mage__vari02_kings_raid_0.png-1d35a235a7febce4f39f2cddd024d910.s3tc.ctex"]
+dest_files=["res://.godot/imported/monster__dark_elf__mage__vari02_kings_raid_0.png-1d35a235a7febce4f39f2cddd024d910.s3tc.ctex", "res://.godot/imported/monster__dark_elf__mage__vari02_kings_raid_0.png-1d35a235a7febce4f39f2cddd024d910.etc2.ctex"]
 
 [params]
 

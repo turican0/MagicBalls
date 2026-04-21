@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b765vrvhxalrm"
 path.s3tc="res://.godot/imported/Image_1.png-020d4f14b0501583f7fe4eea9d26ed0f.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_1.png-020d4f14b0501583f7fe4eea9d26ed0f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/sorceree8/textures/Image_1.png"
-dest_files=["res://.godot/imported/Image_1.png-020d4f14b0501583f7fe4eea9d26ed0f.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_1.png-020d4f14b0501583f7fe4eea9d26ed0f.s3tc.ctex", "res://.godot/imported/Image_1.png-020d4f14b0501583f7fe4eea9d26ed0f.etc2.ctex"]
 
 [params]
 

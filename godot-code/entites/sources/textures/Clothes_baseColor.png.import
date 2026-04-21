@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dud2qpjmjd4k5"
 path.s3tc="res://.godot/imported/Clothes_baseColor.png-32c5068eb86ed5e78f6317e08a0dbedd.s3tc.ctex"
+path.etc2="res://.godot/imported/Clothes_baseColor.png-32c5068eb86ed5e78f6317e08a0dbedd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/textures/Clothes_baseColor.png"
-dest_files=["res://.godot/imported/Clothes_baseColor.png-32c5068eb86ed5e78f6317e08a0dbedd.s3tc.ctex"]
+dest_files=["res://.godot/imported/Clothes_baseColor.png-32c5068eb86ed5e78f6317e08a0dbedd.s3tc.ctex", "res://.godot/imported/Clothes_baseColor.png-32c5068eb86ed5e78f6317e08a0dbedd.etc2.ctex"]
 
 [params]
 

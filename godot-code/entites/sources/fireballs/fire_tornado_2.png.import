@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dc3bfe63b2nm"
 path.s3tc="res://.godot/imported/fire_tornado_2.png-508b91f20e37fc8a9ee6674344a3f123.s3tc.ctex"
+path.etc2="res://.godot/imported/fire_tornado_2.png-508b91f20e37fc8a9ee6674344a3f123.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/fireballs/fire_tornado_2.png"
-dest_files=["res://.godot/imported/fire_tornado_2.png-508b91f20e37fc8a9ee6674344a3f123.s3tc.ctex"]
+dest_files=["res://.godot/imported/fire_tornado_2.png-508b91f20e37fc8a9ee6674344a3f123.s3tc.ctex", "res://.godot/imported/fire_tornado_2.png-508b91f20e37fc8a9ee6674344a3f123.etc2.ctex"]
 
 [params]
 

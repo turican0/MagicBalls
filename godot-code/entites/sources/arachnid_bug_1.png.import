@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bcwua6mlsondh"
 path.s3tc="res://.godot/imported/arachnid_bug_1.png-74c293a5eb3b1734116ec807c1a2d94f.s3tc.ctex"
+path.etc2="res://.godot/imported/arachnid_bug_1.png-74c293a5eb3b1734116ec807c1a2d94f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/arachnid_bug_1.png"
-dest_files=["res://.godot/imported/arachnid_bug_1.png-74c293a5eb3b1734116ec807c1a2d94f.s3tc.ctex"]
+dest_files=["res://.godot/imported/arachnid_bug_1.png-74c293a5eb3b1734116ec807c1a2d94f.s3tc.ctex", "res://.godot/imported/arachnid_bug_1.png-74c293a5eb3b1734116ec807c1a2d94f.etc2.ctex"]
 
 [params]
 

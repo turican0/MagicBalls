@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cisuaeur7jq1o"
 path.s3tc="res://.godot/imported/Image_3.png-59f95e7e58f9c8836d9d589ae93bfef2.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_3.png-59f95e7e58f9c8836d9d589ae93bfef2.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/crab-ball/textures/Image_3.png"
-dest_files=["res://.godot/imported/Image_3.png-59f95e7e58f9c8836d9d589ae93bfef2.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_3.png-59f95e7e58f9c8836d9d589ae93bfef2.s3tc.ctex", "res://.godot/imported/Image_3.png-59f95e7e58f9c8836d9d589ae93bfef2.etc2.ctex"]
 
 [params]
 

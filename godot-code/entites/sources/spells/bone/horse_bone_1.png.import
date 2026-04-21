@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://budpw3yanj0ro"
 path.s3tc="res://.godot/imported/horse_bone_1.png-2d5b8a571160d8e4ebf4a603f70d6f75.s3tc.ctex"
+path.etc2="res://.godot/imported/horse_bone_1.png-2d5b8a571160d8e4ebf4a603f70d6f75.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/spells/bone/horse_bone_1.png"
-dest_files=["res://.godot/imported/horse_bone_1.png-2d5b8a571160d8e4ebf4a603f70d6f75.s3tc.ctex"]
+dest_files=["res://.godot/imported/horse_bone_1.png-2d5b8a571160d8e4ebf4a603f70d6f75.s3tc.ctex", "res://.godot/imported/horse_bone_1.png-2d5b8a571160d8e4ebf4a603f70d6f75.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://be6jsaccgf55q"
 path.s3tc="res://.godot/imported/archer-walk_Bow_DIFF.jpg-9d130f8cf704f42ccc181c6f4b3ef466.s3tc.ctex"
+path.etc2="res://.godot/imported/archer-walk_Bow_DIFF.jpg-9d130f8cf704f42ccc181c6f4b3ef466.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/archer-walk_Bow_DIFF.jpg"
-dest_files=["res://.godot/imported/archer-walk_Bow_DIFF.jpg-9d130f8cf704f42ccc181c6f4b3ef466.s3tc.ctex"]
+dest_files=["res://.godot/imported/archer-walk_Bow_DIFF.jpg-9d130f8cf704f42ccc181c6f4b3ef466.s3tc.ctex", "res://.godot/imported/archer-walk_Bow_DIFF.jpg-9d130f8cf704f42ccc181c6f4b3ef466.etc2.ctex"]
 
 [params]
 

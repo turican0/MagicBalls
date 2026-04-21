@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://duav72cfgl0gj"
 path.s3tc="res://.godot/imported/Male_Bushy_Transparency_diffuse.png-56ee8598c1eff871ede5d6c48489a263.s3tc.ctex"
+path.etc2="res://.godot/imported/Male_Bushy_Transparency_diffuse.png-56ee8598c1eff871ede5d6c48489a263.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/textures/Male_Bushy_Transparency_diffuse.png"
-dest_files=["res://.godot/imported/Male_Bushy_Transparency_diffuse.png-56ee8598c1eff871ede5d6c48489a263.s3tc.ctex"]
+dest_files=["res://.godot/imported/Male_Bushy_Transparency_diffuse.png-56ee8598c1eff871ede5d6c48489a263.s3tc.ctex", "res://.godot/imported/Male_Bushy_Transparency_diffuse.png-56ee8598c1eff871ede5d6c48489a263.etc2.ctex"]
 
 [params]
 

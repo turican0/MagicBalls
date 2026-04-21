@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4vok5msgqsi2"
 path.s3tc="res://.godot/imported/archer-walk_FemaleFitA_eyelash_diffuse.png-d1646537936283ef72b0b9a5f3b6d8b2.s3tc.ctex"
+path.etc2="res://.godot/imported/archer-walk_FemaleFitA_eyelash_diffuse.png-d1646537936283ef72b0b9a5f3b6d8b2.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/archer-walk_FemaleFitA_eyelash_diffuse.png"
-dest_files=["res://.godot/imported/archer-walk_FemaleFitA_eyelash_diffuse.png-d1646537936283ef72b0b9a5f3b6d8b2.s3tc.ctex"]
+dest_files=["res://.godot/imported/archer-walk_FemaleFitA_eyelash_diffuse.png-d1646537936283ef72b0b9a5f3b6d8b2.s3tc.ctex", "res://.godot/imported/archer-walk_FemaleFitA_eyelash_diffuse.png-d1646537936283ef72b0b9a5f3b6d8b2.etc2.ctex"]
 
 [params]
 

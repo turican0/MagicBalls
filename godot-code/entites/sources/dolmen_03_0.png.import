@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ewbpi0l01xej"
 path.s3tc="res://.godot/imported/dolmen_03_0.png-762a27150d719b8e2d3a472e6bf3d8c5.s3tc.ctex"
+path.etc2="res://.godot/imported/dolmen_03_0.png-762a27150d719b8e2d3a472e6bf3d8c5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/dolmen_03_0.png"
-dest_files=["res://.godot/imported/dolmen_03_0.png-762a27150d719b8e2d3a472e6bf3d8c5.s3tc.ctex"]
+dest_files=["res://.godot/imported/dolmen_03_0.png-762a27150d719b8e2d3a472e6bf3d8c5.s3tc.ctex", "res://.godot/imported/dolmen_03_0.png-762a27150d719b8e2d3a472e6bf3d8c5.etc2.ctex"]
 
 [params]
 

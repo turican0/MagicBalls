@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dqvx168j1av7n"
 path.s3tc="res://.godot/imported/arrow_0.png-d46a828d8aba2895ca883353843c60da.s3tc.ctex"
+path.etc2="res://.godot/imported/arrow_0.png-d46a828d8aba2895ca883353843c60da.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/arrow_0.png"
-dest_files=["res://.godot/imported/arrow_0.png-d46a828d8aba2895ca883353843c60da.s3tc.ctex"]
+dest_files=["res://.godot/imported/arrow_0.png-d46a828d8aba2895ca883353843c60da.s3tc.ctex", "res://.godot/imported/arrow_0.png-d46a828d8aba2895ca883353843c60da.etc2.ctex"]
 
 [params]
 

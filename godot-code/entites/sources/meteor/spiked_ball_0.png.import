@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dxcv6000j2smq"
 path.s3tc="res://.godot/imported/spiked_ball_0.png-699dfec15919582513a0aad1d155517f.s3tc.ctex"
+path.etc2="res://.godot/imported/spiked_ball_0.png-699dfec15919582513a0aad1d155517f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/meteor/spiked_ball_0.png"
-dest_files=["res://.godot/imported/spiked_ball_0.png-699dfec15919582513a0aad1d155517f.s3tc.ctex"]
+dest_files=["res://.godot/imported/spiked_ball_0.png-699dfec15919582513a0aad1d155517f.s3tc.ctex", "res://.godot/imported/spiked_ball_0.png-699dfec15919582513a0aad1d155517f.etc2.ctex"]
 
 [params]
 

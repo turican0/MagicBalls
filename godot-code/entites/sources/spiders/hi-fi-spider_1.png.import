@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dena6g1wdqa8q"
 path.s3tc="res://.godot/imported/hi-fi-spider_1.png-79ab9357f9555800bf6dcf6b71645ec6.s3tc.ctex"
+path.etc2="res://.godot/imported/hi-fi-spider_1.png-79ab9357f9555800bf6dcf6b71645ec6.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/spiders/hi-fi-spider_1.png"
-dest_files=["res://.godot/imported/hi-fi-spider_1.png-79ab9357f9555800bf6dcf6b71645ec6.s3tc.ctex"]
+dest_files=["res://.godot/imported/hi-fi-spider_1.png-79ab9357f9555800bf6dcf6b71645ec6.s3tc.ctex", "res://.godot/imported/hi-fi-spider_1.png-79ab9357f9555800bf6dcf6b71645ec6.etc2.ctex"]
 
 [params]
 

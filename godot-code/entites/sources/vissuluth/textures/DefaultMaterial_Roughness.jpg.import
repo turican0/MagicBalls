@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4nx273r0s3wl"
 path.s3tc="res://.godot/imported/DefaultMaterial_Roughness.jpg-4e5c5eaa181c56490228443bb70256df.s3tc.ctex"
+path.etc2="res://.godot/imported/DefaultMaterial_Roughness.jpg-4e5c5eaa181c56490228443bb70256df.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/vissuluth/textures/DefaultMaterial_Roughness.jpg"
-dest_files=["res://.godot/imported/DefaultMaterial_Roughness.jpg-4e5c5eaa181c56490228443bb70256df.s3tc.ctex"]
+dest_files=["res://.godot/imported/DefaultMaterial_Roughness.jpg-4e5c5eaa181c56490228443bb70256df.s3tc.ctex", "res://.godot/imported/DefaultMaterial_Roughness.jpg-4e5c5eaa181c56490228443bb70256df.etc2.ctex"]
 
 [params]
 

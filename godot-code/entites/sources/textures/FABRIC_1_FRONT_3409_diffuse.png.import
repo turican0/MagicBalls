@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cmksydh0krh1x"
 path.s3tc="res://.godot/imported/FABRIC_1_FRONT_3409_diffuse.png-011a2eb2f05beddac4d1548f4bd47006.s3tc.ctex"
+path.etc2="res://.godot/imported/FABRIC_1_FRONT_3409_diffuse.png-011a2eb2f05beddac4d1548f4bd47006.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/textures/FABRIC_1_FRONT_3409_diffuse.png"
-dest_files=["res://.godot/imported/FABRIC_1_FRONT_3409_diffuse.png-011a2eb2f05beddac4d1548f4bd47006.s3tc.ctex"]
+dest_files=["res://.godot/imported/FABRIC_1_FRONT_3409_diffuse.png-011a2eb2f05beddac4d1548f4bd47006.s3tc.ctex", "res://.godot/imported/FABRIC_1_FRONT_3409_diffuse.png-011a2eb2f05beddac4d1548f4bd47006.etc2.ctex"]
 
 [params]
 

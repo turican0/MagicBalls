@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://l7crifegy8g2"
 path.s3tc="res://.godot/imported/TMAPS0-0.DAT_029_00.png-f7f9e4aba17294df16b01c22d4a9881b.s3tc.ctex"
+path.etc2="res://.godot/imported/TMAPS0-0.DAT_029_00.png-f7f9e4aba17294df16b01c22d4a9881b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/centipede/TMAPS0-0.DAT_029_00.png"
-dest_files=["res://.godot/imported/TMAPS0-0.DAT_029_00.png-f7f9e4aba17294df16b01c22d4a9881b.s3tc.ctex"]
+dest_files=["res://.godot/imported/TMAPS0-0.DAT_029_00.png-f7f9e4aba17294df16b01c22d4a9881b.s3tc.ctex", "res://.godot/imported/TMAPS0-0.DAT_029_00.png-f7f9e4aba17294df16b01c22d4a9881b.etc2.ctex"]
 
 [params]
 

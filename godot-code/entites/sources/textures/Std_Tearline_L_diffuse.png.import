@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://djl4uq5cn8a47"
 path.s3tc="res://.godot/imported/Std_Tearline_L_diffuse.png-6ec2c1cbeac966ccede921dc9d106f58.s3tc.ctex"
+path.etc2="res://.godot/imported/Std_Tearline_L_diffuse.png-6ec2c1cbeac966ccede921dc9d106f58.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={}
@@ -13,7 +14,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://entites/sources/textures/Std_Tearline_L_diffuse.png"
-dest_files=["res://.godot/imported/Std_Tearline_L_diffuse.png-6ec2c1cbeac966ccede921dc9d106f58.s3tc.ctex"]
+dest_files=["res://.godot/imported/Std_Tearline_L_diffuse.png-6ec2c1cbeac966ccede921dc9d106f58.s3tc.ctex", "res://.godot/imported/Std_Tearline_L_diffuse.png-6ec2c1cbeac966ccede921dc9d106f58.etc2.ctex"]
 
 [params]
 

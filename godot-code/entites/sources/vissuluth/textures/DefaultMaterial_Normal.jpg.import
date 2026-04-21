@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://py3yogj3c0pe"
 path.s3tc="res://.godot/imported/DefaultMaterial_Normal.jpg-74b14b7e0eb68eef7f5461cd629e94c9.s3tc.ctex"
+path.etc2="res://.godot/imported/DefaultMaterial_Normal.jpg-74b14b7e0eb68eef7f5461cd629e94c9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/vissuluth/textures/DefaultMaterial_Normal.jpg"
-dest_files=["res://.godot/imported/DefaultMaterial_Normal.jpg-74b14b7e0eb68eef7f5461cd629e94c9.s3tc.ctex"]
+dest_files=["res://.godot/imported/DefaultMaterial_Normal.jpg-74b14b7e0eb68eef7f5461cd629e94c9.s3tc.ctex", "res://.godot/imported/DefaultMaterial_Normal.jpg-74b14b7e0eb68eef7f5461cd629e94c9.etc2.ctex"]
 
 [params]
 

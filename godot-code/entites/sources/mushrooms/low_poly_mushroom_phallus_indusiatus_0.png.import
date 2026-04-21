@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://rtrhbievbv8f"
 path.s3tc="res://.godot/imported/low_poly_mushroom_phallus_indusiatus_0.png-b0f24732eefc17c1aab7cd9fdf3adc7e.s3tc.ctex"
+path.etc2="res://.godot/imported/low_poly_mushroom_phallus_indusiatus_0.png-b0f24732eefc17c1aab7cd9fdf3adc7e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/mushrooms/low_poly_mushroom_phallus_indusiatus_0.png"
-dest_files=["res://.godot/imported/low_poly_mushroom_phallus_indusiatus_0.png-b0f24732eefc17c1aab7cd9fdf3adc7e.s3tc.ctex"]
+dest_files=["res://.godot/imported/low_poly_mushroom_phallus_indusiatus_0.png-b0f24732eefc17c1aab7cd9fdf3adc7e.s3tc.ctex", "res://.godot/imported/low_poly_mushroom_phallus_indusiatus_0.png-b0f24732eefc17c1aab7cd9fdf3adc7e.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://br83odahvnapb"
 path.s3tc="res://.godot/imported/turk_villiger_t-pose_0.png-d05d9436c8970b2909749a551fce6017.s3tc.ctex"
+path.etc2="res://.godot/imported/turk_villiger_t-pose_0.png-d05d9436c8970b2909749a551fce6017.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/villigers-source data/turk_villiger_t-pose_0.png"
-dest_files=["res://.godot/imported/turk_villiger_t-pose_0.png-d05d9436c8970b2909749a551fce6017.s3tc.ctex"]
+dest_files=["res://.godot/imported/turk_villiger_t-pose_0.png-d05d9436c8970b2909749a551fce6017.s3tc.ctex", "res://.godot/imported/turk_villiger_t-pose_0.png-d05d9436c8970b2909749a551fce6017.etc2.ctex"]
 
 [params]
 

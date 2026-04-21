@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cuxv6ikbv6i3n"
 path.s3tc="res://.godot/imported/jelly_mushroom_5.png-b25185fcc64e64fe9ca554ac947dba2a.s3tc.ctex"
+path.etc2="res://.godot/imported/jelly_mushroom_5.png-b25185fcc64e64fe9ca554ac947dba2a.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/mushrooms/jelly_mushroom_5.png"
-dest_files=["res://.godot/imported/jelly_mushroom_5.png-b25185fcc64e64fe9ca554ac947dba2a.s3tc.ctex"]
+dest_files=["res://.godot/imported/jelly_mushroom_5.png-b25185fcc64e64fe9ca554ac947dba2a.s3tc.ctex", "res://.godot/imported/jelly_mushroom_5.png-b25185fcc64e64fe9ca554ac947dba2a.etc2.ctex"]
 
 [params]
 

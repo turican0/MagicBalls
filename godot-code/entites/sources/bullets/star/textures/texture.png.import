@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cqy0rrexdk05c"
 path.s3tc="res://.godot/imported/texture.png-eb1d5c57108cb84c435ad8026fc9b3e6.s3tc.ctex"
+path.etc2="res://.godot/imported/texture.png-eb1d5c57108cb84c435ad8026fc9b3e6.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/bullets/star/textures/texture.png"
-dest_files=["res://.godot/imported/texture.png-eb1d5c57108cb84c435ad8026fc9b3e6.s3tc.ctex"]
+dest_files=["res://.godot/imported/texture.png-eb1d5c57108cb84c435ad8026fc9b3e6.s3tc.ctex", "res://.godot/imported/texture.png-eb1d5c57108cb84c435ad8026fc9b3e6.etc2.ctex"]
 
 [params]
 

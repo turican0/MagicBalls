@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d4c5bst2tbgn6"
 path.s3tc="res://.godot/imported/Image_4.png-314d2d0b5657d5eb876140213a1e5a39.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_4.png-314d2d0b5657d5eb876140213a1e5a39.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/hopper/textures/Image_4.png"
-dest_files=["res://.godot/imported/Image_4.png-314d2d0b5657d5eb876140213a1e5a39.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_4.png-314d2d0b5657d5eb876140213a1e5a39.s3tc.ctex", "res://.godot/imported/Image_4.png-314d2d0b5657d5eb876140213a1e5a39.etc2.ctex"]
 
 [params]
 

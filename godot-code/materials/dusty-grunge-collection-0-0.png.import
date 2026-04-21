@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://usha66nwvkeg"
 path.s3tc="res://.godot/imported/dusty-grunge-collection-0-0.png-11cb302bc22a5e4f988c39c122d80cc9.s3tc.ctex"
+path.etc2="res://.godot/imported/dusty-grunge-collection-0-0.png-11cb302bc22a5e4f988c39c122d80cc9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://materials/dusty-grunge-collection-0-0.png"
-dest_files=["res://.godot/imported/dusty-grunge-collection-0-0.png-11cb302bc22a5e4f988c39c122d80cc9.s3tc.ctex"]
+dest_files=["res://.godot/imported/dusty-grunge-collection-0-0.png-11cb302bc22a5e4f988c39c122d80cc9.s3tc.ctex", "res://.godot/imported/dusty-grunge-collection-0-0.png-11cb302bc22a5e4f988c39c122d80cc9.etc2.ctex"]
 
 [params]
 

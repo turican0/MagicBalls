@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://wljxiploen5n"
 path.s3tc="res://.godot/imported/archer-walk_Erika_Archer_Clothes_diffuse.png-81cc479e848ebf00900780b104d945ec.s3tc.ctex"
+path.etc2="res://.godot/imported/archer-walk_Erika_Archer_Clothes_diffuse.png-81cc479e848ebf00900780b104d945ec.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/archer-walk_Erika_Archer_Clothes_diffuse.png"
-dest_files=["res://.godot/imported/archer-walk_Erika_Archer_Clothes_diffuse.png-81cc479e848ebf00900780b104d945ec.s3tc.ctex"]
+dest_files=["res://.godot/imported/archer-walk_Erika_Archer_Clothes_diffuse.png-81cc479e848ebf00900780b104d945ec.s3tc.ctex", "res://.godot/imported/archer-walk_Erika_Archer_Clothes_diffuse.png-81cc479e848ebf00900780b104d945ec.etc2.ctex"]
 
 [params]
 

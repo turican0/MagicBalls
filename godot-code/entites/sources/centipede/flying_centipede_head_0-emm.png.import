@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://w6na86uuqqmv"
 path.s3tc="res://.godot/imported/flying_centipede_head_0-emm.png-171ddd5dc2640b72462ba186dec48f7d.s3tc.ctex"
+path.etc2="res://.godot/imported/flying_centipede_head_0-emm.png-171ddd5dc2640b72462ba186dec48f7d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/centipede/flying_centipede_head_0-emm.png"
-dest_files=["res://.godot/imported/flying_centipede_head_0-emm.png-171ddd5dc2640b72462ba186dec48f7d.s3tc.ctex"]
+dest_files=["res://.godot/imported/flying_centipede_head_0-emm.png-171ddd5dc2640b72462ba186dec48f7d.s3tc.ctex", "res://.godot/imported/flying_centipede_head_0-emm.png-171ddd5dc2640b72462ba186dec48f7d.etc2.ctex"]
 
 [params]
 

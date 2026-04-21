@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bwuerhdb76bmf"
 path.s3tc="res://.godot/imported/FemaleFitA_StdNM.png-b3e4f3392e7f7bff6f9e2bbd17959e00.s3tc.ctex"
+path.etc2="res://.godot/imported/FemaleFitA_StdNM.png-b3e4f3392e7f7bff6f9e2bbd17959e00.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/textures/FemaleFitA_StdNM.png"
-dest_files=["res://.godot/imported/FemaleFitA_StdNM.png-b3e4f3392e7f7bff6f9e2bbd17959e00.s3tc.ctex"]
+dest_files=["res://.godot/imported/FemaleFitA_StdNM.png-b3e4f3392e7f7bff6f9e2bbd17959e00.s3tc.ctex", "res://.godot/imported/FemaleFitA_StdNM.png-b3e4f3392e7f7bff6f9e2bbd17959e00.etc2.ctex"]
 
 [params]
 

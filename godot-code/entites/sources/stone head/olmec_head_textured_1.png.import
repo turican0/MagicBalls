@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://5ew433s5g3kl"
 path.s3tc="res://.godot/imported/olmec_head_textured_1.png-1e26cafbc9f2fa3a2d1140bae9782d97.s3tc.ctex"
+path.etc2="res://.godot/imported/olmec_head_textured_1.png-1e26cafbc9f2fa3a2d1140bae9782d97.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/stone head/olmec_head_textured_1.png"
-dest_files=["res://.godot/imported/olmec_head_textured_1.png-1e26cafbc9f2fa3a2d1140bae9782d97.s3tc.ctex"]
+dest_files=["res://.godot/imported/olmec_head_textured_1.png-1e26cafbc9f2fa3a2d1140bae9782d97.s3tc.ctex", "res://.godot/imported/olmec_head_textured_1.png-1e26cafbc9f2fa3a2d1140bae9782d97.etc2.ctex"]
 
 [params]
 

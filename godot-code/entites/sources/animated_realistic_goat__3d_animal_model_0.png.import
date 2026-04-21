@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dquuyn6i8c2bw"
 path.s3tc="res://.godot/imported/animated_realistic_goat__3d_animal_model_0.png-fbfdeee1361637092ad40e2322f26709.s3tc.ctex"
+path.etc2="res://.godot/imported/animated_realistic_goat__3d_animal_model_0.png-fbfdeee1361637092ad40e2322f26709.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://entites/sources/animated_realistic_goat__3d_animal_model_0.png"
-dest_files=["res://.godot/imported/animated_realistic_goat__3d_animal_model_0.png-fbfdeee1361637092ad40e2322f26709.s3tc.ctex"]
+dest_files=["res://.godot/imported/animated_realistic_goat__3d_animal_model_0.png-fbfdeee1361637092ad40e2322f26709.s3tc.ctex", "res://.godot/imported/animated_realistic_goat__3d_animal_model_0.png-fbfdeee1361637092ad40e2322f26709.etc2.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b64g518jgk6us"
 path.s3tc="res://.godot/imported/Image_3.png-62a5609e2cb133d3336c282992320ea9.s3tc.ctex"
+path.etc2="res://.godot/imported/Image_3.png-62a5609e2cb133d3336c282992320ea9.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/wizards/draka/textures/Image_3.png"
-dest_files=["res://.godot/imported/Image_3.png-62a5609e2cb133d3336c282992320ea9.s3tc.ctex"]
+dest_files=["res://.godot/imported/Image_3.png-62a5609e2cb133d3336c282992320ea9.s3tc.ctex", "res://.godot/imported/Image_3.png-62a5609e2cb133d3336c282992320ea9.etc2.ctex"]
 
 [params]
 

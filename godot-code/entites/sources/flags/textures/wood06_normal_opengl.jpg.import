@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://8ff7gh3chdtc"
 path.s3tc="res://.godot/imported/wood06_normal_opengl.jpg-aa5440ea81cd0a29821f84cace9e7a5e.s3tc.ctex"
+path.etc2="res://.godot/imported/wood06_normal_opengl.jpg-aa5440ea81cd0a29821f84cace9e7a5e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/flags/textures/wood06_normal_opengl.jpg"
-dest_files=["res://.godot/imported/wood06_normal_opengl.jpg-aa5440ea81cd0a29821f84cace9e7a5e.s3tc.ctex"]
+dest_files=["res://.godot/imported/wood06_normal_opengl.jpg-aa5440ea81cd0a29821f84cace9e7a5e.s3tc.ctex", "res://.godot/imported/wood06_normal_opengl.jpg-aa5440ea81cd0a29821f84cace9e7a5e.etc2.ctex"]
 
 [params]
 

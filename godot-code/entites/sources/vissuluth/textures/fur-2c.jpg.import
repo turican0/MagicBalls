@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bxs5f42k4j8oi"
 path.s3tc="res://.godot/imported/fur-2c.jpg-6d68772d3680e4c36e6dea59651ccecb.s3tc.ctex"
+path.etc2="res://.godot/imported/fur-2c.jpg-6d68772d3680e4c36e6dea59651ccecb.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://entites/sources/vissuluth/textures/fur-2c.jpg"
-dest_files=["res://.godot/imported/fur-2c.jpg-6d68772d3680e4c36e6dea59651ccecb.s3tc.ctex"]
+dest_files=["res://.godot/imported/fur-2c.jpg-6d68772d3680e4c36e6dea59651ccecb.s3tc.ctex", "res://.godot/imported/fur-2c.jpg-6d68772d3680e4c36e6dea59651ccecb.etc2.ctex"]
 
 [params]
 
