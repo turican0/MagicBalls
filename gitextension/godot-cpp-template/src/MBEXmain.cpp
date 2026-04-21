@@ -76,7 +76,7 @@ void MBEXclass::_bind_methods() {
 
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainValue", "Int"), &MBEXclass::REMC2EditorGetTerrainValue);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetTerrainValue", "Int", "Int"), &MBEXclass::REMC2EditorSetTerrainValue);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
+	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainPlayers"), &MBEXclass::REMC2EditorGetTerrainPlayers);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
@@ -1796,7 +1796,7 @@ void MBEXclass::REMC2EditorSetTerrainValue(int type, int value) {
 	}
 }
 */
-
+/*
 PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	PackedFloat32Array result;
 	int count = 1200;
@@ -1824,7 +1824,7 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainEntites() {
 	}
 	return result;
 }
-
+*/
 PackedFloat32Array MBEXclass::REMC2EditorGetTerrainPlayers() {
 	PackedFloat32Array data;
 
@@ -2064,6 +2064,12 @@ Dictionary MBEXclass::REMC2EditorGetLevelData() {
 		ed["par1"] = (int)e.par1_14;
 		ed["par2"] = (int)e.par2_16;
 		ed["par3"] = (int)e.par3_18;
+		axis_3d position;
+		position.x = e.axis2d_4.x * 256;
+		position.y = e.axis2d_4.y * 256;
+		position.z = 0;
+		ed["axis_z"] = (float)(getTerrainAlt_10C40(&position) / 256);
+
 		entities.push_back(ed);
 	}
 	d["entities"] = entities;

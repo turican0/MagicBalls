@@ -61,12 +61,16 @@ func _ready() -> void:
 		selector.current_value = Global.editorLevel[selectors[i].name]
 		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
 			selector.value_changed.connect(_on_h_box_container_value_changed)
+	
 	SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
 	SetStagesValues(Global.MBEX.REMC2EditorGetTerrainStages())
 
 	toggle_editor_control_styleSt(true)
 	$UI.visible=true
 	_preload_library(library, library_scenes)
+	
+	RenderEditorEntites()
+	
 	Tree_View.item_selected.connect(_on_tree_item_selected)
 	
 	get_window().focus_entered.connect(_on_window_focus_entered)
@@ -301,7 +305,6 @@ func EditorStep():
 	Global.MBEX.REMC2EditorLoop()
 	var isCave:bool = false
 	Global.MBEX.renew_terrain(isCave)
-	RenderEditorEntites(Global.MBEX.REMC2EditorGetTerrainEntites())
 
 var pool_size = 1020
 
@@ -639,14 +642,14 @@ func delete_selected_entities():
 	if (result & 4):
 		nexttext = nexttext + " some entities not deleted, have parent"
 	log_message(nexttext)
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	RenderEditorEntites()
 
-		
-
-func RenderEditorEntites(data_array: PackedFloat32Array):
+func RenderEditorEntites():
 	for node in get_tree().get_nodes_in_group("entities"):
 		node.remove_from_group("entities")
 	var entites_per_frame=0;
-	var stride = 11
+	#var stride = 11
 	var inv_256 = 1.0 / 256.0
 	var camera = get_viewport().get_camera_3d()
 	var has_camera = camera != null
@@ -654,16 +657,16 @@ func RenderEditorEntites(data_array: PackedFloat32Array):
 	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
 	var default_key = Vector3i(0, 1000, 0)
 	for i in range(1, pool_size):
-		var offset = i * stride
-		var type_0x30311 = data_array[offset]
-		var subtype_0x30311 = data_array[offset+1]
-		var pos = Vector3(data_array[offset+2], data_array[offset+4], data_array[offset+3])
-		var DisId = data_array[offset+5]
-		var word_10 = data_array[offset+6]
-		var stageTag_12 = data_array[offset+7]
-		var par1_14 = data_array[offset+8]
-		var par2_16 = data_array[offset+9]
-		var par3_18 = data_array[offset+10]
+		#var offset = i * stride
+		var type_0x30311 = Global.editorLevel["entities"][i]["type"]
+		var subtype_0x30311 = Global.editorLevel["entities"][i]["subtype"]
+		var pos = Vector3(Global.editorLevel["entities"][i]["axis_x"], Global.editorLevel["entities"][i]["axis_z"], Global.editorLevel["entities"][i]["axis_y"])
+		var DisId = Global.editorLevel["entities"][i]["dis_id"]
+		var word_10 = Global.editorLevel["entities"][i]["word10"]
+		var stageTag_12 = Global.editorLevel["entities"][i]["stage_tag"]
+		var par1_14 = Global.editorLevel["entities"][i]["par1"]
+		var par2_16 = Global.editorLevel["entities"][i]["par2"]
+		var par3_18 = Global.editorLevel["entities"][i]["par3"]
 		
 		var updateObject=false
 		var current_node = null
