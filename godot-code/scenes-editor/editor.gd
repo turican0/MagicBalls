@@ -188,9 +188,9 @@ func toggle_editor_control_styleSt(state):
 	if state:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
-		var center = get_viewport().get_visible_rect().size / 2.0
-		get_viewport().warp_mouse(center)
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		#var center = get_viewport().get_visible_rect().size / 2.0
+		#get_viewport().warp_mouse(center)
 
 func update_tree():
 	var all_sections: Array = []

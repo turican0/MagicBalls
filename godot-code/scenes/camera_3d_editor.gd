@@ -36,7 +36,7 @@ var _cylinder_radius : float = 1.0
 # INITIALIZATION
 # ═══════════════════════════════════════════════════════════
 func _ready() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_yaw = rotation.y
 	_pitch = rotation.x
 	_apply_absolute_rotation()
@@ -45,12 +45,24 @@ func _ready() -> void:
 # MAIN LOOP
 # ═══════════════════════════════════════════════════════════
 func _process(delta: float) -> void:
-	if Input.get_mouse_mode() == Input.MOUSE_MODE_CONFINED_HIDDEN:
-		_handle_mouse_rotation()
+	#if Input.get_mouse_mode() == Input.MOUSE_MODE_CONFINED_HIDDEN:
+		#_handle_mouse_rotation()
 	
 	_handle_movement(delta)
 	_cast_center_ray()
 	_update_ray_position()
+	
+func _input(event: InputEvent) -> void:
+	# Reagujeme pouze na pohyb myši a jen když je okno aktivní
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		# event.relative nám dává přesný posun od posledního snímku
+		_yaw -= event.relative.x * mouse_sensitivity
+		_pitch -= event.relative.y * mouse_sensitivity
+		
+		_pitch = clamp(_pitch, deg_to_rad(-pitch_limit), deg_to_rad(pitch_limit))
+		_yaw = wrapf(_yaw, -PI, PI)
+		
+		_apply_absolute_rotation()
 
 # ═══════════════════════════════════════════════════════════
 # ROTATION LOGIC (Absolute Mouse Position)
