@@ -302,22 +302,10 @@ jobs:
           mkdir -p exports/release
           RELEASE_BIN="${{ github.workspace }}/exports/release/MagicBalls.x86_64"
 
-          echo "=== DEBUG: export_presets.cfg ==="
-          cat godot-code/export_presets.cfg 2>/dev/null || echo "SOUBOR NEEXISTUJE"
-
-          echo "=== DEBUG: .so soubory v MBEXout ==="
-          find gitextension/godot-cpp-template/MBEXout -name "*.so" 2>/dev/null || echo "zadne .so"
-
-          echo "=== DEBUG: .so soubory v bin/linux ==="
-          find gitextension/godot-cpp-template/bin/linux -name "*.so" 2>/dev/null || echo "zadne .so"
-
-          echo "=== DEBUG: addons/MBEX obsah ==="
-          ls godot-code/addons/MBEX/ 2>/dev/null || echo "adresar neexistuje"
-
           echo "=== RELEASE export ==="
           godot --headless --verbose --path godot-code \
             --export-release Linux "$RELEASE_BIN" \
-            > release_stdout.txt 2> release_stderr.txt || true
+            > release_stdout.txt 2> release_stderr.txt
           cat release_stdout.txt || true
           cat release_stderr.txt || true
 
@@ -394,26 +382,35 @@ jobs:
 
       - name: Rename .so files to EXTENSION-NAME
         run: |
+          # CMake builduje do MBEXout/bin/android.<ABI>/ s nazvem MagicBalls.*
+          # .gdextension ocekava MBEXout/bin/android/libEXTENSION-NAME.android.template_*.so
+          destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
+          mkdir -p "$destDir"
+
+          echo "=== Dostupne .so soubory ==="
+          find gitextension/godot-cpp-template/MBEXout/bin -name "*.so" 2>/dev/null || true
+
           for ABI in arm64-v8a x86_64; do
-            binDir="gitextension/godot-cpp-template/bin/android/$ABI"
-            # .gdextension ocekava android.arm64 / android.x86_64 - mapujeme ABI
+            # CMake pojmenuva platformu jako "android.<ABI>"
+            srcDir="gitextension/godot-cpp-template/MBEXout/bin/android.$ABI"
             case "$ABI" in
-              arm64-v8a) destABI="arm64" ;;
-              x86_64)    destABI="x86_64" ;;
+              arm64-v8a) gdextABI="arm64" ;;
+              x86_64)    gdextABI="x86_64" ;;
             esac
-            destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
-            mkdir -p "$destDir"
 
-            for f in "$binDir"/MagicBalls*.so; do
+            for f in "$srcDir"/MagicBalls*.so; do
               [ -e "$f" ] || continue
-              newName=$(basename "$f" | sed 's/^MagicBalls/EXTENSION-NAME/')
-              mv "$f" "$binDir/$newName"
-              echo "Přejmenováno: $(basename $f) → $newName [$ABI]"
+              base=$(basename "$f")
+              # MagicBalls.android.arm64-v8a.template_debug.arm64.so
+              # → libEXTENSION-NAME.android.template_debug.arm64.so
+              newName=$(echo "$base" |                 sed 's/^MagicBalls/libEXTENSION-NAME/' |                 sed "s/\.android\.$ABI\./.android./")
+              cp "$f" "$destDir/$newName"
+              echo "Zkopirováno: $base → $newName"
             done
-
-            # Kopíruj do MBEXout/bin/android/ kde je očekává mbex.gdextension
-            cp "$binDir"/EXTENSION-NAME*.so "$destDir/" 2>/dev/null || true
           done
+
+          echo "=== Výsledek v MBEXout/bin/android/ ==="
+          ls "$destDir/" 2>/dev/null || true
 
       - name: Install Godot + Android export templates
         run: |
@@ -451,18 +448,6 @@ jobs:
 
       - name: Import Godot project
         run: |
-          echo "=== DEBUG: .so soubory v MBEXout ==="
-          find gitextension/godot-cpp-template/MBEXout -name "*.so" 2>/dev/null || echo "zadne .so"
-
-          echo "=== DEBUG: addons/MBEX obsah ==="
-          ls godot-code/addons/MBEX/ 2>/dev/null || echo "adresar neexistuje"
-
-          echo "=== DEBUG: mbex.gdextension ==="
-          cat godot-code/addons/MBEX/mbex.gdextension 2>/dev/null || echo "soubor neexistuje"
-
-          echo "=== DEBUG: export_presets.cfg ==="
-          cat godot-code/export_presets.cfg 2>/dev/null || echo "SOUBOR NEEXISTUJE"
-
           timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
             > import_stdout.txt 2> import_stderr.txt || true
           cat import_stdout.txt || true
