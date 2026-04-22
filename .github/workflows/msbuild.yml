@@ -412,7 +412,9 @@ jobs:
               base=$(basename "$f")
               # MagicBalls.android.arm64-v8a.template_release.arm64.so
               # → libEXTENSION-NAME.android.template_release.arm64.so
-              newName=$(echo "$base" |                 sed 's/^MagicBalls/libEXTENSION-NAME/' |                 sed "s/\.android\.$ABI\./.android./")
+              tempName=$(echo "$base" | sed "s/^MagicBalls/libEXTENSION-NAME/")
+              cleanName=$(echo "$tempName" | sed "s/\.$ABI//")
+              newName=$(echo "$cleanName" | sed "s/\.so$/.$gdextABI.so/")
               cp "$f" "$destDir/$newName"
               echo "Zkopirováno: $base → $newName"
             done
