@@ -79,10 +79,12 @@ void MBEXclass::_bind_methods() {
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainPlayers"), &MBEXclass::REMC2EditorGetTerrainPlayers);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorIsParentType", "Int", "Int"), &MBEXclass::REMC2EditorIsParentType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetLevelData"), &MBEXclass::REMC2EditorGetLevelData);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSetLevelData", "Dictionary"), &MBEXclass::REMC2EditorSetLevelData);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorExportToCSV"), &MBEXclass::REMC2EditorExportToCSV);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorUndo"), &MBEXclass::REMC2EditorUndo);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorRedo"), &MBEXclass::REMC2EditorRedo);
@@ -1888,14 +1890,21 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainStages() {
 	return data;
 }
 */
+bool MBEXclass::REMC2EditorIsParentType(int type, int subtype) {
+	if (type == 2)
+		return false;
+	if (type == 3)
+		return false;
+	if ((type == 10) && (subtype == 45))
+		return false;
+	return true;
+}
+
 int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	if (p_indices.is_empty())
 		return -1;
 	int result = 1;
 
-	auto is_parent_type = [](int type) -> bool {
-		return type != 2 && type != 11;
-	};
 	// Sestav set indexů ke smazání
 	std::set<int> selected_set;
 	for (int i = 0; i < p_indices.size(); i++) {
@@ -1918,7 +1927,8 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	for (int idx : selected_set) {
 		int par = tempTerrain.entity_0x30311[idx].par1_14;
 		int type = tempTerrain.entity_0x30311[idx].type_0x30311;
-		if (is_parent_type(type) && par != 0 && selected_set.count(par) == 0) {
+		int subtype = tempTerrain.entity_0x30311[idx].subtype_0x30311;
+		if (REMC2EditorIsParentType(type, subtype) && par != 0 && selected_set.count(par) == 0) {
 			// má rodiče mimo seznam -> nesmazat
 			result |= 4;
 			continue;
@@ -1939,7 +1949,7 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 		if (index_to_remove < 0 || index_to_remove >= current_count)
 			continue;
 		for (int k = 0; k < current_count; k++) {
-			if (!is_parent_type(tempTerrain.entity_0x30311[k].type_0x30311))
+			if (!REMC2EditorIsParentType(tempTerrain.entity_0x30311[k].type_0x30311, tempTerrain.entity_0x30311[k].subtype_0x30311))
 				continue;
 			if (tempTerrain.entity_0x30311[k].par1_14 == index_to_remove) {
 				tempTerrain.entity_0x30311[k].par1_14 = 0;
@@ -2282,7 +2292,132 @@ void MBEXclass::REMC2EditorSetLevelData(Dictionary d) {
 	}
 }
 
+#include <vector>
 
+void MBEXclass::REMC2EditorExportToCSV() {
+	// Definice cesty v rámci uživatelského adresáře Godotu
+	String p_path = "user://level.csv";
+
+	Ref<FileAccess> f = FileAccess::open(p_path, FileAccess::WRITE);
+	if (f.is_null()) {
+		return;
+	}
+
+	// Získání dat ze stávající funkce (vrací Dictionary)
+	Dictionary d = REMC2EditorGetLevelData();
+
+	// ── HLAVIČKA (Použití std::vector pro inicializaci klíčů) ────
+	f->store_line("SECTION;Header");
+	f->store_line("Key;Value");
+
+	std::vector<String> header_keys = {
+		"word_2FECE", "levelID", "byte_2FED2", "byte_2FED3", "map_type",
+		"word_2FED5", "word_2FED7", "seed", "offset", "raise", "gnarl",
+		"river", "lriver", "source", "snLin", "snFlt", "bhLin", "bhFlt",
+		"rkSte", "next_360D1"
+	};
+
+	for (const String &key : header_keys) {
+		if (d.has(key)) {
+			f->store_line(key + String(";") + itos(d[key]));
+		}
+	}
+	f->store_line("");
+
+	// ── HRÁČI ───────────────────────────────────────────────────
+	f->store_line("SECTION;Players");
+	if (d.has("players")) {
+		Array players = d["players"];
+		String p_line = "Player Indices;";
+		for (int i = 0; i < players.size(); i++) {
+			p_line += itos(players[i]) + (i < players.size() - 1 ? "," : "");
+		}
+		f->store_line(p_line);
+	}
+	f->store_line("");
+
+	// ── ENTITY (Filtrace type 0 && subtype 0) ───────────────────
+	f->store_line("SECTION;Entities");
+	f->store_line("ID;Type;Subtype;Axis_X;Axis_Y;Axis_Z;Dis_ID;Word10;Stage_Tag;Par1;Par2;Par3");
+
+	if (d.has("entities")) {
+		Array entities = d["entities"];
+		for (int i = 0; i < entities.size(); i++) {
+			Dictionary ed = entities[i];
+			int type = ed["type"];
+			int subtype = ed["subtype"];
+
+			// Přeskočit entity, které nemají nastavený typ ani podtyp
+			if (type == 0 && subtype == 0) {
+				continue;
+			}
+
+			String row = itos(i) + ";";
+			row += itos(type) + ";";
+			row += itos(subtype) + ";";
+			row += itos(ed["axis_x"]) + ";";
+			row += itos(ed["axis_y"]) + ";";
+			row += String::num(ed["axis_z"], 2) + ";";
+			row += itos(ed["dis_id"]) + ";";
+			row += itos(ed["word10"]) + ";";
+			row += itos(ed["stage_tag"]) + ";";
+			row += itos(ed["par1"]) + ";";
+			row += itos(ed["par2"]) + ";";
+			row += itos(ed["par3"]);
+			f->store_line(row);
+		}
+	}
+	f->store_line("");
+
+	// ── WIZARDS (Kouzelníci) ────────────────────────────────────
+	f->store_line("SECTION;Wizards");
+	f->store_line("Index;Aggression;Reflexes;Perception;Life");
+	if (d.has("wizards")) {
+		Array wizards = d["wizards"];
+		for (int i = 0; i < wizards.size(); i++) {
+			Dictionary wd = wizards[i];
+			String row = itos(i) + ";";
+			row += itos(wd["aggression"]) + ";";
+			row += itos(wd["reflexes"]) + ";";
+			row += itos(wd["perception"]) + ";";
+			row += itos(wd["life"]);
+			f->store_line(row);
+		}
+	}
+	f->store_line("");
+
+	// ── STAGES ──────────────────────────────────────────────────
+	f->store_line("SECTION;Stages");
+	f->store_line("ID;Index;Stage;Axis_X;Axis_Y");
+	if (d.has("stages")) {
+		Array stages = d["stages"];
+		for (int i = 0; i < stages.size(); i++) {
+			Dictionary sd = stages[i];
+			f->store_line(itos(i) + ";" + itos(sd["index"]) + ";" + itos(sd["stage"]) + ";" + itos(sd["axis_x"]) + ";" + itos(sd["axis_y"]));
+		}
+	}
+	f->store_line("");
+
+	// ── STAGE VARS ──────────────────────────────────────────────
+	f->store_line("SECTION;StageVars");
+	f->store_line("ID;Index;Stage;U_Axis2D_X;U_Axis2D_Y;U_Dword_X;U_Dword_Y");
+	if (d.has("stage_vars")) {
+		Array svars = d["stage_vars"];
+		for (int i = 0; i < svars.size(); i++) {
+			Dictionary vd = svars[i];
+			String row = itos(i) + ";";
+			row += itos(vd["index"]) + ";";
+			row += itos(vd["stage"]) + ";";
+			row += itos(vd["union_axis_2d_x"]) + ";";
+			row += itos(vd["union_axis_2d_y"]) + ";";
+			row += itos(vd["union_dword_axis_x"]) + ";";
+			row += itos(vd["union_dword_axis_y"]);
+			f->store_line(row);
+		}
+	}
+
+	f->close();
+}
 
 void MBEXclass::REMC2EditorUndo() {
 	if (urManager->canUndo()) {

@@ -661,6 +661,7 @@ func delete_selected_entities():
 	if (result & 4):
 		nexttext = nexttext + " some entities not deleted, have parent"
 	log_message(nexttext)
+	EditorStep()
 	RenderEditorEntites()
 
 func RenderEditorEntites():
@@ -772,7 +773,7 @@ func AddParentsArrows():
 	for entity in get_tree().get_nodes_in_group("entities"):
 		var current_node = null
 		var updateObject: bool = false
-		if entity.get_meta("type_0x30311") == 2 || entity.get_meta("type_0x30311") == 11:
+		if !Global.MBEX.REMC2EditorIsParentType(entity.get_meta("type_0x30311"),entity.get_meta("subtype_0x30311")):
 			continue
 		if entity.get_meta("par1_14") in index_to_pos:
 			var parent_index = entity.get_meta("par1_14")
@@ -978,3 +979,8 @@ func _on_tree_terrain_stagesVars(index: int, value: String):
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.show()
+
+const ID_EXPORT_CSV = 0
+func _on_file_id_pressed(id: int) -> void:
+	if (id == ID_EXPORT_CSV):
+		Global.MBEX.REMC2EditorExportToCSV();

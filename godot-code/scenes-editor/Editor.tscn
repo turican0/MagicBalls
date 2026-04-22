@@ -368,6 +368,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="File" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1089930277]
+item_count = 1
+item_0/text = "Export to CSV"
+item_0/id = 0
 
 [node name="View" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1249348343]
 
@@ -2196,6 +2199,7 @@ mesh = SubResource("CylinderMesh_jhayq")
 
 [node name="PlayerEditor" parent="." unique_id=1031186005 instance=ExtResource("6_jhayq")]
 
+[connection signal="id_pressed" from="UI/Control/MenuBar/File" to="." method="_on_file_id_pressed"]
 [connection signal="button_down" from="UI/Control/Undo" to="." method="_on_undo_button_down"]
 [connection signal="button_down" from="UI/Control/Redo" to="." method="_on_redo_button_down"]
 [connection signal="state_changed_graphicsType" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" to="." method="_on_terrain_type_state_changed_graphics_type"]
