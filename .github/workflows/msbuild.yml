@@ -395,26 +395,21 @@ jobs:
 
       - name: Rename .so files to EXTENSION-NAME
         run: |
-          # CMake builduje do MBEXout/bin/android.<ABI>/ s nazvem MagicBalls.*
-          # .gdextension ocekava MBEXout/bin/android/libEXTENSION-NAME.android.template_release.arm64.so
+          # CMake produkuje: MagicBalls.android.arm64-v8a.template_release.arm64.so
+          # .gdextension chce: libEXTENSION-NAME.android.template_release.arm64.so
+          # Postup: lib prefix + odstranit "arm64-v8a." uprostred
           destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
           mkdir -p "$destDir"
 
           for ABI in arm64-v8a x86_64; do
             srcDir="gitextension/godot-cpp-template/MBEXout/bin/android.$ABI"
-            case "$ABI" in
-              arm64-v8a) gdextABI="arm64" ;;
-              x86_64)    gdextABI="x86_64" ;;
-            esac
 
             for f in "$srcDir"/MagicBalls*.so; do
               [ -e "$f" ] || continue
               base=$(basename "$f")
               # MagicBalls.android.arm64-v8a.template_release.arm64.so
               # → libEXTENSION-NAME.android.template_release.arm64.so
-              tempName=$(echo "$base" | sed "s/^MagicBalls/libEXTENSION-NAME/")
-              cleanName=$(echo "$tempName" | sed "s/\.$ABI//")
-              newName=$(echo "$cleanName" | sed "s/\.so$/.$gdextABI.so/")
+              newName=$(echo "$base" | sed "s/^MagicBalls/libEXTENSION-NAME/" | sed "s/\.${ABI}\././")
               cp "$f" "$destDir/$newName"
               echo "Zkopirováno: $base → $newName"
             done
