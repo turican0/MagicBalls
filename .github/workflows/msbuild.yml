@@ -395,26 +395,31 @@ jobs:
 
       - name: Rename .so files to EXTENSION-NAME
         run: |
+          # CMake builduje do MBEXout/bin/android.<ABI>/ s nazvem MagicBalls.*
+          # .gdextension ocekava MBEXout/bin/android/libEXTENSION-NAME.android.template_release.arm64.so
+          destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
+          mkdir -p "$destDir"
+
           for ABI in arm64-v8a x86_64; do
-            binDir="gitextension/godot-cpp-template/bin/android/$ABI"
-            # .gdextension ocekava android.arm64 / android.x86_64 - mapujeme ABI
+            srcDir="gitextension/godot-cpp-template/MBEXout/bin/android.$ABI"
             case "$ABI" in
-              arm64-v8a) destABI="arm64" ;;
-              x86_64)    destABI="x86_64" ;;
+              arm64-v8a) gdextABI="arm64" ;;
+              x86_64)    gdextABI="x86_64" ;;
             esac
-            destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
-            mkdir -p "$destDir"
 
-            for f in "$binDir"/MagicBalls*.so; do
+            for f in "$srcDir"/MagicBalls*.so; do
               [ -e "$f" ] || continue
-              newName=$(basename "$f" | sed 's/^MagicBalls/EXTENSION-NAME/')
-              mv "$f" "$binDir/$newName"
-              echo "Přejmenováno: $(basename $f) → $newName [$ABI]"
+              base=$(basename "$f")
+              # MagicBalls.android.arm64-v8a.template_release.arm64.so
+              # → libEXTENSION-NAME.android.template_release.arm64.so
+              newName=$(echo "$base" |                 sed 's/^MagicBalls/libEXTENSION-NAME/' |                 sed "s/\.android\.$ABI\./.android./")
+              cp "$f" "$destDir/$newName"
+              echo "Zkopirováno: $base → $newName"
             done
-
-            # Kopíruj do MBEXout/bin/android/ kde je očekává mbex.gdextension
-            cp "$binDir"/EXTENSION-NAME*.so "$destDir/" 2>/dev/null || true
           done
+
+          echo "=== Výsledek ==="
+          ls "$destDir/" 2>/dev/null || echo "prazdny adresar"
 
       - name: Install Godot + Android export templates
         run: |
