@@ -69,8 +69,9 @@ func _ready() -> void:
 	for i in range(selectors.size()):
 		var selector = selectors[i]
 		selector.current_value = Global.editorLevel[selectors[i].name]
-		if not selector.value_changed.is_connected(_on_h_box_container_value_changed):
-			selector.value_changed.connect(_on_h_box_container_value_changed)
+		selector.get_node_or_null("SpinBox").value = Global.editorLevel[selectors[i].name]
+		if not selector.get_node_or_null("SpinBox").value_changed.is_connected(_on_h_box_container_value_changed):
+			selector.get_node_or_null("SpinBox").value_changed.connect(_on_h_box_container_value_changed.bind(i))
 	
 	for i in range(TEselector2.size()):
 		var selector = TEselector2[i]
@@ -871,7 +872,7 @@ func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	RenderEditorEntites()
 
-func _on_h_box_container_value_changed(terrainVarIndex: int,new_value: int) -> void:
+func _on_h_box_container_value_changed(new_value: int,terrainVarIndex: int) -> void:
 	Global.editorLevel[selectors[terrainVarIndex].name] = new_value
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
