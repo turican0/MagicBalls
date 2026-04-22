@@ -875,6 +875,7 @@ func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
 func _on_h_box_container_value_changed(new_value: int,terrainVarIndex: int) -> void:
 	Global.editorLevel[selectors[terrainVarIndex].name] = new_value
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	EditorStep()
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	RenderEditorEntites()
 
