@@ -302,10 +302,22 @@ jobs:
           mkdir -p exports/release
           RELEASE_BIN="${{ github.workspace }}/exports/release/MagicBalls.x86_64"
 
+          echo "=== DEBUG: export_presets.cfg ==="
+          cat godot-code/export_presets.cfg 2>/dev/null || echo "SOUBOR NEEXISTUJE"
+
+          echo "=== DEBUG: .so soubory v MBEXout ==="
+          find gitextension/godot-cpp-template/MBEXout -name "*.so" 2>/dev/null || echo "zadne .so"
+
+          echo "=== DEBUG: .so soubory v bin/linux ==="
+          find gitextension/godot-cpp-template/bin/linux -name "*.so" 2>/dev/null || echo "zadne .so"
+
+          echo "=== DEBUG: addons/MBEX obsah ==="
+          ls godot-code/addons/MBEX/ 2>/dev/null || echo "adresar neexistuje"
+
           echo "=== RELEASE export ==="
           godot --headless --verbose --path godot-code \
             --export-release Linux "$RELEASE_BIN" \
-            > release_stdout.txt 2> release_stderr.txt
+            > release_stdout.txt 2> release_stderr.txt || true
           cat release_stdout.txt || true
           cat release_stderr.txt || true
 
@@ -439,6 +451,18 @@ jobs:
 
       - name: Import Godot project
         run: |
+          echo "=== DEBUG: .so soubory v MBEXout ==="
+          find gitextension/godot-cpp-template/MBEXout -name "*.so" 2>/dev/null || echo "zadne .so"
+
+          echo "=== DEBUG: addons/MBEX obsah ==="
+          ls godot-code/addons/MBEX/ 2>/dev/null || echo "adresar neexistuje"
+
+          echo "=== DEBUG: mbex.gdextension ==="
+          cat godot-code/addons/MBEX/mbex.gdextension 2>/dev/null || echo "soubor neexistuje"
+
+          echo "=== DEBUG: export_presets.cfg ==="
+          cat godot-code/export_presets.cfg 2>/dev/null || echo "SOUBOR NEEXISTUJE"
+
           timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
             > import_stdout.txt 2> import_stderr.txt || true
           cat import_stdout.txt || true
