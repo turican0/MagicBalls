@@ -9,6 +9,8 @@ func display_player_data(idx: int):
 		push_error("Hráč s indexem %d není v Global.players_settings načten!" % idx)
 		return
 
+	$State/SpinBox.value = Global.editorLevel["players"][idx]
+
 	$Aggression/SpinBox.value = Global.editorLevel["wizards"][idx]["aggression"]
 	$Reflexes/SpinBox.value   = Global.editorLevel["wizards"][idx]["reflexes"]
 	$Perception/SpinBox.value = Global.editorLevel["wizards"][idx]["perception"]

@@ -75,7 +75,7 @@ func _ready() -> void:
 	
 	for i in range(TEselector2.size()):
 		var selector = TEselector2[i]
-		selector.get_node_or_null("SpinBox").value = Global.editorLevel[selectors[i].name]
+		selector.get_node_or_null("SpinBox").value = Global.editorLevel[TEselector2[i].name]
 		if not selector.get_node_or_null("SpinBox").value_changed.is_connected(_on_h_box_container_value_changed2):
 			selector.get_node_or_null("SpinBox").value_changed.connect(_on_h_box_container_value_changed2.bind(i))
 	
@@ -661,6 +661,7 @@ func delete_selected_entities():
 	if (result & 4):
 		nexttext = nexttext + " some entities not deleted, have parent"
 	log_message(nexttext)
+	RenderEditorEntites()
 
 func RenderEditorEntites():
 	for node in get_tree().get_nodes_in_group("entities"):
