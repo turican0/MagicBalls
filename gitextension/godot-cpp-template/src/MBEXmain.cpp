@@ -2277,7 +2277,7 @@ void MBEXclass::REMC2EditorSetLevelData(Dictionary d) {
 			if (vd.has("union_dword_axis_x"))
 				v.str_0x3647C_4.axis.x = (uint16_t)(int)vd["union_dword_axis_x"];
 			if (vd.has("union_dword_axis_y"))
-				v.str_0x3647C_4.axis.x = (uint16_t)(int)vd["union_dword_axis_y"];
+				v.str_0x3647C_4.axis.y = (uint16_t)(int)vd["union_dword_axis_y"];
 		}
 	}
 }
