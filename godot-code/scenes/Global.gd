@@ -10,7 +10,7 @@ var music_volume:float
 var	sounds_volume:float
 var speech_volume:float
 
-var inverse_mouseY
+var inverse_mouseY = true
 
 var soundInited:bool = false
 var sounds_map = {}

@@ -347,11 +347,20 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 	library_scenes[Vector3i(a, b, c)] = load(path)
 
 var library = {
-	Vector3i(0,996,0): "res://entites/object_arrow_disid.tscn",  # parent arrow
-	Vector3i(0,997,0): "res://entites/object_arrow_path.tscn",  # parent arrow
-	Vector3i(0,998,0): "res://entites/object_arrow_parent.tscn",  # parent arrow
-	Vector3i(0,999,0): "res://entites/object_text.tscn",
-	Vector3i(0,1000,0): "res://entites/object_textEditor.tscn",
+	Vector3i(2,0,0): "res://entites-editor/object_2_0_tree.tscn",
+	Vector3i(2,2,0): "res://entites-editor/object_2_2_dolmen.tscn",
+	Vector3i(5,1,0): "res://entites-editor/object_5_1_goat.tscn",
+	Vector3i(5,3,0): "res://entites-editor/object_5_3_worm.tscn",
+	Vector3i(5,4,0): "res://entites-editor/object_5_4_archer.tscn",
+	Vector3i(5,13,0): "res://entites-editor/object_5_13_people.tscn",
+	Vector3i(5,19,0): "res://entites-editor/object_5_19_firefly.tscn",
+	Vector3i(14,5,0): "res://entites-editor/object_14_5_scroll.tscn",
+	Vector3i(15,2,0): "res://entites-editor/object_15_2_vase.tscn",
+	Vector3i(10,45,0): "res://entites-editor/object_10_45_house.tscn",
+	Vector3i(0,996,0): "res://entites-editor/object_arrow_disid.tscn",  # parent arrow
+	Vector3i(0,997,0): "res://entites-editor/object_arrow_path.tscn",  # parent arrow
+	Vector3i(0,998,0): "res://entites-editor/object_arrow_parent.tscn",  # parent arrow
+	Vector3i(0,1000,0): "res://entites-editor/object_textEditor.tscn",
 	#Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree -difColors!!!
 	#Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue -difmodels!!!
 	#Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen

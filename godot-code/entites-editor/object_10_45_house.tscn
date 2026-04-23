@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://dnlhogegl2oc5"]
+
+[ext_resource type="Texture2D" uid="uid://t4xr12jsv0aa" path="res://entites-editor/img/HSPRD0-0.DAT_125.png" id="1_5ai3v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_atwak"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_atwak"]
+material = SubResource("StandardMaterial3D_atwak")
+radius = 0.2
+height = 0.4
+
+[node name="Node3D" type="Node3D" unique_id=1207081722]
+
+[node name="Label3D" type="Label3D" parent="." unique_id=447533271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+pixel_size = 0.003
+billboard = 1
+alpha_cut = 1
+text = "TEST"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1932770428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("SphereMesh_atwak")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=571625524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+billboard = 1
+alpha_cut = 1
+texture = ExtResource("1_5ai3v")
