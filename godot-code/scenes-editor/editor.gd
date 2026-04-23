@@ -283,6 +283,7 @@ func _process(delta: float) -> void:
 	update_tree()
 	Global.MBEX.REMC2EditorTimedSaveState(1.0)
 	UpdatePositionLabel()
+	select_entities_by_filter()
 
 func gameInit():
 	match Global.getLevelType():
@@ -621,11 +622,24 @@ func select_entities_in_radius_2D(center_pos_3d: Vector3, radius: float):
 				found_any_in_radius = true
 		if not found_any_in_radius and closest_node != null:
 			mark_as_selected(closest_node)
-		
-		
-	if closest_node != null and closest_node.has_meta("index"):
-		var idx = closest_node.get_meta("index")
-		fillEntityDetails(idx)
+
+func select_entities_by_filter():
+	if !EntityFilter_On:
+		return
+	for node in get_tree().get_nodes_in_group("entities"):
+		var should_be_selected = true		
+		for filter in Global.editorFilteres:
+			if node.has_meta(filter.filterName):
+				if node.get_meta(filter.filterName) != filter.filterKey:
+					should_be_selected = false
+					break
+			else:
+				should_be_selected = false
+				break
+		if should_be_selected:
+			mark_as_selected(node)
+		else:
+			unmark_as_selected(node)
 
 func mark_as_selected(node: Node3D):
 	if node.is_in_group("selected_entities"):
@@ -998,7 +1012,20 @@ func UpdatePositionLabel():
 
 func _on_selector_toggled(toggled_on: bool) -> void:
 	Ray_Cylinder.visible = toggled_on
+	if(Ray_Cylinder.visible):
+		if(EntityFilter_On):
+			$UI/Control/Filter.button_pressed=false
 
-
+var EntityFilter_On:bool=false
 func _on_filter_toggled(toggled_on: bool) -> void:
+	EntityFilter_On = toggled_on
+	if(EntityFilter_On):
+		if(Ray_Cylinder.visible):
+			$UI/Control/Selector.button_pressed=false
+	else:
+		for node in get_tree().get_nodes_in_group("entities"):
+			unmark_as_selected(node)
+
+
+func _on_filter_show_toggled(toggled_on: bool) -> void:
 	EntityFilter.visible = toggled_on

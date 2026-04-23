@@ -236,5 +236,20 @@ class StagesSettings:
 	var x2: int
 	var y2: int
 		
-#var players_settings: Array[WizardSettings] = []
-#var stages_settings: Array[StagesSettings] = []
+var editorFilteres: Array[Dictionary] = []
+
+func add_editor_filter(name: String, key: Variant) -> void:
+	var new_filter = {
+		"filterName": name,
+		"filterKey": key
+	}
+	editorFilteres.append(new_filter)
+
+func remove_editor_filter(name: String) -> void:
+	for i in range(editorFilteres.size()):
+		if editorFilteres[i]["filterName"] == name:
+			editorFilteres.remove_at(i)
+			return
+
+func clear_editor_filters() -> void:
+	editorFilteres.clear()

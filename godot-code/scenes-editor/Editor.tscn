@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://cw1g07ahbhkck" path="res://scenes-editor/PlayerEditor.tscn" id="6_jhayq"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="6_wa12f"]
 [ext_resource type="Script" uid="uid://n4kpwwnt37vs" path="res://scenes-editor/StagesSettings.gd" id="8_wqm82"]
+[ext_resource type="Script" uid="uid://cqplmm705y6m2" path="res://scenes-editor/entity_filter.gd" id="9_xhpx2"]
+[ext_resource type="Texture2D" uid="uid://cag6kwjpq504j" path="res://gui/GuiUnchecked.svg" id="10_xhpx2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xi2fd"]
 bg_color = Color(0.1, 0.1, 0.1, 0.5)
@@ -403,11 +405,18 @@ offset_right = 344.0
 offset_bottom = 57.0
 text = "Filter"
 
+[node name="FilterShow" type="CheckBox" parent="UI/Control" unique_id=943896794]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 33.0
+offset_right = 404.0
+offset_bottom = 57.0
+
 [node name="Selector" type="CheckButton" parent="UI/Control" unique_id=743748458]
 layout_mode = 0
-offset_left = 400.0
+offset_left = 440.0
 offset_top = 33.0
-offset_right = 488.0
+offset_right = 551.0
 offset_bottom = 64.0
 button_pressed = true
 text = "Selector"
@@ -2186,6 +2195,7 @@ max_value = 65535.0
 
 [node name="Console" type="Control" parent="UI" unique_id=1943275785]
 layout_mode = 3
+anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2220,6 +2230,7 @@ theme_override_font_sizes/font_size = 37
 text = "Position: 000.00 x 000.00"
 
 [node name="EntityFilter" type="Control" parent="UI" unique_id=680992071]
+visible = false
 layout_mode = 3
 anchor_left = 0.7
 anchor_right = 0.7
@@ -2228,6 +2239,7 @@ offset_left = -400.0
 offset_top = 70.0
 grow_horizontal = 0
 grow_vertical = 2
+script = ExtResource("9_xhpx2")
 
 [node name="PreContainer" type="PanelContainer" parent="UI/EntityFilter" unique_id=1169438402]
 layout_mode = 1
@@ -2256,39 +2268,6 @@ layout_mode = 2
 layout_mode = 2
 text = "Entity Filter"
 
-[node name="POS" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2122946744]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=854657373]
-layout_mode = 2
-text = "X:"
-
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=389567627]
-layout_mode = 2
-
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=282713365]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1994557339]
-layout_mode = 2
-text = "   Y:"
-
-[node name="SpinBox2" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1516721238]
-layout_mode = 2
-
-[node name="CheckBox3" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1768519277]
-layout_mode = 2
-
-[node name="Label3" type="Label" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=909953442]
-layout_mode = 2
-text = "   Z:"
-
-[node name="SpinBox3" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1078423178]
-layout_mode = 2
-
-[node name="CheckBox2" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=830383386]
-layout_mode = 2
-
 [node name="type_0x30311" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1648029769]
 layout_mode = 2
 
@@ -2297,11 +2276,15 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "type_0x30311"
 
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311" unique_id=1989579694]
+[node name="SpinBoxType" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311" unique_id=1989579694]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311" unique_id=579979429]
+[node name="CheckBoxType" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311" unique_id=579979429]
 layout_mode = 2
+theme_override_icons/unchecked = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked = ExtResource("10_xhpx2")
+theme_override_icons/unchecked_disabled = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked_disabled = ExtResource("10_xhpx2")
 
 [node name="subtype_0x30311" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1021834340]
 layout_mode = 2
@@ -2311,11 +2294,15 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "subtype_0x30311"
 
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311" unique_id=120983385]
+[node name="SpinBoxSubType" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311" unique_id=120983385]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311" unique_id=366828846]
+[node name="CheckBoxSubType" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311" unique_id=366828846]
 layout_mode = 2
+theme_override_icons/unchecked = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked = ExtResource("10_xhpx2")
+theme_override_icons/unchecked_disabled = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked_disabled = ExtResource("10_xhpx2")
 
 [node name="DisId" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2060076528]
 layout_mode = 2
@@ -2325,11 +2312,15 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "DisId"
 
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/DisId" unique_id=1511473032]
+[node name="SpinBoxDisId" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/DisId" unique_id=1511473032]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/DisId" unique_id=2022973998]
+[node name="CheckBoxDisId" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/DisId" unique_id=2022973998]
 layout_mode = 2
+theme_override_icons/unchecked = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked = ExtResource("10_xhpx2")
+theme_override_icons/unchecked_disabled = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked_disabled = ExtResource("10_xhpx2")
 
 [node name="word_10" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1478951881]
 layout_mode = 2
@@ -2339,11 +2330,15 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "word_10"
 
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_10" unique_id=773172]
+[node name="SpinBoxWord" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_10" unique_id=773172]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_10" unique_id=1373067459]
+[node name="CheckBoxWord" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_10" unique_id=1373067459]
 layout_mode = 2
+theme_override_icons/unchecked = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked = ExtResource("10_xhpx2")
+theme_override_icons/unchecked_disabled = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked_disabled = ExtResource("10_xhpx2")
 
 [node name="stageTag_12" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1504064376]
 layout_mode = 2
@@ -2353,11 +2348,15 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "stageTag_12"
 
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/stageTag_12" unique_id=726408548]
+[node name="SpinBoxTag" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/stageTag_12" unique_id=726408548]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/stageTag_12" unique_id=610345535]
+[node name="CheckBoxTag" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/stageTag_12" unique_id=610345535]
 layout_mode = 2
+theme_override_icons/unchecked = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked = ExtResource("10_xhpx2")
+theme_override_icons/unchecked_disabled = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked_disabled = ExtResource("10_xhpx2")
 
 [node name="par1_14" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1616707997]
 layout_mode = 2
@@ -2367,11 +2366,15 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "par1_14"
 
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par1_14" unique_id=2095987180]
+[node name="SpinBoxPar1" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par1_14" unique_id=2095987180]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par1_14" unique_id=1077863730]
+[node name="CheckBoxPar1" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par1_14" unique_id=1077863730]
 layout_mode = 2
+theme_override_icons/unchecked = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked = ExtResource("10_xhpx2")
+theme_override_icons/unchecked_disabled = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked_disabled = ExtResource("10_xhpx2")
 
 [node name="par2_16" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=632781126]
 layout_mode = 2
@@ -2381,11 +2384,15 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "par2_16"
 
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par2_16" unique_id=1113460524]
+[node name="SpinBoxPar2" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par2_16" unique_id=1113460524]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par2_16" unique_id=1210470541]
+[node name="CheckBoxPar2" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par2_16" unique_id=1210470541]
 layout_mode = 2
+theme_override_icons/unchecked = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked = ExtResource("10_xhpx2")
+theme_override_icons/unchecked_disabled = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked_disabled = ExtResource("10_xhpx2")
 
 [node name="par3_18" type="HBoxContainer" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=929007598]
 layout_mode = 2
@@ -2395,11 +2402,15 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "par3_18"
 
-[node name="SpinBox" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par3_18" unique_id=181056875]
+[node name="SpinBoxPar3" type="SpinBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par3_18" unique_id=181056875]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par3_18" unique_id=1109390386]
+[node name="CheckBoxPar3" type="CheckBox" parent="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par3_18" unique_id=1109390386]
 layout_mode = 2
+theme_override_icons/unchecked = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked = ExtResource("10_xhpx2")
+theme_override_icons/unchecked_disabled = ExtResource("10_xhpx2")
+theme_override_icons/radio_unchecked_disabled = ExtResource("10_xhpx2")
 
 [node name="MBEngine" type="Node3D" parent="." unique_id=973372086]
 script = ExtResource("2_j6dse")
@@ -2423,7 +2434,24 @@ mesh = SubResource("CylinderMesh_jhayq")
 [connection signal="button_down" from="UI/Control/Undo" to="." method="_on_undo_button_down"]
 [connection signal="button_down" from="UI/Control/Redo" to="." method="_on_redo_button_down"]
 [connection signal="toggled" from="UI/Control/Filter" to="." method="_on_filter_toggled"]
+[connection signal="toggled" from="UI/Control/FilterShow" to="." method="_on_filter_show_toggled"]
 [connection signal="toggled" from="UI/Control/Selector" to="." method="_on_selector_toggled"]
 [connection signal="state_changed_graphicsType" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" to="." method="_on_terrain_type_state_changed_graphics_type"]
 [connection signal="value_changed" from="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]
+[connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/SpinBoxType" to="UI/EntityFilter" method="_on_spin_box_type_value_changed"]
+[connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/CheckBoxType" to="UI/EntityFilter" method="_on_check_box_type_toggled"]
+[connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311/SpinBoxSubType" to="UI/EntityFilter" method="_on_spin_box_sub_type_value_changed"]
+[connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311/CheckBoxSubType" to="UI/EntityFilter" method="_on_check_box_sub_type_toggled"]
+[connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/DisId/SpinBoxDisId" to="UI/EntityFilter" method="_on_spin_box_dis_id_value_changed"]
+[connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/DisId/CheckBoxDisId" to="UI/EntityFilter" method="_on_check_box_dis_id_toggled"]
+[connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_10/SpinBoxWord" to="UI/EntityFilter" method="_on_spin_box_word_value_changed"]
+[connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/word_10/CheckBoxWord" to="UI/EntityFilter" method="_on_check_box_word_toggled"]
+[connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/stageTag_12/SpinBoxTag" to="UI/EntityFilter" method="_on_spin_box_tag_value_changed"]
+[connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/stageTag_12/CheckBoxTag" to="UI/EntityFilter" method="_on_check_box_tag_toggled"]
+[connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par1_14/SpinBoxPar1" to="UI/EntityFilter" method="_on_spin_box_par_1_value_changed"]
+[connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par1_14/CheckBoxPar1" to="UI/EntityFilter" method="_on_check_box_par_1_toggled"]
+[connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par2_16/SpinBoxPar2" to="UI/EntityFilter" method="_on_spin_box_par_2_value_changed"]
+[connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par2_16/CheckBoxPar2" to="UI/EntityFilter" method="_on_check_box_par_2_toggled"]
+[connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par3_18/SpinBoxPar3" to="UI/EntityFilter" method="_on_spin_box_par_3_value_changed"]
+[connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par3_18/CheckBoxPar3" to="UI/EntityFilter" method="_on_check_box_par_3_toggled"]
