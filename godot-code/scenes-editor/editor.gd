@@ -284,6 +284,7 @@ func _process(delta: float) -> void:
 	Global.MBEX.REMC2EditorTimedSaveState(1.0)
 	UpdatePositionLabel()
 	select_entities_by_filter()
+	RenderEditorEntites()
 
 func gameInit():
 	match Global.getLevelType():
