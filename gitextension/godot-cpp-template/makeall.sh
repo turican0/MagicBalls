@@ -3,7 +3,7 @@ set -euo pipefail
 
 CMAKE="../../../MagicBalls/tools/cmake-4.2.1-linux-x86_64/bin/cmake"
 LIBNAME="EXTENSION-NAME"
-GODOT_PROJECT_DIR="MBEXout"
+GODOT_PROJECT_DIR="../../godot-code/MBEXout"
 
 # ================================================
 # ANDROID NDK – adjust path if you have a different version

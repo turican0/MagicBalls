@@ -2,7 +2,7 @@
 set -e
 
 LIBNAME="EXTENSION-NAME"
-GODOT_PROJECT_DIR="MBEXout"
+GODOT_PROJECT_DIR="../../godot-code/MBEXout"
 
 echo "========================================"
 echo "MBEX Godot GDExtension – BUILD macOS + iOS"

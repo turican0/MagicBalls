@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 set CMAKE=..\..\..\MagicBalls\tools\cmake-4.2.1-windows-x86_64\bin\cmake
 set LIBNAME=EXTENSION-NAME
-set GODOT_PROJECT_DIR=MBEXout
+set GODOT_PROJECT_DIR=..\..\godot-code\MBEXout
 
 :: ================================================
 :: ANDROID NDK – uprav cestu, pokud máš jinou verzi

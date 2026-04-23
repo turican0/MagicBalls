@@ -337,6 +337,9 @@ data = {
 [sub_resource type="ImageTexture" id="ImageTexture_wo42n"]
 image = SubResource("Image_yt380")
 
+[sub_resource type="SystemFont" id="SystemFont_a6lnc"]
+font_names = PackedStringArray("Consolas")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhayq"]
 transparency = 4
 albedo_color = Color(1, 0.3254902, 0.25882354, 0.11372549)
@@ -376,14 +379,6 @@ item_0/id = 0
 
 [node name="Filter" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1885130967]
 
-[node name="Label" type="RichTextLabel" parent="UI/Control" unique_id=1733416364]
-layout_mode = 0
-offset_left = 357.0
-offset_top = 16.0
-offset_right = 988.0
-offset_bottom = 79.0
-text = "WASD - move, SPACE  - change control(2D/3D), X - delete objects, N - new objects H - hide all , M - show/hide terrain setting"
-
 [node name="Undo" type="Button" parent="UI/Control" unique_id=1018523640]
 layout_mode = 0
 offset_left = 4.0
@@ -399,6 +394,30 @@ offset_top = 33.0
 offset_right = 297.0
 offset_bottom = 64.0
 text = "REDO -> (CTRL+Y)"
+
+[node name="Filter" type="CheckButton" parent="UI/Control" unique_id=846870773]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 33.0
+offset_right = 344.0
+offset_bottom = 57.0
+text = "Filter"
+
+[node name="Selector" type="CheckButton" parent="UI/Control" unique_id=743748458]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 33.0
+offset_right = 488.0
+offset_bottom = 64.0
+text = "Selector"
+
+[node name="Label" type="RichTextLabel" parent="UI/Control" unique_id=1733416364]
+layout_mode = 0
+offset_left = 550.0
+offset_top = 16.0
+offset_right = 1181.0
+offset_bottom = 79.0
+text = "WASD - move, SPACE  - change control(2D/3D), X - delete objects, N - new objects H - hide all , M - show/hide terrain setting"
 
 [node name="TreeView" type="Control" parent="UI" unique_id=639034540]
 layout_mode = 3
@@ -2165,13 +2184,13 @@ max_value = 65535.0
 
 [node name="Console" type="Control" parent="UI" unique_id=1943275785]
 layout_mode = 3
-anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 550.0
 offset_top = -60.0
-grow_horizontal = 2
-grow_vertical = 2
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="UI/Console" unique_id=1832740722]
 layout_mode = 1
@@ -2180,6 +2199,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Position" type="Control" parent="UI" unique_id=438295925]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="UI/Position" unique_id=34582268]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = SubResource("SystemFont_a6lnc")
+theme_override_font_sizes/font_size = 37
+text = "Position: 000.00 x 000.00"
 
 [node name="MBEngine" type="Node3D" parent="." unique_id=973372086]
 script = ExtResource("2_j6dse")
@@ -2202,6 +2238,8 @@ mesh = SubResource("CylinderMesh_jhayq")
 [connection signal="id_pressed" from="UI/Control/MenuBar/File" to="." method="_on_file_id_pressed"]
 [connection signal="button_down" from="UI/Control/Undo" to="." method="_on_undo_button_down"]
 [connection signal="button_down" from="UI/Control/Redo" to="." method="_on_redo_button_down"]
+[connection signal="toggled" from="UI/Control/Filter" to="." method="_on_filter_toggled"]
+[connection signal="toggled" from="UI/Control/Selector" to="." method="_on_selector_toggled"]
 [connection signal="state_changed_graphicsType" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" to="." method="_on_terrain_type_state_changed_graphics_type"]
 [connection signal="value_changed" from="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]

@@ -21,6 +21,8 @@ extends Node3D
 @onready var Wizards_Edit: Control = $UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 @onready var Stages_Edit: Control = $UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 
+@onready var Position_Label: Control = $UI/Position/Label
+
 @onready var selectors = [
 	Terrain_Edit.get_node("seed"),
 	Terrain_Edit.get_node("offset"),
@@ -278,6 +280,7 @@ func _process(delta: float) -> void:
 		EditorStep()
 	update_tree()
 	Global.MBEX.REMC2EditorTimedSaveState(1.0)
+	UpdatePositionLabel()
 
 func gameInit():
 	match Global.getLevelType():
@@ -603,18 +606,19 @@ func select_entities_in_radius_2D(center_pos_3d: Vector3, radius: float):
 	var min_dist_sq = INF # Nastavíme na nekonečno
 	
 	# 1. Průchod: Zjistíme co je v kruhu a najdeme nejbližšího kandidáta
-	for node in get_tree().get_nodes_in_group("entities"):
-		var node_pos_2d = Vector2(node.global_position.x, node.global_position.z)
-		var dist_sq = center_2d.distance_squared_to(node_pos_2d)
-		unmark_as_selected(node)
-		if dist_sq < min_dist_sq:
-			min_dist_sq = dist_sq
-			closest_node = node
-		if dist_sq <= radius_squared:
-			mark_as_selected(node)
-			found_any_in_radius = true
-	if not found_any_in_radius and closest_node != null:
-		mark_as_selected(closest_node)
+	if Ray_Cylinder.visible:
+		for node in get_tree().get_nodes_in_group("entities"):
+			var node_pos_2d = Vector2(node.global_position.x, node.global_position.z)
+			var dist_sq = center_2d.distance_squared_to(node_pos_2d)
+			unmark_as_selected(node)
+			if dist_sq < min_dist_sq:
+				min_dist_sq = dist_sq
+				closest_node = node
+			if dist_sq <= radius_squared:
+				mark_as_selected(node)
+				found_any_in_radius = true
+		if not found_any_in_radius and closest_node != null:
+			mark_as_selected(closest_node)
 		
 		
 	if closest_node != null and closest_node.has_meta("index"):
@@ -984,3 +988,15 @@ const ID_EXPORT_CSV = 0
 func _on_file_id_pressed(id: int) -> void:
 	if (id == ID_EXPORT_CSV):
 		Global.MBEX.REMC2EditorExportToCSV();
+		
+func UpdatePositionLabel():
+	var x = Main_Camera.position.x
+	var y = Main_Camera.position.y
+	Position_Label.text = "Position: %06.2f x %06.2f" % [x, y]
+
+func _on_selector_toggled(toggled_on: bool) -> void:
+	Ray_Cylinder.visible = toggled_on
+
+
+func _on_filter_toggled(toggled_on: bool) -> void:
+	pass # Replace with function body.
