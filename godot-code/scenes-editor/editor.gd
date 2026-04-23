@@ -21,6 +21,8 @@ extends Node3D
 @onready var Wizards_Edit: Control = $UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 @onready var Stages_Edit: Control = $UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 
+@onready var EntityFilter: Control = $UI/EntityFilter
+
 @onready var Position_Label: Control = $UI/Position/Label
 
 @onready var selectors = [
@@ -999,4 +1001,4 @@ func _on_selector_toggled(toggled_on: bool) -> void:
 
 
 func _on_filter_toggled(toggled_on: bool) -> void:
-	pass # Replace with function body.
+	EntityFilter.visible = toggled_on

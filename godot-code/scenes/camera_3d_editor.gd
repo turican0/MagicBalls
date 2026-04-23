@@ -138,7 +138,7 @@ func _cast_center_ray() -> void:
 func _update_ray_position() -> void:
 	if Ray_Cylinder == null: return # Failsafe if not assigned
 	
-	Ray_Cylinder.visible = true
+	#Ray_Cylinder.visible = true
 	
 	# Update position
 	if terrain_hit_valid:
