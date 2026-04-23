@@ -39,52 +39,32 @@ jobs:
       - name: Build C++ Library (Debug & Release)
         shell: pwsh
         run: |
-          # VS generator ignoruje -DCMAKE_BUILD_TYPE – konfigurace se řídí --config při buildu.
-          # Jeden cmake -B stačí pro oba --config Release i --config Debug.
-          # GODOT_PROJECT_DIR je relativní k PROJECT_SOURCE_DIR (gitextension/godot-cpp-template/),
-          # takže ../../godot-code/MBEXout ukazuje správně do godot-code/MBEXout.
-          cmake -B build-cpp -S gitextension/godot-cpp-template `
-            -G "Visual Studio 17 2022" -A x64 `
-            -DLIBNAME="MagicBalls" `
-            -DGODOT_PROJECT_DIR="../../godot-code/MBEXout"
+          cmake -B build-cpp-release -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls"
+          cmake --build build-cpp-release --config Release
 
-          cmake --build build-cpp --config Release --parallel
-          cmake --build build-cpp --config Debug --parallel
+          cmake -B build-cpp-debug -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls"
+          cmake --build build-cpp-debug --config Debug
 
       - name: Rename DLLs to EXTENSION-NAME
         shell: pwsh
         run: |
-          # DLL jsou po buildu v godot-code/MBEXout/bin/windows/ (díky CMake POST_BUILD copy)
-          # i v gitextension/godot-cpp-template/bin/windows/ (primární výstup)
-          # Přejmenujeme v obou místech.
-          $dirs = @(
-            "gitextension/godot-cpp-template/bin/windows",
-            "godot-code/MBEXout/bin/windows"
-          )
+          $binDir = "gitextension/godot-cpp-template/bin/windows"
 
-          foreach ($binDir in $dirs) {
-            if (-not (Test-Path $binDir)) {
-              Write-Host "SKIP (neexistuje): $binDir"
-              continue
-            }
-            Write-Host "=== DLL před přejmenováním v $binDir ==="
-            Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
+          Write-Host "=== DLL před přejmenováním ==="
+          Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
 
-            Get-ChildItem -Path $binDir -Filter "MagicBalls*.dll" | ForEach-Object {
-              $newName = $_.Name -replace '^MagicBalls', 'EXTENSION-NAME'
-              Rename-Item -Path $_.FullName -NewName $newName -Force
-              Write-Host "Přejmenováno: $($_.Name) → $newName"
-            }
-
-            Write-Host "=== DLL po přejmenování v $binDir ==="
-            Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
+          Get-ChildItem -Path $binDir -Filter "MagicBalls*.dll" | ForEach-Object {
+            $newName = $_.Name -replace '^MagicBalls', 'EXTENSION-NAME'
+            Rename-Item -Path $_.FullName -NewName $newName -Force
+            Write-Host "Přejmenováno: $($_.Name) → $newName"
           }
 
-          # Ověřit že DLL jsou v godot-code/MBEXout (kde je Godot hledá)
-          $targetDir = "godot-code/MBEXout/bin/windows"
+          Write-Host "=== DLL po přejmenování ==="
+          Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
+
           $expected = @(
-            "$targetDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll",
-            "$targetDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"
+            "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll",
+            "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"
           )
           foreach ($f in $expected) {
             if (Test-Path $f) { Write-Host "OK: $f" }
@@ -139,6 +119,16 @@ jobs:
       - name: Godot Export
         shell: pwsh
         run: |
+          # Godot pri exportu hleda DLL pres relativni cestu z .gdextension:
+          # godot-code/addons/MBEX/../../MBEXout/bin/windows/ = godot-code/MBEXout/bin/windows/
+          # DLL musime zkopirovat tam.
+          $srcDir  = "gitextension\godot-cpp-template\MBEXout\bin\windows"
+          $destDir = "godot-code\MBEXout\bin\windows"
+          New-Item -ItemType Directory -Force -Path $destDir
+          Copy-Item "$srcDir\EXTENSION-NAME*" $destDir -Force
+          Write-Host "=== DLL zkopirované do godot-code/MBEXout/bin/windows/ ==="
+          Get-ChildItem $destDir
+
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
@@ -178,7 +168,7 @@ jobs:
           Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/" -ErrorAction SilentlyContinue
 
-          $binDir = "godot-code/MBEXout/bin/windows"
+          $binDir = "gitextension/godot-cpp-template/bin/windows"
           Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"       "exports/release/"
           Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll" "exports/debug/"
 
@@ -408,7 +398,6 @@ jobs:
               -DGODOTCPP_TARGET=template_release \
               -DCMAKE_BUILD_TYPE=Release \
               -DLIBNAME="MagicBalls" \
-              -DGODOT_PROJECT_DIR="../../godot-code/MBEXout" \
               -DCMAKE_EXE_LINKER_FLAGS="-lm" \
               -GNinja
             ninja -C "build-android-$ABI"
@@ -416,28 +405,38 @@ jobs:
 
       - name: Rename .so files to EXTENSION-NAME
         run: |
-          # CMake POST_BUILD kopíruje .so do godot-code/MBEXout/bin/android.$ABI/
-          # .gdextension chce: libEXTENSION-NAME.android.template_debug.arm64.so
-          # v adresáři: godot-code/MBEXout/bin/android/
-          destDir="godot-code/MBEXout/bin/android"
+          # CMake produkuje: MagicBalls.android.arm64-v8a.template_release.arm64.so
+          # .gdextension chce: libEXTENSION-NAME.android.template_release.arm64.so
+          # Postup: lib prefix + odstranit "arm64-v8a." uprostred
+          destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
           mkdir -p "$destDir"
 
           for ABI in arm64-v8a x86_64; do
-            srcDir="godot-code/MBEXout/bin/android.$ABI"
+            srcDir="gitextension/godot-cpp-template/MBEXout/bin/android.$ABI"
 
             for f in "$srcDir"/MagicBalls*.so; do
               [ -e "$f" ] || continue
               base=$(basename "$f")
-              # MagicBalls.android.arm64-v8a.template_debug.arm64.so
-              # → libEXTENSION-NAME.android.template_debug.arm64.so
+              # MagicBalls.android.arm64-v8a.template_release.arm64.so
+              # → libEXTENSION-NAME.android.template_release.arm64.so
               newName=$(echo "$base" | sed "s/^MagicBalls/libEXTENSION-NAME/" | sed "s/\.${ABI}\././")
               cp "$f" "$destDir/$newName"
               echo "Zkopirováno: $base → $newName"
             done
           done
 
-          echo "=== Výsledek ==="
+          echo "=== Výsledek v MBEXout/bin/android/ ==="
           ls "$destDir/" 2>/dev/null || echo "prazdny adresar"
+
+          # Godot FileAccess neumi relativni cesty mimo res:// pri Android exportu.
+          # Zkopirujeme .so soubory i do godot-code aby byly dostupne pres res://
+          # (stejne jako Windows .dll jsou zkopirované CMake POST_BUILD do MBEXout)
+          # Toto zajisti ze Godot najde knihovny pri importu i exportu.
+          GODOT_ANDROID_BIN="godot-code/addons/MBEX/bin/android"
+          mkdir -p "$GODOT_ANDROID_BIN"
+          cp "$destDir"/*.so "$GODOT_ANDROID_BIN/" 2>/dev/null || true
+          echo "=== Výsledek v godot-code/addons/MBEX/bin/android/ ==="
+          ls "$GODOT_ANDROID_BIN/" 2>/dev/null || echo "prazdny adresar"
 
       - name: Install Godot + Android export templates
         run: |
@@ -475,24 +474,6 @@ jobs:
 
       - name: Import Godot project
         run: |
-          echo "=== DEBUG: .so soubory v godot-code/MBEXout ==="
-          find godot-code/MBEXout -name "*.so" 2>/dev/null || echo "zadne .so"
-
-          echo "=== DEBUG: addons/MBEX obsah ==="
-          ls godot-code/addons/MBEX/ 2>/dev/null || echo "adresar neexistuje"
-
-          echo "=== DEBUG: mbex.gdextension ==="
-          cat godot-code/addons/MBEX/mbex.gdextension 2>/dev/null || echo "soubor neexistuje"
-
-          echo "=== DEBUG: export_presets.cfg ==="
-          cat godot-code/export_presets.cfg 2>/dev/null || echo "SOUBOR NEEXISTUJE"
-
-          echo "=== MBEXout/bin/android/ ==="
-          ls -la godot-code/MBEXout/bin/android/ 2>/dev/null || echo "CHYBI"
-
-          echo "=== godot-code/addons/MBEX/ obsah ==="
-          ls -la godot-code/addons/MBEX/ 2>/dev/null || echo "CHYBI"
-
           timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
             > import_stdout.txt 2> import_stderr.txt || true
           cat import_stdout.txt || true
@@ -523,14 +504,26 @@ jobs:
           TAG="${{ github.ref_name }}"
           APK_PATH="${{ github.workspace }}/exports/android/MagicBalls-${TAG}-Android-Release.apk"
 
+          # Godot hleda .so pres: godot-code/addons/MBEX/../../MBEXout/bin/android/
+          # = godot-code/MBEXout/bin/android/ - zkopirujeme tam .so pred exportem
+          mkdir -p "godot-code/MBEXout/bin/android"
+          cp gitextension/godot-cpp-template/MBEXout/bin/android/*.so "godot-code/MBEXout/bin/android/" 2>/dev/null || true
+
           echo "=== ANDROID RELEASE export ==="
           godot --headless --verbose --path godot-code \
-            --export-release Android "$APK_PATH"
+            --export-release Android "$APK_PATH" \
+            > android_export_stdout.txt 2> android_export_stderr.txt || true
+          cat android_export_stdout.txt || true
+          cat android_export_stderr.txt || true
 
+          # Godot vraci exit code 1 kvuli memory leak pri ukonceni (PagedAllocator)
+          # i kdyz APK byl uspesne vytvoren - kontrolujeme existenci souboru
           if [ -f "$APK_PATH" ]; then
             echo "=== APK ÚSPĚŠNĚ VYTVOŘENO: $APK_PATH ==="
           else
-            echo "ERROR: APK se nepodařilo vygenerovat! Export pravděpodobně selhal."
+            echo "ERROR: APK neexistuje - export selhal."
+            cat android_export_stdout.txt || true
+            cat android_export_stderr.txt || true
             exit 1
           fi
 
