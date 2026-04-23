@@ -22,8 +22,8 @@ windows.x86_32.double.release = "../../MBEXout/bin/windows/EXTENSION-NAME.window
 
 windows.x86_64.single.debug = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.debug.dll"
 windows.x86_64.double.debug = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.debug.dll"
-windows.x86_64.single.release = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.template_release.x86_64.dll"
-windows.x86_64.double.release = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.template_release.x86_64.dll"
+windows.x86_64.single.release = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
+windows.x86_64.double.release = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
 
 linux.x86_64.single.debug = "../../MBEXout/bin/linux/libEXTENSION-NAME.linux.template_debug.x86_64.so"
 linux.x86_64.double.debug = "../../MBEXout/bin/linux/libEXTENSION-NAME.linux.template_debug.x86_64.double.so"

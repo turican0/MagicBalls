@@ -408,6 +408,7 @@ jobs:
               -DGODOTCPP_TARGET=template_release \
               -DCMAKE_BUILD_TYPE=Release \
               -DLIBNAME="MagicBalls" \
+              -DGODOT_PROJECT_DIR="../../godot-code/MBEXout" \
               -DCMAKE_EXE_LINKER_FLAGS="-lm" \
               -GNinja
             ninja -C "build-android-$ABI"
@@ -415,20 +416,20 @@ jobs:
 
       - name: Rename .so files to EXTENSION-NAME
         run: |
-          # CMake produkuje: MagicBalls.android.arm64-v8a.template_release.arm64.so
-          # .gdextension chce: libEXTENSION-NAME.android.template_release.arm64.so
-          # Postup: lib prefix + odstranit "arm64-v8a." uprostred
-          destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
+          # CMake POST_BUILD kopíruje .so do godot-code/MBEXout/bin/android.$ABI/
+          # .gdextension chce: libEXTENSION-NAME.android.template_debug.arm64.so
+          # v adresáři: godot-code/MBEXout/bin/android/
+          destDir="godot-code/MBEXout/bin/android"
           mkdir -p "$destDir"
 
           for ABI in arm64-v8a x86_64; do
-            srcDir="gitextension/godot-cpp-template/MBEXout/bin/android.$ABI"
+            srcDir="godot-code/MBEXout/bin/android.$ABI"
 
             for f in "$srcDir"/MagicBalls*.so; do
               [ -e "$f" ] || continue
               base=$(basename "$f")
-              # MagicBalls.android.arm64-v8a.template_release.arm64.so
-              # → libEXTENSION-NAME.android.template_release.arm64.so
+              # MagicBalls.android.arm64-v8a.template_debug.arm64.so
+              # → libEXTENSION-NAME.android.template_debug.arm64.so
               newName=$(echo "$base" | sed "s/^MagicBalls/libEXTENSION-NAME/" | sed "s/\.${ABI}\././")
               cp "$f" "$destDir/$newName"
               echo "Zkopirováno: $base → $newName"
@@ -474,8 +475,8 @@ jobs:
 
       - name: Import Godot project
         run: |
-          echo "=== DEBUG: .so soubory v MBEXout ==="
-          find gitextension/godot-cpp-template/MBEXout -name "*.so" 2>/dev/null || echo "zadne .so"
+          echo "=== DEBUG: .so soubory v godot-code/MBEXout ==="
+          find godot-code/MBEXout -name "*.so" 2>/dev/null || echo "zadne .so"
 
           echo "=== DEBUG: addons/MBEX obsah ==="
           ls godot-code/addons/MBEX/ 2>/dev/null || echo "adresar neexistuje"
@@ -486,16 +487,8 @@ jobs:
           echo "=== DEBUG: export_presets.cfg ==="
           cat godot-code/export_presets.cfg 2>/dev/null || echo "SOUBOR NEEXISTUJE"
 
-          echo "=== Workspace root ==="
-          ls -la
-
           echo "=== MBEXout/bin/android/ ==="
-          ls -la gitextension/godot-cpp-template/MBEXout/bin/android/ 2>/dev/null || echo "CHYBI"
-
-          echo "=== Relativni cesta z gdextension (../../../gitextension/...) ==="
-          # gdextension je v godot-code/addons/MBEX/mbex.gdextension
-          # takze ../../../ = workspace root
-          ls -la godot-code/addons/MBEX/../../../gitextension/godot-cpp-template/MBEXout/bin/android/ 2>/dev/null || echo "RELATIVNI CESTA NEFUNGUJE"
+          ls -la godot-code/MBEXout/bin/android/ 2>/dev/null || echo "CHYBI"
 
           echo "=== godot-code/addons/MBEX/ obsah ==="
           ls -la godot-code/addons/MBEX/ 2>/dev/null || echo "CHYBI"
