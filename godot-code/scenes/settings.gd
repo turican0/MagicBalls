@@ -137,7 +137,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	#await get_tree().create_timer(0.1).timeout
-	_apply_settings()	
+	_apply_settings()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -213,7 +213,7 @@ func _apply_settings() -> void:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		2:  # Exclusive Fullscreen
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-	var target_scale = Vector2i.ZERO if is_native else res
+	var target_scale = res
 	get_tree().root.content_scale_size = target_scale
 	#get_tree().root.call_deferred("set", "content_scale_size", target_scale)
 
