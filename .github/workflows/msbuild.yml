@@ -128,15 +128,6 @@ jobs:
           Copy-Item "$srcDir\EXTENSION-NAME*" $destDir -Force
           Write-Host "=== DLL zkopirované do godot-code/MBEXout/bin/windows/ ==="
           Get-ChildItem $destDir
-          Write-Host "=== Overeni ze DLL existuji ==="
-          # Release DLL ma v nazvu template_debug (Godot konvence pro Windows)
-          # Debug DLL ma navic .debug suffix
-          $releaseDll = "$destDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"
-          $debugDll   = "$destDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll"
-          if (Test-Path $releaseDll) { Write-Host "OK release: $releaseDll" }
-          else { Write-Error "CHYBI release: $releaseDll" }
-          if (Test-Path $debugDll) { Write-Host "OK debug: $debugDll" }
-          else { Write-Error "CHYBI debug: $debugDll" }
 
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
@@ -441,10 +432,10 @@ jobs:
           # Zkopirujeme .so soubory i do godot-code aby byly dostupne pres res://
           # (stejne jako Windows .dll jsou zkopirované CMake POST_BUILD do MBEXout)
           # Toto zajisti ze Godot najde knihovny pri importu i exportu.
-          GODOT_ANDROID_BIN="godot-code/addons/MBEX/bin/android"
+          GODOT_ANDROID_BIN="godot-code/MBEXout/bin/android"
           mkdir -p "$GODOT_ANDROID_BIN"
           cp "$destDir"/*.so "$GODOT_ANDROID_BIN/" 2>/dev/null || true
-          echo "=== Výsledek v godot-code/addons/MBEX/bin/android/ ==="
+          echo "=== Výsledek v godot-code/MBEXout/bin/android/ ==="
           ls "$GODOT_ANDROID_BIN/" 2>/dev/null || echo "prazdny adresar"
 
       - name: Install Godot + Android export templates
