@@ -47,7 +47,7 @@ void vertex() {
     float t2 = textureLod(control_map, global_uv + vec2(0.0, -texel.y), 0.0).r;
     float t3 = textureLod(control_map, global_uv + vec2(-texel.x, 0.0), 0.0).r;
 	float t4 = textureLod(control_map, global_uv + vec2(-texel.x, -texel.y), 0.0).r;
-	v_texture_index1 = t0 * 255.0;
+	v_texture_index1 = round(t0 * 255.0);
     float v_final = 0.0;
     if (t1 < 0.001 && t2 < 0.001 && t3 < 0.001 && t4 < 0.001) v_final = 1.0;
 	

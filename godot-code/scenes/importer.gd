@@ -48,6 +48,8 @@ var _stop_spinner: bool = false
 
 func _ready() -> void:		
 	if !check_existing_data():
+		await get_tree().process_frame
+		await get_tree().process_frame
 		Global.canNotification = false
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		Main_DecodeLevel = get_node("DecodeLevel")

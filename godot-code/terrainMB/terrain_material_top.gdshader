@@ -14,7 +14,6 @@ uniform float wave_height : hint_range(0.0, 1.0) = 0.5;
 uniform float wave_speed : hint_range(0.1, 5.0) = 2.0;
 uniform float wave_scale : hint_range(0.1, 32.0) = 4.0;
 
-varying flat float v_texture_index1;
 varying flat int row_index;
 
 void vertex() {

@@ -12,6 +12,8 @@ var Main_TerrainsMB
 #var MainMusic
 func _ready() -> void:
 	await get_tree().process_frame
+	await get_tree().process_frame	
+	await RenderingServer.frame_post_draw
 	Engine.max_fps = 60
 	Main_DecodeLevel = get_node("DecodeLevel")
 	MBEngine = get_node("MBEngine")
