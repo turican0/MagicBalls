@@ -576,37 +576,42 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          # 1. Získání git logu
           PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)
           if [ -z "$PREV_TAG" ]; then
             GIT_LOG=$(git log --oneline --no-merges | head -30)
           else
             GIT_LOG=$(git log "${PREV_TAG}..HEAD" --oneline --no-merges)
           fi
-
           [ -z "$GIT_LOG" ] && GIT_LOG="No commits since last release."
 
-          echo "=== Git log pro changelog ==="
-          echo "$GIT_LOG"
+          # 2. Příprava promptu
+          PROMPT="You are a concise release notes writer. Based on the following git commit log, write a short and clear changelog in bullet points (max 10 bullets) in Czech language. Group related changes. Commits:\n\n${GIT_LOG}"
 
-          PROMPT="You are a concise release notes writer. Based on the following git commit log, write a short and clear changelog in bullet points (max 10 bullets). Group related changes if possible. Use plain English, no fluff. Commits:\n\n${GIT_LOG}"
-
-          RESPONSE=$(curl -s \
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d "{\"contents\":[{\"parts\":[{\"text\":$(echo "$PROMPT" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')}]}]}")
-
-          CHANGELOG=$(echo "$RESPONSE" | python3 -c "
-          import json, sys
-          data = json.load(sys.stdin)
-          print(data['candidates'][0]['content']['parts'][0]['text'])
-          ")
+          # 3. Volání API (používáme tvůj funkční model gemini-2.5-flash)
+          # Používáme Python pro bezpečné sestavení JSONu, aby se nerozbilo uvozovkami v commitu
+          RESPONSE=$(python3 -c "
+          import json, requests, os, sys
+          api_key = os.getenv('GEMINI_API_KEY')
+          url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}'
+          payload = {
+              'contents': [{'parts': [{'text': sys.argv[1]}]}]
+          }
+          headers = {'Content-Type': 'application/json'}
+          res = requests.post(url, json=payload, headers=headers)
+          if res.status_code != 200:
+              print(f'ERROR: {res.text}', file=sys.stderr)
+              sys.exit(1)
+          print(res.json()['candidates'][0]['content']['parts'][0]['text'])
+          " "$PROMPT")
 
           echo "=== Vygenerovaný changelog ==="
-          echo "$CHANGELOG"
+          echo "$RESPONSE"
 
+          # 4. Uložení do výstupu GitHub Actions
           {
             echo "CHANGELOG<<EOF"
-            echo "$CHANGELOG"
+            echo "$RESPONSE"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
