@@ -119,15 +119,10 @@ jobs:
       - name: Godot Export
         shell: pwsh
         run: |
-          # Godot pri exportu hleda DLL pres relativni cestu z .gdextension:
-          # godot-code/addons/MBEX/../../MBEXout/bin/windows/ = godot-code/MBEXout/bin/windows/
-          # DLL musime zkopirovat tam.
-          $srcDir  = "gitextension\godot-cpp-template\MBEXout\bin\windows"
-          $destDir = "godot-code\MBEXout\bin\windows"
-          New-Item -ItemType Directory -Force -Path $destDir
-          Copy-Item "$srcDir\EXTENSION-NAME*" $destDir -Force
-          Write-Host "=== DLL zkopirované do godot-code/MBEXout/bin/windows/ ==="
-          Get-ChildItem $destDir
+          # DLL jsou jiz v godot-code\MBEXout\bin\windows\ diky CMake POST_BUILD
+          # a prejmenování v predchozim kroku - neni treba kopirovat.
+          Write-Host "=== DLL v godot-code/MBEXout/bin/windows/ ==="
+          Get-ChildItem "godot-code\MBEXout\bin\windows" -Filter "*.dll" | Select-Object Name
 
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"

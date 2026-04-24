@@ -41,3 +41,4 @@ godot-code/MBEXout/bin/android.arm64-v8a/EXTENSION-NAME.android.arm64-v8a.templa
 godot-code/MBEXout/bin/android.arm64-v8a/EXTENSION-NAME.android.arm64-v8a.template_debug.arm64.so
 godot-code/MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.debug.dll
 godot-code/MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll
+godot-code/MBEXout/bin/windows/~EXTENSION-NAME.windows.template_debug.x86_64.debug.dll
