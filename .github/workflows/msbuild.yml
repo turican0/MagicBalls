@@ -586,27 +586,40 @@ jobs:
           [ -z "$GIT_LOG" ] && GIT_LOG="No commits since last release."
 
           # 2. Příprava promptu
-          PROMPT="You are a concise release notes writer. Based on the following git commit log, write a short and clear changelog in bullet points (max 10 bullets) in Czech language. Group related changes. Commits:\n\n${GIT_LOG}"
+          PROMPT="You are a concise release notes writer. Based on the following git commit log, write a short and clear changelog in bullet points (max 10 bullets). Group related changes. Commits:\n\n${GIT_LOG}"
 
-          # 3. Volání API (používáme tvůj funkční model gemini-2.5-flash)
-          # Používáme Python pro bezpečné sestavení JSONu, aby se nerozbilo uvozovkami v commitu
+          # 3. Volání API s retry logikou (10 pokusů) a zálohou
           RESPONSE=$(python3 -c "
-          import json, requests, os, sys
+          import json, requests, os, sys, time
+          
           api_key = os.getenv('GEMINI_API_KEY')
           url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}'
-          payload = {
-              'contents': [{'parts': [{'text': sys.argv[1]}]}]
-          }
+          prompt_text = sys.argv[1]
+          raw_log = sys.argv[2]
+          payload = {'contents': [{'parts': [{'text': prompt_text}]}]}
           headers = {'Content-Type': 'application/json'}
-          res = requests.post(url, json=payload, headers=headers)
-          if res.status_code != 200:
-              print(f'ERROR: {res.text}', file=sys.stderr)
-              sys.exit(1)
-          print(res.json()['candidates'][0]['content']['parts'][0]['text'])
-          " "$PROMPT")
+          
+          success = False
+          for i in range(1, 11):
+              try:
+                  res = requests.post(url, json=payload, headers=headers, timeout=30)
+                  if res.status_code == 200:
+                      print(res.json()['candidates'][0]['content']['parts'][0]['text'])
+                      success = True
+                      break
+                  elif res.status_code in [429, 503, 500]:
+                      print(f'Pokus {i}/10: Server je zaneprázdněn ({res.status_code}). Čekám...', file=sys.stderr)
+                  else:
+                      print(f'Pokus {i}/10: Chyba {res.status_code}: {res.text}', file=sys.stderr)
+              except Exception as e:
+                  print(f'Pokus {i}/10: Chyba sítě: {e}', file=sys.stderr)
+              
+              if i < 10: time.sleep(5) # Krátká pauza mezi pokusy
 
-          echo "=== Vygenerovaný changelog ==="
-          echo "$RESPONSE"
+          if not success:
+              print('Gemini API nedostupné po 10 pokusech. Používám nezpracovaný log.', file=sys.stderr)
+              print(f'### Raw Changelog\n{raw_log}')
+          " "$PROMPT" "$GIT_LOG")
 
           # 4. Uložení do výstupu GitHub Actions
           {
