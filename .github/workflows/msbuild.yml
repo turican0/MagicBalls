@@ -39,32 +39,52 @@ jobs:
       - name: Build C++ Library (Debug & Release)
         shell: pwsh
         run: |
-          cmake -B build-cpp-release -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Release -DLIBNAME="MagicBalls"
-          cmake --build build-cpp-release --config Release
+          # VS generator ignoruje -DCMAKE_BUILD_TYPE – konfigurace se řídí --config při buildu.
+          # Jeden cmake -B stačí pro oba --config Release i --config Debug.
+          # GODOT_PROJECT_DIR je relativní k PROJECT_SOURCE_DIR (gitextension/godot-cpp-template/),
+          # takže ../../godot-code/MBEXout ukazuje správně do godot-code/MBEXout.
+          cmake -B build-cpp -S gitextension/godot-cpp-template `
+            -G "Visual Studio 17 2022" -A x64 `
+            -DLIBNAME="MagicBalls" `
+            -DGODOT_PROJECT_DIR="../../godot-code/MBEXout"
 
-          cmake -B build-cpp-debug -S gitextension/godot-cpp-template -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="MagicBalls"
-          cmake --build build-cpp-debug --config Debug
+          cmake --build build-cpp --config Release --parallel
+          cmake --build build-cpp --config Debug --parallel
 
       - name: Rename DLLs to EXTENSION-NAME
         shell: pwsh
         run: |
-          $binDir = "gitextension/godot-cpp-template/bin/windows"
+          # DLL jsou po buildu v godot-code/MBEXout/bin/windows/ (díky CMake POST_BUILD copy)
+          # i v gitextension/godot-cpp-template/bin/windows/ (primární výstup)
+          # Přejmenujeme v obou místech.
+          $dirs = @(
+            "gitextension/godot-cpp-template/bin/windows",
+            "godot-code/MBEXout/bin/windows"
+          )
 
-          Write-Host "=== DLL před přejmenováním ==="
-          Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
+          foreach ($binDir in $dirs) {
+            if (-not (Test-Path $binDir)) {
+              Write-Host "SKIP (neexistuje): $binDir"
+              continue
+            }
+            Write-Host "=== DLL před přejmenováním v $binDir ==="
+            Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
 
-          Get-ChildItem -Path $binDir -Filter "MagicBalls*.dll" | ForEach-Object {
-            $newName = $_.Name -replace '^MagicBalls', 'EXTENSION-NAME'
-            Rename-Item -Path $_.FullName -NewName $newName -Force
-            Write-Host "Přejmenováno: $($_.Name) → $newName"
+            Get-ChildItem -Path $binDir -Filter "MagicBalls*.dll" | ForEach-Object {
+              $newName = $_.Name -replace '^MagicBalls', 'EXTENSION-NAME'
+              Rename-Item -Path $_.FullName -NewName $newName -Force
+              Write-Host "Přejmenováno: $($_.Name) → $newName"
+            }
+
+            Write-Host "=== DLL po přejmenování v $binDir ==="
+            Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
           }
 
-          Write-Host "=== DLL po přejmenování ==="
-          Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
-
+          # Ověřit že DLL jsou v godot-code/MBEXout (kde je Godot hledá)
+          $targetDir = "godot-code/MBEXout/bin/windows"
           $expected = @(
-            "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll",
-            "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"
+            "$targetDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll",
+            "$targetDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"
           )
           foreach ($f in $expected) {
             if (Test-Path $f) { Write-Host "OK: $f" }
@@ -119,11 +139,6 @@ jobs:
       - name: Godot Export
         shell: pwsh
         run: |
-          # DLL jsou jiz v godot-code\MBEXout\bin\windows\ diky CMake POST_BUILD
-          # a prejmenování v predchozim kroku - neni treba kopirovat.
-          Write-Host "=== DLL v godot-code/MBEXout/bin/windows/ ==="
-          Get-ChildItem "godot-code\MBEXout\bin\windows" -Filter "*.dll" | Select-Object Name
-
           New-Item -ItemType Directory -Force -Path "exports/debug"
           New-Item -ItemType Directory -Force -Path "exports/release"
 
@@ -163,7 +178,7 @@ jobs:
           Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/release/" -ErrorAction SilentlyContinue
 
-          $binDir = "gitextension/godot-cpp-template/bin/windows"
+          $binDir = "godot-code/MBEXout/bin/windows"
           Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.dll"       "exports/release/"
           Copy-Item "$binDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll" "exports/debug/"
 
