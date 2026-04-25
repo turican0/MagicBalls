@@ -79,6 +79,7 @@ void MBEXclass::_bind_methods() {
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainEntites"), &MBEXclass::REMC2EditorGetTerrainEntites);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainPlayers"), &MBEXclass::REMC2EditorGetTerrainPlayers);
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorIsGroupType", "Int", "Int"), &MBEXclass::REMC2EditorIsGroupType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorIsParentType", "Int", "Int"), &MBEXclass::REMC2EditorIsParentType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
 
@@ -1890,12 +1891,32 @@ PackedFloat32Array MBEXclass::REMC2EditorGetTerrainStages() {
 	return data;
 }
 */
+bool MBEXclass::REMC2EditorIsGroupType(int type, int subtype) {
+	if ((type == 2) && (subtype == 0))
+		return false;
+	return true;
+}
+
 bool MBEXclass::REMC2EditorIsParentType(int type, int subtype) {
 	if (type == 2)
 		return false;
 	if (type == 3)
 		return false;
+	if ((type == 5) && (subtype == 19))
+		return false;
+	if ((type == 10) && (subtype == 5))
+		return false;
 	if ((type == 10) && (subtype == 45))
+		return false;
+	if ((type == 11) && (subtype == 0))
+		return false;
+	if ((type == 11) && (subtype == 1))
+		return false;
+	if ((type == 11) && (subtype == 4))
+		return false;
+	if ((type == 11) && (subtype == 32))
+		return false;
+	if ((type == 14) && (subtype == 5))
 		return false;
 	return true;
 }

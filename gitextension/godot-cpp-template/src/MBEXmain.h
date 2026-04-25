@@ -140,7 +140,9 @@ public:
 	//PackedFloat32Array REMC2EditorGetTerrainEntites();
 	//PackedFloat32Array REMC2EditorGetTerrainPlayers();
 	//PackedFloat32Array REMC2EditorGetTerrainStages();
+	bool REMC2EditorIsGroupType(int type, int subtype);
 	bool REMC2EditorIsParentType(int type, int subtype);
+	
 	int REMC2EditorDeleteEntites(Array p_indices);
 
 	Dictionary REMC2EditorGetLevelData();

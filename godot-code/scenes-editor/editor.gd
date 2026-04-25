@@ -349,6 +349,7 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 var library = {
 	Vector3i(2,0,0): "res://entites-editor/object_2_0_tree.tscn",
 	Vector3i(2,2,0): "res://entites-editor/object_2_2_dolmen.tscn",
+	Vector3i(3,4,0): "res://entites-editor/object_3_4_player.tscn",
 	Vector3i(5,1,0): "res://entites-editor/object_5_1_goat.tscn",
 	Vector3i(5,3,0): "res://entites-editor/object_5_3_worm.tscn",
 	Vector3i(5,4,0): "res://entites-editor/object_5_4_archer.tscn",
@@ -357,6 +358,10 @@ var library = {
 	Vector3i(14,5,0): "res://entites-editor/object_14_5_scroll.tscn",
 	Vector3i(15,2,0): "res://entites-editor/object_15_2_vase.tscn",
 	Vector3i(10,45,0): "res://entites-editor/object_10_45_house.tscn",
+	Vector3i(10,0,0): "res://entites-editor/object_10_0_explosion.tscn",
+	Vector3i(10,1,0): "res://entites-editor/object_10_1_big_explosion.tscn",
+	Vector3i(10,59,0): "res://entites-editor/object_10_59_smoke1.tscn",
+	Vector3i(10,60,0): "res://entites-editor/object_10_60_smoke2.tscn",
 	Vector3i(0,996,0): "res://entites-editor/object_arrow_disid.tscn",  # parent arrow
 	Vector3i(0,997,0): "res://entites-editor/object_arrow_path.tscn",  # parent arrow
 	Vector3i(0,998,0): "res://entites-editor/object_arrow_parent.tscn",  # parent arrow
@@ -792,7 +797,8 @@ func RenderEditorEntites():
 			#current_node.rotation = Vector3(0, yaw, 0)
 	AddParentsArrows()
 	AddPathArrows()
-	AddDisIdArrows()
+	#AddDisIdArrows()
+	AddDisId2Arrows()
 	show_hide_entites()
 
 func AddParentsArrows():
@@ -858,12 +864,13 @@ func AddPathArrows():
 func AddDisIdArrows():
 	var disid_groups: Dictionary = {}
 	for entity in get_tree().get_nodes_in_group("entities"):
-		var disid = entity.get_meta("DisId")
-		if disid <= 0:
-			continue
-		if not disid_groups.has(disid):
-			disid_groups[disid] = []
-		disid_groups[disid].append(entity)
+		if Global.MBEX.REMC2EditorIsGroupType(entity.get_meta("type_0x30311"),entity.get_meta("subtype_0x30311")):
+			var disid = entity.get_meta("DisId")
+			if disid <= 0:
+				continue
+			if not disid_groups.has(disid):
+				disid_groups[disid] = []
+			disid_groups[disid].append(entity)
 	for disid in disid_groups:
 		var group = disid_groups[disid]
 		if group.size() < 2:
@@ -873,7 +880,7 @@ func AddDisIdArrows():
 			var entity_b = group[i + 1]
 			var current_node = null
 			var updateObject: bool = false
-			var uid2 = Vector3i(0, 996, 0)
+			var uid2 = Vector3i(0, 997, 0)
 			current_node = get_first_entity_with_uid(uid2)
 			if current_node == null:
 				var scene_to_instance = library_scenes[uid2]
@@ -890,6 +897,40 @@ func AddDisIdArrows():
 			if current_node && updateObject:
 				current_node.get_node("Arrow").start_pos = current_node.get_meta("start")
 				current_node.get_node("Arrow").end_pos = current_node.get_meta("end")
+				
+func AddDisId2Arrows():
+	var index_to_pos: Dictionary = {}
+	for entity in get_tree().get_nodes_in_group("entities"):
+		if(entity.get_meta("stageTag_12")>0) and (entity.get_meta("type_0x30311")==11):
+			index_to_pos[entity.get_meta("stageTag_12")] = entity.position
+		
+	for entity in get_tree().get_nodes_in_group("entities"):
+		var current_node = null
+		var updateObject: bool = false
+		#if(entity.get_meta("type_0x30311")==11):
+			#continue
+		#if !Global.MBEX.REMC2EditorIsParentType(entity.get_meta("type_0x30311"),entity.get_meta("subtype_0x30311")):
+			#continue
+		if entity.get_meta("DisId") in index_to_pos:
+			var parent_index = entity.get_meta("DisId")
+			var uid2=Vector3i(0,998,0)
+			current_node = get_first_entity_with_uid(uid2)
+			if current_node == null:
+				var scene_to_instance = library_scenes[uid2]
+				var new_node = scene_to_instance.instantiate()
+				add_child(new_node)
+				current_node = new_node
+				add_to_entites_pool(uid2,new_node)
+				updateObject=true
+			else:
+				add_pool_index(uid2)
+				updateObject=true
+			var parent_pos = index_to_pos.get(parent_index, null)
+			current_node.set_meta("start", entity.position+Vector3(0,2,0))
+			current_node.set_meta("end", parent_pos+Vector3(0,2,0))
+		if (current_node&&updateObject):
+			current_node.get_node("Arrow").start_pos = current_node.get_meta("end")
+			current_node.get_node("Arrow").end_pos = current_node.get_meta("start")
 
 func EditorEnd():
 	Global.MBEX.REMC2EditorEnd()
@@ -1017,7 +1058,7 @@ func _on_file_id_pressed(id: int) -> void:
 		
 func UpdatePositionLabel():
 	var x = Main_Camera.position.x
-	var y = Main_Camera.position.y
+	var y = Main_Camera.position.z
 	Position_Label.text = "Position: %06.2f x %06.2f" % [x, y]
 
 func _on_selector_toggled(toggled_on: bool) -> void:
