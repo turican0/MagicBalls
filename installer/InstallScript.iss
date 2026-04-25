@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Magic Balls"
-#define MyAppEditorName "Editor"
+#define MyAppEditorName "Magic Editor"
 #define MyAppVersion "0.0.0.0"
 #define MyAppPublisher "@turican"
 #define MyAppURL "https://github.com/turican0/MagicBalls/"

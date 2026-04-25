@@ -166,6 +166,25 @@ jobs:
           Write-Host "=== Obsah exports/ ==="
           Get-ChildItem -Recurse "exports/"
 
+      - name: Set version
+        shell: bash
+        run: |
+          # Replace version
+          sed -i "s/0.0.0.0/$GITHUB_REF_NAME/g" installer/InstallScript.iss
+          cat remc2/engine/globals.h
+          if grep -q "$GITHUB_REF_NAME" installer/InstallScript.iss; then
+            echo "Set Version Passed!"
+          else
+            echo "Set Version Failed!"
+            exit 1
+          fi
+          
+      - name: Compile .ISS to .EXE Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: installer/InstallScript.iss
+          options: /O+
+      
       - name: Package Artifacts
         shell: pwsh
         run: |
