@@ -170,9 +170,9 @@ jobs:
         shell: bash
         run: |
           # Replace version
-          sed -i "s/0.0.0.0/$GITHUB_REF_NAME/g" installer/InstallScript.iss
+          sed -i "s|0.0.0.0|${{ github.ref_name }}|g" installer/InstallScript.iss
           cat remc2/engine/globals.h
-          if grep -q "$GITHUB_REF_NAME" installer/InstallScript.iss; then
+          if grep -q "${{ github.ref_name }}" installer/InstallScript.iss; then
             echo "Set Version Passed!"
           else
             echo "Set Version Failed!"
