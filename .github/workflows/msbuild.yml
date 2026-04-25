@@ -192,6 +192,8 @@ jobs:
           $debugZip   = "exports\MagicBalls-$tagName-Windows-Debug.zip"
           $releaseZip = "exports\MagicBalls-$tagName-Windows-Release.zip"
 
+          Copy-Item "installer/Output/MagicBallsSetup.exe" "exports/release/" -ErrorAction SilentlyContinue
+          
           Copy-Item "scripts/editor.bat"             "exports/debug/"   -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/"   -ErrorAction SilentlyContinue
           Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
@@ -208,7 +210,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-zips
-          path: exports/*.zip
+          path: |
+            exports/*.zip
+            exports/*.exe
 
 
   # ───────────────────────────────────────────
