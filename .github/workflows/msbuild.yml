@@ -178,8 +178,6 @@ jobs:
             echo "Set Version Failed!"
             exit 1
           fi
-          ls godot-code/MBEXout/bin
-          ls godot-code/MBEXout/bin/windows
           
       - name: Compile .ISS to .EXE Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
@@ -670,10 +668,12 @@ jobs:
             |-----------|--------|
             | 🪟 Windows Debug | `MagicBalls-${{ github.ref_name }}-Windows-Debug.zip` |
             | 🪟 Windows Release | `MagicBalls-${{ github.ref_name }}-Windows-Release.zip` |
+            | 🪟 Windows Release | `MagicBallsSetup.exe` |
             | 🐧 Linux x86_64 | `MagicBalls-${{ github.ref_name }}-Linux-Release.tar.gz` |
             | 🤖 Android | `MagicBalls-${{ github.ref_name }}-Android-Release.apk` |
           files: |
             dist/windows-zips/*.zip
+            dist/windows-zips/*.exe
             dist/linux-tarballs/*.tar.gz
             dist/android-apk/*.apk
         env:
