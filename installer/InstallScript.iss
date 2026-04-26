@@ -34,6 +34,9 @@ UninstallDisplayIcon={app}\app.ico
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+[CustomMessages]
+DeleteDataQuery=Do you want to delete all user settings and application data (save files) for Magic Balls?
+
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
@@ -53,3 +56,24 @@ Name: "{autodesktop}\{#MyAppEditorName}"; Filename: "{app}\{#MyAppEditorExeName}
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  UserDataPath: string;
+begin
+  if CurUninstallStep = usUninstall then
+  begin
+    // Adjusted specifically for Godot's folder structure
+    UserDataPath := ExpandConstant('{userappdata}\Godot\app_userdata\{#MyAppName}');
+
+    if DirExists(UserDataPath) then
+    begin
+      if MsgBox(CustomMessage('DeleteDataQuery'), mbConfirmation, MB_YESNO) = IDYES then
+      begin
+        // Recursively deletes the Godot app_userdata folder for this game
+        DelTree(UserDataPath, True, True, True);
+      end;
+    end;
+  end;
+end;
