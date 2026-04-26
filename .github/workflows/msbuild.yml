@@ -204,7 +204,7 @@ jobs:
           & "C:\Program Files\7-Zip\7z.exe" a "$debugZip"   ".\exports\debug\*"
           & "C:\Program Files\7-Zip\7z.exe" a "$releaseZip" ".\exports\release\*"
           
-          Copy-Item "installer/Output/MagicBallsSetup.exe" "exports/" -ErrorAction SilentlyContinue
+          Copy-Item "installer/Output/MagicBallsSetup.exe" "exports/MagicBallsSetup-$tagName.exe" -ErrorAction SilentlyContinue
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
@@ -668,7 +668,7 @@ jobs:
             |-----------|--------|
             | 🪟 Windows Debug | `MagicBalls-${{ github.ref_name }}-Windows-Debug.zip` |
             | 🪟 Windows Release | `MagicBalls-${{ github.ref_name }}-Windows-Release.zip` |
-            | 🪟 Windows Release | `MagicBallsSetup.exe` |
+            | 🪟 Windows Release | `MagicBallsSetup-${{ github.ref_name }}.exe` |
             | 🐧 Linux x86_64 | `MagicBalls-${{ github.ref_name }}-Linux-Release.tar.gz` |
             | 🤖 Android | `MagicBalls-${{ github.ref_name }}-Android-Release.apk` |
           files: |
