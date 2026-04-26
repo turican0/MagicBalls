@@ -178,6 +178,8 @@ jobs:
             echo "Set Version Failed!"
             exit 1
           fi
+          ls godot-code/MBEXout/bin
+          ls godot-code/MBEXout/bin/windows
           
       - name: Compile .ISS to .EXE Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
@@ -191,8 +193,6 @@ jobs:
           $tagName    = "${{ github.ref_name }}"
           $debugZip   = "exports\MagicBalls-$tagName-Windows-Debug.zip"
           $releaseZip = "exports\MagicBalls-$tagName-Windows-Release.zip"
-
-          Copy-Item "installer/Output/MagicBallsSetup.exe" "exports/release/" -ErrorAction SilentlyContinue
           
           Copy-Item "scripts/editor.bat"             "exports/debug/"   -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/"   -ErrorAction SilentlyContinue
@@ -205,6 +205,8 @@ jobs:
 
           & "C:\Program Files\7-Zip\7z.exe" a "$debugZip"   ".\exports\debug\*"
           & "C:\Program Files\7-Zip\7z.exe" a "$releaseZip" ".\exports\release\*"
+          
+          Copy-Item "installer/Output/MagicBallsSetup.exe" "exports/" -ErrorAction SilentlyContinue
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4

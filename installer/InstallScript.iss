@@ -28,7 +28,7 @@ Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 DefaultGroupName=Magic Balls
-ArchitecturesInstallIn64BitMode=x64
+ArchitecturesInstallIn64BitMode=win64
 UninstallDisplayIcon={app}\app.ico
 
 [Languages]
