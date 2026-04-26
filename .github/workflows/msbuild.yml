@@ -166,6 +166,25 @@ jobs:
           Write-Host "=== Obsah exports/ ==="
           Get-ChildItem -Recurse "exports/"
 
+      - name: Set version
+        shell: bash
+        run: |
+          # Replace version
+          sed -i "s|0.0.0.0|${{ github.ref_name }}|g" installer/InstallScript.iss
+          cat remc2/engine/globals.h
+          if grep -q "${{ github.ref_name }}" installer/InstallScript.iss; then
+            echo "Set Version Passed!"
+          else
+            echo "Set Version Failed!"
+            exit 1
+          fi
+          
+      - name: Compile .ISS to .EXE Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: installer/InstallScript.iss
+          options: /O+
+      
       - name: Package Artifacts
         shell: pwsh
         run: |
@@ -173,6 +192,8 @@ jobs:
           $debugZip   = "exports\MagicBalls-$tagName-Windows-Debug.zip"
           $releaseZip = "exports\MagicBalls-$tagName-Windows-Release.zip"
 
+          Copy-Item "installer/Output/MagicBallsSetup.exe" "exports/release/" -ErrorAction SilentlyContinue
+          
           Copy-Item "scripts/editor.bat"             "exports/debug/"   -ErrorAction SilentlyContinue
           Copy-Item "scripts/removeUserMBFolder.bat" "exports/debug/"   -ErrorAction SilentlyContinue
           Copy-Item "scripts/editor.bat"             "exports/release/" -ErrorAction SilentlyContinue
@@ -189,7 +210,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-zips
-          path: exports/*.zip
+          path: |
+            exports/*.zip
+            exports/*.exe
 
 
   # ───────────────────────────────────────────
