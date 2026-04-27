@@ -870,6 +870,7 @@ char SetKeysDialog_79610_mod() //25a610
 			if (allKeysDone)
 				exitFlag = 2;
 		}
+		thread2_wait_for_continue(Thread2_State::KEY_SETTINGS_LOOP);
 	}
 	WriteConfigDat_81DB0();
 	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
