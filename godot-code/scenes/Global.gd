@@ -12,6 +12,9 @@ var speech_volume:float
 
 var inverse_mouseY = true
 
+var level_mode:int = 0
+var custom_level:int = 0
+
 var soundInited:bool = false
 var sounds_map = {}
 var music_map = {}

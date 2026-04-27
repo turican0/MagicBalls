@@ -34,7 +34,7 @@ private:
 	String saved_real_cdPath;
 	String saved_real_gamePath;
 	int saved_argc;
-	char *saved_argv[3];
+	char *saved_argv[5];
 
 	MeshInstance3D *mesh_instance_bottom = nullptr;
 	MeshInstance3D *mesh_instance_top = nullptr;
@@ -109,7 +109,7 @@ public:
 	int initLanguage(int index);
 	void changeLanguage(int index);
 
-	void REMC2BeginGame(String cdPath, String gamePath);
+	void REMC2BeginGame(String cdPath, String gamePath, int CustomLevel=-1);
 	void REMC2EndGame();
 	//void REMC2BeginItem();
 	//void REMC2EndItem();

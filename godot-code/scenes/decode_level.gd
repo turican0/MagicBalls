@@ -1572,7 +1572,10 @@ func getVGABuffer():
 func MBEXinit():
 	if !Global.MBEX:
 		Global.MBEX = MBEXclass.new()
-		Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata)
+		if(Global.level_mode==0):
+			Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata)
+		else:
+			Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata,Global.custom_level)
 		#Global.MBEX.REMC2SetCDPath(Global.cdPath)
 
 func MBEXconvert(path, path2):

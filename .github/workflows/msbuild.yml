@@ -94,7 +94,7 @@ jobs:
       - name: Setup Godot
         uses: chickensoft-games/setup-godot@v2
         with:
-          version: 4.6.1
+          version: 4.6.2
           use-dotnet: false
           include-templates: true
 
@@ -292,7 +292,7 @@ jobs:
 
       - name: Install Godot + export templates
         run: |
-          GODOT_VERSION="4.6.1"
+          GODOT_VERSION="4.6.2"
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
@@ -473,7 +473,7 @@ jobs:
 
       - name: Install Godot + Android export templates
         run: |
-          GODOT_VERSION="4.6.1"
+          GODOT_VERSION="4.6.2"
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 

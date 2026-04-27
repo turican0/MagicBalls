@@ -52,7 +52,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("changeLanguage", "Int"), &MBEXclass::changeLanguage);
 	godot::ClassDB::bind_method(D_METHOD("initLanguage", "Int"), &MBEXclass::initLanguage);
 
-	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text", "text"), &MBEXclass::REMC2BeginGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text", "text", "int"), &MBEXclass::REMC2BeginGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
@@ -1434,13 +1434,25 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
-void MBEXclass::REMC2BeginGame(String cdPath, String gamePath) { //OK!!
+void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel) { //OK!!
 	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 	saved_real_gamePath = ProjectSettings::get_singleton()->globalize_path(gamePath);
-	saved_argc = 3;
+	for (int i = 0; i < 5; ++i)
+		saved_argv[i] = nullptr;
+
 	saved_argv[0] = (char *)"game.exe";
-	saved_argv[1] = (char *)"";
+	saved_argv[1] = (char *)""; // Prázdný argument
 	saved_argv[2] = (char *)"--auto_change_res";
+
+	if (customLevel == -1) {
+		saved_argc = 3;
+	} else {
+		saved_argc = 5;
+		saved_argv[3] = (char *)"--set_level";
+		static char levelBuffer[16];
+		snprintf(levelBuffer, sizeof(levelBuffer), "%d", customLevel);
+		saved_argv[4] = levelBuffer;
+	}
 
 	CommandLineParams.Init(saved_argc, saved_argv);
 

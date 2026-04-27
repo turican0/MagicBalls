@@ -62,7 +62,11 @@ const DEFAULTS = {
 		"mouse_sensitivity": 8,
 		"invert_y":          1#,  # 0=No 1=Yes
 		#"gamepad":           0,  # 0=Auto 1=Always 2=Never
-	}#,
+	},
+		"game": {
+		"level_mode":  0,
+		"custom_level": 0,
+	},
 	#"game": {
 		#"language":    0,        # 0=English (add more as needed)
 		#"difficulty":  1,        # 0=Easy 1=Normal 2=Hard
@@ -126,6 +130,9 @@ var _sel_gamepad:       OptionButton
 var _sel_language:      OptionButton
 var _sel_difficulty:    OptionButton
 var _sel_autosave:      OptionButton
+
+var _sel_level_mode:    OptionButton
+var _sel_custom_level:  OptionButton  # changed from HSlider to OptionButton
 
 # =============================================
 # READY
@@ -261,6 +268,9 @@ func _read_controls_into_settings() -> void:
 	#_settings["game"]["difficulty"] = _sel_difficulty.selected
 	#_settings["game"]["autosave"]   = _sel_autosave.selected
 
+	_settings["game"]["level_mode"]    = _sel_level_mode.selected
+	_settings["game"]["custom_level"]  = VALID_LEVELS[_sel_custom_level.selected]  # store actual level index
+
 # =============================================
 # COUNTDOWN UI
 # =============================================
@@ -368,6 +378,8 @@ func SetGlobals():
 	Global.sounds_volume=_settings["audio"]["sfx_volume"]/100.0
 	Global.speech_volume=_settings["audio"]["speech_volume"]/100.0
 	Global.inverse_mouseY=_settings["input"]["invert_y"]
+	Global.level_mode    = _settings["game"]["level_mode"]
+	Global.custom_level  = _settings["game"]["custom_level"]
 
 func _animate_simple_spinner(spinner: Label):
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
@@ -426,7 +438,7 @@ func _open_settings() -> void:
 	_build_video_tab(tabs)
 	_build_audio_tab(tabs)
 	_build_input_tab(tabs)
-	#_build_game_tab(tabs)
+	_build_game_tab(tabs)
 
 	root_vbox.add_child(_make_footer())
 
@@ -492,6 +504,44 @@ func _build_input_tab(tc: TabContainer) -> void:
 	#_sel_gamepad = _option(vbox, "Gamepad",
 		#["Auto", "Always", "Never"],
 		#_settings["input"]["gamepad"])
+
+const VALID_LEVELS = [
+	0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
+	27,
+	30,31,32,33,
+	38,39,40,
+	46,48,
+	52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,
+	77,
+	80,81,82,83,84,85,
+	87,88,89,90,91,
+	93,94,95,96,97,98,99,100,101,102,103,
+	105,106,107,108,109,110,111,112,113,114,115,116,117,
+	120,121,122,123,124,125,126,127,
+]
+
+func _build_game_tab(tc: TabContainer) -> void:
+	var vbox = _make_tab("GAME", tc)
+	vbox.add_child(_section("LEVEL"))
+	_sel_level_mode = _option(vbox, "Game Mode",
+		["Standard Game", "Custom Level"],
+		_settings["game"]["level_mode"])
+	var level_names: Array = []
+	for lvl in VALID_LEVELS:
+		level_names.append(str(lvl))
+	var saved_opt_idx = max(VALID_LEVELS.find(_settings["game"]["custom_level"]), 0)
+	_sel_custom_level = _option(vbox, "Level Number", level_names, saved_opt_idx)
+	# Selector is visible only in Custom Mode
+	_sel_level_mode.item_selected.connect(_on_level_mode_changed)
+	_update_custom_level_visibility()
+
+func _on_level_mode_changed(idx: int) -> void:
+	_update_custom_level_visibility()
+
+func _update_custom_level_visibility() -> void:
+	# Parent HBoxContainer of the selector
+	var row = _sel_custom_level.get_parent()
+	row.visible = (_sel_level_mode.selected == 1)
 
 #func _build_game_tab(tc: TabContainer) -> void:
 	#var vbox = _make_tab("GAME", tc)
