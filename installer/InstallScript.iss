@@ -34,9 +34,6 @@ UninstallDisplayIcon={app}\app.ico
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
-[CustomMessages]
-DeleteDataQuery=Do you want to delete all user settings and application data (save files) for Magic Balls?
-
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
@@ -58,22 +55,30 @@ Name: "{autodesktop}\{#MyAppEditorName}"; Filename: "{app}\{#MyAppEditorExeName}
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
+var
+  ShouldDeleteData: Boolean;
+
+procedure InitializeUninstallProgressForm();
+begin
+  ShouldDeleteData := MsgBox(
+    'Do you want to delete Magic Balls user data?' + #13#10 +
+    '(save files, settings)' + #13#10#13#10 +
+    'Folder: %APPDATA%\Godot\app_userdata\MagicBalls',
+    mbConfirmation, MB_YESNO) = IDYES;
+end;
+
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
   UserDataPath: string;
 begin
-  if CurUninstallStep = usUninstall then
+  if CurUninstallStep = usPostUninstall then
   begin
-    // Adjusted specifically for Godot's folder structure
-    UserDataPath := ExpandConstant('{userappdata}\Godot\app_userdata\{#MyAppName}');
-
-    if DirExists(UserDataPath) then
+    if ShouldDeleteData then
     begin
-      if MsgBox(CustomMessage('DeleteDataQuery'), mbConfirmation, MB_YESNO) = IDYES then
-      begin
-        // Recursively deletes the Godot app_userdata folder for this game
+      // Delete Godot app_userdata folder for Magic Balls
+      UserDataPath := ExpandConstant('{userappdata}\Godot\app_userdata\MagicBalls');
+      if DirExists(UserDataPath) then
         DelTree(UserDataPath, True, True, True);
-      end;
     end;
   end;
 end;
