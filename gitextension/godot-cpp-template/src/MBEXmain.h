@@ -109,7 +109,7 @@ public:
 	int initLanguage(int index);
 	void changeLanguage(int index);
 
-	void REMC2BeginGame(String cdPath, String gamePath, int CustomLevel=-1);
+	void REMC2BeginGame(String cdPath, String gamePath, int CustomLevel = -1, String CustomLevelPath = "");
 	void REMC2EndGame();
 	//void REMC2BeginItem();
 	//void REMC2EndItem();
@@ -155,6 +155,8 @@ public:
 	void REMC2EditorSaveState();
 	void REMC2EditorTimedSaveState(float time);
 
+	bool REMC2EditorLoadLevel();
+	void REMC2EditorSaveLevel();
 };
 
 void MBEXaudioExtract(String path);

@@ -1573,9 +1573,9 @@ func MBEXinit():
 	if !Global.MBEX:
 		Global.MBEX = MBEXclass.new()
 		if(Global.level_mode==0):
-			Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata)
+			Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata,-1,Global.target_level)
 		else:
-			Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata,Global.custom_level)
+			Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata,Global.custom_level,"")
 		#Global.MBEX.REMC2SetCDPath(Global.cdPath)
 
 func MBEXconvert(path, path2):

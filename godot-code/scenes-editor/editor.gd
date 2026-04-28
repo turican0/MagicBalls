@@ -1103,10 +1103,27 @@ func _on_tree_terrain_stagesVars(index: int, value: String):
 	Stages_Edit_Panel.show()
 
 const ID_EXPORT_CSV = 0
+const ID_LOAD_LEVEL = 1
+const ID_SAVE_LEVEL = 2
+const ID_RUN_LEVEL = 3
 func _on_file_id_pressed(id: int) -> void:
-	if (id == ID_EXPORT_CSV):
-		Global.MBEX.REMC2EditorExportToCSV();
-		
+	match id:
+		ID_EXPORT_CSV:
+			Global.MBEX.REMC2EditorExportToCSV();
+		ID_LOAD_LEVEL:
+			Global.MBEX.REMC2EditorLoadLevel();
+		ID_SAVE_LEVEL:
+			Global.MBEX.REMC2EditorSaveLevel();
+		ID_RUN_LEVEL:
+			Global.MBEX.REMC2EditorSaveLevel();
+			_runGame()
+
+func _runGame():
+	var level_path = "user://user-levels/level0.mc2"
+	var my_args = ["--custom_level", level_path]
+	OS.create_instance(my_args)
+	get_tree().quit()
+
 func UpdatePositionLabel():
 	var x = Main_Camera.position.x
 	var y = Main_Camera.position.z

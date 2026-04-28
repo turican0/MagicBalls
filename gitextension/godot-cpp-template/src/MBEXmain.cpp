@@ -91,7 +91,10 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorRedo"), &MBEXclass::REMC2EditorRedo);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSaveState"), &MBEXclass::REMC2EditorSaveState);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorTimedSaveState", "Float"), &MBEXclass::REMC2EditorTimedSaveState);
-}
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadLevel"), &MBEXclass::REMC2EditorLoadLevel);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSaveLevel"), &MBEXclass::REMC2EditorSaveLevel);
+	}
 
 
 //PlayIntoSoundEvents_1B280
@@ -1434,7 +1437,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
-void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel) { //OK!!
+void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, String CustomLevelPath) { //OK!!
 	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 	saved_real_gamePath = ProjectSettings::get_singleton()->globalize_path(gamePath);
 	for (int i = 0; i < 5; ++i)
@@ -1445,7 +1448,16 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel) 
 	saved_argv[2] = (char *)"--auto_change_res";
 
 	if (customLevel == -1) {
-		saved_argc = 3;
+		if (CustomLevelPath == "")
+			saved_argc = 3;
+		else {
+			saved_argc = 5;
+			saved_argv[3] = (char *)"--custom_level";
+			String globalCLPath = ProjectSettings::get_singleton()->globalize_path(CustomLevelPath);
+			static std::string persistentPath;
+			persistentPath = globalCLPath.utf8().get_data();
+			saved_argv[4] = (char *)persistentPath.c_str();
+		}
 	} else {
 		saved_argc = 5;
 		saved_argv[3] = (char *)"--set_level";
@@ -1453,6 +1465,8 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel) 
 		snprintf(levelBuffer, sizeof(levelBuffer), "%d", customLevel);
 		saved_argv[4] = levelBuffer;
 	}
+
+	//--custom_level
 
 	CommandLineParams.Init(saved_argc, saved_argv);
 
@@ -2479,6 +2493,31 @@ void MBEXclass::REMC2EditorTimedSaveState(float seconds) {
 	std::chrono::duration<float> elapsed = now - lastSaveTime;
 	if (elapsed.count() >= seconds) {
 		REMC2EditorSaveState();
+	}
+}
+
+bool MBEXclass::REMC2EditorLoadLevel() {
+	String levelName = "level0";
+	String fullPath = ProjectSettings::get_singleton()->globalize_path("user://user-levels/") + levelName + ".mc2";
+	Ref<FileAccess> file = FileAccess::open(fullPath, FileAccess::READ);
+	if (file.is_null()) {
+		return false;
+	}
+	file->get_buffer((uint8_t *)&tempTerrain, sizeof(tempTerrain));
+	return true;
+}
+
+void MBEXclass::REMC2EditorSaveLevel() {
+	String dirPath = "user://user-levels/";
+	String levelName = "level0";
+	Ref<DirAccess> dir = DirAccess::open("user://");
+	if (!dir->dir_exists(dirPath)) {
+		dir->make_dir_recursive(dirPath);
+	}
+	String fullPath = dirPath + levelName + ".mc2";
+	Ref<FileAccess> file = FileAccess::open(fullPath, FileAccess::WRITE);
+	if (file.is_valid()) {
+		file->store_buffer((const uint8_t *)&tempTerrain, sizeof(tempTerrain));
 	}
 }
 
