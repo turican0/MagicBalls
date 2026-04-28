@@ -242,11 +242,14 @@ class StagesSettings:
 var editorFilteres: Array[Dictionary] = []
 
 func add_editor_filter(name: String, key: Variant) -> void:
-	var new_filter = {
+	for i in range(editorFilteres.size()):
+		if editorFilteres[i]["filterName"] == name:
+			editorFilteres[i]["filterKey"] = key
+			return
+	editorFilteres.append({
 		"filterName": name,
 		"filterKey": key
-	}
-	editorFilteres.append(new_filter)
+	})
 
 func remove_editor_filter(name: String) -> void:
 	for i in range(editorFilteres.size()):

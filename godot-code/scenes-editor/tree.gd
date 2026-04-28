@@ -3,8 +3,8 @@ extends Tree
 func _ready():
 	columns = 2
 	column_titles_visible = true
-	set_column_title(0, "Název")
-	set_column_title(1, "Hodnota")
+	set_column_title(0, "Name")
+	set_column_title(1, "Value")
 	hide_root = true # Schováme prázdný root uzel
 	
 func update_tree_view(all_sections: Array):
@@ -45,7 +45,7 @@ func update_tree_view(all_sections: Array):
 			# Volitelně: lepší zarovnání hodnoty doprava
 			item.set_text_alignment(1, HORIZONTAL_ALIGNMENT_RIGHT)
 		var title = str(section["title"])
-		category.set_collapsed(collapsed_states.get(title, false))
+		category.set_collapsed(collapsed_states.get(title, true))
 
 # Příklad volání (např. odjinud nebo pro test):
 # update_tree("Zbraně", [{"jmeno": "Dýka", "sila": 5}, {"jmeno": "Meč", "sila": 15}])

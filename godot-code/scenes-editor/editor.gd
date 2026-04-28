@@ -199,8 +199,16 @@ func toggle_editor_control_styleSt(state):
 func update_tree():
 	var all_sections: Array = []
 
-	# Terrain sekce (pokud selectors obsahuje terrain data)
+	# ── Terrain selectors ───────────────────────────────────────
 	var terrain_items = []
+	for entity in TEselector2:
+		if is_instance_valid(entity):
+			var sb = entity.get_node_or_null("SpinBox")
+			terrain_items.append({
+				"name": str(entity.name),
+				"value": str(sb.value if sb else "?"),  #UPDATE
+				"id": 0
+			})
 	for entity in selectors:
 		if is_instance_valid(entity):
 			terrain_items.append({
@@ -208,10 +216,9 @@ func update_tree():
 				"value": str(entity.current_value),
 				"id": entity.name.get_slice("_", 1).to_int()
 			})
-
 	all_sections.append({ "title": "Terrain", "items": terrain_items })
 
-	# Entities sekce – všechny entity z grupy
+	# ── Entities ────────────────────────────────────────────────
 	var entity_items = []
 	for entity in get_tree().get_nodes_in_group("entities"):
 		if is_instance_valid(entity):
@@ -220,36 +227,80 @@ func update_tree():
 				"value": str(entity.current_value if "current_value" in entity else entity.position),
 				"id": entity.get_meta("index", -1)   # lepší použít meta "index", které tam ukládáš
 			})
-
 	all_sections.append({ "title": "Entities", "items": entity_items })
+	
+	# ── Next ────────────────────────────────────────────────────
+	var next_items = [] #UPDATE
+	next_items.append({ #UPDATE
+		"name": "next_360D1", #UPDATE
+		"value": str(Global.editorLevel.get("next_360D1", 0)), #UPDATE
+		"id": 0 #UPDATE
+	}) #UPDATE
+	all_sections.append({ "title": "Next", "items": next_items })
+
+	# ── Wizards (Spells) ────────────────────────────────────────
+	var spells_items = [] #UPDATE
+	var wizards: Array = Global.editorLevel.get("wizards", []) #UPDATE
+	for i in range(wizards.size()): #UPDATE
+		var w = wizards[i] #UPDATE
+		spells_items.append({ #UPDATE
+			"name": "W%d  Agg:%d  Ref:%d  Per:%d  Life:%d" % [i, w.get("aggression",0), w.get("reflexes",0), w.get("perception",0), w.get("life",0)], #UPDATE
+			"value": str(i), #UPDATE
+			"id": i #UPDATE
+		}) #UPDATE
+	all_sections.append({ "title": "Wizards", "items": spells_items })
+
+	# ── Stages ──────────────────────────────────────────────────
+	var stages_items = [] #UPDATE
+	var stages: Array = Global.editorLevel.get("stages", []) #UPDATE
+	for i in range(stages.size()): #UPDATE
+		var s = stages[i] #UPDATE
+		stages_items.append({ #UPDATE
+			"name": "S%d  Idx:%d  Stg:%d  X:%d  Y:%d" % [i, s.get("index",0), s.get("stage",0), s.get("axis_x",0), s.get("axis_y",0)], #UPDATE
+			"value": str(i), #UPDATE
+			"id": i #UPDATE
+		}) #UPDATE
+	all_sections.append({ "title": "Stages", "items": stages_items })
+
+	# ── StageVars ───────────────────────────────────────────────
+	var stagesvars_items = [] #UPDATE
+	var stage_vars: Array = Global.editorLevel.get("stage_vars", []) #UPDATE
+	for i in range(stage_vars.size()): #UPDATE
+		var v = stage_vars[i] #UPDATE
+		stagesvars_items.append({ #UPDATE
+			"name": "SV%d  Idx:%d  Stg:%d  X:%d  Y:%d" % [i, v.get("index",0), v.get("stage",0), v.get("union_axis_2d_x",0), v.get("union_axis_2d_y",0)], #UPDATE
+			"value": str(i), #UPDATE
+			"id": i #UPDATE
+		}) #UPDATE
+	all_sections.append({ "title": "StagesVars", "items": stagesvars_items })
 	
 	#uint8_t next_0x360D1;
 	#Type_WizardMapSettings_0x360D2 WizardMapSettings_0x360D2[8];//lenght 110  /spells?
 	#type_str_0x36442 stages_0x36442[8];//stages(checkpoints)
 	#type_str_0x3647Ac StageVars_0x3647A[11];//8x11
-	var next_items = []
-	all_sections.append({ "title": "Next", "items": next_items })
-	var spells_items = []	
-	spells_items.append({
-		"name": "Speels",
-		"value": "X",
-		"id": 0
-	})	
-	all_sections.append({ "title": "Spells", "items": spells_items })
-	var stages_items = []
-	stages_items.append({
-		"name": "Stages",
-		"value": "X",
-		"id": 0
-	})	
-	all_sections.append({ "title": "Stages", "items": stages_items })
-	var stagesvars_items = []
-	stagesvars_items.append({
-		"name": "StagesVars",
-		"value": "X",
-		"id": 0
-	})	
-	all_sections.append({ "title": "StagesVars", "items": stagesvars_items })
+	#var next_items = []
+	#all_sections.append({ "title": "Next", "items": next_items })
+	#var spells_items = []	
+	#spells_items.append({
+		#"name": "Speels",
+		#"value": "X",
+		#"id": 0
+	#})	
+	#all_sections.append({ "title": "Spells", "items": spells_items })
+	#var stages_items = []
+	#stages_items.append({
+		#"name": "Stages",
+		#"value": "X",
+		#"id": 0
+	#})	
+	#all_sections.append({ "title": "Stages", "items": stages_items })
+	#var stagesvars_items = []
+	#stagesvars_items.append({
+		#"name": "StagesVars",
+		#"value": "X",
+		#"id": 0
+	#})	
+	#all_sections.append({ "title": "StagesVars", "items": stagesvars_items })
 
 	Tree_View.update_tree_view(all_sections)
 	
@@ -642,7 +693,7 @@ func select_entities_by_filter():
 	if !EntityFilter_On:
 		return
 	for node in get_tree().get_nodes_in_group("entities"):
-		var should_be_selected = true		
+		var should_be_selected = true
 		for filter in Global.editorFilteres:
 			if node.has_meta(filter.filterName):
 				if node.get_meta(filter.filterName) != filter.filterKey:
