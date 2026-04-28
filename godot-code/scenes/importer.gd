@@ -46,25 +46,25 @@ var _picker_selected_path: String = ""
 # Control State
 var _stop_spinner: bool = false
 
-func _ready() -> void:		
-	if !check_existing_data():
-		await get_tree().process_frame
-		await get_tree().process_frame
-		Global.canNotification = false
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		Main_DecodeLevel = get_node("DecodeLevel")
-		_show_welcome_dialog()
-	else:
-		await get_tree().process_frame	
-		_go_to_main_menu()
+func _ready() -> void:
+	#if !check_existing_data():
+	await get_tree().process_frame
+	await get_tree().process_frame
+	Global.canNotification = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	Main_DecodeLevel = get_node("DecodeLevel")
+	_show_welcome_dialog()
+	#else:
+		#await get_tree().process_frame	
+		#_go_to_main_menu()
 
-func _go_to_main_menu():
-	Global.last_scene_path = "res://scenes/Settings.tscn"
-	get_tree().change_scene_to_file("res://scenes/Settings.tscn")
-
-func check_existing_data() -> bool:
-	var music_path = Global.convertdata + "musics/"
-	return DirAccess.dir_exists_absolute(music_path)
+#func _go_to_main_menu():
+	#Global.last_scene_path = "res://scenes/Settings.tscn"
+	#get_tree().change_scene_to_file("res://scenes/Settings.tscn")
+#
+#func check_existing_data() -> bool:
+	#var music_path = Global.convertdata + "musics/"
+	#return DirAccess.dir_exists_absolute(music_path)
 
 # =============================================
 # INITIAL WELCOME DIALOG

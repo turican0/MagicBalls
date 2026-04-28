@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bkpm1emxwwamr"]
 
 [ext_resource type="Script" uid="uid://2yrfqycvjjrs" path="res://scenes/importer.gd" id="1_ikn2j"]
-[ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="2_jt0sq"]
 
 [node name="Importer" type="Node3D" unique_id=1606233981]
 script = ExtResource("1_ikn2j")
@@ -22,8 +21,3 @@ size = Vector2i(800, 600)
 file_mode = 2
 display_mode = 1
 access = 2
-
-[node name="DecodeLevel" type="Node3D" parent="." unique_id=329679931]
-script = ExtResource("2_jt0sq")
-levels_tab_path = "res://mclevels/LEVELS.TAB"
-levels_dat_path = "res://mclevels/LEVELS.DAT"
