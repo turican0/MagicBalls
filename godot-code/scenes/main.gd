@@ -28,8 +28,8 @@ func _parse_command_line_args():
 	for i in range(args.size()):
 		var argument = args[i]
 		match argument:
-			"--edit-mode":
+			"--edit":
 				is_edit_mode = true
-			"--custom-level":
+			"--custom_level":
 				if i + 1 < args.size():
 					Global.target_level = args[i + 1]
