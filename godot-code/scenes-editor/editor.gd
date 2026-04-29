@@ -101,6 +101,7 @@ func _ready() -> void:
 	
 	Wizards_Edit.display_player_data(0)
 	Stages_Edit.display_stages_data(0)
+	_connect_entity_spinboxes()
 	editor_runned=true
 
 func _on_window_focus_entered() -> void:
@@ -806,7 +807,7 @@ func RenderEditorEntites():
 						"IDX: %d\n" +
 						"T: %d, " +
 						"ST: %d\n" +
-						"Pos: %d,%d,%d\n" +
+						"Pos: %d,%d\n" +
 						"DisId: %d, " +
 						"W10: %d, " +
 						"Stage: %d\n" +
@@ -816,12 +817,16 @@ func RenderEditorEntites():
 					) % [
 						i,
 						type_0x30311, subtype_0x30311,
-						pos.x,pos.y,pos.z,
+						pos.x,pos.z,
 						DisId, word_10, stageTag_12, 
 						par1_14, par2_16, par3_18
 					]
 			
 			current_node.set_meta("index",int(i))
+			
+			current_node.set_meta("axis_x", int(pos.x))
+			current_node.set_meta("axis_y", int(pos.z))
+			current_node.set_meta("axis_z", int(pos.y))
 			
 			current_node.set_meta("type_0x30311",int(type_0x30311))
 			current_node.set_meta("subtype_0x30311",int(subtype_0x30311))
@@ -1032,6 +1037,8 @@ func fillEntityDetails(index:int):
 			finded_node=node
 	if finded_node:
 		Entity_Edit.get_node_or_null("IDX/SpinBox").value = finded_node.get_meta("index")
+		Entity_Edit.get_node_or_null("POS/SpinBox").value = finded_node.get_meta("axis_x")
+		Entity_Edit.get_node_or_null("POS/SpinBox2").value = finded_node.get_meta("axis_y")
 		Entity_Edit.get_node_or_null("type_0x30311/SpinBox").value = finded_node.get_meta("type_0x30311")
 		Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox").value = finded_node.get_meta("subtype_0x30311")
 		Entity_Edit.get_node_or_null("DisId/SpinBox").value = finded_node.get_meta("DisId")
@@ -1148,3 +1155,38 @@ func _on_filter_toggled(toggled_on: bool) -> void:
 
 func _on_filter_show_toggled(toggled_on: bool) -> void:
 	EntityFilter.visible = toggled_on
+
+func _on_entity_spinbox_value_changed(_value) -> void:
+	var idx = Entity_Edit.get_node_or_null("IDX/SpinBox").value as int
+	if idx <= 0 or idx >= pool_size:
+		return
+
+	Global.editorLevel["entities"][idx]["axis_x"]   = Entity_Edit.get_node_or_null("POS/SpinBox").value as int
+	Global.editorLevel["entities"][idx]["axis_y"]   = Entity_Edit.get_node_or_null("POS/SpinBox2").value as int
+	
+	Global.editorLevel["entities"][idx]["type"]      = Entity_Edit.get_node_or_null("type_0x30311/SpinBox").value as int
+	Global.editorLevel["entities"][idx]["subtype"]   = Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox").value as int
+	Global.editorLevel["entities"][idx]["dis_id"]    = Entity_Edit.get_node_or_null("DisId/SpinBox").value as int
+	Global.editorLevel["entities"][idx]["word10"]    = Entity_Edit.get_node_or_null("word_10/SpinBox").value as int
+	Global.editorLevel["entities"][idx]["stage_tag"] = Entity_Edit.get_node_or_null("stageTag_12/SpinBox").value as int
+	Global.editorLevel["entities"][idx]["par1"]      = Entity_Edit.get_node_or_null("par1_14/SpinBox").value as int
+	Global.editorLevel["entities"][idx]["par2"]      = Entity_Edit.get_node_or_null("par2_16/SpinBox").value as int
+	Global.editorLevel["entities"][idx]["par3"]      = Entity_Edit.get_node_or_null("par3_18/SpinBox").value as int
+
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	EditorStep()
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	RenderEditorEntites()
+
+func _connect_entity_spinboxes() -> void:
+	var node
+	node=Entity_Edit.get_node_or_null("POS/SpinBox")
+	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
+		node.value_changed.connect(_on_entity_spinbox_value_changed)
+	node=Entity_Edit.get_node_or_null("type_0x30311/SpinBox")
+	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
+		node.value_changed.connect(_on_entity_spinbox_value_changed)
+	node=Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox")
+	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
+		node.value_changed.connect(_on_entity_spinbox_value_changed)
+	

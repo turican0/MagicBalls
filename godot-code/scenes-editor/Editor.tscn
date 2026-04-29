@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://dicjjkp54bhci" path="res://scenes-editor/adding_spells.gd" id="5_xi2fd"]
 [ext_resource type="Script" uid="uid://w263ytfpiejg" path="res://scenes-editor/spellIcon.gd" id="5_ydsuf"]
 [ext_resource type="PackedScene" uid="uid://cw1g07ahbhkck" path="res://scenes-editor/PlayerEditor.tscn" id="6_jhayq"]
+[ext_resource type="Script" uid="uid://c3bv6dt6mholp" path="res://scenes-editor/spin_boxEntityIDX.gd" id="6_rvyvi"]
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="6_wa12f"]
 [ext_resource type="Script" uid="uid://n4kpwwnt37vs" path="res://scenes-editor/StagesSettings.gd" id="8_wqm82"]
 [ext_resource type="Script" uid="uid://cqplmm705y6m2" path="res://scenes-editor/entity_filter.gd" id="9_xhpx2"]
@@ -641,7 +642,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="EntityEdit" type="Control" parent="UI" unique_id=169198194]
-visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -685,7 +685,8 @@ text = "IDX:"
 
 [node name="SpinBox" type="SpinBox" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX" unique_id=638778608]
 layout_mode = 2
-max_value = 8.0
+max_value = 1200.0
+script = ExtResource("6_rvyvi")
 
 [node name="POS" type="HBoxContainer" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1628316249]
 layout_mode = 2
@@ -696,6 +697,7 @@ text = "X:"
 
 [node name="SpinBox" type="SpinBox" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=652689407]
 layout_mode = 2
+max_value = 255.0
 
 [node name="Label2" type="Label" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=491703809]
 layout_mode = 2
@@ -703,13 +705,7 @@ text = "   Y:"
 
 [node name="SpinBox2" type="SpinBox" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1866450263]
 layout_mode = 2
-
-[node name="Label3" type="Label" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=293957423]
-layout_mode = 2
-text = "   Z:"
-
-[node name="SpinBox3" type="SpinBox" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1084909580]
-layout_mode = 2
+max_value = 255.0
 
 [node name="Button" type="Button" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1020222163]
 layout_mode = 2
