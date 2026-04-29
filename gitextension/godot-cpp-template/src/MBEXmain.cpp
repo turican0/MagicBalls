@@ -109,11 +109,14 @@ void MBEXclass::_bind_methods() {
 //DrawAndSoundDragonAndFire_81EE0-clean
 //NewGameSubdraw_81760 - portals
 
-void MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
+bool MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 	String real_path = ProjectSettings::get_singleton()->globalize_path(path);
 	String real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
-	MBEXcdExtract((char*)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
+	bool result = MBEXcdExtract((char*)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
+	if (!result)
+		return false;
 	MBEXfixLang((char*)real_path.utf8().get_data(), 2);
+	return true;
 }
 
 String MBEXclass::REMC2GetLevelType() {
@@ -169,8 +172,36 @@ int MBEXclass::initLanguage(int index) {
 void MBEXclass::MBEXfixLang(char* path,int index) {
 	char pathBuffer[512];
 	sprintf(pathBuffer, "%s%s", path, "GAME/NETHERW");
-	FILE *configFile2;
 	char configFilePath[MAX_PATH];
+	sprintf(configFilePath, "%s/%s", pathBuffer, "CONFIG.DAT");
+
+	//-----------------------------------------------------
+	String gConfigPath = String(configFilePath);
+	String gResSource = "res://hidata/config/CONFIG.DAT";
+
+	if (!FileAccess::file_exists(gConfigPath)) {
+		if (FileAccess::file_exists(gResSource)) {
+			DirAccess::copy_absolute(gResSource, gConfigPath);
+		}
+	}
+
+	char versionFilePath[MAX_PATH];
+	sprintf(versionFilePath, "%s/%s", pathBuffer, "/CDATA/VERSION.DAT");
+	String gVersionPath = String(versionFilePath);
+	String gResSource2 = "res://hidata/version/VERSION.DAT";
+
+	if (!FileAccess::file_exists(gVersionPath)) {
+		if (FileAccess::file_exists(gResSource2)) {
+			DirAccess::copy_absolute(gResSource2, gVersionPath);
+		}
+	}
+
+	//-----------------------------------------------------
+
+	//char pathBuffer[512];
+	//sprintf(pathBuffer, "%s%s", path, "GAME/NETHERW");
+	FILE *configFile2;
+	//char configFilePath[MAX_PATH];
 	TypeConfigDat configDat;
 	sprintf(configFilePath, "%s/%s", pathBuffer, "CONFIG.DAT");
 	configFile2 = DataFileIO::CreateOrOpenFile(configFilePath, 512);

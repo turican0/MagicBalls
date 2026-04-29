@@ -1637,11 +1637,11 @@ void extract_recursive(l9660_fs *fs_ptr, l9660_dir *current_dir, const fs::path 
 	}
 }
 
-void MBEXcdExtract(char* pathGOG, char* pathOut) {
+bool MBEXcdExtract(char *pathGOG, char *pathOut) {
 	std::string biggestFilePath;
+	fs::path src(pathGOG);
+	fs::path dest(pathOut);
 	try {
-		fs::path src(pathGOG);
-		fs::path dest(pathOut);
 		fs::create_directories(pathOut);
 		fs::path gameFolder = src / "GAME";
 		if (fs::exists(gameFolder) && fs::is_directory(gameFolder)) {
@@ -1650,7 +1650,6 @@ void MBEXcdExtract(char* pathGOG, char* pathOut) {
 		} else {
 			std::cerr << "Folder GAME not found in location!\n";
 		}
-
 		uintmax_t max_size = 0;
 		fs::path tempPath;
 		for (const auto &entry : fs::recursive_directory_iterator(src)) {
@@ -1669,19 +1668,121 @@ void MBEXcdExtract(char* pathGOG, char* pathOut) {
 		}
 	} catch (const fs::filesystem_error &e) {
 		std::cerr << "Error when working with files: " << e.what() << std::endl;
+		return false;
 	}
-
 	g_image_file.open(biggestFilePath, std::ios::binary);
 	if (!g_image_file) {
 		std::cerr << "Cannot open file " << biggestFilePath << std::endl;
-		return;
+		return false;
 	}
 	l9660_fs fs_ctx;
 	l9660_dir root_dir;
 	if (l9660_openfs(&fs_ctx, read_sector_callback) != L9660_OK) {
 		std::cerr << "Error lib9660: Cannot find PVD. Check G_BASE_START!" << std::endl;
 		g_image_file.close();
-		return;
+		fs::path netherExe = src / "NETHERW.EXE";
+		if (!fs::exists(netherExe)) {
+			std::cerr << "NETHERW.EXE not found either!\n";
+			return false;
+		}
+
+        // Pomocná funkce pro nastavení práv k zápisu
+		auto makeWritable = [](const fs::path &p) {
+			try {
+				if (fs::exists(p)) {
+					// Přidá právo zápisu pro vlastníka (případně i pro skupinu a ostatní, pokud je třeba)
+					fs::permissions(p, fs::perms::owner_write | fs::perms::group_write | fs::perms::others_write, fs::perm_options::add);
+				}
+			} catch (...) {
+			}
+		};
+
+		fs::path output_path = fs::path(pathOut) / "CD_Files";
+		fs::create_directories(output_path);
+		makeWritable(output_path); // Práva pro hlavní složku
+
+		if (fs::exists(src) && fs::is_directory(src)) {
+			for (const auto &entry : fs::recursive_directory_iterator(src)) {
+				try {
+					fs::path rel = fs::relative(entry.path(), src);
+					fs::path target = (fs::path(output_path) / rel).make_preferred();
+
+					if (fs::is_directory(entry.path())) {
+						fs::create_directories(target);
+						makeWritable(target); // Nastavit práva adresáři
+					} else {
+						if (!fs::exists(target)) {
+							fs::create_directories(target.parent_path());
+							fs::copy_file(entry.path(), target, fs::copy_options::skip_existing);
+							makeWritable(target); // Nastavit práva souboru hned po zkopírování
+						}
+					}
+				} catch (const std::exception &e) {
+					std::cerr << "Přeskočeno: " << entry.path().string() << std::endl;
+				}
+			}
+		}
+
+		fs::path gameBase = fs::path(pathOut) / "GAME/NETHERW";
+
+		// Lambda pro vytvoření adresáře a nastavení práv v jednom kroku
+		auto createDirWritable = [&](const fs::path &p) {
+			fs::create_directories(p);
+			makeWritable(p);
+		};
+
+		createDirWritable(gameBase / "CDATA");
+		createDirWritable(gameBase / "CLEVELS");
+		createDirWritable(gameBase / "LANGUAGE");
+		createDirWritable(gameBase / "SAVE");
+		createDirWritable(gameBase / "SHOTS");
+		createDirWritable(gameBase / "SOUND");
+
+		auto safeCopy = [&](const fs::path &s, const fs::path &t) {
+			if (fs::exists(s) && !fs::exists(t)) {
+				try {
+					fs::copy_file(s, t, fs::copy_options::skip_existing);
+					makeWritable(t); // Tady je to klíčové pro CONFIG.DAT a další
+				} catch (...) {
+				}
+			}
+		};
+
+		// Kopírování CDATA, LEVELS atd.
+		safeCopy(src / "DATA/TMAPS0-0.DAT", gameBase / "CDATA/TMAPS0-0.DAT");
+		safeCopy(src / "DATA/TMAPS1-0.DAT", gameBase / "CDATA/TMAPS1-0.DAT");
+		safeCopy(src / "DATA/TMAPS2-0.DAT", gameBase / "CDATA/TMAPS2-0.DAT");
+		safeCopy(src / "DATA/VERSION.DAT", gameBase / "CDATA/VERSION.DAT");
+		safeCopy(src / "DATA/TMAPS0-0.TAB", gameBase / "CDATA/TMAPS0-0.TAB");
+		safeCopy(src / "DATA/TMAPS1-0.TAB", gameBase / "CDATA/TMAPS1-0.TAB");
+		safeCopy(src / "DATA/TMAPS2-0.TAB", gameBase / "CDATA/TMAPS2-0.TAB");
+
+		safeCopy(src / "LEVELS/LEVELS.DAT", gameBase / "CLEVELS/LEVELS.DAT");
+		safeCopy(src / "LEVELS/LEVELS.TAB", gameBase / "CLEVELS/LEVELS.TAB");
+
+		// SOUND
+		fs::path sourceDir = src / "SOUND";
+		fs::path targetDir = gameBase / "SOUND";
+		if (fs::exists(sourceDir)) {
+			createDirWritable(targetDir);
+			for (const auto &entry : fs::directory_iterator(sourceDir)) {
+				std::string name = entry.path().filename().string();
+				if (name == "SOUND.DAT" || name == "MUSIC.DAT")
+					continue;
+
+				fs::path dest = targetDir / name;
+				if (!fs::exists(dest)) {
+					try {
+						fs::copy(entry.path(), dest, fs::copy_options::recursive | fs::copy_options::skip_existing);
+						// Nastavení práv rekurzivně, pokud by to byla složka, nebo jen souboru
+						makeWritable(dest);
+					} catch (...) {
+					}
+				}
+			}
+		}
+		std::cout << "\nDone!" << std::endl;
+		return true;
 	}
 	l9660_fs_open_root(&root_dir, &fs_ctx);
 	fs::path output_path = pathOut + std::string("CD_Files/");
@@ -1689,140 +1790,7 @@ void MBEXcdExtract(char* pathGOG, char* pathOut) {
 	extract_recursive(&fs_ctx, &root_dir, output_path);
 	g_image_file.close();
 	std::cout << "\nDone!" << std::endl;
+	return true;
 }
-/*
-typedef struct { //lenght 4
-	int32_t startPos_0;
-	int32_t length_2;
-} Type_WavTrack_Info;
 
-Type_WavTrack_Info WavTracks_DB080[27] = {
-	{ 0, 9360960 }, // Track01 (na screenu Track 02)
-	{ 9360960, 11028528 }, // Track02 (na screenu Track 03)
-	{ 20389488, 9572640 }, // Track03 (na screenu Track 04)
-	{ 29962128, 5496624 }, // Track04 (na screenu Track 05)
-	{ 35458752, 6039936 }, // Track05 (na screenu Track 06)
-	{ 41498688, 8476608 }, // Track06 (na screenu Track 07)
-	{ 49975296, 5654208 }, // Track07 (na screenu Track 08)
-	{ 55629504, 10616928 }, // Track08 (na screenu Track 09)
-	{ 66246432, 9377424 }, // Track09 (na screenu Track 10)
-	{ 75623856, 8497776 }, // Track10 (na screenu Track 11)
-	{ 84121632, 7625184 }, // Track11 (na screenu Track 12)
-	{ 91746816, 7279440 }, // Track12 (na screenu Track 13)
-	{ 99026256, 8260224 }, // Track13 (na screenu Track 14)
-	{ 107286480, 9172800 }, // Track14 (na screenu Track 15)
-	{ 116459280, 6759648 }, // Track15 (na screenu Track 16)
-	{ 123218928, 8446032 }, // Track16 (na screenu Track 17)
-	{ 131664960, 5108544 }, // Track17 (na screenu Track 18)
-	{ 136773504, 9417408 }, // Track18 (na screenu Track 19)
-	{ 146190912, 3363360 }, // Track19 (na screenu Track 20)
-	{ 149554272, 6552672 }, // Track20 (na screenu Track 21)
-	{ 156106944, 7248864 }, // Track21 (na screenu Track 22)
-	{ 163355808, 6552672 }, // Track22 (na screenu Track 23)
-	{ 169908480, 11120256 }, // Track23 (na screenu Track 24)
-	{ 181028736, 8742384 }, // Track24 (na screenu Track 25)
-	{ 189771120, 9186912 }, // Track25 (na screenu Track 26)
-	{ 198958032, 1324176 }, // Track26 (na screenu Track 27)
-	{ 200282208, 1324176 } // Track27 (na screenu Track 28)
-};
-
-bool useWavHeader=false;
-void MBEXaudioExtract(char *pathGOG, char *pathOut) {
-	// 1. Najdeme největší soubor v adresáři
-	std::string binPath;
-	uintmax_t max_size = 0;
-	for (const auto &entry : fs::recursive_directory_iterator(pathGOG)) {
-		if (fs::is_regular_file(entry) && fs::file_size(entry) > max_size) {
-			max_size = fs::file_size(entry);
-			binPath = entry.path().string();
-		}
-	}
-
-	if (binPath.empty())
-		return;
-
-	std::ifstream src(binPath, std::ios::binary);
-	if (!src)
-		return;
-
-	// 2. Najdeme automaticky start audio oblasti
-	const int SECTOR_SIZE = 2352;
-	unsigned char sector[SECTOR_SIZE];
-	const unsigned char syncPattern[12] = { 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00 };
-	uint64_t audioStartOffset = 0;
-	uint64_t currentOffset = 0;
-
-	std::cout << "Scanning for audio start offset...\n";
-	while (src.read((char *)sector, SECTOR_SIZE)) {
-		if (std::memcmp(sector, syncPattern, 12) != 0) {
-			audioStartOffset = currentOffset;
-			break;
-		}
-		currentOffset += SECTOR_SIZE;
-	}
-
-	if (audioStartOffset == 0) {
-		std::cerr << "Could not find audio start offset.\n";
-		return;
-	}
-
-	// 3. Extrakce tracků
-	fs::path outDir = fs::path(pathOut) / (useWavHeader ? "Extracted_WAV" : "Extracted_RAW");
-	fs::create_directories(outDir);
-
-	for (int i = 0; i < 27; ++i) {
-		Type_WavTrack_Info &track = WavTracks_DB080[i];
-		uint64_t absoluteStart = audioStartOffset + track.startPos_0 - 0x12A8;
-		uint32_t dataSize = track.length_2;
-
-		src.seekg(absoluteStart);
-		std::vector<char> trackDataBuffer(dataSize);
-		src.read(trackDataBuffer.data(), dataSize);
-
-		if (!trackDataBuffer.empty()) {
-			// Dynamická přípona podle volby
-			std::string extension = useWavHeader ? ".wav" : ".raw";
-			std::ostringstream oss;
-			oss << "Track" << std::setw(2) << std::setfill('0') << (i + 1) << extension;
-			std::string fileName = oss.str();
-
-			std::ofstream dst(outDir / fileName, std::ios::binary);
-			if (!dst) {
-				std::cerr << "Chyba: Nelze vytvorit soubor " << fileName << std::endl;
-				continue;
-			}
-
-			if (useWavHeader) {
-#pragma pack(push, 1)
-				struct {
-					char riff[4] = { 'R', 'I', 'F', 'F' };
-					uint32_t fileSize;
-					char wave[4] = { 'W', 'A', 'V', 'E' };
-					char fmt[4] = { 'f', 'm', 't', ' ' };
-					uint32_t fmtLen = 16;
-					uint16_t formatTag = 1;
-					uint16_t channels = 2;
-					uint32_t sampleRate = 44100;
-					uint32_t byteRate = 176400;
-					uint16_t blockAlign = 4;
-					uint16_t bitsPerSample = 16;
-					char dataLabel[4] = { 'd', 'a', 't', 'a' };
-					uint32_t dataLen;
-				} header;
-#pragma pack(pop)
-
-				header.dataLen = (uint32_t)trackDataBuffer.size();
-				header.fileSize = header.dataLen + 36;
-
-				dst.write((char *)&header, sizeof(header));
-			}
-
-			// Zápis samotných dat (společné pro obě varianty)
-			dst.write(trackDataBuffer.data(), trackDataBuffer.size());
-			dst.close();
-
-			std::cout << "Extrahovano: " << fileName << " (" << trackDataBuffer.size() << " bytes)" << std::endl;
-		}
-	}
-}*/
 

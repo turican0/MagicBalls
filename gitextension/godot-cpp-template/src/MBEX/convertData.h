@@ -68,6 +68,6 @@ void MBEXgtdConverts(String path);
 void MBEXextractLang(String path, String langPath, String cdLangPath);
 void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *data, TColor *palette, bool alpha, int alphaIndex);
 void MBEXsaveBitmapCrop(String path, char *name, int width, int height, uint8_t *data, TColor *palette, int cropXmin);
-void MBEXcdExtract(char *pathGOG, char *pathOut);
+bool MBEXcdExtract(char *pathGOG, char *pathOut);
 void MBEXtmapsConverts(String path);
 void MBEXfontsConverts(String path);

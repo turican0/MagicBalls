@@ -228,6 +228,7 @@ func update_tree():
 				"value": str(entity.current_value if "current_value" in entity else entity.position),
 				"id": entity.get_meta("index", -1)   # lepší použít meta "index", které tam ukládáš
 			})
+	entity_items.sort_custom(func(a, b): return a["id"] < b["id"])
 	all_sections.append({ "title": "Entities", "items": entity_items })
 	
 	# ── Next ────────────────────────────────────────────────────
@@ -384,7 +385,7 @@ func EditorStep():
 	var isCave:bool = false
 	Global.MBEX.renew_terrain(isCave)
 
-var pool_size = 1020
+var pool_size = 1200
 
 var library_scenes = {}
 
@@ -1029,7 +1030,10 @@ func log_message(text: String, color: String = "white"):
 	var scrollbar = Console.get_v_scroll_bar()
 	scrollbar.value = scrollbar.max_value
 
+var _filling_entity_details := false
+
 func fillEntityDetails(index:int):
+	_filling_entity_details = true
 	var entities = get_tree().get_nodes_in_group("entities")
 	var finded_node = null
 	for node in entities:
@@ -1047,6 +1051,7 @@ func fillEntityDetails(index:int):
 		Entity_Edit.get_node_or_null("par1_14/SpinBox").value = finded_node.get_meta("par1_14")
 		Entity_Edit.get_node_or_null("par2_16/SpinBox").value = finded_node.get_meta("par2_16")
 		Entity_Edit.get_node_or_null("par3_18/SpinBox").value = finded_node.get_meta("par3_18")
+		_filling_entity_details = false
 		
 func _on_tree_item_selected() -> void:
 	var selected = Tree_View.get_selected()
@@ -1157,6 +1162,8 @@ func _on_filter_show_toggled(toggled_on: bool) -> void:
 	EntityFilter.visible = toggled_on
 
 func _on_entity_spinbox_value_changed(_value) -> void:
+	if _filling_entity_details:
+		return
 	var idx = Entity_Edit.get_node_or_null("IDX/SpinBox").value as int
 	if idx <= 0 or idx >= pool_size:
 		return
@@ -1178,15 +1185,18 @@ func _on_entity_spinbox_value_changed(_value) -> void:
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	RenderEditorEntites()
 
+func _connect_node_spinboxes(node) -> void:
+	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
+		node.value_changed.connect(_on_entity_spinbox_value_changed)
+
 func _connect_entity_spinboxes() -> void:
-	var node
-	node=Entity_Edit.get_node_or_null("POS/SpinBox")
-	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
-		node.value_changed.connect(_on_entity_spinbox_value_changed)
-	node=Entity_Edit.get_node_or_null("type_0x30311/SpinBox")
-	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
-		node.value_changed.connect(_on_entity_spinbox_value_changed)
-	node=Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox")
-	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
-		node.value_changed.connect(_on_entity_spinbox_value_changed)
-	
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("POS/SpinBox"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("POS/SpinBox2"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("type_0x30311/SpinBox"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("DisId/SpinBox"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("word_10/SpinBox"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("stageTag_12/SpinBox"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par1_14/SpinBox"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par2_16/SpinBox"))
+	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par3_18/SpinBox"))

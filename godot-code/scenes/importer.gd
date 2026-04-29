@@ -81,7 +81,7 @@ func _show_welcome_dialog():
 	canvas.add_child(bg)
 
 	var label = Label.new()
-	label.text = "Magic Carpet 2 setup required.\nPlease select the game installation folder."
+	label.text = "Magic Carpet 2 setup required.\nPlease select the source of your Magic Carpet 2 game data:\na folder with CD image, a GOG installation folder, or an inserted CD."
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -280,10 +280,21 @@ func _start_extraction(dir: String):
 
 func _heavy_work(dir):
 	Global.MBEX = MBEXclass.new()
-	Main_DecodeLevel.MBEXextractCD(Global.cdPath, dir)
-	Global.MBEX.REMC2BeginGame(Global.cdPath, Global.hidata)
-	Main_DecodeLevel.MBEXconvert(Global.convertdata, dir)
-	call_deferred("_on_work_done")
+	var CDfinded=Main_DecodeLevel.MBEXextractCD(Global.cdPath, dir)
+	if(!CDfinded):
+		call_deferred("_on_work_done2")
+	else:
+		Global.MBEX.REMC2BeginGame(Global.cdPath, Global.hidata,-1,"")
+		Main_DecodeLevel.MBEXconvert(Global.convertdata, dir)
+		call_deferred("_on_work_done")
+		
+func _on_work_done2():
+	_thread.wait_to_finish()
+	Global.canNotification = true
+	#Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+	await _run_ending2()
+	#OS.create_process(OS.get_executable_path(), OS.get_cmdline_args())
+	get_tree().quit()
 
 func _on_work_done():
 	_thread.wait_to_finish()
@@ -344,6 +355,18 @@ func _run_ending() -> void:
 	countdown_label.add_theme_color_override("font_color", UI_COUNTDOWN_COLOR)
 	countdown_label.add_theme_font_size_override("font_size", 48)
 	for i in range(5, -1, -1):
+		countdown_label.text = str(i)
+		await get_tree().create_timer(1.0).timeout
+		
+func _run_ending2() -> void:
+	_stop_spinner = true # Disable the animation loop
+	var canvas = get_node("LoadingCanvas")
+	var label = canvas.get_node("StatusLabel")
+	label.text = "The folder containing the Magic Carpet 2 game was not found.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+	var countdown_label = canvas.get_node("Spinner")
+	countdown_label.add_theme_color_override("font_color", UI_COUNTDOWN_COLOR)
+	countdown_label.add_theme_font_size_override("font_size", 48)
+	for i in range(20, -1, -1):
 		countdown_label.text = str(i)
 		await get_tree().create_timer(1.0).timeout
 
