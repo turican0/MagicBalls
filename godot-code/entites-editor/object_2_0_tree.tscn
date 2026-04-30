@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://biv060jrwopr0"]
 
-[ext_resource type="Texture2D" uid="uid://c5gxt2b7iduod" path="res://entites-editor/img/TMAPS0-0.DAT_075_00.png" id="1_fy2si"]
+[ext_resource type="Script" uid="uid://dow4auvlljop7" path="res://entites-editor/sprite_3dEditorEntity.gd" id="2_1ex0g"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_atwak"]
 
@@ -26,4 +26,5 @@ mesh = SubResource("SphereMesh_atwak")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 0)
 billboard = 1
 alpha_cut = 1
-texture = ExtResource("1_fy2si")
+script = ExtResource("2_1ex0g")
+texture_filename = "TMAPS0-0.DAT_075_00.png"
