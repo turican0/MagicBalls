@@ -9,8 +9,8 @@ permissions:
   contents: write
 
 # ─────────────────────────────────────────────────────────────
-# JOBS – Windows, Linux a Android běží paralelně,
-#         release job počká na všechny tři.
+# JOBS – Windows, Linux and Android run in parallel,
+#         release job waits for all three.
 # ─────────────────────────────────────────────────────────────
 jobs:
 
@@ -39,10 +39,10 @@ jobs:
       - name: Build C++ Library (Debug & Release)
         shell: pwsh
         run: |
-          # VS generator ignoruje -DCMAKE_BUILD_TYPE – konfigurace se řídí --config při buildu.
-          # Jeden cmake -B stačí pro oba --config Release i --config Debug.
-          # GODOT_PROJECT_DIR je relativní k PROJECT_SOURCE_DIR (gitextension/godot-cpp-template/),
-          # takže ../../godot-code/MBEXout ukazuje správně do godot-code/MBEXout.
+          # VS generator ignores -DCMAKE_BUILD_TYPE – configuration is controlled by --config at build time.
+          # One cmake -B is enough for both --config Release and --config Debug.
+          # GODOT_PROJECT_DIR is relative to PROJECT_SOURCE_DIR (gitextension/godot-cpp-template/),
+          # so ../../godot-code/MBEXout correctly points into godot-code/MBEXout.
           cmake -B build-cpp -S gitextension/godot-cpp-template `
             -G "Visual Studio 17 2022" -A x64 `
             -DLIBNAME="MagicBalls" `
@@ -54,9 +54,9 @@ jobs:
       - name: Rename DLLs to EXTENSION-NAME
         shell: pwsh
         run: |
-          # DLL jsou po buildu v godot-code/MBEXout/bin/windows/ (díky CMake POST_BUILD copy)
-          # i v gitextension/godot-cpp-template/bin/windows/ (primární výstup)
-          # Přejmenujeme v obou místech.
+          # DLLs are placed after build in godot-code/MBEXout/bin/windows/ (via CMake POST_BUILD copy)
+          # and in gitextension/godot-cpp-template/bin/windows/ (primary output).
+          # Rename in both locations.
           $dirs = @(
             "gitextension/godot-cpp-template/bin/windows",
             "godot-code/MBEXout/bin/windows"
@@ -64,23 +64,23 @@ jobs:
 
           foreach ($binDir in $dirs) {
             if (-not (Test-Path $binDir)) {
-              Write-Host "SKIP (neexistuje): $binDir"
+              Write-Host "SKIP (does not exist): $binDir"
               continue
             }
-            Write-Host "=== DLL před přejmenováním v $binDir ==="
+            Write-Host "=== DLLs before rename in $binDir ==="
             Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
 
             Get-ChildItem -Path $binDir -Filter "MagicBalls*.dll" | ForEach-Object {
               $newName = $_.Name -replace '^MagicBalls', 'EXTENSION-NAME'
               Rename-Item -Path $_.FullName -NewName $newName -Force
-              Write-Host "Přejmenováno: $($_.Name) → $newName"
+              Write-Host "Renamed: $($_.Name) -> $newName"
             }
 
-            Write-Host "=== DLL po přejmenování v $binDir ==="
+            Write-Host "=== DLLs after rename in $binDir ==="
             Get-ChildItem -Path $binDir -Filter "*.dll" | Select-Object Name
           }
 
-          # Ověřit že DLL jsou v godot-code/MBEXout (kde je Godot hledá)
+          # Verify DLLs exist in godot-code/MBEXout (where Godot expects them)
           $targetDir = "godot-code/MBEXout/bin/windows"
           $expected = @(
             "$targetDir\EXTENSION-NAME.windows.template_debug.x86_64.debug.dll",
@@ -88,7 +88,7 @@ jobs:
           )
           foreach ($f in $expected) {
             if (Test-Path $f) { Write-Host "OK: $f" }
-            else              { Write-Error "CHYBI: $f"; exit 1 }
+            else              { Write-Error "MISSING: $f"; exit 1 }
           }
 
       - name: Setup Godot
@@ -119,9 +119,9 @@ jobs:
           $blenderDir = (Split-Path $env:BLENDER_PATH) -replace '\\', '/'
           New-Item -ItemType Directory -Force -Path (Split-Path $settingsPath)
           Set-Content $settingsPath -Encoding UTF8 -Value "[gd_resource type=""EditorSettings"" format=3]`n`n[resource]`nfilesystem/import/blender/blender3_path = ""$blenderDir"""
-          Write-Host "Editor settings vytvořeny s Blender cestou: $blenderDir"
+          Write-Host "Editor settings created with Blender path: $blenderDir"
 
-          Write-Host "=== Spouštím import ==="
+          Write-Host "=== Running import ==="
           $proc = Start-Process -FilePath $godotPath -ArgumentList "--headless --path $proj --editor --quit-after 120000" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "import_stdout.txt" -RedirectStandardError "import_stderr.txt"
           Write-Host "Exit code: $($proc.ExitCode)"
           Get-Content "import_stdout.txt" -ErrorAction SilentlyContinue
@@ -130,11 +130,35 @@ jobs:
           $importedDir = "$proj/.godot/imported"
           if (Test-Path $importedDir) {
             $count = (Get-ChildItem $importedDir -Recurse -File).Count
-            Write-Host "Importováno souborů: $count"
+            Write-Host "Imported files: $count"
           } else {
-            Write-Error "Složka .godot/imported nevznikla!"
+            Write-Error "Folder .godot/imported was not created!"
             exit 1
           }
+
+      - name: Verify GDExtension loaded correctly
+        shell: pwsh
+        run: |
+          # Run a GDScript that checks ClassDB for the C++ class registered by the extension.
+          # Godot loads .gdextension silently even if the .dll is missing – this step makes
+          # the failure explicit with a non-zero exit code.
+          $script = @"
+extends SceneTree
+func _init():
+    var ok = ClassDB.class_exists("MBEXclass")
+    if ok:
+        print("OK: MBEXclass found in ClassDB - GDExtension loaded successfully")
+        quit(0)
+    else:
+        printerr("ERROR: MBEXclass NOT found in ClassDB - extension failed to load!")
+        quit(1)
+"@
+          $script | Set-Content "$env:TEMP\verify_ext.gd" -Encoding UTF8
+          $godot = $env:GODOT_CONSOLE
+          $proc = Start-Process -FilePath $godot `
+            -ArgumentList "--headless --path godot-code --script $env:TEMP\verify_ext.gd" `
+            -NoNewWindow -Wait -PassThru
+          if ($proc.ExitCode -ne 0) { exit 1 }
 
       - name: Godot Export
         shell: pwsh
@@ -153,7 +177,7 @@ jobs:
           if (Test-Path "debug_stdout.txt") { Get-Content "debug_stdout.txt" }
           if (Test-Path "debug_stderr.txt") { Get-Content "debug_stderr.txt" }
           if ($proc.ExitCode -ne 0) { exit 1 }
-          if (-not (Test-Path $debugExe)) { Write-Error "Debug exe chybi!"; exit 1 }
+          if (-not (Test-Path $debugExe)) { Write-Error "Debug exe missing!"; exit 1 }
 
           Write-Host "=== RELEASE export ==="
           $proc2 = Start-Process -FilePath $godot -ArgumentList "--headless --verbose --path godot-code --export-release Windows $releaseExe" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "release_stdout.txt" -RedirectStandardError "release_stderr.txt"
@@ -161,9 +185,9 @@ jobs:
           if (Test-Path "release_stdout.txt") { Get-Content "release_stdout.txt" }
           if (Test-Path "release_stderr.txt") { Get-Content "release_stderr.txt" }
           if ($proc2.ExitCode -ne 0) { exit 1 }
-          if (-not (Test-Path $releaseExe)) { Write-Error "Release exe chybi!"; exit 1 }
+          if (-not (Test-Path $releaseExe)) { Write-Error "Release exe missing!"; exit 1 }
 
-          Write-Host "=== Obsah exports/ ==="
+          Write-Host "=== Contents of exports/ ==="
           Get-ChildItem -Recurse "exports/"
 
       - name: Set version
@@ -246,12 +270,11 @@ jobs:
           GODOT_CPP_CMAKE="gitextension/godot-cpp-template/godot-cpp/CMakeLists.txt"
           sed -i 's/-fno-exceptions/-fexceptions/g' "$GODOT_CPP_CMAKE"
           sed -i 's/-fno-rtti/-frtti/g'             "$GODOT_CPP_CMAKE"
-          echo "=== Patch godot-cpp CMakeLists ==="
+          echo "=== Patched godot-cpp CMakeLists ==="
           grep -n "exceptions\|rtti" "$GODOT_CPP_CMAKE" | head -20
 
-          # GCC 13: -include atomic + cmath kvuli chybejicim transitnim includum
-          # -fexceptions -frtti: vynuceni exceptions (godot-cpp je jinak vypina)
-          # GCC 13: -include atomic + cmath kvuli chybejicim transitnim includum
+          # GCC 13: -include atomic + cmath for missing transitive includes
+          # -fexceptions -frtti: force exceptions (godot-cpp disables them by default)
           EXTRA_FLAGS="-include atomic -include cmath"
 
           cmake -B build-cpp-release -S gitextension/godot-cpp-template \
@@ -271,24 +294,42 @@ jobs:
       - name: Rename .so files to EXTENSION-NAME
         run: |
           binDir="gitextension/godot-cpp-template/bin/linux"
-          destDir="gitextension/godot-cpp-template/MBEXout/bin/linux"
+          destDir="godot-code/MBEXout/bin/linux"
           mkdir -p "$destDir"
 
-          echo "=== .so před přejmenováním ==="
-          ls "$binDir"/*.so 2>/dev/null || true
+          echo "=== .so files produced by CMake (before rename) ==="
+          find "$binDir" -name "*.so" 2>/dev/null || echo "No .so files found!"
 
-          for f in "$binDir"/MagicBalls*.so; do
+          # CMake on Linux produces libMagicBalls*.so (with lib prefix).
+          # Handle both prefixed (libMagicBalls) and non-prefixed (MagicBalls) variants.
+          for f in "$binDir"/libMagicBalls*.so "$binDir"/MagicBalls*.so; do
             [ -e "$f" ] || continue
-            newName=$(basename "$f" | sed 's/^MagicBalls/EXTENSION-NAME/')
+            newName=$(basename "$f" \
+              | sed 's/^libMagicBalls/libEXTENSION-NAME/' \
+              | sed 's/^MagicBalls/EXTENSION-NAME/')
             mv "$f" "$binDir/$newName"
-            echo "Přejmenováno: $(basename $f) → $newName"
+            echo "Renamed: $(basename $f) -> $newName"
           done
 
-          # Kopíruj do MBEXout/bin/linux/ kde je očekává mbex.gdextension
-          cp "$binDir"/EXTENSION-NAME*.so "$destDir/" 2>/dev/null || true
+          # Copy directly into godot-code/MBEXout/bin/linux/ so Godot finds and bundles the .so on export.
+          cp "$binDir"/libEXTENSION-NAME*.so "$destDir/" 2>/dev/null || true
+          cp "$binDir"/EXTENSION-NAME*.so     "$destDir/" 2>/dev/null || true
 
-          echo "=== .so po přejmenování ==="
-          ls "$destDir"/*.so 2>/dev/null || true
+          echo "=== .so files in godot-code/MBEXout/bin/linux/ ==="
+          ls "$destDir"/*.so 2>/dev/null || { echo "ERROR: No .so files in $destDir!"; exit 1; }
+
+      - name: Verify GDExtension .so before Godot import
+        run: |
+          # Fail early if the expected release .so is missing – before Godot even starts.
+          EXPECTED="godot-code/MBEXout/bin/linux/libEXTENSION-NAME.linux.template_release.x86_64.so"
+          if [ -f "$EXPECTED" ]; then
+            echo "OK: $EXPECTED"
+          else
+            echo "ERROR: Expected .so not found: $EXPECTED"
+            echo "=== All .so files in repo ==="
+            find . -name "*.so" 2>/dev/null || echo "None found"
+            exit 1
+          fi
 
       - name: Install Godot + export templates
         run: |
@@ -327,7 +368,7 @@ jobs:
           filesystem/import/blender/blender3_path = "$BLENDER_DIR"
           EOF
 
-          echo "=== Spouštím import ==="
+          echo "=== Running import ==="
           timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
             > import_stdout.txt 2> import_stderr.txt || true
           cat import_stdout.txt || true
@@ -335,10 +376,28 @@ jobs:
 
           if [ -d "godot-code/.godot/imported" ]; then
             COUNT=$(find "godot-code/.godot/imported" -type f | wc -l)
-            echo "Importováno souborů: $COUNT"
+            echo "Imported files: $COUNT"
           else
-            echo "ERROR: .godot/imported nevznikla!" && exit 1
+            echo "ERROR: .godot/imported was not created!" && exit 1
           fi
+
+      - name: Verify GDExtension loaded correctly
+        run: |
+          # Run a GDScript that checks ClassDB for the C++ class registered by the extension.
+          # Godot loads .gdextension silently even if the .so is missing – this step makes
+          # the failure explicit with a non-zero exit code.
+          cat > /tmp/verify_ext.gd << 'EOF'
+          extends SceneTree
+          func _init():
+              var ok = ClassDB.class_exists("MBEXclass")
+              if ok:
+                  print("OK: MBEXclass found in ClassDB - GDExtension loaded successfully")
+                  quit(0)
+              else:
+                  printerr("ERROR: MBEXclass NOT found in ClassDB - extension failed to load!")
+                  quit(1)
+          EOF
+          godot --headless --path godot-code --script /tmp/verify_ext.gd
 
       - name: Godot Export (Release)
         run: |
@@ -346,16 +405,13 @@ jobs:
           RELEASE_BIN="${{ github.workspace }}/exports/release/MagicBalls.x86_64"
 
           echo "=== DEBUG: export_presets.cfg ==="
-          cat godot-code/export_presets.cfg 2>/dev/null || echo "SOUBOR NEEXISTUJE"
+          cat godot-code/export_presets.cfg 2>/dev/null || echo "FILE NOT FOUND"
 
-          echo "=== DEBUG: .so soubory v MBEXout ==="
-          find gitextension/godot-cpp-template/MBEXout -name "*.so" 2>/dev/null || echo "zadne .so"
+          echo "=== DEBUG: .so files in godot-code/MBEXout ==="
+          find godot-code/MBEXout -name "*.so" 2>/dev/null || echo "none"
 
-          echo "=== DEBUG: .so soubory v bin/linux ==="
-          find gitextension/godot-cpp-template/bin/linux -name "*.so" 2>/dev/null || echo "zadne .so"
-
-          echo "=== DEBUG: addons/MBEX obsah ==="
-          ls godot-code/addons/MBEX/ 2>/dev/null || echo "adresar neexistuje"
+          echo "=== DEBUG: addons/MBEX contents ==="
+          ls godot-code/addons/MBEX/ 2>/dev/null || echo "directory does not exist"
 
           echo "=== RELEASE export ==="
           godot --headless --verbose --path godot-code \
@@ -364,9 +420,9 @@ jobs:
           cat release_stdout.txt || true
           cat release_stderr.txt || true
 
-          [ -f "$RELEASE_BIN" ] || { echo "ERROR: Linux binary chybí!"; exit 1; }
+          [ -f "$RELEASE_BIN" ] || { echo "ERROR: Linux binary missing!"; exit 1; }
 
-          echo "=== Obsah exports/ ==="
+          echo "=== Contents of exports/ ==="
           find exports/ -type f
 
       - name: Package Artifacts
@@ -438,11 +494,12 @@ jobs:
 
       - name: Rename .so files to EXTENSION-NAME
         run: |
-          # CMake produkuje: MagicBalls.android.arm64-v8a.template_release.arm64.so
-          # .gdextension chce: libEXTENSION-NAME.android.template_release.arm64.so
-          # Postup: lib prefix + odstranit "arm64-v8a." uprostred
+          # CMake produces: MagicBalls.android.arm64-v8a.template_release.arm64.so
+          # .gdextension expects: libEXTENSION-NAME.android.template_release.arm64.so
+          # Steps: add lib prefix + remove the "arm64-v8a." segment from the middle.
           destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
-          mkdir -p "$destDir"
+          godotDir="godot-code/MBEXout/bin/android"
+          mkdir -p "$destDir" "$godotDir"
 
           for ABI in arm64-v8a x86_64; do
             srcDir="gitextension/godot-cpp-template/MBEXout/bin/android.$ABI"
@@ -450,26 +507,40 @@ jobs:
             for f in "$srcDir"/MagicBalls*.so; do
               [ -e "$f" ] || continue
               base=$(basename "$f")
-              # MagicBalls.android.arm64-v8a.template_release.arm64.so
-              # → libEXTENSION-NAME.android.template_release.arm64.so
               newName=$(echo "$base" | sed "s/^MagicBalls/libEXTENSION-NAME/" | sed "s/\.${ABI}\././")
               cp "$f" "$destDir/$newName"
-              echo "Zkopirováno: $base → $newName"
+              echo "Copied: $base -> $newName"
             done
           done
 
-          echo "=== Výsledek v MBEXout/bin/android/ ==="
-          ls "$destDir/" 2>/dev/null || echo "prazdny adresar"
+          echo "=== Result in MBEXout/bin/android/ ==="
+          ls "$destDir/" 2>/dev/null || echo "Empty directory"
 
-          # Godot FileAccess neumi relativni cesty mimo res:// pri Android exportu.
-          # Zkopirujeme .so soubory i do godot-code aby byly dostupne pres res://
-          # (stejne jako Windows .dll jsou zkopirované CMake POST_BUILD do MBEXout)
-          # Toto zajisti ze Godot najde knihovny pri importu i exportu.
-          GODOT_ANDROID_BIN="godot-code/MBEXout/bin/android"
-          mkdir -p "$GODOT_ANDROID_BIN"
-          cp "$destDir"/*.so "$GODOT_ANDROID_BIN/" 2>/dev/null || true
-          echo "=== Výsledek v godot-code/MBEXout/bin/android/ ==="
-          ls "$GODOT_ANDROID_BIN/" 2>/dev/null || echo "prazdny adresar"
+          # Copy .so into godot-code/MBEXout/bin/android/ so Godot finds and bundles them on export.
+          cp "$destDir"/*.so "$godotDir/" || { echo "ERROR: No .so files to copy to godot-code!"; exit 1; }
+          echo "=== Result in godot-code/MBEXout/bin/android/ ==="
+          ls "$godotDir/" 2>/dev/null || echo "Empty directory"
+
+      - name: Verify GDExtension .so before Godot import
+        run: |
+          # Fail early if the expected release .so files are missing – before Godot even starts.
+          GODOT_DIR="godot-code/MBEXout/bin/android"
+          MISSING=0
+          for EXPECTED in \
+            "$GODOT_DIR/libEXTENSION-NAME.android.template_release.arm64.so" \
+            "$GODOT_DIR/libEXTENSION-NAME.android.template_release.x86_64.so"; do
+            if [ -f "$EXPECTED" ]; then
+              echo "OK: $EXPECTED"
+            else
+              echo "ERROR: Expected .so not found: $EXPECTED"
+              MISSING=1
+            fi
+          done
+          if [ "$MISSING" -eq 1 ]; then
+            echo "=== All .so files in repo ==="
+            find . -name "*.so" 2>/dev/null || echo "None found"
+            exit 1
+          fi
 
       - name: Install Godot + Android export templates
         run: |
@@ -495,7 +566,7 @@ jobs:
           echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
           echo "KEYSTORE_PATH=$(pwd)/keystore.jks" >> $GITHUB_ENV
 
-          # Godot editor settings pro Android SDK
+          # Godot editor settings for Android SDK
           SETTINGS_DIR="$HOME/.config/godot"
           mkdir -p "$SETTINGS_DIR"
           cat > "$SETTINGS_DIR/editor_settings-4.tres" <<EOF
@@ -514,10 +585,28 @@ jobs:
 
           if [ -d "godot-code/.godot/imported" ]; then
             COUNT=$(find "godot-code/.godot/imported" -type f | wc -l)
-            echo "Importováno souborů: $COUNT"
+            echo "Imported files: $COUNT"
           else
-            echo "ERROR: .godot/imported nevznikla!" && exit 1
+            echo "ERROR: .godot/imported was not created!" && exit 1
           fi
+
+      - name: Verify GDExtension loaded correctly
+        run: |
+          # Run a GDScript that checks ClassDB for the C++ class registered by the extension.
+          # Godot loads .gdextension silently even if the .so is missing – this step makes
+          # the failure explicit with a non-zero exit code.
+          cat > /tmp/verify_ext.gd << 'EOF'
+          extends SceneTree
+          func _init():
+              var ok = ClassDB.class_exists("MBEXclass")
+              if ok:
+                  print("OK: MBEXclass found in ClassDB - GDExtension loaded successfully")
+                  quit(0)
+              else:
+                  printerr("ERROR: MBEXclass NOT found in ClassDB - extension failed to load!")
+                  quit(1)
+          EOF
+          godot --headless --path godot-code --script /tmp/verify_ext.gd
 
       - name: Godot Export – Android Release APK
         env:
@@ -537,8 +626,7 @@ jobs:
           TAG="${{ github.ref_name }}"
           APK_PATH="${{ github.workspace }}/exports/android/MagicBalls-${TAG}-Android-Release.apk"
 
-          # Godot hleda .so pres: godot-code/addons/MBEX/../../MBEXout/bin/android/
-          # = godot-code/MBEXout/bin/android/ - zkopirujeme tam .so pred exportem
+          # Copy .so into godot-code/MBEXout/bin/android/ before export (already done in rename step).
           mkdir -p "godot-code/MBEXout/bin/android"
           cp gitextension/godot-cpp-template/MBEXout/bin/android/*.so "godot-code/MBEXout/bin/android/" 2>/dev/null || true
 
@@ -549,12 +637,12 @@ jobs:
           cat android_export_stdout.txt || true
           cat android_export_stderr.txt || true
 
-          # Godot vraci exit code 1 kvuli memory leak pri ukonceni (PagedAllocator)
-          # i kdyz APK byl uspesne vytvoren - kontrolujeme existenci souboru
+          # Godot returns exit code 1 due to memory leak on shutdown (PagedAllocator)
+          # even when the APK was created successfully – check file existence instead.
           if [ -f "$APK_PATH" ]; then
-            echo "=== APK ÚSPĚŠNĚ VYTVOŘENO: $APK_PATH ==="
+            echo "=== APK CREATED SUCCESSFULLY: $APK_PATH ==="
           else
-            echo "ERROR: APK neexistuje - export selhal."
+            echo "ERROR: APK does not exist - export failed."
             cat android_export_stdout.txt || true
             cat android_export_stderr.txt || true
             exit 1
@@ -568,9 +656,9 @@ jobs:
 
 
   # ───────────────────────────────────────────
-  # 4) RELEASE – čeká na všechny 3 buildy,
-  #              generuje changelog přes Gemini
-  #              a vytvoří GitHub Release
+  # 4) RELEASE – waits for all 3 builds,
+  #              generates changelog via Gemini
+  #              and creates GitHub Release
   # ───────────────────────────────────────────
   release:
     name: Create GitHub Release
@@ -599,7 +687,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          # 1. Získání git logu
+          # 1. Get git log
           PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)
           if [ -z "$PREV_TAG" ]; then
             GIT_LOG=$(git log --oneline --no-merges | head -30)
@@ -608,10 +696,10 @@ jobs:
           fi
           [ -z "$GIT_LOG" ] && GIT_LOG="No commits since last release."
 
-          # 2. Příprava promptu
+          # 2. Prepare prompt
           PROMPT="You are a concise release notes writer. Based on the following git commit log, write a short and clear changelog in bullet points (max 10 bullets). Group related changes. Commits:\n\n${GIT_LOG}"
 
-          # 3. Volání API s retry logikou (10 pokusů) a zálohou
+          # 3. Call API with retry logic (10 attempts) and fallback
           RESPONSE=$(python3 -c "
           import json, requests, os, sys, time
           
@@ -631,20 +719,20 @@ jobs:
                       success = True
                       break
                   elif res.status_code in [429, 503, 500]:
-                      print(f'Pokus {i}/10: Server je zaneprázdněn ({res.status_code}). Čekám...', file=sys.stderr)
+                      print(f'Attempt {i}/10: Server busy ({res.status_code}). Waiting...', file=sys.stderr)
                   else:
-                      print(f'Pokus {i}/10: Chyba {res.status_code}: {res.text}', file=sys.stderr)
+                      print(f'Attempt {i}/10: Error {res.status_code}: {res.text}', file=sys.stderr)
               except Exception as e:
-                  print(f'Pokus {i}/10: Chyba sítě: {e}', file=sys.stderr)
+                  print(f'Attempt {i}/10: Network error: {e}', file=sys.stderr)
               
-              if i < 10: time.sleep(5) # Krátká pauza mezi pokusy
+              if i < 10: time.sleep(5)
 
           if not success:
-              print('Gemini API nedostupné po 10 pokusech. Používám nezpracovaný log.', file=sys.stderr)
+              print('Gemini API unavailable after 10 attempts. Using raw log.', file=sys.stderr)
               print(f'### Raw Changelog\n{raw_log}')
           " "$PROMPT" "$GIT_LOG")
 
-          # 4. Uložení do výstupu GitHub Actions
+          # 4. Save to GitHub Actions output
           {
             echo "CHANGELOG<<EOF"
             echo "$RESPONSE"
