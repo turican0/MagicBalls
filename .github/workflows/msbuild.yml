@@ -136,7 +136,7 @@ jobs:
             exit 1
           }
 
-- name: Verify GDExtension loaded correctly
+      - name: Verify GDExtension loaded correctly
         shell: pwsh
         run: |
           # Run a GDScript that checks ClassDB for the C++ class registered by the extension.
@@ -153,21 +153,6 @@ jobs:
                   printerr("ERROR: MBEXclass NOT found in ClassDB - extension failed to load!")
                   quit(1)
           "@
-          $script | Set-Content "$env:TEMP\verify_ext.gd" -Encoding UTF8
-          $godot = $env:GODOT_CONSOLE
-          $proc = Start-Process -FilePath $godot `
-            -ArgumentList "--headless --path godot-code --script $env:TEMP\verify_ext.gd" `
-            -NoNewWindow -Wait -PassThru
-          if ($proc.ExitCode -ne 0) { exit 1 }
-func _init():
-    var ok = ClassDB.class_exists("MBEXclass")
-    if ok:
-        print("OK: MBEXclass found in ClassDB - GDExtension loaded successfully")
-        quit(0)
-    else:
-        printerr("ERROR: MBEXclass NOT found in ClassDB - extension failed to load!")
-        quit(1)
-"@
           $script | Set-Content "$env:TEMP\verify_ext.gd" -Encoding UTF8
           $godot = $env:GODOT_CONSOLE
           $proc = Start-Process -FilePath $godot `
