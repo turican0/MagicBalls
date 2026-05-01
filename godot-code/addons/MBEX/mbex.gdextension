@@ -25,10 +25,10 @@ windows.x86_64.double.debug = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.
 windows.x86_64.single.release = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
 windows.x86_64.double.release = "../../MBEXout/bin/windows/EXTENSION-NAME.windows.template_debug.x86_64.dll"
 
-linux.x86_64.single.debug = "../../MBEXout/bin/linux/libEXTENSION-NAME.linux.template_debug.x86_64.so"
-linux.x86_64.double.debug = "../../MBEXout/bin/linux/libEXTENSION-NAME.linux.template_debug.x86_64.double.so"
-linux.x86_64.single.release = "../../MBEXout/bin/linux/libEXTENSION-NAME.linux.template_release.x86_64.so"
-linux.x86_64.double.release = "../../MBEXout/bin/linux/libEXTENSION-NAME.linux.template_release.x86_64.double.so"
+linux.x86_64.single.debug = "../../MBEXout/bin/linux/MagicBalls.linux.template_debug.x86_64.debug.so"
+linux.x86_64.double.debug = "../../MBEXout/bin/linux/MagicBalls.linux.template_debug.x86_64.debug.so"
+linux.x86_64.single.release = "../../MBEXout/bin/linux/MagicBalls.linux.template_debug.x86_64.so"
+linux.x86_64.double.release = "../../MBEXout/bin/linux/MagicBalls.linux.template_debug.x86_64.so"
 
 linux.arm64.single.debug = "../../MBEXout/bin/linux/libEXTENSION-NAME.linux.template_debug.arm64.so"
 linux.arm64.double.debug = "../../MBEXout/bin/linux/libEXTENSION-NAME.linux.template_debug.arm64.double.so"

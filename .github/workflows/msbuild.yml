@@ -491,6 +491,27 @@ jobs:
               -GNinja
             ninja -C "build-android-$ABI"
           done
+          
+      - name: Verify GDExtension .so before Godot import1
+        run: |
+          # Fail early if the expected release .so files are missing – before Godot even starts.
+          GODOT_DIR="godot-code/MBEXout/bin/android"
+          MISSING=0
+          for EXPECTED in \
+            "$GODOT_DIR/libEXTENSION-NAME.android.template_release.arm64.so" \
+            "$GODOT_DIR/libEXTENSION-NAME.android.template_release.x86_64.so"; do
+            if [ -f "$EXPECTED" ]; then
+              echo "OK: $EXPECTED"
+            else
+              echo "ERROR: Expected .so not found: $EXPECTED"
+              MISSING=1
+            fi
+          done
+          if [ "$MISSING" -eq 1 ]; then
+            echo "=== All .so files in repo ==="
+            find . -name "*.so" 2>/dev/null || echo "None found"
+            exit 1
+          fi
 
       - name: Rename .so files to EXTENSION-NAME
         run: |
