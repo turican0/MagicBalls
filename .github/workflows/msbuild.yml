@@ -498,8 +498,8 @@ jobs:
           GODOT_DIR="godot-code/MBEXout/bin/android"
           MISSING=0
           for EXPECTED in \
-            "$GODOT_DIR/MagicBalls.android.arm64-v8a.template_release.arm64.so" \
-            "$GODOT_DIR/MagicBalls.android.x86_64.template_release.x86_64.so"; do
+            "$GODOT_DIR/MBEXout/bin/android.arm64-v8a/MagicBalls.android.arm64-v8a.template_release.arm64.so" \
+            "$GODOT_DIR/MBEXout/bin/android.x86_64/MagicBalls.android.x86_64.template_release.x86_64.so"; do
             if [ -f "$EXPECTED" ]; then
               echo "OK: $EXPECTED"
             else
@@ -548,8 +548,8 @@ jobs:
           GODOT_DIR="godot-code/MBEXout/bin/android"
           MISSING=0
           for EXPECTED in \
-            "$GODOT_DIR/libEXTENSION-NAME.android.template_release.arm64.so" \
-            "$GODOT_DIR/libEXTENSION-NAME.android.template_release.x86_64.so"; do
+            "$GODOT_DIR/MBEXout/bin/android.arm64-v8a/MagicBalls.android.arm64-v8a.template_release.arm64.so" \
+            "$GODOT_DIR/MBEXout/bin/android.x86_64/MagicBalls.android.x86_64.template_release.x86_64.so"; do
             if [ -f "$EXPECTED" ]; then
               echo "OK: $EXPECTED"
             else
