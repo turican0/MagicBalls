@@ -513,56 +513,6 @@ jobs:
             exit 1
           fi
 
-      - name: Rename .so files to EXTENSION-NAME
-        run: |
-          # CMake produces: MagicBalls.android.arm64-v8a.template_release.arm64.so
-          # .gdextension expects: libEXTENSION-NAME.android.template_release.arm64.so
-          # Steps: add lib prefix + remove the "arm64-v8a." segment from the middle.
-          destDir="gitextension/godot-cpp-template/MBEXout/bin/android"
-          godotDir="godot-code/MBEXout/bin/android"
-          mkdir -p "$destDir" "$godotDir"
-
-          for ABI in arm64-v8a x86_64; do
-            srcDir="gitextension/godot-cpp-template/MBEXout/bin/android.$ABI"
-
-            for f in "$srcDir"/MagicBalls*.so; do
-              [ -e "$f" ] || continue
-              base=$(basename "$f")
-              newName=$(echo "$base" | sed "s/^MagicBalls/libEXTENSION-NAME/" | sed "s/\.${ABI}\././")
-              cp "$f" "$destDir/$newName"
-              echo "Copied: $base -> $newName"
-            done
-          done
-
-          echo "=== Result in MBEXout/bin/android/ ==="
-          ls "$destDir/" 2>/dev/null || echo "Empty directory"
-
-          # Copy .so into godot-code/MBEXout/bin/android/ so Godot finds and bundles them on export.
-          cp "$destDir"/*.so "$godotDir/" || { echo "ERROR: No .so files to copy to godot-code!"; exit 1; }
-          echo "=== Result in godot-code/MBEXout/bin/android/ ==="
-          ls "$godotDir/" 2>/dev/null || echo "Empty directory"
-
-      - name: Verify GDExtension .so before Godot import
-        run: |
-          # Fail early if the expected release .so files are missing – before Godot even starts.
-          GODOT_DIR="godot-code/MBEXout/bin"
-          MISSING=0
-          for EXPECTED in \
-            "$GODOT_DIR/android.arm64-v8a/MagicBalls.android.arm64-v8a.template_release.arm64.so" \
-            "$GODOT_DIR/android.x86_64/MagicBalls.android.x86_64.template_release.x86_64.so"; do
-            if [ -f "$EXPECTED" ]; then
-              echo "OK: $EXPECTED"
-            else
-              echo "ERROR: Expected .so not found: $EXPECTED"
-              MISSING=1
-            fi
-          done
-          if [ "$MISSING" -eq 1 ]; then
-            echo "=== All .so files in repo ==="
-            find . -name "*.so" 2>/dev/null || echo "None found"
-            exit 1
-          fi
-
       - name: Install Godot + Android export templates
         run: |
           GODOT_VERSION="4.6.2"
