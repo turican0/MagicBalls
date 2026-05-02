@@ -761,6 +761,8 @@ void MBEXhscreenConverts(String path) {
 			MBEXsaveSprite(path + "/6", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
 	for (int i = 0; i <= 271; i++)
 		MBEXsaveSprite(path + "/6-B", i, xy_DWORD_17DEC0_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
+	for (int i = 0; i <= 271; i++)
+		MBEXsaveSprite(path + "/6-C", i, xy_DWORD_17DEC8_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
 
 	memset(pdwScreenBuffer_351628, 255, 640*480);
 	sub_85CC3_draw_round_frame((uint16_t *)x_DWORD_17DE38str.x_DWORD_17DE5C_border_bitmap);
