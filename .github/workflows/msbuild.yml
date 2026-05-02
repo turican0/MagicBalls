@@ -491,7 +491,7 @@ jobs:
               -GNinja
             ninja -C "build-android-$ABI"
           done
-          
+
       - name: Verify GDExtension .so before Godot import1
         run: |
           # Fail early if the expected release .so files are missing – before Godot even starts.
@@ -563,21 +563,14 @@ jobs:
 
       - name: Verify GDExtension loaded correctly
         run: |
-          # Run a GDScript that checks ClassDB for the C++ class registered by the extension.
-          # Godot loads .gdextension silently even if the .so is missing – this step makes
-          # the failure explicit with a non-zero exit code.
-          cat > /tmp/verify_ext.gd << 'EOF'
-          extends SceneTree
-          func _init():
-              var ok = ClassDB.class_exists("MBEXclass")
-              if ok:
-                  print("OK: MBEXclass found in ClassDB - GDExtension loaded successfully")
-                  quit(0)
-              else:
-                  printerr("ERROR: MBEXclass NOT found in ClassDB - extension failed to load!")
-                  quit(1)
-          EOF
-          godot --headless --path godot-code --script /tmp/verify_ext.gd
+          # Android .so cannot be loaded on a Linux runner – verify file existence only.
+          EXPECTED="godot-code/MBEXout/bin/android.arm64-v8a/MagicBalls.android.arm64-v8a.template_release.arm64.so"
+          if [ -f "$EXPECTED" ]; then
+            echo "OK: $EXPECTED"
+          else
+            echo "ERROR: Expected .so not found: $EXPECTED"
+            exit 1
+          fi
 
       - name: Godot Export – Android Release APK
         env:
