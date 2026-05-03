@@ -49,7 +49,14 @@ std::map<int, HSAMPLE> GameChunkHSamples = std::map<int, HSAMPLE>();
 
 uint8_t sound_buffer[4][20000];
 
-//std::vector<Mix_Timer> Timers = std::vector<Mix_Timer>();
+struct MyMix_Timer {
+	int Id;
+	uint32_t IntervalMs;
+	std::function<uint32_t(uint32_t)> Callback;
+	bool Running{ false };
+	std::chrono::steady_clock::time_point NextTick;
+};
+std::list<MyMix_Timer> Timers;
 /*
 10
 29
@@ -646,61 +653,48 @@ uint32_t SOUND_sample_status(HSAMPLE S) {
 	return 0;
 }
 
-void SOUND_RegisterTimer(int timerIdx, uint32_t(*callback)(uint32_t))
-{
-	/*
-	auto timer = Mix_Timer();
-	timer.Id = timerIdx;
-	timer.Callback = (SDL_TimerCallback)callback;
-	Timers.push_back(timer);
-	*/
+void SOUND_RegisterTimer(int timerIdx, uint32_t (*callback)(uint32_t)) {
+	Timers.emplace_back();
+	Timers.back().Id = timerIdx;
+	Timers.back().Callback = callback;
 }
 
-void SOUND_SetTimerPeriod(int timerIdx, uint32_t intervalMs)
-{
-	/*
-	for (int i = 0; i < Timers.size(); i++)
-	{
-		if (Timers[i].Id == timerIdx)
-		{
-			Timers[i].IntervalMs = intervalMs;
+void SOUND_SetTimerPeriod(int timerIdx, uint32_t intervalMs) {
+	for (auto &t : Timers)
+		if (t.Id == timerIdx) {
+			t.IntervalMs = intervalMs;
 			break;
 		}
-	}
-	*/
 }
 
-void SOUND_StartTimer(int timerIdx)
-{
-	/*
-	for (int i = 0; i < Timers.size(); i++)
-	{
-		if (Timers[i].Id == timerIdx)
-		{
-			Timers[i].SdlId = SDL_AddTimer(Timers[i].IntervalMs, Timers[i].Callback, nullptr);
+void SOUND_StartTimer(int timerIdx) {
+	for (auto &t : Timers)
+		if (t.Id == timerIdx) {
+			t.Running = true;
+			t.NextTick = std::chrono::steady_clock::now() + std::chrono::milliseconds(t.IntervalMs);
 			break;
 		}
-	}
-	*/
 }
 
-void SOUND_StopTimer(int timerIdx)
-{
-	//sound_queue_add_action("SOUND_StopTimer", 0, 0, 0);
-	/*
-	int idxToDelete = -1;
-	for (int i = 0; i < Timers.size(); i++)
-	{
-		if (Timers[i].Id == timerIdx)
-		{
-			SDL_RemoveTimer(Timers[i].SdlId);
-			idxToDelete = i;
+void SOUND_StopTimer(int timerIdx) {
+	for (auto it = Timers.begin(); it != Timers.end(); ++it)
+		if (it->Id == timerIdx) {
+			Timers.erase(it);
 			break;
 		}
+}
+
+void SOUND_UpdateTimers() {
+	auto now = std::chrono::steady_clock::now();
+	for (auto &t : Timers) {
+		if (t.Running && now >= t.NextTick) {
+			uint32_t next = t.Callback(t.IntervalMs);
+			if (next == 0)
+				t.Running = false;
+			else
+				t.NextTick = now + std::chrono::milliseconds(next);
+		}
 	}
-	if (idxToDelete > -1)
-		Timers.erase(Timers.begin() + idxToDelete);
-	*/
 }
 
 void SOUND_end_sample(HSAMPLE S) {
@@ -1494,4 +1488,5 @@ std::vector<SoundAction> sound_queue_get_pending_actions() {
 
 void sound_queue_clear() {
 	sound_queue.clear();
+	SOUND_UpdateTimers();
 }

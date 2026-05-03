@@ -60,6 +60,7 @@ func initSound():
 		Main_Sounds=get_tree().root.get_node_or_null("Sounds")
 	Main_Sounds.MainMusic = Main_Sounds.get_node("MidiPlayer")
 	Main_Sounds.MainMusicHi = Main_Sounds.get_node("AudioStreamPlayer")
+	Main_Sounds.MainMusicHi2 = Main_Sounds.get_node("AudioStreamPlayer2")
 	Main_Sounds.MainSpeech = Main_Sounds.get_node("AudioStreamPlayerSpeech")
 	
 	Main_Sounds.load_sounds_from_dir(Global.convertdata+"sounds/")

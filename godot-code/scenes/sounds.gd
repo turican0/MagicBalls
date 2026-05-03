@@ -2,6 +2,7 @@ extends Node3D
 
 var MainMusic:MidiPlayer
 var MainMusicHi:AudioStreamPlayer
+var MainMusicHi2:AudioStreamPlayer
 var MainSpeech:AudioStreamPlayer
 
 #func _load_wav_as_sample(file_path: String) -> AudioStream:
@@ -72,23 +73,23 @@ func load_musics_from_dir(path: String):
 		print("Chyba: Adresář nebyl nalezen.")
 		
 func load_musics_hi_from_dir(path: String):
-	var dir = DirAccess.open(path)
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		
-		while file_name != "":
-			if !dir.current_is_dir() and file_name.ends_with(".ogg"):
-				var parts = file_name.split("_")
-				if parts.size() >= 2:
-					var music_idx = parts[0].to_int()
-					var full_path = path + file_name
-					Global.music_hi_map[music_idx] = full_path
-					print("Ogg track readed: ", music_idx)
-			file_name = dir.get_next()
-		dir.list_dir_end()
-	else:
-		print("DirAccess selhal!")  # toto se vypíše pokud adresář nejde otevřít
+	#var dir = DirAccess.open(path)
+	#if dir:
+		#dir.list_dir_begin()
+		#var file_name = dir.get_next()
+		#
+		#while file_name != "":
+			#if !dir.current_is_dir() and file_name.ends_with(".ogg"):
+				#var parts = file_name.split("_")
+				#if parts.size() >= 2:
+					#var music_idx = parts[0].to_int()
+					#var full_path = path + file_name
+					#Global.music_hi_map[music_idx] = full_path
+					#print("Ogg track readed: ", music_idx)
+			#file_name = dir.get_next()
+		#dir.list_dir_end()
+	#else:
+		#print("DirAccess selhal!")  # toto se vypíše pokud adresář nejde otevřít
 	# Fallback – pokud DirAccess selhal v exportu, načti natvrdo
 	if Global.music_hi_map.is_empty():
 		print("DirAccess selhal, používám fallback seznam")
@@ -98,14 +99,19 @@ func load_musics_hi_from_dir(path: String):
 			"002_C2GAME3.ogg",
 			"003_C2SETUP.ogg",
 			"004_C2INTRO.ogg",
-			"005_C2CUTS.ogg"
+			"005_C2CUTS.ogg",
+			"000_C2GAME1_danger.ogg",
+			"001_C2GAME2_danger.ogg",
+			"002_C2GAME3_danger.ogg"
 		]
+		var music_idx = 0
 		for file_name2 in fallback:
-			var parts = file_name2.get_basename().split("_")
-			if parts.size() >= 2:
-				var music_idx = parts[0].to_int()
-				Global.music_hi_map[music_idx] = path + file_name2
-				print("Fallback loaded: ", music_idx, " -> ", path + file_name2)
+			#var parts = file_name2.get_basename().split("_")
+			#if parts.size() >= 2:
+			#var music_idx = fallback.index+1
+			Global.music_hi_map[music_idx] = path + file_name2
+			print("Fallback loaded: ", music_idx, " -> ", path + file_name2)
+			music_idx+=1
 
 func load_sounds_from_dir(path: String):
 	var dir = DirAccess.open(path)
@@ -168,6 +174,9 @@ func updateSounds(soundActions:Array):
 			"SOUND_set_sequence_volume":
 				set_music_volume(p1)
 				matchok=true
+			"SOUND_warmusic_setvolume":
+				set_danges_music_volume(p1)
+				matchok=true
 			"SOUND_set_sample_volume_panning":
 				set_sound_panning(p1, p2)
 				matchok=true
@@ -180,6 +189,7 @@ func updateSounds(soundActions:Array):
 			"EndPlayingCdTrackSegment":
 				stop_speech()
 				matchok=true
+
 			#sound_queue_add_action("PlayCdTrackSegment", trackIdx, startPosMs, lengthMs);
 			#sound_queue_add_action("EndPlayingCdTrackSegment", 0, 0, 0);
 			#sound_queue_add_action("ClearCdTrackSegment", 0, 0, 0);
@@ -287,11 +297,16 @@ func set_music_volume(volume_int: int) -> void:
 		MainMusicHi.volume_db = linear_to_db(float(volume_int) / 128.0 * Global.music_volume)
 	else:
 		MainMusic.volume_db = linear_to_db(float(volume_int) / 128.0 * Global.music_volume)
+		
+func set_danges_music_volume(volume_int: int) -> void:
+	if(Global.himusic):
+		MainMusicHi2.volume_db = linear_to_db(float(volume_int) / 128.0 * Global.music_volume)
 			
 func stop_music() -> void:
 	if(Global.himusic):
 		if MainMusicHi.playing:
 			MainMusicHi.stop()
+			MainMusicHi2.stop()
 	else:
 		if MainMusic.playing:
 			MainMusic.stop()
@@ -338,18 +353,34 @@ func start_music(index: int) -> void:
 
 		if Global.music_hi_map.has(index):
 			var path = Global.music_hi_map[index]
-			print("Path: ", path)
-			print("ResourceLoader exists: ", ResourceLoader.exists(path))
+			#print("Path: ", path)
+			#print("ResourceLoader exists: ", ResourceLoader.exists(path))
 			var stream = ResourceLoader.load(path, "AudioStream")
-			print("Stream loaded: ", stream)
+			#print("Stream loaded: ", stream)
 			if stream is AudioStreamOggVorbis:
 				stream.loop = true
 			elif stream is AudioStreamWAV:
 				stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 			MainMusicHi.stream = stream
-			print("Stream set, playing...")
+			#print("Stream set, playing...")
 			MainMusicHi.play()
-			print("Playing: ", MainMusicHi.playing)
+			#print("Playing: ", MainMusicHi.playing)
+			if(index<=2):
+				if Global.music_hi_map.has(index+6):
+					var path2 = Global.music_hi_map[index+6]
+					#print("Path: ", path2)
+					#print("ResourceLoader exists: ", ResourceLoader.exists(path2))
+					var stream2 = ResourceLoader.load(path2, "AudioStream")
+					#print("Stream loaded: ", stream2)
+					if stream2 is AudioStreamOggVorbis:
+						stream2.loop = true
+					elif stream2 is AudioStreamWAV:
+						stream2.loop_mode = AudioStreamWAV.LOOP_FORWARD
+					MainMusicHi2.stream = stream2
+					#print("Stream set, playing...")
+					MainMusicHi2.volume_db = linear_to_db(0)
+					MainMusicHi2.play()
+					#print("Playing: ", MainMusicHi2.playing)
 	else:
 		# --- MIDI SECTION (MainMusic) ---
 		print("=== START MIDI MUSIC ===")
