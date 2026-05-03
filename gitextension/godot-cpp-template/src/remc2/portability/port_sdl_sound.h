@@ -24,6 +24,13 @@
 #include <time.h>
 #include <string>
 
+#include <list>
+#include <vector>
+#include <map>
+#include <functional>
+#include <chrono>
+#include <cstdint>
+
 #include "../engine/ail_sound.h"
 #include "port_filesystem.h"
 
