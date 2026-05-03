@@ -1227,12 +1227,12 @@ void MainMenu_76FA0_mod() //257fa0
 			sub_7A060_get_mouse_and_keyboard_events();
 			thread2_wait_for_continue(Thread2_State::MAIN_MENU_LOOP);
 		}
-		sub_41BC0();
+		ClearPauseMenuState_41BC0();
 		D41A0_0.m_GameSettings.m_Display.m_uiScreenSize = 0;
 		sub_753D0();
 		x_DWORD_E9C38_smalltit = x_DWORD_17DE38str.x_DWORD_17DE44;
 	} else {
-		sub_41BC0();
+		ClearPauseMenuState_41BC0();
 		D41A0_0.m_GameSettings.m_Display.m_uiScreenSize = 0;
 		sub_753D0();
 	}

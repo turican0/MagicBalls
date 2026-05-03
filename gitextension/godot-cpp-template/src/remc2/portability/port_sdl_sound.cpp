@@ -112,6 +112,14 @@ void SOUND_start_sequence(int32_t sequence_num) {
 #endif//SOUND_SDLMIXER
 };
 
+void WarMusicSetVolume(int32_t volume) {
+	sound_queue_add_action("SOUND_warmusic_setvolume", volume, 0, 0, 0);
+#ifdef SOUND_SDLMIXER
+	//Mix_Volume(music_war_channel_index, ((volume * settingsMusicVolume) / 127));
+	//Mix_VolumeChunk(GAME_music_war, 128);
+#endif //SOUND_SDLMIXER
+}
+
 void SOUND_pause_sequence(int32_t  /*sequence_num*/) {
 	if (unitTests)return;
 #ifdef SOUND_SDLMIXER

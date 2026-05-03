@@ -211,6 +211,7 @@ void SOUND_start_sample(HSAMPLE S);
 void SOUND_end_sample(HSAMPLE S);
 
 void SOUND_start_sequence(int32_t sequence_num);
+void WarMusicSetVolume(int32_t volume);
 void SOUND_pause_sequence(int32_t sequence_num);
 void SOUND_stop_sequence(int32_t sequence_num);
 void SOUND_resume_sequence(int32_t sequence_num);
