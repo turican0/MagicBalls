@@ -54,6 +54,9 @@ func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Main_DecodeLevel = get_node("DecodeLevel")
 	_show_welcome_dialog()
+	var loader = get_tree().root.get_node_or_null("GlobalLoadingCanvas")
+	if loader:
+		loader.queue_free()
 	#else:
 		#await get_tree().process_frame	
 		#_go_to_main_menu()
