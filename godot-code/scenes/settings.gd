@@ -51,7 +51,6 @@ const DEFAULTS = {
 		#"vsync":            0,   # 0=On 1=Off 2=Adaptive
 		"texture_quality":  2,   # 0=Low 1=Medium 2=High
 		#"view_distance":    7,   # 1..10
-		"fps_limit":        1,   # 0=30 1=60 2=144 3=Unlimited
 	},
 	"audio": {
 		"master_volume":    100,
@@ -67,6 +66,7 @@ const DEFAULTS = {
 		"game": {
 		"level_mode":  0,
 		"custom_level": 0,
+		"fps_limit":        1,   # 0=30 1=60 2=144 3=Unlimited
 	},
 	#"game": {
 		#"language":    0,        # 0=English (add more as needed)
@@ -235,7 +235,7 @@ func _apply_settings() -> void:
 		#2: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ADAPTIVE)
 
 	## FPS limit
-	match _settings["video"]["fps_limit"]:
+	match _settings["game"]["fps_limit"]:
 		0: Engine.max_fps = 20
 		1: Engine.max_fps = 24
 		2: Engine.max_fps = 30
@@ -258,7 +258,7 @@ func _read_controls_into_settings() -> void:
 	#_settings["video"]["vsync"]            = _sel_vsync.selected
 	#_settings["video"]["texture_quality"]  = _sel_texture.selected
 	#_settings["video"]["view_distance"]    = int(_sl_view_dist.value)
-	_settings["video"]["fps_limit"]        = _sel_fps.selected
+
 
 	_settings["audio"]["master_volume"]    = int(_sl_master.value)
 	_settings["audio"]["music_volume"]     = int(_sl_music.value)
@@ -275,7 +275,8 @@ func _read_controls_into_settings() -> void:
 
 	_settings["game"]["level_mode"]    = _sel_level_mode.selected
 	_settings["game"]["custom_level"]  = VALID_LEVELS[_sel_custom_level.selected]  # store actual level index
-
+	_settings["game"]["fps_limit"]     = _sel_fps.selected
+	
 # =============================================
 # COUNTDOWN UI
 # =============================================
@@ -426,7 +427,7 @@ func SetGlobals():
 	Global.inverse_mouseY=_settings["input"]["invert_y"]
 	Global.level_mode    = _settings["game"]["level_mode"]
 	Global.custom_level  = _settings["game"]["custom_level"]
-	Global.max_fps  = _settings["video"]["fps_limit"]
+	Global.max_fps       = _settings["game"]["fps_limit"]
 
 func _animate_simple_spinner(spinner: Label):
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
@@ -519,23 +520,6 @@ func _build_video_tab(tc: TabContainer) -> void:
 	#_sel_vsync = _option(vbox, "VSync",
 		#["On", "Off", "Adaptive"],
 		#_settings["video"]["vsync"])
-	_sel_fps = _option(vbox, "FPS Limit",
-		["20", "24", "30", "40", "50"],
-		_settings["video"]["fps_limit"])
-		
-	var fps_note = Label.new()
-	fps_note.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
-	fps_note.add_theme_font_size_override("font_size", 12)
-	fps_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	vbox.add_child(fps_note)
-
-	var _update_fps_note = func(idx: int) -> void:
-		if idx >= 2:
-			fps_note.text = "⚠ Warning, at higher FPS the game becomes harder to control — only for hardcore players(best experience is at 24 FPS)."
-		else:
-			fps_note.text = ""
-	_sel_fps.item_selected.connect(_update_fps_note)
-	_update_fps_note.call(_settings["video"]["fps_limit"])
 
 	#vbox.add_child(_section("QUALITY"))
 	#_sel_texture = _option(vbox, "Texture Quality",
@@ -595,6 +579,24 @@ func _build_game_tab(tc: TabContainer) -> void:
 	# Selector is visible only in Custom Mode
 	_sel_level_mode.item_selected.connect(_on_level_mode_changed)
 	_update_custom_level_visibility()
+	
+	_sel_fps = _option(vbox, "FPS Limit",
+	["20", "24", "30", "40", "50"],
+	_settings["game"]["fps_limit"])
+		
+	var fps_note = Label.new()
+	fps_note.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
+	fps_note.add_theme_font_size_override("font_size", 12)
+	fps_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(fps_note)
+
+	var _update_fps_note = func(idx: int) -> void:
+		if idx >= 2:
+			fps_note.text = "⚠ Warning, at higher FPS the game becomes harder to control — only for hardcore players(best experience is at 24 FPS)."
+		else:
+			fps_note.text = ""
+	_sel_fps.item_selected.connect(_update_fps_note)
+	_update_fps_note.call(_settings["game"]["fps_limit"])
 
 func _on_level_mode_changed(idx: int) -> void:
 	_update_custom_level_visibility()
