@@ -107,30 +107,39 @@ func _process(_p_delta) -> void:
 		3:
 			beginMainMenu()
 			inGameLoop=false
+			Engine.max_fps = 30
 		4:
 			beginAnimation(4)
 			inGameLoop=false
+			Engine.max_fps = 30
 		5:
 			beginInGame()
 			inGameLoop=true
+			Engine.max_fps = Global.max_fps
 		6:
 			beginAnimation(0)
 			inGameLoop=false
+			Engine.max_fps = 30
 		15:
 			beginAnimation(5)
 			inGameLoop=false
+			Engine.max_fps = 30
 		16:
 			beginAnimation(6)
 			inGameLoop=false
+			Engine.max_fps = 30
 		17:
 			beginAnimation(7)
 			inGameLoop=false
+			Engine.max_fps = 30
 		18:
 			beginAnimation(8)
 			inGameLoop=false
+			Engine.max_fps = 30
 		19:
 			beginAnimation(9)
 			inGameLoop=false
+			Engine.max_fps = 30
 	#if(inGameLoop):
 		#Main_Filter.show()
 	#else:

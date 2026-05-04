@@ -57,7 +57,7 @@ const DEFAULTS = {
 		"master_volume":    100,
 		"music_volume":     100,
 		"sfx_volume":       100,
-		"speech_volume":       100,
+		"speech_volume":    100,
 	},
 	"input": {
 		"mouse_sensitivity": 8,
@@ -236,11 +236,11 @@ func _apply_settings() -> void:
 
 	## FPS limit
 	match _settings["video"]["fps_limit"]:
-		0: Engine.max_fps = 24
-		1: Engine.max_fps = 30
-		2: Engine.max_fps = 40
-		3: Engine.max_fps = 50
-		3: Engine.max_fps = 60
+		0: Engine.max_fps = 20
+		1: Engine.max_fps = 24
+		2: Engine.max_fps = 30
+		3: Engine.max_fps = 40
+		4: Engine.max_fps = 50
 
 	# Master volume
 	#var master_idx = AudioServer.get_bus_index("Master")
@@ -263,7 +263,7 @@ func _read_controls_into_settings() -> void:
 	_settings["audio"]["master_volume"]    = int(_sl_master.value)
 	_settings["audio"]["music_volume"]     = int(_sl_music.value)
 	_settings["audio"]["sfx_volume"]       = int(_sl_sfx.value)
-	_settings["audio"]["speech_volume"]       = int(_sl_speech.value)
+	_settings["audio"]["speech_volume"]    = int(_sl_speech.value)
 
 	#_settings["input"]["mouse_sensitivity"] = int(_sl_sensitivity.value)
 	_settings["input"]["invert_y"]          = _sel_invert_y.selected
@@ -426,6 +426,7 @@ func SetGlobals():
 	Global.inverse_mouseY=_settings["input"]["invert_y"]
 	Global.level_mode    = _settings["game"]["level_mode"]
 	Global.custom_level  = _settings["game"]["custom_level"]
+	Global.max_fps  = _settings["video"]["fps_limit"]
 
 func _animate_simple_spinner(spinner: Label):
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
@@ -518,9 +519,23 @@ func _build_video_tab(tc: TabContainer) -> void:
 	#_sel_vsync = _option(vbox, "VSync",
 		#["On", "Off", "Adaptive"],
 		#_settings["video"]["vsync"])
-	#_sel_fps = _option(vbox, "FPS Limit",
-		#["30", "60", "144", "Unlimited"],
-		#_settings["video"]["fps_limit"])
+	_sel_fps = _option(vbox, "FPS Limit",
+		["20", "24", "30", "40", "50"],
+		_settings["video"]["fps_limit"])
+		
+	var fps_note = Label.new()
+	fps_note.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
+	fps_note.add_theme_font_size_override("font_size", 12)
+	fps_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(fps_note)
+
+	var _update_fps_note = func(idx: int) -> void:
+		if idx >= 2:
+			fps_note.text = "⚠ Warning, at higher FPS the game becomes harder to control — only for hardcore players(best experience is at 24 FPS)."
+		else:
+			fps_note.text = ""
+	_sel_fps.item_selected.connect(_update_fps_note)
+	_update_fps_note.call(_settings["video"]["fps_limit"])
 
 	#vbox.add_child(_section("QUALITY"))
 	#_sel_texture = _option(vbox, "Texture Quality",
