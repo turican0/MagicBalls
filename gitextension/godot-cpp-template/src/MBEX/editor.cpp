@@ -1,4 +1,5 @@
 #include "editor.h"
+#include "../remc2/engine/LevelInit.h"
 
 //#include <filesystem>
 
@@ -205,6 +206,43 @@ void editor_run() {
 
 void terrain_recalculate() {
 	D41A0_0.terrain_2FECE = tempTerrain;
+
+	isCaveLevel_D41B6 = 0;
+	if (D41A0_0.terrain_2FECE.MapType == MapType_t::Cave) {
+		//D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
+		isCaveLevel_D41B6 = 1;
+		MapBasicHeight_D41B7 = D41A0_0.terrain_2FECE.byte_0x2FED3;
+		//LoadSounds_84300(2u);
+		//CURSOR_SPRITE_INDEX_D419E = 10;
+	}
+	//LevelInit_56C00(&D41A0_0.terrain_2FECE);
+	/*
+	isCaveLevel_D41B6 = 0;
+	SPELLS_BEGIN_BUFFER_str[4].subspell[0].life_0x1A = 19;
+	SPELLS_BEGIN_BUFFER_str[4].subspell[0].hintText_0x16x = 199;
+	SPELLS_BEGIN_BUFFER_str[19].subspell[0].life_0x1A = 19;
+	SPELLS_BEGIN_BUFFER_str[19].subspell[0].hintText_0x16x = 245;
+	if (levelData->MapType == MapType_t::Day) {
+		SPELLS_BEGIN_BUFFER_str[4].subspell[0].life_0x1A = 2;
+		SPELLS_BEGIN_BUFFER_str[4].subspell[0].hintText_0x16x = 198;
+		SPELLS_BEGIN_BUFFER_str[19].subspell[0].life_0x1A = 2;
+		SPELLS_BEGIN_BUFFER_str[19].subspell[0].hintText_0x16x = 244;
+		D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
+		LoadSounds_84300(0);
+		CURSOR_SPRITE_INDEX_D419E = 1;
+	} else if (levelData->MapType == MapType_t::Night) {
+		D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
+		LoadSounds_84300(1u);
+		CURSOR_SPRITE_INDEX_D419E = 9;
+	} else if (levelData->MapType == MapType_t::Cave) {
+		D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
+		isCaveLevel_D41B6 = 1;
+		MapBasicHeight_D41B7 = levelData->byte_0x2FED3;
+		LoadSounds_84300(2u);
+		CURSOR_SPRITE_INDEX_D419E = 10;
+	}
+	SetDefaultSpells_5C0A0();
+	*/
 
 	rand2_17B4E0 = D41A0_0.terrain_2FECE.seed_0x2FEE5;
 	D41A0_0.rand_0x8 = D41A0_0.terrain_2FECE.seed_0x2FEE5;

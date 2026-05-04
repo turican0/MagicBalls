@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://dgwygcjmuwppm"]
 
 [ext_resource type="Script" uid="uid://ck41p2c40j4gy" path="res://scenes-editor/editor.gd" id="1_wmxca"]
-[ext_resource type="Script" uid="uid://qpmv1s8echb2" path="res://scenes-editor/terrain_type.gd" id="2_8pqvr"]
 [ext_resource type="Script" uid="uid://kwr82wuj0j7e" path="res://scenes/mb_engine.gd" id="2_j6dse"]
 [ext_resource type="Script" uid="uid://brjgn84dk2dmv" path="res://scenes-editor/tree.gd" id="2_ydsuf"]
 [ext_resource type="PackedScene" uid="uid://bc4iq8agolxia" path="res://scenes-editor/my16bit spinbox.tscn" id="3_8pqvr"]
 [ext_resource type="Script" uid="uid://ewkll8tkpt6" path="res://scenes/node_3d_test_terrain.gd" id="3_wa12f"]
 [ext_resource type="Script" uid="uid://78x5mjwl15i7" path="res://scenes/decode_level.gd" id="4_6tdr8"]
 [ext_resource type="Script" uid="uid://dvoufrv4iadh5" path="res://scenes-editor/PlayersSettings.gd" id="5_4odmu"]
+[ext_resource type="Script" uid="uid://b5dye7v5i4ahs" path="res://scenes-editor/map_type.gd" id="5_ntnns"]
 [ext_resource type="Script" uid="uid://dicjjkp54bhci" path="res://scenes-editor/adding_spells.gd" id="5_xi2fd"]
 [ext_resource type="Script" uid="uid://w263ytfpiejg" path="res://scenes-editor/spellIcon.gd" id="5_ydsuf"]
 [ext_resource type="PackedScene" uid="uid://cw1g07ahbhkck" path="res://scenes-editor/PlayerEditor.tscn" id="6_jhayq"]
@@ -385,6 +385,10 @@ item_3/text = "Run Level(and save)"
 item_3/id = 3
 
 [node name="View" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1249348343]
+item_count = 1
+item_0/text = "Show roof"
+item_0/checkable = 1
+item_0/id = 0
 
 [node name="Filter" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1885130967]
 
@@ -470,7 +474,6 @@ layout_mode = 2
 script = ExtResource("2_ydsuf")
 
 [node name="TerrainEdit" type="Control" parent="UI" unique_id=1978053754]
-visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -503,28 +506,6 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer" unique_id=1369587993]
 layout_mode = 2
-
-[node name="TerrainType" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1749833685]
-layout_mode = 2
-script = ExtResource("2_8pqvr")
-
-[node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" unique_id=880158843]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-text = "DayTime"
-
-[node name="BtnLess" type="Button" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" unique_id=1321199649]
-layout_mode = 2
-text = "<"
-
-[node name="StateLabel" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" unique_id=1577261135]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-text = "Night"
-
-[node name="BtnMore" type="Button" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" unique_id=584506679]
-layout_mode = 2
-text = ">"
 
 [node name="word_2FECE" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=438271473]
 layout_mode = 2
@@ -574,6 +555,7 @@ layout_mode = 2
 
 [node name="map_type" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=149952370]
 layout_mode = 2
+script = ExtResource("5_ntnns")
 
 [node name="Label" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" unique_id=1697419120]
 custom_minimum_size = Vector2(140, 0)
@@ -581,6 +563,10 @@ layout_mode = 2
 text = "map_type"
 
 [node name="SpinBox" type="SpinBox" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" unique_id=70974915]
+layout_mode = 2
+max_value = 2.0
+
+[node name="Label2" type="Label" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" unique_id=1174344155]
 layout_mode = 2
 
 [node name="word_2FED5" type="HBoxContainer" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1952536437]
@@ -642,6 +628,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="EntityEdit" type="Control" parent="UI" unique_id=169198194]
+visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -2437,12 +2424,14 @@ mesh = SubResource("CylinderMesh_jhayq")
 [node name="PlayerEditor" parent="." unique_id=1031186005 instance=ExtResource("6_jhayq")]
 
 [connection signal="id_pressed" from="UI/Control/MenuBar/File" to="." method="_on_file_id_pressed"]
+[connection signal="id_pressed" from="UI/Control/MenuBar/View" to="." method="_on_view_id_pressed"]
 [connection signal="button_down" from="UI/Control/Undo" to="." method="_on_undo_button_down"]
 [connection signal="button_down" from="UI/Control/Redo" to="." method="_on_redo_button_down"]
 [connection signal="toggled" from="UI/Control/Filter" to="." method="_on_filter_toggled"]
 [connection signal="toggled" from="UI/Control/FilterShow" to="." method="_on_filter_show_toggled"]
 [connection signal="toggled" from="UI/Control/Selector" to="." method="_on_selector_toggled"]
-[connection signal="state_changed_graphicsType" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/TerrainType" to="." method="_on_terrain_type_state_changed_graphics_type"]
+[connection signal="state_changed_graphicsType" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" to="." method="_on_map_type_state_changed_graphics_type"]
+[connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type/SpinBox" to="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/SpinBoxType" to="UI/EntityFilter" method="_on_spin_box_type_value_changed"]

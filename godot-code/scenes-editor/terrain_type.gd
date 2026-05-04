@@ -3,7 +3,7 @@ extends HBoxContainer
 # Simplified signal - only returns the String
 signal state_changed_graphicsType(state_name: String)
 
-@export var states = ["Night", "Day", "Cave"]
+@export var states: Array[String] = ["Night", "Day", "Cave"]
 var current_index: int = 0
 
 @onready var label = $StateLabel
@@ -21,6 +21,7 @@ func _ready():
 
 func _on_btn_less_pressed():
 	current_index = posmod(current_index - 1, states.size())
+	#get_parent().getnodeornull("map_type").get_node("SpinBox").value=current_index
 	_update_ui()
 
 func _on_btn_more_pressed():

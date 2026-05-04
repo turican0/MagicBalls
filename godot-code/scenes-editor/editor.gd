@@ -53,6 +53,8 @@ extends Node3D
 var editor_runned=false
 var is_ui_visible = false
 
+var roof_show = false
+
 func _ready() -> void:
 	await get_tree().process_frame
 	Global.MBEX = MBEXclass.new()
@@ -102,6 +104,8 @@ func _ready() -> void:
 	Wizards_Edit.display_player_data(0)
 	Stages_Edit.display_stages_data(0)
 	_connect_entity_spinboxes()
+	
+	SetRoofByVar()
 	editor_runned=true
 
 func _on_window_focus_entered() -> void:
@@ -380,10 +384,11 @@ func gameInit():
 func EditorInit(cdPath):
 	Global.MBEX.REMC2EditorBegin(cdPath)
 
+var updateRoof:bool = false
+
 func EditorStep():
 	Global.MBEX.REMC2EditorLoop()
-	var isCave:bool = false
-	Global.MBEX.renew_terrain(isCave)
+	Global.MBEX.renew_terrain(updateRoof)
 
 var pool_size = 1200
 
@@ -992,16 +997,6 @@ func AddDisId2Arrows():
 func EditorEnd():
 	Global.MBEX.REMC2EditorEnd()
 
-func _on_terrain_type_state_changed_graphics_type(state_name: String) -> void:
-	if(!Main_TerrainsMB):
-		return
-	Global.setLevelType(state_name)
-	Global.MBEX.REMC2SetLevelType(state_name)
-	Main_DecodeLevel.gameInit(false)
-	Main_TerrainsMB.updateMeshes(false)
-	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
-	RenderEditorEntites()
-
 func _on_h_box_container_value_changed(new_value: int,terrainVarIndex: int) -> void:
 	Global.editorLevel[selectors[terrainVarIndex].name] = new_value
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
@@ -1129,6 +1124,25 @@ func _on_file_id_pressed(id: int) -> void:
 		ID_RUN_LEVEL:
 			Global.MBEX.REMC2EditorSaveLevel();
 			_runGame()
+			
+const ID_TOGGLE_ROOF = 0
+func _on_view_id_pressed(id: int) -> void:
+	match id:
+		ID_TOGGLE_ROOF:
+			var popup = $UI/Control/MenuBar/View
+			var idx = popup.get_item_index(ID_TOGGLE_ROOF)
+			popup.set_item_checked(idx, !popup.is_item_checked(idx))
+			var is_checked = popup.is_item_checked(idx)
+			roof_show = is_checked
+			SetRoofByVar()
+			
+func SetRoofByVar():
+	if(!Main_TerrainsMB):
+		return
+	if(roof_show):
+		Main_TerrainsMB.mesh_instance_top.show()
+	else:
+		Main_TerrainsMB.mesh_instance_top.hide()
 
 func _runGame():
 	var level_path = "user://user-levels/level0.mc2"
@@ -1200,3 +1214,19 @@ func _connect_entity_spinboxes() -> void:
 	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par1_14/SpinBox"))
 	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par2_16/SpinBox"))
 	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par3_18/SpinBox"))
+
+
+func _on_map_type_state_changed_graphics_type(state_name: String) -> void:
+	if(!Main_TerrainsMB):
+		return
+	if(state_name=="Cave"):
+		updateRoof=true
+	else:
+		updateRoof=false
+	Global.setLevelType(state_name)
+	Global.MBEX.REMC2SetLevelType(state_name)
+	Main_DecodeLevel.gameInit(false)
+	Main_TerrainsMB.updateMeshes(false)
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	RenderEditorEntites()
+	SetRoofByVar()
