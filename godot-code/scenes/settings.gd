@@ -580,7 +580,7 @@ func _build_game_tab(tc: TabContainer) -> void:
 	_sel_level_mode.item_selected.connect(_on_level_mode_changed)
 	_update_custom_level_visibility()
 	
-	_sel_fps = _option(vbox, "FPS Limit",
+	_sel_fps = _option(vbox, "FPS Limit(game speed)",
 	["20", "24", "30", "40", "50"],
 	_settings["game"]["fps_limit"])
 		
