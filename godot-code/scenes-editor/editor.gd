@@ -1069,10 +1069,10 @@ func _on_tree_item_selected() -> void:
 			_on_tree_terrain_selected(item_index, item_value.to_int())
 		"Entities":
 			_on_tree_entity_selected(item_index, item_value)
-		"Spells":
-			_on_tree_terrain_spells(item_index, item_value)
+		"Wizards":
+			_on_tree_wizard_selected(item_index, item_value)
 		"Stages":
-			_on_tree_terrain_stages(item_index, item_value)
+			_on_tree_terrain_spells(item_index, item_value)
 		"StagesVars":
 			_on_tree_terrain_stagesVars(item_index, item_value)
 
@@ -1091,7 +1091,7 @@ func _on_tree_entity_selected(index: int, value: String) -> void:
 	Stages_Edit_Panel.hide()
 	fillEntityDetails(index)
 	
-func _on_tree_terrain_spells(index: int, value: String):
+func _on_tree_wizard_selected(index: int, value: String):
 	Wizards_Edit_Panel.show()
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
