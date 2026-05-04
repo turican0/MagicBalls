@@ -51,7 +51,7 @@ const DEFAULTS = {
 		#"vsync":            0,   # 0=On 1=Off 2=Adaptive
 		"texture_quality":  2,   # 0=Low 1=Medium 2=High
 		#"view_distance":    7,   # 1..10
-		#"fps_limit":        2,   # 0=30 1=60 2=144 3=Unlimited
+		"fps_limit":        1,   # 0=30 1=60 2=144 3=Unlimited
 	},
 	"audio": {
 		"master_volume":    100,
@@ -235,11 +235,12 @@ func _apply_settings() -> void:
 		#2: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ADAPTIVE)
 
 	## FPS limit
-	#match _settings["video"]["fps_limit"]:
-		#0: Engine.max_fps = 30
-		#1: Engine.max_fps = 60
-		#2: Engine.max_fps = 144
-		#3: Engine.max_fps = 0  # Unlimited
+	match _settings["video"]["fps_limit"]:
+		0: Engine.max_fps = 24
+		1: Engine.max_fps = 30
+		2: Engine.max_fps = 40
+		3: Engine.max_fps = 50
+		3: Engine.max_fps = 60
 
 	# Master volume
 	#var master_idx = AudioServer.get_bus_index("Master")
@@ -257,7 +258,7 @@ func _read_controls_into_settings() -> void:
 	#_settings["video"]["vsync"]            = _sel_vsync.selected
 	#_settings["video"]["texture_quality"]  = _sel_texture.selected
 	#_settings["video"]["view_distance"]    = int(_sl_view_dist.value)
-	#_settings["video"]["fps_limit"]        = _sel_fps.selected
+	_settings["video"]["fps_limit"]        = _sel_fps.selected
 
 	_settings["audio"]["master_volume"]    = int(_sl_master.value)
 	_settings["audio"]["music_volume"]     = int(_sl_music.value)
