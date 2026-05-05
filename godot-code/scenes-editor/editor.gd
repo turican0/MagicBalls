@@ -1259,11 +1259,10 @@ func _on_wizard_spinbox_value_changed(_value) -> void:
 	if idx < 0 or idx > 7:
 		return
 		
-	Global.editorLevel["wizards"][idx]["State"]   = Wizards_Edit.get_node_or_null("State/SpinBox").value as int
-	Global.editorLevel["wizards"][idx]["Aggression"]   = Wizards_Edit.get_node_or_null("Aggression/SpinBox").value as int
-	Global.editorLevel["wizards"][idx]["Reflexes"]      = Wizards_Edit.get_node_or_null("Reflexes/SpinBox").value as int
-	Global.editorLevel["wizards"][idx]["Perception"]   = Wizards_Edit.get_node_or_null("Perception/SpinBox").value as int
-	Global.editorLevel["wizards"][idx]["Life"]    = Wizards_Edit.get_node_or_null("Life/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["aggression"]   = Wizards_Edit.get_node_or_null("Aggression/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["reflexes"]      = Wizards_Edit.get_node_or_null("Reflexes/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["perception"]   = Wizards_Edit.get_node_or_null("Perception/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["life"]    = Wizards_Edit.get_node_or_null("Life/SpinBox").value as int
 	
 	var spells_container = Wizards_Edit.get_node_or_null("StartingSpells")
 	if spells_container:
@@ -1272,7 +1271,7 @@ func _on_wizard_spinbox_value_changed(_value) -> void:
 			var button = panel.get_child(0)
 			if button and button is TextureButton:
 				spells_data.append(button.button_pressed)
-		Global.editorLevel["wizards"][idx]["StartingSpells"] = spells_data
+		Global.editorLevel["wizards"][idx]["starting_spells"] = spells_data
 		
 	var available_container = Wizards_Edit.get_node_or_null("AvailableSpells")
 	if available_container:
@@ -1281,7 +1280,7 @@ func _on_wizard_spinbox_value_changed(_value) -> void:
 			var button = panel.get_child(0)
 			if button and button is TextureButton:
 				spells_data.append(button.button_pressed)
-		Global.editorLevel["wizards"][idx]["AvailableSpells"] = spells_data
+		Global.editorLevel["wizards"][idx]["byte_array"] = spells_data
 		
 	var blocked_container = Wizards_Edit.get_node_or_null("BlockedSpells")
 	if blocked_container:
@@ -1290,7 +1289,7 @@ func _on_wizard_spinbox_value_changed(_value) -> void:
 			var button = panel.get_child(0)
 			if button and button is TextureButton:
 				spells_data.append(button.button_pressed)
-		Global.editorLevel["wizards"][idx]["BlockedSpells"] = spells_data
+		Global.editorLevel["wizards"][idx]["blocked_spells"] = spells_data
 	
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 
@@ -1322,7 +1321,6 @@ func _connect_wizard_spells(node) -> void:
 				button.toggled.connect(_on_wizard_spinbox_value_changed)
 
 func _connect_wizards_spinboxes() -> void:
-	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("State/SpinBox"))
 	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Aggression/SpinBox"))
 	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Reflexes/SpinBox"))
 	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Perception/SpinBox"))

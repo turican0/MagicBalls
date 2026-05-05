@@ -838,18 +838,6 @@ max_value = 7.0
 value = 1.0
 script = ExtResource("6_rvyvi")
 
-[node name="State" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2093992416]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/State" unique_id=1681779500]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "State"
-
-[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/State" unique_id=2025122469]
-layout_mode = 2
-max_value = 65535.0
-
 [node name="Aggression" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=151106663]
 layout_mode = 2
 
