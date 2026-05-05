@@ -94,9 +94,10 @@ func _ready() -> void:
 	get_window().mouse_entered.connect(_on_window_focus_entered)
 	get_window().mouse_exited.connect(_on_window_focus_exited)
 	
-	Wizards_Edit.display_player_data(0)
-	Stages_Edit.display_stages_data(0)
+	#Wizards_Edit.display_player_data(0)
+	#Stages_Edit.display_stages_data(0)
 	_connect_entity_spinboxes()
+	_connect_wizards_spinboxes()
 	
 	SetRoofByVar()
 	editor_runned=true
@@ -373,6 +374,7 @@ func _process(delta: float) -> void:
 		EditorStep()
 		Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 		refreshTerrainDetails()
+		#refreshWizardDetails()
 		update_tree()
 		Global.MBEX.REMC2EditorTimedSaveState(1.0)
 		UpdatePositionLabel()
@@ -1071,6 +1073,7 @@ func log_message(text: String, color: String = "white"):
 	scrollbar.value = scrollbar.max_value
 
 var _filling_entity_details := false
+var _filling_wizard_details := false
 
 func fillEntityDetails(index:int):
 	_filling_entity_details = true
@@ -1105,32 +1108,31 @@ func _on_tree_item_selected() -> void:
 		
 	var section_title = parent.get_text(0)  # "Terrain" nebo "Entities"
 	var item_text = selected.get_text(0)    # např. "Seed_0"
-	var item_value = selected.get_text(1)   # hodnota jako string
 	var item_index: int = -1
 	if selected.get_metadata(0) != null:
 		item_index = selected.get_metadata(0)
 	match section_title:
 		"Terrain":
-			_on_tree_terrain_selected(item_index, item_value.to_int())
+			_on_tree_terrain_selected(item_index)
 		"Entities":
-			_on_tree_entity_selected(item_index, item_value)
+			_on_tree_entity_selected(item_index)
 		"Wizards":
-			_on_tree_wizard_selected(item_index, item_value)
+			_on_tree_wizard_selected(item_index)
 		"Stages":
-			_on_tree_stages_selected(item_index, item_value)
+			_on_tree_stages_selected(item_index)
 		"StagesVars":
-			_on_tree_stagesVars_selected(item_index, item_value)
+			_on_tree_stagesVars_selected(item_index)
 
-func _on_tree_terrain_selected(index: int, value: int) -> void:
-	log_message("Terrain selected: index=%d value=%d" % [index, value])
+func _on_tree_terrain_selected(index: int) -> void:
+	log_message("Terrain selected: index=%d" % [index])
 	Terrain_Edit_Panel.show()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.hide()
 
-func _on_tree_entity_selected(index: int, value: String) -> void:
-	log_message("Entity selected: index=%d value=%s" % [index, value])
+func _on_tree_entity_selected(index: int) -> void:
+	log_message("Entity selected: index=%d" % [index])
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.show()
 	Wizards_Edit_Panel.hide()
@@ -1138,15 +1140,17 @@ func _on_tree_entity_selected(index: int, value: String) -> void:
 	StagesVars_Edit_Panel.hide()
 	fillEntityDetails(index)
 	
-func _on_tree_wizard_selected(index: int, value: String):
+func _on_tree_wizard_selected(index: int):
 	Wizards_Edit_Panel.show()
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.hide()
+	_filling_wizard_details=true
 	Wizards_Edit.display_player_data(index)
+	_filling_wizard_details=false
 
-func _on_tree_stages_selected(index: int, value: String):
+func _on_tree_stages_selected(index: int):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()
@@ -1154,7 +1158,7 @@ func _on_tree_stages_selected(index: int, value: String):
 	StagesVars_Edit_Panel.hide()
 	Stages_Edit.display_stages_data(index)
  
-func _on_tree_stagesVars_selected(index: int, value: String):
+func _on_tree_stagesVars_selected(index: int):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()
@@ -1246,28 +1250,86 @@ func _on_entity_spinbox_value_changed(_value) -> void:
 	Global.editorLevel["entities"][idx]["par1"]      = Entity_Edit.get_node_or_null("par1_14/SpinBox").value as int
 	Global.editorLevel["entities"][idx]["par2"]      = Entity_Edit.get_node_or_null("par2_16/SpinBox").value as int
 	Global.editorLevel["entities"][idx]["par3"]      = Entity_Edit.get_node_or_null("par3_18/SpinBox").value as int
-
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
-	EditorStep()
-	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
-	RenderEditorEntites()
+	
+func _on_wizard_spinbox_value_changed(_value) -> void:
+	if _filling_wizard_details:
+		return
+	var idx = Wizards_Edit.get_node_or_null("IDX/SpinBox").value as int
+	if idx < 0 or idx > 7:
+		return
+		
+	Global.editorLevel["wizards"][idx]["State"]   = Wizards_Edit.get_node_or_null("State/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["Aggression"]   = Wizards_Edit.get_node_or_null("Aggression/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["Reflexes"]      = Wizards_Edit.get_node_or_null("Reflexes/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["Perception"]   = Wizards_Edit.get_node_or_null("Perception/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["Life"]    = Wizards_Edit.get_node_or_null("Life/SpinBox").value as int
+	
+	var spells_container = Wizards_Edit.get_node_or_null("StartingSpells")
+	if spells_container:
+		var spells_data = []
+		for panel in spells_container.get_children():
+			var button = panel.get_child(0)
+			if button and button is TextureButton:
+				spells_data.append(button.button_pressed)
+		Global.editorLevel["wizards"][idx]["StartingSpells"] = spells_data
+		
+	var available_container = Wizards_Edit.get_node_or_null("AvailableSpells")
+	if available_container:
+		var spells_data = []
+		for panel in available_container.get_children():
+			var button = panel.get_child(0)
+			if button and button is TextureButton:
+				spells_data.append(button.button_pressed)
+		Global.editorLevel["wizards"][idx]["AvailableSpells"] = spells_data
+		
+	var blocked_container = Wizards_Edit.get_node_or_null("BlockedSpells")
+	if blocked_container:
+		var spells_data = []
+		for panel in blocked_container.get_children():
+			var button = panel.get_child(0)
+			if button and button is TextureButton:
+				spells_data.append(button.button_pressed)
+		Global.editorLevel["wizards"][idx]["BlockedSpells"] = spells_data
+	
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 
-func _connect_node_spinboxes(node) -> void:
+func _connect_entity_spinbox(node) -> void:
 	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
 		node.value_changed.connect(_on_entity_spinbox_value_changed)
 
 func _connect_entity_spinboxes() -> void:
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("POS/SpinBox"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("POS/SpinBox2"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("type_0x30311/SpinBox"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("DisId/SpinBox"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("word_10/SpinBox"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("stageTag_12/SpinBox"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par1_14/SpinBox"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par2_16/SpinBox"))
-	_connect_node_spinboxes(Entity_Edit.get_node_or_null("par3_18/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("POS/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("POS/SpinBox2"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("type_0x30311/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("DisId/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("word_10/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("stageTag_12/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("par1_14/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("par2_16/SpinBox"))
+	_connect_entity_spinbox(Entity_Edit.get_node_or_null("par3_18/SpinBox"))
 
+func _connect_wizard_spinbox(node) -> void:
+	if !node.value_changed.is_connected(_on_wizard_spinbox_value_changed):
+		node.value_changed.connect(_on_wizard_spinbox_value_changed)
+
+func _connect_wizard_spells(node) -> void:
+	for panel in node.get_children():
+		var button = panel.get_child(0)
+		if button and button is TextureButton:
+			if !button.toggled.is_connected(_on_wizard_spinbox_value_changed):
+				button.toggled.connect(_on_wizard_spinbox_value_changed)
+
+func _connect_wizards_spinboxes() -> void:
+	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("State/SpinBox"))
+	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Aggression/SpinBox"))
+	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Reflexes/SpinBox"))
+	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Perception/SpinBox"))
+	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Life/SpinBox"))
+	_connect_wizard_spells(Wizards_Edit.get_node_or_null("StartingSpells"))
+	_connect_wizard_spells(Wizards_Edit.get_node_or_null("AvailableSpells"))
+	_connect_wizard_spells(Wizards_Edit.get_node_or_null("BlockedSpells"))
 
 func _on_map_type_state_changed_graphics_type(state_name: String) -> void:
 	if(!Main_TerrainsMB):
