@@ -21,70 +21,61 @@ struct EditorSnapshot {
 
 class UndoRedoManager {
 public:
-	explicit UndoRedoManager(Type_Level_2FECE &terrain, size_t maxSteps = 100) :
-			m_currentTerrain(terrain), m_maxSteps(maxSteps) {
-		// Uložíme počáteční stav obou objektů
-		saveToStack(undoStack);
+	explicit UndoRedoManager(size_t maxSteps = 100) :
+			m_maxSteps(maxSteps) {
 	}
 
-	void saveState() {
-		// Kontrola shody s posledním stavem (porovnáváme obojí)
-		if (!undoStack.empty() && undoStack.back().isSameAs(m_currentTerrain)) {
+	void init(Type_Level_2FECE &terrain) {
+		undoStack.clear();
+		redoStack.clear();
+		saveToStack(undoStack, terrain);
+	}
+
+    void saveState(Type_Level_2FECE &terrain) {
+		if (!undoStack.empty() && undoStack.back().isSameAs(terrain)) {
 			return;
 		}
-
 		redoStack.clear();
-		saveToStack(undoStack);
-
+		saveToStack(undoStack, terrain);
 		if (undoStack.size() > m_maxSteps + 1) {
 			undoStack.pop_front();
 		}
 	}
 
-	bool undo() {
+    bool undo(Type_Level_2FECE &terrain) {
 		if (undoStack.size() <= 1)
 			return false;
-
 		redoStack.push_back(undoStack.back());
 		undoStack.pop_back();
-
-		restoreFromSnapshot(undoStack.back());
+		restoreFromSnapshot(undoStack.back(), terrain);
 		return true;
 	}
 
-	bool redo() {
+	bool redo(Type_Level_2FECE &terrain) {
 		if (redoStack.empty())
 			return false;
-
 		undoStack.push_back(redoStack.back());
-		restoreFromSnapshot(undoStack.back());
+		restoreFromSnapshot(undoStack.back(), terrain);
 		redoStack.pop_back();
-
 		return true;
 	}
 
-	// Pomocné metody pro přístup k informacím
 	bool canUndo() const { return undoStack.size() > 1; }
 	bool canRedo() const { return !redoStack.empty(); }
 
 private:
-	// Reference na originální data v editoru
-	Type_Level_2FECE &m_currentTerrain;
-
 	std::deque<EditorSnapshot> undoStack;
 	std::deque<EditorSnapshot> redoStack;
 	size_t m_maxSteps;
 
-	// Vytvoří kopii aktuálních dat do zásobníku
-	void saveToStack(std::deque<EditorSnapshot> &stack) {
+    void saveToStack(std::deque<EditorSnapshot> &stack, const Type_Level_2FECE &terrain) {
 		EditorSnapshot snapshot;
-		snapshot.terrain = m_currentTerrain;
+		snapshot.terrain = terrain;
 		stack.push_back(snapshot);
 	}
 
-	// Přepíše data v editoru daty ze snapshotu
-	void restoreFromSnapshot(const EditorSnapshot &snapshot) {
-		m_currentTerrain = snapshot.terrain;
+    void restoreFromSnapshot(const EditorSnapshot &snapshot, Type_Level_2FECE &terrain) {
+		terrain = snapshot.terrain;
 	}
 };
 

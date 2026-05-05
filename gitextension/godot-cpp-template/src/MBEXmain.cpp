@@ -2499,20 +2499,20 @@ void MBEXclass::REMC2EditorExportToCSV() {
 
 void MBEXclass::REMC2EditorUndo() {
 	if (urManager->canUndo()) {
-		urManager->undo();
+		urManager->undo(tempTerrain);
 	}
 }
 
 void MBEXclass::REMC2EditorRedo() {
 	if (urManager->canRedo()) {
-		urManager->redo();
+		urManager->redo(tempTerrain);
 	}
 }
 
 std::chrono::steady_clock::time_point lastSaveTime;
 
 void MBEXclass::REMC2EditorSaveState() {
-	urManager->saveState();
+	urManager->saveState(tempTerrain);
 	lastSaveTime = std::chrono::steady_clock::now();
 }
 

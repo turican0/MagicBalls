@@ -201,7 +201,8 @@ void editor_run() {
 	//InGameLoop_47320(0);//run game
 
 	//restore D41A0_BYTESTR_0
-	urManager = std::make_unique<UndoRedoManager>(D41A0_0.terrain_2FECE);
+	urManager = std::make_unique<UndoRedoManager>();
+	urManager->init(tempTerrain);
 }
 
 void terrain_recalculate() {
