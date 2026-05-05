@@ -124,15 +124,12 @@ func DetectFocus() -> void:
 var _waiting_for_click_focus := false
 func _on_window_focus_entered() -> void:
 	if not is_ui_visible:
-		_waiting_for_click_focus = true	
+		_waiting_for_click_focus = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	log_message("Aplikace opět aktivní - myš nastavena.")
 
 func _on_window_focus_exited() -> void:
 	_waiting_for_click_focus = false
-	print("_on_window_focus_exited")
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	log_message("Aplikace ztratila focus - myš uvolněna.")
 	
 #func SetPlayerValues(data: PackedFloat32Array):
 	#if data.is_empty():
@@ -185,8 +182,6 @@ func _input(event: InputEvent) -> void:
 	if _waiting_for_click_focus:
 		if event is InputEventMouseButton and not event.pressed:
 			_waiting_for_click_focus = false
-			#var center = get_viewport().get_visible_rect().size / 2.0
-			#get_viewport().warp_mouse(center)
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			return
 	# M pressed
@@ -222,12 +217,8 @@ func toggle_editor_control_styleSt(state):
 	if state:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		#Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
-		print("Input.MOUSE_MODE_VISIBLE")
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		print("Input.MOUSE_MODE_CAPTURED")
-		#var center = get_viewport().get_visible_rect().size / 2.0
-		#get_viewport().warp_mouse(center)
 
 func update_tree():
 	var all_sections: Array = []
