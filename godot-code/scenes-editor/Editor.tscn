@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://c5friqigqdh4k" path="res://Sky3D/Sky3DDemo.tscn" id="6_wa12f"]
 [ext_resource type="Script" uid="uid://n4kpwwnt37vs" path="res://scenes-editor/StagesSettings.gd" id="8_wqm82"]
 [ext_resource type="Script" uid="uid://cqplmm705y6m2" path="res://scenes-editor/entity_filter.gd" id="9_xhpx2"]
+[ext_resource type="Script" uid="uid://d2s8yjkscxwdq" path="res://scenes-editor/StagesVarsSettings.gd" id="10_rvyvi"]
 [ext_resource type="Texture2D" uid="uid://cag6kwjpq504j" path="res://gui/GuiUnchecked.svg" id="10_xhpx2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xi2fd"]
@@ -833,9 +834,9 @@ text = "Player id:"
 
 [node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX" unique_id=300397358]
 layout_mode = 2
-min_value = 1.0
-max_value = 8.0
+max_value = 7.0
 value = 1.0
+script = ExtResource("6_rvyvi")
 
 [node name="State" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2093992416]
 layout_mode = 2
@@ -894,54 +895,6 @@ layout_mode = 2
 text = "Life"
 
 [node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Life" unique_id=466910067]
-layout_mode = 2
-max_value = 65535.0
-
-[node name="StageIndex" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1925007844]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageIndex" unique_id=1443861603]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "StageIndex"
-
-[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageIndex" unique_id=187605508]
-layout_mode = 2
-max_value = 65535.0
-
-[node name="StageStage" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=729549288]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageStage" unique_id=79062092]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "StageStage"
-
-[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageStage" unique_id=1450131364]
-layout_mode = 2
-max_value = 65535.0
-
-[node name="StageX" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=306412774]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX" unique_id=1168289504]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "StageX"
-
-[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX" unique_id=1566181987]
-layout_mode = 2
-max_value = 65535.0
-
-[node name="StageY" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=795641651]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY" unique_id=592165409]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "StageY"
-
-[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY" unique_id=125753527]
 layout_mode = 2
 max_value = 65535.0
 
@@ -2099,7 +2052,6 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer" unique_id=319321999]
 layout_mode = 2
 script = ExtResource("8_wqm82")
-player_index = null
 
 [node name="IDX" type="HBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=915971275]
 layout_mode = 2
@@ -2111,9 +2063,9 @@ text = "IDX"
 
 [node name="SpinBox" type="SpinBox" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX" unique_id=1265435466]
 layout_mode = 2
-min_value = 1.0
-max_value = 11.0
+max_value = 7.0
 value = 1.0
+script = ExtResource("6_rvyvi")
 
 [node name="StageIndex" type="HBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=658014732]
 layout_mode = 2
@@ -2163,27 +2115,125 @@ text = "StageY1"
 layout_mode = 2
 max_value = 65535.0
 
-[node name="StageX2" type="HBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=674498265]
+[node name="StagesVarsEdit" type="Control" parent="UI" unique_id=1252974492]
+visible = false
+layout_mode = 3
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PreContainer" type="PanelContainer" parent="UI/StagesVarsEdit" unique_id=312371389]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/StagesVarsEdit/PreContainer" unique_id=1442164081]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX2" unique_id=1119145626]
+[node name="MarginContainer" type="MarginContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer" unique_id=1042300975]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer" unique_id=1322917471]
+layout_mode = 2
+script = ExtResource("10_rvyvi")
+
+[node name="IDX" type="HBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=284831975]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX" unique_id=1037506467]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "IDX"
+
+[node name="SpinBox" type="SpinBox" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX" unique_id=321417913]
+layout_mode = 2
+max_value = 11.0
+value = 1.0
+script = ExtResource("6_rvyvi")
+
+[node name="StageIndex" type="HBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2095320459]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageIndex" unique_id=1474000220]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "StageIndex"
+
+[node name="SpinBox" type="SpinBox" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageIndex" unique_id=1581692344]
+layout_mode = 2
+max_value = 65535.0
+
+[node name="StageStage" type="HBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1906835099]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageStage" unique_id=1076647735]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "StageStage"
+
+[node name="SpinBox" type="SpinBox" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageStage" unique_id=1712223559]
+layout_mode = 2
+max_value = 65535.0
+
+[node name="StageX1" type="HBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=448754421]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX1" unique_id=1752290762]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "StageX1"
+
+[node name="SpinBox" type="SpinBox" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX1" unique_id=189626578]
+layout_mode = 2
+max_value = 65535.0
+
+[node name="StageY1" type="HBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1421200832]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY1" unique_id=1518882085]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "StageY1"
+
+[node name="SpinBox" type="SpinBox" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY1" unique_id=1433002834]
+layout_mode = 2
+max_value = 65535.0
+
+[node name="StageX2" type="HBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1193681624]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX2" unique_id=1022277805]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "StageX2"
 
-[node name="SpinBox" type="SpinBox" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX2" unique_id=1190797636]
+[node name="SpinBox" type="SpinBox" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageX2" unique_id=1263629857]
 layout_mode = 2
 max_value = 65535.0
 
-[node name="StageY2" type="HBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=243181050]
+[node name="StageY2" type="HBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1063936787]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY2" unique_id=30332247]
+[node name="Label" type="Label" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY2" unique_id=1948886927]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "StageY2"
 
-[node name="SpinBox" type="SpinBox" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY2" unique_id=1698740197]
+[node name="SpinBox" type="SpinBox" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY2" unique_id=1910735757]
 layout_mode = 2
 max_value = 65535.0
 
@@ -2433,8 +2483,6 @@ mesh = SubResource("CylinderMesh_jhayq")
 [connection signal="toggled" from="UI/Control/Selector" to="." method="_on_selector_toggled"]
 [connection signal="state_changed_graphicsType" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" to="." method="_on_map_type_state_changed_graphics_type"]
 [connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type/SpinBox" to="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" method="_on_spin_box_value_changed"]
-[connection signal="value_changed" from="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]
-[connection signal="value_changed" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/IDX/SpinBox" to="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/SpinBoxType" to="UI/EntityFilter" method="_on_spin_box_type_value_changed"]
 [connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/CheckBoxType" to="UI/EntityFilter" method="_on_check_box_type_toggled"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311/SpinBoxSubType" to="UI/EntityFilter" method="_on_spin_box_sub_type_value_changed"]

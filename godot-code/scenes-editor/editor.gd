@@ -13,6 +13,7 @@ extends Node3D
 @onready var Entity_Edit_Panel: Control = $UI/EntityEdit
 @onready var Wizards_Edit_Panel: Control = $UI/WizardsEdit
 @onready var Stages_Edit_Panel: Control = $UI/StagesEdit
+@onready var StagesVars_Edit_Panel: Control = $UI/StagesVarsEdit
 
 @onready var Console: RichTextLabel = $UI/Console/RichTextLabel
 
@@ -20,6 +21,7 @@ extends Node3D
 @onready var Entity_Edit: Control = $UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 @onready var Wizards_Edit: Control = $UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 @onready var Stages_Edit: Control = $UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
+@onready var StagesVars_Edit: Control = $UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer
 
 @onready var EntityFilter: Control = $UI/EntityFilter
 
@@ -1102,6 +1104,7 @@ func _on_tree_terrain_selected(index: int, value: int) -> void:
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
+	StagesVars_Edit_Panel.hide()
 
 func _on_tree_entity_selected(index: int, value: String) -> void:
 	log_message("Entity selected: index=%d value=%s" % [index, value])
@@ -1109,6 +1112,7 @@ func _on_tree_entity_selected(index: int, value: String) -> void:
 	Entity_Edit_Panel.show()
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
+	StagesVars_Edit_Panel.hide()
 	fillEntityDetails(index)
 	
 func _on_tree_wizard_selected(index: int, value: String):
@@ -1116,18 +1120,24 @@ func _on_tree_wizard_selected(index: int, value: String):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
+	StagesVars_Edit_Panel.hide()
+	Wizards_Edit.display_player_data(index)
 
 func _on_tree_stages_selected(index: int, value: String):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
-	Wizards_Edit_Panel.show()
-	Stages_Edit_Panel.hide()
+	Wizards_Edit_Panel.hide()
+	Stages_Edit_Panel.show()
+	StagesVars_Edit_Panel.hide()
+	Stages_Edit.display_stages_data(index)
  
 func _on_tree_stagesVars_selected(index: int, value: String):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()
-	Stages_Edit_Panel.show()
+	Stages_Edit_Panel.hide()
+	StagesVars_Edit_Panel.show()
+	StagesVars_Edit.display_stages_data(index)
 
 const ID_EXPORT_CSV = 0
 const ID_LOAD_LEVEL = 1
@@ -1144,7 +1154,7 @@ func _on_file_id_pressed(id: int) -> void:
 		ID_RUN_LEVEL:
 			Global.MBEX.REMC2EditorSaveLevel();
 			_runGame()
-			
+
 const ID_TOGGLE_ROOF = 0
 func _on_view_id_pressed(id: int) -> void:
 	match id:
@@ -1155,7 +1165,7 @@ func _on_view_id_pressed(id: int) -> void:
 			var is_checked = popup.is_item_checked(idx)
 			roof_show = is_checked
 			SetRoofByVar()
-			
+
 func SetRoofByVar():
 	if(!Main_TerrainsMB):
 		return

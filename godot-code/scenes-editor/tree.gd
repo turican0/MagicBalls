@@ -1,10 +1,9 @@
 extends Tree
 
 func _ready():
-	columns = 2
+	columns = 1
 	column_titles_visible = true
-	set_column_title(0, "Name")
-	set_column_title(1, "Value")
+	set_column_title(0, "Level data")
 	hide_root = true # Schováme prázdný root uzel
 	
 func update_tree_view(all_sections: Array):
@@ -19,9 +18,8 @@ func update_tree_view(all_sections: Array):
 
 	var root = create_item()
 	hide_root = true
-	columns = 2
-	set_column_title(0, "Property")
-	set_column_title(1, "Value")
+	columns = 1
+	set_column_title(0, "Level data")
 	column_titles_visible = true
 
 	for section in all_sections:
