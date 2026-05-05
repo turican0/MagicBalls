@@ -27,9 +27,7 @@ func update_tree_view(all_sections: Array):
 		var category: TreeItem = create_item(root)
 		category.set_text(0, str(section["title"]))
 		category.set_selectable(0, false)
-		category.set_selectable(1, false)
 		category.set_custom_bg_color(0, Color(0.12, 0.12, 0.12))
-		category.set_custom_bg_color(1, Color(0.12, 0.12, 0.12))
 		category.set_collapsed(false)
 
 		# 2. Přidání všech položek
@@ -37,11 +35,10 @@ func update_tree_view(all_sections: Array):
 			var item: TreeItem = create_item(category)
 
 			item.set_text(0, str(item_data["name"]))
-			item.set_text(1, str(item_data["value"]))
 			item.set_metadata(0, item_data["id"])
 
 			# Volitelně: lepší zarovnání hodnoty doprava
-			item.set_text_alignment(1, HORIZONTAL_ALIGNMENT_RIGHT)
+			#item.set_text_alignment(1, HORIZONTAL_ALIGNMENT_RIGHT)
 		var title = str(section["title"])
 		category.set_collapsed(collapsed_states.get(title, true))
 

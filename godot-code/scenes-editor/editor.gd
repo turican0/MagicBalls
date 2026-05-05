@@ -74,20 +74,8 @@ func _ready() -> void:
 	
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	#Main_TerrainsMB.updateMeshes(false)
-	for i in range(selectors.size()):
-		var selector = selectors[i]
-		selector.current_value = Global.editorLevel[selectors[i].name]
-		selector.get_node_or_null("SpinBox").value = Global.editorLevel[selectors[i].name]
-		if not selector.get_node_or_null("SpinBox").value_changed.is_connected(_on_h_box_container_value_changed):
-			selector.get_node_or_null("SpinBox").value_changed.connect(_on_h_box_container_value_changed.bind(i))
-	
-	for i in range(TEselector2.size()):
-		var selector = TEselector2[i]
-		selector.get_node_or_null("SpinBox").value = Global.editorLevel[TEselector2[i].name]
-		if not selector.get_node_or_null("SpinBox").value_changed.is_connected(_on_h_box_container_value_changed2):
-			selector.get_node_or_null("SpinBox").value_changed.connect(_on_h_box_container_value_changed2.bind(i))
-	
-	
+	refreshTerrainDetails()
+	_connect_terrain_spinboxes()	
 	
 	#SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
 	#SetStagesValues(Global.MBEX.REMC2EditorGetTerrainStages())
@@ -112,6 +100,31 @@ func _ready() -> void:
 	
 	SetRoofByVar()
 	editor_runned=true
+	
+func _connect_terrain_spinboxes() -> void:
+	for i in range(selectors.size()):
+		var sb = selectors[i].get_node_or_null("SpinBox")
+		if sb and not sb.value_changed.is_connected(_on_h_box_container_value_changed):
+			sb.value_changed.connect(_on_h_box_container_value_changed.bind(i))
+
+	for i in range(TEselector2.size()):
+		var sb = TEselector2[i].get_node_or_null("SpinBox")
+		if sb and not sb.value_changed.is_connected(_on_h_box_container_value_changed2):
+			sb.value_changed.connect(_on_h_box_container_value_changed2.bind(i))
+
+var _filling_terrain_details := false
+func refreshTerrainDetails() -> void:
+	_filling_terrain_details = true
+	for i in range(selectors.size()):
+		var selector = selectors[i]
+		var val = Global.editorLevel[selector.name]
+		selector.current_value = val
+		selector.get_node_or_null("SpinBox").value = val
+	
+	for i in range(TEselector2.size()):
+		var selector = TEselector2[i]
+		selector.get_node_or_null("SpinBox").value = Global.editorLevel[selector.name]
+	_filling_terrain_details = false
 
 var _has_focus := false
 func DetectFocus() -> void:
@@ -348,22 +361,23 @@ func update_tree():
 				var idx = item.get_metadata(0)
 				if idx in selected_indices:
 					item.set_custom_bg_color(0, Color(1.0, 1.0, 0.0, 0.4))
-					item.set_custom_bg_color(1, Color(1.0, 1.0, 0.0, 0.4))
+					#item.set_custom_bg_color(1, Color(1.0, 1.0, 0.0, 0.4))
 				else:
 					item.clear_custom_bg_color(0)
-					item.clear_custom_bg_color(1)
+					#item.clear_custom_bg_color(1)
 				item = item.get_next()
 		section = section.get_next()
 
 func _process(delta: float) -> void:
 	if editor_runned:
 		EditorStep()
-	update_tree()
-	Global.MBEX.REMC2EditorTimedSaveState(1.0)
-	UpdatePositionLabel()
-	select_entities_by_filter()
-	RenderEditorEntites()
-	#DetectFocus()
+		Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+		refreshTerrainDetails()
+		update_tree()
+		Global.MBEX.REMC2EditorTimedSaveState(1.0)
+		UpdatePositionLabel()
+		select_entities_by_filter()
+		RenderEditorEntites()		
 
 func gameInit():
 	match Global.getLevelType():
@@ -1020,6 +1034,8 @@ func EditorEnd():
 	Global.MBEX.REMC2EditorEnd()
 
 func _on_h_box_container_value_changed(new_value: int,terrainVarIndex: int) -> void:
+	if _filling_terrain_details:
+		return
 	Global.editorLevel[selectors[terrainVarIndex].name] = new_value
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 	EditorStep()
@@ -1027,15 +1043,22 @@ func _on_h_box_container_value_changed(new_value: int,terrainVarIndex: int) -> v
 	RenderEditorEntites()
 
 func _on_h_box_container_value_changed2(new_value: int,terrainVarIndex: int) -> void:
+	if _filling_terrain_details:
+		return
 	Global.editorLevel[TEselector2[terrainVarIndex].name] = new_value
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 
 func _on_undo_button_down() -> void:
 	Global.MBEX.REMC2EditorUndo()
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	print("testUndo"+str(Global.editorLevel["word_2FECE"]))
+	refreshTerrainDetails()
 	log_message("UNDO")
 
 func _on_redo_button_down() -> void:
 	Global.MBEX.REMC2EditorRedo()
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	refreshTerrainDetails()
 	log_message("REDO")
 
 func SaveState() -> void:
