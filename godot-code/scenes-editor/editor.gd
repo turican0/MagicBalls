@@ -51,7 +51,7 @@ extends Node3D
 ]
 
 var editor_runned=false
-var is_ui_visible = false
+var is_ui_visible = true
 
 var roof_show = false
 
@@ -101,6 +101,9 @@ func _ready() -> void:
 	get_window().focus_entered.connect(_on_window_focus_entered)
 	get_window().focus_exited.connect(_on_window_focus_exited)
 	
+	get_window().mouse_entered.connect(_on_window_focus_entered)
+	get_window().mouse_exited.connect(_on_window_focus_exited)
+	
 	Wizards_Edit.display_player_data(0)
 	Stages_Edit.display_stages_data(0)
 	_connect_entity_spinboxes()
@@ -108,11 +111,26 @@ func _ready() -> void:
 	SetRoofByVar()
 	editor_runned=true
 
+var _has_focus := false
+func DetectFocus() -> void:
+	var window_focused = get_window().has_focus()
+	if window_focused != _has_focus:
+		_has_focus = window_focused
+		if window_focused:
+			_on_window_focus_entered()
+		else:
+			_on_window_focus_exited()
+
+var _waiting_for_click_focus := false
 func _on_window_focus_entered() -> void:
-	toggle_editor_control_styleSt(is_ui_visible)
+	if not is_ui_visible:
+		_waiting_for_click_focus = true	
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	log_message("Aplikace opět aktivní - myš nastavena.")
 
 func _on_window_focus_exited() -> void:
+	_waiting_for_click_focus = false
+	print("_on_window_focus_exited")
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	log_message("Aplikace ztratila focus - myš uvolněna.")
 	
@@ -164,6 +182,13 @@ func _on_window_focus_exited() -> void:
 		#Global.stages_settings.append(stage)
 	
 func _input(event: InputEvent) -> void:
+	if _waiting_for_click_focus:
+		if event is InputEventMouseButton and not event.pressed:
+			_waiting_for_click_focus = false
+			#var center = get_viewport().get_visible_rect().size / 2.0
+			#get_viewport().warp_mouse(center)
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			return
 	# M pressed
 	if (event is InputEventKey and event.keycode == KEY_SPACE and event.pressed):
 		toggle_editor_control_style()
@@ -195,9 +220,12 @@ func toggle_editor_control_style():
 		
 func toggle_editor_control_styleSt(state):
 	if state:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		#Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+		print("Input.MOUSE_MODE_VISIBLE")
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		print("Input.MOUSE_MODE_CAPTURED")
 		#var center = get_viewport().get_visible_rect().size / 2.0
 		#get_viewport().warp_mouse(center)
 
@@ -342,6 +370,7 @@ func _process(delta: float) -> void:
 	UpdatePositionLabel()
 	select_entities_by_filter()
 	RenderEditorEntites()
+	#DetectFocus()
 
 func gameInit():
 	match Global.getLevelType():
@@ -1072,9 +1101,9 @@ func _on_tree_item_selected() -> void:
 		"Wizards":
 			_on_tree_wizard_selected(item_index, item_value)
 		"Stages":
-			_on_tree_terrain_spells(item_index, item_value)
+			_on_tree_stages_selected(item_index, item_value)
 		"StagesVars":
-			_on_tree_terrain_stagesVars(item_index, item_value)
+			_on_tree_stagesVars_selected(item_index, item_value)
 
 func _on_tree_terrain_selected(index: int, value: int) -> void:
 	log_message("Terrain selected: index=%d value=%d" % [index, value])
@@ -1097,13 +1126,13 @@ func _on_tree_wizard_selected(index: int, value: String):
 	Entity_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 
-func _on_tree_terrain_stages(index: int, value: String):
+func _on_tree_stages_selected(index: int, value: String):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.show()
 	Stages_Edit_Panel.hide()
  
-func _on_tree_terrain_stagesVars(index: int, value: String):
+func _on_tree_stagesVars_selected(index: int, value: String):
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()

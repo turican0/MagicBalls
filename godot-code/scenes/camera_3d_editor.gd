@@ -30,13 +30,13 @@ var _yaw : float = 0.0
 var _pitch : float = 0.0
 var terrain_hit_position : Vector3 = Vector3.ZERO
 var terrain_hit_valid : bool = false
-var _cylinder_radius : float = 1.0
+var _cylinder_radius : float = 0.1
 
 # ═══════════════════════════════════════════════════════════
 # INITIALIZATION
 # ═══════════════════════════════════════════════════════════
 func _ready() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_yaw = rotation.y
 	_pitch = rotation.x
 	_apply_absolute_rotation()
