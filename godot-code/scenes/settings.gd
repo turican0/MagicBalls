@@ -235,12 +235,9 @@ func _apply_settings() -> void:
 		#2: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ADAPTIVE)
 
 	## FPS limit
-	match _settings["game"]["fps_limit"]:
-		0: Engine.max_fps = 20
-		1: Engine.max_fps = 24
-		2: Engine.max_fps = 30
-		3: Engine.max_fps = 40
-		4: Engine.max_fps = 50
+	var fps_idx = _settings["game"]["fps_limit"]
+	fps_idx = clamp(fps_idx, 0, FPS_VALUES.size() - 1)    
+	Engine.max_fps = FPS_VALUES[fps_idx]
 
 	# Master volume
 	#var master_idx = AudioServer.get_bus_index("Master")
@@ -427,7 +424,8 @@ func SetGlobals():
 	Global.inverse_mouseY=_settings["input"]["invert_y"]
 	Global.level_mode    = _settings["game"]["level_mode"]
 	Global.custom_level  = _settings["game"]["custom_level"]
-	Global.max_fps       = _settings["game"]["fps_limit"]
+	var fps_idx = _settings["game"]["fps_limit"]
+	Global.max_fps = FPS_VALUES[clamp(fps_idx, 0, FPS_VALUES.size() - 1)]
 
 func _animate_simple_spinner(spinner: Label):
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
@@ -565,6 +563,9 @@ const VALID_LEVELS = [
 	120,121,122,123,124,125,126,127,
 ]
 
+const FPS_VALUES = [20, 24, 30, 40, 50]
+const FPS_NAMES  = ["20", "24", "30", "40", "50"]
+
 func _build_game_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("GAME", tc)
 	vbox.add_child(_section("LEVEL"))
@@ -581,7 +582,7 @@ func _build_game_tab(tc: TabContainer) -> void:
 	_update_custom_level_visibility()
 	
 	_sel_fps = _option(vbox, "FPS Limit(game speed)",
-	["20", "24", "30", "40", "50"],
+	FPS_NAMES,
 	_settings["game"]["fps_limit"])
 		
 	var fps_note = Label.new()
@@ -591,7 +592,7 @@ func _build_game_tab(tc: TabContainer) -> void:
 	vbox.add_child(fps_note)
 
 	var _update_fps_note = func(idx: int) -> void:
-		if idx >= 2:
+		if FPS_VALUES[idx] >= 30:
 			fps_note.text = "⚠ Warning, at higher FPS the game becomes harder to control — only for hardcore players(best experience is at 24 FPS)."
 		else:
 			fps_note.text = ""
