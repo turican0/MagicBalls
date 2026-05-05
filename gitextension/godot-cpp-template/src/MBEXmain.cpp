@@ -1126,9 +1126,6 @@ void handleInputs(Dictionary inputs,int type) {
 					HandleButtonClick_191B0(27, 0);
 				}
 				break;
-			case 0x1769: //I - objective
-				mainSetPress(is_pressed, 0x186f); //O
-				break;
 			case 0x2368: //H - change graphics type
 				if (is_pressed) {
 					graphics_enhance = 1 - graphics_enhance;
@@ -1143,7 +1140,10 @@ void handleInputs(Dictionary inputs,int type) {
 				if (is_pressed)
 					game_paused = 1 - game_paused;
 				break;
-			case 0x186f: //O - one step in pause mode
+			case 0x186f: //O - objective
+				mainSetPress(is_pressed, 0x186f); //O
+				break;
+			case 0x1769: //I - one step in pause mode
 				if (game_paused)
 					oneFrameRun = true;
 				break;

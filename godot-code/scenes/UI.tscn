@@ -147,10 +147,10 @@ F1 - this help
 F5 - quick save
 F7 - fog level
 F9 - quick load
-I - current objective
+O - current objective
 H - change graphics type
 P - pause
-O - one step
+I - step frame 
 Enter - big map
 L - destroy castle
 K - kill all creatures(cheat)
