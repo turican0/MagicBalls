@@ -39,7 +39,8 @@ extends Node3D
 	Terrain_Edit.get_node("snFlt"),
 	Terrain_Edit.get_node("bhLin"),
 	Terrain_Edit.get_node("bhFlt"),
-	Terrain_Edit.get_node("rkSte")
+	Terrain_Edit.get_node("rkSte"),
+	Terrain_Edit.get_node("next")
 ]
 
 @onready var TEselector2 = [
@@ -74,8 +75,8 @@ func _ready() -> void:
 	
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	#Main_TerrainsMB.updateMeshes(false)
-	refreshTerrainDetails()
-	_connect_terrain_spinboxes()	
+	#fillTerrainDetails()
+	_connect_terrain_spinboxes()
 	
 	#SetPlayerValues(Global.MBEX.REMC2EditorGetTerrainPlayers())
 	#SetStagesValues(Global.MBEX.REMC2EditorGetTerrainStages())
@@ -98,6 +99,8 @@ func _ready() -> void:
 	#Stages_Edit.display_stages_data(0)
 	_connect_entity_spinboxes()
 	_connect_wizards_spinboxes()
+	_connect_stages_spinboxes()
+	_connect_stagesvars_spinboxes()
 	
 	SetRoofByVar()
 	editor_runned=true
@@ -114,7 +117,7 @@ func _connect_terrain_spinboxes() -> void:
 			sb.value_changed.connect(_on_h_box_container_value_changed2.bind(i))
 
 var _filling_terrain_details := false
-func refreshTerrainDetails() -> void:
+func fillTerrainDetails() -> void:
 	_filling_terrain_details = true
 	for i in range(selectors.size()):
 		var selector = selectors[i]
@@ -270,15 +273,6 @@ func update_tree():
 	entity_items.sort_custom(func(a, b): return a["id"] < b["id"])
 	all_sections.append({ "title": "Entities", "items": entity_items })
 	
-	# ── Next ────────────────────────────────────────────────────
-	var next_items = [] #UPDATE
-	next_items.append({ #UPDATE
-		"name": "next_360D1", #UPDATE
-		"value": str(Global.editorLevel.get("next_360D1", 0)), #UPDATE
-		"id": 0 #UPDATE
-	}) #UPDATE
-	all_sections.append({ "title": "Next", "items": next_items })
-
 	# ── Wizards (Spells) ────────────────────────────────────────
 	var spells_items = [] #UPDATE
 	var wizards: Array = Global.editorLevel.get("wizards", []) #UPDATE
@@ -309,43 +303,15 @@ func update_tree():
 	for i in range(stage_vars.size()): #UPDATE
 		var v = stage_vars[i] #UPDATE
 		stagesvars_items.append({ #UPDATE
-			"name": "SV%d  Idx:%d  Stg:%d  X:%d  Y:%d" % [i, v.get("index",0), v.get("stage",0), v.get("union_axis_2d_x",0), v.get("union_axis_2d_y",0)], #UPDATE
+			"name": "SV%d  Idx:%d  Stg:%d  X1:%d  Y1:%d  X2:%d  Y2:%d" % [i, v.get("index",0), v.get("stage",0), v.get("union_axis_2d_x",0), v.get("union_axis_2d_y",0), v.get("union_dword_axis_x",0), v.get("union_dword_axis_y",0)], #UPDATE
 			"value": str(i), #UPDATE
 			"id": i #UPDATE
 		}) #UPDATE
 	all_sections.append({ "title": "StagesVars", "items": stagesvars_items })
 	
-	#uint8_t next_0x360D1;
-	#Type_WizardMapSettings_0x360D2 WizardMapSettings_0x360D2[8];//lenght 110  /spells?
-	#type_str_0x36442 stages_0x36442[8];//stages(checkpoints)
-	#type_str_0x3647Ac StageVars_0x3647A[11];//8x11
-	#var next_items = []
-	#all_sections.append({ "title": "Next", "items": next_items })
-	#var spells_items = []	
-	#spells_items.append({
-		#"name": "Speels",
-		#"value": "X",
-		#"id": 0
-	#})	
-	#all_sections.append({ "title": "Spells", "items": spells_items })
-	#var stages_items = []
-	#stages_items.append({
-		#"name": "Stages",
-		#"value": "X",
-		#"id": 0
-	#})	
-	#all_sections.append({ "title": "Stages", "items": stages_items })
-	#var stagesvars_items = []
-	#stagesvars_items.append({
-		#"name": "StagesVars",
-		#"value": "X",
-		#"id": 0
-	#})	
-	#all_sections.append({ "title": "StagesVars", "items": stagesvars_items })
-
 	Tree_View.update_tree_view(all_sections)
 	
-		# Podbarvi vybrané entity v tree
+	# Podbarvi vybrané entity v tree
 	var selected_indices = {}
 	for node in get_tree().get_nodes_in_group("selected_entities"):
 		if node.has_meta("index"):
@@ -373,13 +339,13 @@ func _process(delta: float) -> void:
 	if editor_runned:
 		EditorStep()
 		Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
-		refreshTerrainDetails()
+		#fillTerrainDetails()
 		#refreshWizardDetails()
 		update_tree()
 		Global.MBEX.REMC2EditorTimedSaveState(1.0)
 		UpdatePositionLabel()
 		select_entities_by_filter()
-		RenderEditorEntites()		
+		RenderEditorEntites()
 
 func gameInit():
 	match Global.getLevelType():
@@ -1054,14 +1020,40 @@ func _on_undo_button_down() -> void:
 	Global.MBEX.REMC2EditorUndo()
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	print("testUndo"+str(Global.editorLevel["word_2FECE"]))
-	refreshTerrainDetails()
+	_refresh_active_panel()
 	log_message("UNDO")
 
 func _on_redo_button_down() -> void:
 	Global.MBEX.REMC2EditorRedo()
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
-	refreshTerrainDetails()
+	_refresh_active_panel()
 	log_message("REDO")
+
+func _refresh_active_panel() -> void:
+	if Terrain_Edit_Panel.visible:
+		fillTerrainDetails()
+	elif Entity_Edit_Panel.visible:
+		var idx = Entity_Edit.get_node_or_null("IDX/SpinBox").value as int
+		if idx > 0 and idx < pool_size:
+			fillEntityDetails(idx)
+	elif Wizards_Edit_Panel.visible:
+		var idx = Wizards_Edit.get_node_or_null("IDX/SpinBox").value as int
+		if idx >= 0 and idx <= 7:
+			_filling_wizard_details = true
+			Wizards_Edit.display_player_data(idx)
+			_filling_wizard_details = false
+	elif Stages_Edit_Panel.visible:
+		var idx = Stages_Edit.get_node_or_null("IDX/SpinBox").value as int
+		if idx >= 0 and idx <= 7:
+			_filling_stages_details = true
+			Stages_Edit.display_stages_data(idx)
+			_filling_stages_details = false
+	elif StagesVars_Edit_Panel.visible:
+		var idx = StagesVars_Edit.get_node_or_null("IDX/SpinBox").value as int
+		if idx >= 0 and idx <= 11:
+			_filling_stagesvars_details = true
+			StagesVars_Edit.display_stages_data(idx)
+			_filling_stagesvars_details = false
 
 func SaveState() -> void:
 	Global.MBEX.REMC2EditorSaveState()
@@ -1122,6 +1114,7 @@ func _on_tree_item_selected() -> void:
 			_on_tree_stages_selected(item_index)
 		"StagesVars":
 			_on_tree_stagesVars_selected(item_index)
+	#_refresh_active_panel()
 
 func _on_tree_terrain_selected(index: int) -> void:
 	log_message("Terrain selected: index=%d" % [index])
@@ -1130,6 +1123,7 @@ func _on_tree_terrain_selected(index: int) -> void:
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.hide()
+	fillTerrainDetails()
 
 func _on_tree_entity_selected(index: int) -> void:
 	log_message("Entity selected: index=%d" % [index])
@@ -1146,9 +1140,9 @@ func _on_tree_wizard_selected(index: int):
 	Entity_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.hide()
-	_filling_wizard_details=true
+	_filling_wizard_details = true
 	Wizards_Edit.display_player_data(index)
-	_filling_wizard_details=false
+	_filling_wizard_details = false
 
 func _on_tree_stages_selected(index: int):
 	Terrain_Edit_Panel.hide()
@@ -1156,7 +1150,9 @@ func _on_tree_stages_selected(index: int):
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.show()
 	StagesVars_Edit_Panel.hide()
+	_filling_stages_details = true
 	Stages_Edit.display_stages_data(index)
+	_filling_stages_details = false
  
 func _on_tree_stagesVars_selected(index: int):
 	Terrain_Edit_Panel.hide()
@@ -1164,7 +1160,9 @@ func _on_tree_stagesVars_selected(index: int):
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.show()
+	_filling_stagesvars_details = true
 	StagesVars_Edit.display_stages_data(index)
+	_filling_stagesvars_details = false
 
 const ID_EXPORT_CSV = 0
 const ID_LOAD_LEVEL = 1
@@ -1292,6 +1290,58 @@ func _on_wizard_spinbox_value_changed(_value) -> void:
 		Global.editorLevel["wizards"][idx]["blocked_spells"] = spells_data
 	
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	
+	
+var _filling_stages_details := false
+var _filling_stagesvars_details := false
+
+func _on_stages_spinbox_value_changed(_value) -> void:
+	if _filling_stages_details:
+		return
+	var idx = Stages_Edit.get_node_or_null("IDX/SpinBox").value as int
+	if idx < 0 or idx >= Global.editorLevel["stages"].size():
+		return
+	Global.editorLevel["stages"][idx]["index"]  = Stages_Edit.get_node_or_null("StageIndex/SpinBox").value as int
+	Global.editorLevel["stages"][idx]["stage"]  = Stages_Edit.get_node_or_null("StageStage/SpinBox").value as int
+	Global.editorLevel["stages"][idx]["axis_x"] = Stages_Edit.get_node_or_null("StageX1/SpinBox").value as int
+	Global.editorLevel["stages"][idx]["axis_y"] = Stages_Edit.get_node_or_null("StageY1/SpinBox").value as int
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+
+func _on_stagesvars_spinbox_value_changed(_value) -> void:
+	if _filling_stagesvars_details:
+		return
+	var idx = StagesVars_Edit.get_node_or_null("IDX/SpinBox").value as int
+	if idx < 0 or idx >= Global.editorLevel["stage_vars"].size():
+		return
+	Global.editorLevel["stage_vars"][idx]["index"]         = StagesVars_Edit.get_node_or_null("StageIndex/SpinBox").value as int
+	Global.editorLevel["stage_vars"][idx]["stage"]         = StagesVars_Edit.get_node_or_null("StageStage/SpinBox").value as int
+	Global.editorLevel["stage_vars"][idx]["union_axis_2d_x"] = StagesVars_Edit.get_node_or_null("StageX1/SpinBox").value as int
+	Global.editorLevel["stage_vars"][idx]["union_axis_2d_y"] = StagesVars_Edit.get_node_or_null("StageY1/SpinBox").value as int
+	Global.editorLevel["stage_vars"][idx]["union_dword_axis_x"] = StagesVars_Edit.get_node_or_null("StageX2/SpinBox").value as int
+	Global.editorLevel["stage_vars"][idx]["union_dword_axis_y"] = StagesVars_Edit.get_node_or_null("StageY2/SpinBox").value as int
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+
+func _connect_stage_spinbox(node) -> void:
+	if node and not node.value_changed.is_connected(_on_stages_spinbox_value_changed):
+		node.value_changed.connect(_on_stages_spinbox_value_changed)
+
+func _connect_stagesvar_spinbox(node) -> void:
+	if node and not node.value_changed.is_connected(_on_stagesvars_spinbox_value_changed):
+		node.value_changed.connect(_on_stagesvars_spinbox_value_changed)
+
+func _connect_stages_spinboxes() -> void:
+	_connect_stage_spinbox(Stages_Edit.get_node_or_null("StageIndex/SpinBox"))
+	_connect_stage_spinbox(Stages_Edit.get_node_or_null("StageStage/SpinBox"))
+	_connect_stage_spinbox(Stages_Edit.get_node_or_null("StageX1/SpinBox"))
+	_connect_stage_spinbox(Stages_Edit.get_node_or_null("StageY1/SpinBox"))
+
+func _connect_stagesvars_spinboxes() -> void:
+	_connect_stagesvar_spinbox(StagesVars_Edit.get_node_or_null("StageIndex/SpinBox"))
+	_connect_stagesvar_spinbox(StagesVars_Edit.get_node_or_null("StageStage/SpinBox"))
+	_connect_stagesvar_spinbox(StagesVars_Edit.get_node_or_null("StageX1/SpinBox"))
+	_connect_stagesvar_spinbox(StagesVars_Edit.get_node_or_null("StageY1/SpinBox"))
+	_connect_stagesvar_spinbox(StagesVars_Edit.get_node_or_null("StageX2/SpinBox"))
+	_connect_stagesvar_spinbox(StagesVars_Edit.get_node_or_null("StageY2/SpinBox"))
 
 func _connect_entity_spinbox(node) -> void:
 	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):

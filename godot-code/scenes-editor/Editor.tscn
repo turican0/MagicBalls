@@ -475,7 +475,6 @@ layout_mode = 2
 script = ExtResource("2_ydsuf")
 
 [node name="TerrainEdit" type="Control" parent="UI" unique_id=1978053754]
-visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -627,6 +626,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="rkSte" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=275042693 instance=ExtResource("3_8pqvr")]
+layout_mode = 2
+
+[node name="next" parent="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1804450636 instance=ExtResource("3_8pqvr")]
 layout_mode = 2
 
 [node name="EntityEdit" type="Control" parent="UI" unique_id=169198194]
@@ -2227,13 +2229,12 @@ max_value = 65535.0
 
 [node name="Console" type="Control" parent="UI" unique_id=1943275785]
 layout_mode = 3
-anchors_preset = 12
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 550.0
+offset_left = 400.0
 offset_top = -60.0
-grow_horizontal = 0
+offset_right = 1000.0
 grow_vertical = 0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="UI/Console" unique_id=1832740722]
@@ -2258,7 +2259,7 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 theme_override_fonts/font = SubResource("SystemFont_a6lnc")
-theme_override_font_sizes/font_size = 37
+theme_override_font_sizes/font_size = 28
 text = "Position: 000.00 x 000.00"
 
 [node name="EntityFilter" type="Control" parent="UI" unique_id=680992071]
