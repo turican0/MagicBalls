@@ -271,7 +271,7 @@ func _read_controls_into_settings() -> void:
 	#_settings["game"]["autosave"]   = _sel_autosave.selected
 
 	_settings["game"]["level_mode"]    = _sel_level_mode.selected
-	_settings["game"]["custom_level"]  = VALID_LEVELS[_sel_custom_level.selected]  # store actual level index
+	_settings["game"]["custom_level"]  = Global.VALID_LEVELS[_sel_custom_level.selected]  # store actual level index
 	_settings["game"]["fps_limit"]     = _sel_fps.selected
 	
 # =============================================
