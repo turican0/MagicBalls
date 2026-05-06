@@ -762,7 +762,7 @@ func delete_selected_entities():
 		nexttext = nexttext + " some entities not deleted, have parent"
 	log_message(nexttext)
 	EditorStep()
-	RenderEditorEntites()
+	#RenderEditorEntites()
 
 func RenderEditorEntites():
 	for node in get_tree().get_nodes_in_group("entities"):
@@ -1011,7 +1011,7 @@ func _on_h_box_container_value_changed(new_value: int,terrainVarIndex: int) -> v
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 	EditorStep()
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
-	RenderEditorEntites()
+	#RenderEditorEntites()
 
 func _on_h_box_container_value_changed2(new_value: int,terrainVarIndex: int) -> void:
 	if _filling_terrain_details:
@@ -1173,6 +1173,8 @@ const ID_QSAVE_LEVEL = 2
 const ID_LOAD_LEVEL = 3
 const ID_SAVE_LEVEL = 4
 const ID_RUN_LEVEL = 5
+const ID_CLEAN_LEVEL = 6
+const ID_GAME_LEVEL = 7
 
 func _ensure_file_dialogs() -> void:
 	var default_dir = ProjectSettings.globalize_path("user://user-levels/")
@@ -1206,12 +1208,67 @@ func _on_load_dialog_file_selected(path: String) -> void:
 	else:
 		Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 		fillTerrainDetails()
-		RenderEditorEntites()
+		#RenderEditorEntites()
 		log_message("Level loaded: " + path)
 
 func _on_save_dialog_file_selected(path: String) -> void:
 	Global.MBEX.REMC2EditorSaveLevel(path)
 	log_message("Level saved: " + path)
+	
+	
+var _level_select_dialog: Window # Nebo AcceptDialog
+
+func _ensure_level_select_dialog() -> void:
+	if _level_select_dialog != null:
+		return
+
+	_level_select_dialog = Window.new()
+	_level_select_dialog.title = "Select Game Level"
+	_level_select_dialog.size = Vector2i(900, 700)
+	_level_select_dialog.min_size = Vector2i(600, 500)
+	_level_select_dialog.exclusive = true
+	_level_select_dialog.transient = true
+	_level_select_dialog.close_requested.connect(func(): _level_select_dialog.hide())
+	
+	var scroll = ScrollContainer.new()
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 15)
+	
+	var main_vbox = VBoxContainer.new()
+	main_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	main_vbox.add_theme_constant_override("separation", 10) # Mezera mezi sekvencemi
+	
+	if Global.VALID_LEVELS.size() > 0:
+		var current_hbox = HBoxContainer.new()
+		main_vbox.add_child(current_hbox)
+		
+		for i in range(Global.VALID_LEVELS.size()):
+			var lvl_id = Global.VALID_LEVELS[i]
+			
+			# Kontrola spojitosti: Pokud toto není první prvek a 
+			# aktuální ID není o 1 větší než předchozí, založ nový řádek
+			if i > 0 and Global.VALID_LEVELS[i] != Global.VALID_LEVELS[i-1] + 1:
+				current_hbox = HBoxContainer.new()
+				main_vbox.add_child(current_hbox)
+			
+			var btn = Button.new()
+			btn.text = str(lvl_id)
+			btn.custom_minimum_size = Vector2(40, 40)
+			btn.pressed.connect(_on_level_button_pressed.bind(lvl_id))
+			current_hbox.add_child(btn)
+
+	scroll.add_child(main_vbox)
+	_level_select_dialog.add_child(scroll)
+	add_child(_level_select_dialog)
+
+func _on_level_button_pressed(lvl_id: int) -> void:
+	_level_select_dialog.hide()
+	log_message("Loading Game Level: " + str(lvl_id))
+	Global.MBEX.REMC2EditorLoadInGameLevel(lvl_id)
+	# Po loadu herního levelu pravděpodobně chceš refreshnout editor:
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	_on_map_type_state_changed_graphics_typeInt(Global.editorLevel["map_type"])
+	fillTerrainDetails()
+	#RenderEditorEntites()
 
 func _on_file_id_pressed(id: int) -> void:
 	_ensure_file_dialogs()
@@ -1221,19 +1278,25 @@ func _on_file_id_pressed(id: int) -> void:
 		ID_QLOAD_LEVEL:
 			var result = Global.MBEX.REMC2EditorLoadLevel("");
 			if(!result):
-				log_message("Can not Load this level file user://user-levels/level0.mc2")
+				log_message("Can not Load this level file user://user-levels/editorLevel.mc2")
 			else:
-				log_message("Level loaded: " + "user://user-levels/level0.mc2")
+				log_message("Level loaded: " + "user://user-levels/quickSaved.mc2")
 		ID_QSAVE_LEVEL:
 			Global.MBEX.REMC2EditorSaveLevel("");
-			log_message("Level saved: " + "user://user-levels/level0.mc2")
+			log_message("Level saved: " + "user://user-levels/quickSaved.mc2")
 		ID_LOAD_LEVEL:
 			_load_dialog.popup_centered()
 		ID_SAVE_LEVEL:
 			_save_dialog.popup_centered()
 		ID_RUN_LEVEL:
-			Global.MBEX.REMC2EditorSaveLevel();
+			Global.MBEX.REMC2EditorSaveLevel("user://user-levels/editorLevel.mc2")
 			_runGame()
+		ID_CLEAN_LEVEL:
+			Global.MBEX.REMC2EditorCleanLevel()
+			_on_map_type_state_changed_graphics_typeInt(Global.editorLevel["map_type"])
+		ID_GAME_LEVEL:
+			_ensure_level_select_dialog()
+			_level_select_dialog.popup_centered()
 
 const ID_TOGGLE_ROOF = 0
 func _on_view_id_pressed(id: int) -> void:
@@ -1255,7 +1318,7 @@ func SetRoofByVar():
 		Main_TerrainsMB.mesh_instance_top.hide()
 
 func _runGame():
-	var level_path = "user://user-levels/level0.mc2"
+	var level_path = "user://user-levels/editorLevel.mc2"
 	var my_args = ["--custom_level", level_path]
 	OS.create_instance(my_args)
 	get_tree().quit()
@@ -1433,6 +1496,14 @@ func _connect_wizards_spinboxes() -> void:
 	_connect_wizard_spells(Wizards_Edit.get_node_or_null("StartingSpells"))
 	_connect_wizard_spells(Wizards_Edit.get_node_or_null("AvailableSpells"))
 	_connect_wizard_spells(Wizards_Edit.get_node_or_null("BlockedSpells"))
+
+func _on_map_type_state_changed_graphics_typeInt(state_index: int) -> void:
+	if(state_index==0):
+		_on_map_type_state_changed_graphics_type("Day")
+	if(state_index==1):
+		_on_map_type_state_changed_graphics_type("Night")
+	if(state_index==2):
+		_on_map_type_state_changed_graphics_type("Cave")
 
 func _on_map_type_state_changed_graphics_type(state_name: String) -> void:
 	if(!Main_TerrainsMB):

@@ -94,6 +94,9 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadLevel", "text"), &MBEXclass::REMC2EditorLoadLevel);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSaveLevel", "text"), &MBEXclass::REMC2EditorSaveLevel);
+
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorCleanLevel"), &MBEXclass::REMC2EditorCleanLevel);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadInGameLevel", "Int"), &MBEXclass::REMC2EditorLoadInGameLevel);
 	}
 
 
@@ -2539,7 +2542,7 @@ void MBEXclass::REMC2EditorTimedSaveState(float seconds) {
 bool MBEXclass::REMC2EditorLoadLevel(String path) {
 	String fullPath;
 	if (path.is_empty()) {
-		String levelName = "level0";
+		String levelName = "quickSaved";
 		fullPath = ProjectSettings::get_singleton()->globalize_path("user://user-levels/") + levelName + ".mc2";
 	} else {
 		fullPath = path;
@@ -2558,7 +2561,7 @@ bool MBEXclass::REMC2EditorLoadLevel(String path) {
 void MBEXclass::REMC2EditorSaveLevel(String path) {
 	String fullPath;
 	if (path.is_empty()) {
-		String levelName = "level0";
+		String levelName = "quickSaved";
 		fullPath = ProjectSettings::get_singleton()->globalize_path("user://user-levels/") + levelName + ".mc2";
 	} else {
 		fullPath = path;
@@ -2574,6 +2577,13 @@ void MBEXclass::REMC2EditorSaveLevel(String path) {
 	if (file.is_valid()) {
 		file->store_buffer((const uint8_t *)&tempTerrain, sizeof(tempTerrain));
 	}
+}
+
+void MBEXclass::REMC2EditorCleanLevel() {
+	memset(&tempTerrain, 0, sizeof(tempTerrain));
+}
+void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
+	loadlevel(levelIndex);
 }
 
 

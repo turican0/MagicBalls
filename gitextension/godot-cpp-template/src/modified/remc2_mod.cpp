@@ -1373,10 +1373,11 @@ void MenusAndIntros_76930_mod(bool skipMenus) //257930
 		m_ExitMenuLoop_E29DC = 0;
 	}
 
-	if (x_BYTE_D41AD_skip_screen == 1 || (nextMenu_E29D8 != MenuItem::InitLanguage)) {
+	if ((!skipMenus) &&((x_BYTE_D41AD_skip_screen == 1 || (nextMenu_E29D8 != MenuItem::InitLanguage)))) {
 		PlayInGameFmv_82670_mod();
 		LoadAndSetGraphicsAndPalette_7AC00();
 	}
+
 	if (x_BYTE_D41AD_skip_screen == 1) {
 		InitLanguage_76A40();
 		nextMenu_E29D8 = MenuItem::MainMenu;

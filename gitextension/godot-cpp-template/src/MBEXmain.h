@@ -157,6 +157,9 @@ public:
 
 	bool REMC2EditorLoadLevel(String path);
 	void REMC2EditorSaveLevel(String path);
+
+	void REMC2EditorCleanLevel();
+	void REMC2EditorLoadInGameLevel(int levelIndex);
 };
 
 void MBEXaudioExtract(String path);

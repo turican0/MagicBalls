@@ -87,5 +87,6 @@ extern std::unique_ptr<UndoRedoManager> urManager;
 
 void editor_run();
 void main_x();
+void loadlevel(int levelnumber);
 
 #endif
