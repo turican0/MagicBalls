@@ -155,8 +155,8 @@ public:
 	void REMC2EditorSaveState();
 	void REMC2EditorTimedSaveState(float time);
 
-	bool REMC2EditorLoadLevel();
-	void REMC2EditorSaveLevel();
+	bool REMC2EditorLoadLevel(String path);
+	void REMC2EditorSaveLevel(String path);
 };
 
 void MBEXaudioExtract(String path);

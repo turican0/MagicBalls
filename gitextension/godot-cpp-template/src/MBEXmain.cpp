@@ -92,8 +92,8 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSaveState"), &MBEXclass::REMC2EditorSaveState);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorTimedSaveState", "Float"), &MBEXclass::REMC2EditorTimedSaveState);
 
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadLevel"), &MBEXclass::REMC2EditorLoadLevel);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSaveLevel"), &MBEXclass::REMC2EditorSaveLevel);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadLevel", "text"), &MBEXclass::REMC2EditorLoadLevel);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSaveLevel", "text"), &MBEXclass::REMC2EditorSaveLevel);
 	}
 
 
@@ -2536,25 +2536,40 @@ void MBEXclass::REMC2EditorTimedSaveState(float seconds) {
 	}
 }
 
-bool MBEXclass::REMC2EditorLoadLevel() {
-	String levelName = "level0";
-	String fullPath = ProjectSettings::get_singleton()->globalize_path("user://user-levels/") + levelName + ".mc2";
+bool MBEXclass::REMC2EditorLoadLevel(String path) {
+	String fullPath;
+	if (path.is_empty()) {
+		String levelName = "level0";
+		fullPath = ProjectSettings::get_singleton()->globalize_path("user://user-levels/") + levelName + ".mc2";
+	} else {
+		fullPath = path;
+	}
 	Ref<FileAccess> file = FileAccess::open(fullPath, FileAccess::READ);
 	if (file.is_null()) {
+		return false;
+	}
+	if (file->get_length() < sizeof(tempTerrain)) {
 		return false;
 	}
 	file->get_buffer((uint8_t *)&tempTerrain, sizeof(tempTerrain));
 	return true;
 }
 
-void MBEXclass::REMC2EditorSaveLevel() {
-	String dirPath = "user://user-levels/";
+void MBEXclass::REMC2EditorSaveLevel(String path) {
+	String fullPath;
+	if (path.is_empty()) {
+		String levelName = "level0";
+		fullPath = ProjectSettings::get_singleton()->globalize_path("user://user-levels/") + levelName + ".mc2";
+	} else {
+		fullPath = path;
+	}
+	/*String dirPath = "user://user-levels/";
 	String levelName = "level0";
 	Ref<DirAccess> dir = DirAccess::open("user://");
 	if (!dir->dir_exists(dirPath)) {
 		dir->make_dir_recursive(dirPath);
 	}
-	String fullPath = dirPath + levelName + ".mc2";
+	String fullPath = dirPath + levelName + ".mc2";*/
 	Ref<FileAccess> file = FileAccess::open(fullPath, FileAccess::WRITE);
 	if (file.is_valid()) {
 		file->store_buffer((const uint8_t *)&tempTerrain, sizeof(tempTerrain));

@@ -1,5 +1,8 @@
 extends Node3D
 
+var _load_dialog: FileDialog = null
+var _save_dialog: FileDialog = null
+
 @onready var Main_DecodeLevel: Node3D = $DecodeLevel
 @onready var MBEngine: Node3D = $MBEngine
 @onready var Main_TerrainsMB: Node3D = $TerrainsMB
@@ -1163,19 +1166,71 @@ func _on_tree_stagesVars_selected(index: int):
 	_filling_stagesvars_details = true
 	StagesVars_Edit.display_stages_data(index)
 	_filling_stagesvars_details = false
-
+	
 const ID_EXPORT_CSV = 0
-const ID_LOAD_LEVEL = 1
-const ID_SAVE_LEVEL = 2
-const ID_RUN_LEVEL = 3
+const ID_QLOAD_LEVEL = 1
+const ID_QSAVE_LEVEL = 2
+const ID_LOAD_LEVEL = 3
+const ID_SAVE_LEVEL = 4
+const ID_RUN_LEVEL = 5
+
+func _ensure_file_dialogs() -> void:
+	var default_dir = ProjectSettings.globalize_path("user://user-levels/")
+	if _load_dialog == null:
+		_load_dialog = FileDialog.new()
+		_load_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+		_load_dialog.access = FileDialog.ACCESS_FILESYSTEM
+		_load_dialog.filters = PackedStringArray(["*.mc2 ; MC2 Level Files", "*.* ; All Files"])
+		_load_dialog.title = "Load Level"
+		_load_dialog.size = Vector2i(800, 600)
+		_load_dialog.current_dir = default_dir
+		_load_dialog.file_selected.connect(_on_load_dialog_file_selected)
+		add_child(_load_dialog)
+
+	if _save_dialog == null:
+		_save_dialog = FileDialog.new()
+		_save_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+		_save_dialog.access = FileDialog.ACCESS_FILESYSTEM
+		_save_dialog.filters = PackedStringArray(["*.mc2 ; MC2 Level Files", "*.* ; All Files"])
+		_save_dialog.title = "Save Level"
+		_save_dialog.size = Vector2i(800, 600)
+		_save_dialog.current_dir = default_dir
+		_save_dialog.current_file = "level0.mc2"
+		_save_dialog.file_selected.connect(_on_save_dialog_file_selected)
+		add_child(_save_dialog)
+		
+func _on_load_dialog_file_selected(path: String) -> void:
+	var result = Global.MBEX.REMC2EditorLoadLevel(path)
+	if(!result):
+		log_message("Can not Load this level file:" + path)
+	else:
+		Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+		fillTerrainDetails()
+		RenderEditorEntites()
+		log_message("Level loaded: " + path)
+
+func _on_save_dialog_file_selected(path: String) -> void:
+	Global.MBEX.REMC2EditorSaveLevel(path)
+	log_message("Level saved: " + path)
+
 func _on_file_id_pressed(id: int) -> void:
+	_ensure_file_dialogs()
 	match id:
 		ID_EXPORT_CSV:
 			Global.MBEX.REMC2EditorExportToCSV();
+		ID_QLOAD_LEVEL:
+			var result = Global.MBEX.REMC2EditorLoadLevel("");
+			if(!result):
+				log_message("Can not Load this level file user://user-levels/level0.mc2")
+			else:
+				log_message("Level loaded: " + "user://user-levels/level0.mc2")
+		ID_QSAVE_LEVEL:
+			Global.MBEX.REMC2EditorSaveLevel("");
+			log_message("Level saved: " + "user://user-levels/level0.mc2")
 		ID_LOAD_LEVEL:
-			Global.MBEX.REMC2EditorLoadLevel();
+			_load_dialog.popup_centered()
 		ID_SAVE_LEVEL:
-			Global.MBEX.REMC2EditorSaveLevel();
+			_save_dialog.popup_centered()
 		ID_RUN_LEVEL:
 			Global.MBEX.REMC2EditorSaveLevel();
 			_runGame()
