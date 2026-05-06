@@ -1078,12 +1078,12 @@ Array MBEXclass::getPaletteModifications() {
 }
 
 bool inverse_mouseY;
-
+bool shift_pressed = false;
 void handleInputs(Dictionary inputs,int type) {
 	LastPressedKey_1806E4 = 0;
 	//type==0 game
 	//type==1 mapmenu
-	Array key_changes = inputs["key_changes"];
+	Array key_changes = inputs["key_changes"];	
 	for (int i = 0; i < key_changes.size(); i++) {
 		Dictionary change = key_changes[i];
 		int key_index = change["key_index"];
@@ -1120,7 +1120,7 @@ void handleInputs(Dictionary inputs,int type) {
 			case 0x2d78: //X
 				mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
 				break;
-			case 0x1d00:
+			case 0x1de0:
 				//mainSetPress(is_pressed, 0x1d00); //CTRL
 				mainSetPress(is_pressed, /*inputMapping.SpellMenu*/0x1de0); //CTRL
 				//0xe0 - LEFT CTRL//inputMapping.SpellMenu
@@ -1132,12 +1132,17 @@ void handleInputs(Dictionary inputs,int type) {
 				//0xe6 - RIGHT ALT
 				//0xe7 - RIGHT WIN / META
 				break;
+			case 0x2ae1: //SHIFT
+				shift_pressed = is_pressed;
+				mainSetPress(is_pressed, 0x2ae1); //SHIFT
+				break;
+			/*
 			case 0x5300: //DELETE
 				if (is_pressed) {
 					HandleButtonClick_191B0(29, 0);
 					HandleButtonClick_191B0(27, 0);
 				}
-				break;
+				break;*/
 			case 0x2368: //H - change graphics type
 				if (is_pressed) {
 					graphics_enhance = 1 - graphics_enhance;
@@ -1224,12 +1229,30 @@ void handleInputs(Dictionary inputs,int type) {
 					buttonresult |= 0x40;
 				break;
 			case 3: //MOUSE_BUTTON_WHEEL_UP
+				if (type != 0)
+					break;
+				if (is_pressed) {
+					type_entity_0x6E8E *v8x = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+					if (shift_pressed)
+						sub_18DA0(v8x, 2, 0);
+					else
+						sub_18DA0(v8x, 1, 0);
+				}
 				/* if (is_pressed)
 					buttonresult |= 2;
 				else
 					buttonresult |= 4;*/
 				break;
 			case 4: //MOUSE_BUTTON_WHEEL_DOWN
+				if (type != 0)
+					break;
+				if (is_pressed) {
+					type_entity_0x6E8E *v8x = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+					if (shift_pressed)
+						sub_18DA0(v8x, 2, 1);
+					else
+						sub_18DA0(v8x, 1, 1);
+				}
 				/* if (is_pressed)
 					buttonresult |= 2;
 				else

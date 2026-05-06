@@ -26,8 +26,8 @@ const KEY_INDEX := {
 	KEY_BACKSPACE: 0x0E08,
 	KEY_TAB: 0x0F09,
 	KEY_ENTER: 0x1c0d,
-	KEY_CTRL: 0x1d00,
-	KEY_SHIFT: 0x2a00, # Namapováno na Left Shift z tvého seznamu
+	KEY_CTRL: 0x1de0,
+	KEY_SHIFT: 0x2ae1, # Namapováno na Left Shift z tvého seznamu
 	KEY_ALT: 0x3800,
 	KEY_SPACE: 0x3920,
 
