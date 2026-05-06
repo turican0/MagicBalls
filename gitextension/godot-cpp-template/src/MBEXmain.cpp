@@ -1110,10 +1110,13 @@ void handleInputs(Dictionary inputs,int type) {
 				break;
 			case 0x3c00: //F2
 				mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
+				break;
 			case 0x3d00: //F3
 				mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+				break;
 			case 0x2d78: //X
 				mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
+				break;
 			case 0x1d00:
 				//mainSetPress(is_pressed, 0x1d00); //CTRL
 				mainSetPress(is_pressed, /*inputMapping.SpellMenu*/0x1de0); //CTRL
@@ -2137,7 +2140,7 @@ Dictionary MBEXclass::REMC2EditorGetLevelData() {
 	d["bhLin"] = (int)tempTerrain.bhLin_0x2FF09;
 	d["bhFlt"] = (int)tempTerrain.bhFlt_0x2FF0D;
 	d["rkSte"] = (int)tempTerrain.rkSte_0x2FF11;
-	d["next_360D1"] = (int)tempTerrain.next_0x360D1;
+	d["next"] = (int)tempTerrain.next_0x360D1;
 
 	// ── Hráči ───────────────────────────────────────────────────
 	Array players;
@@ -2265,8 +2268,8 @@ void MBEXclass::REMC2EditorSetLevelData(Dictionary d) {
 		tempTerrain.bhFlt_0x2FF0D = (uint16_t)(int)d["bhFlt"];
 	if (d.has("rkSte"))
 		tempTerrain.rkSte_0x2FF11 = (uint16_t)(int)d["rkSte"];
-	if (d.has("next_360D1"))
-		tempTerrain.next_0x360D1 = (uint8_t)(int)d["next_360D1"];
+	if (d.has("next"))
+		tempTerrain.next_0x360D1 = (uint8_t)(int)d["next"];
 
 	// ── Hráči ───────────────────────────────────────────────────
 	if (d.has("players")) {

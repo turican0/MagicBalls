@@ -21,15 +21,9 @@ var entity_name: String = ""
 func _ready():
 	# Parse name
 	var full_name = str(name)
-	var parts = full_name.split("_")	
-	if parts.size() >= 2:
-		entity_name = parts[0]
-		entity_index = parts[1].to_int()
-	else:
-		entity_name = full_name
-		entity_index = 0	
-	# Set label text
-	label.text = entity_name	
+	entity_name = full_name
+	entity_index = 0
+	label.text = entity_name
 	# Configure limits
 	for node in [slider, spin_box]:
 		node.min_value = 0
