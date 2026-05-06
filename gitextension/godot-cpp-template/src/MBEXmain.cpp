@@ -1108,6 +1108,12 @@ void handleInputs(Dictionary inputs,int type) {
 			case 0x011B:
 				mainSetPress(is_pressed, 0x011B); //ESC
 				break;
+			case 0x3c00: //F2
+				mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
+			case 0x3d00: //F3
+				mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+			case 0x2d78: //X
+				mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
 			case 0x1d00:
 				//mainSetPress(is_pressed, 0x1d00); //CTRL
 				mainSetPress(is_pressed, /*inputMapping.SpellMenu*/0x1de0); //CTRL
