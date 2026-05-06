@@ -108,6 +108,10 @@ func _ready() -> void:
 	SetRoofByVar()
 	editor_runned=true
 	
+	var loader = get_tree().root.get_node_or_null("GlobalLoadingCanvas")
+	if loader:
+		loader.queue_free()
+	
 func _connect_terrain_spinboxes() -> void:
 	for i in range(selectors.size()):
 		var sb = selectors[i].get_node_or_null("SpinBox")
@@ -337,6 +341,41 @@ func update_tree():
 					#item.clear_custom_bg_color(1)
 				item = item.get_next()
 		section = section.get_next()
+		
+func update_selection() -> void:
+	var ray_nodes = get_tree().get_nodes_in_group("selected_entities_ray")
+	var filter_nodes = get_tree().get_nodes_in_group("selected_entities_filter")
+	for node in get_tree().get_nodes_in_group("selected_entities"):
+		unmark_as_selected(node,"selected_entities")
+	if not Ray_Cylinder.visible and not EntityFilter_On:
+		for node in get_tree().get_nodes_in_group("entities"):
+			mark_as_selected(node,"selected_entities")
+		return
+
+	# Výpočet průniku
+	var final_selection: Array[Node] = []
+
+	if Ray_Cylinder.visible and EntityFilter_On:
+		# PRŮNIK obou
+		for node in ray_nodes:
+			if node in filter_nodes:           # nebo node.is_in_group("selected_entities_filter")
+				final_selection.append(node)
+				
+	elif Ray_Cylinder.visible:
+		# Pouze ray/cylinder
+		final_selection = ray_nodes.duplicate()
+		
+	elif EntityFilter_On:
+		# Pouze filter
+		final_selection = filter_nodes.duplicate()
+
+	# Aplikujeme finální výběr
+	for node in final_selection:
+		if is_instance_valid(node):
+			mark_as_selected(node,"selected_entities")
+	
+	# Debug výpis (můžeš smazat)
+	# print("Selection updated: %d entities | Cylinder: %s | Filter: %s" % [selected_count, cylinder_active, filter_active])
 
 func _process(delta: float) -> void:
 	if editor_runned:
@@ -348,6 +387,7 @@ func _process(delta: float) -> void:
 		Global.MBEX.REMC2EditorTimedSaveState(1.0)
 		UpdatePositionLabel()
 		select_entities_by_filter()
+		update_selection()
 		RenderEditorEntites()
 
 func gameInit():
@@ -693,15 +733,15 @@ func select_entities_in_radius_2D(center_pos_3d: Vector3, radius: float):
 		for node in get_tree().get_nodes_in_group("entities"):
 			var node_pos_2d = Vector2(node.global_position.x, node.global_position.z)
 			var dist_sq = center_2d.distance_squared_to(node_pos_2d)
-			unmark_as_selected(node)
+			unmark_as_selected(node,"selected_entities_ray")
 			if dist_sq < min_dist_sq:
 				min_dist_sq = dist_sq
 				closest_node = node
 			if dist_sq <= radius_squared:
-				mark_as_selected(node)
+				mark_as_selected(node,"selected_entities_ray")
 				found_any_in_radius = true
 		if not found_any_in_radius and closest_node != null:
-			mark_as_selected(closest_node)
+			mark_as_selected(closest_node,"selected_entities_ray")
 
 func select_entities_by_filter():
 	if !EntityFilter_On:
@@ -717,30 +757,31 @@ func select_entities_by_filter():
 				should_be_selected = false
 				break
 		if should_be_selected:
-			mark_as_selected(node)
+			mark_as_selected(node,"selected_entities_filter")
 		else:
-			unmark_as_selected(node)
+			unmark_as_selected(node,"selected_entities_filter")
 
-func mark_as_selected(node: Node3D):
-	if node.is_in_group("selected_entities"):
-		return
-	node.add_to_group("selected_entities")	
-	var mesh = node.get_node_or_null("MeshInstance3D")
-	if mesh:
-		var mat = mesh.get_surface_override_material(0)
-		if not mat:
-			mat = mesh.mesh.surface_get_material(0).duplicate()
-			mesh.set_surface_override_material(0, mat)
-		mat.albedo_color = Color(1.0, 1.0, 0.0)
+func mark_as_selected(node: Node3D,type:String):
+	if node.is_in_group(type): return
+	node.add_to_group(type)#"selected_entities"
+	if(type=="selected_entities"):
+		var mesh = node.get_node_or_null("MeshInstance3D")
+		if mesh:
+			var mat = mesh.get_surface_override_material(0)
+			if not mat:
+				mat = mesh.mesh.surface_get_material(0).duplicate()
+				mesh.set_surface_override_material(0, mat)
+			mat.albedo_color = Color(1.0, 1.0, 0.0)
 
-func unmark_as_selected(node: Node3D):
-	if not node.is_in_group("selected_entities"): return
-	node.remove_from_group("selected_entities")	
-	var mesh = node.get_node_or_null("MeshInstance3D")
-	if mesh:
-		var mat = mesh.get_surface_override_material(0)
-		if mat:
-			mat.albedo_color = Color(1, 1, 1) 
+func unmark_as_selected(node: Node3D,type:String):
+	if not node.is_in_group(type): return
+	node.remove_from_group(type)
+	if(type=="selected_entities"):
+		var mesh = node.get_node_or_null("MeshInstance3D")
+		if mesh:
+			var mat = mesh.get_surface_override_material(0)
+			if mat:
+				mat.albedo_color = Color(1, 1, 1) 
 
 func delete_selected_entities():
 	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")
@@ -1330,19 +1371,19 @@ func UpdatePositionLabel():
 
 func _on_selector_toggled(toggled_on: bool) -> void:
 	Ray_Cylinder.visible = toggled_on
-	if(Ray_Cylinder.visible):
-		if(EntityFilter_On):
-			$UI/Control/Filter.button_pressed=false
+	#if(Ray_Cylinder.visible):
+		#if(EntityFilter_On):
+			#$UI/Control/Filter.button_pressed=false
 
 var EntityFilter_On:bool=false
 func _on_filter_toggled(toggled_on: bool) -> void:
 	EntityFilter_On = toggled_on
-	if(EntityFilter_On):
-		if(Ray_Cylinder.visible):
-			$UI/Control/Selector.button_pressed=false
-	else:
-		for node in get_tree().get_nodes_in_group("entities"):
-			unmark_as_selected(node)
+	#if(EntityFilter_On):
+		#if(Ray_Cylinder.visible):
+			#$UI/Control/Selector.button_pressed=false
+	#else:
+		#for node in get_tree().get_nodes_in_group("entities"):
+			#unmark_as_selected(node)
 
 
 func _on_filter_show_toggled(toggled_on: bool) -> void:

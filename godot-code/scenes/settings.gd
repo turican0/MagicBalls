@@ -37,6 +37,7 @@ const UI_COUNTDOWN_COLOR   = Color(1.00, 0.40, 0.40)
 
 const CONFIG_PATH       = "user://config.cfg"
 const COUNTDOWN_SECONDS = 3
+const EDITOR_KEY      = KEY_E
 const SETTINGS_KEY      = KEY_S
 const REIMPORT_KEY      = KEY_R
 
@@ -161,6 +162,8 @@ func _input(event: InputEvent) -> void:
 		elif event.keycode == REIMPORT_KEY:
 			_countdown_active = false
 			_reimport_scene()
+		elif event.keycode == EDITOR_KEY:
+			_launch_editor()
 
 func _process(delta: float) -> void:
 	if not _countdown_active:
@@ -309,7 +312,7 @@ func _show_countdown() -> void:
 	_countdown_canvas.add_child(_countdown_label)
 
 	var hint = Label.new()
-	hint.text = "Press  [Esc]  to START NOW  |  Press  [R]  for Reimport data |  Press  [S]  for Settings"
+	hint.text = "Press  [Esc]  to START NOW  |  Press  [R]  for Reimport data |  Press  [S]  for Settings |  Press  [E]  for Editor"
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	hint.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -374,6 +377,43 @@ func _launch_game() -> void:
 	SetGlobals()
 	await get_tree().create_timer(0.1).timeout
 	get_tree().change_scene_to_file("res://scenes/CodeGeneratedDemo.tscn")
+
+func _launch_editor() -> void:
+	_countdown_active = false
+	if _countdown_canvas:
+		_countdown_canvas.queue_free()
+	if is_instance_valid(_settings_canvas):
+		_settings_canvas.queue_free()
+	_apply_settings()
+	var canvas = CanvasLayer.new()
+	canvas.name = "GlobalLoadingCanvas"
+	canvas.layer = 128 # Maximální priorita
+	get_tree().root.add_child(canvas) # KLÍČOVÁ ZMĚNA: Přidáno do Rootu
+	var bg = ColorRect.new()
+	bg.color = Color(0, 0, 0, 1)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	canvas.add_child(bg)
+	var label = Label.new()
+	label.text = "Starting game Editor"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	label.offset_bottom = -80
+	label.add_theme_font_size_override("font_size", 26)
+	label.add_theme_color_override("font_color", UI_TEXT_COLOR)
+	canvas.add_child(label)
+	var spinner = Label.new()
+	spinner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	spinner.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	spinner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	spinner.offset_top = 100
+	spinner.add_theme_font_size_override("font_size", 48)
+	spinner.add_theme_color_override("font_color", UI_SPINNER_COLOR)
+	canvas.add_child(spinner)
+	_animate_simple_spinner(spinner)
+	SetGlobals()
+	await get_tree().create_timer(0.1).timeout
+	get_tree().change_scene_to_file("res://scenes-editor/Editor.tscn")
 	
 func _reimport_scene() -> void:
 	_countdown_active = false
