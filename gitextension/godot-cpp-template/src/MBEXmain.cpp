@@ -1131,7 +1131,7 @@ void handleInputs(Dictionary inputs,int type) {
 				break;
 			case 0x1de0:
 				//mainSetPress(is_pressed, 0x1d00); //CTRL
-				mainSetPress(is_pressed, /*inputMapping.SpellMenu*/0x1de0); //CTRL
+				mainSetPress(is_pressed, 0x1de0); //CTRL
 				//0xe0 - LEFT CTRL//inputMapping.SpellMenu
 				//0xe1 - SHIFT LEFT
 				//0xe2 - ALT LEFT
@@ -1168,6 +1168,11 @@ void handleInputs(Dictionary inputs,int type) {
 			case 0x1970: //P - pause
 				if (is_pressed)
 					game_paused = 1 - game_paused;
+				break;
+			case 0x2e63: //C - pause + spell menu
+				game_paused = 1 - game_paused;
+				mainSetPress(is_pressed, 0x1de0); //CTRL
+				//mainSetPress(is_pressed, 0x186f);
 				break;
 			case 0x186f: //O - objective
 				mainSetPress(is_pressed, 0x186f); //O
