@@ -1139,6 +1139,9 @@ void handleInputs(Dictionary inputs,int type) {
 				shift_pressed = is_pressed;
 				mainSetPress(is_pressed, 0x2ae1); //SHIFT
 				break;
+			case 0x38e2: //ALT
+				mainSetPress(is_pressed, 0x38e2); //ALT
+				break;
 			/*
 			case 0x5300: //DELETE
 				if (is_pressed) {
@@ -1235,31 +1238,23 @@ void handleInputs(Dictionary inputs,int type) {
 				if (type != 0)
 					break;
 				if (is_pressed) {
-					type_entity_0x6E8E *v8x = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+					//type_entity_0x6E8E *v8x = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 					if (shift_pressed)
-						sub_18DA0(v8x, 2, 0);
+						specialAction = 0; //sub_18DA0(v8x, 2, 0);
 					else
-						sub_18DA0(v8x, 1, 0);
+						specialAction = 1; //sub_18DA0(v8x, 1, 0);
 				}
-				/* if (is_pressed)
-					buttonresult |= 2;
-				else
-					buttonresult |= 4;*/
 				break;
 			case 4: //MOUSE_BUTTON_WHEEL_DOWN
 				if (type != 0)
 					break;
 				if (is_pressed) {
-					type_entity_0x6E8E *v8x = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+					//type_entity_0x6E8E *v8x = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 					if (shift_pressed)
-						sub_18DA0(v8x, 2, 1);
+						specialAction = 2; //sub_18DA0(v8x, 2, 1);
 					else
-						sub_18DA0(v8x, 1, 1);
+						specialAction = 3; //sub_18DA0(v8x, 1, 1);
 				}
-				/* if (is_pressed)
-					buttonresult |= 2;
-				else
-					buttonresult |= 4;*/
 				break;
 		}
 	}

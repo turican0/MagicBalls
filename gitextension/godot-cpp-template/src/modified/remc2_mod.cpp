@@ -2466,6 +2466,7 @@ void PaletteChanges_47760_mod() //228760
 }
 
 int loc_debug_first_run = 0;
+int specialAction = -1;
 void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 {
 	SetFrameStart(std::chrono::system_clock::now());
@@ -2512,6 +2513,31 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 #endif //DEBUG_PALETTE
 
 	MouseAndKeysEvents_17A00(turn);
+
+	type_entity_0x6E8E *specialEntity;
+	switch (specialAction) {
+		case 0:
+			specialEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+			sub_18DA0(specialEntity, 2, 0);
+			specialAction = -1;
+			break;
+		case 1:
+			specialEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+			sub_18DA0(specialEntity, 1, 0);
+			specialAction = -1;
+			break;
+		case 2:
+			specialEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+			sub_18DA0(specialEntity, 2, 0);
+			specialAction = -1;
+			break;
+		case 3:
+			specialEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+			sub_18DA0(specialEntity, 1, 0);
+			specialAction = -1;
+			break;
+	}
+
 	//debug
 	if (CommandLineParams.DoDebugafterload()) {
 		if (loc_debug_first_run == 5) {

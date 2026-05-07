@@ -122,6 +122,8 @@ extern int numberOfIntroVideos;
 extern int game_paused;
 extern bool oneFrameRun;
 
+extern int specialAction;
+
 void InitLanguage_76A40_mod_only_language();
 
 void sub_main_mod_end();
