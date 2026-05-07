@@ -1093,7 +1093,13 @@ void handleInputs(Dictionary inputs,int type) {
 		String action = change["action"];
 		bool is_pressed = (action == "pressed");
 		if (type != 0) {
-			mainSetPress(is_pressed, key_index);
+			switch (key_index) {
+				case 0x3c00: //F2
+					mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
+					break;
+				default:
+					mainSetPress(is_pressed, key_index);
+			}
 		} else
 		switch (key_index) {
 			case 0x1177:
