@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://6gh3vce3q3eg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_atwak"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_atwak"]
+material = SubResource("StandardMaterial3D_atwak")
+radius = 0.2
+height = 0.4
+
+[node name="Node3D" type="Node3D" unique_id=1207081722]
+
+[node name="Label3D" type="Label3D" parent="." unique_id=447533271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+pixel_size = 0.003
+billboard = 1
+alpha_cut = 1
+text = "TEST"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1932770428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+mesh = SubResource("SphereMesh_atwak")

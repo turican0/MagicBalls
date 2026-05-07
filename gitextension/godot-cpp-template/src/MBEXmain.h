@@ -130,6 +130,8 @@ public:
 	void REMC2SetInverseMouse(bool locInverse_mouseY);
 	void MBEXfixLang(char *path, int index);
 
+	int REMC2GetTerrainAlt(int x, int y);
+
 	void REMC2EditorBegin(String cdPath);
 	void REMC2EditorEnd();
 	void REMC2EditorLoop();

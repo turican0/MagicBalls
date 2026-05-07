@@ -467,6 +467,9 @@ var library = {
 	Vector3i(10,1,0): "res://entites-editor/object_10_1_big_explosion.tscn",
 	Vector3i(10,59,0): "res://entites-editor/object_10_59_smoke1.tscn",
 	Vector3i(10,60,0): "res://entites-editor/object_10_60_smoke2.tscn",
+	Vector3i(0,993,0): "res://entites-editor/object_arrow_stage.tscn",
+	Vector3i(0,994,0): "res://entites-editor/object_stageVEditor.tscn",
+	Vector3i(0,995,0): "res://entites-editor/object_stageEditor.tscn",
 	Vector3i(0,996,0): "res://entites-editor/object_arrow_disid.tscn",  # parent arrow
 	Vector3i(0,997,0): "res://entites-editor/object_arrow_path.tscn",  # parent arrow
 	Vector3i(0,998,0): "res://entites-editor/object_arrow_parent.tscn",  # parent arrow
@@ -907,9 +910,144 @@ func RenderEditorEntites():
 			#current_node.rotation = Vector3(0, yaw, 0)
 	AddParentsArrows()
 	AddPathArrows()
+	
+	AddStages()
+	AddStagesVars()
 	#AddDisIdArrows()
 	AddDisId2Arrows()
 	show_hide_entites()
+
+func AddStages():
+	var x = -2
+	var y = 0
+	var z = 2
+	for stages in Global.editorLevel["stages"]:
+		var index = stages["index"]
+		var stage = stages["stage"]
+		var axis_x = stages["axis_x"]
+		var axis_y = stages["axis_y"]
+		
+		y=y+ 1
+		
+		var pos = Vector3(x, z, y)
+		
+		var current_node = null
+		var updateObject: bool = false
+		var uid2=Vector3i(0,995,0)
+		if(index != -1):
+			current_node = get_first_entity_with_uid(uid2)
+		if current_node == null:
+			var scene_to_instance = library_scenes[uid2]
+			var new_node = scene_to_instance.instantiate()
+			add_child(new_node)
+			current_node = new_node
+			add_to_entites_pool(uid2,new_node)
+			updateObject=true
+		else:
+			add_pool_index(uid2)
+			updateObject=true
+		if (current_node&&updateObject):
+			if current_node.get_node_or_null("Label3D"):
+					current_node.get_node("Label3D").text = (
+						"index: %d\n" +
+						"stage: %d\n" +
+						"axis_x: %d\n" +
+						"axis_y: %d"
+					) % [
+						index,
+						stage,
+						axis_x,
+						axis_y
+					]
+			if(index == 7):
+				var entity = Global.editorLevel["entities"][stage]
+				pos = Vector3(entity["axis_x"], entity["axis_z"], entity["axis_y"])
+			current_node.position = Vector3(pos.x, pos.y, pos.z)
+		
+	
+func AddStagesVars():
+	var x = -4
+	var y = 0
+	var z = 2
+	for stages in Global.editorLevel["stage_vars"]:
+		var index = (stages["index"]+256) % 256
+		var indexA = index % 128
+		var indexB = int(index / 128)
+		var stage = stages["stage"]
+		var union_axis_2d_x = stages["union_axis_2d_x"]
+		var union_axis_2d_y = stages["union_axis_2d_y"]
+		var union_dword_axis_x = stages["union_dword_axis_x"]
+		var union_dword_axis_y = stages["union_dword_axis_y"]
+		
+		y=y+ 1
+		
+		var pos = Vector3(x, z, y)
+		
+		var current_node = null
+		var updateObject: bool = false
+		var uid2=Vector3i(0,994,0)
+		
+		var current_nodeB = null
+		var updateObjectB: bool = false
+		var uid2B=Vector3i(0,993,0)
+		if(indexA != 0):
+			current_node = get_first_entity_with_uid(uid2)
+		if current_node == null:
+			var scene_to_instance = library_scenes[uid2]
+			var new_node = scene_to_instance.instantiate()
+			add_child(new_node)
+			current_node = new_node
+			add_to_entites_pool(uid2,new_node)
+			updateObject=true
+		else:
+			add_pool_index(uid2)
+			updateObject=true
+		if current_node && (indexA==1 || indexA==2):
+			current_nodeB = get_first_entity_with_uid(uid2B)
+			if current_nodeB == null:
+				var scene_to_instanceB = library_scenes[uid2B]
+				var new_nodeB = scene_to_instanceB.instantiate()
+				add_child(new_nodeB)
+				current_nodeB = new_nodeB
+				add_to_entites_pool(uid2B,new_nodeB)
+				updateObjectB=true
+			else:
+				add_pool_index(uid2B)
+				updateObjectB=true
+			
+		if (current_node&&updateObject):
+			if current_node.get_node_or_null("Label3D"):
+					current_node.get_node("Label3D").text = (
+						"indexes: %d,%d\n" +
+						"stage: %d\n" +
+						"axis_x: %d, " +
+						"axis_y: %d\n" +
+						"axis_x2: %d, " +
+						"axis_y2: %d"
+					) % [
+						indexA,indexB,
+						stage,
+						union_axis_2d_x,
+						union_axis_2d_y,
+						union_dword_axis_x,
+						union_dword_axis_y
+					]
+			if(union_axis_2d_x > 0) && (indexA==1 || indexA==2):
+				var entity = Global.editorLevel["entities"][union_axis_2d_x]
+				pos = Vector3(entity["axis_x"], entity["axis_z"], entity["axis_y"])
+			current_node.position = Vector3(pos.x, pos.y, pos.z)
+		if (current_nodeB&&updateObjectB):
+			var zAxis=Global.MBEX.REMC2GetTerrainAlt(union_dword_axis_x,union_dword_axis_y)
+			current_nodeB.get_node("Arrow").end_pos = Vector3(union_dword_axis_x, zAxis + 4, union_dword_axis_y)
+			if(union_axis_2d_x == 0):
+				pos.x=union_dword_axis_x
+				pos.y=zAxis
+				pos.z=union_dword_axis_y
+				current_node.position = Vector3(pos.x, pos.y, pos.z)
+				current_nodeB.get_node("Arrow").start_pos = Vector3(current_node.position.x, current_node.position.y + 5, current_node.position.z)
+			else:
+				current_nodeB.get_node("Arrow").start_pos = Vector3(current_node.position.x, current_node.position.y + 4, current_node.position.z)
+			
 
 func AddParentsArrows():
 	var index_to_pos: Dictionary = {}
