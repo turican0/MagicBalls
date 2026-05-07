@@ -784,6 +784,12 @@ func _process(_p_delta) -> void:
 	var gameState=Global.MBEX.REMC2StepInGame(input_state,nextState)
 	match gameState:
 		1:
+			var mapMode=Global.MBEX.REMC2GetMapMode()
+			var actual_camera = get_viewport().get_camera()
+			if mapMode:
+				actual_camera.h_offset=-1.8
+			else:
+				actual_camera.h_offset=0
 			updatePlayer(getPlayerPosRot())
 			renderEntites(getEntites())
 			Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))

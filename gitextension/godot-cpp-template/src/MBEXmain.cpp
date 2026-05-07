@@ -70,6 +70,8 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetInverseMouse", "Bool"), &MBEXclass::REMC2SetInverseMouse);
 
+	godot::ClassDB::bind_method(D_METHOD("REMC2GetMapMode"), &MBEXclass::REMC2GetMapMode);
+
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorBegin", "text"), &MBEXclass::REMC2EditorBegin);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorEnd"), &MBEXclass::REMC2EditorEnd);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoop"), &MBEXclass::REMC2EditorLoop);
@@ -1797,6 +1799,20 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			break;
 	}
 	return -1;
+}
+
+bool MBEXclass::REMC2GetMapMode() {
+	switch (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].MenuState_0x3DF_2BE4_12221) {
+		case 6:
+		case 7:
+		case 8:
+		case 0xB:
+		case 0xC:
+		case 0xE:
+			return true;
+			break;
+	}
+	return false;
 }
 
 void MBEXclass::REMC2EditorBegin(String cdPath)

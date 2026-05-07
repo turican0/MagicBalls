@@ -160,6 +160,8 @@ public:
 
 	void REMC2EditorCleanLevel();
 	void REMC2EditorLoadInGameLevel(int levelIndex);
+
+	bool REMC2GetMapMode();
 };
 
 void MBEXaudioExtract(String path);
