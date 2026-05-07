@@ -28,7 +28,7 @@ const KEY_INDEX := {
 	KEY_ENTER: 0x1c0d,
 	KEY_CTRL: 0x1de0,
 	KEY_SHIFT: 0x2ae1, # Namapováno na Left Shift z tvého seznamu
-	KEY_ALT: 0x3800,
+	KEY_ALT: 0x38e2,
 	KEY_SPACE: 0x3920,
 
 	# Čísla (horní řada)
@@ -784,12 +784,6 @@ func _process(_p_delta) -> void:
 	var gameState=Global.MBEX.REMC2StepInGame(input_state,nextState)
 	match gameState:
 		1:
-			var mapMode=Global.MBEX.REMC2GetMapMode()
-			var actual_camera = get_viewport().get_camera()
-			if mapMode:
-				actual_camera.h_offset=-1.8
-			else:
-				actual_camera.h_offset=0
 			updatePlayer(getPlayerPosRot())
 			renderEntites(getEntites())
 			Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))
@@ -1470,6 +1464,12 @@ func MBrun(inGame):
 			
 	var result=Global.MBEX.REMC2Run(input_state,0)
 	if(inGame):
+		var mapMode=Global.MBEX.REMC2GetMapMode()
+		var camera = get_viewport().get_camera_3d()
+		if mapMode:
+			camera.h_offset=0
+		else:
+			camera.h_offset=0
 		if(locGraphicsEnhance):
 			Main_Filter.show()
 			if(Global.MBEX.REMC2GetWebInfo()):

@@ -79,7 +79,7 @@ var inGameLoop=false
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
-	
+
 	print("FPS:", Engine.get_frames_per_second(), "Limit:", Engine.max_fps)
 
 	var endRunVar = Main_DecodeLevel.MBrun(inGameLoop)
