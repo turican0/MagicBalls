@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
           fetch-depth: 0
@@ -231,7 +231,7 @@ jobs:
           Copy-Item "installer/Output/MagicBallsSetup.exe" "exports/MagicBallsSetup-$tagName.exe" -ErrorAction SilentlyContinue
 
       - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: windows-zips
           path: |
@@ -248,7 +248,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
           fetch-depth: 0
@@ -434,7 +434,7 @@ jobs:
           tar -czf "exports/MagicBalls-${TAG}-Linux-Release.tar.gz" -C exports/release .
 
       - name: Upload Linux artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: linux-tarballs
           path: exports/*.tar.gz
@@ -449,19 +449,19 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
           fetch-depth: 0
 
       - name: Setup Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v4.7.1
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v3.2.1
 
       - name: Install Android SDK packages
         run: |
@@ -655,7 +655,7 @@ jobs:
             || { echo "CHYBA: META-INF chybi - APK neni podepsano!"; exit 1; }
 
       - name: Upload Android artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: android-apk
           path: exports/android/*.apk
@@ -676,12 +676,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
       - name: Download all build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.3.0
         with:
           path: dist/
 
