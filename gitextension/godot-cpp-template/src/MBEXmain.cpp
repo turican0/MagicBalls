@@ -84,6 +84,7 @@ void MBEXclass::_bind_methods() {
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorIsGroupType", "Int", "Int"), &MBEXclass::REMC2EditorIsGroupType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorIsParentType", "Int", "Int"), &MBEXclass::REMC2EditorIsParentType);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorAddEntity"), &MBEXclass::REMC2EditorAddEntity);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetLevelData"), &MBEXclass::REMC2EditorGetLevelData);
@@ -2052,6 +2053,18 @@ bool MBEXclass::REMC2EditorIsParentType(int type, int subtype) {
 	return true;
 }
 
+void MBEXclass::REMC2EditorAddEntity() {
+	int countEntities = 1200; // adjust to actual field name
+	int lastFreeIndex = -1;
+	for (int idx = countEntities - 1; idx > 0; idx--) {
+		if (tempTerrain.entity_0x30311[idx].type_0x30311 != 0)
+			break;
+		lastFreeIndex = idx;
+	}
+	if (lastFreeIndex>-1)
+		tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = 2;
+}
+
 int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	if (p_indices.is_empty())
 		return -1;
@@ -2684,10 +2697,17 @@ void MBEXclass::REMC2EditorSaveLevel(String path) {
 
 void MBEXclass::REMC2EditorCleanLevel() {
 	memset(&tempTerrain, 0, sizeof(tempTerrain));
+	tempTerrain.word_0x2FED7 = 1;
 	for (int i=0;i<8;i++)
 		tempTerrain.stages_0x36442[i].index_0 = -1;
 	tempTerrain.entity_0x30311[1].type_0x30311 = 3; // player start
 	tempTerrain.entity_0x30311[1].subtype_0x30311 = 4; // player start
+	//tempTerrain.WizardMapSettings_0x360D2[0].Aggression_0x360D5= 128;
+	//tempTerrain.WizardMapSettings_0x360D2[0].Reflexes_0x360D9 = 128;
+	//tempTerrain.WizardMapSettings_0x360D2[0].Perception_0x360DD = 128;
+	//tempTerrain.WizardMapSettings_0x360D2[0].Life_0x3612F = 0;
+	for (int i = 0; i < 26; i++)
+		tempTerrain.WizardMapSettings_0x360D2[0].StartingSpells_0x360E1x[i] = 1;//activate spells
 }
 void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 	loadlevel(levelIndex);

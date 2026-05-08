@@ -217,6 +217,8 @@ func _input(event: InputEvent) -> void:
 		$UI.visible = !$UI.visible
 	if (event is InputEventKey and event.keycode == KEY_X and event.pressed):
 		delete_selected_entities()
+	if (event is InputEventKey and event.keycode == KEY_N and event.pressed):
+		add_entitity()
 	# UNDO & REDO
 	if event is InputEventKey and event.pressed:
 		var command_or_ctrl = event.ctrl_pressed or event.meta_pressed
@@ -785,6 +787,9 @@ func unmark_as_selected(node: Node3D,type:String):
 			var mat = mesh.get_surface_override_material(0)
 			if mat:
 				mat.albedo_color = Color(1, 1, 1) 
+
+func add_entitity():
+	Global.MBEX.REMC2EditorAddEntity()
 
 func delete_selected_entities():
 	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")

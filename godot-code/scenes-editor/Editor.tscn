@@ -743,6 +743,7 @@ text = "DisId"
 
 [node name="SpinBox" type="SpinBox" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/DisId" unique_id=155578736]
 layout_mode = 2
+min_value = -1.0
 
 [node name="word_10" type="HBoxContainer" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1528708388]
 layout_mode = 2
@@ -765,6 +766,7 @@ text = "stageTag_12"
 
 [node name="SpinBox" type="SpinBox" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/stageTag_12" unique_id=1307101069]
 layout_mode = 2
+min_value = -1.0
 
 [node name="par1_14" type="HBoxContainer" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=752949364]
 layout_mode = 2
@@ -2076,6 +2078,7 @@ text = "StageIndex"
 
 [node name="SpinBox" type="SpinBox" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageIndex" unique_id=1666721279]
 layout_mode = 2
+min_value = -1.0
 max_value = 65535.0
 
 [node name="StageStage" type="HBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=90109606]
