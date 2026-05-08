@@ -600,6 +600,19 @@ jobs:
             exit 1
           fi
 
+      - name: Fix scene UIDs
+        run: |
+          # Godot 4 uses UIDs to reference scenes/resources.
+          # If .uid files are missing the main scene cannot be resolved at runtime.
+          # Run a second import pass to ensure all UIDs are generated.
+          echo "=== Second import pass to fix UIDs ==="
+          timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
+            > import2_stdout.txt 2> import2_stderr.txt || true
+          cat import2_stdout.txt || true
+          cat import2_stderr.txt || true
+          echo "=== .uid files after second import ==="
+          find godot-code -name "*.uid" | head -20 || echo "No .uid files found!"
+
       - name: Godot Export – Android Release APK
         env:
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
