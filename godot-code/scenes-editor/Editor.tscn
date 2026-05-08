@@ -483,6 +483,7 @@ layout_mode = 2
 script = ExtResource("2_ydsuf")
 
 [node name="TerrainEdit" type="Control" parent="UI" unique_id=1978053754]
+visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0

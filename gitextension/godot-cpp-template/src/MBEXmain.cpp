@@ -2057,31 +2057,28 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 		return -1;
 	int result = 1;
 
-	// Sestav set indexů ke smazání
 	std::set<int> selected_set;
 	for (int i = 0; i < p_indices.size(); i++) {
 		selected_set.insert((int)p_indices[i]);
 	}
+
 	int current_count = 1200;
-	// Přidej děti vybraných entit
+
+	// Add children of selected entities (par1_14)
 	for (int i = 0; i < current_count; i++) {
-		/*
-		if (!is_parent_type(temparray_0x30311[i].type_0x30311))
-			continue;
-		*/
 		if (selected_set.count(tempTerrain.entity_0x30311[i].par1_14) > 0) {
 			result |= 2;
 			selected_set.insert(i);
 		}
 	}
-	// Pokud má entita rodiče který NENÍ v seznamu ke smazání -> odstraň ji ze setu, změň result
+
+	// If entity has a parent NOT in the delete list -> remove from set
 	std::set<int> final_set;
 	for (int idx : selected_set) {
 		int par = tempTerrain.entity_0x30311[idx].par1_14;
 		int type = tempTerrain.entity_0x30311[idx].type_0x30311;
 		int subtype = tempTerrain.entity_0x30311[idx].subtype_0x30311;
 		if (REMC2EditorIsParentType(type, subtype) && par != 0 && selected_set.count(par) == 0) {
-			// má rodiče mimo seznam -> nesmazat
 			result |= 4;
 			continue;
 		}
@@ -2089,31 +2086,75 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 	}
 
 	if (final_set.empty()) {
-		result  |= 8;
+		result |= 8;
 		return result;
 	}
 
-	// Seřaď sestupně
+	// Sort descending
 	std::vector<int> to_delete(final_set.begin(), final_set.end());
 	std::sort(to_delete.begin(), to_delete.end(), std::greater<int>());
 
 	for (int index_to_remove : to_delete) {
 		if (index_to_remove < 0 || index_to_remove >= current_count)
 			continue;
+
 		for (int k = 0; k < current_count; k++) {
-			if (!REMC2EditorIsParentType(tempTerrain.entity_0x30311[k].type_0x30311, tempTerrain.entity_0x30311[k].subtype_0x30311))
-				continue;
-			if (tempTerrain.entity_0x30311[k].par1_14 == index_to_remove) {
-				tempTerrain.entity_0x30311[k].par1_14 = 0;
-			} else if (tempTerrain.entity_0x30311[k].par1_14 > index_to_remove) {
-				tempTerrain.entity_0x30311[k].par1_14--;
+			auto &ent = tempTerrain.entity_0x30311[k];
+
+			// --- par1_14 (parent) ---
+			if (REMC2EditorIsParentType(ent.type_0x30311, ent.subtype_0x30311)) {
+				if (ent.par1_14 == index_to_remove) {
+					ent.par1_14 = 0;
+				} else if (ent.par1_14 > index_to_remove) {
+					ent.par1_14--;
+				}
+			}
+
+			// --- par2_16 (path) ---
+			if (ent.par2_16 == index_to_remove) {
+				ent.par2_16 = 0;
+			} else if (ent.par2_16 > index_to_remove) {
+				ent.par2_16--;
+			}
+
+			// --- stageTag_12 ---
+			// stageTag_12 is a group identifier, not a direct entity index -> leave unchanged
+
+			// --- DisId ---
+			// DisId is a group identifier, not a direct entity index -> leave unchanged
+		}
+
+		// --- stage_vars: union_axis_2d_x (direct entity index) ---
+		int sv_count = 11; // adjust to actual field name
+		for (int s = 0; s < sv_count; s++) {
+			auto &sv = tempTerrain.StageVars_0x3647A[s];
+			if (sv.str_0x3647A_2._axis_2d.x == index_to_remove) {
+				sv.str_0x3647A_2._axis_2d.x = 0;
+			} else if (sv.str_0x3647A_2._axis_2d.x > index_to_remove) {
+				sv.str_0x3647A_2._axis_2d.x--;
 			}
 		}
+
+		// --- stages: stage where index==7 (direct entity index) ---
+		int st_count = 8; // adjust to actual field name
+		for (int s = 0; s < st_count; s++) {
+			auto &st = tempTerrain.stages_0x36442[s];
+			if (st.index_0 == 7) {
+				if (st.stage_1 == index_to_remove) {
+					st.stage_1 = 0;
+				} else if (st.stage_1 > index_to_remove) {
+					st.stage_1--;
+				}
+			}
+		}
+
+		// Remove entity by shifting array
 		for (int j = index_to_remove; j < current_count - 1; j++) {
 			tempTerrain.entity_0x30311[j] = tempTerrain.entity_0x30311[j + 1];
 		}
 		current_count--;
 	}
+
 	return result;
 }
 
@@ -2643,6 +2684,10 @@ void MBEXclass::REMC2EditorSaveLevel(String path) {
 
 void MBEXclass::REMC2EditorCleanLevel() {
 	memset(&tempTerrain, 0, sizeof(tempTerrain));
+	for (int i=0;i<8;i++)
+		tempTerrain.stages_0x36442[i].index_0 = -1;
+	tempTerrain.entity_0x30311[1].type_0x30311 = 3; // player start
+	tempTerrain.entity_0x30311[1].subtype_0x30311 = 4; // player start
 }
 void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 	loadlevel(levelIndex);

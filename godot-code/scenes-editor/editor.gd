@@ -934,8 +934,9 @@ func AddStages():
 		var current_node = null
 		var updateObject: bool = false
 		var uid2=Vector3i(0,995,0)
-		if(index != -1):
-			current_node = get_first_entity_with_uid(uid2)
+		if(index == -1):
+			continue
+		current_node = get_first_entity_with_uid(uid2)
 		if current_node == null:
 			var scene_to_instance = library_scenes[uid2]
 			var new_node = scene_to_instance.instantiate()
@@ -990,8 +991,9 @@ func AddStagesVars():
 		var current_nodeB = null
 		var updateObjectB: bool = false
 		var uid2B=Vector3i(0,993,0)
-		if(indexA != 0):
-			current_node = get_first_entity_with_uid(uid2)
+		if(indexA == 0):
+			continue
+		current_node = get_first_entity_with_uid(uid2)
 		if current_node == null:
 			var scene_to_instance = library_scenes[uid2]
 			var new_node = scene_to_instance.instantiate()
