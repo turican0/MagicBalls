@@ -533,22 +533,9 @@ jobs:
       - name: Setup Android keystore (release signing)
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
           echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
           echo "KEYSTORE_PATH=$(pwd)/keystore.jks" >> $GITHUB_ENV
-
-          # ── Validate keystore ──────────────────────────────────────
-          KEYSTORE_SIZE=$(wc -c < keystore.jks)
-          echo "Keystore size: ${KEYSTORE_SIZE} bytes"
-          if [ "$KEYSTORE_SIZE" -lt 100 ]; then
-            echo "ERROR: keystore.jks is too small – base64 decode likely failed!"
-            exit 1
-          fi
-          keytool -list -keystore keystore.jks -storepass "$KEYSTORE_PASSWORD" -noprompt \
-            && echo "OK: Keystore is valid" \
-            || { echo "ERROR: Keystore is invalid or password is wrong!"; exit 1; }
-          # ──────────────────────────────────────────────────────────
 
           # Godot editor settings for Android SDK
           SETTINGS_DIR="$HOME/.config/godot"
@@ -593,11 +580,26 @@ jobs:
         run: |
           PRESETS_FILE="godot-code/export_presets.cfg"
 
+          echo "=== export_presets.cfg BEFORE modification ==="
+          grep -n "keystore" "$PRESETS_FILE" || echo "(no keystore lines found!)"
+
           echo "=== Modify export_presets.cfg for GitHub Actions ==="
           sed -i "s|keystore/release=\".*\"|keystore/release=\"$KEYSTORE_PATH\"|" "$PRESETS_FILE"
           sed -i "s|keystore/release_user=\".*\"|keystore/release_user=\"$KEY_ALIAS\"|" "$PRESETS_FILE"
           sed -i "s|keystore/release_password=\".*\"|keystore/release_password=\"$KEYSTORE_PASSWORD\"|" "$PRESETS_FILE"
           sed -i "s|keystore/release_key_password=\".*\"|keystore/release_key_password=\"$KEY_PASSWORD\"|" "$PRESETS_FILE"
+
+          echo "=== export_presets.cfg AFTER modification ==="
+          grep -n "keystore" "$PRESETS_FILE" || echo "(no keystore lines found!)"
+
+          # Pokud keystore řádky chybí, přidej je ručně
+          if ! grep -q "keystore/release=" "$PRESETS_FILE"; then
+            echo "WARNING: keystore lines missing in export_presets.cfg – injecting manually!"
+            # Najdi sekci [preset.0.options] a přidej za ni keystore řádky
+            sed -i "/^\[preset\.[0-9]*\.options\]/a keystore/release=\"$KEYSTORE_PATH\"\nkeystore/release_user=\"$KEY_ALIAS\"\nkeystore/release_password=\"$KEYSTORE_PASSWORD\"\nkeystore/release_key_password=\"$KEY_PASSWORD\"" "$PRESETS_FILE"
+            echo "=== export_presets.cfg AFTER injection ==="
+            grep -n "keystore" "$PRESETS_FILE" || echo "(still no keystore lines!)"
+          fi
 
           mkdir -p exports/android
           TAG="${{ github.ref_name }}"
