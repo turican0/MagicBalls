@@ -1124,7 +1124,15 @@ void handleInputs(Dictionary inputs,int type) {
 				mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
 				break;
 			case 0x3d00: //F3
-				mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+				if (x_D41A0_BYTEARRAY_4_struct.speedIndex<2)
+					mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+				break;
+			case 0x3e00: //F4
+				if (x_D41A0_BYTEARRAY_4_struct.speedIndex > 0) {
+					if (is_pressed)
+						x_D41A0_BYTEARRAY_4_struct.speedIndex = (x_D41A0_BYTEARRAY_4_struct.speedIndex + 1) % 3;
+					mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+				}
 				break;
 			case 0x2d78: //X
 				mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
