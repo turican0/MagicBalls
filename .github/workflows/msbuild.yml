@@ -533,9 +533,22 @@ jobs:
       - name: Setup Android keystore (release signing)
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
           echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
           echo "KEYSTORE_PATH=$(pwd)/keystore.jks" >> $GITHUB_ENV
+
+          # ── Validate keystore ──────────────────────────────────────
+          KEYSTORE_SIZE=$(wc -c < keystore.jks)
+          echo "Keystore size: ${KEYSTORE_SIZE} bytes"
+          if [ "$KEYSTORE_SIZE" -lt 100 ]; then
+            echo "ERROR: keystore.jks is too small – base64 decode likely failed!"
+            exit 1
+          fi
+          keytool -list -keystore keystore.jks -storepass "$KEYSTORE_PASSWORD" -noprompt \
+            && echo "OK: Keystore is valid" \
+            || { echo "ERROR: Keystore is invalid or password is wrong!"; exit 1; }
+          # ──────────────────────────────────────────────────────────
 
           # Godot editor settings for Android SDK
           SETTINGS_DIR="$HOME/.config/godot"
