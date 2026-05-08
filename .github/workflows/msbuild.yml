@@ -463,9 +463,14 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android NDK r23c
+      - name: Install Android SDK packages
         run: |
-          sdkmanager --install "ndk;27.2.12479018"
+          sdkmanager --licenses || true
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "ndk;27.2.12479018"
           echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.2.12479018" >> $GITHUB_ENV
 
       - name: Install build dependencies
@@ -633,6 +638,21 @@ jobs:
             cat android_export_stderr.txt || true
             exit 1
           fi
+
+      - name: Verify APK
+        run: |
+          TAG="${{ github.ref_name }}"
+          APK_PATH="${{ github.workspace }}/exports/android/MagicBalls-${TAG}-Android-Release.apk"
+          if [ ! -f "$APK_PATH" ]; then
+            echo "APK neexistuje!"; exit 1
+          fi
+          ls -lh "$APK_PATH"
+          echo "=== Obsah APK (prvnich 50 polozek) ==="
+          unzip -l "$APK_PATH" | head -50
+          echo "=== Kontrola podpisu ==="
+          unzip -l "$APK_PATH" | grep -i "META-INF" \
+            && echo "OK: APK je podepsano" \
+            || { echo "CHYBA: META-INF chybi - APK neni podepsano!"; exit 1; }
 
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
