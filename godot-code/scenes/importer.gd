@@ -215,8 +215,56 @@ func _show_custom_dir_picker():
 	btn_select.pressed.connect(_on_picker_select_pressed)
 	hbox.add_child(btn_select)
 
-	var start_path = "C:/" if OS.get_name() == "Windows" else "/"
+	var start_path: String
+	var os_name = OS.get_name()
+	if os_name == "Windows":
+		start_path = "C:/"
+	elif os_name == "Android":
+		# Android: pouzij Downloads nebo externi uloziste
+		var downloads = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS)
+		if downloads != "" and DirAccess.dir_exists_absolute(downloads):
+			start_path = downloads
+		else:
+			start_path = "/storage/emulated/0"
+		_show_android_quick_links()
+	else:
+		start_path = "/"
 	_picker_navigate(start_path)
+
+
+func _show_android_quick_links():
+	# Přidej rychlé zkratky pro Android úložiště
+	if not is_instance_valid(_picker_canvas): return
+	var vbox = _picker_tree.get_parent()
+	if not vbox: return
+
+	var quick_label = Label.new()
+	quick_label.text = "Quick access:"
+	quick_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.8))
+	quick_label.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(quick_label)
+	vbox.move_child(quick_label, _picker_tree.get_index())
+
+	var hbox = HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 8)
+	vbox.add_child(hbox)
+	vbox.move_child(hbox, _picker_tree.get_index())
+
+	var shortcuts = {
+		"Downloads": OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS),
+		"Documents": OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS),
+		"SD Card": "/storage/emulated/0",
+	}
+	for label_text in shortcuts:
+		var path = shortcuts[label_text]
+		if path != "" and DirAccess.dir_exists_absolute(path):
+			var btn = Button.new()
+			btn.text = label_text
+			btn.custom_minimum_size = Vector2(100, 36)
+			_apply_button_theme(btn)
+			var captured_path = path
+			btn.pressed.connect(func(): _picker_navigate(captured_path))
+			hbox.add_child(btn)
 
 func _picker_navigate(path: String):
 	_picker_current_path = path
