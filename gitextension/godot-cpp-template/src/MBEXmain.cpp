@@ -117,8 +117,17 @@ void MBEXclass::_bind_methods() {
 //NewGameSubdraw_81760 - portals
 
 bool MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
-	String real_path = ProjectSettings::get_singleton()->globalize_path(path);
-	String real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
+	String real_path, real_path2;
+	if (path.begins_with("res://") || path.begins_with("user://")) {
+		real_path = ProjectSettings::get_singleton()->globalize_path(path);
+	} else {
+		real_path = path;
+	}
+	if (path2.begins_with("res://") || path2.begins_with("user://")) {
+		real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
+	} else {
+		real_path2 = path2;
+	}
 	bool result = MBEXcdExtract((char*)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
 	if (!result)
 		return false;
