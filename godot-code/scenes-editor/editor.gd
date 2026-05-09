@@ -320,28 +320,42 @@ func update_tree():
 	
 	Tree_View.update_tree_view(all_sections)
 	
-	# Podbarvi vybrané entity v tree
-	var selected_indices = {}
-	for node in get_tree().get_nodes_in_group("selected_entities"):
-		if node.has_meta("index"):
-			selected_indices[node.get_meta("index")] = true
+	_highlight_active_and_selected_items()
 
+func _highlight_active_and_selected_items() -> void:
 	var root = Tree_View.get_root()
 	if root == null:
 		return
+	var selected_3d = {}
+	for node in get_tree().get_nodes_in_group("selected_entities"):
+		if node.has_meta("index"):
+			selected_3d[node.get_meta("index")] = true
 	var section = root.get_first_child()
 	while section:
-		if section.get_text(0) == "Entities":
-			var item = section.get_first_child()
-			while item:
-				var idx = item.get_metadata(0)
-				if idx in selected_indices:
-					item.set_custom_bg_color(0, Color(1.0, 1.0, 0.0, 0.4))
-					#item.set_custom_bg_color(1, Color(1.0, 1.0, 0.0, 0.4))
-				else:
-					item.clear_custom_bg_color(0)
-					#item.clear_custom_bg_color(1)
-				item = item.get_next()
+		var title = section.get_text(0)
+		var item = section.get_first_child()		
+		while item:
+			var id = item.get_metadata(0) as int
+			var is_active = false
+			var is_3d_sel = id in selected_3d
+			match title:
+				"Entities":
+					is_active = (id == current_edited_entity)
+				"Wizards":
+					is_active = (id == current_edited_wizard)
+				"Stages":
+					is_active = (id == current_edited_stage)
+				"StagesVars":
+					is_active = (id == current_edited_stagevar)
+			if is_active and is_3d_sel:
+				item.set_custom_bg_color(0, Color(0.0, 0.85, 0.95, 0.65))   # Azurová / Cyan
+			elif is_active:
+				item.set_custom_bg_color(0, Color(0.25, 0.6, 1.0, 0.6))     # Modrá
+			elif is_3d_sel:
+				item.set_custom_bg_color(0, Color(1.0, 0.9, 0.2, 0.45))     # Žlutá
+			else:
+				item.clear_custom_bg_color(0)
+			item = item.get_next()
 		section = section.get_next()
 		
 func update_selection() -> void:
@@ -1311,6 +1325,11 @@ func _on_tree_item_selected() -> void:
 			_on_tree_stagesVars_selected(item_index)
 	#_refresh_active_panel()
 
+var current_edited_entity: int = -1
+var current_edited_wizard: int = -1
+var current_edited_stage: int = -1
+var current_edited_stagevar: int = -1
+
 func _on_tree_terrain_selected(index: int) -> void:
 	log_message("Terrain selected: index=%d" % [index])
 	Terrain_Edit_Panel.show()
@@ -1318,6 +1337,10 @@ func _on_tree_terrain_selected(index: int) -> void:
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.hide()
+	current_edited_stage = -1
+	current_edited_entity = -1
+	current_edited_wizard = -1
+	current_edited_stagevar = -1
 	fillTerrainDetails()
 
 func _on_tree_entity_selected(index: int) -> void:
@@ -1329,6 +1352,10 @@ func _on_tree_entity_selected(index: int) -> void:
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.hide()
+	current_edited_entity = index
+	current_edited_wizard = -1
+	current_edited_stage = -1
+	current_edited_stagevar = -1
 	fillEntityDetails(index)
 	
 func _on_tree_wizard_selected(index: int):
@@ -1339,6 +1366,10 @@ func _on_tree_wizard_selected(index: int):
 	Entity_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.hide()
+	current_edited_wizard = index
+	current_edited_entity = -1
+	current_edited_stage = -1
+	current_edited_stagevar = -1
 	_filling_wizard_details = true
 	Wizards_Edit.display_player_data(index)
 	_filling_wizard_details = false
@@ -1351,6 +1382,10 @@ func _on_tree_stages_selected(index: int):
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.show()
 	StagesVars_Edit_Panel.hide()
+	current_edited_stage = index
+	current_edited_entity = -1
+	current_edited_wizard = -1
+	current_edited_stagevar = -1
 	_filling_stages_details = true
 	Stages_Edit.display_stages_data(index)
 	_filling_stages_details = false
@@ -1363,6 +1398,10 @@ func _on_tree_stagesVars_selected(index: int):
 	Wizards_Edit_Panel.hide()
 	Stages_Edit_Panel.hide()
 	StagesVars_Edit_Panel.show()
+	current_edited_stagevar = index
+	current_edited_entity = -1
+	current_edited_wizard = -1
+	current_edited_stage = -1
 	_filling_stagesvars_details = true
 	StagesVars_Edit.display_stages_data(index)
 	_filling_stagesvars_details = false
@@ -1703,9 +1742,31 @@ func _on_stagesvars_spinbox_value_changed(_value = null) -> void:
 		return
 	_save_current_stagesvars_changes()
 
+func _lock_spinbox_to_integers(sb: SpinBox) -> void:
+	if not sb:
+		return
+	var le = sb.get_line_edit()
+	if not le:
+		return
+	if not le.text_changed.is_connected(_on_spinbox_text_filter.bind(le)):
+		le.text_changed.connect(_on_spinbox_text_filter.bind(le))
+
+func _on_spinbox_text_filter(new_text: String, le: LineEdit) -> void:
+	var filtered := ""
+	for i in range(new_text.length()):
+		var c := new_text[i]
+		if c >= "0" and c <= "9":
+			filtered += c
+		elif c == "-" and i == 0:
+			filtered += c
+	if filtered != new_text:
+		le.text = filtered
+		le.caret_column = filtered.length()
+
 func _connect_stage_spinbox(node) -> void:
 	if not node:
 		return
+	_lock_spinbox_to_integers(node)
 	if node and not node.value_changed.is_connected(_on_stages_spinbox_value_changed):
 		node.value_changed.connect(_on_stages_spinbox_value_changed)
 	if not node.focus_exited.is_connected(_on_stages_spinbox_value_changed):
@@ -1714,6 +1775,7 @@ func _connect_stage_spinbox(node) -> void:
 func _connect_stagesvar_spinbox(node) -> void:
 	if not node:
 		return
+	_lock_spinbox_to_integers(node)
 	if node and not node.value_changed.is_connected(_on_stagesvars_spinbox_value_changed):
 		node.value_changed.connect(_on_stagesvars_spinbox_value_changed)
 	if not node.focus_exited.is_connected(_on_stagesvars_spinbox_value_changed):
@@ -1736,6 +1798,7 @@ func _connect_stagesvars_spinboxes() -> void:
 func _connect_entity_spinbox(node) -> void:
 	if not node:
 		return
+	_lock_spinbox_to_integers(node)
 	if !node.value_changed.is_connected(_on_entity_spinbox_value_changed):
 		node.value_changed.connect(_on_entity_spinbox_value_changed)
 	if not node.focus_exited.is_connected(_on_entity_spinbox_value_changed):
@@ -1756,6 +1819,7 @@ func _connect_entity_spinboxes() -> void:
 func _connect_wizard_spinbox(node) -> void:
 	if not node:
 		return
+	_lock_spinbox_to_integers(node)
 	if !node.value_changed.is_connected(_on_wizard_spinbox_value_changed):
 		node.value_changed.connect(_on_wizard_spinbox_value_changed)
 	if not node.focus_exited.is_connected(_on_wizard_spinbox_value_changed):
