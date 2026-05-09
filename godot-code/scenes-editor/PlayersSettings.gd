@@ -33,7 +33,7 @@ func _update_spell_buttons(container: Control, spell_array: Array):
 		if btn:
 			btn.toggle_mode = true
 			# Pokud je hodnota v poli > 0, tlačítko se zapne
-			btn.button_pressed = (spell_array[i] > 0)
+			btn.button_pressed = spell_array[i]
 
 
 #func _on_spin_box_value_changed(value: float) -> void:

@@ -1332,6 +1332,8 @@ func _on_tree_entity_selected(index: int) -> void:
 	fillEntityDetails(index)
 	
 func _on_tree_wizard_selected(index: int):
+	if Wizards_Edit_Panel.visible:
+		_save_current_wizards_changes()
 	Wizards_Edit_Panel.show()
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
@@ -1342,6 +1344,8 @@ func _on_tree_wizard_selected(index: int):
 	_filling_wizard_details = false
 
 func _on_tree_stages_selected(index: int):
+	if Stages_Edit_Panel.visible:
+		_save_current_stages_changes()
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()
@@ -1352,6 +1356,8 @@ func _on_tree_stages_selected(index: int):
 	_filling_stages_details = false
  
 func _on_tree_stagesVars_selected(index: int):
+	if StagesVars_Edit_Panel.visible:
+		_save_current_stagesvars_changes()
 	Terrain_Edit_Panel.hide()
 	Entity_Edit_Panel.hide()
 	Wizards_Edit_Panel.hide()
@@ -1553,7 +1559,7 @@ func _save_current_entity_changes() -> void:
 	if _filling_entity_details:
 		return
 	var idx = current_entity_index
-	_force_commit_all_spinboxes()
+	_force_commit_all_spinboxes(Entity_Edit)
 	Global.editorLevel["entities"][idx]["axis_x"]   = Entity_Edit.get_node_or_null("POS/SpinBox").value as int
 	Global.editorLevel["entities"][idx]["axis_y"]   = Entity_Edit.get_node_or_null("POS/SpinBox2").value as int
 	Global.editorLevel["entities"][idx]["type"]      = Entity_Edit.get_node_or_null("type_0x30311/SpinBox").value as int
@@ -1566,72 +1572,103 @@ func _save_current_entity_changes() -> void:
 	Global.editorLevel["entities"][idx]["par3"]      = Entity_Edit.get_node_or_null("par3_18/SpinBox").value as int
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 	
-func _force_commit_all_spinboxes() -> void:
-	var spinboxes = [
-		Entity_Edit.get_node_or_null("POS/SpinBox"),
-		Entity_Edit.get_node_or_null("POS/SpinBox2"),
-		Entity_Edit.get_node_or_null("type_0x30311/SpinBox"),
-		Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox"),
-		Entity_Edit.get_node_or_null("DisId/SpinBox"),
-		Entity_Edit.get_node_or_null("word_10/SpinBox"),
-		Entity_Edit.get_node_or_null("stageTag_12/SpinBox"),
-		Entity_Edit.get_node_or_null("par1_14/SpinBox"),
-		Entity_Edit.get_node_or_null("par2_16/SpinBox"),
-		Entity_Edit.get_node_or_null("par3_18/SpinBox"),
-	]    
+func _force_commit_all_spinboxes(panel: Control = null) -> void:
+	if panel == null:
+		panel = Entity_Edit
+	var spinboxes: Array = []
+	if panel == Entity_Edit:
+		spinboxes = [
+			panel.get_node_or_null("POS/SpinBox"),
+			panel.get_node_or_null("POS/SpinBox2"),
+			panel.get_node_or_null("type_0x30311/SpinBox"),
+			panel.get_node_or_null("subtype_0x30311/SpinBox"),
+			panel.get_node_or_null("DisId/SpinBox"),
+			panel.get_node_or_null("word_10/SpinBox"),
+			panel.get_node_or_null("stageTag_12/SpinBox"),
+			panel.get_node_or_null("par1_14/SpinBox"),
+			panel.get_node_or_null("par2_16/SpinBox"),
+			panel.get_node_or_null("par3_18/SpinBox"),
+		]
+	elif panel == Stages_Edit:
+		spinboxes = [
+			panel.get_node_or_null("StageIndex/SpinBox"),
+			panel.get_node_or_null("StageStage/SpinBox"),
+			panel.get_node_or_null("StageX1/SpinBox"),
+			panel.get_node_or_null("StageY1/SpinBox"),
+		]
+	elif panel == StagesVars_Edit:
+		spinboxes = [
+			panel.get_node_or_null("StageIndex/SpinBox"),
+			panel.get_node_or_null("StageStage/SpinBox"),
+			panel.get_node_or_null("StageX1/SpinBox"),
+			panel.get_node_or_null("StageY1/SpinBox"),
+			panel.get_node_or_null("StageX2/SpinBox"),
+			panel.get_node_or_null("StageY2/SpinBox"),
+		]
+	elif panel == Wizards_Edit:
+		spinboxes = [
+			panel.get_node_or_null("IDX/SpinBox"),
+			panel.get_node_or_null("Aggression/SpinBox"),
+			panel.get_node_or_null("Reflexes/SpinBox"),
+			panel.get_node_or_null("Perception/SpinBox"),
+			panel.get_node_or_null("Life/SpinBox"),
+		]
 	for sb in spinboxes:
-		var line_edit = sb.get_line_edit()
-		if line_edit:
-			sb.value = line_edit.text.to_int()
-	
-func _on_wizard_spinbox_value_changed(_value) -> void:
+		if sb and is_instance_valid(sb):
+			var line_edit = sb.get_line_edit()
+			if line_edit and line_edit.text.strip_edges() != "":
+				sb.value = line_edit.text.to_int()
+
+# ==================== WIZARDS (PLAYERS) ====================
+func _save_current_wizards_changes() -> void:
 	if _filling_wizard_details:
 		return
+	_force_commit_all_spinboxes(Wizards_Edit)
 	var idx = Wizards_Edit.get_node_or_null("IDX/SpinBox").value as int
 	if idx < 0 or idx > 7:
 		return
-		
 	Global.editorLevel["wizards"][idx]["aggression"]   = Wizards_Edit.get_node_or_null("Aggression/SpinBox").value as int
-	Global.editorLevel["wizards"][idx]["reflexes"]      = Wizards_Edit.get_node_or_null("Reflexes/SpinBox").value as int
+	Global.editorLevel["wizards"][idx]["reflexes"]     = Wizards_Edit.get_node_or_null("Reflexes/SpinBox").value as int
 	Global.editorLevel["wizards"][idx]["perception"]   = Wizards_Edit.get_node_or_null("Perception/SpinBox").value as int
-	Global.editorLevel["wizards"][idx]["life"]    = Wizards_Edit.get_node_or_null("Life/SpinBox").value as int
-	
-	var spells_container = Wizards_Edit.get_node_or_null("StartingSpells")
-	if spells_container:
+	Global.editorLevel["wizards"][idx]["life"]         = Wizards_Edit.get_node_or_null("Life/SpinBox").value as int
+	var starting_container = Wizards_Edit.get_node_or_null("StartingSpells")
+	if starting_container:
 		var spells_data = []
-		for panel in spells_container.get_children():
-			var button = panel.get_child(0)
+		for panel in starting_container.get_children():
+			var button = panel.get_child(0) if panel.get_child_count() > 0 else null
 			if button and button is TextureButton:
 				spells_data.append(button.button_pressed)
 		Global.editorLevel["wizards"][idx]["starting_spells"] = spells_data
-		
 	var available_container = Wizards_Edit.get_node_or_null("AvailableSpells")
 	if available_container:
 		var spells_data = []
 		for panel in available_container.get_children():
-			var button = panel.get_child(0)
+			var button = panel.get_child(0) if panel.get_child_count() > 0 else null
 			if button and button is TextureButton:
 				spells_data.append(button.button_pressed)
 		Global.editorLevel["wizards"][idx]["byte_array"] = spells_data
-		
 	var blocked_container = Wizards_Edit.get_node_or_null("BlockedSpells")
 	if blocked_container:
 		var spells_data = []
 		for panel in blocked_container.get_children():
-			var button = panel.get_child(0)
+			var button = panel.get_child(0) if panel.get_child_count() > 0 else null
 			if button and button is TextureButton:
 				spells_data.append(button.button_pressed)
 		Global.editorLevel["wizards"][idx]["blocked_spells"] = spells_data
-	
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
-	
-	
+
+func _on_wizard_spinbox_value_changed(_value = null) -> void:
+	if _filling_wizard_details:
+		return
+	_save_current_wizards_changes()
+
 var _filling_stages_details := false
 var _filling_stagesvars_details := false
 
-func _on_stages_spinbox_value_changed(_value) -> void:
+func _save_current_stages_changes() -> void:
 	if _filling_stages_details:
 		return
+	_force_commit_all_spinboxes(Stages_Edit)
 	var idx = Stages_Edit.get_node_or_null("IDX/SpinBox").value as int
 	if idx < 0 or idx >= Global.editorLevel["stages"].size():
 		return
@@ -1641,9 +1678,15 @@ func _on_stages_spinbox_value_changed(_value) -> void:
 	Global.editorLevel["stages"][idx]["axis_y"] = Stages_Edit.get_node_or_null("StageY1/SpinBox").value as int
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 
-func _on_stagesvars_spinbox_value_changed(_value) -> void:
+func _on_stages_spinbox_value_changed(_value = null) -> void:
+	if _filling_stages_details:
+		return
+	_save_current_stages_changes()
+
+func _save_current_stagesvars_changes() -> void:
 	if _filling_stagesvars_details:
 		return
+	_force_commit_all_spinboxes(StagesVars_Edit)
 	var idx = StagesVars_Edit.get_node_or_null("IDX/SpinBox").value as int
 	if idx < 0 or idx >= Global.editorLevel["stage_vars"].size():
 		return
@@ -1654,6 +1697,11 @@ func _on_stagesvars_spinbox_value_changed(_value) -> void:
 	Global.editorLevel["stage_vars"][idx]["union_dword_axis_x"] = StagesVars_Edit.get_node_or_null("StageX2/SpinBox").value as int
 	Global.editorLevel["stage_vars"][idx]["union_dword_axis_y"] = StagesVars_Edit.get_node_or_null("StageY2/SpinBox").value as int
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	
+func _on_stagesvars_spinbox_value_changed(_value = null) -> void:
+	if _filling_stagesvars_details:
+		return
+	_save_current_stagesvars_changes()
 
 func _connect_stage_spinbox(node) -> void:
 	if not node:
@@ -1706,12 +1754,18 @@ func _connect_entity_spinboxes() -> void:
 	_connect_entity_spinbox(Entity_Edit.get_node_or_null("par3_18/SpinBox"))
 
 func _connect_wizard_spinbox(node) -> void:
+	if not node:
+		return
 	if !node.value_changed.is_connected(_on_wizard_spinbox_value_changed):
 		node.value_changed.connect(_on_wizard_spinbox_value_changed)
+	if not node.focus_exited.is_connected(_on_wizard_spinbox_value_changed):
+		node.focus_exited.connect(_on_wizard_spinbox_value_changed)
 
 func _connect_wizard_spells(node) -> void:
+	if not node:
+		return
 	for panel in node.get_children():
-		var button = panel.get_child(0)
+		var button = panel.get_child(0) if panel.get_child_count() > 0 else null
 		if button and button is TextureButton:
 			if !button.toggled.is_connected(_on_wizard_spinbox_value_changed):
 				button.toggled.connect(_on_wizard_spinbox_value_changed)
