@@ -111,6 +111,9 @@ func _ready() -> void:
 	var loader = get_tree().root.get_node_or_null("GlobalLoadingCanvas")
 	if loader:
 		loader.queue_free()
+		
+	#Tree_View.set_focus_mode(Control.FOCUS_ALL)
+	#Tree_View.hide_folding = false
 	
 func _connect_terrain_spinboxes() -> void:
 	for i in range(selectors.size()):
@@ -203,13 +206,46 @@ func _on_window_focus_exited() -> void:
 		#stage.y2 = int(data[offset + 5])
 		#
 		#Global.stages_settings.append(stage)
-	
+
+func _move_tree_selection(direction: int) -> void:
+	var root = Tree_View.get_root()
+	if root == null:
+		return
+	var section_title = ""
+	var current_idx = -1	
+	if Entity_Edit_Panel.visible:
+		section_title = "Entities"
+		var entities = get_tree().get_nodes_in_group("entities")
+		current_edited_entity=clamp(current_edited_entity + direction, 1, entities.size())
+	elif Wizards_Edit_Panel.visible:
+		section_title = "Wizards"
+		current_edited_wizard = clamp(current_edited_wizard + direction, 0, 7)
+	elif Stages_Edit_Panel.visible:
+		section_title = "Stages"
+		current_edited_stage = clamp(current_edited_stage + direction, 0, 7)
+	elif StagesVars_Edit_Panel.visible:
+		section_title = "StagesVars"
+		current_edited_stagevar = clamp(current_edited_stagevar + direction, 0, 11)
+	else:
+		section_title = "Terrain"
+
 func _input(event: InputEvent) -> void:
 	if _waiting_for_click_focus:
 		if event is InputEventMouseButton and not event.pressed:
 			_waiting_for_click_focus = false
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			return
+			
+	if Tree_View.has_focus() and event is InputEventKey and event.pressed:
+		if event.keycode == KEY_UP:
+			_move_tree_selection(-1)
+			get_viewport().set_input_as_handled()
+			return
+		elif event.keycode == KEY_DOWN:
+			_move_tree_selection(1)
+			get_viewport().set_input_as_handled()
+			return
+			
 	# M pressed
 	if (event is InputEventKey and event.keycode == KEY_SPACE and event.pressed):
 		toggle_editor_control_style()
@@ -333,7 +369,7 @@ func _highlight_active_and_selected_items() -> void:
 	var section = root.get_first_child()
 	while section:
 		var title = section.get_text(0)
-		var item = section.get_first_child()		
+		var item = section.get_first_child()
 		while item:
 			var id = item.get_metadata(0) as int
 			var is_active = false
