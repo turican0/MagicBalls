@@ -11,6 +11,7 @@ func display_player_data(idx: int):
 	$Reflexes/SpinBox.value   = Global.editorLevel["wizards"][idx]["reflexes"]
 	$Perception/SpinBox.value = Global.editorLevel["wizards"][idx]["perception"]
 	$Life/SpinBox.value       = Global.editorLevel["wizards"][idx]["life"]
+	$Activated/SpinBox.value  = Global.editorLevel["players"][idx]
 	
 	#$StageIndex/SpinBox.value = Global.editorLevel["stages"][idx]["index"]
 	#$StageStage/SpinBox.value = Global.editorLevel["stages"][idx]["stage"]

@@ -1730,6 +1730,7 @@ func _force_commit_all_spinboxes(panel: Control = null) -> void:
 			panel.get_node_or_null("Reflexes/SpinBox"),
 			panel.get_node_or_null("Perception/SpinBox"),
 			panel.get_node_or_null("Life/SpinBox"),
+			panel.get_node_or_null("Activated/SpinBox"),
 		]
 	for sb in spinboxes:
 		if sb and is_instance_valid(sb):
@@ -1749,6 +1750,7 @@ func _save_current_wizards_changes() -> void:
 	Global.editorLevel["wizards"][idx]["reflexes"]     = Wizards_Edit.get_node_or_null("Reflexes/SpinBox").value as int
 	Global.editorLevel["wizards"][idx]["perception"]   = Wizards_Edit.get_node_or_null("Perception/SpinBox").value as int
 	Global.editorLevel["wizards"][idx]["life"]         = Wizards_Edit.get_node_or_null("Life/SpinBox").value as int
+	Global.editorLevel["players"][idx]                 = Wizards_Edit.get_node_or_null("Activated/SpinBox").value as int
 	var starting_container = Wizards_Edit.get_node_or_null("StartingSpells")
 	if starting_container:
 		var spells_data = []
@@ -1918,6 +1920,7 @@ func _connect_wizards_spinboxes() -> void:
 	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Reflexes/SpinBox"))
 	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Perception/SpinBox"))
 	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Life/SpinBox"))
+	_connect_wizard_spinbox(Wizards_Edit.get_node_or_null("Activated/SpinBox"))
 	_connect_wizard_spells(Wizards_Edit.get_node_or_null("StartingSpells"))
 	_connect_wizard_spells(Wizards_Edit.get_node_or_null("AvailableSpells"))
 	_connect_wizard_spells(Wizards_Edit.get_node_or_null("BlockedSpells"))

@@ -899,6 +899,18 @@ text = "Life"
 layout_mode = 2
 max_value = 65535.0
 
+[node name="Activated" type="HBoxContainer" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=490955170]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Activated" unique_id=489764178]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Activated"
+
+[node name="SpinBox" type="SpinBox" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Activated" unique_id=1603927811]
+layout_mode = 2
+max_value = 65535.0
+
 [node name="LabelStartingSpells" type="Label" parent="UI/WizardsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1057108797]
 layout_mode = 2
 text = "StartingSpell"
