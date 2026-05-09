@@ -212,7 +212,7 @@ func _move_tree_selection(direction: int) -> void:
 	if root == null:
 		return
 	var section_title = ""
-	var current_idx = -1	
+	var current_idx = -1
 	if Entity_Edit_Panel.visible:
 		section_title = "Entities"
 		var entities = get_tree().get_nodes_in_group("entities")
@@ -228,7 +228,7 @@ func _move_tree_selection(direction: int) -> void:
 		current_edited_stagevar = clamp(current_edited_stagevar + direction, 0, 11)
 	else:
 		section_title = "Terrain"
-
+	
 func _input(event: InputEvent) -> void:
 	if _waiting_for_click_focus:
 		if event is InputEventMouseButton and not event.pressed:
@@ -284,6 +284,10 @@ func toggle_editor_control_styleSt(state):
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+var _last_scrolled_entity: int = -99
+var _last_scrolled_wizard: int = -99
+var _last_scrolled_stage: int = -99
+var _last_scrolled_stagevar: int = -99
 func update_tree():
 	var all_sections: Array = []
 
@@ -357,7 +361,46 @@ func update_tree():
 	Tree_View.update_tree_view(all_sections)
 	
 	_highlight_active_and_selected_items()
+	
+	if Entity_Edit_Panel.visible and current_edited_entity >= 0:
+		if current_edited_entity != _last_scrolled_entity:
+			_last_scrolled_entity = current_edited_entity
+			_on_tree_entity_selected(current_edited_entity)
+			_scroll_tree_to_active("Entities", current_edited_entity)
+	elif Wizards_Edit_Panel.visible and current_edited_wizard >= 0:
+		if current_edited_wizard != _last_scrolled_wizard:
+			_last_scrolled_wizard = current_edited_wizard
+			_on_tree_wizard_selected(current_edited_wizard)
+			_scroll_tree_to_active("Wizards", current_edited_wizard)
+	elif Stages_Edit_Panel.visible and current_edited_stage >= 0:
+		if current_edited_stage != _last_scrolled_stage:
+			_last_scrolled_stage = current_edited_stage
+			_on_tree_stages_selected(current_edited_stage)
+			_scroll_tree_to_active("Stages", current_edited_stage)
+	elif StagesVars_Edit_Panel.visible and current_edited_stagevar >= 0:
+		if current_edited_stagevar != _last_scrolled_stagevar:
+			_last_scrolled_stagevar = current_edited_stagevar
+			_on_tree_stagesVars_selected(current_edited_stagevar)
+			_scroll_tree_to_active("StagesVars", current_edited_stagevar)
 
+func _scroll_tree_to_active(section_title: String, item_index: int) -> void:
+	var root = Tree_View.get_root()
+	if root == null:
+		return
+	var section = root.get_first_child()
+	while section:
+		if section.get_text(0) == section_title:
+			break
+		section = section.get_next()
+	if section == null:
+		return
+	var item = section.get_first_child()
+	while item:
+		if item.get_metadata(0) == item_index:
+			Tree_View.scroll_to_item(item)
+			return
+		item = item.get_next()
+		
 func _highlight_active_and_selected_items() -> void:
 	var root = Tree_View.get_root()
 	if root == null:
