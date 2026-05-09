@@ -1670,159 +1670,222 @@ void extract_recursive(l9660_fs *fs_ptr, l9660_dir *current_dir, const fs::path 
 	}
 }
 
+// Globální Godot FileAccess místo std::ifstream
+static Ref<FileAccess> g_godot_image_file;
+
+bool read_sector_callback_godot(l9660_fs *fs, void *buf, uint32_t sector) {
+	if (g_godot_image_file.is_null())
+		return false;
+	uint64_t target_pos = (uint64_t)G_BASE_START +
+			((uint64_t)sector * BIN_SECTOR_SIZE) + BIN_DATA_OFFSET;
+	g_godot_image_file->seek(target_pos);
+	PackedByteArray data = g_godot_image_file->get_buffer(ISO_DATA_SIZE);
+	if (data.size() < (int)ISO_DATA_SIZE)
+		return false;
+	memcpy(buf, data.ptr(), ISO_DATA_SIZE);
+	return true;
+}
+
+void save_file_godot(l9660_file *l_file, String dest_path) {
+	Ref<FileAccess> out = FileAccess::open(dest_path, FileAccess::WRITE);
+	if (out.is_null())
+		return;
+	char buffer[ISO_DATA_SIZE];
+	size_t read_bytes;
+	while (l_file->position < l_file->length) {
+		if (l9660_read(l_file, buffer, sizeof(buffer), &read_bytes) == L9660_OK) {
+			if (read_bytes == 0)
+				break;
+			out->store_buffer((const uint8_t *)buffer, read_bytes);
+		} else
+			break;
+	}
+}
+
+void extract_recursive_godot(l9660_fs *fs_ptr, l9660_dir *current_dir, String current_local_path) {
+	l9660_dirent *dent;
+	l9660_seekdir(current_dir, 0);
+
+	while (true) {
+		if (l9660_readdir(current_dir, &dent) != L9660_OK || dent == nullptr)
+			break;
+
+		std::string name(dent->name, dent->name_len);
+		size_t semi = name.find(';');
+		if (semi != std::string::npos)
+			name = name.substr(0, semi);
+		if (name.length() == 1 && (name[0] == '\0' || name[0] == '\1'))
+			continue;
+
+		String godot_name = String(name.c_str());
+		String target_path = current_local_path.path_join(godot_name);
+
+		if (dent->flags & (1 << 1)) {
+			DirAccess::make_dir_recursive_absolute(target_path);
+			l9660_dir sub_dir;
+			if (l9660_opendirat(&sub_dir, current_dir, name.c_str()) == L9660_OK)
+				extract_recursive_godot(fs_ptr, &sub_dir, target_path);
+		} else {
+			l9660_file l_file;
+			if (l9660_openat(&l_file, current_dir, name.c_str()) == L9660_OK)
+				save_file_godot(&l_file, target_path);
+		}
+	}
+}
+
 bool MBEXcdExtract(char *pathGOG, char *pathOut) {
-	std::string biggestFilePath;
-	fs::path src(pathGOG);
-	fs::path dest(pathOut);
-	try {
-		fs::create_directories(pathOut);
-		fs::path gameFolder = src / "GAME";
-		if (fs::exists(gameFolder) && fs::is_directory(gameFolder)) {
-			fs::copy(gameFolder, dest / "GAME", fs::copy_options::recursive | fs::copy_options::overwrite_existing);
-			std::cout << "The GAME folder has been successfully copied.\n";
-		} else {
-			std::cerr << "Folder GAME not found in location!\n";
-		}
-		uintmax_t max_size = 0;
-		fs::path tempPath;
-		for (const auto &entry : fs::recursive_directory_iterator(src)) {
-			if (fs::is_regular_file(entry)) {
-				uintmax_t current_size = fs::file_size(entry);
-				if (current_size > max_size) {
-					max_size = current_size;
-					tempPath = entry.path();
-				}
-			}
-		}
-		if (!tempPath.empty()) {
-			biggestFilePath = tempPath.string();
-		} else {
-			biggestFilePath = "";
-		}
-	} catch (const fs::filesystem_error &e) {
-		std::cerr << "Error when working with files: " << e.what() << std::endl;
-		return false;
-	}
-	g_image_file.open(biggestFilePath, std::ios::binary);
-	if (!g_image_file) {
-		std::cerr << "Cannot open file " << biggestFilePath << std::endl;
-		return false;
-	}
-	l9660_fs fs_ctx;
-	l9660_dir root_dir;
-	if (l9660_openfs(&fs_ctx, read_sector_callback) != L9660_OK) {
-		std::cerr << "Error lib9660: Cannot find PVD. Check G_BASE_START!" << std::endl;
-		g_image_file.close();
-		fs::path netherExe = src / "NETHERW.EXE";
-		if (!fs::exists(netherExe)) {
-			std::cerr << "NETHERW.EXE not found either!\n";
+	String src = String(pathGOG);
+	String dst = String(pathOut);
+
+	auto copyFile = [&](String from, String to) -> bool {
+		if (!FileAccess::file_exists(from))
 			return false;
+		Ref<FileAccess> fin = FileAccess::open(from, FileAccess::READ);
+		Ref<FileAccess> fout = FileAccess::open(to, FileAccess::WRITE);
+		if (fin.is_null() || fout.is_null())
+			return false;
+		const int CHUNK = 1024 * 1024;
+		uint64_t remaining = fin->get_length();
+		while (remaining > 0) {
+			uint64_t toRead = MIN((uint64_t)CHUNK, remaining);
+			fout->store_buffer(fin->get_buffer(toRead));
+			remaining -= toRead;
 		}
+		return true;
+	};
 
-        // Pomocná funkce pro nastavení práv k zápisu
-		auto makeWritable = [](const fs::path &p) {
-			try {
-				if (fs::exists(p)) {
-					// Přidá právo zápisu pro vlastníka (případně i pro skupinu a ostatní, pokud je třeba)
-					fs::permissions(p, fs::perms::owner_write | fs::perms::group_write | fs::perms::others_write, fs::perm_options::add);
-				}
-			} catch (...) {
+	std::function<void(String, String)> copyDir = [&](String from, String to) {
+		DirAccess::make_dir_recursive_absolute(to);
+		Ref<DirAccess> dir = DirAccess::open(from);
+		if (dir.is_null())
+			return;
+		dir->list_dir_begin();
+		String name = dir->get_next();
+		while (name != "") {
+			if (name != "." && name != "..") {
+				String fromFull = from.path_join(name);
+				String toFull = to.path_join(name);
+				if (dir->current_is_dir())
+					copyDir(fromFull, toFull);
+				else
+					copyFile(fromFull, toFull);
 			}
-		};
+			name = dir->get_next();
+		}
+		dir->list_dir_end();
+	};
 
-		fs::path output_path = fs::path(pathOut) / "CD_Files";
-		fs::create_directories(output_path);
-		makeWritable(output_path); // Práva pro hlavní složku
+	auto safeCopy = [&](String from, String to) {
+		if (FileAccess::file_exists(from) && !FileAccess::file_exists(to))
+			copyFile(from, to);
+	};
 
-		if (fs::exists(src) && fs::is_directory(src)) {
-			for (const auto &entry : fs::recursive_directory_iterator(src)) {
-				try {
-					fs::path rel = fs::relative(entry.path(), src);
-					fs::path target = (fs::path(output_path) / rel).make_preferred();
+	// --- Zkopíruj GAME složku ---
+	String gameFolder = src.path_join("GAME");
+	if (DirAccess::dir_exists_absolute(gameFolder))
+		copyDir(gameFolder, dst.path_join("GAME"));
+	else
+		UtilityFunctions::printerr("Folder GAME not found in location!");
 
-					if (fs::is_directory(entry.path())) {
-						fs::create_directories(target);
-						makeWritable(target); // Nastavit práva adresáři
-					} else {
-						if (!fs::exists(target)) {
-							fs::create_directories(target.parent_path());
-							fs::copy_file(entry.path(), target, fs::copy_options::skip_existing);
-							makeWritable(target); // Nastavit práva souboru hned po zkopírování
+	// --- Najdi největší soubor (ISO/BIN) ---
+	String biggestFilePath = "";
+	uint64_t maxSize = 0;
+
+	std::function<void(String)> findBiggest = [&](String folder) {
+		Ref<DirAccess> dir = DirAccess::open(folder);
+		if (dir.is_null())
+			return;
+		dir->list_dir_begin();
+		String name = dir->get_next();
+		while (name != "") {
+			if (name != "." && name != "..") {
+				String full = folder.path_join(name);
+				if (dir->current_is_dir()) {
+					findBiggest(full);
+				} else {
+					Ref<FileAccess> f = FileAccess::open(full, FileAccess::READ);
+					if (f.is_valid()) {
+						uint64_t size = f->get_length();
+						if (size > maxSize) {
+							maxSize = size;
+							biggestFilePath = full;
 						}
 					}
-				} catch (const std::exception &e) {
-					std::cerr << "Přeskočeno: " << entry.path().string() << std::endl;
 				}
 			}
+			name = dir->get_next();
 		}
+		dir->list_dir_end();
+	};
 
-		fs::path gameBase = fs::path(pathOut) / "GAME/NETHERW";
+	findBiggest(src);
 
-		// Lambda pro vytvoření adresáře a nastavení práv v jednom kroku
-		auto createDirWritable = [&](const fs::path &p) {
-			fs::create_directories(p);
-			makeWritable(p);
-		};
-
-		createDirWritable(gameBase / "CDATA");
-		createDirWritable(gameBase / "CLEVELS");
-		createDirWritable(gameBase / "LANGUAGE");
-		createDirWritable(gameBase / "SAVE");
-		createDirWritable(gameBase / "SHOTS");
-		createDirWritable(gameBase / "SOUND");
-
-		auto safeCopy = [&](const fs::path &s, const fs::path &t) {
-			if (fs::exists(s) && !fs::exists(t)) {
-				try {
-					fs::copy_file(s, t, fs::copy_options::skip_existing);
-					makeWritable(t); // Tady je to klíčové pro CONFIG.DAT a další
-				} catch (...) {
-				}
+	// --- Větev A: ISO image přes l9660 ---
+	if (biggestFilePath != "") {
+		g_godot_image_file = FileAccess::open(biggestFilePath, FileAccess::READ);
+		if (g_godot_image_file.is_valid()) {
+			l9660_fs fs_ctx;
+			l9660_dir root_dir;
+			if (l9660_openfs(&fs_ctx, read_sector_callback_godot) == L9660_OK) {
+				l9660_fs_open_root(&root_dir, &fs_ctx);
+				String output_path = dst.path_join("CD_Files");
+				DirAccess::make_dir_recursive_absolute(output_path);
+				extract_recursive_godot(&fs_ctx, &root_dir, output_path);
+				g_godot_image_file.unref();
+				UtilityFunctions::print("Done!");
+				return true;
 			}
-		};
-
-		// Kopírování CDATA, LEVELS atd.
-		safeCopy(src / "DATA/TMAPS0-0.DAT", gameBase / "CDATA/TMAPS0-0.DAT");
-		safeCopy(src / "DATA/TMAPS1-0.DAT", gameBase / "CDATA/TMAPS1-0.DAT");
-		safeCopy(src / "DATA/TMAPS2-0.DAT", gameBase / "CDATA/TMAPS2-0.DAT");
-		safeCopy(src / "DATA/VERSION.DAT", gameBase / "CDATA/VERSION.DAT");
-		safeCopy(src / "DATA/TMAPS0-0.TAB", gameBase / "CDATA/TMAPS0-0.TAB");
-		safeCopy(src / "DATA/TMAPS1-0.TAB", gameBase / "CDATA/TMAPS1-0.TAB");
-		safeCopy(src / "DATA/TMAPS2-0.TAB", gameBase / "CDATA/TMAPS2-0.TAB");
-
-		safeCopy(src / "LEVELS/LEVELS.DAT", gameBase / "CLEVELS/LEVELS.DAT");
-		safeCopy(src / "LEVELS/LEVELS.TAB", gameBase / "CLEVELS/LEVELS.TAB");
-
-		// SOUND
-		fs::path sourceDir = src / "SOUND";
-		fs::path targetDir = gameBase / "SOUND";
-		if (fs::exists(sourceDir)) {
-			createDirWritable(targetDir);
-			for (const auto &entry : fs::directory_iterator(sourceDir)) {
-				std::string name = entry.path().filename().string();
-				if (name == "SOUND.DAT" || name == "MUSIC.DAT")
-					continue;
-
-				fs::path dest = targetDir / name;
-				if (!fs::exists(dest)) {
-					try {
-						fs::copy(entry.path(), dest, fs::copy_options::recursive | fs::copy_options::skip_existing);
-						// Nastavení práv rekurzivně, pokud by to byla složka, nebo jen souboru
-						makeWritable(dest);
-					} catch (...) {
-					}
-				}
-			}
+			g_godot_image_file.unref();
 		}
-		std::cout << "\nDone!" << std::endl;
-		return true;
 	}
-	l9660_fs_open_root(&root_dir, &fs_ctx);
-	fs::path output_path = pathOut + std::string("CD_Files/");
-	fs::create_directories(output_path);
-	extract_recursive(&fs_ctx, &root_dir, output_path);
-	g_image_file.close();
-	std::cout << "\nDone!" << std::endl;
+
+	// --- Větev B: přímé kopírování souborů (bez ISO) ---
+	if (!FileAccess::file_exists(src.path_join("NETHERW.EXE"))) {
+		UtilityFunctions::printerr("NETHERW.EXE not found!");
+		return false;
+	}
+
+	String output_path = dst.path_join("CD_Files");
+	DirAccess::make_dir_recursive_absolute(output_path);
+	copyDir(src, output_path);
+
+	String gameBase = dst.path_join("GAME/NETHERW");
+	DirAccess::make_dir_recursive_absolute(gameBase.path_join("CDATA"));
+	DirAccess::make_dir_recursive_absolute(gameBase.path_join("CLEVELS"));
+	DirAccess::make_dir_recursive_absolute(gameBase.path_join("LANGUAGE"));
+	DirAccess::make_dir_recursive_absolute(gameBase.path_join("SAVE"));
+	DirAccess::make_dir_recursive_absolute(gameBase.path_join("SHOTS"));
+	DirAccess::make_dir_recursive_absolute(gameBase.path_join("SOUND"));
+
+	safeCopy(src.path_join("DATA/TMAPS0-0.DAT"), gameBase.path_join("CDATA/TMAPS0-0.DAT"));
+	safeCopy(src.path_join("DATA/TMAPS1-0.DAT"), gameBase.path_join("CDATA/TMAPS1-0.DAT"));
+	safeCopy(src.path_join("DATA/TMAPS2-0.DAT"), gameBase.path_join("CDATA/TMAPS2-0.DAT"));
+	safeCopy(src.path_join("DATA/VERSION.DAT"), gameBase.path_join("CDATA/VERSION.DAT"));
+	safeCopy(src.path_join("DATA/TMAPS0-0.TAB"), gameBase.path_join("CDATA/TMAPS0-0.TAB"));
+	safeCopy(src.path_join("DATA/TMAPS1-0.TAB"), gameBase.path_join("CDATA/TMAPS1-0.TAB"));
+	safeCopy(src.path_join("DATA/TMAPS2-0.TAB"), gameBase.path_join("CDATA/TMAPS2-0.TAB"));
+	safeCopy(src.path_join("LEVELS/LEVELS.DAT"), gameBase.path_join("CLEVELS/LEVELS.DAT"));
+	safeCopy(src.path_join("LEVELS/LEVELS.TAB"), gameBase.path_join("CLEVELS/LEVELS.TAB"));
+
+	String soundSrc = src.path_join("SOUND");
+	String soundDst = gameBase.path_join("SOUND");
+	if (DirAccess::dir_exists_absolute(soundSrc)) {
+		Ref<DirAccess> sdir = DirAccess::open(soundSrc);
+		if (sdir.is_valid()) {
+			sdir->list_dir_begin();
+			String fname = sdir->get_next();
+			while (fname != "") {
+				if (fname != "." && fname != ".." && !sdir->current_is_dir()) {
+					if (fname != "SOUND.DAT" && fname != "MUSIC.DAT")
+						safeCopy(soundSrc.path_join(fname), soundDst.path_join(fname));
+				}
+				fname = sdir->get_next();
+			}
+			sdir->list_dir_end();
+		}
+	}
+
+	UtilityFunctions::print("Done!");
 	return true;
 }
 
