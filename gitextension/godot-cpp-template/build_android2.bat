@@ -47,8 +47,8 @@ cmake --build build-android-arm64-debug --config Debug --parallel
 :: --- MANIPULACE S DEBUG SOUBOREM ---
 if not exist "%BIN_DIR%\android" mkdir "%BIN_DIR%\android"
 :: Najdeme soubor (at uz se jmenuje jakkoliv) a vnutime mu tvuj nazev
-if exist "%BIN_DIR%\android\lib%LIBNAME%.android.template_debug.arm64.so" (
-    move /Y "%BIN_DIR%\android\lib%LIBNAME%.android.template_debug.arm64.so" "%BIN_DIR%\android\libEXTENSION-NAME.android.template_debug.arm64.so"
+if exist "%BIN_DIR%\android.arm64-v8a\MagicBalls.android.arm64-v8a.template_debug.arm64.debug.so" (
+    move /Y "%BIN_DIR%\android.arm64-v8a\MagicBalls.android.arm64-v8a.template_debug.arm64.debug.so" "%BIN_DIR%\android.arm64-v8a\libEXTENSION-NAME.android.template_debug.arm64.so"
 )
 
 :: ============================================================
