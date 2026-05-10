@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://btwucymtia6o4"]
 
+[ext_resource type="Script" uid="uid://dxillf1td2qr7" path="res://entites/wizardHealthUpdate.gd" id="1_lb5ft"]
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_p548r"]
 [ext_resource type="PackedScene" uid="uid://yvtik6mmymd8" path="res://entites/sources/wizards/goblin/goblin.tscn" id="2_flopb"]
 [ext_resource type="Shader" uid="uid://cw0psqgof7j0q" path="res://entites/sorcerer-label-shader.gdshader" id="3_5yk3s"]
@@ -42,7 +43,13 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lb5ft"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6o85i"]
+bg_color = Color(1, 0, 0, 1)
+
 [node name="Node3D" type="Node3D" unique_id=872675572]
+script = ExtResource("1_lb5ft")
 
 [node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_p548r")]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
@@ -66,15 +73,28 @@ texture = SubResource("ViewportTexture_6o85i")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=728256945]
 transparent_bg = true
-size = Vector2i(95, 50)
+size = Vector2i(160, 80)
 
-[node name="PanelContainer" type="PanelContainer" parent="SubViewport" unique_id=2102028772]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewport" unique_id=322737291]
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewport/VBoxContainer" unique_id=2102028772]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gg1ig")
 
-[node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=449661065]
+[node name="Label" type="Label" parent="SubViewport/VBoxContainer/PanelContainer" unique_id=449661065]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "RAHN"
+horizontal_alignment = 1
+
+[node name="HealthBar" type="ProgressBar" parent="SubViewport/VBoxContainer" unique_id=1484923714]
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_lb5ft")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6o85i")
+value = 50.0
+show_percentage = false

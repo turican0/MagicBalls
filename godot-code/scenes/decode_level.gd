@@ -1002,6 +1002,8 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					add_pool_index(uid)
 					updateObject=true
 		if (current_node&&updateObject):
+			if(modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 227 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251):
+				current_node.updateHealthBar(actLife,actMaxLife)
 			if(modelIndex == 411):#zobmie
 				#var nodeStateVisibility=current_node.get_fade_state()
 				var entityStateHidden=actByte2 & 0x80

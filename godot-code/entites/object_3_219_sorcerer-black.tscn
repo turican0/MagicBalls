@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://b5yv2te87kts"]
 
+[ext_resource type="Script" uid="uid://dxillf1td2qr7" path="res://entites/wizardHealthUpdate.gd" id="1_gs607"]
 [ext_resource type="PackedScene" uid="uid://dlpx8lnqkt88q" path="res://entites/sources/sketchfab_scene-carpet.tscn" id="1_hydjd"]
 [ext_resource type="PackedScene" uid="uid://ci3l51jc3mjj7" path="res://entites/sources/wizards/skeleton-sorcerer/skeleton_sorcerer.tscn" id="2_5lun3"]
 [ext_resource type="Material" uid="uid://5het4fmv56q8" path="res://entites/sources/wizards/skeleton-sorcerer/sorcerer-black.tres" id="3_4uv5v"]
@@ -32,7 +33,13 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gs607"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4uv5v"]
+bg_color = Color(1, 0, 0, 1)
+
 [node name="Node3D" type="Node3D" unique_id=872675572]
+script = ExtResource("1_gs607")
 
 [node name="Sketchfab_Scene" parent="." unique_id=424736047 instance=ExtResource("1_hydjd")]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
@@ -56,14 +63,27 @@ texture = SubResource("ViewportTexture_01vcg")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1406402291]
 transparent_bg = true
-size = Vector2i(146, 50)
+size = Vector2i(160, 80)
 
-[node name="PanelContainer" type="PanelContainer" parent="SubViewport" unique_id=160368239]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewport" unique_id=1478875264]
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewport/VBoxContainer" unique_id=160368239]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bjjno")
 
-[node name="Label" type="Label" parent="SubViewport/PanelContainer" unique_id=352848314]
+[node name="Label" type="Label" parent="SubViewport/VBoxContainer/PanelContainer" unique_id=352848314]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "YRAGORE"
+horizontal_alignment = 1
+
+[node name="HealthBar" type="ProgressBar" parent="SubViewport/VBoxContainer" unique_id=258776544]
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_gs607")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4uv5v")
+value = 50.0
+show_percentage = false
