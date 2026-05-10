@@ -311,6 +311,19 @@ if(ANDROID)
         -Wl,-z,max-page-size=16384
         -Wl,-z,common-page-size=16384
     )
+	target_compile_options(${LIBNAME} PRIVATE
+        -g3
+        -O0
+        -fno-omit-frame-pointer
+        -fno-inline
+        -fno-inline-functions
+        -fno-optimize-sibling-calls
+        -fdebug-info-for-profiling
+        -ggdb
+    )
+	target_compile_options(godot-cpp PRIVATE
+        -g3 -O0 -fno-omit-frame-pointer -fexceptions -frtti
+    )
     # -fexceptions je uz v target_compile_options nahore, toto je pojistka
     # pro godot-cpp ktery ma vlastni -fno-exceptions v PRIVATE options
     target_compile_options(godot-cpp PRIVATE -fexceptions -frtti)
