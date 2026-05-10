@@ -310,5 +310,11 @@ if(ANDROID)
     # -fexceptions je uz v target_compile_options nahore, toto je pojistka
     # pro godot-cpp ktery ma vlastni -fno-exceptions v PRIVATE options
     target_compile_options(godot-cpp PRIVATE -fexceptions -frtti)
-	target_compile_options(${LIBNAME} PRIVATE -include cmath)
+    target_compile_options(${LIBNAME} PRIVATE -include cmath)
+    # Debug: symboly pro ndk-stack/lldb, bez optimalizaci
+    # Release: maximalni rychlost
+    target_compile_options(${LIBNAME} PRIVATE
+        $<$<CONFIG:Debug>:-g -O0 -fno-omit-frame-pointer>
+        $<$<CONFIG:Release>:-O3 -DNDEBUG>
+    )
 endif()
