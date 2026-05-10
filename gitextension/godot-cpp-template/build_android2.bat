@@ -6,7 +6,8 @@ setlocal EnableDelayedExpansion
 set NDK_PATH=C:\adb\ndk\27.2.12479018
 set LIBNAME=MagicBalls
 set SOURCE_DIR=.
-set BIN_DIR=godot-code\MBEXout\bin
+set BIN_DIR=..\..\godot-code\MBEXout\bin
+set ABI_DIR=%BIN_DIR%\android.arm64-v8a
 
 :: Overeni ze NDK existuje
 set TOOLCHAIN=%NDK_PATH%\build\cmake\android.toolchain.cmake
@@ -26,6 +27,8 @@ if errorlevel 1 (
     )
 )
 
+if not exist "%ABI_DIR%" mkdir "%ABI_DIR%"
+
 :: ============================================================
 :: 1. DEBUG build (arm64-v8a)
 :: ============================================================
@@ -40,15 +43,30 @@ cmake -B build-android-arm64-debug ^
     -DCMAKE_BUILD_TYPE=Debug ^
     -DLIBNAME="%LIBNAME%" ^
     -G "%GENERATOR%"
+if errorlevel 1 ( echo CHYBA: cmake konfigurace debug selhala & exit /b 1 )
 
 echo [2/4] Stavim Debug build...
 cmake --build build-android-arm64-debug --config Debug --parallel
+if errorlevel 1 ( echo CHYBA: cmake build debug selhal & exit /b 1 )
 
-:: --- MANIPULACE S DEBUG SOUBOREM ---
-if not exist "%BIN_DIR%\android" mkdir "%BIN_DIR%\android"
-:: Najdeme soubor (at uz se jmenuje jakkoliv) a vnutime mu tvuj nazev
-if exist "%BIN_DIR%\android.arm64-v8a\MagicBalls.android.arm64-v8a.template_debug.arm64.debug.so" (
-    move /Y "%BIN_DIR%\android.arm64-v8a\MagicBalls.android.arm64-v8a.template_debug.arm64.debug.so" "%BIN_DIR%\android.arm64-v8a\libEXTENSION-NAME.android.template_debug.arm64.so"
+:: CMake generuje pouze .debug.so (s debug symboly)
+:: Pouzijeme ho pro oba ucely:
+::   - libEXTENSION-NAME...so       -> pro .gdextension a APK
+::   - libEXTENSION-NAME...debug.so -> pro Android Studio debugger
+
+set CMAKE_DEBUG_SYM=%ABI_DIR%\%LIBNAME%.android.arm64-v8a.template_debug.arm64.debug.so
+
+if exist "%CMAKE_DEBUG_SYM%" (
+    :: Pro .gdextension / APK
+    copy /Y "%CMAKE_DEBUG_SYM%" "%ABI_DIR%\libEXTENSION-NAME.android.template_debug.arm64.so"
+    echo OK: .gdextension -> %ABI_DIR%\libEXTENSION-NAME.android.template_debug.arm64.so
+
+    :: Pro Android Studio (debug symboly)
+    copy /Y "%CMAKE_DEBUG_SYM%" "%ABI_DIR%\libEXTENSION-NAME.android.template_debug.arm64.debug.so"
+    echo OK: Android Studio -> %ABI_DIR%\libEXTENSION-NAME.android.template_debug.arm64.debug.so
+) else (
+    echo CHYBA: Nenalezen %CMAKE_DEBUG_SYM%
+    exit /b 1
 )
 
 :: ============================================================
@@ -65,30 +83,34 @@ cmake -B build-android-arm64-release ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DLIBNAME="%LIBNAME%" ^
     -G "%GENERATOR%"
+if errorlevel 1 ( echo CHYBA: cmake konfigurace release selhala & exit /b 1 )
 
 echo [4/4] Stavim Release build...
 cmake --build build-android-arm64-release --config Release --parallel
+if errorlevel 1 ( echo CHYBA: cmake build release selhal & exit /b 1 )
 
-:: --- MANIPULACE S RELEASE SOUBOREM ---
-if not exist "%BIN_DIR%\android.arm64-v8a" mkdir "%BIN_DIR%\android.arm64-v8a"
-:: CMake to pravdepodobne hodi do /android/, tak to presuneme do /android.arm64-v8a/ a prejmenujeme
-if exist "%BIN_DIR%\android\lib%LIBNAME%.android.template_release.arm64.so" (
-    move /Y "%BIN_DIR%\android\lib%LIBNAME%.android.template_release.arm64.so" "%BIN_DIR%\android.arm64-v8a\lib%LIBNAME%.android.arm64-v8a.template_release.arm64.so"
+set CMAKE_RELEASE_SO=%ABI_DIR%\%LIBNAME%.android.arm64-v8a.template_release.arm64.so
+if exist "%CMAKE_RELEASE_SO%" (
+    copy /Y "%CMAKE_RELEASE_SO%" "%ABI_DIR%\libMagicBalls.android.arm64-v8a.template_release.arm64.so"
+    echo OK: Release -> %ABI_DIR%\libMagicBalls.android.arm64-v8a.template_release.arm64.so
+) else (
+    echo VAROVANI: Nenalezen %CMAKE_RELEASE_SO%
 )
 
 :: ============================================================
-:: FINÁLNÍ VÝPIS
+:: FINALNI VYPIS
 :: ============================================================
 echo.
 echo ============================================================
-echo  HOTOVO - Soubory jsou pripraveny v techto cestach:
+echo  HOTOVO
 echo ============================================================
 echo.
-echo android.arm64.single.debug = "res://MBEXout/bin/android/libEXTENSION-NAME.android.template_debug.arm64.so"
-echo android.arm64.double.debug = "res://MBEXout/bin/android/libEXTENSION-NAME.android.template_debug.arm64.so"
+echo Soubory pro .gdextension:
+echo   android.arm64.*.debug   = "res://MBEXout/bin/android.arm64-v8a/libEXTENSION-NAME.android.template_debug.arm64.so"
+echo   android.arm64.*.release = "res://MBEXout/bin/android.arm64-v8a/libMagicBalls.android.arm64-v8a.template_release.arm64.so"
 echo.
-echo android.arm64.single.release = "res://MBEXout/bin/android.arm64-v8a/lib%LIBNAME%.android.arm64-v8a.template_release.arm64.so"
-echo android.arm64.double.release = "res://MBEXout/bin/android.arm64-v8a/lib%LIBNAME%.android.arm64-v8a.template_release.arm64.so"
+echo Soubor pro Android Studio (debug symboly):
+echo   %ABI_DIR%\libEXTENSION-NAME.android.template_debug.arm64.debug.so
 echo.
 
 endlocal
