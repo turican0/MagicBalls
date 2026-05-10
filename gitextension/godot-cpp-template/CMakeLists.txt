@@ -307,6 +307,10 @@ if(ANDROID)
     target_compile_definitions(${LIBNAME} PRIVATE _LIBCPP_HAS_THREAD_API_PTHREAD)
     target_link_libraries(${LIBNAME} PRIVATE log android)
     target_link_options(${LIBNAME} PRIVATE -pthread)
+	target_link_options(${LIBNAME} PRIVATE
+        -Wl,-z,max-page-size=16384
+        -Wl,-z,common-page-size=16384
+    )
     # -fexceptions je uz v target_compile_options nahore, toto je pojistka
     # pro godot-cpp ktery ma vlastni -fno-exceptions v PRIVATE options
     target_compile_options(godot-cpp PRIVATE -fexceptions -frtti)
