@@ -46,7 +46,7 @@ android.x86_64.single.release = "res://MBEXout/bin/android.x86_64/libMagicBalls.
 android.x86_64.double.release = "res://MBEXout/bin/android.x86_64/libMagicBalls.android.x86_64.template_release.x86_64.so"
 
 android.arm64.single.debug = "res://MBEXout/bin/android/libEXTENSION-NAME.android.template_debug.arm64.so"
-android.arm64.double.debug = "res://MBEXout/bin/android/libEXTENSION-NAME.android.template_debug.arm64.double.so"
+android.arm64.double.debug = "res://MBEXout/bin/android/libEXTENSION-NAME.android.template_debug.arm64.so"
 android.arm64.single.release = "res://MBEXout/bin/android.arm64-v8a/libMagicBalls.android.arm64-v8a.template_release.arm64.so"
 android.arm64.double.release = "res://MBEXout/bin/android.arm64-v8a/libMagicBalls.android.arm64-v8a.template_release.arm64.so"
 
