@@ -1144,6 +1144,9 @@ void handleInputs(Dictionary inputs,int type) {
 					mainSetPress(is_pressed, 0x3d00); //F3 - change speed
 				}
 				break;
+			case 0x4200: //F8
+				mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
+				break;
 			case 0x2d78: //X
 				mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
 				break;
