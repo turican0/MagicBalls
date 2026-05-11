@@ -468,6 +468,12 @@ func update_selection() -> void:
 	for node in final_selection:
 		if is_instance_valid(node):
 			mark_as_selected(node,"selected_entities")
+			
+	if FirstSelectedToEdit and not final_selection.is_empty():
+		if is_instance_valid(final_selection[0]):
+			var node = final_selection[0]
+			if node.has_meta("index"):
+				fillEntityDetails(node.get_meta("index"))
 	
 	# Debug výpis (můžeš smazat)
 	# print("Selection updated: %d entities | Cylinder: %s | Filter: %s" % [selected_count, cylinder_active, filter_active])
@@ -882,7 +888,14 @@ func unmark_as_selected(node: Node3D,type:String):
 				mat.albedo_color = Color(1, 1, 1) 
 
 func add_entitity():
-	Global.MBEX.REMC2EditorAddEntity()
+	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")
+	var copy_node: Dictionary={}
+	if(current_edited_entity>-1):
+		copy_node=Global.editorLevel["entities"][current_edited_entity]
+	else:
+		if !selected_nodes.is_empty():
+			copy_node=Global.editorLevel["entities"][selected_nodes[0].get_meta("index")]
+	Global.MBEX.REMC2EditorAddEntity(copy_node)
 
 func delete_selected_entities():
 	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")
@@ -1485,14 +1498,19 @@ func _on_tree_stagesVars_selected(index: int):
 	StagesVars_Edit.display_stages_data(index)
 	_filling_stagesvars_details = false
 	
-const ID_EXPORT_CSV = 0
-const ID_QLOAD_LEVEL = 1
-const ID_QSAVE_LEVEL = 2
-const ID_LOAD_LEVEL = 3
-const ID_SAVE_LEVEL = 4
-const ID_RUN_LEVEL = 5
-const ID_CLEAN_LEVEL = 6
-const ID_GAME_LEVEL = 7
+const MENU_FILE_EXPORT_CSV = 0
+const MENU_FILE_QLOAD_LEVEL = 1
+const MENU_FILE_QSAVE_LEVEL = 2
+const MENU_FILE_LOAD_LEVEL = 3
+const MENU_FILE_SAVE_LEVEL = 4
+const MENU_FILE_RUN_LEVEL = 5
+const MENU_FILE_CLEAN_LEVEL = 6
+const MENU_FILE_GAME_LEVEL = 7
+
+const MENU_FILTER_SELECTRAY = 0
+const MENU_FILTER_SELECTFILTER = 1
+const MENU_FILTER_SHOWFILTER = 2
+const MENU_FILTER_SELECTTOEDIT = 3
 
 func _ensure_file_dialogs() -> void:
 	var default_dir = ProjectSettings.globalize_path("user://user-levels/")
@@ -1589,39 +1607,38 @@ func _on_level_button_pressed(lvl_id: int) -> void:
 	#RenderEditorEntites()
 
 func _on_file_id_pressed(id: int) -> void:
-	_ensure_file_dialogs()
 	match id:
-		ID_EXPORT_CSV:
+		MENU_FILE_EXPORT_CSV:
 			Global.MBEX.REMC2EditorExportToCSV();
-		ID_QLOAD_LEVEL:
+		MENU_FILE_QLOAD_LEVEL:
 			var result = Global.MBEX.REMC2EditorLoadLevel("");
 			if(!result):
 				log_message("Can not Load this level file user://user-levels/editorLevel.mc2")
 			else:
 				log_message("Level loaded: " + "user://user-levels/quickSaved.mc2")
-		ID_QSAVE_LEVEL:
+		MENU_FILE_QSAVE_LEVEL:
 			Global.MBEX.REMC2EditorSaveLevel("");
 			log_message("Level saved: " + "user://user-levels/quickSaved.mc2")
-		ID_LOAD_LEVEL:
+		MENU_FILE_LOAD_LEVEL:
 			_load_dialog.popup_centered()
-		ID_SAVE_LEVEL:
+		MENU_FILE_SAVE_LEVEL:
 			_save_dialog.popup_centered()
-		ID_RUN_LEVEL:
+		MENU_FILE_RUN_LEVEL:
 			Global.MBEX.REMC2EditorSaveLevel("user://user-levels/editorLevel.mc2")
 			_runGame()
-		ID_CLEAN_LEVEL:
+		MENU_FILE_CLEAN_LEVEL:
 			Global.MBEX.REMC2EditorCleanLevel()
 			_on_map_type_state_changed_graphics_typeInt(Global.editorLevel["map_type"])
-		ID_GAME_LEVEL:
+		MENU_FILE_GAME_LEVEL:
 			_ensure_level_select_dialog()
 			_level_select_dialog.popup_centered()
 
-const ID_TOGGLE_ROOF = 0
+const MENU_VIEW_TOGGLEROOF = 0
 func _on_view_id_pressed(id: int) -> void:
 	match id:
-		ID_TOGGLE_ROOF:
+		MENU_VIEW_TOGGLEROOF:
 			var popup = $UI/Control/MenuBar/View
-			var idx = popup.get_item_index(ID_TOGGLE_ROOF)
+			var idx = popup.get_item_index(MENU_VIEW_TOGGLEROOF)
 			popup.set_item_checked(idx, !popup.is_item_checked(idx))
 			var is_checked = popup.is_item_checked(idx)
 			roof_show = is_checked
@@ -1646,25 +1663,9 @@ func UpdatePositionLabel():
 	var y = Main_Camera.position.z
 	Position_Label.text = "Position: %06.2f x %06.2f" % [x, y]
 
-func _on_selector_toggled(toggled_on: bool) -> void:
-	Ray_Cylinder.visible = toggled_on
-	#if(Ray_Cylinder.visible):
-		#if(EntityFilter_On):
-			#$UI/Control/Filter.button_pressed=false
-
 var EntityFilter_On:bool=false
-func _on_filter_toggled(toggled_on: bool) -> void:
-	EntityFilter_On = toggled_on
-	#if(EntityFilter_On):
-		#if(Ray_Cylinder.visible):
-			#$UI/Control/Selector.button_pressed=false
-	#else:
-		#for node in get_tree().get_nodes_in_group("entities"):
-			#unmark_as_selected(node)
 
-
-func _on_filter_show_toggled(toggled_on: bool) -> void:
-	EntityFilter.visible = toggled_on
+var FirstSelectedToEdit:bool=true
 
 func _on_entity_spinbox_value_changed(_value = null) -> void:
 	if _filling_entity_details:
@@ -1947,3 +1948,31 @@ func _on_map_type_state_changed_graphics_type(state_name: String) -> void:
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	RenderEditorEntites()
 	SetRoofByVar()
+
+func _on_filter_id_pressed(id: int) -> void:
+	_ensure_file_dialogs()
+	match id:
+		MENU_FILTER_SELECTRAY:
+			var popup = $UI/Control/MenuBar/Filter
+			var idx = popup.get_item_index(MENU_FILTER_SELECTRAY)
+			popup.set_item_checked(idx, !popup.is_item_checked(idx))
+			var is_checked = popup.is_item_checked(idx)
+			Ray_Cylinder.visible = is_checked
+		MENU_FILTER_SELECTFILTER:
+			var popup = $UI/Control/MenuBar/Filter
+			var idx = popup.get_item_index(MENU_FILTER_SELECTFILTER)
+			popup.set_item_checked(idx, !popup.is_item_checked(idx))
+			var is_checked = popup.is_item_checked(idx)
+			EntityFilter_On = is_checked
+		MENU_FILTER_SHOWFILTER:
+			var popup = $UI/Control/MenuBar/Filter
+			var idx = popup.get_item_index(MENU_FILTER_SHOWFILTER)
+			popup.set_item_checked(idx, !popup.is_item_checked(idx))
+			var is_checked = popup.is_item_checked(idx)
+			Ray_Cylinder.visible = is_checked
+		MENU_FILTER_SELECTTOEDIT:
+			var popup = $UI/Control/MenuBar/Filter
+			var idx = popup.get_item_index(MENU_FILTER_SELECTTOEDIT)
+			popup.set_item_checked(idx, !popup.is_item_checked(idx))
+			var is_checked = popup.is_item_checked(idx)
+			FirstSelectedToEdit = is_checked

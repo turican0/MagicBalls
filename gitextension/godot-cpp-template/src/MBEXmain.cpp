@@ -84,7 +84,7 @@ void MBEXclass::_bind_methods() {
 	//godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetTerrainStages"), &MBEXclass::REMC2EditorGetTerrainStages);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorIsGroupType", "Int", "Int"), &MBEXclass::REMC2EditorIsGroupType);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorIsParentType", "Int", "Int"), &MBEXclass::REMC2EditorIsParentType);
-	godot::ClassDB::bind_method(D_METHOD("REMC2EditorAddEntity"), &MBEXclass::REMC2EditorAddEntity);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorAddEntity", "Dictionary"), &MBEXclass::REMC2EditorAddEntity);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorDeleteEntites", "Array"), &MBEXclass::REMC2EditorDeleteEntites);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorGetLevelData"), &MBEXclass::REMC2EditorGetLevelData);
@@ -2065,7 +2065,7 @@ bool MBEXclass::REMC2EditorIsParentType(int type, int subtype) {
 	return true;
 }
 
-void MBEXclass::REMC2EditorAddEntity() {
+void MBEXclass::REMC2EditorAddEntity(Dictionary entity) {	
 	int countEntities = 1200; // adjust to actual field name
 	int lastFreeIndex = -1;
 	for (int idx = countEntities - 1; idx > 0; idx--) {
@@ -2073,8 +2073,22 @@ void MBEXclass::REMC2EditorAddEntity() {
 			break;
 		lastFreeIndex = idx;
 	}
-	if (lastFreeIndex>-1)
+	if (lastFreeIndex > -1) {
 		tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = 2;
+		if (!entity.is_empty())
+		{
+			tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = entity["type"];
+			tempTerrain.entity_0x30311[lastFreeIndex].subtype_0x30311 = entity["subtype"];
+			tempTerrain.entity_0x30311[lastFreeIndex].axis2d_4.x = entity["axis_x"];
+			tempTerrain.entity_0x30311[lastFreeIndex].axis2d_4.y = entity["axis_y"];
+			tempTerrain.entity_0x30311[lastFreeIndex].DisId = entity["dis_id"];
+			tempTerrain.entity_0x30311[lastFreeIndex].word_10 = entity["word10"];
+			tempTerrain.entity_0x30311[lastFreeIndex].stageTag_12 = entity["stage_tag"];
+			tempTerrain.entity_0x30311[lastFreeIndex].par1_14 = entity["par1"];
+			tempTerrain.entity_0x30311[lastFreeIndex].par2_16 = entity["par2"];
+			tempTerrain.entity_0x30311[lastFreeIndex].par3_18 = entity["par3"];
+		}
+	}
 }
 
 int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {

@@ -145,7 +145,7 @@ public:
 	bool REMC2EditorIsGroupType(int type, int subtype);
 	bool REMC2EditorIsParentType(int type, int subtype);
 
-	void REMC2EditorAddEntity();
+	void REMC2EditorAddEntity(Dictionary entity);
 	int REMC2EditorDeleteEntites(Array p_indices);
 
 	Dictionary REMC2EditorGetLevelData();
