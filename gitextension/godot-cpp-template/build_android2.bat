@@ -35,7 +35,7 @@ if not exist "%ABI_DIR%" mkdir "%ABI_DIR%"
 :: ============================================================
 echo.
 echo [1/4] Konfiguruji Debug build (arm64-v8a)...
-cmake -B build-android-arm64-debug -S "%SOURCE_DIR%" -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN%" -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-24 -DGODOTCPP_TARGET=template_debug -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="%LIBNAME%" -G "%GENERATOR%"
+cmake -B build-android-arm64-debug -S "%SOURCE_DIR%" -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN%" -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-24 -DGODOTCPP_TARGET=template_debug -DCMAKE_BUILD_TYPE=Debug -DLIBNAME="%LIBNAME%" -DANDROID=1 -G "%GENERATOR%"
 if errorlevel 1 ( echo CHYBA: cmake konfigurace debug selhala & exit /b 1 )
 
 echo [2/4] Stavim Debug build...
