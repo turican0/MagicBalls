@@ -141,17 +141,22 @@ layout_mode = 2
 text = "WASD - move
 SPACE - confirm
 ESC - Exit
-CTRL - spell menu
-DELETE - Exit2
+CTRL - spell menu, SHIFT +left/right mouse(in spell menu) - select
 F1 - this help
+F2 - hide/show inGame Help
+F3 - increase speed
+F4 - decrease speed
 F5 - quick save
 F7 - fog level
+F8 - hide/show wizard names
 F9 - quick load
+X - stop move
 O - current objective
 H - change graphics type
 P - pause
-I - step frame 
-Enter - big map
+C - pause + spell menu
+I - step frame
+Enter - map view, ALT(in map view) - show wizards status
 L - destroy castle
 K - kill all creatures(cheat)
 "
