@@ -332,18 +332,18 @@ func _start_extraction(dir: String):
 func _heavy_work(dir):
 	Global.MBEX = MBEXclass.new()
 	var CDfinded=Main_DecodeLevel.MBEXextractCD(Global.cdPath, dir)
-	if(!CDfinded):
-		call_deferred("_on_work_done2")
+	if(CDfinded>0):
+		call_deferred("_on_work_done2",CDfinded)
 	else:
 		Global.MBEX.REMC2BeginGame(Global.cdPath, Global.hidata,-1,"")
 		Main_DecodeLevel.MBEXconvert(Global.convertdata, dir)
 		call_deferred("_on_work_done")
 		
-func _on_work_done2():
+func _on_work_done2(result):
 	_thread.wait_to_finish()
 	Global.canNotification = true
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
-	await _run_ending2()
+	await _run_ending2(result)
 	#OS.create_process(OS.get_executable_path(), OS.get_cmdline_args())
 	get_tree().quit()
 
@@ -409,11 +409,17 @@ func _run_ending() -> void:
 		countdown_label.text = str(i)
 		await get_tree().create_timer(1.0).timeout
 		
-func _run_ending2() -> void:
+func _run_ending2(result) -> void:
 	_stop_spinner = true # Disable the animation loop
 	var canvas = get_node("LoadingCanvas")
 	var label = canvas.get_node("StatusLabel")
-	label.text = "The folder containing the Magic Carpet 2 game was not found.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+	match(result):
+		-1:#
+			label.text = "The folder containing the Magic Carpet 2 game was not found.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+		-2:#
+			label.text = "The folder containing the Magic Carpet 2 game was not found.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+		-3:#
+			label.text = "The folder containing the Magic Carpet 2 game was not found.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
 	var countdown_label = canvas.get_node("Spinner")
 	countdown_label.add_theme_color_override("font_color", UI_COUNTDOWN_COLOR)
 	countdown_label.add_theme_font_size_override("font_size", 48)

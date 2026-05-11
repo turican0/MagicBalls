@@ -1589,7 +1589,7 @@ func MBEXinit():
 func MBEXconvert(path, path2):
 	Global.MBEX.convertOriginalData(path,path2)
 
-func MBEXextractCD(path, path2) -> bool:
+func MBEXextractCD(path, path2) -> int:
 	return Global.MBEX.convertOriginalDataExtractCD(path,path2)
 
 #func sub_533B0_decompress_levels(level_id: int):

@@ -1733,17 +1733,30 @@ void extract_recursive_godot(l9660_fs *fs_ptr, l9660_dir *current_dir, String cu
 	}
 }
 
-bool MBEXcdExtract(char *pathGOG, char *pathOut) {
+// Return codes:
+//  2  = OK, direct copy (branch B)
+//  1  = OK, ISO extraction (branch A)
+// -1  = GAME folder not found
+// -2  = no files found in src (empty directory?)
+// -3  = l9660_openfs failed
+// -4  = NETHERW.EXE not found (branch B)
+// -5  = failed to create output_path
+// -6  = copyDir(src, output_path) failed (src unreadable?)
+// -7  = failed to create gameBase subdirectories
+// -8  = no required CDATA file was copied
+// -9  = no required CLEVELS file was copied
+
+int MBEXcdExtract(char *pathGOG, char *pathOut) {
 	String src = String(pathGOG);
 	String dst = String(pathOut);
 
-	auto copyFile = [&](String from, String to) -> bool {
+	auto copyFile = [&](String from, String to) -> int {
 		if (!FileAccess::file_exists(from))
-			return false;
+			return -1;
 		Ref<FileAccess> fin = FileAccess::open(from, FileAccess::READ);
 		Ref<FileAccess> fout = FileAccess::open(to, FileAccess::WRITE);
 		if (fin.is_null() || fout.is_null())
-			return false;
+			return -2;
 		const int CHUNK = 1024 * 1024;
 		uint64_t remaining = fin->get_length();
 		while (remaining > 0) {
@@ -1751,14 +1764,14 @@ bool MBEXcdExtract(char *pathGOG, char *pathOut) {
 			fout->store_buffer(fin->get_buffer(toRead));
 			remaining -= toRead;
 		}
-		return true;
+		return 1;
 	};
 
-	std::function<void(String, String)> copyDir = [&](String from, String to) {
+	std::function<bool(String, String)> copyDir = [&](String from, String to) -> bool {
 		DirAccess::make_dir_recursive_absolute(to);
 		Ref<DirAccess> dir = DirAccess::open(from);
 		if (dir.is_null())
-			return;
+			return false;
 		dir->list_dir_begin();
 		String name = dir->get_next();
 		while (name != "") {
@@ -1773,21 +1786,25 @@ bool MBEXcdExtract(char *pathGOG, char *pathOut) {
 			name = dir->get_next();
 		}
 		dir->list_dir_end();
+		return true;
 	};
 
-	auto safeCopy = [&](String from, String to) {
+	auto safeCopy = [&](String from, String to) -> bool {
 		if (FileAccess::file_exists(from) && !FileAccess::file_exists(to))
-			copyFile(from, to);
+			return copyFile(from, to) > 0;
+		return false;
 	};
 
-	// --- Zkopíruj GAME složku ---
+	// --- Copy GAME folder ---
 	String gameFolder = src.path_join("GAME");
-	if (DirAccess::dir_exists_absolute(gameFolder))
+	if (DirAccess::dir_exists_absolute(gameFolder)) {
 		copyDir(gameFolder, dst.path_join("GAME"));
-	else
-		UtilityFunctions::printerr("Folder GAME not found in location!");
+	} else {
+		UtilityFunctions::printerr("[-1] GAME folder not found in: " + src);
+		return -1;
+	}
 
-	// --- Najdi největší soubor (ISO/BIN) ---
+	// --- Find largest file (ISO/BIN) ---
 	String biggestFilePath = "";
 	uint64_t maxSize = 0;
 
@@ -1820,73 +1837,119 @@ bool MBEXcdExtract(char *pathGOG, char *pathOut) {
 
 	findBiggest(src);
 
-	// --- Větev A: ISO image přes l9660 ---
-	if (biggestFilePath != "") {
-		g_godot_image_file = FileAccess::open(biggestFilePath, FileAccess::READ);
-		if (g_godot_image_file.is_valid()) {
-			l9660_fs fs_ctx;
-			l9660_dir root_dir;
-			if (l9660_openfs(&fs_ctx, read_sector_callback_godot) == L9660_OK) {
-				l9660_fs_open_root(&root_dir, &fs_ctx);
-				String output_path = dst.path_join("CD_Files");
-				DirAccess::make_dir_recursive_absolute(output_path);
-				extract_recursive_godot(&fs_ctx, &root_dir, output_path);
+	if (biggestFilePath == "") {
+		UtilityFunctions::printerr("[-2] No files found in src: " + src);
+		return -2;
+	}
+
+	// --- Branch A: ISO image via l9660 ---
+	g_godot_image_file = FileAccess::open(biggestFilePath, FileAccess::READ);
+	if (g_godot_image_file.is_valid()) {
+		l9660_fs fs_ctx;
+		l9660_dir root_dir;
+		if (l9660_openfs(&fs_ctx, read_sector_callback_godot) == L9660_OK) {
+			l9660_fs_open_root(&root_dir, &fs_ctx);
+			String output_path = dst.path_join("CD_Files");
+			if (DirAccess::make_dir_recursive_absolute(output_path) != OK) {
 				g_godot_image_file.unref();
-				UtilityFunctions::print("Done!");
-				return true;
+				UtilityFunctions::printerr("[-5] Failed to create output dir: " + output_path);
+				return -5;
 			}
+			extract_recursive_godot(&fs_ctx, &root_dir, output_path);
 			g_godot_image_file.unref();
+			UtilityFunctions::print("[1] Done! ISO extraction successful.");
+			return 1;
+		} else {
+			g_godot_image_file.unref();
+			UtilityFunctions::printerr("[-3] l9660_openfs failed on: " + biggestFilePath);
+			return -3;
 		}
 	}
 
-	// --- Větev B: přímé kopírování souborů (bez ISO) ---
+	// --- Branch B: direct file copy (no ISO) ---
 	if (!FileAccess::file_exists(src.path_join("NETHERW.EXE"))) {
-		UtilityFunctions::printerr("NETHERW.EXE not found!");
-		return false;
+		UtilityFunctions::printerr("[-4] NETHERW.EXE not found in: " + src);
+		return -4;
 	}
 
 	String output_path = dst.path_join("CD_Files");
-	DirAccess::make_dir_recursive_absolute(output_path);
-	copyDir(src, output_path);
+	if (DirAccess::make_dir_recursive_absolute(output_path) != OK) {
+		UtilityFunctions::printerr("[-5] Failed to create output dir: " + output_path);
+		return -5;
+	}
+
+	if (!copyDir(src, output_path)) {
+		UtilityFunctions::printerr("[-6] Failed to copy src dir: " + src);
+		return -6;
+	}
 
 	String gameBase = dst.path_join("GAME/NETHERW");
-	DirAccess::make_dir_recursive_absolute(gameBase.path_join("CDATA"));
-	DirAccess::make_dir_recursive_absolute(gameBase.path_join("CLEVELS"));
-	DirAccess::make_dir_recursive_absolute(gameBase.path_join("LANGUAGE"));
-	DirAccess::make_dir_recursive_absolute(gameBase.path_join("SAVE"));
-	DirAccess::make_dir_recursive_absolute(gameBase.path_join("SHOTS"));
-	DirAccess::make_dir_recursive_absolute(gameBase.path_join("SOUND"));
+	bool dirsOK =
+			DirAccess::make_dir_recursive_absolute(gameBase.path_join("CDATA")) == OK &&
+			DirAccess::make_dir_recursive_absolute(gameBase.path_join("CLEVELS")) == OK &&
+			DirAccess::make_dir_recursive_absolute(gameBase.path_join("LANGUAGE")) == OK &&
+			DirAccess::make_dir_recursive_absolute(gameBase.path_join("SAVE")) == OK &&
+			DirAccess::make_dir_recursive_absolute(gameBase.path_join("SHOTS")) == OK &&
+			DirAccess::make_dir_recursive_absolute(gameBase.path_join("SOUND")) == OK;
+	if (!dirsOK) {
+		UtilityFunctions::printerr("[-7] Failed to create one or more gameBase subdirectories under: " + gameBase);
+		return -7;
+	}
 
-	safeCopy(src.path_join("DATA/TMAPS0-0.DAT"), gameBase.path_join("CDATA/TMAPS0-0.DAT"));
-	safeCopy(src.path_join("DATA/TMAPS1-0.DAT"), gameBase.path_join("CDATA/TMAPS1-0.DAT"));
-	safeCopy(src.path_join("DATA/TMAPS2-0.DAT"), gameBase.path_join("CDATA/TMAPS2-0.DAT"));
-	safeCopy(src.path_join("DATA/VERSION.DAT"), gameBase.path_join("CDATA/VERSION.DAT"));
-	safeCopy(src.path_join("DATA/TMAPS0-0.TAB"), gameBase.path_join("CDATA/TMAPS0-0.TAB"));
-	safeCopy(src.path_join("DATA/TMAPS1-0.TAB"), gameBase.path_join("CDATA/TMAPS1-0.TAB"));
-	safeCopy(src.path_join("DATA/TMAPS2-0.TAB"), gameBase.path_join("CDATA/TMAPS2-0.TAB"));
-	safeCopy(src.path_join("LEVELS/LEVELS.DAT"), gameBase.path_join("CLEVELS/LEVELS.DAT"));
-	safeCopy(src.path_join("LEVELS/LEVELS.TAB"), gameBase.path_join("CLEVELS/LEVELS.TAB"));
+	// --- Copy CDATA files ---
+	int cdataCopied = 0;
+	cdataCopied += safeCopy(src.path_join("DATA/TMAPS0-0.DAT"), gameBase.path_join("CDATA/TMAPS0-0.DAT")) ? 1 : 0;
+	cdataCopied += safeCopy(src.path_join("DATA/TMAPS1-0.DAT"), gameBase.path_join("CDATA/TMAPS1-0.DAT")) ? 1 : 0;
+	cdataCopied += safeCopy(src.path_join("DATA/TMAPS2-0.DAT"), gameBase.path_join("CDATA/TMAPS2-0.DAT")) ? 1 : 0;
+	cdataCopied += safeCopy(src.path_join("DATA/VERSION.DAT"), gameBase.path_join("CDATA/VERSION.DAT")) ? 1 : 0;
+	cdataCopied += safeCopy(src.path_join("DATA/TMAPS0-0.TAB"), gameBase.path_join("CDATA/TMAPS0-0.TAB")) ? 1 : 0;
+	cdataCopied += safeCopy(src.path_join("DATA/TMAPS1-0.TAB"), gameBase.path_join("CDATA/TMAPS1-0.TAB")) ? 1 : 0;
+	cdataCopied += safeCopy(src.path_join("DATA/TMAPS2-0.TAB"), gameBase.path_join("CDATA/TMAPS2-0.TAB")) ? 1 : 0;
+	if (cdataCopied == 0) {
+		UtilityFunctions::printerr("[-8] No CDATA files were copied — DATA/ folder missing or empty in: " + src);
+		return -8;
+	}
+	UtilityFunctions::print("[B] CDATA files copied: " + String::num_int64(cdataCopied) + "/7");
 
+	// --- Copy CLEVELS files ---
+	int clevelsCopied = 0;
+	clevelsCopied += safeCopy(src.path_join("LEVELS/LEVELS.DAT"), gameBase.path_join("CLEVELS/LEVELS.DAT")) ? 1 : 0;
+	clevelsCopied += safeCopy(src.path_join("LEVELS/LEVELS.TAB"), gameBase.path_join("CLEVELS/LEVELS.TAB")) ? 1 : 0;
+	if (clevelsCopied == 0) {
+		UtilityFunctions::printerr("[-9] No CLEVELS files were copied — LEVELS/ folder missing or empty in: " + src);
+		return -9;
+	}
+	UtilityFunctions::print("[B] CLEVELS files copied: " + String::num_int64(clevelsCopied) + "/2");
+
+	// --- Copy SOUND files (optional, skip SOUND.DAT and MUSIC.DAT) ---
 	String soundSrc = src.path_join("SOUND");
 	String soundDst = gameBase.path_join("SOUND");
 	if (DirAccess::dir_exists_absolute(soundSrc)) {
 		Ref<DirAccess> sdir = DirAccess::open(soundSrc);
 		if (sdir.is_valid()) {
+			int soundCopied = 0;
 			sdir->list_dir_begin();
 			String fname = sdir->get_next();
 			while (fname != "") {
 				if (fname != "." && fname != ".." && !sdir->current_is_dir()) {
-					if (fname != "SOUND.DAT" && fname != "MUSIC.DAT")
-						safeCopy(soundSrc.path_join(fname), soundDst.path_join(fname));
+					if (fname != "SOUND.DAT" && fname != "MUSIC.DAT") {
+						if (safeCopy(soundSrc.path_join(fname), soundDst.path_join(fname)))
+							soundCopied++;
+					}
 				}
 				fname = sdir->get_next();
 			}
 			sdir->list_dir_end();
+			UtilityFunctions::print("[B] SOUND files copied: " + String::num_int64(soundCopied));
+		} else {
+			UtilityFunctions::printerr("[B] Warning: SOUND folder exists but could not be opened: " + soundSrc);
 		}
+	} else {
+		UtilityFunctions::printerr("[B] Warning: SOUND folder not found (non-fatal): " + soundSrc);
 	}
 
-	UtilityFunctions::print("Done!");
-	return true;
+	UtilityFunctions::print("[2] Done! Direct copy successful.");
+	return 2;
 }
 
 
