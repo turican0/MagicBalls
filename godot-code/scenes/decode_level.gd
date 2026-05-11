@@ -904,6 +904,7 @@ func generate_unique_id() -> int:
 
 
 func renderEntites(data_array: PackedFloat32Array) -> void:
+	var WizardLabelsVisible:bool=Global.MBEX.REMC2GetWizardsLabelsVisible()
 	var entites_per_frame=0;
 	var stride = 31
 	var default_key = Vector3i(0, 999, 0)
@@ -1003,7 +1004,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 					updateObject=true
 		if (current_node&&updateObject):
 			if(modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 227 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251):
-				current_node.updateHealthBar(actLife,actMaxLife)
+				current_node.updateHealthBar(actLife,actMaxLife,WizardLabelsVisible)
 			if(modelIndex == 411):#zobmie
 				#var nodeStateVisibility=current_node.get_fade_state()
 				var entityStateHidden=actByte2 & 0x80

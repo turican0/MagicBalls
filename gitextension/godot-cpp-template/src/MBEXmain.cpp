@@ -71,6 +71,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetInverseMouse", "Bool"), &MBEXclass::REMC2SetInverseMouse);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetMapMode"), &MBEXclass::REMC2GetMapMode);
+	godot::ClassDB::bind_method(D_METHOD("REMC2GetWizardsLabelsVisible"), &MBEXclass::REMC2GetWizardsLabelsVisible);
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetTerrainAlt", "int", "int"), &MBEXclass::REMC2GetTerrainAlt);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorBegin", "text"), &MBEXclass::REMC2EditorBegin);
@@ -1841,6 +1842,10 @@ bool MBEXclass::REMC2GetMapMode() {
 			break;
 	}
 	return false;
+}
+
+bool MBEXclass::REMC2GetWizardsLabelsVisible() {
+	return !x_D41A0_BYTEARRAY_4_struct.byteindex_207;
 }
 
 int MBEXclass::REMC2GetTerrainAlt(int x, int y) {

@@ -165,6 +165,7 @@ public:
 	void REMC2EditorLoadInGameLevel(int levelIndex);
 
 	bool REMC2GetMapMode();
+	bool REMC2GetWizardsLabelsVisible();
 };
 
 void MBEXaudioExtract(String path);
