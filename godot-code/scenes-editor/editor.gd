@@ -1976,3 +1976,21 @@ func _on_filter_id_pressed(id: int) -> void:
 			popup.set_item_checked(idx, !popup.is_item_checked(idx))
 			var is_checked = popup.is_item_checked(idx)
 			FirstSelectedToEdit = is_checked
+
+func _on_entity_set_button_down() -> void:
+	if current_edited_entity <= 0 or current_edited_entity >= pool_size:
+		return
+	var pos = Main_Player.position
+	Global.editorLevel["entities"][current_edited_entity]["axis_x"] = int(pos.x)
+	Global.editorLevel["entities"][current_edited_entity]["axis_y"] = int(pos.z)
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	EditorStep()
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	fillEntityDetails(current_edited_entity)
+
+func _on_entity_move_button_down() -> void:
+	if current_edited_entity <= 0 or current_edited_entity >= pool_size:
+		return
+	for node in get_tree().get_nodes_in_group("entities"):
+		if node.get_meta("index") == current_edited_entity:
+			Main_Camera.position = node.position

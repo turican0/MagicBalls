@@ -628,7 +628,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="EntityEdit" type="Control" parent="UI" unique_id=169198194]
-visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -694,9 +693,15 @@ text = "   Y:"
 layout_mode = 2
 max_value = 255.0
 
-[node name="Button" type="Button" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1020222163]
+[node name="Button_Set" type="Button" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=1020222163]
 layout_mode = 2
+tooltip_text = "Sets the entity's position based on the camera's position"
 text = "SET"
+
+[node name="Button_Move" type="Button" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS" unique_id=2109888640]
+layout_mode = 2
+tooltip_text = "Moves the camera to the entity's position"
+text = "MOVE"
 
 [node name="type_0x30311" type="HBoxContainer" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1039963779]
 layout_mode = 2
@@ -790,6 +795,7 @@ text = "par3_18"
 
 [node name="SpinBox" type="SpinBox" parent="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/par3_18" unique_id=1341430889]
 layout_mode = 2
+max_value = 255.0
 
 [node name="WizardsEdit" type="Control" parent="UI" unique_id=1729068468]
 visible = false
@@ -2484,6 +2490,8 @@ mesh = SubResource("CylinderMesh_jhayq")
 [connection signal="button_down" from="UI/Control/Redo" to="." method="_on_redo_button_down"]
 [connection signal="state_changed_graphicsType" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" to="." method="_on_map_type_state_changed_graphics_type"]
 [connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type/SpinBox" to="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" method="_on_spin_box_value_changed"]
+[connection signal="button_down" from="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS/Button_Set" to="." method="_on_entity_set_button_down"]
+[connection signal="button_down" from="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS/Button_Move" to="." method="_on_entity_move_button_down"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/SpinBoxType" to="UI/EntityFilter" method="_on_spin_box_type_value_changed"]
 [connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/CheckBoxType" to="UI/EntityFilter" method="_on_check_box_type_toggled"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311/SpinBoxSubType" to="UI/EntityFilter" method="_on_spin_box_sub_type_value_changed"]
