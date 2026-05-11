@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c3idbqpxfggth" path="res://entites/object_3_211_sorcerer-red.tscn" id="1_4lyoc"]
 [ext_resource type="Script" uid="uid://c6xwlttxy7wxa" path="res://scenes/sub_viewport_container.gd" id="2_i052m"]
+[ext_resource type="Script" uid="uid://piicc147srmi" path="res://scenes/sub_viewport_container2.gd" id="3_3sglg"]
 
 [node name="TestScene" type="Node3D" unique_id=950006661]
 
@@ -17,10 +18,11 @@ frustum_offset = Vector2(1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
 visible = false
 projection = 2
-size = 0.15
-frustum_offset = Vector2(-0.18, 0)
+size = 0.086
+frustum_offset = Vector2(-0.04, 0)
 
 [node name="Control" type="Control" parent="." unique_id=1032119700]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,9 +45,41 @@ script = ExtResource("2_i052m")
 [node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer" unique_id=2069273836]
 handle_input_locally = false
 size = Vector2i(2240, 900)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Camera3D" type="Camera3D" parent="Control/SubViewportContainer/SubViewport" unique_id=1068109346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+current = true
+size = 0.04
+frustum_offset = Vector2(1, 0)
+
+[node name="Control2" type="Control" parent="." unique_id=532468549]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control2" unique_id=1643112417]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 840.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+script = ExtResource("3_3sglg")
+
+[node name="SubViewport" type="SubViewport" parent="Control2/SubViewportContainer" unique_id=1226115133]
+handle_input_locally = false
+size = Vector2i(560, 900)
+render_target_update_mode = 0
+
+[node name="Camera3D" type="Camera3D" parent="Control2/SubViewportContainer/SubViewport" unique_id=99113818]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
 current = true
 size = 0.04

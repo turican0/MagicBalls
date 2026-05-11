@@ -10,9 +10,10 @@ func _ready():
 func _update_layout():
 	var screen_size = get_parent().size
 	var extra_ratio = 0.4
-	var newWcoef=(1-extra_ratio+extra_ratio/2)*2
-	size = Vector2(screen_size.x * newWcoef, screen_size.y)
-	position = Vector2(0, 0)
+	size = Vector2(screen_size.x * extra_ratio, screen_size.y)
+	position = Vector2(screen_size.x-screen_size.x*extra_ratio, 0)
+	#$SubViewport.size = Vector2i(int(screen_size.x + extra_width), int(screen_size.y))
+
 
 func _process(delta):
 	##print("screen_size: ", screen_size)
