@@ -535,7 +535,9 @@ int sub_main(int argc, char** argv, char**  /*envp*/)//236F70
 
 	SetTimeStart();
 
+#ifndef __ANDROID__
 	try
+#endif
 	{
 		begin_plugin();
 
@@ -576,16 +578,19 @@ int sub_main(int argc, char** argv, char**  /*envp*/)//236F70
 
 		Logger->info("Reading config.json file");
 
+#ifndef __ANDROID__
 		try
+#endif
 		{
 			SetConfig();
 		}
+#ifndef __ANDROID__
 		catch (const std::exception& e)
 		{
 			Logger->critical("Error reading config.json file: {}", e.what());
 			return -1;
 		}
-
+#endif
 		EventDispatcher::I = new EventDispatcher();
 
 		EventDispatcher::I->RegisterEvent(new Event<Scene>(EventType::E_SCENE_CHANGE, sceneChangeCallBack));
@@ -690,6 +695,7 @@ int sub_main(int argc, char** argv, char**  /*envp*/)//236F70
 		}
 		delete EventDispatcher::I;
 	}
+#ifndef __ANDROID__
 	catch (const thread_exit_exception& e)
 	{
 		Logger->info("Immediate Exit called");
@@ -699,6 +705,7 @@ int sub_main(int argc, char** argv, char**  /*envp*/)//236F70
 		Logger->critical("Critical Error: {}", e.what());
 		exitCode = -1;
 	}
+#endif
 	Logger->info("Exited Game");
 	return exitCode;
 }

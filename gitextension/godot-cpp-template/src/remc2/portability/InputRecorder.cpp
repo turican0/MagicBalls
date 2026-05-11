@@ -142,7 +142,10 @@ void InputRecorder::RecordPlayerActions(uint16_t level, uint16_t playerIdx, uint
 }
 
 bool InputRecorder::SaveRecordingToFile(const char *outputFileName) {
-	try {
+#ifndef __ANDROID__
+	try
+#endif
+	{
 		if (m_InputEvents == nullptr || m_InputEvents->empty())
 			return false;
 
@@ -199,13 +202,19 @@ bool InputRecorder::SaveRecordingToFile(const char *outputFileName) {
 		}
 		delete playerTurns;
 		return fclose(eventsFile) == 0;
-	} catch (exception ex) {
+	}
+#ifndef __ANDROID__
+	catch (exception ex) {
 		return false;
 	}
+#endif
 }
 
 bool InputRecorder::LoadRecordingFile(const char *inputFileName) {
-	try {
+#ifndef __ANDROID__
+	try
+#endif
+	{
 		FILE *eventsFile = fopen(inputFileName, "rb");
 		if (eventsFile == nullptr)
 			return false;
@@ -275,7 +284,10 @@ bool InputRecorder::LoadRecordingFile(const char *inputFileName) {
 			}
 		}
 		return fclose(eventsFile) == 0;
-	} catch (exception ex) {
+	}
+#ifndef __ANDROID__
+	catch (exception ex) {
 		return false;
 	}
+#endif
 }

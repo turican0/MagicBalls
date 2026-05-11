@@ -70,7 +70,9 @@ void InitializeLogging(spdlog::level::level_enum level)
 
 void InitializeLogging(spdlog::level::level_enum level, const char* logFileName)
 {
+#ifndef __ANDROID__
 	try
+#endif
 	{
 		if (Logger == nullptr)
 		{
@@ -94,10 +96,12 @@ void InitializeLogging(spdlog::level::level_enum level, const char* logFileName)
 			Logger->warn("Logging already Initialized");
 		}
 	}
+#ifndef __ANDROID__
 	catch (const spdlog::spdlog_ex& ex)
 	{
 		//std::cout << "Log init failed: " << ex.what() << std::endl;
 	}
+#endif
 }
 
 #ifdef _MSC_VER
@@ -325,17 +329,22 @@ dirsstruct getListDir(char *dirname) {
 dirsstruct getListDir(char *dirname) {
 	dirsstruct directories;
 	directories.number = 0;
-
-	try {
+#ifndef __ANDROID__
+	try
+#endif
+	{
 		for (const auto &entry : std::filesystem::directory_iterator(dirname)) {
 			std::string name = entry.path().filename().string();
 			if (name[0] == '.')
 				continue;
 			sprintf(directories.dir[directories.number++], "%s", name.c_str());
 		}
-	} catch (const std::exception &e) {
+	}
+#ifndef __ANDROID__
+	catch (const std::exception &e) {
 		Logger->error("Could not open directory: {}", e.what());
 	}
+#endif
 
 	return directories;
 }

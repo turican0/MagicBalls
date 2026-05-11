@@ -377,8 +377,9 @@ void Config::LoadPaths(rapidjson::GenericObject<false, rapidjson::Value>& settin
 std::string Config::ReadFileToString(std::string fileName)
 {
 	std::string json;
-
+#ifndef __ANDROID__
 	try
+#endif
 	{
 		std::ifstream is(fileName, std::ifstream::binary);
 		std::string line;
@@ -388,9 +389,11 @@ std::string Config::ReadFileToString(std::string fileName)
 			json.push_back('\n');
 		}
 	}
+#ifndef __ANDROID__
 	catch (const std::exception& e)
 	{
 		std::cout << "Error Stopping Worker Thread: " << e.what();
 	}
+#endif
 	return json;
 };

@@ -482,8 +482,12 @@ namespace MyNetworkLib {
 		// Create the remote endpoint using the destination ip address and
 		// the target port number.  This is not a broadcast
 		//auto remote = asio::ip::udp::endpoint(asio::ip::address::from_string(destination_ip), port);
-		try {
+#ifndef __ANDROID__
+		try
+#endif
+		{
 		}
+#ifndef __ANDROID__
 #ifdef USE_BOOST__
 		catch (const system::system_error& ex)
 #else
@@ -494,6 +498,7 @@ namespace MyNetworkLib {
 			// Examine ex.code() and ex.what() to see what went wrong!
 			return false;
 		}
+#endif
 		return true;
 	}
 

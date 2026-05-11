@@ -2902,7 +2902,10 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
 	int exitCode = 0;
 	SetTimeStart();
-	try {
+#ifndef __ANDROID__
+	try
+#endif
+	{
 		begin_plugin();
 		preconvert(); //rewrite and remove it later
 		*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it
@@ -3003,12 +3006,15 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 			}
 		}
 		delete EventDispatcher::I;
-	} catch (const thread_exit_exception &e) {
+	}
+#ifndef __ANDROID__
+	catch (const thread_exit_exception &e) {
 		//Logger->info("Immediate Exit called");
 	} catch (const std::exception &e) {
 		//Logger->critical("Critical Error: {}", e.what());
 		exitCode = -1;
 	}
+#endif
 	//Logger->info("Exited Game");
 
 	thread2_wait_for_continue(Thread2_State::SUB_MAIN_END_FUNCTION);
