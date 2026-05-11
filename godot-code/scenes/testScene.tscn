@@ -1,10 +1,52 @@
 [gd_scene format=3 uid="uid://cxhx1qfntfsgj"]
 
 [ext_resource type="PackedScene" uid="uid://c3idbqpxfggth" path="res://entites/object_3_211_sorcerer-red.tscn" id="1_4lyoc"]
+[ext_resource type="Script" uid="uid://c6xwlttxy7wxa" path="res://scenes/sub_viewport_container.gd" id="2_i052m"]
 
 [node name="TestScene" type="Node3D" unique_id=950006661]
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1176225436]
-transform = Transform3D(-0.9973336, 0, -0.07297713, 0, 1, 0, 0.07297713, 0, -0.9973336, 0, 1.5889893, -6.023926)
-
 [node name="Node3D" parent="." unique_id=872675572 instance=ExtResource("1_4lyoc")]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1099047612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+current = true
+size = 0.04
+frustum_offset = Vector2(1, 0)
+
+[node name="Camera3D2" type="Camera3D" parent="." unique_id=2089323139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+visible = false
+projection = 2
+size = 0.15
+frustum_offset = Vector2(-0.18, 0)
+
+[node name="Control" type="Control" parent="." unique_id=1032119700]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control" unique_id=2133365307]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 840.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+script = ExtResource("2_i052m")
+
+[node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer" unique_id=2069273836]
+handle_input_locally = false
+size = Vector2i(2240, 900)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Control/SubViewportContainer/SubViewport" unique_id=1068109346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+current = true
+size = 0.04
+frustum_offset = Vector2(1, 0)

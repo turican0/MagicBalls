@@ -414,12 +414,28 @@ func _run_ending2(result) -> void:
 	var canvas = get_node("LoadingCanvas")
 	var label = canvas.get_node("StatusLabel")
 	match(result):
-		-1:#
-			label.text = "The folder containing the Magic Carpet 2 game was not found.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
-		-2:#
-			label.text = "The folder containing the Magic Carpet 2 game was not found.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
-		-3:#
-			label.text = "The folder containing the Magic Carpet 2 game was not found.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+		-1:
+			label.text = "The GAME folder was not found in the selected location.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+		-2:
+			label.text = "The selected folder appears to be empty.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+		-3:
+			label.text = "The selected file could not be read as a CD image (ISO/BIN).\nThe image may be corrupted or in an unsupported format.\nTry again :)"
+		-4:
+			label.text = "NETHERW.EXE was not found in the selected location.\nThis does not appear to be a valid Magic Carpet 2 installation.\nTry again :)"
+		-5:
+			label.text = "Failed to create the output directory.\nCheck that the destination path is valid and you have write permissions.\nTry again :)"
+		-6:
+			label.text = "Failed to copy files from the selected location.\nThe folder may be unreadable or access was denied.\nTry again :)"
+		-7:
+			label.text = "Failed to create required game subdirectories in the output folder.\nCheck that the destination path is valid and you have write permissions.\nTry again :)"
+		-8:
+			label.text = "No data files (DATA/) were found in the selected location.\nThis does not appear to be a valid Magic Carpet 2 installation.\nTry again :)"
+		-9:
+			label.text = "No level files (LEVELS/) were found in the selected location.\nThis does not appear to be a valid Magic Carpet 2 installation.\nTry again :)"
+		1:
+			label.text = "Extraction from CD image completed successfully!\nMagic Carpet 2 is ready to play. Enjoy! :)"
+		2:
+			label.text = "Files copied successfully!\nMagic Carpet 2 is ready to play. Enjoy! :)"
 	var countdown_label = canvas.get_node("Spinner")
 	countdown_label.add_theme_color_override("font_color", UI_COUNTDOWN_COLOR)
 	countdown_label.add_theme_font_size_override("font_size", 48)
