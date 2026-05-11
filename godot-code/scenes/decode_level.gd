@@ -1467,19 +1467,19 @@ func MBrun(inGame):
 	var result=Global.MBEX.REMC2Run(input_state,0)
 	if(inGame):
 		var mapMode=Global.MBEX.REMC2GetMapMode()
-		var camera = get_viewport().get_camera_3d()
-		if mapMode:
-			camera.near = 1.0
-			var frustum_size: float = 2 * camera.near * tan(deg_to_rad(camera.fov / 2.0))
-			var target_pos_x: float = 0.4# 40%
-			camera.projection = Camera3D.PROJECTION_FRUSTUM
-			camera.size = frustum_size
-			var flustrum_offset_koef=4.5
-			camera.frustum_offset.x = flustrum_offset_koef * frustum_size * (target_pos_x - 0.5)
-		else:
-			camera.projection = Camera3D.PROJECTION_PERSPECTIVE
-			camera.near = 0.05
-			camera.frustum_offset.x = 0
+		#var camera = get_viewport().get_camera_3d()
+		#if mapMode:
+			#camera.near = 1.0
+			#var frustum_size: float = 2 * camera.near * tan(deg_to_rad(camera.fov / 2.0))
+			#var target_pos_x: float = 0.4# 40%
+			#camera.projection = Camera3D.PROJECTION_FRUSTUM
+			#camera.size = frustum_size
+			#var flustrum_offset_koef=4.5
+			#camera.frustum_offset.x = flustrum_offset_koef * frustum_size * (target_pos_x - 0.5)
+		#else:
+			#camera.projection = Camera3D.PROJECTION_PERSPECTIVE
+			#camera.near = 0.05
+			#camera.frustum_offset.x = 0
 		if(locGraphicsEnhance):
 			Main_Filter.show()
 			if(Global.MBEX.REMC2GetWebInfo()):
