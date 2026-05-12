@@ -33,7 +33,7 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0
 visible = false
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1626102450]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 current = true
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Camera3D" unique_id=909624587]
