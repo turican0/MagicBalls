@@ -1670,15 +1670,16 @@ var FirstSelectedToEdit:bool=true
 func _on_entity_spinbox_value_changed(_value = null) -> void:
 	if _filling_entity_details:
 		return
-	_save_current_entity_changes()
+	_save_current_entity_changes(false)
 	
-func _save_current_entity_changes() -> void:
+func _save_current_entity_changes(commit_spinboxes = true) -> void:
 	if current_entity_index <= 0 or current_entity_index >= pool_size:
 		return
 	if _filling_entity_details:
 		return
+	if commit_spinboxes:
+		_force_commit_all_spinboxes(Entity_Edit)
 	var idx = current_entity_index
-	_force_commit_all_spinboxes(Entity_Edit)
 	Global.editorLevel["entities"][idx]["axis_x"]   = Entity_Edit.get_node_or_null("POS/SpinBox").value as int
 	Global.editorLevel["entities"][idx]["axis_y"]   = Entity_Edit.get_node_or_null("POS/SpinBox2").value as int
 	Global.editorLevel["entities"][idx]["type"]      = Entity_Edit.get_node_or_null("type_0x30311/SpinBox").value as int
@@ -1740,10 +1741,11 @@ func _force_commit_all_spinboxes(panel: Control = null) -> void:
 				sb.value = line_edit.text.to_int()
 
 # ==================== WIZARDS (PLAYERS) ====================
-func _save_current_wizards_changes() -> void:
+func _save_current_wizards_changes(commit_spinboxes = true) -> void:
 	if _filling_wizard_details:
 		return
-	_force_commit_all_spinboxes(Wizards_Edit)
+	if commit_spinboxes:
+		_force_commit_all_spinboxes(Wizards_Edit)
 	var idx = Wizards_Edit.get_node_or_null("IDX/SpinBox").value as int
 	if idx < 0 or idx > 7:
 		return
@@ -1781,15 +1783,16 @@ func _save_current_wizards_changes() -> void:
 func _on_wizard_spinbox_value_changed(_value = null) -> void:
 	if _filling_wizard_details:
 		return
-	_save_current_wizards_changes()
+	_save_current_wizards_changes(false)
 
 var _filling_stages_details := false
 var _filling_stagesvars_details := false
 
-func _save_current_stages_changes() -> void:
+func _save_current_stages_changes(commit_spinboxes = true) -> void:
 	if _filling_stages_details:
 		return
-	_force_commit_all_spinboxes(Stages_Edit)
+	if commit_spinboxes:
+		_force_commit_all_spinboxes(Stages_Edit)
 	var idx = Stages_Edit.get_node_or_null("IDX/SpinBox").value as int
 	if idx < 0 or idx >= Global.editorLevel["stages"].size():
 		return
@@ -1802,12 +1805,13 @@ func _save_current_stages_changes() -> void:
 func _on_stages_spinbox_value_changed(_value = null) -> void:
 	if _filling_stages_details:
 		return
-	_save_current_stages_changes()
+	_save_current_stages_changes(false)
 
-func _save_current_stagesvars_changes() -> void:
+func _save_current_stagesvars_changes(commit_spinboxes = true) -> void:
 	if _filling_stagesvars_details:
 		return
-	_force_commit_all_spinboxes(StagesVars_Edit)
+	if commit_spinboxes:
+		_force_commit_all_spinboxes(StagesVars_Edit)
 	var idx = StagesVars_Edit.get_node_or_null("IDX/SpinBox").value as int
 	if idx < 0 or idx >= Global.editorLevel["stage_vars"].size():
 		return
@@ -1822,7 +1826,7 @@ func _save_current_stagesvars_changes() -> void:
 func _on_stagesvars_spinbox_value_changed(_value = null) -> void:
 	if _filling_stagesvars_details:
 		return
-	_save_current_stagesvars_changes()
+	_save_current_stagesvars_changes(false)
 
 func _lock_spinbox_to_integers(sb: SpinBox) -> void:
 	if not sb:
@@ -1980,12 +1984,14 @@ func _on_filter_id_pressed(id: int) -> void:
 func _on_entity_set_button_down() -> void:
 	if current_edited_entity <= 0 or current_edited_entity >= pool_size:
 		return
-	var pos = Main_Player.position
+	var pos = Main_Camera.position
 	Global.editorLevel["entities"][current_edited_entity]["axis_x"] = int(pos.x)
 	Global.editorLevel["entities"][current_edited_entity]["axis_y"] = int(pos.z)
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 	EditorStep()
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	#_save_current_entity_changes(false)
+	RenderEditorEntites()
 	fillEntityDetails(current_edited_entity)
 
 func _on_entity_move_button_down() -> void:
