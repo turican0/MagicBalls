@@ -1442,8 +1442,20 @@ func setLoadScreenBuffer(locTextureRect):
 	Global.MBEX.REMC2SetScrBuffer(locTextureRect)
 
 var DL_inGame=false;
+var oldMapMode=null
+var cameraState=0
+
+var defaultFovA=75
+var defaultFovB=75
+var defaultNearA=0.25
+var defaultNearB=0.25
+var defaultFarA=16384.0
+var defaultFarB=16384.0
+var defaultLeftA=-1
+var defaultLeftB=0.6
+var defaultStepsCount=5
 func MBrun(inGame):
-	DL_inGame=inGame	
+	DL_inGame=inGame
 	var locGraphicsEnhance = Global.MBEX.REMC2GetGraphicsEenhance()
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())
@@ -1468,21 +1480,28 @@ func MBrun(inGame):
 	var result=Global.MBEX.REMC2Run(input_state,0)
 	if(inGame):
 		var mapMode=Global.MBEX.REMC2GetMapMode()
-		var camera = get_viewport().get_camera_3d()
+		var camera = get_viewport().get_camera_3d()		
 		if mapMode:
 			camera.projection = Camera3D.PROJECTION_FRUSTUM
-			var fov = camera.fov
-			var z_near = camera.near
-			var z_far = camera.far
-			var aspect = get_viewport().size.x / float(get_viewport().size.y)
-			var leftPart=0.6
-			var desired_center_x = -(leftPart+(1-leftPart)/2)         # 80% šířky (0.0 = vlevo, 1.0 = vpravo)
-			var size = 2.0 * tan(deg_to_rad(fov / 2.0)) * z_near
-			var offset_x = (desired_center_x - 0.5) * 2.0 * (size * 0.5 * aspect)
-			var frustum_offset = Vector2(offset_x * (size * 0.5 * aspect), 0.0)
-			camera.set_frustum(size, frustum_offset*4.5, z_near, z_far)
+			cameraState=cameraState+1.0/defaultStepsCount
+			if(cameraState>1):
+				cameraState=1
 		else:
-			camera.projection = Camera3D.PROJECTION_PERSPECTIVE
+			camera.projection = Camera3D.PROJECTION_FRUSTUM
+			cameraState=cameraState-1.0/defaultStepsCount
+			if(cameraState<0):
+				cameraState=0
+		var fov = defaultFovB*cameraState+defaultFovA*(1-cameraState)
+		var z_near = defaultNearB*cameraState+defaultNearA*(1-cameraState)
+		var z_far = defaultFarB*cameraState+defaultFarB*(1-cameraState)
+		var aspect = get_viewport().size.x / float(get_viewport().size.y)
+		var leftPart = defaultLeftB*cameraState+defaultLeftA*(1-cameraState)
+		var desired_center_x = -(leftPart+(1-leftPart)/2)         # 80% šířky (0.0 = vlevo, 1.0 = vpravo)
+		var size = 2.0 * tan(deg_to_rad(fov / 2.0)) * z_near
+		var offset_x = (desired_center_x - 0.5) * 2.0 * (size * 0.5 * aspect)
+		var frustum_offset = Vector2(offset_x * (size * 0.5 * aspect), 0.0)
+		camera.set_frustum(size, frustum_offset, z_near, z_far)
+		oldMapMode=mapMode
 		if(locGraphicsEnhance):
 			Main_Filter.show()
 			if(Global.MBEX.REMC2GetWebInfo()):
@@ -1509,6 +1528,8 @@ func MBrun(inGame):
 			Main_Filter.hide()
 	else:
 		Main_Filter.hide()
+		oldMapMode=null
+		cameraState=0
 		#get_parent().get_node("UILayer/UI").updateSpells(Global.MBEX.getActiveSpells())
 		#get_parent().get_node("UILayer/UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
 		#get_parent().get_node("UILayer/UI").updateMinimap(Global.MBEX.getMinimap())
