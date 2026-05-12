@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c3idbqpxfggth" path="res://entites/object_3_211_sorcerer-red.tscn" id="1_4lyoc"]
 [ext_resource type="Script" uid="uid://c6xwlttxy7wxa" path="res://scenes/sub_viewport_container.gd" id="2_i052m"]
+[ext_resource type="Script" uid="uid://biujcnwkjdnns" path="res://scenes/test_flustrum.gd" id="2_sj726"]
 [ext_resource type="Script" uid="uid://piicc147srmi" path="res://scenes/sub_viewport_container2.gd" id="3_3sglg"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_3sglg"]
@@ -16,10 +17,34 @@ mesh = SubResource("BoxMesh_3sglg")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1099047612]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
-visible = false
 current = true
 size = 0.04
 frustum_offset = Vector2(1, 0)
+
+[node name="Camera3D2" type="Camera3D" parent="." unique_id=2089323139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+projection = 2
+current = true
+size = 0.96049106
+frustum_offset = Vector2(-0.4463726, 0)
+near = 0.25
+far = 16400.0
+script = ExtResource("2_sj726")
+camera_state = 1.0
+default_steps_count = 5.0
+far_a = 16400.0
+left_a = 0.0
+fov_b = 125.0
+far_b = 16400.0
+left_b = -0.6600000000000001
+_result_fov = 125.0
+_result_z_near = 0.25
+_result_z_far = 16400.0
+_result_size = 0.9605
+_result_left_part = -0.66
+_result_desired_center_x = -0.33
+_result_offset_x = -0.4464
+_result_frustum_offset = Vector2(-0.4464, 0)
 
 [node name="Control" type="Control" parent="." unique_id=1032119700]
 visible = false
@@ -87,10 +112,3 @@ visible = false
 current = true
 size = 0.04
 frustum_offset = Vector2(1, 0)
-
-[node name="Camera3D2" type="Camera3D" parent="." unique_id=2089323139]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
-visible = false
-projection = 2
-size = 0.086
-frustum_offset = Vector2(-0.04, 0)

@@ -1446,37 +1446,19 @@ var oldMapMode=null
 var cameraState=0
 
 var defaultFovA=75
-var defaultFovB=75
+var defaultFovB=125
 var defaultNearA=0.25
 var defaultNearB=0.25
 var defaultFarA=16384.0
 var defaultFarB=16384.0
-var defaultLeftA=-1
-var defaultLeftB=0.6
+var defaultLeftA=0
+var defaultLeftB=-0.66
 var defaultStepsCount=5
 func MBrun(inGame):
 	DL_inGame=inGame
 	var locGraphicsEnhance = Global.MBEX.REMC2GetGraphicsEenhance()
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())
-	#if(inGame):
-		#if(Main_UI.old_is_ctrl_active!=Main_UI.is_ctrl_active):
-			#if Main_UI.is_ctrl_active:
-				#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-				#Main_UI.saved_mouse_pos = get_viewport().get_mouse_position()
-				#var grid_rect = Main_UI.spell_grid.get_global_rect()
-				#var center_pos = grid_rect.position + (grid_rect.size / 2.0)
-				#center_pos.x=50
-				#get_viewport().warp_mouse(center_pos)
-			#else:
-				#get_viewport().warp_mouse(Main_UI.saved_mouse_pos)
-				#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			#Main_UI.old_is_ctrl_active=Main_UI.is_ctrl_active
-		#if(last_spell_index!=-1):
-			#Global.MBEX.setPlayerActiveSpell(last_spell_index,last_button)
-			#last_spell_index = -1
-			#last_button = -1
-			
 	var result=Global.MBEX.REMC2Run(input_state,0)
 	if(inGame):
 		var mapMode=Global.MBEX.REMC2GetMapMode()
@@ -1491,15 +1473,16 @@ func MBrun(inGame):
 			cameraState=cameraState-1.0/defaultStepsCount
 			if(cameraState<0):
 				cameraState=0
+		
 		var fov = defaultFovB*cameraState+defaultFovA*(1-cameraState)
 		var z_near = defaultNearB*cameraState+defaultNearA*(1-cameraState)
 		var z_far = defaultFarB*cameraState+defaultFarB*(1-cameraState)
 		var aspect = get_viewport().size.x / float(get_viewport().size.y)
 		var leftPart = defaultLeftB*cameraState+defaultLeftA*(1-cameraState)
-		var desired_center_x = -(leftPart+(1-leftPart)/2)         # 80% šířky (0.0 = vlevo, 1.0 = vpravo)
 		var size = 2.0 * tan(deg_to_rad(fov / 2.0)) * z_near
-		var offset_x = (desired_center_x - 0.5) * 2.0 * (size * 0.5 * aspect)
-		var frustum_offset = Vector2(offset_x * (size * 0.5 * aspect), 0.0)
+		var desired_center_x = (leftPart + 1.0) / 2.0 - 0.5
+		var offset_x = desired_center_x * (size * aspect)
+		var frustum_offset = Vector2(offset_x, 0.0)
 		camera.set_frustum(size, frustum_offset, z_near, z_far)
 		oldMapMode=mapMode
 		if(locGraphicsEnhance):
