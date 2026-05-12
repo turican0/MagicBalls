@@ -47,6 +47,10 @@ var _picker_selected_path: String = ""
 var _stop_spinner: bool = false
 
 func _ready() -> void:
+	# --- ANROID RIGHTS ---
+	if OS.get_name() == "Android":
+		await _check_android_permissions()
+	# --- ANROID RIGHTS ---
 	#if !check_existing_data():
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -68,6 +72,23 @@ func _ready() -> void:
 #func check_existing_data() -> bool:
 	#var music_path = Global.convertdata + "musics/"
 	#return DirAccess.dir_exists_absolute(music_path)
+	
+func _check_android_permissions():
+	if OS.get_name() != "Android":
+		return
+	OS.request_permissions()
+	var api_level = 0
+	if OS.has_method("get_static_object"):
+		api_level = OS.call("get_static_object", "android/os/Build$VERSION", "SDK_INT")	
+	if api_level >= 30:
+		var is_manager = false
+		if OS.has_method("is_external_storage_manager"):
+			is_manager = OS.call("is_external_storage_manager")		
+		if not is_manager:
+			print("Nemáme správu souborů, otevírám nastavení...")
+			if OS.has_method("request_manage_all_files_access"):
+				OS.call("request_manage_all_files_access")
+	await get_tree().process_frame
 
 # =============================================
 # INITIAL WELCOME DIALOG
