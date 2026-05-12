@@ -1468,19 +1468,21 @@ func MBrun(inGame):
 	var result=Global.MBEX.REMC2Run(input_state,0)
 	if(inGame):
 		var mapMode=Global.MBEX.REMC2GetMapMode()
-		#var camera = get_viewport().get_camera_3d()
-		#if mapMode:
-			#camera.near = 1.0
-			#var frustum_size: float = 2 * camera.near * tan(deg_to_rad(camera.fov / 2.0))
-			#var target_pos_x: float = 0.4# 40%
-			#camera.projection = Camera3D.PROJECTION_FRUSTUM
-			#camera.size = frustum_size
-			#var flustrum_offset_koef=4.5
-			#camera.frustum_offset.x = flustrum_offset_koef * frustum_size * (target_pos_x - 0.5)
-		#else:
-			#camera.projection = Camera3D.PROJECTION_PERSPECTIVE
-			#camera.near = 0.05
-			#camera.frustum_offset.x = 0
+		var camera = get_viewport().get_camera_3d()
+		if mapMode:
+			camera.projection = Camera3D.PROJECTION_FRUSTUM
+			var fov = camera.fov
+			var z_near = camera.near
+			var z_far = camera.far
+			var aspect = get_viewport().size.x / float(get_viewport().size.y)
+			var leftPart=0.6
+			var desired_center_x = -(leftPart+(1-leftPart)/2)         # 80% šířky (0.0 = vlevo, 1.0 = vpravo)
+			var size = 2.0 * tan(deg_to_rad(fov / 2.0)) * z_near
+			var offset_x = (desired_center_x - 0.5) * 2.0 * (size * 0.5 * aspect)
+			var frustum_offset = Vector2(offset_x * (size * 0.5 * aspect), 0.0)
+			camera.set_frustum(size, frustum_offset*4.5, z_near, z_far)
+		else:
+			camera.projection = Camera3D.PROJECTION_PERSPECTIVE
 		if(locGraphicsEnhance):
 			Main_Filter.show()
 			if(Global.MBEX.REMC2GetWebInfo()):

@@ -4,21 +4,22 @@
 [ext_resource type="Script" uid="uid://c6xwlttxy7wxa" path="res://scenes/sub_viewport_container.gd" id="2_i052m"]
 [ext_resource type="Script" uid="uid://piicc147srmi" path="res://scenes/sub_viewport_container2.gd" id="3_3sglg"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_3sglg"]
+size = Vector3(10, 1, 1)
+
 [node name="TestScene" type="Node3D" unique_id=950006661]
+
+[node name="Node3D2" type="MeshInstance3D" parent="." unique_id=818379585]
+mesh = SubResource("BoxMesh_3sglg")
 
 [node name="Node3D" parent="." unique_id=872675572 instance=ExtResource("1_4lyoc")]
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1099047612]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+visible = false
 current = true
 size = 0.04
 frustum_offset = Vector2(1, 0)
-
-[node name="Camera3D2" type="Camera3D" parent="." unique_id=2089323139]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
-projection = 2
-size = 0.086
-frustum_offset = Vector2(-0.04, 0)
 
 [node name="Control" type="Control" parent="." unique_id=1032119700]
 visible = false
@@ -30,6 +31,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Control" unique_id=2133365307]
+visible = false
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -48,11 +50,13 @@ render_target_update_mode = 0
 
 [node name="Camera3D" type="Camera3D" parent="Control/SubViewportContainer/SubViewport" unique_id=1068109346]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+visible = false
 current = true
 size = 0.04
 frustum_offset = Vector2(1, 0)
 
 [node name="Control2" type="Control" parent="." unique_id=532468549]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,10 +79,18 @@ script = ExtResource("3_3sglg")
 [node name="SubViewport" type="SubViewport" parent="Control2/SubViewportContainer" unique_id=1226115133]
 handle_input_locally = false
 size = Vector2i(560, 900)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="Camera3D" type="Camera3D" parent="Control2/SubViewportContainer/SubViewport" unique_id=99113818]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+visible = false
 current = true
 size = 0.04
 frustum_offset = Vector2(1, 0)
+
+[node name="Camera3D2" type="Camera3D" parent="." unique_id=2089323139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
+visible = false
+projection = 2
+size = 0.086
+frustum_offset = Vector2(-0.04, 0)
