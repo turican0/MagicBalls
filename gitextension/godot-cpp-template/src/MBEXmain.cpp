@@ -32,28 +32,35 @@
 
 static void android_copy_dir_recursive(const String &src_dir, const String &dst_dir) {
 	Ref<DirAccess> src = DirAccess::open(src_dir);
-	if (src.is_null()) {
-		UtilityFunctions::printerr("android_copy_dir_recursive: cannot open src: ", src_dir);
+	if (src.is_null())
 		return;
+
+	// Zajistíme existenci cílové složky
+	String global_dst = ProjectSettings::get_singleton()->globalize_path(dst_dir);
+	if (!DirAccess::dir_exists_absolute(global_dst)) {
+		DirAccess::make_dir_recursive_absolute(global_dst);
 	}
-	Ref<DirAccess> dst_check = DirAccess::open("user://");
-	if (dst_check.is_valid() && !dst_check->dir_exists(dst_dir.replace("user://", ""))) {
-		DirAccess::make_dir_recursive_absolute(
-				ProjectSettings::get_singleton()->globalize_path(dst_dir));
-	}
+
 	src->list_dir_begin();
 	String name = src->get_next();
 	while (name != "") {
 		if (name != "." && name != "..") {
 			String src_path = src_dir.path_join(name);
 			String dst_path = dst_dir.path_join(name);
+
 			if (src->current_is_dir()) {
 				android_copy_dir_recursive(src_path, dst_path);
 			} else {
 				if (!FileAccess::file_exists(dst_path)) {
-					Error err = DirAccess::copy_absolute(src_path, dst_path);
-					if (err != OK) {
-						UtilityFunctions::printerr("android_copy_dir_recursive: copy failed: ", src_path, " -> ", dst_path);
+					// Ignorujeme .import soubory, které způsobují chyby v logu
+					if (!name.ends_with(".import")) {
+						Ref<FileAccess> f_src = FileAccess::open(src_path, FileAccess::READ);
+						if (f_src.is_valid()) {
+							Ref<FileAccess> f_dst = FileAccess::open(dst_path, FileAccess::WRITE);
+							if (f_dst.is_valid()) {
+								f_dst->store_buffer(f_src->get_buffer(f_src->get_length()));
+							}
+						}
 					}
 				}
 			}
@@ -68,41 +75,36 @@ static void android_copy_dir_recursive(const String &src_dir, const String &dst_
 // Kopíruje pouze soubory, které v cíli ještě neexistují.
 static String android_resolve_res_path(const String &path) {
 	if (!path.begins_with("res://"))
-		return String(); // není res://, necháme na volajícím
+		return String();
 
-	// Odstraníme "res://" prefix a sestavíme user:// cestu
-	String rel = path.substr(6); // vše za "res://"
-	// Získáme první komponentu (adresář nebo soubor na nejvyšší úrovni)
-	// aby bylo jasné, co kopírovat
+	String rel = path.substr(6);
 	String user_path = String("user://") + rel;
-
-	// Zjistíme, jestli jde o adresář nebo soubor
-	bool is_dir = (path.get_extension() == ""); // heuristika: bez přípony = adresář
+	bool is_dir = (path.get_extension() == "");
 
 	if (is_dir) {
-		if (!DirAccess::dir_exists_absolute(user_path)) {
-			UtilityFunctions::print("android_resolve_res_path: first run, copying tree: ", path, " -> ", user_path);
+		// ZMĚNA: Kontrola existence adresáře přímo v user://
+		if (!DirAccess::dir_exists_absolute(ProjectSettings::get_singleton()->globalize_path(user_path))) {
+			UtilityFunctions::print("android_resolve_res_path: copying tree: ", path);
 			android_copy_dir_recursive(path, user_path);
+
+			// Marker klidně necháme pro informaci, ale už ho nekontrolujeme
 			String marker = user_path.trim_suffix("/") + "/.android_copied";
 			Ref<FileAccess> mf = FileAccess::open(marker, FileAccess::WRITE);
 			if (mf.is_valid())
 				mf->store_string("ok");
-			UtilityFunctions::print("android_resolve_res_path: copy done, marker written");
-		} else {
-			UtilityFunctions::print("android_resolve_res_path: directory already exists, skipping copy: ", user_path);
 		}
 	} else {
-		// Jednotlivý soubor
+		// Kopírování jednotlivého souboru (stejná logika přes buffer)
 		if (!FileAccess::file_exists(user_path)) {
-			UtilityFunctions::print("android_resolve_res_path: copying file: ", path, " -> ", user_path);
 			String parent = user_path.get_base_dir();
-			DirAccess::make_dir_recursive_absolute(
-					ProjectSettings::get_singleton()->globalize_path(parent));
-			Error err = DirAccess::copy_absolute(path, user_path);
-			if (err != OK)
-				UtilityFunctions::printerr("android_resolve_res_path: copy file failed: ", path);
-		} else {
-			UtilityFunctions::print("android_resolve_res_path: file already exists: ", user_path);
+			DirAccess::make_dir_recursive_absolute(ProjectSettings::get_singleton()->globalize_path(parent));
+
+			Ref<FileAccess> f_src = FileAccess::open(path, FileAccess::READ);
+			if (f_src.is_valid()) {
+				Ref<FileAccess> f_dst = FileAccess::open(user_path, FileAccess::WRITE);
+				if (f_dst.is_valid())
+					f_dst->store_buffer(f_src->get_buffer(f_src->get_length()));
+			}
 		}
 	}
 
