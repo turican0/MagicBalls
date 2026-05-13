@@ -1,5 +1,7 @@
 #include "remc2_mod.h"
 
+#include <godot_cpp/variant/utility_functions.hpp>
+
 //int NewGameDialog_endAction_mod;
 
 int graphics_enhance = 0;
@@ -2899,21 +2901,26 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 
 
 int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath) {
+	godot::UtilityFunctions::print("sub_main_mod begin");
 	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
 	int exitCode = 0;
+	godot::UtilityFunctions::print("sub_main_mod SetTimeStart");
 	SetTimeStart();
 #ifndef __ANDROID__
 	try
 #endif
 	{
+		godot::UtilityFunctions::print("sub_main_mod begin_plugin");
 		begin_plugin();
+		godot::UtilityFunctions::print("sub_main_mod preconvert");
 		preconvert(); //rewrite and remove it later
 		*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it
 		signed int v3; // edi
 		unsigned __int16 v4; // si
 		v3 = 0;
 		v4 = 0;
-		
+
+		godot::UtilityFunctions::print("sub_main_mod RegisterEvent");
 		//std::cout << "Initializing logger...\n";
 		//spdlog::level::level_enum level = GetLoggingLevelFromString(CommandLineParams.GetLogLevelStr().c_str());
 		//InitializeLogging(level);
@@ -2921,6 +2928,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		EventDispatcher::I->RegisterEvent(new Event<Scene>(EventType::E_SCENE_CHANGE, sceneChangeCallBack));
 		EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
 
+		godot::UtilityFunctions::print("sub_main_mod gameFolder");
 		//SetConfig();
 		gameFolder = std::string(real_cdPathch) + "GAME/NETHERW";
 		cdFolder = std::string(real_cdPathch) + "CD_Files";
@@ -2939,6 +2947,8 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		gameResHeight = 480; //added
 		maxGameFps = 1000; //added
 
+		godot::UtilityFunctions::print("sub_main_mod DoDisableGraphicsEnhance");
+
 		if (CommandLineParams.DoDisableGraphicsEnhance()) {
 			Logger->debug("Disabling enhanced graphics");
 			bigSprites = false;
@@ -2947,11 +2957,14 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		}
 		//Set Paths for game data
 		Logger->debug("Getting Game data paths");
+		godot::UtilityFunctions::print("sub_main_mod Getting Game data paths");
 		gameDataPath = GetSubDirectoryPath(gameFolder.c_str());
 		cdDataPath = GetSubDirectoryPath(cdFolder.c_str());
 		highResGraphicsPath = GetSubDirectoryPath(highResGraphicsFolder.c_str());
 		fixedMenuGraphicsPath = GetSubDirectoryPath(fixedMenuGraphicsFolder.c_str());
+		godot::UtilityFunctions::print("sub_main_mod VGA_Init");
 		VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
+		godot::UtilityFunctions::print("sub_main_mod gamepad_init");
 		gamepad_init(gameResWidth, gameResHeight);
 		if (std::string mainfile = GetSubDirectoryFile(gameFolder.c_str(), "CDATA", "TMAPS0-0.DAT"); !file_exists(mainfile.c_str())) //test original file
 		{
@@ -2967,7 +2980,9 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		} else {
 			//Logger->info("Original Game Data Found!");
 		}
+		godot::UtilityFunctions::print("sub_main_mod initposistruct");
 		initposistruct();
+		godot::UtilityFunctions::print("sub_main_mod sub_56210_process_command_line");
 		sub_56210_process_command_line(argc, argv); //236FD4 - 237210
 		if (CommandLineParams.ModeTestNetwork()) {
 			if (Iam_server || Iam_client)
@@ -2982,8 +2997,9 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		} else if (CommandLineParams.GetRecordingPath().length() > 0) {
 			StartRecording(CommandLineParams.GetRecordingPath().c_str());
 		}
+		godot::UtilityFunctions::print("sub_main_mod Initialize");
 		Initialize(); //236FDC - 23C8D0//rozdil 1E1000
-
+		godot::UtilityFunctions::print("sub_main_mod thread2_wait_for_continue");
 		thread2_wait_for_continue(Thread2_State::SUB_MAIN_BEFORE_LOOP);
 
 		sub_46830_main_loop_mod(v4); //227830
