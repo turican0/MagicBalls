@@ -2958,10 +2958,18 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		//Set Paths for game data
 		Logger->debug("Getting Game data paths");
 		godot::UtilityFunctions::print("sub_main_mod Getting Game data paths");
+		godot::UtilityFunctions::print("sub_main_mod gameFolder: ", godot::String(gameFolder.c_str()));
 		gameDataPath = GetSubDirectoryPath(gameFolder.c_str());
+		godot::UtilityFunctions::print("sub_main_mod gameDataPath: ", godot::String(gameDataPath.c_str()));
+		godot::UtilityFunctions::print("sub_main_mod cdFolder: ", godot::String(cdFolder.c_str()));
 		cdDataPath = GetSubDirectoryPath(cdFolder.c_str());
+		godot::UtilityFunctions::print("sub_main_mod cdDataPath: ", godot::String(cdDataPath.c_str()));
+		godot::UtilityFunctions::print("sub_main_mod highResGraphicsFolder: ", godot::String(highResGraphicsFolder.c_str()));
 		highResGraphicsPath = GetSubDirectoryPath(highResGraphicsFolder.c_str());
+		godot::UtilityFunctions::print("sub_main_mod highResGraphicsPath: ", godot::String(highResGraphicsPath.c_str()));
+		godot::UtilityFunctions::print("sub_main_mod fixedMenuGraphicsFolder: ", godot::String(fixedMenuGraphicsFolder.c_str()));
 		fixedMenuGraphicsPath = GetSubDirectoryPath(fixedMenuGraphicsFolder.c_str());
+		godot::UtilityFunctions::print("sub_main_mod fixedMenuGraphicsPath: ", godot::String(fixedMenuGraphicsPath.c_str()));
 		godot::UtilityFunctions::print("sub_main_mod VGA_Init");
 		VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
 		godot::UtilityFunctions::print("sub_main_mod gamepad_init");
