@@ -5,6 +5,8 @@
 #include <vector>
 #include <filesystem>
 #include <iostream>
+
+#include <godot_cpp/variant/utility_functions.hpp>
 using namespace std;
 /*
 #ifndef DIR
@@ -118,7 +120,12 @@ std::string utf8_encode(const std::wstring &wstr)
 bool firstrun = true;
 
 std::string get_exe_path() {
-#ifdef _MSC_VER
+#ifdef __ANDROID__
+	godot::UtilityFunctions::print("get_exe_path");
+	// Na Androidu nema smysl exe path - vracime prazdny string
+	// cesty jsou predavany primo pres gameFolder/cdFolder
+	return "";
+#elif defined _MSC_VER
 	LPWSTR buffer = new WCHAR[MAX_PATH];
 	//GetModuleFileName(NULL, buffer, MAX_PATH);
 	std::string locstr = utf8_encode(buffer);
@@ -216,8 +223,8 @@ int32_t myaccess(const char* path, uint32_t  /*flags*/) {
 
 int32_t /*__cdecl*/ mymkdir(const char* path) {
 	//char path2[512] = "\0";
-
-	Logger->debug("mymkdir:path: {}", path);
+	if (Logger)
+		Logger->debug("mymkdir:path: {}", path);
 
 	//pathfix(path, path2);//only for DOSBOX version
 	//Logger->debug("mymkdir:path2: %s\n", path2);
@@ -230,7 +237,8 @@ int32_t /*__cdecl*/ mymkdir(const char* path) {
 	pwcsName = new WCHAR[nChars];
 	MultiByteToWideChar(CP_ACP, 0, path, -1, (LPWSTR)pwcsName, nChars);
 	// use it....
-	Logger->debug("mymkdir:path3: {}", fmt::ptr(pwcsName));
+	if (Logger)
+		Logger->debug("mymkdir:path3: {}", fmt::ptr(pwcsName));
 #endif
 
 	int result;
@@ -241,7 +249,8 @@ int32_t /*__cdecl*/ mymkdir(const char* path) {
 	result = mkdir(path, 0700);
 #endif
 	// delete it
-	Logger->debug("mymkdir:end: {}", result);
+	if (Logger)
+		Logger->debug("mymkdir:end: {}", result);
 	return result;
 };
 
@@ -342,7 +351,8 @@ dirsstruct getListDir(char *dirname) {
 	}
 #ifndef __ANDROID__
 	catch (const std::exception &e) {
-		Logger->error("Could not open directory: {}", e.what());
+		if (Logger)
+			Logger->error("Could not open directory: {}", e.what());
 	}
 #endif
 
@@ -350,8 +360,14 @@ dirsstruct getListDir(char *dirname) {
 }
 
 void FixDir(char* outdirname, char* indirname) {
+#ifdef __ANDROID__
+	godot::UtilityFunctions::print("FixDir Android indirname: ", String(indirname));
+	sprintf(outdirname, "%s", indirname);
+	godot::UtilityFunctions::print("FixDir Android outdirname: ", String(outdirname));
+#else
 	std::string pathexe = get_exe_path();
 	sprintf(outdirname, "%s/%s", pathexe.c_str(), indirname);
+#endif
 };
 /*
 
@@ -504,7 +520,16 @@ long ReadGraphicsfile(const char* path, uint8_t* buffer, long size)
 std::string getExistingDataPath(std::filesystem::path path) 
 {
 	std::vector<std::string> file_locations;
-#ifdef __linux__
+#ifdef __ANDROID__
+	std::string direct = path.string();
+	godot::UtilityFunctions::print("getExistingDataPath Android path: ", String(direct.c_str()));
+	if (std::filesystem::exists(direct)) {
+		godot::UtilityFunctions::print("getExistingDataPath Android found: ", String(direct.c_str()));
+		return direct;
+	}
+	godot::UtilityFunctions::print("getExistingDataPath Android not found, returning empty");
+	return "";
+#elif defined(__linux__)
 	auto env_home_dir = std::getenv("HOME");
 	auto env_xdg_data_home_dir = std::getenv("XDG_DATA_HOME");
 	std::filesystem::path home_dir;
