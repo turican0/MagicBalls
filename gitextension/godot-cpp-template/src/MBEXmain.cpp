@@ -80,18 +80,16 @@ static String android_resolve_res_path(const String &path) {
 	bool is_dir = (path.get_extension() == ""); // heuristika: bez přípony = adresář
 
 	if (is_dir) {
-		// Zkopírujeme celý strom jednou (marker soubor)
-		String marker = user_path.trim_suffix("/") + "/.android_copied";
-		if (!FileAccess::file_exists(marker)) {
+		if (!DirAccess::dir_exists_absolute(user_path)) {
 			UtilityFunctions::print("android_resolve_res_path: first run, copying tree: ", path, " -> ", user_path);
 			android_copy_dir_recursive(path, user_path);
-			// Zapíšeme marker
+			String marker = user_path.trim_suffix("/") + "/.android_copied";
 			Ref<FileAccess> mf = FileAccess::open(marker, FileAccess::WRITE);
 			if (mf.is_valid())
 				mf->store_string("ok");
 			UtilityFunctions::print("android_resolve_res_path: copy done, marker written");
 		} else {
-			UtilityFunctions::print("android_resolve_res_path: already copied, using user path: ", user_path);
+			UtilityFunctions::print("android_resolve_res_path: directory already exists, skipping copy: ", user_path);
 		}
 	} else {
 		// Jednotlivý soubor
