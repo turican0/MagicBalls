@@ -309,10 +309,22 @@ void convertPost() {
 }
 
 void MBEXclass::convertOriginalData(String path, String path2) {
+	UtilityFunctions::print("convertOriginalData START");
+	UtilityFunctions::print("convertOriginalData path: ", path);
+	UtilityFunctions::print("convertOriginalData path2: ", path2);
+	UtilityFunctions::print("convertOriginalData calling convertPre...");
 	convertPre();
+	UtilityFunctions::print("convertOriginalData convertPre done");
+	UtilityFunctions::print("convertOriginalData calling MBEXconvertData...");
 	MBEXconvertData(path, path2);
+	UtilityFunctions::print("convertOriginalData MBEXconvertData done");
+	UtilityFunctions::print("convertOriginalData calling MBEXaudioExtract...");
 	MBEXaudioExtract(path);
+	UtilityFunctions::print("convertOriginalData MBEXaudioExtract done");
+	UtilityFunctions::print("convertOriginalData calling convertPost...");
 	convertPost();
+	UtilityFunctions::print("convertOriginalData convertPost done");
+	UtilityFunctions::print("convertOriginalData END");
 }
 
 /*
@@ -2220,63 +2232,72 @@ int MBEXclass::REMC2EditorDeleteEntites(Array p_indices) {
 //#include <godot_cpp/variant/utility_functions.hpp>
 
 void MBEXaudioExtract(String path) {
+	UtilityFunctions::print("MBEXaudioExtract START");
+	UtilityFunctions::print("MBEXaudioExtract path: ", path);
 	String source_path = "res://hidata/speech/";
 	String target_path = path.path_join("speech");
-
-	// 1. Kontrola a vytvoření cílové složky
+	UtilityFunctions::print("MBEXaudioExtract source_path: ", source_path);
+	UtilityFunctions::print("MBEXaudioExtract target_path: ", target_path);
 	Ref<DirAccess> da_target = DirAccess::open(path);
 	if (da_target.is_valid()) {
+		UtilityFunctions::print("MBEXaudioExtract base path opened OK");
 		if (!da_target->dir_exists("speech")) {
+			UtilityFunctions::print("MBEXaudioExtract speech dir not exists, creating...");
 			da_target->make_dir("speech");
-			UtilityFunctions::print("Slozka vytvorena: ", target_path);
+			UtilityFunctions::print("MBEXaudioExtract speech dir created: ", target_path);
+		} else {
+			UtilityFunctions::print("MBEXaudioExtract speech dir already exists");
 		}
 	} else {
-		UtilityFunctions::printerr("Nelze pristoupit k zakladni ceste: ", path);
+		UtilityFunctions::printerr("MBEXaudioExtract failed to open base path: ", path);
 		return;
 	}
-
-	// 1. Otevřeme složku se ZIPy
 	Ref<DirAccess> dir = DirAccess::open(source_path);
 	if (dir.is_null()) {
-		UtilityFunctions::printerr("Nelze otevrit slozku: ", source_path);
+		UtilityFunctions::printerr("MBEXaudioExtract failed to open source path: ", source_path);
 		return;
 	}
-
+	UtilityFunctions::print("MBEXaudioExtract source path opened OK");
 	dir->list_dir_begin();
 	String file_name = dir->get_next();
-
 	while (file_name != "") {
-		// Zpracujeme pouze .zip soubory
 		if (!dir->current_is_dir() && file_name.ends_with(".zip")) {
 			String full_zip_path = source_path + file_name;
-
+			UtilityFunctions::print("MBEXaudioExtract processing ZIP: ", full_zip_path);
 			Ref<ZIPReader> zip_reader;
 			zip_reader.instantiate();
-
 			if (zip_reader->open(full_zip_path) == OK) {
-				// Získáme seznam souborů uvnitř ZIPu (měly by tam být ty s01.dat atd.)
+				UtilityFunctions::print("MBEXaudioExtract ZIP opened OK");
 				PackedStringArray files = zip_reader->get_files();
-
+				UtilityFunctions::print("MBEXaudioExtract files in ZIP: ", files.size());
 				for (int i = 0; i < files.size(); i++) {
 					String internal_file = files[i];
+					UtilityFunctions::print("MBEXaudioExtract extracting: ", internal_file);
 					PackedByteArray data = zip_reader->read_file(internal_file);
-
+					UtilityFunctions::print("MBEXaudioExtract data size: ", data.size());
 					if (data.size() > 0) {
 						String out_path = target_path.path_join(internal_file);
+						UtilityFunctions::print("MBEXaudioExtract writing to: ", out_path);
 						Ref<FileAccess> f_out = FileAccess::open(out_path, FileAccess::WRITE);
 						if (f_out.is_valid()) {
 							f_out->store_buffer(data);
-							UtilityFunctions::print("Rozbaleno: ", out_path);
+							UtilityFunctions::print("MBEXaudioExtract extracted OK: ", out_path);
+						} else {
+							UtilityFunctions::printerr("MBEXaudioExtract failed to open for write: ", out_path);
 						}
+					} else {
+						UtilityFunctions::printerr("MBEXaudioExtract empty data for: ", internal_file);
 					}
 				}
 				zip_reader->close();
+				UtilityFunctions::print("MBEXaudioExtract ZIP closed");
 			} else {
-				UtilityFunctions::printerr("Nelze otevrit ZIP: ", file_name);
+				UtilityFunctions::printerr("MBEXaudioExtract failed to open ZIP: ", file_name);
 			}
 		}
 		file_name = dir->get_next();
 	}
+	UtilityFunctions::print("MBEXaudioExtract END");
 }
 
 Dictionary MBEXclass::REMC2EditorGetLevelData() {

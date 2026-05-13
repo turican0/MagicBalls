@@ -168,25 +168,61 @@ BMPData load_bmp_godot(String p_path) {
 */
 
 void MBEXconvertData(String path, String path2) {
-	//MBEXcdExtract((char *)path2.utf8().get_data(), "c:/prenos/godot-zyllan/MagicBalls/gitextension/godot-cpp-template/data/"); //user some path
+	UtilityFunctions::print("MBEXconvertData START");
+	UtilityFunctions::print("MBEXconvertData path: ", path);
+	UtilityFunctions::print("MBEXconvertData path2: ", path2);
+	UtilityFunctions::print("MBEXconvertData calling MBEXfontsConverts...");
 	MBEXfontsConverts(path + "/fonts");
+	UtilityFunctions::print("MBEXconvertData MBEXfontsConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXsoundConverts...");
 	MBEXsoundConverts(path + "/sounds");
+	UtilityFunctions::print("MBEXconvertData MBEXsoundConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXmusicConverts g...");
 	MBEXmusicConverts(path + "/musics", 'g');
+	UtilityFunctions::print("MBEXconvertData MBEXmusicConverts g done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXmusicConverts r...");
 	MBEXmusicConverts(path + "/musics", 'r');
+	UtilityFunctions::print("MBEXconvertData MBEXmusicConverts r done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXmusicConverts f...");
 	MBEXmusicConverts(path + "/musics", 'f');
+	UtilityFunctions::print("MBEXconvertData MBEXmusicConverts f done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXmusicConverts w...");
 	MBEXmusicConverts(path + "/musics", 'w');
+	UtilityFunctions::print("MBEXconvertData MBEXmusicConverts w done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXtexturesConverts...");
 	MBEXtexturesConverts(path + "/textures");
+	UtilityFunctions::print("MBEXconvertData MBEXtexturesConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXgraphicsConverts...");
 	MBEXgraphicsConverts(path + "/HSPR");
+	UtilityFunctions::print("MBEXconvertData MBEXgraphicsConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXwebConverts...");
 	MBEXwebConverts(path + "/web");
+	UtilityFunctions::print("MBEXconvertData MBEXwebConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXsmatsConverts...");
 	MBEXsmatsConverts(path + "/smat");
+	UtilityFunctions::print("MBEXconvertData MBEXsmatsConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXhscreenConverts...");
 	MBEXhscreenConverts(path + "/HSCREEN");
+	UtilityFunctions::print("MBEXconvertData MBEXhscreenConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXhtablesConverts...");
 	MBEXhtablesConverts(path + "/TABLES");
-	//MBEXhbuttonsConverts(path + "/BUTTONS");-only noise
+	UtilityFunctions::print("MBEXconvertData MBEXhtablesConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXcdrConverts...");
 	MBEXcdrConverts(path + "/CDR");
-	MBEXpointersConverts(path + "/POINTERS");//-find true palette
+	UtilityFunctions::print("MBEXconvertData MBEXcdrConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXpointersConverts...");
+	MBEXpointersConverts(path + "/POINTERS");
+	UtilityFunctions::print("MBEXconvertData MBEXpointersConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXgtdConverts...");
 	MBEXgtdConverts(path + "/GTD");
+	UtilityFunctions::print("MBEXconvertData MBEXgtdConverts done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXextractLang...");
 	MBEXextractLang(path + "/language", "res://hidata/language/", "/LANGUAGE/");
+	UtilityFunctions::print("MBEXconvertData MBEXextractLang done");
+	UtilityFunctions::print("MBEXconvertData calling MBEXtmapsConverts...");
 	MBEXtmapsConverts(path + "/TMAPS");
+	UtilityFunctions::print("MBEXconvertData MBEXtmapsConverts done");
+	UtilityFunctions::print("MBEXconvertData END");
 }
 
 void MBEXextractLang(String path, String langPath, String cdLangPath) {
