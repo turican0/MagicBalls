@@ -353,7 +353,7 @@ func _start_extraction(dir: String):
 func _heavy_work(dir):
 	Global.MBEX = MBEXclass.new()
 	var CDfinded=Main_DecodeLevel.MBEXextractCD(Global.cdPath, dir)
-	if(CDfinded>0):
+	if(CDfinded<0):
 		call_deferred("_on_work_done2",CDfinded)
 	else:
 		Global.MBEX.REMC2BeginGame(Global.cdPath, Global.hidata,-1,"")

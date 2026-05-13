@@ -128,7 +128,7 @@ public:
 
 	Dictionary REMC2getWarpMouse();
 	void REMC2SetInverseMouse(bool locInverse_mouseY);
-	void MBEXfixLang(char *path, int index);
+	void MBEXfixLang(String path, int index);
 
 	int REMC2GetTerrainAlt(int x, int y);
 

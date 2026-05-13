@@ -130,9 +130,9 @@ int MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 		real_path2 = path2;
 	}
 	int result = MBEXcdExtract((char*)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
-	if (result>0)
+	if (result<0)
 		return result;
-	MBEXfixLang((char*)real_path.utf8().get_data(), 2);
+	MBEXfixLang(real_path, 2);
 	return result;
 }
 
@@ -186,54 +186,66 @@ int MBEXclass::initLanguage(int index) {
 	return index;
 }
 
-void MBEXclass::MBEXfixLang(char* path,int index) {
-	char pathBuffer[512];
-	sprintf(pathBuffer, "%s%s", path, "GAME/NETHERW");
-	char configFilePath[MAX_PATH];
-	sprintf(configFilePath, "%s/%s", pathBuffer, "CONFIG.DAT");
+void MBEXclass::MBEXfixLang(String path, int index) {
+	String pathBuffer = path.trim_suffix("/") + "/GAME/NETHERW";
+	String configFilePath = pathBuffer + "/CONFIG.DAT";
+	String versionFilePath = pathBuffer + "/CDATA/VERSION.DAT";
 
-	//-----------------------------------------------------
-	String gConfigPath = String(configFilePath);
-	String gResSource = "res://hidata/config/CONFIG.DAT";
+	UtilityFunctions::print("MBEXfixLang path: ", path);
+	UtilityFunctions::print("MBEXfixLang pathBuffer: ", pathBuffer);
+	UtilityFunctions::print("MBEXfixLang configFilePath: ", configFilePath);
+	UtilityFunctions::print("MBEXfixLang versionFilePath: ", versionFilePath);
 
-	if (!FileAccess::file_exists(gConfigPath)) {
-		if (FileAccess::file_exists(gResSource)) {
-			DirAccess::copy_absolute(gResSource, gConfigPath);
+	// copy CONFIG.DAT from res:// if not exists
+	UtilityFunctions::print("CONFIG.DAT exists: ", FileAccess::file_exists(configFilePath));
+	if (!FileAccess::file_exists(configFilePath)) {
+		UtilityFunctions::print("CONFIG.DAT res source exists: ", FileAccess::file_exists("res://hidata/config/CONFIG.DAT"));
+		if (FileAccess::file_exists("res://hidata/config/CONFIG.DAT")) {
+			Error err = DirAccess::copy_absolute("res://hidata/config/CONFIG.DAT", configFilePath);
+			UtilityFunctions::print("CONFIG.DAT copy result: ", (int)err);
 		}
 	}
 
-	char versionFilePath[MAX_PATH];
-	sprintf(versionFilePath, "%s/%s", pathBuffer, "/CDATA/VERSION.DAT");
-	String gVersionPath = String(versionFilePath);
-	String gResSource2 = "res://hidata/version/VERSION.DAT";
-
-	if (!FileAccess::file_exists(gVersionPath)) {
-		if (FileAccess::file_exists(gResSource2)) {
-			DirAccess::copy_absolute(gResSource2, gVersionPath);
+	// copy VERSION.DAT from res:// if not exists
+	UtilityFunctions::print("VERSION.DAT exists: ", FileAccess::file_exists(versionFilePath));
+	if (!FileAccess::file_exists(versionFilePath)) {
+		UtilityFunctions::print("VERSION.DAT res source exists: ", FileAccess::file_exists("res://hidata/version/VERSION.DAT"));
+		if (FileAccess::file_exists("res://hidata/version/VERSION.DAT")) {
+			Error err = DirAccess::copy_absolute("res://hidata/version/VERSION.DAT", versionFilePath);
+			UtilityFunctions::print("VERSION.DAT copy result: ", (int)err);
 		}
 	}
 
-	//-----------------------------------------------------
-
-	//char pathBuffer[512];
-	//sprintf(pathBuffer, "%s%s", path, "GAME/NETHERW");
+	// read and write CONFIG.DAT
 	FILE *configFile2;
-	//char configFilePath[MAX_PATH];
 	TypeConfigDat configDat;
-	sprintf(configFilePath, "%s/%s", pathBuffer, "CONFIG.DAT");
-	configFile2 = DataFileIO::CreateOrOpenFile(configFilePath, 512);
+	UtilityFunctions::print("Opening CONFIG.DAT for reading (512)");
+	configFile2 = DataFileIO::CreateOrOpenFile(configFilePath.utf8().get_data(), 512);
 	if (configFile2 != nullptr) {
+		UtilityFunctions::print("CONFIG.DAT opened, reading data");
 		DataFileIO::Read(configFile2, (uint8_t *)&configDat, sizeof(TypeConfigDat));
 		DataFileIO::Close(configFile2);
+		UtilityFunctions::print("configDatSign_0: ", (int)configDat.configDatSign_0);
+		UtilityFunctions::print("configDat.langIndex_4 before write: ", (int)configDat.langIndex_4);
 		if (configDat.configDatSign_0 == 0xfffffff7) {
 			configDat.langIndex_4 = index;
-			configFile2 = DataFileIO::CreateOrOpenFile(configFilePath, 546);
+			UtilityFunctions::print("Writing langIndex: ", index);
+			configFile2 = DataFileIO::CreateOrOpenFile(configFilePath.utf8().get_data(), 546);
 			if (configFile2 != nullptr) {
 				DataFileIO::WriteFile_98CAA(configFile2, (uint8_t *)&configDat, sizeof(TypeConfigDat));
 				DataFileIO::Close(configFile2);
+				UtilityFunctions::print("CONFIG.DAT write OK");
+			} else {
+				UtilityFunctions::printerr("Failed to open CONFIG.DAT for writing (546)");
 			}
+		} else {
+			UtilityFunctions::printerr("configDatSign_0 does not match 0xfffffff7, skipping write");
 		}
+	} else {
+		UtilityFunctions::printerr("Failed to open CONFIG.DAT for reading (512)");
 	}
+
+	UtilityFunctions::print("MBEXfixLang done");
 }
 
 void MBEXclass::changeLanguage(int index) {
@@ -2744,4 +2756,12 @@ void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 	loadlevel(levelIndex);
 }
 
+/*
+debug in android : adb logcat -s godot
+
+in code:
+UtilityFunctions::print("REMC2BeginGame: spoustim vlakno 2");
+UtilityFunctions::print("thread2_waiting=", thread2_waiting);
+UtilityFunctions::printerr("Neco se pokazilo!");
+*/
 
