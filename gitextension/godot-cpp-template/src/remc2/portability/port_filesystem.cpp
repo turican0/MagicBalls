@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/dir_access.hpp>
 using namespace std;
 /*
 #ifndef DIR
@@ -121,10 +122,22 @@ bool firstrun = true;
 
 std::string get_exe_path() {
 #ifdef __ANDROID__
-	godot::UtilityFunctions::print("get_exe_path");
-	// Na Androidu nema smysl exe path - vracime prazdny string
-	// cesty jsou predavany primo pres gameFolder/cdFolder
-	return "";
+	godot::UtilityFunctions::print("get_exe_path called on Android");
+	const char *target_dir = "user://exe/";
+	godot::Ref<godot::DirAccess> dir = godot::DirAccess::open("user://");
+	if (dir.is_valid()) {
+		if (!dir->dir_exists(target_dir)) {
+			godot::Error err = dir->make_dir_recursive(target_dir);
+			if (err == godot::OK) {
+				godot::UtilityFunctions::print("Directory created successfully: ", target_dir);
+			} else {
+				godot::UtilityFunctions::printerr("Failed to create directory: ", target_dir, " Error code: ", err);
+			}
+		}
+	} else {
+		godot::UtilityFunctions::printerr("Failed to open user:// file system.");
+	}
+	return "user://exe/";
 #elif defined _MSC_VER
 	LPWSTR buffer = new WCHAR[MAX_PATH];
 	//GetModuleFileName(NULL, buffer, MAX_PATH);
