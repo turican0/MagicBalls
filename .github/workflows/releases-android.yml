@@ -1,0 +1,351 @@
+name: Build GDExtension, Godot Export & Release
+
+on:
+  push:
+    tags:
+      - 'a*'
+
+permissions:
+  contents: write
+
+# ─────────────────────────────────────────────────────────────
+# JOBS – Android build + release
+# ─────────────────────────────────────────────────────────────
+jobs:
+
+  # ───────────────────────────────────────────
+  # ANDROID – C++ (CMake) + Godot export (release APK)
+  # ───────────────────────────────────────────
+  build-android:
+    name: Android (release APK)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4.7.1
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3.2.1
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager --licenses || true
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "ndk;27.2.12479018"
+          echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.2.12479018" >> $GITHUB_ENV
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
+
+      - name: Build C++ Library for Android (arm64-v8a + x86_64)
+        run: |
+          NDK_TOOLCHAIN="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake"
+
+          for ABI in arm64-v8a x86_64; do
+            cmake -B "build-android-$ABI" \
+              -S gitextension/godot-cpp-template \
+              -DCMAKE_TOOLCHAIN_FILE="$NDK_TOOLCHAIN" \
+              -DANDROID_ABI="$ABI" \
+              -DANDROID_PLATFORM=android-24 \
+              -DGODOTCPP_DISABLE_EXCEPTIONS=OFF \
+              -DGODOTCPP_TARGET=template_release \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DLIBNAME="MagicBalls" \
+              -DCMAKE_EXE_LINKER_FLAGS="-lm" \
+              -GNinja
+            ninja -C "build-android-$ABI"
+          done
+
+      - name: Verify GDExtension .so before Godot import1
+        run: |
+          # Přejmenuj .so soubory – Android vyžaduje prefix "lib"
+          for ABI in arm64-v8a x86_64; do
+            SO_DIR="godot-code/MBEXout/bin/android.$ABI"
+            for SO in "$SO_DIR"/*.so; do
+              [ -f "$SO" ] || continue
+              BASENAME=$(basename "$SO")
+              if [[ "$BASENAME" != lib* ]]; then
+                echo "Renaming: $BASENAME → lib${BASENAME}"
+                mv "$SO" "$SO_DIR/lib${BASENAME}"
+              fi
+            done
+          done
+
+          # Ověř že soubory existují s lib prefixem
+          GODOT_DIR="godot-code/MBEXout/bin"
+          MISSING=0
+          for EXPECTED in \
+            "$GODOT_DIR/android.arm64-v8a/libMagicBalls.android.arm64-v8a.template_release.arm64.so" \
+            "$GODOT_DIR/android.x86_64/libMagicBalls.android.x86_64.template_release.x86_64.so"; do
+            if [ -f "$EXPECTED" ]; then
+              echo "OK: $EXPECTED"
+            else
+              echo "ERROR: Expected .so not found: $EXPECTED"
+              MISSING=1
+            fi
+          done
+          if [ "$MISSING" -eq 1 ]; then
+            echo "=== All .so files in repo ==="
+            find . -name "*.so" 2>/dev/null || echo "None found"
+            exit 1
+          fi
+
+      - name: Install Godot + Android export templates
+        run: |
+          GODOT_VERSION="4.6.2"
+          GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
+          TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+
+          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/${GODOT_FILENAME}.zip"
+          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/${TEMPLATES_FILENAME}"
+
+          unzip -q "${GODOT_FILENAME}.zip"
+          chmod +x "${GODOT_FILENAME}"
+          sudo mv "${GODOT_FILENAME}" /usr/local/bin/godot
+
+          mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          unzip -q "${TEMPLATES_FILENAME}" -d /tmp/templates
+          mv /tmp/templates/templates/* "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
+
+      - name: Setup Android keystore (release signing)
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
+          echo "KEYSTORE_PATH=$(pwd)/keystore.jks" >> $GITHUB_ENV
+
+          KEYSTORE_SIZE=$(wc -c < keystore.jks)
+          echo "Keystore size: ${KEYSTORE_SIZE} bytes"
+          if [ "$KEYSTORE_SIZE" -lt 100 ]; then
+            echo "ERROR: keystore.jks je příliš malý – base64 decode selhal!"
+            exit 1
+          fi
+          keytool -list -keystore keystore.jks -storepass "$KEYSTORE_PASSWORD" -noprompt \
+            && echo "OK: Keystore is valid" \
+            || { echo "ERROR: Keystore neplatný nebo špatné heslo!"; exit 1; }
+          # Godot editor settings for Android SDK
+          SETTINGS_DIR="$HOME/.config/godot"
+          mkdir -p "$SETTINGS_DIR"
+          cat > "$SETTINGS_DIR/editor_settings-4.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/android_sdk_path = "$ANDROID_SDK_ROOT"
+          EOF
+
+      - name: Import Godot project
+        run: |
+          timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
+            > import_stdout.txt 2> import_stderr.txt || true
+          cat import_stdout.txt || true
+          cat import_stderr.txt || true
+
+          if [ -d "godot-code/.godot/imported" ]; then
+            COUNT=$(find "godot-code/.godot/imported" -type f | wc -l)
+            echo "Imported files: $COUNT"
+          else
+            echo "ERROR: .godot/imported was not created!" && exit 1
+          fi
+
+      - name: Verify GDExtension loaded correctly
+        run: |
+          # Android .so cannot be loaded on a Linux runner – verify file existence only.
+          EXPECTED="godot-code/MBEXout/bin/android.arm64-v8a/libMagicBalls.android.arm64-v8a.template_release.arm64.so"
+          if [ -f "$EXPECTED" ]; then
+            echo "OK: $EXPECTED"
+          else
+            echo "ERROR: Expected .so not found: $EXPECTED"
+            exit 1
+          fi
+
+      - name: Fix scene UIDs
+        run: |
+          # Godot 4 uses UIDs to reference scenes/resources.
+          # If .uid files are missing the main scene cannot be resolved at runtime.
+          # Run a second import pass to ensure all UIDs are generated.
+          echo "=== Second import pass to fix UIDs ==="
+          timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
+            > import2_stdout.txt 2> import2_stderr.txt || true
+          cat import2_stdout.txt || true
+          cat import2_stderr.txt || true
+          echo "=== .uid files after second import ==="
+          find godot-code -name "*.uid" | head -20 || echo "No .uid files found!"
+
+      - name: Godot Export – Android Release APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          PRESETS_FILE="godot-code/export_presets.cfg"
+
+          echo "=== Inject keystore do export_presets.cfg ==="
+          sed -i "/^keystore\/release/d" "$PRESETS_FILE"
+          sed -i "/^\[preset\.[0-9]*\.options\]/a keystore\/release_key_password=\"$KEY_PASSWORD\"\nkeystore\/release_password=\"$KEYSTORE_PASSWORD\"\nkeystore\/release_user=\"$KEY_ALIAS\"\nkeystore\/release=\"$KEYSTORE_PATH\"" "$PRESETS_FILE"
+          echo "=== Keystore řádky v export_presets.cfg ==="
+          grep -n "keystore" "$PRESETS_FILE" || echo "(zadne keystore radky!)"
+
+          mkdir -p exports/android
+          TAG="${{ github.ref_name }}"
+          APK_PATH="${{ github.workspace }}/exports/android/MagicBalls-${TAG}-Android-Release.apk"
+
+          echo "=== .so files před exportem ==="
+          find godot-code/MBEXout/bin -name "*.so" | sort
+
+          echo "=== ANDROID RELEASE export ==="
+          godot --headless --verbose --path godot-code \
+            --export-release Android "$APK_PATH" \
+            > android_export_stdout.txt 2> android_export_stderr.txt || true
+          cat android_export_stdout.txt || true
+          cat android_export_stderr.txt || true
+
+          # Godot returns exit code 1 due to memory leak on shutdown (PagedAllocator)
+          # even when the APK was created successfully – check file existence instead.
+          if [ -f "$APK_PATH" ]; then
+            echo "=== APK CREATED SUCCESSFULLY: $APK_PATH ==="
+          else
+            echo "ERROR: APK does not exist - export failed."
+            cat android_export_stdout.txt || true
+            cat android_export_stderr.txt || true
+            exit 1
+          fi
+
+      - name: Verify APK
+        run: |
+          TAG="${{ github.ref_name }}"
+          APK_PATH="${{ github.workspace }}/exports/android/MagicBalls-${TAG}-Android-Release.apk"
+          if [ ! -f "$APK_PATH" ]; then
+            echo "APK neexistuje!"; exit 1
+          fi
+          ls -lh "$APK_PATH"
+          echo "=== Obsah APK (prvnich 50 polozek) ==="
+          unzip -l "$APK_PATH" | head -50
+          echo "=== Kontrola podpisu ==="
+          unzip -l "$APK_PATH" | grep -i "META-INF" \
+            && echo "OK: APK je podepsano" \
+            || { echo "CHYBA: META-INF chybi - APK neni podepsano!"; exit 1; }
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: android-apk
+          path: exports/android/*.apk
+
+
+  # ───────────────────────────────────────────
+  # RELEASE – waits for Android build,
+  #            generates changelog via Gemini
+  #            and creates GitHub Release
+  # ───────────────────────────────────────────
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs:
+      - build-android
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4.3.0
+        with:
+          path: dist/
+
+      - name: List dist
+        run: find dist/ -type f
+
+      - name: Generate Changelog via Gemini
+        id: changelog
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          # 1. Get git log
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)
+          if [ -z "$PREV_TAG" ]; then
+            GIT_LOG=$(git log --oneline --no-merges | head -30)
+          else
+            GIT_LOG=$(git log "${PREV_TAG}..HEAD" --oneline --no-merges)
+          fi
+          [ -z "$GIT_LOG" ] && GIT_LOG="No commits since last release."
+
+          # 2. Prepare prompt
+          PROMPT="You are a concise release notes writer. Based on the following git commit log, write a short and clear changelog in bullet points (max 10 bullets). Group related changes. Commits:\n\n${GIT_LOG}"
+
+          # 3. Call API with retry logic (10 attempts) and fallback
+          RESPONSE=$(python3 -c "
+          import json, requests, os, sys, time
+          
+          api_key = os.getenv('GEMINI_API_KEY')
+          url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}'
+          prompt_text = sys.argv[1]
+          raw_log = sys.argv[2]
+          payload = {'contents': [{'parts': [{'text': prompt_text}]}]}
+          headers = {'Content-Type': 'application/json'}
+          
+          success = False
+          for i in range(1, 11):
+              try:
+                  res = requests.post(url, json=payload, headers=headers, timeout=30)
+                  if res.status_code == 200:
+                      print(res.json()['candidates'][0]['content']['parts'][0]['text'])
+                      success = True
+                      break
+                  elif res.status_code in [429, 503, 500]:
+                      print(f'Attempt {i}/10: Server busy ({res.status_code}). Waiting...', file=sys.stderr)
+                  else:
+                      print(f'Attempt {i}/10: Error {res.status_code}: {res.text}', file=sys.stderr)
+              except Exception as e:
+                  print(f'Attempt {i}/10: Network error: {e}', file=sys.stderr)
+              
+              if i < 10: time.sleep(5)
+
+          if not success:
+              print('Gemini API unavailable after 10 attempts. Using raw log.', file=sys.stderr)
+              print(f'### Raw Changelog\n{raw_log}')
+          " "$PROMPT" "$GIT_LOG")
+
+          # 4. Save to GitHub Actions output
+          {
+            echo "CHANGELOG<<EOF"
+            echo "$RESPONSE"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "MagicBalls ${{ github.ref_name }}"
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}
+          body: |
+            ## 🎮 MagicBalls ${{ github.ref_name }}
+
+            ${{ steps.changelog.outputs.CHANGELOG }}
+
+            ---
+            | Platforma | Soubor |
+            |-----------|--------|
+            | 🤖 Android | `MagicBalls-${{ github.ref_name }}-Android-Release.apk` |
+          files: |
+            dist/android-apk/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
