@@ -8,5 +8,5 @@ albedo_color = Color(0, 0, 0.13333334, 0.59607846)
 
 [node name="Sketchfab_Scene" unique_id=2056786751 instance=ExtResource("1_ta4nk")]
 
-[node name="Object_3" parent="Sketchfab_model/cloud_obj_cleaner_gles/Object_2" parent_id_path=PackedInt32Array(960811426) index="0" unique_id=1718706802]
+[node name="Object_3" parent="Sketchfab_model/cloud_obj_cleaner_gles/Object_2" parent_id_path=PackedInt32Array(400964174) index="0" unique_id=1317419349]
 surface_material_override/0 = SubResource("StandardMaterial3D_sm4np")

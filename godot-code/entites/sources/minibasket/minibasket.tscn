@@ -4,7 +4,7 @@
 
 [node name="minibasket" unique_id=1980334862 instance=ExtResource("1_h4r85")]
 
-[node name="Skeleton3D" parent="Sketchfab_model/036eeeaf0ae54679aee58c825e047158_fbx/Object_2/RootNode/Armature/Object_6" parent_id_path=PackedInt32Array(1013846953) index="1" unique_id=949529588]
+[node name="Skeleton3D" parent="Sketchfab_model/036eeeaf0ae54679aee58c825e047158_fbx/Object_2/RootNode/Armature/Object_6" parent_id_path=PackedInt32Array(1943873852) index="1" unique_id=1497293427]
 bones/1/position = Vector3(-1.16927374e-08, -0.653173, 0.34160775)
 bones/1/rotation = Quaternion(2.6822093e-07, -1.7114274e-08, 4.4408925e-15, 1)
 bones/3/position = Vector3(0.11312202, 0.33861735, 0.107261695)
@@ -109,6 +109,6 @@ bones/90/rotation = Quaternion(-0.00048685522, 0.4801633, 0.008717647, 0.8771356
 bones/92/position = Vector3(1.4901161e-07, 0.06262565, 8.046627e-07)
 bones/92/rotation = Quaternion(1.8626451e-07, -1.1920929e-07, 5.9604645e-08, 1)
 
-[node name="AnimationPlayer" parent="." index="2" unique_id=1227555855]
+[node name="AnimationPlayer" parent="." index="2" unique_id=2072433953]
 autoplay = &"IDLE"
 speed_scale = 4.0

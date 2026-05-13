@@ -18,12 +18,9 @@ uv1_scale = Vector3(10, 10, 10)
 
 [node name="Sketchfab_Scene" unique_id=1328573478 instance=ExtResource("1_x6v70")]
 
-[node name="Icosphere_0" parent="Sketchfab_model/root/GLTF_SceneRootNode" parent_id_path=PackedInt32Array(1688873752) index="0" unique_id=453995998]
-transform = Transform3D(0.69277006, 0.7126784, 0.11026851, -0.6703595, 0.69277006, -0.26587182, -0.26587182, 0.11026849, 0.95768106, 0, 0, 0)
-
-[node name="Object_4" parent="Sketchfab_model/root/GLTF_SceneRootNode/Icosphere_0" index="0" unique_id=1509555992]
+[node name="Object_4" parent="Sketchfab_model/root/GLTF_SceneRootNode/Icosphere_0" parent_id_path=PackedInt32Array(1336247168) index="0" unique_id=1215740278]
 surface_material_override/0 = SubResource("StandardMaterial3D_ckb8e")
 
-[node name="AnimationPlayer" parent="." index="1" unique_id=2137457032]
+[node name="AnimationPlayer" parent="." index="1" unique_id=777288232]
 autoplay = &"Action"
 speed_scale = 5.0

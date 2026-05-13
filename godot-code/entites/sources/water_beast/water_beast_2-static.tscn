@@ -4,10 +4,10 @@
 
 [node name="water_beast2" unique_id=285403699 instance=ExtResource("1_raem2")]
 
-[node name="Sketchfab_model" parent="." index="0" unique_id=848694206]
+[node name="Sketchfab_model" parent="." index="0" unique_id=876808829]
 transform = Transform3D(1, 0, 0, 0, -0.12500453, 0.9921562, 0, -0.9921562, -0.12500453, 0, -38.528526, -130.63002)
 
-[node name="Skeleton3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Armature_51/GLTF_created_0" parent_id_path=PackedInt32Array(276375992) index="2" unique_id=433322342]
+[node name="Skeleton3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Armature_51/GLTF_created_0" parent_id_path=PackedInt32Array(1002278389) index="2" unique_id=320495698]
 bones/0/position = Vector3(0, 0, 0)
 bones/1/position = Vector3(-9.159533, 419.9999, -21.19815)
 bones/1/rotation = Quaternion(-0.7073445, 1.192093e-07, 0.706869, -5.960465e-08)
@@ -97,5 +97,5 @@ bones/48/rotation = Quaternion(-0.51289296, 0.510092, 0.48867315, 0.48779652)
 bones/49/position = Vector3(42.405727, -2.9979738e-05, -3.390399e-05)
 bones/49/rotation = Quaternion(-0.004667183, 0.022617852, -0.0004998225, 0.9997332)
 
-[node name="AnimationPlayer" parent="." index="1" unique_id=343411305]
+[node name="AnimationPlayer" parent="." index="1" unique_id=40080699]
 speed_scale = 2.0

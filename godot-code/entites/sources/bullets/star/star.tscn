@@ -61,7 +61,6 @@ emission_enabled = true
 
 [node name="Circle" type="MeshInstance3D" parent="." unique_id=228678394]
 mesh = SubResource("ArrayMesh_fgpei")
-skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_0peaj")
 metadata/extras = {
 "v3d": {}

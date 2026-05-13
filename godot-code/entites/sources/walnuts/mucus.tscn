@@ -20,5 +20,5 @@ uv1_scale = Vector3(2, 2, 2)
 
 [node name="mucus" unique_id=347933459 instance=ExtResource("1_bxgli")]
 
-[node name="Orange_001" parent="Orange" parent_id_path=PackedInt32Array(732652492) index="0" unique_id=606758055]
+[node name="Orange_001" parent="Orange" parent_id_path=PackedInt32Array(821025552) index="0" unique_id=1225215104]
 surface_material_override/0 = SubResource("StandardMaterial3D_0yukl")

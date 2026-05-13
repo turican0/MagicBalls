@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://lyh7ab5smsgu"]
+[gd_scene format=3 uid="uid://lyh7ab5smsgu"]
 
 [ext_resource type="PackedScene" uid="uid://cb0tsppu12i68" path="res://entites/sources/sarah-1-Walking.blend" id="1_hd4c6"]
 
-[node name="sarah-1-Walking" instance=ExtResource("1_hd4c6")]
+[node name="sarah-1-Walking" unique_id=1638368807 instance=ExtResource("1_hd4c6")]
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1362038335) index="0" unique_id=1717504294]
 bones/0/position = Vector3(-0.07183589, -1.1362939, -101.39433)
 bones/0/rotation = Quaternion(-0.7001176, 0.011009682, -0.031884003, 0.7132304)
 bones/1/rotation = Quaternion(-0.017568868, 0.0012003642, 0.0035311992, 0.99983877)
@@ -91,5 +91,5 @@ bones/61/rotation = Quaternion(-0.20817968, -0.054940812, -0.08025258, 0.9732432
 bones/62/rotation = Quaternion(0.56205577, -0.13684225, -0.021895615, 0.81540674)
 bones/63/rotation = Quaternion(0.31297743, 0.041872527, -0.023566615, 0.94854444)
 
-[node name="AnimationPlayer" parent="." index="2"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="2" unique_id=536705777]
+autoplay = &"Armature|mixamo_com|Layer0"

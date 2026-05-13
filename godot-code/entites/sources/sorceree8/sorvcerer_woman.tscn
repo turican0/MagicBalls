@@ -4,7 +4,7 @@
 
 [node name="sorvcerer-woman" unique_id=185084340 instance=ExtResource("1_ubi6m")]
 
-[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(1125086480) index="0" unique_id=1658758978]
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(1030864301) index="0" unique_id=1202616606]
 bones/1/rotation = Quaternion(-0.012126958, 2.1708669e-18, 1.142406e-17, 0.9999265)
 bones/2/rotation = Quaternion(0.016625913, 9.543223e-19, 2.0856888e-17, 0.99986184)
 bones/3/rotation = Quaternion(0.07600153, 1.1886446e-07, 9.0601e-09, 0.99710774)
@@ -25,5 +25,5 @@ bones/154/rotation = Quaternion(0.701675, -0.0496451, -0.029697295, 0.7101448)
 bones/155/rotation = Quaternion(0.6152539, 2.1733532e-10, -3.5643521e-09, 0.78832906)
 bones/156/rotation = Quaternion(-0.5078348, 4.579777e-09, -8.341437e-09, 0.8614544)
 
-[node name="AnimationPlayer" parent="." index="2" unique_id=18725076]
+[node name="AnimationPlayer" parent="." index="2" unique_id=773227481]
 autoplay = &"metarigAction"

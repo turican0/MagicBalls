@@ -6,7 +6,7 @@
 
 [node name="vissuluth" unique_id=505768597 instance=ExtResource("1_p001b")]
 
-[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(458848739) index="0" unique_id=1750272675]
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(2128785435) index="0" unique_id=858065565]
 bones/1/rotation = Quaternion(-0.064476304, 0, 0, 0.99791926)
 bones/4/position = Vector3(0, 2.352092, -0.5332382)
 bones/5/rotation = Quaternion(0.35093173, -1.11627635e-07, 4.1834337e-08, 0.936401)
@@ -23,47 +23,47 @@ bones/124/rotation = Quaternion(0.55218685, 0.09528342, 0.01246288, 0.828164)
 bones/125/rotation = Quaternion(-0.09884418, 0.414878, -0.008901057, 0.9044484)
 bones/157/rotation = Quaternion(6.0684336e-08, 0.9612488, -0.2756822, -7.257226e-08)
 
-[node name="Object_3" parent="metarig/Skeleton3D" index="1" unique_id=771414470]
+[node name="Object_3" parent="metarig/Skeleton3D" index="1" unique_id=1647868706]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_3_001" parent="metarig/Skeleton3D" index="2" unique_id=405374010]
+[node name="Object_3_001" parent="metarig/Skeleton3D" index="2" unique_id=83925636]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4" parent="metarig/Skeleton3D" index="3" unique_id=823976852]
+[node name="Object_4" parent="metarig/Skeleton3D" index="3" unique_id=1769558240]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_001" parent="metarig/Skeleton3D" index="4" unique_id=1003206729]
+[node name="Object_4_001" parent="metarig/Skeleton3D" index="4" unique_id=839260676]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_002" parent="metarig/Skeleton3D" index="5" unique_id=1126241967]
+[node name="Object_4_002" parent="metarig/Skeleton3D" index="5" unique_id=1642065997]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_003" parent="metarig/Skeleton3D" index="6" unique_id=1923061057]
+[node name="Object_4_003" parent="metarig/Skeleton3D" index="6" unique_id=81347881]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_004" parent="metarig/Skeleton3D" index="7" unique_id=1955812811]
+[node name="Object_4_004" parent="metarig/Skeleton3D" index="7" unique_id=1191593987]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_005" parent="metarig/Skeleton3D" index="8" unique_id=348070307]
+[node name="Object_4_005" parent="metarig/Skeleton3D" index="8" unique_id=1919958427]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_006" parent="metarig/Skeleton3D" index="9" unique_id=614337656]
+[node name="Object_4_006" parent="metarig/Skeleton3D" index="9" unique_id=537599783]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_007" parent="metarig/Skeleton3D" index="10" unique_id=2090250159]
+[node name="Object_4_007" parent="metarig/Skeleton3D" index="10" unique_id=614192610]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_008" parent="metarig/Skeleton3D" index="11" unique_id=644426628]
+[node name="Object_4_008" parent="metarig/Skeleton3D" index="11" unique_id=1106662016]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Object_4_009" parent="metarig/Skeleton3D" index="12" unique_id=593834223]
+[node name="Object_4_009" parent="metarig/Skeleton3D" index="12" unique_id=563401208]
 surface_material_override/0 = ExtResource("2_pxf4c")
 
-[node name="Sphere_001__0" parent="metarig/Skeleton3D" index="13" unique_id=296957641]
+[node name="Sphere_001__0" parent="metarig/Skeleton3D" index="13" unique_id=1055020981]
 surface_material_override/0 = ExtResource("3_mbxhy")
 
-[node name="Sphere__0" parent="metarig/Skeleton3D" index="15" unique_id=1771274452]
+[node name="Sphere__0" parent="metarig/Skeleton3D" index="15" unique_id=62758870]
 surface_material_override/0 = ExtResource("3_mbxhy")
 
-[node name="AnimationPlayer" parent="." index="15" unique_id=2064709168]
+[node name="AnimationPlayer" parent="." index="15" unique_id=1292658608]
 autoplay = &"496"

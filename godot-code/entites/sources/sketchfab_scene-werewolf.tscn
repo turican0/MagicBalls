@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://p4fjy4ori4lc"]
+[gd_scene format=3 uid="uid://p4fjy4ori4lc"]
 
 [ext_resource type="PackedScene" uid="uid://cpsfypsnxeoim" path="res://entites/sources/werewolf_walking_furry.glb" id="1_u2q0t"]
 
-[node name="Sketchfab_Scene" instance=ExtResource("1_u2q0t")]
+[node name="Sketchfab_Scene" unique_id=938088326 instance=ExtResource("1_u2q0t")]
 transform = Transform3D(-0.02, 0, -1.7484555e-09, 0, 0.02, 0, 1.7484555e-09, 0, -0.02, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Sketchfab_model/f635ff13accf4e6c8cc09bc96418b9d1_fbx/Object_2/RootNode/CtrlGround/cCOG/Object_7" index="0"]
+[node name="Skeleton3D" parent="Sketchfab_model/f635ff13accf4e6c8cc09bc96418b9d1_fbx/Object_2/RootNode/CtrlGround/cCOG/Object_7" parent_id_path=PackedInt32Array(977085173) index="0" unique_id=1504537896]
 bones/1/position = Vector3(2.5188189, -1.6045146, 99.616806)
 bones/1/rotation = Quaternion(0.021646645, 0.009468418, -0.7145474, 0.69918793)
 bones/4/position = Vector3(12.540748, -0.0114273755, -1.7787097e-05)
@@ -102,11 +102,11 @@ bones/111/rotation = Quaternion(0.0131423585, -0.09271825, 0.04844369, 0.9944263
 bones/112/rotation = Quaternion(0.0129044, -0.13338624, 0.060810354, 0.98911256)
 bones/113/rotation = Quaternion(-6.984919e-08, -0.13517419, 0.06543916, 0.98865855)
 
-[node name="Bip001_01" parent="Sketchfab_model/f635ff13accf4e6c8cc09bc96418b9d1_fbx/Object_2/RootNode/CtrlGround/cCOG/Object_7/Skeleton3D" index="0"]
+[node name="Bip001_01" parent="Sketchfab_model/f635ff13accf4e6c8cc09bc96418b9d1_fbx/Object_2/RootNode/CtrlGround/cCOG/Object_7/Skeleton3D" index="0" unique_id=396945282]
 transform = Transform3D(-0.021335244, 0.99961567, -0.0176947, -0.9987959, -0.022093056, -0.043801412, -0.044175513, 0.016738879, 0.99888355, 2.5188189, -1.6045146, 99.616806)
 
-[node name="Bip001 Footsteps" parent="Sketchfab_model/f635ff13accf4e6c8cc09bc96418b9d1_fbx/Object_2/RootNode/CtrlGround/cCOG/Object_7/Skeleton3D/Bip001_01" index="0"]
+[node name="Bip001 Footsteps" parent="Sketchfab_model/f635ff13accf4e6c8cc09bc96418b9d1_fbx/Object_2/RootNode/CtrlGround/cCOG/Object_7/Skeleton3D/Bip001_01" index="0" unique_id=1760008156]
 transform = Transform3D(-0.02133536, -0.9987959, -0.044175517, 0.9996157, -0.022093214, 0.016738877, -0.0176947, -0.043801416, 0.9988835, 4.3718157, -1.6561925, -98.83911)
 
-[node name="AnimationPlayer" parent="." index="1"]
-autoplay = "Take 001"
+[node name="AnimationPlayer" parent="." index="1" unique_id=849732300]
+autoplay = &"Take 001"

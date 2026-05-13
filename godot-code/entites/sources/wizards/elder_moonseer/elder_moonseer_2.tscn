@@ -4,7 +4,7 @@
 
 [node name="elder_moonseer2" unique_id=1027492829 instance=ExtResource("1_mt5h6")]
 
-[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(1162446918) index="0" unique_id=2112691361]
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(25830565) index="0" unique_id=1080038583]
 bones/4/rotation = Quaternion(0.20173787, 2.3351654e-07, 9.6196096e-08, 0.97943956)
 bones/21/rotation = Quaternion(0.84255093, 0.3012936, -0.15153617, -0.4199608)
 bones/42/rotation = Quaternion(-0.21379212, -0.26038808, 0.89460343, -0.29355732)
@@ -33,5 +33,5 @@ bones/165/rotation = Quaternion(-0.03980267, 0.9569065, -0.2727936, -0.09126632)
 bones/181/rotation = Quaternion(0.9999136, 0, 0, -0.013154464)
 bones/185/rotation = Quaternion(0.9996355, 0, 0, -0.026997454)
 
-[node name="AnimationPlayer" parent="." index="2" unique_id=2088826596]
+[node name="AnimationPlayer" parent="." index="2" unique_id=1546987814]
 autoplay = &"metarigAction"

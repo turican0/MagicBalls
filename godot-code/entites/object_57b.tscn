@@ -1,7 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cj0ab2sqgqx3f"]
+[gd_scene format=3 uid="uid://cj0ab2sqgqx3f"]
 
-[ext_resource type="Texture2D" uid="uid://dysjqq7rpfwyf" path="res://entites/TMAPS1-0-063-00.png" id="1_5ft7y"]
+[ext_resource type="Texture2D" uid="uid://dysjqq7rpfwyf" path="res://entites/sources/TMAPS1-0-063-00.png" id="1_5ft7y"]
 
-[node name="Sprite3D" type="Sprite3D"]
+[node name="Sprite3D" type="Sprite3D" unique_id=1201297792]
 billboard = 1
 texture = ExtResource("1_5ft7y")

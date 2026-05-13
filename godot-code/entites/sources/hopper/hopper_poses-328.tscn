@@ -7,7 +7,7 @@
 
 [node name="hopperPoses" unique_id=1451981561 instance=ExtResource("1_0cl7k")]
 
-[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(397025581) index="0" unique_id=111196443]
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(808700257) index="0" unique_id=214715848]
 bones/0/position = Vector3(0.08576364, 5.6415296, -1.5211793)
 bones/1/rotation = Quaternion(0.0986657, -0.0017022112, -0.10118249, 0.9899618)
 bones/3/rotation = Quaternion(0.0016271037, -3.1457958e-08, -2.7962518e-08, 0.9999987)
@@ -41,7 +41,7 @@ bones/149/rotation = Quaternion(0.63994384, -0.07333778, 0.054203004, 0.7629912)
 bones/150/rotation = Quaternion(-0.449677, -0.05654544, -0.034173224, 0.8907444)
 bones/151/rotation = Quaternion(-2.6245333e-08, 0.79918796, -0.60108125, 1.6631125e-07)
 
-[node name="Object_6" parent="metarig/Skeleton3D" index="0" unique_id=1141793065]
+[node name="Object_6" parent="metarig/Skeleton3D" index="0" unique_id=101442544]
 surface_material_override/0 = ExtResource("2_udn8g")
 surface_material_override/1 = ExtResource("3_2fmay")
 surface_material_override/2 = ExtResource("4_e3826")

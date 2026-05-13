@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bn5nf4esciwex"]
+[gd_scene format=3 uid="uid://bn5nf4esciwex"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_788j8"]
 albedo_color = Color(1, 0, 0, 1)
@@ -30,26 +30,26 @@ bottom_radius = 0.34
 height = 1.54
 radial_segments = 4
 
-[node name="TestMultimesh" type="Node3D"]
+[node name="TestMultimesh" type="Node3D" unique_id=414608848]
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="Node3D" type="Node3D" parent="." unique_id=132744389]
 
-[node name="MeshInstance3D1" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D1" type="MeshInstance3D" parent="Node3D" unique_id=583870261]
 mesh = SubResource("SphereMesh_u4ac2")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=643498251]
 visible = false
 mesh = SubResource("BoxMesh_xyuxq")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=1386604421]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.118133, 0)
 visible = false
 mesh = SubResource("PrismMesh_xnm4h")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=1980111158]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.246009, 0)
 visible = false
 mesh = SubResource("CylinderMesh_dp7xj")

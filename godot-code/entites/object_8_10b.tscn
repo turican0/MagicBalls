@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://0jgcvf647o6g"]
+[gd_scene format=3 uid="uid://0jgcvf647o6g"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7hled"]
 direction = Vector3(0, 1, 0)
@@ -27,9 +27,9 @@ billboard_mode = 1
 material = SubResource("StandardMaterial3D_8b0wp")
 size = Vector2(0.4, 0.4)
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1933947626]
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=2042340398]
 amount = 200
 process_material = SubResource("ParticleProcessMaterial_7hled")
 draw_pass_1 = SubResource("QuadMesh_v5wgy")

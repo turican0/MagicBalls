@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://btqsg3ug2yn6n"]
+[gd_scene format=3 uid="uid://btqsg3ug2yn6n"]
 
 [ext_resource type="PackedScene" uid="uid://c3b2juq643ghy" path="res://entites/sources/sareelady-Walking.blend" id="1_nbcrm"]
 [ext_resource type="Texture2D" uid="uid://dln3513rrukbq" path="res://entites/sources/textures/Material_001_baseColor.png" id="2_gr7dk"]
@@ -15,15 +15,15 @@ cull_mode = 2
 albedo_texture = ExtResource("2_gr7dk")
 roughness = 0.5
 
-[node name="sareelady-Walking" instance=ExtResource("1_nbcrm")]
+[node name="sareelady-Walking" unique_id=331997865 instance=ExtResource("1_nbcrm")]
 
-[node name="Camera" parent="." index="0"]
+[node name="Camera" parent="." index="0" unique_id=1808813683]
 visible = false
 
-[node name="Light" parent="." index="1"]
+[node name="Light" parent="." index="1" unique_id=1628055550]
 visible = false
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(359144418) index="0" unique_id=265073055]
 bones/0/position = Vector3(0.048217613, -2.093067, -112.149315)
 bones/0/rotation = Quaternion(-0.7007214, 0.0088558635, -0.024241777, 0.7129681)
 bones/1/rotation = Quaternion(-0.016594956, 0.0032440617, 4.6585355e-05, 0.99985707)
@@ -64,11 +64,11 @@ bones/30/rotation = Quaternion(0.6645091, 0.13041942, -0.1071795, 0.72796357)
 bones/31/position = Vector3(-9.1447424e-07, 16.654442, 5.62668e-08)
 bones/31/rotation = Quaternion(0.06949742, 0.019962896, -0.06812543, 0.99505305)
 
-[node name="node_0a377758_863e_4729_a735_00d5867bdb64_mesh0" parent="Armature/Skeleton3D" index="0"]
+[node name="node_0a377758_863e_4729_a735_00d5867bdb64_mesh0" parent="Armature/Skeleton3D" index="0" unique_id=710905606]
 surface_material_override/0 = SubResource("StandardMaterial3D_47o8x")
 
-[node name="node_c74ece34_d49b_4f14_8827_c060a3739958_mesh0" parent="Armature/Skeleton3D" index="1"]
+[node name="node_c74ece34_d49b_4f14_8827_c060a3739958_mesh0" parent="Armature/Skeleton3D" index="1" unique_id=22817870]
 surface_material_override/0 = SubResource("StandardMaterial3D_qk1wl")
 
-[node name="AnimationPlayer" parent="." index="4"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="4" unique_id=184967834]
+autoplay = &"Armature|mixamo_com|Layer0"

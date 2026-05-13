@@ -1,4 +1,4 @@
-[gd_resource type="NoiseTexture3D" load_steps=3 format=3 uid="uid://dtslqj6qgbsi0"]
+[gd_resource type="NoiseTexture3D" format=3 uid="uid://dtslqj6qgbsi0"]
 
 [sub_resource type="Gradient" id="Gradient_0rds5"]
 offsets = PackedFloat32Array(0.141667, 0.841667)
@@ -14,8 +14,8 @@ domain_warp_enabled = true
 domain_warp_fractal_octaves = 1
 
 [resource]
-seamless = true
-seamless_blend_skirt = 1.0
-normalize = false
-color_ramp = SubResource("Gradient_0rds5")
 noise = SubResource("FastNoiseLite_1pc0f")
+color_ramp = SubResource("Gradient_0rds5")
+seamless = true
+normalize = false
+seamless_blend_skirt = 1.0

@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dfptexyx5gk2g"
-valid=false
+path="res://.godot/imported/Metal048C_2K-PNG.blend-925516c4ee0d8649b24f1a5c9d5a59ac.scn"
 
 [deps]
 
 source_file="res://assets/sphere/Metal048C_2K-PNG.blend"
+dest_files=["res://.godot/imported/Metal048C_2K-PNG.blend-925516c4ee0d8649b24f1a5c9d5a59ac.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

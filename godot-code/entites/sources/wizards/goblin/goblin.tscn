@@ -4,7 +4,7 @@
 
 [node name="goblin" unique_id=741974772 instance=ExtResource("1_0igxu")]
 
-[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(461508942) index="0" unique_id=85050558]
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(1897501496) index="0" unique_id=236957049]
 bones/7/rotation = Quaternion(0.7298626, 0.27214098, 0.45669654, -0.4297304)
 bones/8/rotation = Quaternion(0.07689597, 0.36752185, -0.628764, 0.68093365)
 bones/11/rotation = Quaternion(0.7298627, -0.27214086, -0.45669636, -0.42973047)
@@ -13,5 +13,5 @@ bones/14/rotation = Quaternion(0.19074889, -0.4460346, -0.0882985, 0.86998355)
 bones/27/rotation = Quaternion(0.028102128, 0.9608379, -0.2693443, -0.05877468)
 bones/28/rotation = Quaternion(-0.59190327, 0.7573975, -0.16975403, -0.21721703)
 
-[node name="AnimationPlayer" parent="." index="1" unique_id=668466848]
+[node name="AnimationPlayer" parent="." index="1" unique_id=143207571]
 autoplay = &"metarigAction"

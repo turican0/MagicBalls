@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dqwgv1ahsvqio"]
+[gd_scene format=3 uid="uid://dqwgv1ahsvqio"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_788j8"]
 albedo_color = Color(1, 0, 0, 1)
@@ -87,53 +87,53 @@ bottom_radius = 0.77
 height = 1.54
 radial_segments = 4
 
-[node name="TestMultimesh" type="Node3D"]
+[node name="TestMultimesh" type="Node3D" unique_id=701850852]
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="Node3D" type="Node3D" parent="." unique_id=435288543]
 
-[node name="MeshInstance3D0" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D0" type="MeshInstance3D" parent="Node3D" unique_id=1576567267]
 mesh = SubResource("SphereMesh_u4ac2")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D1" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D1" type="MeshInstance3D" parent="Node3D" unique_id=416685680]
 mesh = SubResource("TorusMesh_tjrnq")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=1412580051]
 mesh = SubResource("BoxMesh_xyuxq")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=1181543189]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.118133, 0)
 mesh = SubResource("PrismMesh_xnm4h")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=1880612354]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.246009, 0)
 mesh = SubResource("CylinderMesh_i1yhp")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Node3D" unique_id=2046061378]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.246009, 0)
 mesh = SubResource("CylinderMesh_bvmel")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Node3D" unique_id=1866044063]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.246009, 0)
 mesh = SubResource("CylinderMesh_x8oip")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Node3D" unique_id=1222355190]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.246009, 0)
 mesh = SubResource("CylinderMesh_dp7xj")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D8" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Node3D" unique_id=239625076]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.246009, 0)
 mesh = SubResource("CylinderMesh_8ctts")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D9" type="MeshInstance3D" parent="Node3D"]
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Node3D" unique_id=440692312]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.246009, 0)
 mesh = SubResource("CylinderMesh_w2aj8")
 skeleton = NodePath("../..")

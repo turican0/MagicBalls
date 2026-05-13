@@ -12,5 +12,5 @@ emission_texture = ExtResource("3_wqmiy")
 
 [node name="flying_centipede_body-text" unique_id=2007778101 instance=ExtResource("1_clase")]
 
-[node name="geometry_0" parent="world" parent_id_path=PackedInt32Array(261481176) index="0" unique_id=1581809828]
+[node name="geometry_0" parent="world" parent_id_path=PackedInt32Array(1995052429) index="0" unique_id=508961770]
 surface_material_override/0 = SubResource("StandardMaterial3D_enkr5")

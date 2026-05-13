@@ -16,5 +16,5 @@ albedo_texture = SubResource("NoiseTexture2D_1igq0")
 
 [node name="posses" unique_id=1478039552 instance=ExtResource("1_4y8js")]
 
-[node name="Icosphere" parent="." index="0" unique_id=892943798]
+[node name="Icosphere" parent="." index="0" unique_id=655577393]
 surface_material_override/0 = SubResource("StandardMaterial3D_0ou33")

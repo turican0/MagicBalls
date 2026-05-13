@@ -4,5 +4,5 @@
 
 [node name="Sketchfab_Scene" unique_id=384214065 instance=ExtResource("1_y5grg")]
 
-[node name="Object_3" parent="Sketchfab_model/Collada visual scene group/Sphere" parent_id_path=PackedInt32Array(985678930) index="0" unique_id=438954410]
+[node name="Object_3" parent="Sketchfab_model/Collada visual scene group/Sphere" parent_id_path=PackedInt32Array(1726284547) index="0" unique_id=2065859321]
 transform = Transform3D(0.99999976, 0, 7.1054274e-15, 0, 0.99999976, 0, -7.1054274e-15, 0, 0.99999976, -0.3663013, -0.88364875, 0.45820355)

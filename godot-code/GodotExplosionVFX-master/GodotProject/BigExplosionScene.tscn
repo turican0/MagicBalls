@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://goh3vkv8vodf"]
+[gd_scene format=3 uid="uid://goh3vkv8vodf"]
 
 [ext_resource type="Material" uid="uid://cxhaa6i7bto07" path="res://GodotExplosionVFX-master/GodotProject/ExplosionMaterial.tres" id="1_an4hs"]
 
@@ -13,9 +13,9 @@ linear_accel_max = -1.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_16uck"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1820623952]
 
-[node name="Explosion1" type="GPUParticles3D" parent="."]
+[node name="Explosion1" type="GPUParticles3D" parent="." unique_id=1829637691]
 transform = Transform3D(0.996103, 0, 0, 0, 0.996103, 0, 0, 0, 1, -0.00112057, -0.00427759, -0.00190479)
 material_override = ExtResource("1_an4hs")
 amount = 20
@@ -27,7 +27,7 @@ visibility_aabb = AABB(-4, -4, -4.79199, 8, 8, 8)
 process_material = SubResource("ParticleProcessMaterial_rva4e")
 draw_pass_1 = SubResource("QuadMesh_16uck")
 
-[node name="Explosion2" type="GPUParticles3D" parent="."]
+[node name="Explosion2" type="GPUParticles3D" parent="." unique_id=377458607]
 transform = Transform3D(0.996103, 0, 0, 0, 0.996103, 0, 0, 0, 1, -0.00112057, -0.00427759, -0.00190479)
 visible = false
 material_override = ExtResource("1_an4hs")

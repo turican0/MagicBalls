@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cr4nb0mp0apn3"]
 
-[ext_resource type="Script" path="res://entites/object_14_461_mouth.gd" id="1_vow2k"]
+[ext_resource type="Script" uid="uid://cv1oiquo7qe61" path="res://entites/object_14_461_mouth.gd" id="1_vow2k"]
 [ext_resource type="Script" uid="uid://ioujr8tsmg8w" path="res://entites/sources/mouth_of_marrow_hollow___nightmare.gd" id="3_mrbjm"]
 [ext_resource type="PackedScene" uid="uid://dcr4d2ft5fmc8" path="res://entites/sources/portals/ancient_portal_frame.glb" id="4_eo8s0"]
 

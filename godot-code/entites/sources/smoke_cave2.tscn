@@ -52,5 +52,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -228.141, -280.375, -22.7344)
 
 [node name="Object_3" type="MeshInstance3D" parent="Sketchfab_model/cloud_obj_cleaner_gles/Object_2" unique_id=226010003]
 mesh = SubResource("ArrayMesh_7tlr5")
-skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_tc5r2")

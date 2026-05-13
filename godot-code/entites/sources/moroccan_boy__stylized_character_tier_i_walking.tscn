@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://bd8b81qdh802v"]
+[gd_scene format=3 uid="uid://bd8b81qdh802v"]
 
 [ext_resource type="PackedScene" uid="uid://1d200at4sh6q" path="res://entites/sources/moroccan_boy__stylized_character_tier_i-Walking.blend" id="1_3k7vk"]
 
-[node name="moroccan_boy__stylized_character_tier_i-Walking" instance=ExtResource("1_3k7vk")]
+[node name="moroccan_boy__stylized_character_tier_i-Walking" unique_id=873004237 instance=ExtResource("1_3k7vk")]
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(68968655) index="0" unique_id=1634092445]
 bones/0/position = Vector3(0.9197531, -3.3889313, -43.825012)
 bones/0/rotation = Quaternion(-0.6872468, 0.06125384, -0.058040902, 0.7215061)
 bones/1/rotation = Quaternion(0.033641655, -0.026462372, 0.004954505, 0.99907136)
@@ -66,5 +66,5 @@ bones/61/rotation = Quaternion(-0.55714417, 0.114198275, -0.0046221972, 0.822513
 bones/62/rotation = Quaternion(0.62555355, -0.037845958, 0.008709353, 0.7792142)
 bones/63/rotation = Quaternion(0.4056325, 0.16635889, -0.014007681, 0.89866066)
 
-[node name="AnimationPlayer" parent="." index="2"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="2" unique_id=2063581545]
+autoplay = &"Armature|mixamo_com|Layer0"

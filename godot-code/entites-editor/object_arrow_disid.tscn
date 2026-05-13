@@ -29,13 +29,13 @@ head_height = 0.6
 arrow_color = Color(0, 1, 0, 1)
 
 [node name="Shaft" type="MeshInstance3D" parent="Arrow" unique_id=1866831024]
-transform = Transform3D(1, 0, 0, 0, 99.4, 0, 0, 0, 1, 0, -0.3, 0)
+transform = Transform3D(1, 0, 0, 0, 100, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_hgg6r")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_o8f8s")
 
 [node name="Head" type="MeshInstance3D" parent="Arrow" unique_id=632113876]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 49.7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
 visible = false
 mesh = SubResource("CylinderMesh_45kf5")
 skeleton = NodePath("../Shaft")

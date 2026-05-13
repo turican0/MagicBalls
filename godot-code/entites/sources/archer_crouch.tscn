@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://nmo5m6tx7a1y"]
+[gd_scene format=3 uid="uid://nmo5m6tx7a1y"]
 
 [ext_resource type="PackedScene" uid="uid://blr8vd1ymp2he" path="res://entites/sources/archer-crouch.blend" id="1_j4vv3"]
 
-[node name="archer-crouch" instance=ExtResource("1_j4vv3")]
+[node name="archer-crouch" unique_id=292136123 instance=ExtResource("1_j4vv3")]
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1167509182) index="0" unique_id=1679629315]
 bones/0/position = Vector3(-4.656427, -3.4261181, -47.485783)
 bones/0/rotation = Quaternion(-0.29112852, -0.013342698, 0.33017623, 0.89780277)
 bones/1/rotation = Quaternion(0.07885997, -0.024231914, -0.023214174, 0.99632084)
@@ -105,5 +105,5 @@ bones/66/rotation = Quaternion(0.5971631, 0.140217, 0.07970766, 0.78573674)
 bones/67/position = Vector3(-1.0606294e-05, 13.711788, -2.7285222e-07)
 bones/67/rotation = Quaternion(0.7428342, 0.023512337, 0.026707701, 0.66852915)
 
-[node name="AnimationPlayer" parent="." index="1"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="1" unique_id=2029773838]
+autoplay = &"Armature|mixamo_com|Layer0"

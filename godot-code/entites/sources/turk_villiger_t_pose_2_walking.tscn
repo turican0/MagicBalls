@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bmm0xqbietnc6"]
+[gd_scene format=3 uid="uid://bmm0xqbietnc6"]
 
 [ext_resource type="PackedScene" uid="uid://dgu4j2mr2uad6" path="res://entites/sources/turk_villiger_t-pose2-Walking.blend" id="1_gkuh4"]
 [ext_resource type="Texture2D" uid="uid://drp2cjw6e48f0" path="res://entites/sources/textures/0.jpg" id="2_32upu"]
@@ -10,10 +10,10 @@ albedo_texture = ExtResource("2_32upu")
 metallic_specular = 0.0
 roughness = 0.0
 
-[node name="turk_villiger_t-pose2-Walking" instance=ExtResource("1_gkuh4")]
+[node name="turk_villiger_t-pose2-Walking" unique_id=534570479 instance=ExtResource("1_gkuh4")]
 transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1681737001) index="0" unique_id=1160972886]
 bones/0/position = Vector3(0.03918462, 0.003138721, -0.9593659)
 bones/0/rotation = Quaternion(-0.6986487, 0.0038446835, -0.022997262, 0.7150848)
 bones/1/rotation = Quaternion(-0.045089502, -0.001987536, 0.0010060408, 0.9989806)
@@ -68,8 +68,8 @@ bones/61/rotation = Quaternion(-0.4479146, 0.037224703, 0.08662983, 0.88909066)
 bones/62/rotation = Quaternion(0.59619045, 0.11807418, -0.114628755, 0.78579617)
 bones/63/rotation = Quaternion(0.31685847, -0.06386784, 0.045665722, 0.9452176)
 
-[node name="Object_4" parent="Armature/Skeleton3D" index="0"]
+[node name="Object_4" parent="Armature/Skeleton3D" index="0" unique_id=429475217]
 surface_material_override/0 = SubResource("StandardMaterial3D_62ts5")
 
-[node name="AnimationPlayer" parent="." index="2"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="2" unique_id=436371448]
+autoplay = &"Armature|mixamo_com|Layer0"

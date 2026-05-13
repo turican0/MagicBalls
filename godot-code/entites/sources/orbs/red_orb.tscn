@@ -153,17 +153,14 @@ transform = Transform3D(1, 0, 0, 0, 2.220446e-16, -1, 0, 1, 2.220446e-16, 0, 0, 
 
 [node name="Object_4" type="MeshInstance3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Icosphere_0" unique_id=2099298518]
 mesh = SubResource("ArrayMesh_2onkt")
-skeleton = NodePath("")
 
 [node name="Object_5" type="MeshInstance3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Icosphere_0" unique_id=437947595]
 mesh = SubResource("ArrayMesh_4seld")
-skeleton = NodePath("")
 
 [node name="Icosphere_001_1" type="Node3D" parent="Sketchfab_model/root/GLTF_SceneRootNode" unique_id=1915466412]
 
 [node name="Object_7" type="MeshInstance3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Icosphere_001_1" unique_id=1135315095]
 mesh = SubResource("ArrayMesh_gg0lx")
-skeleton = NodePath("")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=671500410]
 libraries/ = SubResource("AnimationLibrary_n06yv")

@@ -207,12 +207,10 @@ transform = Transform3D(0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0)
 [node name="Cylinder" type="MeshInstance3D" parent="." unique_id=1166119968]
 transform = Transform3D(-0.28454566, 0, 0, 0, 0.57944274, 0, 0, 0, -0.28454566, 0, -1.9388785, 0)
 mesh = SubResource("ArrayMesh_7x21m")
-skeleton = NodePath("")
 
 [node name="Torus" type="MeshInstance3D" parent="." unique_id=227311873]
 transform = Transform3D(0.3090796, 0, 0, 0, 0.3090796, 0, 0, 0, 0.3090796, 0, -2.3587444, 0)
 mesh = SubResource("ArrayMesh_oaqte")
-skeleton = NodePath("")
 
 [node name="Sphere2" type="MeshInstance3D" parent="." unique_id=1756210462]
 transform = Transform3D(1.236, 0, 0, 0, 1.069, 0, 0, 0, 1.236, 0, -0.482, 0)
@@ -228,5 +226,4 @@ light_energy = 5.0
 [node name="Sphere_001" type="MeshInstance3D" parent="." unique_id=1200801727]
 transform = Transform3D(2.0983818, 0, 0, 0, 1.8159689, 0, 0, 0, 2.0983818, 0, -0.4822902, 0)
 mesh = SubResource("ArrayMesh_vd55q")
-skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_4derb")

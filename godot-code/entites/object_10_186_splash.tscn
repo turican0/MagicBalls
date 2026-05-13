@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bjqllnnikddlj"]
+[gd_scene format=3 uid="uid://bjqllnnikddlj"]
 
 [ext_resource type="Script" uid="uid://ci6dlshqfp770" path="res://entites/object_10_186_splash.gd" id="1_tkruv"]
 
@@ -168,21 +168,19 @@ _data = {
 &"riple": SubResource("Animation_tkruv")
 }
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=522315274]
 script = ExtResource("1_tkruv")
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=548497423]
 amount = 20
 lifetime = 0.25
 process_material = SubResource("ParticleProcessMaterial_ex2xn")
 draw_pass_1 = SubResource("SphereMesh_22ssb")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=34133634]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
 mesh = SubResource("TorusMesh_bjgqg")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D"]
-libraries = {
-&"": SubResource("AnimationLibrary_omrf7")
-}
-autoplay = "riple"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D" unique_id=1890626635]
+libraries/ = SubResource("AnimationLibrary_omrf7")
+autoplay = &"riple"

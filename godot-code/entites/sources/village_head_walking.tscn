@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bpbfwv5tim0cr"]
+[gd_scene format=3 uid="uid://bpbfwv5tim0cr"]
 
 [ext_resource type="PackedScene" uid="uid://1bjsihkbspis" path="res://entites/sources/village_head-Walking.blend" id="1_6dxmy"]
 [ext_resource type="Texture2D" uid="uid://8mdftvhl43dx" path="res://entites/sources/textures/03_-_Default_baseColor.png" id="2_yfolf"]
@@ -12,15 +12,15 @@ roughness = 0.0
 emission_enabled = true
 emission_energy_multiplier = 0.0
 
-[node name="village_head-Walking" instance=ExtResource("1_6dxmy")]
+[node name="village_head-Walking" unique_id=463371776 instance=ExtResource("1_6dxmy")]
 
-[node name="Camera" parent="." index="0"]
+[node name="Camera" parent="." index="0" unique_id=794453184]
 visible = false
 
-[node name="Light" parent="." index="1"]
+[node name="Light" parent="." index="1" unique_id=1535614433]
 visible = false
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(529331037) index="0" unique_id=263613305]
 bones/0/position = Vector3(33.913998, 5.642372, -3070.3333)
 bones/0/rotation = Quaternion(-0.7001724, -0.009315444, -0.046980925, 0.7123655)
 bones/1/position = Vector3(7.867813e-06, 398.3664, -54.803093)
@@ -109,8 +109,8 @@ bones/47/position = Vector3(6.830567e-05, 772.2207, -2.6247926e-05)
 bones/47/rotation = Quaternion(0.33339694, 0.08842861, -0.026128147, 0.93826663)
 bones/48/position = Vector3(-0.000110812485, 321.5667, -2.3842404e-07)
 
-[node name="node_566cac27_c993_4df7_bff3_dde7905f993e_mesh0" parent="Armature/Skeleton3D" index="0"]
+[node name="node_566cac27_c993_4df7_bff3_dde7905f993e_mesh0" parent="Armature/Skeleton3D" index="0" unique_id=202636473]
 surface_material_override/0 = SubResource("StandardMaterial3D_ejawn")
 
-[node name="AnimationPlayer" parent="." index="4"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="4" unique_id=511076123]
+autoplay = &"Armature|mixamo_com|Layer0"

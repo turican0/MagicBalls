@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://kmnmev3fl5gf"]
 
-[ext_resource type="Script" path="res://entites/object_2_424_mushroom_1.gd" id="1_ecggo"]
+[ext_resource type="Script" uid="uid://b6ccdj50qxa8n" path="res://entites/object_2_424_mushroom_1.gd" id="1_ecggo"]
 [ext_resource type="PackedScene" uid="uid://chjrtgpxekvpu" path="res://entites/sources/mushrooms/jelly_mushroom.glb" id="2_jpfoe"]
 
 [node name="Node3D" type="Node3D" unique_id=1585835896]

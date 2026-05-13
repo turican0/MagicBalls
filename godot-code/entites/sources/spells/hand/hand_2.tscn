@@ -18,10 +18,10 @@ uv1_scale = Vector3(5, 5, 5)
 
 [node name="hand2" unique_id=1470693957 instance=ExtResource("1_cfu5t")]
 
-[node name="handlow__0" parent="Armature" parent_id_path=PackedInt32Array(2076500629) index="0" unique_id=1956956099]
+[node name="handlow__0" parent="Armature" parent_id_path=PackedInt32Array(1699161074) index="0" unique_id=1679231214]
 surface_material_override/0 = SubResource("StandardMaterial3D_pv7vl")
 
-[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(2076500629) index="1" unique_id=1269373059]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1699161074) index="1" unique_id=2102284262]
 bones/1/rotation = Quaternion(-0.024464244, -0.042303722, 0.35161695, 0.93486756)
 bones/2/rotation = Quaternion(-0.08513304, -0.04136074, 0.16565382, 0.9816315)
 bones/3/rotation = Quaternion(0.056672074, -0.020497475, 0.0037602743, 0.9981754)

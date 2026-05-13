@@ -6,14 +6,14 @@
 
 [node name="skeleton-crossbow-bake" unique_id=2044310852 instance=ExtResource("1_0fsj4")]
 
-[node name="mesh_2" parent="Armature" parent_id_path=PackedInt32Array(1072729567) index="11" unique_id=1979866458]
+[node name="mesh_2" parent="Armature" parent_id_path=PackedInt32Array(1750991151) index="11" unique_id=189947896]
 visible = false
 
-[node name="Object_10" parent="Armature" parent_id_path=PackedInt32Array(1072729567) index="22" unique_id=844302486]
+[node name="Object_10" parent="Armature" parent_id_path=PackedInt32Array(1750991151) index="22" unique_id=2017781902]
 visible = false
 
-[node name="Object_22" parent="Armature" parent_id_path=PackedInt32Array(1072729567) index="23" unique_id=1233542214]
+[node name="Object_22" parent="Armature" parent_id_path=PackedInt32Array(1750991151) index="23" unique_id=693725886]
 surface_material_override/0 = ExtResource("2_58ahi")
 
-[node name="Object_6" parent="Armature" parent_id_path=PackedInt32Array(1072729567) index="26" unique_id=147040119]
+[node name="Object_6" parent="Armature" parent_id_path=PackedInt32Array(1750991151) index="26" unique_id=1309106338]
 surface_material_override/0 = ExtResource("2_srex6")

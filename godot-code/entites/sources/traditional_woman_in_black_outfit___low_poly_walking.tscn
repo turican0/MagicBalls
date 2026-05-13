@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://d24ia4skxc53j"]
+[gd_scene format=3 uid="uid://d24ia4skxc53j"]
 
 [ext_resource type="PackedScene" uid="uid://dqivmf0gofouf" path="res://entites/sources/traditional_woman_in_black_outfit_-_low_poly-Walking.blend" id="1_jxo3r"]
 
-[node name="traditional_woman_in_black_outfit_-_low_poly-Walking" instance=ExtResource("1_jxo3r")]
+[node name="traditional_woman_in_black_outfit_-_low_poly-Walking" unique_id=1906189877 instance=ExtResource("1_jxo3r")]
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1181678072) index="0" unique_id=1794387487]
 bones/0/position = Vector3(2.8940604, 1.7839159, -82.18758)
 bones/0/rotation = Quaternion(-0.70153856, -0.015288621, -0.00598882, 0.7124423)
 bones/1/rotation = Quaternion(-0.00044337192, 0.0037837296, 0.0012221402, 0.9999921)
@@ -91,5 +91,5 @@ bones/61/rotation = Quaternion(-0.47298267, 0.02390398, 0.03925, 0.8798724)
 bones/62/rotation = Quaternion(0.4097496, -0.06855894, -0.039030027, 0.90878034)
 bones/63/rotation = Quaternion(0.49958876, 0.25999954, 0.0099951, 0.82626367)
 
-[node name="AnimationPlayer" parent="." index="2"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="2" unique_id=21879931]
+autoplay = &"Armature|mixamo_com|Layer0"

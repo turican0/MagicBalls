@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cj064h8ixf1v4"]
+[gd_scene format=3 uid="uid://cj064h8ixf1v4"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ix0hf"]
 
@@ -15,5 +15,5 @@ uv1_scale = Vector3(3, 3, 3)
 [sub_resource type="SphereMesh" id="SphereMesh_ow6k3"]
 material = SubResource("StandardMaterial3D_ko1kv")
 
-[node name="MeshInstance3D" type="MeshInstance3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" unique_id=397884782]
 mesh = SubResource("SphereMesh_ow6k3")

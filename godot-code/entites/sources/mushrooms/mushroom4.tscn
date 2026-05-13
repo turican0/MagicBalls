@@ -65,4 +65,3 @@ transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
 [node name="polySurface55_blinn4_0" type="MeshInstance3D" parent="Sketchfab_model/ac8fa72ced3544dda26538daa0b58756_fbx/RootNode/polySurface55" unique_id=1010660443]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.456078, -8.124383e-15, -21.57878)
 mesh = SubResource("ArrayMesh_f6ihv")
-skeleton = NodePath("")

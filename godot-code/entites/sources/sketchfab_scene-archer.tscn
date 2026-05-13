@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://bgkmwnjuejtpa"]
+[gd_scene format=3 uid="uid://bgkmwnjuejtpa"]
 
-[ext_resource type="PackedScene" uid="uid://ccdc6w81tuj1o" path="res://entites/archer_shooting_arrow_from_bow_in_battle.glb" id="1_ht7es"]
+[ext_resource type="PackedScene" uid="uid://ccdc6w81tuj1o" path="res://entites/sources/archer_shooting_arrow_from_bow_in_battle.glb" id="1_ht7es"]
 
-[node name="Sketchfab_Scene" instance=ExtResource("1_ht7es")]
+[node name="Sketchfab_Scene" unique_id=1048763527 instance=ExtResource("1_ht7es")]
 
-[node name="Skeleton3D" parent="Sketchfab_model/e79dc56019914a359138fbfe8d3c207f_fbx/Object_2/RootNode/Object_4" index="0"]
+[node name="Skeleton3D" parent="Sketchfab_model/e79dc56019914a359138fbfe8d3c207f_fbx/Object_2/RootNode/Object_4" parent_id_path=PackedInt32Array(689531101) index="0" unique_id=1518326715]
 bones/1/position = Vector3(-2.985022, 100.130005, -1.412185)
 bones/1/rotation = Quaternion(-0.034860745, -0.67896545, -0.028307851, 0.73279554)
 bones/2/rotation = Quaternion(0.014547748, 0.016925637, 0.005722471, 0.9997346)
@@ -59,5 +59,5 @@ bones/64/rotation = Quaternion(0.20300794, 0.039877817, -0.03879477, 0.9775953)
 bones/65/rotation = Quaternion(-0.13978848, -0.00425775, 0.09036523, 0.98604023)
 bones/66/rotation = Quaternion(-0.0022819529, 1.7961563e-06, 0.0005076823, 0.9999973)
 
-[node name="AnimationPlayer" parent="." index="1"]
-autoplay = "Animation"
+[node name="AnimationPlayer" parent="." index="1" unique_id=2055669797]
+autoplay = &"Animation"

@@ -9,10 +9,10 @@ emission = Color(1, 0, 0, 1)
 
 [node name="big-dragon-head" unique_id=729478418 instance=ExtResource("1_8wqt7")]
 
-[node name="Object_4" parent="." index="0" unique_id=120475756]
+[node name="Object_4" parent="." index="0" unique_id=1168082602]
 transform = Transform3D(0.025400003, 0, 0, 0, 0.012229166, 0.022262253, 0, -0.022262253, 0.012229166, -14.493134, -13.819038, 19.29192)
 
-[node name="Skeleton3D" parent="Object_4" index="0" unique_id=1582434784]
+[node name="Skeleton3D" parent="Object_4" index="0" unique_id=849113207]
 bones/1/rotation = Quaternion(-0.7071069, 4.936376e-13, 4.936364e-13, 0.70710665)
 bones/2/position = Vector3(32.774498, 356.433, 549.3429)
 bones/2/rotation = Quaternion(0.5045012, 0.50450075, -0.49540767, 0.49550873)
@@ -298,7 +298,7 @@ bones/154/rotation = Quaternion(-0.02117971, 0.12781052, 0.12582508, 0.98355687)
 bones/155/position = Vector3(158.13295, 0.14496163, -0.06876573)
 bones/155/rotation = Quaternion(-0.00073458476, 0.10989689, -0.028362699, 0.99353796)
 
-[node name="AnimationPlayer" parent="." index="1" unique_id=974357715]
+[node name="AnimationPlayer" parent="." index="1" unique_id=1466193572]
 autoplay = &"Object_4"
 speed_scale = 2.0
 

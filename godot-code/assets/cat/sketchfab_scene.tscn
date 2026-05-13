@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=4 uid="uid://b7fps2taalaix"]
+[gd_scene format=4 uid="uid://b7fps2taalaix"]
 
 [ext_resource type="Texture2D" uid="uid://cxt4kw7asvobh" path="res://assets/cat/the_cats_body_0.jpg" id="1_ntegx"]
 
@@ -42,13 +42,12 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_i27un")
 
-[node name="Sketchfab_Scene" type="Node3D"]
+[node name="Sketchfab_Scene" type="Node3D" unique_id=581085621]
 
-[node name="Sketchfab_model" type="Node3D" parent="."]
+[node name="Sketchfab_model" type="Node3D" parent="." unique_id=876268161]
 transform = Transform3D(1, 4.002661e-32, 2.8327693e-16, -2.8327693e-16, 3.8285688e-16, 1, -6.842791e-32, -1, 3.8285688e-16, -1.5881868e-22, 2.3509887e-38, -1.0587912e-22)
 
-[node name="model_obj_cleaner_materialmerger_gles" type="Node3D" parent="Sketchfab_model"]
+[node name="model_obj_cleaner_materialmerger_gles" type="Node3D" parent="Sketchfab_model" unique_id=1776859087]
 
-[node name="Object_2" type="MeshInstance3D" parent="Sketchfab_model/model_obj_cleaner_materialmerger_gles"]
+[node name="Object_2" type="MeshInstance3D" parent="Sketchfab_model/model_obj_cleaner_materialmerger_gles" unique_id=104204043]
 mesh = SubResource("ArrayMesh_px7b2")
-skeleton = NodePath("")

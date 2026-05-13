@@ -6,67 +6,65 @@
 
 [node name="vissuluth" unique_id=505768597 instance=ExtResource("1_3y3jl")]
 
-[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(458848739) index="0" unique_id=1750272675]
-bones/0/rotation = Quaternion(0.19962645, 2.0884156e-18, 1.6466587e-17, 0.9798721)
-bones/1/rotation = Quaternion(0.065044045, 5.3576645e-18, 2.8194405e-17, 0.9978824)
-bones/2/rotation = Quaternion(-0.034828257, 4.3330623e-19, 9.469966e-18, 0.99939334)
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(2128785435) index="0" unique_id=858065565]
+bones/1/rotation = Quaternion(-0.064476304, 0, 0, 0.99791926)
 bones/4/position = Vector3(0, 2.352092, -0.5332382)
-bones/5/rotation = Quaternion(0.09671861, -1.1865037e-07, 1.1529767e-08, 0.9953118)
+bones/5/rotation = Quaternion(0.35093173, -1.11627635e-07, 4.1834337e-08, 0.936401)
 bones/6/rotation = Quaternion(0.024320439, -3.8144326e-14, 8.228294e-16, 0.9997043)
 bones/27/rotation = Quaternion(0.85162455, -0.12408723, 0.21421744, -0.46200535)
 bones/42/rotation = Quaternion(-0.21739301, -0.4192901, 0.85539705, -0.21267869)
 bones/81/rotation = Quaternion(0.28086454, 0.78566945, 0.24428846, -0.49412733)
-bones/100/rotation = Quaternion(0.025035813, -0.27803203, -0.8282459, 0.48588082)
-bones/101/rotation = Quaternion(-0.020651994, 0.38075528, -0.08482258, 0.9205455)
-bones/102/rotation = Quaternion(-0.079772905, 0.4972281, 0.09879258, 0.8582776)
-bones/123/position = Vector3(0.06787751, 3.7944531, -0.6403982)
-bones/123/rotation = Quaternion(0.015044568, 0.3106844, 0.8088978, 0.498932)
-bones/124/rotation = Quaternion(0.014549011, -0.39581436, 0.08965165, 0.9138282)
-bones/125/rotation = Quaternion(-0.10107055, -0.47904393, -0.028117146, 0.8714994)
+bones/100/rotation = Quaternion(-0.2781129, 0.6758324, -0.28347886, 0.6209217)
+bones/101/rotation = Quaternion(0.5373759, -0.0913233, -0.03586077, 0.8376164)
+bones/102/rotation = Quaternion(-0.046176285, -0.60178375, 0.07264422, 0.79400694)
+bones/123/position = Vector3(-0.029962184, 3.7778945, -0.379355)
+bones/123/rotation = Quaternion(-0.27353635, -0.66777, 0.30177543, 0.6230511)
+bones/124/rotation = Quaternion(0.55218685, 0.09528342, 0.01246288, 0.828164)
+bones/125/rotation = Quaternion(-0.09884418, 0.414878, -0.008901057, 0.9044484)
 bones/157/rotation = Quaternion(6.0684336e-08, 0.9612488, -0.2756822, -7.257226e-08)
 
-[node name="Object_3" parent="metarig/Skeleton3D" index="1" unique_id=771414470]
+[node name="Object_3" parent="metarig/Skeleton3D" index="1" unique_id=1647868706]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_3_001" parent="metarig/Skeleton3D" index="2" unique_id=405374010]
+[node name="Object_3_001" parent="metarig/Skeleton3D" index="2" unique_id=83925636]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4" parent="metarig/Skeleton3D" index="3" unique_id=823976852]
+[node name="Object_4" parent="metarig/Skeleton3D" index="3" unique_id=1769558240]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_001" parent="metarig/Skeleton3D" index="4" unique_id=1003206729]
+[node name="Object_4_001" parent="metarig/Skeleton3D" index="4" unique_id=839260676]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_002" parent="metarig/Skeleton3D" index="5" unique_id=1126241967]
+[node name="Object_4_002" parent="metarig/Skeleton3D" index="5" unique_id=1642065997]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_003" parent="metarig/Skeleton3D" index="6" unique_id=1923061057]
+[node name="Object_4_003" parent="metarig/Skeleton3D" index="6" unique_id=81347881]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_004" parent="metarig/Skeleton3D" index="7" unique_id=1955812811]
+[node name="Object_4_004" parent="metarig/Skeleton3D" index="7" unique_id=1191593987]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_005" parent="metarig/Skeleton3D" index="8" unique_id=348070307]
+[node name="Object_4_005" parent="metarig/Skeleton3D" index="8" unique_id=1919958427]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_006" parent="metarig/Skeleton3D" index="9" unique_id=614337656]
+[node name="Object_4_006" parent="metarig/Skeleton3D" index="9" unique_id=537599783]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_007" parent="metarig/Skeleton3D" index="10" unique_id=2090250159]
+[node name="Object_4_007" parent="metarig/Skeleton3D" index="10" unique_id=614192610]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_008" parent="metarig/Skeleton3D" index="11" unique_id=644426628]
+[node name="Object_4_008" parent="metarig/Skeleton3D" index="11" unique_id=1106662016]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Object_4_009" parent="metarig/Skeleton3D" index="12" unique_id=593834223]
+[node name="Object_4_009" parent="metarig/Skeleton3D" index="12" unique_id=563401208]
 surface_material_override/0 = ExtResource("2_052ny")
 
-[node name="Sphere_001__0" parent="metarig/Skeleton3D" index="13" unique_id=296957641]
+[node name="Sphere_001__0" parent="metarig/Skeleton3D" index="13" unique_id=1055020981]
 surface_material_override/0 = ExtResource("3_5evrj")
 
-[node name="Sphere__0" parent="metarig/Skeleton3D" index="15" unique_id=1771274452]
+[node name="Sphere__0" parent="metarig/Skeleton3D" index="15" unique_id=62758870]
 surface_material_override/0 = ExtResource("3_5evrj")
 
-[node name="AnimationPlayer" parent="." index="15" unique_id=2064709168]
+[node name="AnimationPlayer" parent="." index="15" unique_id=1292658608]
 autoplay = &"480"
 speed_scale = 20.0

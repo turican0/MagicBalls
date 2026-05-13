@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://8wnv6dlkmh3i"]
+[gd_scene format=3 uid="uid://8wnv6dlkmh3i"]
 
 [ext_resource type="PackedScene" uid="uid://b0vsg84tnsi48" path="res://entites/sources/arachnid_bug.glb" id="1_jmhkg"]
 
-[node name="Sketchfab_Scene" instance=ExtResource("1_jmhkg")]
+[node name="Sketchfab_Scene" unique_id=108089702 instance=ExtResource("1_jmhkg")]
 
-[node name="Skeleton3D" parent="Sketchfab_model/30cff480e52b4bbf9ddb299410d560fc_fbx/Object_2/RootNode/FlightArahnid/Object_5" index="0"]
+[node name="Skeleton3D" parent="Sketchfab_model/30cff480e52b4bbf9ddb299410d560fc_fbx/Object_2/RootNode/FlightArahnid/Object_5" parent_id_path=PackedInt32Array(972963486) index="0" unique_id=1436277020]
 bones/1/rotation = Quaternion(0.5000001, 0.5, 0.49999997, 0.5)
 bones/2/position = Vector3(0.0019400269, 1.3088484, -0.0017534485)
 bones/2/rotation = Quaternion(0, 0, 0, 1)
@@ -70,5 +70,5 @@ bones/52/position = Vector3(0.37331146, -0.036936097, -0.38715)
 bones/53/position = Vector3(-0.0017535985, 0.84315306, 1.1318568)
 bones/53/rotation = Quaternion(0.5035336, 0.49644154, 0.50353295, 0.4964418)
 
-[node name="AnimationPlayer" parent="." index="1"]
-autoplay = "FlightArahnid|waiting 2"
+[node name="AnimationPlayer" parent="." index="1" unique_id=382304297]
+autoplay = &"FlightArahnid|waiting 2"

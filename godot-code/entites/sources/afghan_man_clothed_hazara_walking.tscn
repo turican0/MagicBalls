@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0ikt2qycvd4x"]
+[gd_scene format=3 uid="uid://d0ikt2qycvd4x"]
 
 [ext_resource type="PackedScene" uid="uid://bhwjvlrp51657" path="res://entites/sources/afghan_man_clothed_hazara-Walking.blend" id="1_7hq8j"]
 
-[node name="afghan_man_clothed_hazara-Walking" instance=ExtResource("1_7hq8j")]
+[node name="afghan_man_clothed_hazara-Walking" unique_id=943607557 instance=ExtResource("1_7hq8j")]
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1197789481) index="0" unique_id=81318574]
 bones/0/position = Vector3(-0.34815344, 0.028944612, -86.51462)
 bones/0/rotation = Quaternion(-0.7009247, 0.003967294, -0.014179871, 0.7130833)
 bones/1/rotation = Quaternion(-0.05143442, 0.005913611, -0.0048498777, 0.9986471)
@@ -40,5 +40,5 @@ bones/29/rotation = Quaternion(-0.1362514, -0.07464423, 0.054098573, 0.98637575)
 bones/30/rotation = Quaternion(0.5363149, -0.033970393, -0.03649316, 0.84254414)
 bones/31/rotation = Quaternion(0.34980562, -0.078009784, 0.019906858, 0.9333564)
 
-[node name="AnimationPlayer" parent="." index="2"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="2" unique_id=1535733878]
+autoplay = &"Armature|mixamo_com|Layer0"

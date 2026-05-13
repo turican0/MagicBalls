@@ -4,7 +4,7 @@
 
 [node name="mummy-walk" unique_id=821949993 instance=ExtResource("1_oi3y0")]
 
-[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1000177599) index="0" unique_id=1127695511]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(870875046) index="0" unique_id=787610817]
 bones/0/position = Vector3(0.28785804, -0.8685739, -92.60721)
 bones/0/rotation = Quaternion(-0.6486721, 0.22529297, -0.1728102, 0.7061192)
 bones/1/rotation = Quaternion(7.5660646e-05, 0.0060262065, 0.023285069, 0.9997108)
@@ -91,6 +91,6 @@ bones/62/rotation = Quaternion(0.42090788, 0.0047677686, 0.16466267, 0.8920203)
 bones/63/position = Vector3(7.919716e-06, 19.957775, -9.970959e-06)
 bones/63/rotation = Quaternion(0.30031776, 0.04030046, -0.012707725, 0.95290273)
 
-[node name="AnimationPlayer" parent="." index="2" unique_id=2143280806]
+[node name="AnimationPlayer" parent="." index="2" unique_id=1062812078]
 autoplay = &"mixamo_com"
 speed_scale = 4.0

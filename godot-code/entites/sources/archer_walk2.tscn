@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://bw82nedg1mvo6"]
+[gd_scene format=3 uid="uid://bw82nedg1mvo6"]
 
 [ext_resource type="PackedScene" uid="uid://x2ldc4a22hka" path="res://entites/sources/archer-walk.glb" id="1_rxlho"]
 
-[node name="archer-walk" instance=ExtResource("1_rxlho")]
+[node name="archer-walk" unique_id=280306495 instance=ExtResource("1_rxlho")]
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(222088239) index="0" unique_id=113244965]
 bones/0/position = Vector3(0.00060486794, -0.005765319, -94.27845)
 bones/0/rotation = Quaternion(-0.5241438, -0.37959087, 0.41237992, 0.6411917)
 bones/1/rotation = Quaternion(0.08906097, 0.00406519, -0.03737835, 0.9953163)
@@ -105,5 +105,5 @@ bones/65/rotation = Quaternion(-0.41989812, 0.011221319, -0.016556285, 0.9073509
 bones/66/rotation = Quaternion(0.54366714, -0.025277834, -0.045399297, 0.8376909)
 bones/67/rotation = Quaternion(0.33842725, -0.0018446175, 0.006911112, 0.94096535)
 
-[node name="AnimationPlayer" parent="." index="1"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="1" unique_id=1664587085]
+autoplay = &"Armature|mixamo_com|Layer0"

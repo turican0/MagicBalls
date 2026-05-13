@@ -4,7 +4,7 @@
 
 [node name="Sketchfab_Scene" unique_id=424736047 instance=ExtResource("1_th22a")]
 
-[node name="Skeleton3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Armature_39/GLTF_created_0" parent_id_path=PackedInt32Array(581968610) index="0" unique_id=679201414]
+[node name="Skeleton3D" parent="Sketchfab_model/root/GLTF_SceneRootNode/Armature_39/GLTF_created_0" parent_id_path=PackedInt32Array(1053131103) index="0" unique_id=601270981]
 bones/2/rotation = Quaternion(0.05874442, -0.06113966, -0.6964434, 0.7125852)
 bones/3/rotation = Quaternion(0.0026196006, -0.00638867, -0.00023051379, 0.9999762)
 bones/4/rotation = Quaternion(-0.68782306, 0.7217148, 0.060570095, -0.04856545)
@@ -40,5 +40,5 @@ bones/34/rotation = Quaternion(-0.39486846, 0.5949962, -0.5809671, 0.39055815)
 bones/36/rotation = Quaternion(-0.20551664, 0.048979707, 0.5479827, 0.80936956)
 bones/37/rotation = Quaternion(-0.17744565, -0.008845389, 0.71356094, 0.67769134)
 
-[node name="AnimationPlayer" parent="." index="1" unique_id=1701674878]
+[node name="AnimationPlayer" parent="." index="1" unique_id=723447056]
 autoplay = &"Action"

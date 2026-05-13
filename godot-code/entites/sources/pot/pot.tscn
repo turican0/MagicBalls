@@ -18,5 +18,5 @@ uv1_scale = Vector3(2, 2, 2)
 
 [node name="pot" unique_id=529921976 instance=ExtResource("1_b6h7y")]
 
-[node name="SM_Cauldron_Lid01a_Material_002_0" parent="Sketchfab_model_001/SM_Cauldron_Lid01a_fbx/RootNode/SM_Cauldron_Lid01a" parent_id_path=PackedInt32Array(1203216395) index="0" unique_id=1590631973]
+[node name="SM_Cauldron_Lid01a_Material_002_0" parent="Sketchfab_model_001/SM_Cauldron_Lid01a_fbx/RootNode/SM_Cauldron_Lid01a" parent_id_path=PackedInt32Array(707403905) index="0" unique_id=925904220]
 surface_material_override/0 = SubResource("StandardMaterial3D_rmoq4")

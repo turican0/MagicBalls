@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ce02dktrnbgl2"]
+[gd_scene format=3 uid="uid://ce02dktrnbgl2"]
 
 [ext_resource type="PackedScene" uid="uid://p4fjy4ori4lc" path="res://entites/sources/sketchfab_scene-werewolf.tscn" id="1_r6m8i"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" unique_id=1676712019]
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_r6m8i")]
+[node name="Sketchfab_Scene" parent="." unique_id=1484265483 instance=ExtResource("1_r6m8i")]
 transform = Transform3D(-0.01, 0, -1.5099579e-09, 0, 0.01, 0, 1.5099579e-09, 0, -0.01, 0, 0, 0)

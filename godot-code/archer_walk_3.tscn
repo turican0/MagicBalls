@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7asv5mbtlfjf"]
+[gd_scene format=3 uid="uid://c7asv5mbtlfjf"]
 
 [ext_resource type="PackedScene" uid="uid://d3732u85ajthv" path="res://entites/sources/archer-walk3.glb" id="1_tbb66"]
 
-[node name="archer-walk3" instance=ExtResource("1_tbb66")]
+[node name="archer-walk3" unique_id=322521159 instance=ExtResource("1_tbb66")]
 
-[node name="Skeleton3D" parent="." index="0"]
+[node name="Skeleton3D" parent="." index="0" unique_id=870310784]
 bones/2/rotation = Quaternion(0.09616429, -0.026020167, 0.04102638, 0.9941792)
 bones/3/rotation = Quaternion(-0.0063374275, -0.0060792654, 0.010573303, 0.99990565)
 bones/4/rotation = Quaternion(0.022895537, -0.006080387, 0.010379755, 0.9996655)
@@ -40,5 +40,5 @@ bones/66/rotation = Quaternion(-0.24561505, 0.03874828, 0.04750504, 0.9674271)
 bones/67/rotation = Quaternion(0.54539526, -0.047709502, 0.019952029, 0.8365822)
 bones/68/rotation = Quaternion(0.34663904, 0.006884331, 0.0018610128, 0.93797153)
 
-[node name="__DEFAULT_CAMERA__" parent="." index="1"]
+[node name="__DEFAULT_CAMERA__" parent="." index="1" unique_id=1837697325]
 visible = false

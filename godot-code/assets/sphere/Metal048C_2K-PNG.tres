@@ -1,19 +1,20 @@
-[gd_resource type="StandardMaterial3D" load_steps=6 format=3 uid="acg_df2lqajp"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dpgrv8nnnfmhj"]
 
-[ext_resource type="Texture2D" uid="uid://acg_60uihm4s" id="Color" path="./Metal048C_2K-PNG_Color.png"]
-[ext_resource type="Texture2D" uid="uid://acg_ftopyr9z" id="Metalness" path="./Metal048C_2K-PNG_Metalness.png"]
-[ext_resource type="Texture2D" uid="uid://acg_t4ld98si" id="Displacement" path="./Metal048C_2K-PNG_Displacement.png"]
-[ext_resource type="Texture2D" uid="uid://acg_grqcl2nu" id="Roughness" path="./Metal048C_2K-PNG_Roughness.png"]
-[ext_resource type="Texture2D" uid="uid://acg_6tldkfj7" id="NormalGL" path="./Metal048C_2K-PNG_NormalGL.png"]
+[ext_resource type="Texture2D" uid="uid://c1ybnltkj8k3m" path="res://assets/sphere/Metal048C_2K-PNG_Color.png" id="Color"]
+[ext_resource type="Texture2D" uid="uid://lx7l5ju8ojit" path="res://assets/sphere/Metal048C_2K-PNG_Displacement.png" id="Displacement"]
+[ext_resource type="Texture2D" uid="uid://4571ecam64gq" path="res://assets/sphere/Metal048C_2K-PNG_Metalness.png" id="Metalness"]
+[ext_resource type="Texture2D" uid="uid://c38470ojxanbi" path="res://assets/sphere/Metal048C_2K-PNG_NormalGL.png" id="NormalGL"]
+[ext_resource type="Texture2D" uid="uid://c4n7aw68tphwj" path="res://assets/sphere/Metal048C_2K-PNG_Roughness.png" id="Roughness"]
+
 [resource]
 albedo_texture = ExtResource("Color")
-metallic_texture = ExtResource("Metalness")
 metallic = 1.0
+metallic_texture = ExtResource("Metalness")
 metallic_texture_channel = 4
 roughness_texture = ExtResource("Roughness")
 roughness_texture_channel = 4
-normal_texture = ExtResource("NormalGL")
 normal_enabled = true
-heightmap_texture = ExtResource("Displacement")
-heightmap_scale = 1.0
+normal_texture = ExtResource("NormalGL")
 heightmap_enabled = true
+heightmap_scale = 1.0
+heightmap_texture = ExtResource("Displacement")

@@ -40,4 +40,3 @@ metadata/extras = {
 
 [node name="geometry_0" type="MeshInstance3D" parent="world" unique_id=806916357]
 mesh = SubResource("ArrayMesh_p1445")
-skeleton = NodePath("")

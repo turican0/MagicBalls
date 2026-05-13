@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://drass40pljleh"]
+[gd_scene format=3 uid="uid://drass40pljleh"]
 
 [ext_resource type="PackedScene" uid="uid://bk7ridbjubuwy" path="res://entites/sources/turkish_old_villager_men_t-pose-Walking.blend" id="1_cy5ho"]
 [ext_resource type="Texture2D" uid="uid://cqg7xmhdh68ss" path="res://entites/sources/textures/material_0_baseColor.jpg" id="2_e3rkk"]
@@ -9,15 +9,15 @@ cull_mode = 2
 albedo_texture = ExtResource("2_e3rkk")
 roughness = 0.5
 
-[node name="turkish_old_villager_men_t-pose-Walking2" instance=ExtResource("1_cy5ho")]
+[node name="turkish_old_villager_men_t-pose-Walking2" unique_id=772974323 instance=ExtResource("1_cy5ho")]
 
-[node name="Camera" parent="." index="0"]
+[node name="Camera" parent="." index="0" unique_id=1427897770]
 visible = false
 
-[node name="Light" parent="." index="1"]
+[node name="Light" parent="." index="1" unique_id=363536788]
 visible = false
 
-[node name="Skeleton3D" parent="Armature" index="0"]
+[node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1066719679) index="0" unique_id=316760136]
 bones/0/position = Vector3(0.11130042, 0.83785856, -92.37823)
 bones/0/rotation = Quaternion(-0.7007766, 0.01004559, -0.022226593, 0.7129637)
 bones/1/rotation = Quaternion(-0.019115211, 0.0038525227, -0.002203175, 0.9998074)
@@ -54,8 +54,8 @@ bones/30/rotation = Quaternion(0.5572132, 0.037274994, -0.10162884, 0.8232835)
 bones/31/position = Vector3(-4.990318e-08, 20.739576, 1.0652448e-06)
 bones/31/rotation = Quaternion(0.29993987, 0.07675856, -0.021538006, 0.95062107)
 
-[node name="node_aa3cc44d_9c3a_4c41_9bf1_0e8361fac30b_mesh0" parent="Armature/Skeleton3D" index="0"]
+[node name="node_aa3cc44d_9c3a_4c41_9bf1_0e8361fac30b_mesh0" parent="Armature/Skeleton3D" index="0" unique_id=64738435]
 surface_material_override/0 = SubResource("StandardMaterial3D_83kqa")
 
-[node name="AnimationPlayer" parent="." index="4"]
-autoplay = "Armature|mixamo_com|Layer0"
+[node name="AnimationPlayer" parent="." index="4" unique_id=6337674]
+autoplay = &"Armature|mixamo_com|Layer0"

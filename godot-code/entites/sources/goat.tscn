@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://cdvmxvsld75th"]
+[gd_scene format=4 uid="uid://cdvmxvsld75th"]
 
 [ext_resource type="Texture2D" uid="uid://dquuyn6i8c2bw" path="res://entites/sources/animated_realistic_goat__3d_animal_model_0.png" id="1_4qrgq"]
 
@@ -4605,24 +4605,24 @@ _data = {
 &"Armature|wound": SubResource("Animation_ju7sd")
 }
 
-[node name="Sketchfab_Scene" type="Node3D"]
+[node name="Sketchfab_Scene" type="Node3D" unique_id=794970527]
 
-[node name="Sketchfab_model" type="Node3D" parent="."]
+[node name="Sketchfab_model" type="Node3D" parent="." unique_id=1517445498]
 transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0, 0)
 
-[node name="f0dd2effdc89454d89b5edfd7c2142cd_fbx" type="Node3D" parent="Sketchfab_model"]
+[node name="f0dd2effdc89454d89b5edfd7c2142cd_fbx" type="Node3D" parent="Sketchfab_model" unique_id=299643771]
 transform = Transform3D(0.01, 0, 0, 0, 0, -0.01, 0, 0.01, 0, 0, 0, 0)
 
-[node name="Object_2" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx"]
+[node name="Object_2" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx" unique_id=946036321]
 
-[node name="RootNode" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2"]
+[node name="RootNode" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2" unique_id=48755066]
 
-[node name="Armature" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode"]
+[node name="Armature" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode" unique_id=1396922830]
 transform = Transform3D(1, 0, 0, 0, -1.1920929e-07, 0.99999994, 0, -0.99999994, -1.1920929e-07, 0, 0, 0)
 
-[node name="Object_5" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode/Armature"]
+[node name="Object_5" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode/Armature" unique_id=1512530888]
 
-[node name="Skeleton3D" type="Skeleton3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode/Armature/Object_5"]
+[node name="Skeleton3D" type="Skeleton3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode/Armature/Object_5" unique_id=2044796627]
 bones/0/name = "_rootJoint"
 bones/0/parent = -1
 bones/0/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -4918,18 +4918,17 @@ bones/41/position = Vector3(0, 11.029236, -1.7763568e-15)
 bones/41/rotation = Quaternion(-5.2041704e-18, -5.2041704e-18, -5.551115e-17, 1)
 bones/41/scale = Vector3(1, 1, 1)
 
-[node name="Object_49" type="MeshInstance3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode/Armature/Object_5/Skeleton3D"]
+[node name="Object_49" type="MeshInstance3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode/Armature/Object_5/Skeleton3D" unique_id=269885138]
 mesh = SubResource("ArrayMesh_rinck")
 skin = SubResource("Skin_n8tn7")
+skeleton = NodePath("..")
 
-[node name="Object_48" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode/Armature/Object_5"]
+[node name="Object_48" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode/Armature/Object_5" unique_id=397830957]
 transform = Transform3D(1, 0, 0, 0, 6.123234e-17, 1, 0, -1, 6.123234e-17, 0, 0, 0)
 
-[node name="SK_Goat_2" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode"]
+[node name="SK_Goat_2" type="Node3D" parent="Sketchfab_model/f0dd2effdc89454d89b5edfd7c2142cd_fbx/Object_2/RootNode" unique_id=1430283677]
 transform = Transform3D(1, 0, 0, 0, -1.1920929e-07, 0.99999994, 0, -0.99999994, -1.1920929e-07, 0, 0, 0)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_ullmj")
-}
-autoplay = "Armature|walk"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1579579399]
+libraries/ = SubResource("AnimationLibrary_ullmj")
+autoplay = &"Armature|walk"

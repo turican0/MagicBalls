@@ -8,7 +8,7 @@ albedo_texture = ExtResource("2_wxrie")
 
 [node name="necromancer2" unique_id=1365390532 instance=ExtResource("1_f4emp")]
 
-[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(293951513) index="0" unique_id=1509869059]
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(1899280894) index="0" unique_id=1773384563]
 bones/0/rotation = Quaternion(0.12583818, 0.0002009175, -0.00022708985, 0.9920507)
 bones/4/rotation = Quaternion(0.3283006, -0.074550994, 0.23662955, 0.9114095)
 bones/5/rotation = Quaternion(-0.13602164, 0.027220614, -0.2349351, 0.96206176)
@@ -29,8 +29,8 @@ bones/124/rotation = Quaternion(0.45242125, -0.14885356, -0.46940213, 0.7435182)
 bones/125/rotation = Quaternion(0.10075931, 0.08958141, 0.09312379, 0.986484)
 bones/150/rotation = Quaternion(0.087541565, 1.8422046e-12, 1.0204888e-11, 0.99616086)
 
-[node name="Object_10" parent="metarig/Skeleton3D" index="0" unique_id=191972229]
+[node name="Object_10" parent="metarig/Skeleton3D" index="0" unique_id=1830254048]
 surface_material_override/0 = SubResource("StandardMaterial3D_eqcob")
 
-[node name="AnimationPlayer" parent="." index="2" unique_id=1508650255]
+[node name="AnimationPlayer" parent="." index="2" unique_id=1407953214]
 autoplay = &"metarigAction"
