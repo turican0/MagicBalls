@@ -374,9 +374,9 @@ dirsstruct getListDir(char *dirname) {
 
 void FixDir(char* outdirname, char* indirname) {
 #ifdef __ANDROID__
-	godot::UtilityFunctions::print("FixDir Android indirname: ", String(indirname));
+	godot::UtilityFunctions::print("FixDir Android indirname: ", godot::String(indirname));
 	sprintf(outdirname, "%s", indirname);
-	godot::UtilityFunctions::print("FixDir Android outdirname: ", String(outdirname));
+	godot::UtilityFunctions::print("FixDir Android outdirname: ", godot::String(outdirname));
 #else
 	std::string pathexe = get_exe_path();
 	sprintf(outdirname, "%s/%s", pathexe.c_str(), indirname);
@@ -535,9 +535,9 @@ std::string getExistingDataPath(std::filesystem::path path)
 	std::vector<std::string> file_locations;
 #ifdef __ANDROID__
 	std::string direct = path.string();
-	godot::UtilityFunctions::print("getExistingDataPath Android path: ", String(direct.c_str()));
+	godot::UtilityFunctions::print("getExistingDataPath Android path: ", godot::String(direct.c_str()));
 	if (std::filesystem::exists(direct)) {
-		godot::UtilityFunctions::print("getExistingDataPath Android found: ", String(direct.c_str()));
+		godot::UtilityFunctions::print("getExistingDataPath Android found: ", godot::String(direct.c_str()));
 		return direct;
 	}
 	godot::UtilityFunctions::print("getExistingDataPath Android not found, returning empty");
