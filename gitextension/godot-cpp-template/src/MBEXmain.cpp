@@ -1558,26 +1558,33 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
-void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, String CustomLevelPath) { //OK!!
+void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, String CustomLevelPath) {
+	UtilityFunctions::print("REMC2BeginGame START");
+	UtilityFunctions::print("REMC2BeginGame cdPath: ", cdPath);
+	UtilityFunctions::print("REMC2BeginGame gamePath: ", gamePath);
+	UtilityFunctions::print("REMC2BeginGame customLevel: ", customLevel);
+	UtilityFunctions::print("REMC2BeginGame CustomLevelPath: ", CustomLevelPath);
 	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 	saved_real_gamePath = ProjectSettings::get_singleton()->globalize_path(gamePath);
+	UtilityFunctions::print("REMC2BeginGame saved_real_cdPath: ", saved_real_cdPath);
+	UtilityFunctions::print("REMC2BeginGame saved_real_gamePath: ", saved_real_gamePath);
 	for (int i = 0; i < 5; ++i)
 		saved_argv[i] = nullptr;
-
 	saved_argv[0] = (char *)"game.exe";
-	saved_argv[1] = (char *)""; // Prázdný argument
+	saved_argv[1] = (char *)"";
 	saved_argv[2] = (char *)"--auto_change_res";
-
 	if (customLevel == -1) {
-		if (CustomLevelPath == "")
+		if (CustomLevelPath == "") {
 			saved_argc = 3;
-		else {
+			UtilityFunctions::print("REMC2BeginGame mode: default, argc=3");
+		} else {
 			saved_argc = 5;
 			saved_argv[3] = (char *)"--custom_level";
 			String globalCLPath = ProjectSettings::get_singleton()->globalize_path(CustomLevelPath);
 			static std::string persistentPath;
 			persistentPath = globalCLPath.utf8().get_data();
 			saved_argv[4] = (char *)persistentPath.c_str();
+			UtilityFunctions::print("REMC2BeginGame mode: custom_level path: ", globalCLPath);
 		}
 	} else {
 		saved_argc = 5;
@@ -1585,16 +1592,15 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 		static char levelBuffer[16];
 		snprintf(levelBuffer, sizeof(levelBuffer), "%d", customLevel);
 		saved_argv[4] = levelBuffer;
+		UtilityFunctions::print("REMC2BeginGame mode: set_level index: ", customLevel);
 	}
-
-	//--custom_level
-
+	UtilityFunctions::print("REMC2BeginGame calling CommandLineParams.Init...");
 	CommandLineParams.Init(saved_argc, saved_argv);
-
+	UtilityFunctions::print("REMC2BeginGame CommandLineParams.Init done");
 	fixedMenuGraphics = true;
-
+	UtilityFunctions::print("REMC2BeginGame calling support_begin...");
 	support_begin();
-
+	UtilityFunctions::print("REMC2BeginGame support_begin done");
 	{
 		std::lock_guard<std::mutex> lock(main_mutex);
 		thread2_state = Thread2_State::BEGIN;
@@ -1602,24 +1608,31 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 		thread2_waiting = false;
 		thread1_waiting = true;
 	}
-
-    printf("REMC2BeginGame: spoustim vlakno 2\n");
+	UtilityFunctions::print("REMC2BeginGame mutex state initialized");
+	static std::string persistentCdPath;
+	static std::string persistentGamePath;
+	persistentCdPath = saved_real_cdPath.utf8().get_data();
+	persistentGamePath = saved_real_gamePath.utf8().get_data();
+	UtilityFunctions::print("REMC2BeginGame persistentCdPath: ", String(persistentCdPath.c_str()));
+	UtilityFunctions::print("REMC2BeginGame persistentGamePath: ", String(persistentGamePath.c_str()));
+	UtilityFunctions::print("REMC2BeginGame starting thread 2...");
 	t2 = std::thread([this]() {
-		printf("Vlakno 2: startuje\n");
-		sub_main_mod(saved_argc, saved_argv, (char *)saved_real_cdPath.utf8().get_data(), (char *)saved_real_gamePath.utf8().get_data());
-		printf("Vlakno 2: skoncilo\n");
+		UtilityFunctions::print("Thread 2: started");
+		sub_main_mod(saved_argc, saved_argv,
+				(char *)persistentCdPath.c_str(),
+				(char *)persistentGamePath.c_str());
+		UtilityFunctions::print("Thread 2: finished");
 	});
 	t2.detach();
-
-	printf("REMC2BeginGame: cekam na vlakno 2\n");
+	UtilityFunctions::print("REMC2BeginGame thread 2 detached, waiting...");
 	{
 		std::unique_lock<std::mutex> lock(main_mutex);
 		main_cv.wait(lock, [] {
-			printf("REMC2BeginGame: kontrolujem thread2_waiting=%d\n", thread2_waiting);
-			return thread2_waiting == true; // ← čekej až vlákno 2 resetuje
+			UtilityFunctions::print("REMC2BeginGame checking thread2_waiting: ", thread2_waiting);
+			return thread2_waiting == true;
 		});
 	}
-	printf("REMC2BeginGame: probудил se, konec\n");
+	UtilityFunctions::print("REMC2BeginGame thread2_waiting received, END");
 }
 
 /*
