@@ -22,6 +22,124 @@
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/node3d.hpp>
 
+// ── Android: res:// → user:// helper ────────────────────────────────────────
+// Na Androidu nelze res:// globalizovat na filesystem cestu použitelnou nativním
+// C kódem. Proto při prvním volání zkopírujeme celý strom res://hidata/ do
+// user://hidata/ a dále používáme user:// cestu.
+// Na ostatních platformách funkce vrátí prázdný String a volající použije
+// původní logiku (globalize_path).
+#if defined(__ANDROID__)
+
+static void android_copy_dir_recursive(const String &src_dir, const String &dst_dir) {
+	Ref<DirAccess> src = DirAccess::open(src_dir);
+	if (src.is_null()) {
+		UtilityFunctions::printerr("android_copy_dir_recursive: cannot open src: ", src_dir);
+		return;
+	}
+	Ref<DirAccess> dst_check = DirAccess::open("user://");
+	if (dst_check.is_valid() && !dst_check->dir_exists(dst_dir.replace("user://", ""))) {
+		DirAccess::make_dir_recursive_absolute(
+				ProjectSettings::get_singleton()->globalize_path(dst_dir));
+	}
+	src->list_dir_begin();
+	String name = src->get_next();
+	while (name != "") {
+		if (name != "." && name != "..") {
+			String src_path = src_dir.path_join(name);
+			String dst_path = dst_dir.path_join(name);
+			if (src->current_is_dir()) {
+				android_copy_dir_recursive(src_path, dst_path);
+			} else {
+				if (!FileAccess::file_exists(dst_path)) {
+					Error err = DirAccess::copy_absolute(src_path, dst_path);
+					if (err != OK) {
+						UtilityFunctions::printerr("android_copy_dir_recursive: copy failed: ", src_path, " -> ", dst_path);
+					}
+				}
+			}
+		}
+		name = src->get_next();
+	}
+	src->list_dir_end();
+}
+
+// Vrátí globalizovanou user:// cestu odpovídající res:// cestě.
+// Při prvním volání zkopíruje celý strom (pokud ještě nebyl zkopírován).
+// Kopíruje pouze soubory, které v cíli ještě neexistují.
+static String android_resolve_res_path(const String &path) {
+	if (!path.begins_with("res://"))
+		return String(); // není res://, necháme na volajícím
+
+	// Odstraníme "res://" prefix a sestavíme user:// cestu
+	String rel = path.substr(6); // vše za "res://"
+	// Získáme první komponentu (adresář nebo soubor na nejvyšší úrovni)
+	// aby bylo jasné, co kopírovat
+	String user_path = String("user://") + rel;
+
+	// Zjistíme, jestli jde o adresář nebo soubor
+	bool is_dir = (path.get_extension() == ""); // heuristika: bez přípony = adresář
+
+	if (is_dir) {
+		// Zkopírujeme celý strom jednou (marker soubor)
+		String marker = user_path.trim_suffix("/") + "/.android_copied";
+		if (!FileAccess::file_exists(marker)) {
+			UtilityFunctions::print("android_resolve_res_path: first run, copying tree: ", path, " -> ", user_path);
+			android_copy_dir_recursive(path, user_path);
+			// Zapíšeme marker
+			Ref<FileAccess> mf = FileAccess::open(marker, FileAccess::WRITE);
+			if (mf.is_valid())
+				mf->store_string("ok");
+			UtilityFunctions::print("android_resolve_res_path: copy done, marker written");
+		} else {
+			UtilityFunctions::print("android_resolve_res_path: already copied, using user path: ", user_path);
+		}
+	} else {
+		// Jednotlivý soubor
+		if (!FileAccess::file_exists(user_path)) {
+			UtilityFunctions::print("android_resolve_res_path: copying file: ", path, " -> ", user_path);
+			String parent = user_path.get_base_dir();
+			DirAccess::make_dir_recursive_absolute(
+					ProjectSettings::get_singleton()->globalize_path(parent));
+			Error err = DirAccess::copy_absolute(path, user_path);
+			if (err != OK)
+				UtilityFunctions::printerr("android_resolve_res_path: copy file failed: ", path);
+		} else {
+			UtilityFunctions::print("android_resolve_res_path: file already exists: ", user_path);
+		}
+	}
+
+	return ProjectSettings::get_singleton()->globalize_path(user_path);
+}
+
+// Hlavní helper: rozhodne, co použít.
+// - res:// na Androidu → zkopíruje do user://, vrátí globalizovanou user:// cestu
+// - user:// → globalizuje přímo
+// - cokoliv jiného → vrátí beze změny
+static String android_globalize_path(const String &path) {
+	if (path.begins_with("res://")) {
+		return android_resolve_res_path(path);
+	}
+	if (path.begins_with("user://")) {
+		return ProjectSettings::get_singleton()->globalize_path(path);
+	}
+	return path;
+}
+
+#define PLATFORM_GLOBALIZE_PATH(p) android_globalize_path(p)
+
+#else // ! __ANDROID__
+
+static String default_globalize_path(const String &path) {
+	if (path.begins_with("res://") || path.begins_with("user://"))
+		return ProjectSettings::get_singleton()->globalize_path(path);
+	return path;
+}
+
+#define PLATFORM_GLOBALIZE_PATH(p) default_globalize_path(p)
+
+#endif // __ANDROID__
+// ── konec Android helperu ────────────────────────────────────────────────────
+
 void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("deRNC", "bytearray"), &MBEXclass::deRNC);
 	//godot::ClassDB::bind_method(D_METHOD("TerrainMake", "bytearray", "text"), &MBEXclass::TerrainMake);
@@ -102,8 +220,7 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorCleanLevel"), &MBEXclass::REMC2EditorCleanLevel);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadInGameLevel", "Int"), &MBEXclass::REMC2EditorLoadInGameLevel);
-	}
-
+}
 
 //PlayIntoSoundEvents_1B280
 //StopMusic_8E020();
@@ -120,32 +237,31 @@ void MBEXclass::_bind_methods() {
 int MBEXclass::convertOriginalDataExtractCD(String path, String path2) {
 	String real_path, real_path2;
 	if (path.begins_with("res://") || path.begins_with("user://")) {
-		real_path = ProjectSettings::get_singleton()->globalize_path(path);
+		real_path = PLATFORM_GLOBALIZE_PATH(path);
 	} else {
 		real_path = path;
 	}
 	if (path2.begins_with("res://") || path2.begins_with("user://")) {
-		real_path2 = ProjectSettings::get_singleton()->globalize_path(path2);
+		real_path2 = PLATFORM_GLOBALIZE_PATH(path2);
 	} else {
 		real_path2 = path2;
 	}
-	int result = MBEXcdExtract((char*)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
-	if (result<0)
+	int result = MBEXcdExtract((char *)real_path2.utf8().get_data(), (char *)real_path.utf8().get_data()); //user some path
+	if (result < 0)
 		return result;
 	MBEXfixLang(real_path, 2);
 	return result;
 }
 
 String MBEXclass::REMC2GetLevelType() {
-	if (x_D41A0_BYTEARRAY_4_struct.levelnumber_43w==24)
+	if (x_D41A0_BYTEARRAY_4_struct.levelnumber_43w == 24)
 		return "Final";
-	else
-		if (D41A0_0.terrain_2FECE.MapType == MapType_t::Day) {
-			return String("Day");
-		} else if (D41A0_0.terrain_2FECE.MapType == MapType_t::Night) {
-			return String("Night");
-		} else
-			return String("Cave");
+	else if (D41A0_0.terrain_2FECE.MapType == MapType_t::Day) {
+		return String("Day");
+	} else if (D41A0_0.terrain_2FECE.MapType == MapType_t::Night) {
+		return String("Night");
+	} else
+		return String("Cave");
 }
 
 void MBEXclass::REMC2SetLevelType(String level) {
@@ -333,7 +449,7 @@ void ExampleClass::soundQueueClear() {
 }
 */
 
-Array MBEXclass::getPendingSoundActions() {	
+Array MBEXclass::getPendingSoundActions() {
 	Array result;
 	std::vector<SoundAction> pending = sound_queue_get_pending_actions();
 	for (size_t i = 0; i < pending.size(); i++) {
@@ -347,7 +463,7 @@ Array MBEXclass::getPendingSoundActions() {
 		result.append(d);
 	}
 	sound_queue_clear();
-	return result;	
+	return result;
 }
 
 typedef struct {
@@ -447,7 +563,7 @@ drawSpellInfoType getDraWSpellInfo(type_entity_0x6E8E *playerEvent) //20f260
 Array MBEXclass::getSelectedSpells() {
 	Array result;
 	drawSpellInfoType spellIndex;
-	type_entity_0x6E8E* playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+	type_entity_0x6E8E *playerEntity = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
 	//if (x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400) {
 	spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105]]);
 	Dictionary dl;
@@ -457,18 +573,18 @@ Array MBEXclass::getSelectedSpells() {
 	dl["glow"] = spellIndex.glow;
 	dl["mana1"] = spellIndex.mana1;
 	dl["mana2"] = spellIndex.mana2;
-		result.append(dl);
+	result.append(dl);
 	//}
 	//if (x_D41A0_BYTEARRAY_4_struct.rightSpellPlayerIndex_38401) {
-		spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]]);
-		Dictionary dr;
-		dr["spellIndex"] = spellIndex.spellIndex;
-		dr["glow"] = spellIndex.glow;
-		dr["spellLevel"] = spellIndex.spellLevel;
-		dr["glow"] = spellIndex.glow;
-		dr["mana1"] = spellIndex.mana1;
-		dr["mana2"] = spellIndex.mana2;
-		result.append(dr);
+	spellIndex = getDraWSpellInfo(Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[playerEntity->dword_0xA4_164x->str_611.SpellIndexRight_0x453_1107]]);
+	Dictionary dr;
+	dr["spellIndex"] = spellIndex.spellIndex;
+	dr["glow"] = spellIndex.glow;
+	dr["spellLevel"] = spellIndex.spellLevel;
+	dr["glow"] = spellIndex.glow;
+	dr["mana1"] = spellIndex.mana1;
+	dr["mana2"] = spellIndex.mana2;
+	result.append(dr);
 	//}
 	return result;
 }
@@ -481,15 +597,14 @@ Array MBEXclass::getActiveSpells() {
 	int spellIconIndex = 0;
 	Array result;
 	while (spellIconIndex < 26) {
-		uint8_t spell_state=0;
-		uint32_t spell_mana=0;
+		uint8_t spell_state = 0;
+		uint32_t spell_mana = 0;
 		uint8_t sub_spell_state[3] = { 0, 0, 0 };
 		uint32_t sub_spell_mana[3] = { 0, 0, 0 };
 		int spellIndex2 = spellIndex_D94FF[spellIconIndex];
 		if (SPELLS_BEGIN_BUFFER_str[spellIndex_D94FF[spellIconIndex]].byte_0 && !(!isCaveLevel_D41B6 && spellIndex2 == 25)) {
 			type_entity_0x6E8E *spellEntity = Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[spellIndex_D94FF[spellIconIndex]]];
-			if (spellEntity > Entities_EA3E4[0])
-			{
+			if (spellEntity > Entities_EA3E4[0]) {
 				int subSpellIndex;
 				if (spellIconIndex == playerEntity->dword_0xA4_164x->str_611.spellIndex_0x458_1112) {
 					x_D41A0_BYTEARRAY_4_struct.spellOnCursor_50 = spellIconIndex;
@@ -531,22 +646,20 @@ Array MBEXclass::getActiveSpells() {
 						}
 					}
 					if (canSummon)
-						spell_state=1; //draw standart - fireball
+						spell_state = 1; //draw standart - fireball
 					else
-						spell_state=2; //draw transaprent - fireball
+						spell_state = 2; //draw transaprent - fireball
 				}
 			} else {
 				spell_state = 3;
 				//draw spell icon colorized
 			}
 
-
 			//int selectedSpellIndex = spellIconIndex;
 			//if (selectedSpellIndex != -1)
 			//spellIndex = spellIndex_D94FF[spellIconIndex];
 			signed __int16 spellIndex3 = playerEntity->dword_0xA4_164x->str_611.SpellLevels_0x41D_1053z.SpellIndex[spellIconIndex];
-			for (int subSpellIconIndex = 0; subSpellIconIndex < 3; subSpellIconIndex++)
-			{
+			for (int subSpellIconIndex = 0; subSpellIconIndex < 3; subSpellIconIndex++) {
 				int manaPart = 0;
 				bool canSubSummon = false;
 				if (!SPELLS_BEGIN_BUFFER_str[spellIconIndex].subspell[subSpellIconIndex].maxManaLimit_A || (entityIndex = playerEntity->dword_0xA4_164x->CastleEntityIndex_0x3A_58) != 0 && SPELLS_BEGIN_BUFFER_str[spellIconIndex].subspell[subSpellIconIndex].maxManaLimit_A <= Entities_EA3E4[entityIndex]->mana_0x90_144) {
@@ -557,15 +670,12 @@ Array MBEXclass::getActiveSpells() {
 					sub_spell_state[subSpellIconIndex] = 1;
 				} else {
 					int bitmapIndex;
-					if (canSubSummon)
-					{
+					if (canSubSummon) {
 						if (manaPart)
 							sub_spell_state[subSpellIconIndex] = 2;
 						else
 							sub_spell_state[subSpellIconIndex] = 3;
-					}
-					else
-					{
+					} else {
 						if (manaPart)
 							sub_spell_state[subSpellIconIndex] = 4;
 						else
@@ -574,45 +684,44 @@ Array MBEXclass::getActiveSpells() {
 				}
 			}
 
-
-				/*
-			for (int subSpellIconIndex = 0; subSpellIconIndex < 3; subSpellIconIndex++)
+			/*
+		for (int subSpellIconIndex = 0; subSpellIconIndex < 3; subSpellIconIndex++)
+		{
+			type_entity_0x6E8E *spellEntity = Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[spellIndex_D94FF[spellIconIndex]]];
+			if (spellEntity > Entities_EA3E4[0])
 			{
-				type_entity_0x6E8E *spellEntity = Entities_EA3E4[playerEntity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[spellIndex_D94FF[spellIconIndex]]];
-				if (spellEntity > Entities_EA3E4[0])
-				{
-					bool skipToLabel43 = false;
-					if (SPELLS_BEGIN_BUFFER_str[spellEntity->model_0x40_64].isEnabled_1 & 4) {
-						if (spellEntity->word_0x2E_46 > 0 && spellEntity->word_0x2E_46 < 32 && x_D41A0_BYTEARRAY_4_struct.colorIndex_121[1]) {
-							skipToLabel43 = true;
-						}
+				bool skipToLabel43 = false;
+				if (SPELLS_BEGIN_BUFFER_str[spellEntity->model_0x40_64].isEnabled_1 & 4) {
+					if (spellEntity->word_0x2E_46 > 0 && spellEntity->word_0x2E_46 < 32 && x_D41A0_BYTEARRAY_4_struct.colorIndex_121[1]) {
+						skipToLabel43 = true;
 					}
-					if (!skipToLabel43) {
-						bool canSummon = false;
-						if (!SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIconIndex].maxManaLimit_A || ((entityIndex = playerEntity->dword_0xA4_164x->CastleEntityIndex_0x3A_58) != 0 && SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIconIndex].maxManaLimit_A <= Entities_EA3E4[entityIndex]->mana_0x90_144)) {
-							canSummon = true;
-						}
-						if (canSummon ) {
-							int manaCost = GetSpellManaCost_6D710(playerEntity, spellIndex2, subSpellIconIndex);
-							if (manaCost > 0) {
-								//DrawBitmap_2BB40(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_BAR], scale);
-								//DrawLine_2BC80(posX + posIconsX + (6 * scale), posIconsY + (28 * scale), (36 * scale) * (playerEntity->mana_0x90_144 % manaCost) / manaCost, (4 * scale), color1);
-								//drawline color1-!!!!
-								int manaPosX = playerEntity->mana_0x90_144 / manaCost;
-								sub_spell_mana[subSpellIconIndex] = manaPosX;
-								//draw manaPosX color0-!!!!
-							}
-						}
-						if (canSummon)
-							sub_spell_state[subSpellIconIndex] = 1; //draw standart - fireball
-						else
-							sub_spell_state[subSpellIconIndex] = 2; //draw transaprent - fireball
-					}
-				} else {
-					sub_spell_state[subSpellIconIndex] = 3;
-					//draw spell icon colorized
 				}
-			}		*/	
+				if (!skipToLabel43) {
+					bool canSummon = false;
+					if (!SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIconIndex].maxManaLimit_A || ((entityIndex = playerEntity->dword_0xA4_164x->CastleEntityIndex_0x3A_58) != 0 && SPELLS_BEGIN_BUFFER_str[spellIndex2].subspell[subSpellIconIndex].maxManaLimit_A <= Entities_EA3E4[entityIndex]->mana_0x90_144)) {
+						canSummon = true;
+					}
+					if (canSummon ) {
+						int manaCost = GetSpellManaCost_6D710(playerEntity, spellIndex2, subSpellIconIndex);
+						if (manaCost > 0) {
+							//DrawBitmap_2BB40(posX + posIconsX, posIconsY, (*filearray_2aa18c[filearrayindex_MSPRD00DATTAB].posistruct)[SPELL_TILE_BAR], scale);
+							//DrawLine_2BC80(posX + posIconsX + (6 * scale), posIconsY + (28 * scale), (36 * scale) * (playerEntity->mana_0x90_144 % manaCost) / manaCost, (4 * scale), color1);
+							//drawline color1-!!!!
+							int manaPosX = playerEntity->mana_0x90_144 / manaCost;
+							sub_spell_mana[subSpellIconIndex] = manaPosX;
+							//draw manaPosX color0-!!!!
+						}
+					}
+					if (canSummon)
+						sub_spell_state[subSpellIconIndex] = 1; //draw standart - fireball
+					else
+						sub_spell_state[subSpellIconIndex] = 2; //draw transaprent - fireball
+				}
+			} else {
+				sub_spell_state[subSpellIconIndex] = 3;
+				//draw spell icon colorized
+			}
+		}		*/
 		}
 		Dictionary d;
 		d["spell_state"] = spell_state;
@@ -631,12 +740,11 @@ Array MBEXclass::getActiveSpells() {
 	return result;
 }
 
-
 void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool isCave) {
 	if (mesh_instance_bottom == p_node_bottom)
 		return;
 	if (mesh_instance_bottom != nullptr) {
-		//mesh_instance_bottom->queue_free();		
+		//mesh_instance_bottom->queue_free();
 		height_image_bottom.unref();
 		height_texture_bottom.unref();
 		control_image.unref();
@@ -668,7 +776,7 @@ void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool i
 }
 
 void MBEXclass::recalculate_mesh(bool isCave) {
-	surface_tool.instantiate();	
+	surface_tool.instantiate();
 	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
 	surface_tool->set_custom_format(0, SurfaceTool::CUSTOM_RGBA_FLOAT);
 
@@ -816,8 +924,7 @@ void MBEXclass::initialize_heightmap(int index) {
 }
 
 void MBEXclass::add_triangle(Vector3 p1, Vector3 p2, Vector3 p3, Vector2 uv1, Vector2 uv2, Vector2 uv3,
-	Vector2 grid_p1, Vector2 grid_p2, Vector2 grid_p3, Vector2 main_p)
-{
+		Vector2 grid_p1, Vector2 grid_p2, Vector2 grid_p3, Vector2 main_p) {
 	Vector3 verts[] = { p1, p2, p3 };
 	Vector2 uvs[] = { uv1, uv2, uv3 };
 
@@ -906,16 +1013,16 @@ PackedFloat32Array MBEXclass::GetEntites() {
 		type_entity_0x6E8E *actEntity = Entities_EA3E4[i];
 
 		if (!(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x20u) && (particlesParameters_D951C[actEntity->word_0x5A_90].word_0 == 461))
-			continue;//not show mount before end level
+			continue; //not show mount before end level
 		if (!(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x20u) && (particlesParameters_D951C[actEntity->word_0x5A_90].word_0 == 462))
 			continue; //not show mount before end level
 
 		write_ptr[idx++] = (float)actEntity->position_0x4C_76.x; //1
 		write_ptr[idx++] = (float)actEntity->position_0x4C_76.y; //2
-		write_ptr[idx++] = (float)actEntity->position_0x4C_76.z;//3
-		write_ptr[idx++] = (float)actEntity->array_0x52_82.yaw;//4
-		write_ptr[idx++] = (float)actEntity->array_0x52_82.pitch;//5
-		write_ptr[idx++] = (float)actEntity->array_0x52_82.roll;//6
+		write_ptr[idx++] = (float)actEntity->position_0x4C_76.z; //3
+		write_ptr[idx++] = (float)actEntity->array_0x52_82.yaw; //4
+		write_ptr[idx++] = (float)actEntity->array_0x52_82.pitch; //5
+		write_ptr[idx++] = (float)actEntity->array_0x52_82.roll; //6
 
 		write_ptr[idx++] = (float)actEntity->actionIndex_0x45_69; //7 = 0x29;
 		write_ptr[idx++] = (float)actEntity->class_0x3F_63; //8 = 0xA;
@@ -928,7 +1035,7 @@ PackedFloat32Array MBEXclass::GetEntites() {
 		write_ptr[idx++] = (float)actEntity->byte_0x39_57; //15 = 128;
 		write_ptr[idx++] = (float)actEntity->byte_0x3A_58; //16 = 0;
 
-		write_ptr[idx++] = (float)actEntity->id_0x1A_26;//17
+		write_ptr[idx++] = (float)actEntity->id_0x1A_26; //17
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[0]; //18
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[1]; //19
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[2]; //20
@@ -957,7 +1064,7 @@ PackedFloat32Array MBEXclass::GetEntites() {
 		switch (test) {
 			case 0: //hrac0-ok
 				break;
-			case 8://strelec
+			case 8: //strelec
 				break;
 			case 38: //ohen-ok
 				break;
@@ -966,7 +1073,7 @@ PackedFloat32Array MBEXclass::GetEntites() {
 			case 57: //kour1(dole)-ok
 				break;
 			case 58: //mana
-				if (actEntity->class_0x3F_63 == 5)//mana snake
+				if (actEntity->class_0x3F_63 == 5) //mana snake
 					break;
 				break;
 			case 59: //schranka s kouzlem-ok
@@ -993,8 +1100,8 @@ PackedFloat32Array MBEXclass::GetEntites() {
 				break;
 			case 411: //mummy-ok
 				break;
-			case 424: //muschroom1				
-				break;//12
+			case 424: //muschroom1
+				break; //12
 			case 425: //muschroom2
 				break;
 			default:
@@ -1010,7 +1117,7 @@ PackedFloat32Array MBEXclass::GetEntites() {
 	return result;
 }
 
-Ref<Image> GetFrameBuffer(int width,int height) {
+Ref<Image> GetFrameBuffer(int width, int height) {
 	uint8_t *palette = VGA_Get_Palette();
 	int crop_x = 0;
 	int crop_y = 0;
@@ -1117,11 +1224,11 @@ Array MBEXclass::getPaletteModifications() {
 
 bool inverse_mouseY;
 bool shift_pressed = false;
-void handleInputs(Dictionary inputs,int type) {
+void handleInputs(Dictionary inputs, int type) {
 	LastPressedKey_1806E4 = 0;
 	//type==0 game
 	//type==1 mapmenu
-	Array key_changes = inputs["key_changes"];	
+	Array key_changes = inputs["key_changes"];
 	for (int i = 0; i < key_changes.size(); i++) {
 		Dictionary change = key_changes[i];
 		int key_index = change["key_index"];
@@ -1136,133 +1243,133 @@ void handleInputs(Dictionary inputs,int type) {
 					mainSetPress(is_pressed, key_index);
 			}
 		} else
-		switch (key_index) {
-			case 0x1177:
-				mainSetPress(is_pressed, /*inputMapping.Forward*/ 0x4800); //UP
-				break;
-			case 0x1f73:
-				mainSetPress(is_pressed, /*inputMapping.Backwards*/ 0x5000); //DOWN
-				break;
-			case 0x1e61:
-				mainSetPress(is_pressed, /*inputMapping.Left*/ 0x4b00); //LEFT
-				break;
-			case 0x2064:
-				mainSetPress(is_pressed, /*inputMapping.Right*/ 0x4d00); //RIGHT
-				break;
-			case 0x3920:
-				mainSetPress(is_pressed, 0x3920); //SPACE
-				break;
-			case 0x011B:
-				mainSetPress(is_pressed, 0x011B); //ESC
-				break;
-			case 0x3c00: //F2
-				mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
-				break;
-			case 0x3d00: //F3
-				if (x_D41A0_BYTEARRAY_4_struct.speedIndex<2)
-					mainSetPress(is_pressed, 0x3d00); //F3 - change speed
-				break;
-			case 0x3e00: //F4
-				if (x_D41A0_BYTEARRAY_4_struct.speedIndex > 0) {
-					if (is_pressed)
-						x_D41A0_BYTEARRAY_4_struct.speedIndex = (x_D41A0_BYTEARRAY_4_struct.speedIndex + 1) % 3;
-					mainSetPress(is_pressed, 0x3d00); //F3 - change speed
-				}
-				break;
-			case 0x4200: //F8
-				mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
-				break;
-			case 0x2d78: //X
-				mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
-				break;
-			case 0x1de0:
-				//mainSetPress(is_pressed, 0x1d00); //CTRL
-				mainSetPress(is_pressed, 0x1de0); //CTRL
-				//0xe0 - LEFT CTRL//inputMapping.SpellMenu
-				//0xe1 - SHIFT LEFT
-				//0xe2 - ALT LEFT
-				//0xe3 - LEFT WIN / META
-				//0xe4 - RIGHT CTRL
-				//0xe5 - RIGHT SHIFT
-				//0xe6 - RIGHT ALT
-				//0xe7 - RIGHT WIN / META
-				break;
-			case 0x2ae1: //SHIFT
-				shift_pressed = is_pressed;
-				mainSetPress(is_pressed, 0x2ae1); //SHIFT
-				break;
-			case 0x38e2: //ALT
-				mainSetPress(is_pressed, 0x38e2); //ALT
-				break;
-			/*
-			case 0x5300: //DELETE
-				if (is_pressed) {
-					HandleButtonClick_191B0(29, 0);
-					HandleButtonClick_191B0(27, 0);
-				}
-				break;*/
-			case 0x2368: //H - change graphics type
-				if (is_pressed) {
-					graphics_enhance = 1 - graphics_enhance;
+			switch (key_index) {
+				case 0x1177:
+					mainSetPress(is_pressed, /*inputMapping.Forward*/ 0x4800); //UP
+					break;
+				case 0x1f73:
+					mainSetPress(is_pressed, /*inputMapping.Backwards*/ 0x5000); //DOWN
+					break;
+				case 0x1e61:
+					mainSetPress(is_pressed, /*inputMapping.Left*/ 0x4b00); //LEFT
+					break;
+				case 0x2064:
+					mainSetPress(is_pressed, /*inputMapping.Right*/ 0x4d00); //RIGHT
+					break;
+				case 0x3920:
+					mainSetPress(is_pressed, 0x3920); //SPACE
+					break;
+				case 0x011B:
+					mainSetPress(is_pressed, 0x011B); //ESC
+					break;
+				case 0x3c00: //F2
+					mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
+					break;
+				case 0x3d00: //F3
+					if (x_D41A0_BYTEARRAY_4_struct.speedIndex < 2)
+						mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+					break;
+				case 0x3e00: //F4
+					if (x_D41A0_BYTEARRAY_4_struct.speedIndex > 0) {
+						if (is_pressed)
+							x_D41A0_BYTEARRAY_4_struct.speedIndex = (x_D41A0_BYTEARRAY_4_struct.speedIndex + 1) % 3;
+						mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+					}
+					break;
+				case 0x4200: //F8
+					mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
+					break;
+				case 0x2d78: //X
+					mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
+					break;
+				case 0x1de0:
+					//mainSetPress(is_pressed, 0x1d00); //CTRL
+					mainSetPress(is_pressed, 0x1de0); //CTRL
+					//0xe0 - LEFT CTRL//inputMapping.SpellMenu
+					//0xe1 - SHIFT LEFT
+					//0xe2 - ALT LEFT
+					//0xe3 - LEFT WIN / META
+					//0xe4 - RIGHT CTRL
+					//0xe5 - RIGHT SHIFT
+					//0xe6 - RIGHT ALT
+					//0xe7 - RIGHT WIN / META
+					break;
+				case 0x2ae1: //SHIFT
+					shift_pressed = is_pressed;
+					mainSetPress(is_pressed, 0x2ae1); //SHIFT
+					break;
+				case 0x38e2: //ALT
+					mainSetPress(is_pressed, 0x38e2); //ALT
+					break;
+				/*
+				case 0x5300: //DELETE
+					if (is_pressed) {
+						HandleButtonClick_191B0(29, 0);
+						HandleButtonClick_191B0(27, 0);
+					}
+					break;*/
+				case 0x2368: //H - change graphics type
+					if (is_pressed) {
+						graphics_enhance = 1 - graphics_enhance;
 
-					if (graphics_enhance) {
-						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
-					} else
-						D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
-				}
-				break;
-			case 0x1970: //P - pause
-				if (is_pressed)
+						if (graphics_enhance) {
+							D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
+						} else
+							D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
+					}
+					break;
+				case 0x1970: //P - pause
+					if (is_pressed)
+						game_paused = 1 - game_paused;
+					break;
+				case 0x2e63: //C - pause + spell menu
 					game_paused = 1 - game_paused;
-				break;
-			case 0x2e63: //C - pause + spell menu
-				game_paused = 1 - game_paused;
-				mainSetPress(is_pressed, 0x1de0); //CTRL
-				//mainSetPress(is_pressed, 0x186f);
-				break;
-			case 0x186f: //O - objective
-				mainSetPress(is_pressed, 0x186f); //O
-				break;
-			case 0x1769: //I - one step in pause mode
-				if (game_paused)
-					oneFrameRun = true;
-				break;
-			case 0x1c0d: //Enter - change map type
-				if (is_pressed)
-					mainSetPress(is_pressed, key_index);
-				break;
-			case 0x266c: //L - destroy castle
-				if (is_pressed) {
-					type_entity_0x6E8E* event = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
-					if (event->dword_0xA4_164x->CastleEntityIndex_0x3A_58)
-						HandleButtonClick_191B0(42, 0);
-				}
-				break;
-			case 0x256b: //K - kill all creatures - cheat
-				KillAllCreatures_1B5F0();
-				break;
-			case 0x3f00://F5
-				if (type != 0)
+					mainSetPress(is_pressed, 0x1de0); //CTRL
+					//mainSetPress(is_pressed, 0x186f);
 					break;
-				if (is_pressed) {
-					SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
-					x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
-					x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
-					HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
-				}
-				break;
-			case 0x4300://F9
-				if (type != 0)
+				case 0x186f: //O - objective
+					mainSetPress(is_pressed, 0x186f); //O
 					break;
-				if (is_pressed) {
-					LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
-					x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
-					HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
-				}
-				break;
-			default:
-				break;
-		}
+				case 0x1769: //I - one step in pause mode
+					if (game_paused)
+						oneFrameRun = true;
+					break;
+				case 0x1c0d: //Enter - change map type
+					if (is_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
+				case 0x266c: //L - destroy castle
+					if (is_pressed) {
+						type_entity_0x6E8E *event = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+						if (event->dword_0xA4_164x->CastleEntityIndex_0x3A_58)
+							HandleButtonClick_191B0(42, 0);
+					}
+					break;
+				case 0x256b: //K - kill all creatures - cheat
+					KillAllCreatures_1B5F0();
+					break;
+				case 0x3f00: //F5
+					if (type != 0)
+						break;
+					if (is_pressed) {
+						SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
+						x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
+						x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
+						HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+					}
+					break;
+				case 0x4300: //F9
+					if (type != 0)
+						break;
+					if (is_pressed) {
+						LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
+						x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
+						HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+					}
+					break;
+				default:
+					break;
+			}
 	}
 
 	int buttonresult = 1;
@@ -1317,8 +1424,7 @@ void handleInputs(Dictionary inputs,int type) {
 	}
 
 	Vector2 mouse_pos;
-	if (type == 0)
-	{
+	if (type == 0) {
 		//mouse_pos = inputs["mouse_pos"];
 		mouse_pos = inputs["mouse_pos2"];
 		if (x_WORD_18072C_cursor_sizex == 0 && inverse_mouseY)
@@ -1326,8 +1432,7 @@ void handleInputs(Dictionary inputs,int type) {
 		else
 			MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
 	}
-	if (type != 0)
-	{
+	if (type != 0) {
 		mouse_pos = inputs["mouse_pos2"];
 		MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
 	}
@@ -1402,14 +1507,14 @@ Dictionary MBEXclass::GetPlayerPositionRotation() {
 }
 
 void TerrainMake(PackedByteArray bytearray, String cdPath) {
-	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+	String real_cdPath = PLATFORM_GLOBALIZE_PATH(cdPath);
 
 	const uint8_t *src = bytearray.ptr();
 	if (bytearray.size() < sizeof(Type_CompressedLevel_2FECE)) {
 		return;
 	}
 
-	support_begin();	
+	support_begin();
 
 	Type_CompressedLevel_2FECE shadow_a2x;
 	qmemcpy(&shadow_a2x, (Type_CompressedLevel_2FECE *)(const void *)src, sizeof(Type_CompressedLevel_2FECE)); //0x6604
@@ -1453,7 +1558,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	sub_8CEDF_install_mouse();
 
 	sub_46DD0_init_sound_and_music();
-	
+
 	//end - code from Initialize
 
 	//x_BYTE_F5538[str_TMAPS00TAB_BEGIN_BUFFER[str_WORD_D951C[a1].word_0].word_8]
@@ -1478,7 +1583,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 6);
 
-	x_DWORD_180648_map_resolution2_x = 640;//fake resolution
+	x_DWORD_180648_map_resolution2_x = 640; //fake resolution
 	x_DWORD_180644_map_resolution2_y = 480;
 	//end - code from MainMenu
 
@@ -1531,7 +1636,7 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 	char dataPath[MAX_PATH];
 	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/PALN-0.DAT");
 	DataFileIO::ReadFileAndDecompress(dataPath, xadatapald0dat2.colorPalette_var28);
-	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0],true);
+	VGA_Set_Palette(xadatapald0dat2.colorPalette_var28[0], true);
 
 	soundActive_E3799 = true;
 	soundAble_E3798 = true;
@@ -1564,8 +1669,10 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 	UtilityFunctions::print("REMC2BeginGame gamePath: ", gamePath);
 	UtilityFunctions::print("REMC2BeginGame customLevel: ", customLevel);
 	UtilityFunctions::print("REMC2BeginGame CustomLevelPath: ", CustomLevelPath);
-	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
-	saved_real_gamePath = ProjectSettings::get_singleton()->globalize_path(gamePath);
+	saved_real_cdPath = PLATFORM_GLOBALIZE_PATH(cdPath);
+	// ── Android: res:// gamePath → zkopíruj do user://, použij user:// cestu ──
+	saved_real_gamePath = PLATFORM_GLOBALIZE_PATH(gamePath);
+	// ── konec Android výjimky ─────────────────────────────────────────────────
 	UtilityFunctions::print("REMC2BeginGame saved_real_cdPath: ", saved_real_cdPath);
 	UtilityFunctions::print("REMC2BeginGame saved_real_gamePath: ", saved_real_gamePath);
 	for (int i = 0; i < 5; ++i)
@@ -1580,7 +1687,7 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 		} else {
 			saved_argc = 5;
 			saved_argv[3] = (char *)"--custom_level";
-			String globalCLPath = ProjectSettings::get_singleton()->globalize_path(CustomLevelPath);
+			String globalCLPath = PLATFORM_GLOBALIZE_PATH(CustomLevelPath);
 			static std::string persistentPath;
 			persistentPath = globalCLPath.utf8().get_data();
 			saved_argv[4] = (char *)persistentPath.c_str();
@@ -1676,7 +1783,6 @@ void MBEXclass::REMC2BeginGame(String cdPath) { //OK!!
 	//changeLanguage(2);//added code
 }*/
 
-
 void REMC2Continue() {
 	// Tato funkce odblokuje vlákno 2
 	{
@@ -1688,7 +1794,7 @@ void REMC2Continue() {
 	main_cv.notify_one();
 }
 
-void MBEXclass::REMC2EndGame() {//OK!!
+void MBEXclass::REMC2EndGame() { //OK!!
 	sub_main_mod_end();
 	support_end();
 	//MBEXstate = 6;
@@ -1696,7 +1802,7 @@ void MBEXclass::REMC2EndGame() {//OK!!
 
 std::set<uint32_t> used_colors; //test used colors in palette
 
-Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
+Ref<Image> getScrBufferImg(uint8_t transparentColor = 255) {
 	uint8_t locTransparentColor = transparentColor;
 
 	POSITION tempRes = VGA_GetResolution();
@@ -1717,13 +1823,13 @@ Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
 			//if(transparentColor!=255)
 			if (transparentColor != 255)
 				used_colors.insert(color_idx);
-			if (color_idx == transparentColor && transparentColor!=255) {
+			if (color_idx == transparentColor && transparentColor != 255) {
 				int dest_pos = (r * crop_w + c) * 4;
 				dest[dest_pos + 0] = 0;
 				dest[dest_pos + 1] = 0;
 				dest[dest_pos + 2] = 0;
 				dest[dest_pos + 3] = 0;
-			}  else {
+			} else {
 				uint8_t red = palette[pal_pos + 0] * 4;
 				uint8_t green = palette[pal_pos + 1] * 4;
 				uint8_t blue = palette[pal_pos + 2] * 4;
@@ -1738,7 +1844,6 @@ Ref<Image> getScrBufferImg(uint8_t transparentColor=255) {
 	Ref<Image> img = Image::create_from_data(crop_w, crop_h, false, Image::FORMAT_RGBA8, rgba_data);
 	return img;
 }
-
 
 int MBEXclass::REMC2GetGraphicsEenhance() {
 	return graphics_enhance;
@@ -1761,7 +1866,6 @@ void MBEXclass::REMC2SetScrBuffer(TextureRect *scrBufferRect) {
 void MBEXclass::REMC2SetCDPath(String cdPath) {
 	saved_real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
 }*/
-
 
 Dictionary MBEXclass::REMC2getWarpMouse() {
 	Dictionary result;
@@ -1803,29 +1907,28 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			//thread2_continue(Thread1_State::CONTINUE);
 			//if (!game_paused || oneFrameRun)
 			//{
-				thread1_wait_for_continue(Thread1_State::CONTINUE);
-				oneFrameRun = false;
+			thread1_wait_for_continue(Thread1_State::CONTINUE);
+			oneFrameRun = false;
 			//}
-				Ref<Image> img;
-				if (inGameBeginSteps > 1 && graphics_enhance)
-					img = getScrBufferImg(MyUiBackGroundColorIdx);//NIGHT 254 or 10, cave 254 or 10, day 254 or 28
-				else
-					img = getScrBufferImg();
-				if (img.is_null())
-					return 0;
-				if (mainTexture.is_null() || mainTexture->get_width() != img->get_width() || mainTexture->get_height() != img->get_height())
-				{
-					mainTexture = ImageTexture::create_from_image(img);
-					mainScrBufferRect->set_texture(mainTexture);
-				} else {
-					mainTexture->update(img);
-				}
-				/*
-				if (PlayInfoFmv_break) {
-					sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
-					mainTexture.unref();
-				}*/
+			Ref<Image> img;
+			if (inGameBeginSteps > 1 && graphics_enhance)
+				img = getScrBufferImg(MyUiBackGroundColorIdx); //NIGHT 254 or 10, cave 254 or 10, day 254 or 28
+			else
+				img = getScrBufferImg();
+			if (img.is_null())
+				return 0;
+			if (mainTexture.is_null() || mainTexture->get_width() != img->get_width() || mainTexture->get_height() != img->get_height()) {
+				mainTexture = ImageTexture::create_from_image(img);
+				mainScrBufferRect->set_texture(mainTexture);
+			} else {
+				mainTexture->update(img);
 			}
+			/*
+			if (PlayInfoFmv_break) {
+				sub_46830_main_loop_mod(0, typeStateMenu{ typeStateMenu::Name::AnimFlv, typeStateMenu::State::End });
+				mainTexture.unref();
+			}*/
+		}
 			switch (thread2_state) {
 				case Thread2_State::SUB_MAIN_END_FUNCTION:
 					return 1;
@@ -1834,8 +1937,7 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 				case Thread2_State::MAIN_MENU_BEGIN:
 					return 3;
 				case Thread2_State::INTRO_BEGIN:
-					switch (numberOfIntroVideos)
-					{
+					switch (numberOfIntroVideos) {
 						case 0:
 							return 15;
 						case 1:
@@ -1893,22 +1995,19 @@ int MBEXclass::REMC2GetTerrainAlt(int x, int y) {
 	return (int)(getTerrainAlt_10C40(&position) / 256);
 }
 
-void MBEXclass::REMC2EditorBegin(String cdPath)
-{
-	String real_cdPath = ProjectSettings::get_singleton()->globalize_path(cdPath);
+void MBEXclass::REMC2EditorBegin(String cdPath) {
+	String real_cdPath = PLATFORM_GLOBALIZE_PATH(cdPath);
 	gameFolder = std::string(real_cdPath.utf8().get_data()) + "GAME/NETHERW";
 	cdFolder = std::string(real_cdPath.utf8().get_data()) + "CD_Files";
 	support_begin();
 	editor_run();
 };
 
-void MBEXclass::REMC2EditorEnd()
-{
+void MBEXclass::REMC2EditorEnd() {
 	support_end();
 };
 
-void MBEXclass::REMC2EditorLoop()
-{
+void MBEXclass::REMC2EditorLoop() {
 	main_x();
 };
 
@@ -2107,7 +2206,7 @@ bool MBEXclass::REMC2EditorIsParentType(int type, int subtype) {
 	return true;
 }
 
-void MBEXclass::REMC2EditorAddEntity(Dictionary entity) {	
+void MBEXclass::REMC2EditorAddEntity(Dictionary entity) {
 	int countEntities = 1200; // adjust to actual field name
 	int lastFreeIndex = -1;
 	for (int idx = countEntities - 1; idx > 0; idx--) {
@@ -2117,8 +2216,7 @@ void MBEXclass::REMC2EditorAddEntity(Dictionary entity) {
 	}
 	if (lastFreeIndex > -1) {
 		tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = 2;
-		if (!entity.is_empty())
-		{
+		if (!entity.is_empty()) {
 			tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = entity["type"];
 			tempTerrain.entity_0x30311[lastFreeIndex].subtype_0x30311 = entity["subtype"];
 			tempTerrain.entity_0x30311[lastFreeIndex].axis2d_4.x = entity["axis_x"];
@@ -2736,7 +2834,7 @@ bool MBEXclass::REMC2EditorLoadLevel(String path) {
 	String fullPath;
 	if (path.is_empty()) {
 		String levelName = "quickSaved";
-		fullPath = ProjectSettings::get_singleton()->globalize_path("user://user-levels/") + levelName + ".mc2";
+		fullPath = PLATFORM_GLOBALIZE_PATH("user://user-levels/") + levelName + ".mc2";
 	} else {
 		fullPath = path;
 	}
@@ -2755,7 +2853,7 @@ void MBEXclass::REMC2EditorSaveLevel(String path) {
 	String fullPath;
 	if (path.is_empty()) {
 		String levelName = "quickSaved";
-		fullPath = ProjectSettings::get_singleton()->globalize_path("user://user-levels/") + levelName + ".mc2";
+		fullPath = PLATFORM_GLOBALIZE_PATH("user://user-levels/") + levelName + ".mc2";
 	} else {
 		fullPath = path;
 	}
@@ -2775,7 +2873,7 @@ void MBEXclass::REMC2EditorSaveLevel(String path) {
 void MBEXclass::REMC2EditorCleanLevel() {
 	memset(&tempTerrain, 0, sizeof(tempTerrain));
 	tempTerrain.word_0x2FED7 = 1;
-	for (int i=0;i<8;i++)
+	for (int i = 0; i < 8; i++)
 		tempTerrain.stages_0x36442[i].index_0 = -1;
 	tempTerrain.entity_0x30311[1].type_0x30311 = 3; // player start
 	tempTerrain.entity_0x30311[1].subtype_0x30311 = 4; // player start
@@ -2784,7 +2882,7 @@ void MBEXclass::REMC2EditorCleanLevel() {
 	//tempTerrain.WizardMapSettings_0x360D2[0].Perception_0x360DD = 128;
 	//tempTerrain.WizardMapSettings_0x360D2[0].Life_0x3612F = 0;
 	for (int i = 0; i < 26; i++)
-		tempTerrain.WizardMapSettings_0x360D2[0].StartingSpells_0x360E1x[i] = 1;//activate spells
+		tempTerrain.WizardMapSettings_0x360D2[0].StartingSpells_0x360E1x[i] = 1; //activate spells
 }
 void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 	loadlevel(levelIndex);
@@ -2798,4 +2896,3 @@ UtilityFunctions::print("REMC2BeginGame: spoustim vlakno 2");
 UtilityFunctions::print("thread2_waiting=", thread2_waiting);
 UtilityFunctions::printerr("Neco se pokazilo!");
 */
-
