@@ -245,10 +245,8 @@ func _input(event: InputEvent) -> void:
 			_move_tree_selection(1)
 			get_viewport().set_input_as_handled()
 			return
-			
+
 	# M pressed
-	if (event is InputEventKey and event.keycode == KEY_SPACE and event.pressed):
-		toggle_editor_control_style()
 	if (event is InputEventKey and event.keycode == KEY_H and event.pressed):
 		$UI.visible = !$UI.visible
 	if (event is InputEventKey and event.keycode == KEY_X and event.pressed):
@@ -265,6 +263,10 @@ func _input(event: InputEvent) -> void:
 				_on_undo_button_down()
 		if command_or_ctrl and event.keycode == KEY_Y:
 			_on_redo_button_down()
+	if event is InputEventMouseButton and event.pressed:
+		match event.button_index:
+			MOUSE_BUTTON_MIDDLE:
+				toggle_editor_control_style()
 	if !is_ui_visible:
 		if event is InputEventMouseButton:
 			match event.button_index:
