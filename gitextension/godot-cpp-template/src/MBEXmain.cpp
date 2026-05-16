@@ -219,6 +219,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorSaveLevel", "text"), &MBEXclass::REMC2EditorSaveLevel);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorCleanLevel"), &MBEXclass::REMC2EditorCleanLevel);
+	godot::ClassDB::bind_method(D_METHOD("REMC2EditorExampleLevel", "int"), &MBEXclass::REMC2EditorExampleLevel);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadInGameLevel", "Int"), &MBEXclass::REMC2EditorLoadInGameLevel);
 }
 
@@ -2884,6 +2885,73 @@ void MBEXclass::REMC2EditorCleanLevel() {
 	for (int i = 0; i < 26; i++)
 		tempTerrain.WizardMapSettings_0x360D2[0].StartingSpells_0x360E1x[i] = 1; //activate spells
 }
+
+void MBEXclass::REMC2EditorExampleLevel(int type) {
+	REMC2EditorCleanLevel();
+	int lastFreeIndex = 1;
+	switch (type) {
+		case 0:
+			for (int i = 0; i < 100; i++) {
+				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 2;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20*(i % 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20*(int)(i / 50);
+			}
+			break;
+		case 1:
+			for (int i = 0; i < 256; i++) {
+				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 3;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+			}
+			break;
+		case 2:
+			for (int i = 0; i < 600; i++) {
+				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 5;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+			}
+			break;
+		case 3:
+			for (int i = 0; i < 100; i++) {
+				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 9;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+			}
+			break;
+		case 4:
+			for (int i = 0; i < 100; i++) {
+				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 10;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+			}
+			break;
+		case 5:
+			for (int i = 0; i < 500; i++) {
+				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 14;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+			}
+			break;
+		case 6:
+			for (int i = 0; i < 100; i++) {
+				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 15;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+			}
+			break;
+		default:
+			break;
+	}
+
+}
+
 void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 	loadlevel(levelIndex);
 }

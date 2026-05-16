@@ -162,6 +162,7 @@ public:
 	void REMC2EditorSaveLevel(String path);
 
 	void REMC2EditorCleanLevel();
+	void REMC2EditorExampleLevel(int type);
 	void REMC2EditorLoadInGameLevel(int levelIndex);
 
 	bool REMC2GetMapMode();

@@ -1508,6 +1508,7 @@ const MENU_FILE_SAVE_LEVEL = 4
 const MENU_FILE_RUN_LEVEL = 5
 const MENU_FILE_CLEAN_LEVEL = 6
 const MENU_FILE_GAME_LEVEL = 7
+const MENU_FILE_EXAMPLE_LEVEL = 8
 
 const MENU_FILTER_SELECTRAY = 0
 const MENU_FILTER_SELECTFILTER = 1
@@ -1555,7 +1556,6 @@ func _on_save_dialog_file_selected(path: String) -> void:
 	
 	
 var _level_select_dialog: Window # Nebo AcceptDialog
-
 func _ensure_level_select_dialog() -> void:
 	if _level_select_dialog != null:
 		return
@@ -1608,7 +1608,63 @@ func _on_level_button_pressed(lvl_id: int) -> void:
 	fillTerrainDetails()
 	#RenderEditorEntites()
 
+var example_names = [
+	"Entities type 2",
+	"Entities type 3",
+	"Entities type 5",
+	"Entities type 10",
+	"Entities type 14",
+	"Entities type 15",
+	"empty",
+	"empty",
+	"empty",
+	"empty",
+	"empty"
+]
+var _example_select_dialog: Window
+func _ensure_example_select_dialog() -> void:
+	if _example_select_dialog != null:
+		return
+	_example_select_dialog = Window.new()
+	_example_select_dialog.title = "Select Example Level"
+	_example_select_dialog.size = Vector2i(500, 150)
+	_example_select_dialog.min_size = Vector2i(400, 120)
+	_example_select_dialog.exclusive = true
+	_example_select_dialog.transient = true
+	_example_select_dialog.close_requested.connect(func(): _example_select_dialog.hide())
+	var vbox = VBoxContainer.new()
+	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 10)
+	var label = Label.new()
+	label.text = "Choose example (0–10):"
+	vbox.add_child(label)
+	var hbox = HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 6)
+	for i in range(11):
+		var col = VBoxContainer.new()
+		col.alignment = BoxContainer.ALIGNMENT_CENTER
+		var btn = Button.new()
+		btn.text = str(i)
+		btn.custom_minimum_size = Vector2(40, 40)
+		btn.pressed.connect(_on_example_button_pressed.bind(i))
+		col.add_child(btn)
+		var lbl = Label.new()
+		lbl.text = example_names[i]
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.add_theme_font_size_override("font_size", 10)
+		col.add_child(lbl)
+		hbox.add_child(col)
+	vbox.add_child(hbox)
+	_example_select_dialog.add_child(vbox)
+	add_child(_example_select_dialog)
+
+func _on_example_button_pressed(example_id: int) -> void:
+	_example_select_dialog.hide()
+	log_message("Loading Example Level: " + str(example_id))
+	Global.MBEX.REMC2EditorExampleLevel(example_id)
+	_on_map_type_state_changed_graphics_typeInt(Global.editorLevel["map_type"])
+
 func _on_file_id_pressed(id: int) -> void:
+	_ensure_file_dialogs()
 	match id:
 		MENU_FILE_EXPORT_CSV:
 			Global.MBEX.REMC2EditorExportToCSV();
@@ -1631,6 +1687,9 @@ func _on_file_id_pressed(id: int) -> void:
 		MENU_FILE_CLEAN_LEVEL:
 			Global.MBEX.REMC2EditorCleanLevel()
 			_on_map_type_state_changed_graphics_typeInt(Global.editorLevel["map_type"])
+		MENU_FILE_EXAMPLE_LEVEL:
+			_ensure_example_select_dialog()
+			_example_select_dialog.popup_centered()
 		MENU_FILE_GAME_LEVEL:
 			_ensure_level_select_dialog()
 			_level_select_dialog.popup_centered()

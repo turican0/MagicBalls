@@ -298,6 +298,7 @@ var library2_scenes = {}
 
 var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
+	Vector3i(2,0,0): "res://entites/object_3_0_sorcerer-white.tscn",#player1-Zanzamar
 	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree -difColors!!!
 	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue -difmodels!!!
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
@@ -310,6 +311,7 @@ var library = {
 	Vector3i(2,424,0): "res://entites/object_2_424_mushroom1.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(2,425,0): "res://entites/object_2_425_mushroom2.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(3,0,0): "",#player1-Zanzamar
+	#Vector3i(3,0,0): "res://entites/object_3_0_sorcerer-white.tscn",#player1-Zanzamar
 	Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,89,0): "res://entites/object_3_89_ballon.tscn",#ballon -difColors!!!
 	Vector3i(3,90,0): "res://entites/object_3_90_ballon.tscn",#ballon -difColors!!!
@@ -444,12 +446,14 @@ var library = {
 	Vector3i(9,146,0): "res://entites/object_9_146_lump.tscn",#crater ball zzzzzzzzzzzzzzOK
 	Vector3i(9,260,0): "res://entites/object_9_260_bone.tscn",#bone spell zzzzzzzzzzzzzzOK
 	Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
+	Vector3i(10,0,0): "res://entites/object_3_0_sorcerer-white.tscn",#fix this model
 	Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK
 	Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion-final-OK
 	Vector3i(10,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star-special
 	Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1-OK
 	Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",#goldMana -OK-standartMana
+	Vector3i(10,60,0): "res://entites/object_9_60_green-spell.tscn",#green-spell
 	Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
 	Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
 	Vector3i(10,68,0): "res://entites/object_10_68_redSphere.tscn",#red sphere xxxxxxxxxxxx
