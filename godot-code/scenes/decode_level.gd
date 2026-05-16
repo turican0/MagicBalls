@@ -296,6 +296,8 @@ var pool_size = 1000
 var library_scenes = {}
 var library2_scenes = {}
 
+#test stone 2 1 - bad 3d model
+
 var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(2,0,0): "res://entites/object_3_0_sorcerer-white.tscn",#player1-Zanzamar

@@ -2073,6 +2073,7 @@ var type_names = {
 	11: "Switches",
 	#12: "Spells",
 	14: "Special",
+	15: "Special2",
 }
 
 var subtype_names = {
@@ -2085,9 +2086,14 @@ var subtype_names = {
 		5: "Blue Dome 2",
 	},
 	3: {
-		4: "Flyer1 (Player)",
-		5: "Flyer2", 6: "Flyer3", 7: "Flyer4",
-		8: "Flyer5", 9: "Flyer6", 10: "Flyer7", 11: "Flyer8",
+		0: "Flyer1 (Player)",
+		1: "Flyer1 (Player)",
+		2: "Flyer1 (Player)",
+		3: "Flyer1 (Player)",
+		4: "Zanzamar mainPlayer",
+		5: "Flyer2",
+		6: "Flyer3",
+		7: "Flyer4",
 	},
 	5: {
 		0: "Dragon",    1: "Goat",     2: "Bee",      3: "Worm",
@@ -2096,21 +2102,23 @@ var subtype_names = {
 		12: "Builder",  13: "Townie",  14: "Trader",
 		16: "Wyvern",   19: "FireFly",
 	},
-	7: {
-		0: "Tornado", 1: "Rain Cloud", 2: "Thunder Cloud",
-		3: "Thermals", 4: "Wind",
-	},
+	#7: {
+		#0: "Tornado", 1: "Rain Cloud", 2: "Thunder Cloud",
+		#3: "Thermals", 4: "Wind",
+	#},
 	10: {
 		0: "Explosion",    1: "Big Explosion", 2: "Dust",
-		3: "Blood",        4: "Spark",         5: "Splash",
+		3: "Blood",        4: "Spark",         5: "Splash(explo3)",
 		6: "Fire",         7: "Freeze",        8: "Mini Volcano",
 		9: "Volcano",      10: "Mini Crater",  11: "Crater",
 		12: "Possession",  13: "White Smoke",  14: "Black Smoke",
 		15: "Earthquake",  17: "Meteor",       21: "Steal Mana",
 		23: "Lightning",   24: "Rain of Fire", 25: "Unknown",
 		28: "Wall",        29: "Path",         31: "Canyon",
-		34: "Teleport",    39: "Mana Ball",    45: "Villager Bldg",
+		34: "Teleport",    39: "Mana Ball",    45: "Building",
 		50: "Ridge Node",  52: "Crab Egg",
+		59: "Smoke1",
+		60: "Smoke2",
 	},
 	11: {
 		0: "Hidden In",    1: "Hidden Out",    2: "Hidden In Re",
@@ -2123,52 +2131,75 @@ var subtype_names = {
 		21: "Griffon",     24: "Genie",        29: "Wyvern",
 		30: "All Creatures", 31: "Exit Level",
 	},
-	12: {
-		0: "Fireball",     1: "Heal",          2: "Speed Up",
-		3: "Possession",   4: "Shield",        5: "Beyond Sight",
-		6: "Earthquake",   7: "Meteor",        8: "Volcano",
-		9: "Crater",       10: "Teleport",     11: "Duel",
-		12: "Invisible",   13: "Steal Mana",   14: "Rebound",
-		15: "Lightning",   16: "Castle",       17: "Skeleton",
-		18: "Thunderbolt", 19: "Mana Magnet",  20: "Fire Wall",
-		21: "Reverse Spd", 22: "Global Death", 23: "Rapid Fireball",
+	#12: {
+		#0: "Fireball",     1: "Heal",          2: "Speed Up",
+		#3: "Possession",   4: "Shield",        5: "Beyond Sight",
+		#6: "Earthquake",   7: "Meteor",        8: "Volcano",
+		#9: "Crater",       10: "Teleport",     11: "Duel",
+		#12: "Invisible",   13: "Steal Mana",   14: "Rebound",
+		#15: "Lightning",   16: "Castle",       17: "Skeleton",
+		#18: "Thunderbolt", 19: "Mana Magnet",  20: "Fire Wall",
+		#21: "Reverse Spd", 22: "Global Death", 23: "Rapid Fireball",
+	#},
+	14: {
+		3: "Scroll",
+		5: "Scroll",
+	},
+	15: {
+		2: "Vase",
 	},
 }
 
 # Obrázky pro typy — cesty přepiš dle svých assetů
 var type_icons = {
-	2:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_075_00.png",
-	3:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_007_00.png",
-	5:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_125_09.png",
+	2:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_075_00.png",#ok
+	3:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_007_00.png",#ok
+	5:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_125_09.png",#ok
 	#7:  "user://convertdata/TMAPS/TMAPS-day/",
-	10: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_115.png",
-	11: "res://gui/editor/switch up.png",
+	10: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_115.png",#ok
+	11: "res://gui/editor/switch up.png",#ok
 	#12: "user://convertdata/TMAPS/TMAPS-day/",
-	14: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_461_00.png",
+	14: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_084.png",#ok
 }
 
 # Obrázky pro subtypes — type_id -> subtype_id -> cesta
 var subtype_icons = {
 	2:  {
+		0: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_075_00.png",#ok
+		1: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_078_00.png",#ok
+		2: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_079_00.png",#ok
+	},
+	3:  {
 		0: "res://entites-editor/icons/2_0_tree.png",
+		1: "res://entites-editor/icons/2_2_dolmen.png",
 		2: "res://entites-editor/icons/2_2_dolmen.png",
+		3: "res://entites-editor/icons/2_2_dolmen.png",
+		4: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_007_00.png",#ok
 	},
 	5:  {
-		1:  "res://entites-editor/icons/5_1_goat.png",
-		3:  "res://entites-editor/icons/5_3_worm.png",
-		4:  "res://entites-editor/icons/5_4_archer.png",
-		13: "res://entites-editor/icons/5_13_people.png",
-		19: "res://entites-editor/icons/5_19_firefly.png",
+		1:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_153_01.png",#ok
+		3:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_036_05.png",#ok
+		4:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_009_01.png",#ok
+		13: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_134_03.png",#ok
+		19: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_285_00.png",#ok
+		45: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_115.png",
 	},
 	10: {
-		0:  "res://entites-editor/icons/10_0_explosion.png",
-		1:  "res://entites-editor/icons/10_1_big_explosion.png",
-		45: "res://entites-editor/icons/10_45_house.png",
-		59: "res://entites-editor/icons/10_59_smoke1.png",
-		60: "res://entites-editor/icons/10_60_smoke2.png",
+		0:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_040_00.png",#ok
+		1:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_040_00.png",#ok
+		5:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_040_00.png",#ok
+		45: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_099.png",#ok
+		59: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_057_00.png",#ok
+		60: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_063_00.png",#ok
 	},
-	14: { 5: "res://entites-editor/icons/14_5_scroll.png" },
-	15: { 2: "res://entites-editor/icons/15_2_vase.png"  },
+	14: {
+		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_259_00.png",#ok
+		5: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_259_00.png",#ok
+	},
+	15: {
+		2: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_059_00.png",#ok
+		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_059_00.png",#ok
+	},
 }
 
 func _make_entity_card(num: String, label_text: String, icon_path: String, on_press: Callable) -> Control:
@@ -2310,7 +2341,6 @@ func _open_subtype_select(type_id: int) -> void:
 		c.queue_free()
 	await get_tree().process_frame
 
-	# Sbíráme subtypes: přednostně z library, doplníme ze subtype_names
 	var subtypes_set: Dictionary = {}
 	for key in library.keys():
 		if key.x == type_id and key.y < 900:
@@ -2332,9 +2362,6 @@ func _open_subtype_select(type_id: int) -> void:
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.custom_minimum_size = Vector2(0, 140)
 
-	var hbox = HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 8)
-
 	if subtypes.is_empty():
 		var fallback = Label.new()
 		fallback.text = "No known subtypes. Will use subtype 0."
@@ -2344,7 +2371,18 @@ func _open_subtype_select(type_id: int) -> void:
 		ok_btn.pressed.connect(_on_subtype_selected.bind(type_id, 0))
 		vbox.add_child(ok_btn)
 	else:
-		for subtype_id in subtypes:
+		const COLS = 10
+		var grid_vbox = VBoxContainer.new()
+		grid_vbox.add_theme_constant_override("separation", 4)
+
+		var current_hbox: HBoxContainer = null
+		for i in range(subtypes.size()):
+			if i % COLS == 0:
+				current_hbox = HBoxContainer.new()
+				current_hbox.add_theme_constant_override("separation", 4)
+				grid_vbox.add_child(current_hbox)
+
+			var subtype_id = subtypes[i]
 			var icon_path = subtype_icons.get(type_id, {}).get(subtype_id, "")
 			var name_str  = subtype_names.get(type_id, {}).get(subtype_id, "")
 			var card = _make_entity_card(
@@ -2353,8 +2391,9 @@ func _open_subtype_select(type_id: int) -> void:
 				icon_path,
 				_on_subtype_selected.bind(type_id, subtype_id)
 			)
-			hbox.add_child(card)
-		scroll.add_child(hbox)
+			current_hbox.add_child(card)
+
+		scroll.add_child(grid_vbox)
 		vbox.add_child(scroll)
 
 	var back_btn = Button.new()
@@ -2363,5 +2402,6 @@ func _open_subtype_select(type_id: int) -> void:
 	vbox.add_child(back_btn)
 
 	_add_entity_dialog.add_child(vbox)
-	_add_entity_dialog.size = Vector2i(max(700, subtypes.size() * 92 + 40), 260)
+	var rows = ceili(subtypes.size() / 10.0)
+	_add_entity_dialog.size = Vector2i(min(10, subtypes.size()) * 96 + 40, 160 + rows * 130)
 	_add_entity_dialog.popup_centered()
