@@ -1612,10 +1612,10 @@ var example_names = [
 	"Entities type 2",
 	"Entities type 3",
 	"Entities type 5",
+	"Entities type 9",
 	"Entities type 10",
 	"Entities type 14",
 	"Entities type 15",
-	"empty",
 	"empty",
 	"empty",
 	"empty",
@@ -1627,7 +1627,7 @@ func _ensure_example_select_dialog() -> void:
 		return
 	_example_select_dialog = Window.new()
 	_example_select_dialog.title = "Select Example Level"
-	_example_select_dialog.size = Vector2i(500, 150)
+	_example_select_dialog.size = Vector2i(800, 150)
 	_example_select_dialog.min_size = Vector2i(400, 120)
 	_example_select_dialog.exclusive = true
 	_example_select_dialog.transient = true

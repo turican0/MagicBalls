@@ -2894,56 +2894,56 @@ void MBEXclass::REMC2EditorExampleLevel(int type) {
 			for (int i = 0; i < 100; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 2;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20*(i % 50);
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20*(int)(i / 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 10 * (int)(i / 25);
 			}
 			break;
 		case 1:
-			for (int i = 0; i < 256; i++) {
+			for (int i = 0; i < 13; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 3;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 10 * (int)(i / 25);
 			}
 			break;
 		case 2:
 			for (int i = 0; i < 600; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 5;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 10 * (int)(i / 25);
 			}
 			break;
 		case 3:
 			for (int i = 0; i < 100; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 9;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 10 * (int)(i / 25);
 			}
 			break;
 		case 4:
 			for (int i = 0; i < 100; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 10;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 10 * (int)(i / 25);
 			}
 			break;
 		case 5:
-			for (int i = 0; i < 500; i++) {
+			for (int i = 0; i < 169; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 14;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 10 * (int)(i / 25);
 			}
 			break;
 		case 6:
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 77; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 15;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 20 * (i % 50);
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 20 * (int)(i / 50);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 10 * (int)(i / 25);
 			}
 			break;
 		default:
