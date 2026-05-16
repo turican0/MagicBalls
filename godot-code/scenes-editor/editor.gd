@@ -2068,10 +2068,11 @@ var type_names = {
 	2:  "Scenery",
 	3:  "Player Spawn",
 	5:  "Creatures",
-	7:  "Weather",
+	#7:  "Weather",
 	10: "Effects",
 	11: "Switches",
-	12: "Spells",
+	#12: "Spells",
+	14: "Special",
 }
 
 var subtype_names = {
@@ -2136,13 +2137,14 @@ var subtype_names = {
 
 # Obrázky pro typy — cesty přepiš dle svých assetů
 var type_icons = {
-	2:  "res://entites-editor/icons/type_scenery.png",
-	3:  "res://entites-editor/icons/type_player.png",
-	5:  "res://entites-editor/icons/type_creature.png",
-	7:  "res://entites-editor/icons/type_weather.png",
-	10: "res://entites-editor/icons/type_effect.png",
-	11: "res://entites-editor/icons/type_switch.png",
-	12: "res://entites-editor/icons/type_spell.png",
+	2:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_075_00.png",
+	3:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_007_00.png",
+	5:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_125_09.png",
+	#7:  "user://convertdata/TMAPS/TMAPS-day/",
+	10: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_115.png",
+	11: "res://gui/editor/switch up.png",
+	#12: "user://convertdata/TMAPS/TMAPS-day/",
+	14: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_461_00.png",
 }
 
 # Obrázky pro subtypes — type_id -> subtype_id -> cesta
@@ -2191,8 +2193,17 @@ func _make_entity_card(num: String, label_text: String, icon_path: String, on_pr
 	tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	tex_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if icon_path != "" and ResourceLoader.exists(icon_path):
-		tex_rect.texture = load(icon_path)
+	if icon_path != "":
+		var path = icon_path
+		# user:// cesty převedeme na absolutní pro FileAccess check
+		if icon_path.begins_with("user://"):
+			path = ProjectSettings.globalize_path(icon_path)
+			if FileAccess.file_exists(path):
+				var img = Image.load_from_file(path)
+				if img:
+					tex_rect.texture = ImageTexture.create_from_image(img)
+		elif ResourceLoader.exists(icon_path):
+			tex_rect.texture = load(icon_path)
 	col.add_child(tex_rect)
 	# Číslo
 	var num_lbl = Label.new()
