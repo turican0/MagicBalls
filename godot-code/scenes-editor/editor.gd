@@ -253,6 +253,8 @@ func _input(event: InputEvent) -> void:
 		delete_selected_entities()
 	if (event is InputEventKey and event.keycode == KEY_N and event.pressed):
 		add_entitity()
+	if (event is InputEventKey and event.keycode == KEY_E and event.pressed):
+		_open_type_select()
 	# UNDO & REDO
 	if event is InputEventKey and event.pressed:
 		var command_or_ctrl = event.ctrl_pressed or event.meta_pressed
@@ -2061,3 +2063,294 @@ func _on_entity_move_button_down() -> void:
 	for node in get_tree().get_nodes_in_group("entities"):
 		if node.get_meta("index") == current_edited_entity:
 			Main_Camera.position = node.position
+
+var type_names = {
+	2:  "Scenery",
+	3:  "Player Spawn",
+	5:  "Creatures",
+	7:  "Weather",
+	10: "Effects",
+	11: "Switches",
+	12: "Spells",
+}
+
+var subtype_names = {
+	2: {
+		0: "Tree",
+		1: "Standing Stone",
+		2: "Dolmen",
+		3: "Bad Stone",
+		4: "Blue Dome",
+		5: "Blue Dome 2",
+	},
+	3: {
+		4: "Flyer1 (Player)",
+		5: "Flyer2", 6: "Flyer3", 7: "Flyer4",
+		8: "Flyer5", 9: "Flyer6", 10: "Flyer7", 11: "Flyer8",
+	},
+	5: {
+		0: "Dragon",    1: "Goat",     2: "Bee",      3: "Worm",
+		4: "Archer",    5: "Crab",     6: "Kraken",   7: "Troll/Ape",
+		8: "Griffin",   9: "Skeleton", 10: "Emu",     11: "Genie",
+		12: "Builder",  13: "Townie",  14: "Trader",
+		16: "Wyvern",   19: "FireFly",
+	},
+	7: {
+		0: "Tornado", 1: "Rain Cloud", 2: "Thunder Cloud",
+		3: "Thermals", 4: "Wind",
+	},
+	10: {
+		0: "Explosion",    1: "Big Explosion", 2: "Dust",
+		3: "Blood",        4: "Spark",         5: "Splash",
+		6: "Fire",         7: "Freeze",        8: "Mini Volcano",
+		9: "Volcano",      10: "Mini Crater",  11: "Crater",
+		12: "Possession",  13: "White Smoke",  14: "Black Smoke",
+		15: "Earthquake",  17: "Meteor",       21: "Steal Mana",
+		23: "Lightning",   24: "Rain of Fire", 25: "Unknown",
+		28: "Wall",        29: "Path",         31: "Canyon",
+		34: "Teleport",    39: "Mana Ball",    45: "Villager Bldg",
+		50: "Ridge Node",  52: "Crab Egg",
+	},
+	11: {
+		0: "Hidden In",    1: "Hidden Out",    2: "Hidden In Re",
+		3: "Hidden Out Re",4: "On Victory",    5: "Death In",
+		6: "Death Out",    7: "Death In Re",   8: "Death Out Re",
+		9: "Obvious In",   10: "Obvious Out",  11: "Obvious In Re",
+		12: "Obvious Out Re", 13: "Dragon",    14: "Vulture",
+		15: "Bee",         16: "Worm",         17: "Archer",
+		18: "Crab",        19: "Kraken",       20: "Troll",
+		21: "Griffon",     24: "Genie",        29: "Wyvern",
+		30: "All Creatures", 31: "Exit Level",
+	},
+	12: {
+		0: "Fireball",     1: "Heal",          2: "Speed Up",
+		3: "Possession",   4: "Shield",        5: "Beyond Sight",
+		6: "Earthquake",   7: "Meteor",        8: "Volcano",
+		9: "Crater",       10: "Teleport",     11: "Duel",
+		12: "Invisible",   13: "Steal Mana",   14: "Rebound",
+		15: "Lightning",   16: "Castle",       17: "Skeleton",
+		18: "Thunderbolt", 19: "Mana Magnet",  20: "Fire Wall",
+		21: "Reverse Spd", 22: "Global Death", 23: "Rapid Fireball",
+	},
+}
+
+# Obrázky pro typy — cesty přepiš dle svých assetů
+var type_icons = {
+	2:  "res://entites-editor/icons/type_scenery.png",
+	3:  "res://entites-editor/icons/type_player.png",
+	5:  "res://entites-editor/icons/type_creature.png",
+	7:  "res://entites-editor/icons/type_weather.png",
+	10: "res://entites-editor/icons/type_effect.png",
+	11: "res://entites-editor/icons/type_switch.png",
+	12: "res://entites-editor/icons/type_spell.png",
+}
+
+# Obrázky pro subtypes — type_id -> subtype_id -> cesta
+var subtype_icons = {
+	2:  {
+		0: "res://entites-editor/icons/2_0_tree.png",
+		2: "res://entites-editor/icons/2_2_dolmen.png",
+	},
+	5:  {
+		1:  "res://entites-editor/icons/5_1_goat.png",
+		3:  "res://entites-editor/icons/5_3_worm.png",
+		4:  "res://entites-editor/icons/5_4_archer.png",
+		13: "res://entites-editor/icons/5_13_people.png",
+		19: "res://entites-editor/icons/5_19_firefly.png",
+	},
+	10: {
+		0:  "res://entites-editor/icons/10_0_explosion.png",
+		1:  "res://entites-editor/icons/10_1_big_explosion.png",
+		45: "res://entites-editor/icons/10_45_house.png",
+		59: "res://entites-editor/icons/10_59_smoke1.png",
+		60: "res://entites-editor/icons/10_60_smoke2.png",
+	},
+	14: { 5: "res://entites-editor/icons/14_5_scroll.png" },
+	15: { 2: "res://entites-editor/icons/15_2_vase.png"  },
+}
+
+func _make_entity_card(num: String, label_text: String, icon_path: String, on_press: Callable) -> Control:
+	# Vnější kontejner — Button jako základ, vše ostatní nad ním
+	var container = Control.new()
+	container.custom_minimum_size = Vector2(88, 120)
+	# Klikatelný button jako pozadí
+	var btn = Button.new()
+	btn.flat = false
+	btn.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	btn.pressed.connect(on_press)
+	container.add_child(btn)
+	# VBox s obsahem nad buttonem
+	var col = VBoxContainer.new()
+	col.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	col.alignment = BoxContainer.ALIGNMENT_CENTER
+	col.mouse_filter = Control.MOUSE_FILTER_IGNORE  # proklikne na button pod ním
+	container.add_child(col)
+	# Obrázek
+	var tex_rect = TextureRect.new()
+	tex_rect.custom_minimum_size = Vector2(64, 64)
+	tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	tex_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if icon_path != "" and ResourceLoader.exists(icon_path):
+		tex_rect.texture = load(icon_path)
+	col.add_child(tex_rect)
+	# Číslo
+	var num_lbl = Label.new()
+	num_lbl.text = num
+	num_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	num_lbl.add_theme_font_size_override("font_size", 11)
+	num_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(num_lbl)
+	# Jméno
+	var name_lbl = Label.new()
+	name_lbl.text = label_text
+	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_lbl.add_theme_font_size_override("font_size", 10)
+	name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	name_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(name_lbl)
+	return container
+
+var _add_entity_dialog: Window
+var _pending_type: int = -1
+
+func _ensure_add_entity_dialog() -> void:
+	if _add_entity_dialog != null:
+		return
+	_add_entity_dialog = Window.new()
+	_add_entity_dialog.title = "Add Entity — Select Type"
+	_add_entity_dialog.size = Vector2i(700, 210)
+	_add_entity_dialog.exclusive = true
+	_add_entity_dialog.transient = true
+	_add_entity_dialog.close_requested.connect(func(): _add_entity_dialog.hide())
+	add_child(_add_entity_dialog)
+
+func _on_type_selected(type_id: int) -> void:
+	_pending_type = type_id
+	_open_subtype_select(type_id)
+
+func _open_type_select() -> void:
+	_ensure_add_entity_dialog()
+	_add_entity_dialog.title = "Add Entity — Select Type"
+	for c in _add_entity_dialog.get_children():
+		c.queue_free()
+	await get_tree().process_frame
+
+	var vbox = VBoxContainer.new()
+	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 10)
+
+	var label = Label.new()
+	label.text = "Choose entity type:"
+	vbox.add_child(label)
+
+	var scroll = ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.custom_minimum_size = Vector2(0, 140)
+
+	var hbox = HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 8)
+
+	for type_id in type_names.keys():
+		var icon_path = type_icons.get(type_id, "")
+		var card = _make_entity_card(
+			str(type_id),
+			type_names[type_id],
+			icon_path,
+			_on_type_selected.bind(type_id)
+		)
+		hbox.add_child(card)
+
+	scroll.add_child(hbox)
+	vbox.add_child(scroll)
+	_add_entity_dialog.add_child(vbox)
+	_add_entity_dialog.size = Vector2i(700, 210)
+	_add_entity_dialog.popup_centered()
+
+func _on_subtype_selected(type_id: int, subtype_id: int) -> void:
+	_add_entity_dialog.hide()
+	log_message("Adding entity T:%d ST:%d" % [type_id, subtype_id])
+
+	var copy_node: Dictionary = {}
+	if current_edited_entity > 0:
+		copy_node = Global.editorLevel["entities"][current_edited_entity].duplicate()
+	elif not get_tree().get_nodes_in_group("selected_entities").is_empty():
+		var sel = get_tree().get_nodes_in_group("selected_entities")[0]
+		copy_node = Global.editorLevel["entities"][sel.get_meta("index")].duplicate()
+	else:
+		copy_node = {
+			"type": 0, "subtype": 0,
+			"axis_x": int(Main_Camera.position.x),
+			"axis_y": int(Main_Camera.position.z),
+			"axis_z": 0,
+			"dis_id": 0, "word10": 0, "stage_tag": 0,
+			"par1": 0, "par2": 0, "par3": 0
+		}
+
+	copy_node["type"] = type_id
+	copy_node["subtype"] = subtype_id
+	copy_node["axis_x"] = int(Main_Camera.position.x)
+	copy_node["axis_y"] = int(Main_Camera.position.z)
+
+	Global.MBEX.REMC2EditorAddEntity(copy_node)
+
+func _open_subtype_select(type_id: int) -> void:
+	_add_entity_dialog.title = "Add Entity — Subtype  (Type %d: %s)" % [type_id, type_names.get(type_id, "?")]
+	for c in _add_entity_dialog.get_children():
+		c.queue_free()
+	await get_tree().process_frame
+
+	# Sbíráme subtypes: přednostně z library, doplníme ze subtype_names
+	var subtypes_set: Dictionary = {}
+	for key in library.keys():
+		if key.x == type_id and key.y < 900:
+			subtypes_set[key.y] = true
+	for st in subtype_names.get(type_id, {}).keys():
+		subtypes_set[st] = true
+	var subtypes = subtypes_set.keys()
+	subtypes.sort()
+
+	var vbox = VBoxContainer.new()
+	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 10)
+
+	var label = Label.new()
+	label.text = "Choose subtype for %s:" % type_names.get(type_id, str(type_id))
+	vbox.add_child(label)
+
+	var scroll = ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.custom_minimum_size = Vector2(0, 140)
+
+	var hbox = HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 8)
+
+	if subtypes.is_empty():
+		var fallback = Label.new()
+		fallback.text = "No known subtypes. Will use subtype 0."
+		vbox.add_child(fallback)
+		var ok_btn = Button.new()
+		ok_btn.text = "Create (subtype 0)"
+		ok_btn.pressed.connect(_on_subtype_selected.bind(type_id, 0))
+		vbox.add_child(ok_btn)
+	else:
+		for subtype_id in subtypes:
+			var icon_path = subtype_icons.get(type_id, {}).get(subtype_id, "")
+			var name_str  = subtype_names.get(type_id, {}).get(subtype_id, "")
+			var card = _make_entity_card(
+				str(subtype_id),
+				name_str,
+				icon_path,
+				_on_subtype_selected.bind(type_id, subtype_id)
+			)
+			hbox.add_child(card)
+		scroll.add_child(hbox)
+		vbox.add_child(scroll)
+
+	var back_btn = Button.new()
+	back_btn.text = "← Back"
+	back_btn.pressed.connect(_open_type_select)
+	vbox.add_child(back_btn)
+
+	_add_entity_dialog.add_child(vbox)
+	_add_entity_dialog.size = Vector2i(max(700, subtypes.size() * 92 + 40), 260)
+	_add_entity_dialog.popup_centered()
