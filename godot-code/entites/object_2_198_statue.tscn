@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bqmimu6xnvpno"]
+
+[ext_resource type="PackedScene" uid="uid://docxmger7goya" path="res://entites/sources/graveyard_angel_statue.glb" id="1_meowp"]
+[ext_resource type="Script" uid="uid://dsovydkyq6o5y" path="res://entites/sources/graveyard_angel_statue.gd" id="2_h1yse"]
+
+[node name="Node3D" type="Node3D" unique_id=247772291]
+
+[node name="Sketchfab_Scene" parent="." unique_id=879507066 instance=ExtResource("1_meowp")]
+transform = Transform3D(-6.5567085e-09, 0, 0.15, 0, 0.15, 0, -0.15, 0, -6.5567085e-09, 0, 0, 0)
+script = ExtResource("2_h1yse")

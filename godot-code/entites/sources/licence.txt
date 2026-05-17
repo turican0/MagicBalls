@@ -193,3 +193,4 @@ vivisuth:
 
 stone:
 	https://sketchfab.com/3d-models/stone-totem-eca00803138f47df9b207cd8499d6503
+	https://sketchfab.com/3d-models/stela-copan-2c44d015d0d148919b6fb3cf280f8586

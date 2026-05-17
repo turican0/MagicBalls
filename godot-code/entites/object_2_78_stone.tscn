@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cur2q1jtr15dy"]
+
+[ext_resource type="PackedScene" uid="uid://dpmsr8bil0bul" path="res://entites/sources/stone/stone.blend" id="1_4vjsf"]
+[ext_resource type="Script" uid="uid://dsovydkyq6o5y" path="res://entites/sources/graveyard_angel_statue.gd" id="2_0j0vy"]
+
+[node name="Node3D" type="Node3D" unique_id=247772291]
+
+[node name="stone" parent="." unique_id=1458051232 instance=ExtResource("1_4vjsf")]
+transform = Transform3D(-2.6226834e-08, 0, 0.6, 0, 0.6, 0, -0.6, 0, -2.6226834e-08, 0, 0, 0)
+script = ExtResource("2_0j0vy")

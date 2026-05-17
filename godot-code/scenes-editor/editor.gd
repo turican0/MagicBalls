@@ -2116,7 +2116,7 @@ var subtype_names = {
 	#},
 	10: {
 		0: "Explosion",    1: "Big Explosion", 2: "none",
-		3: "none",         4: "Wizard",         5: "Splash",
+		3: "none",         4: "Wizard",        5: "Splash",
 		6: "Fire",         7: "Freeze",        8: "Mini Volcano",
 		9: "Volcano",      10: "Mini Crater",  11: "Crater",
 		12: "Possession",  13: "White Smoke",  14: "Black Smoke",

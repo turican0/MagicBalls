@@ -302,12 +302,12 @@ var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(2,0,0): "res://entites/object_3_0_sorcerer-white.tscn",#player1-Zanzamar
 	Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree -difColors!!!
-	Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue -difmodels!!!
+	Vector3i(2,78,0): "res://entites/object_2_198_statue.tscn",#statue -difmodels!!!
 	Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
 	Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2
 	Vector3i(2,178,0): "res://entites/object_2_178_burned_tree.tscn",#burned tree
 	Vector3i(2,179,0): "res://entites/object_2_179_burned_tree.tscn",#burned tree
-	Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2 - same models
+	Vector3i(2,198,0): "res://entites/object_2_198_statue.tscn",#statue2 - level2 - same models
 	Vector3i(2,422,0): "res://entites/object_2_422_barell.tscn",#barell
 	Vector3i(2,423,0): "res://entites/object_2_423_basket.tscn",#basket - yyyyyyyyyyyyyyyyyyyyyyyyy
 	Vector3i(2,424,0): "res://entites/object_2_424_mushroom1.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
@@ -1286,7 +1286,9 @@ func gameInit(useMultimesh):
 			get_parent().get_node("MultiMeshtop").hide()
 	clear_entites_pool()
 
-func setDayEntites():
+func setDayEntites():	
+	updateLibrary(2,78,0,"res://entites/object_2_78_stone.tscn")
+	
 	updateLibrary(5,14,0,"res://entites/object_5_11D_hornet.tscn")
 	updateLibrary(5,15,0,"res://entites/object_5_11D_hornet.tscn")
 	updateLibrary(5,16,0,"res://entites/object_5_11D_hornet.tscn")
@@ -1319,6 +1321,8 @@ func setDayEntites():
 	
 	
 func setNightEntites():
+	updateLibrary(2,78,0,"res://entites/object_2_198_statue.tscn")
+		
 	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,15,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,16,0,"res://entites/object_5_11_bowman.tscn")
@@ -1351,6 +1355,8 @@ func setNightEntites():
 	updateLibrary(10,103,0,"res://entites/object_3_103_posses_building-black.tscn")#castle -difmodels!!!
 
 func setCaveEntites():
+	updateLibrary(2,78,0,"res://entites/object_2_198_statue.tscn")
+
 	updateLibrary(5,14,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,15,0,"res://entites/object_5_11_bowman.tscn")
 	updateLibrary(5,16,0,"res://entites/object_5_11_bowman.tscn")
