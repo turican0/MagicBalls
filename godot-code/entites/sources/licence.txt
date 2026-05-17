@@ -190,3 +190,6 @@ sorcere last:
 
 vivisuth:
 	https://sketchfab.com/3d-models/male-basemesh-de1db382a8b0444199ecc3a3c51f5a43
+
+stone:
+	https://sketchfab.com/3d-models/stone-totem-eca00803138f47df9b207cd8499d6503

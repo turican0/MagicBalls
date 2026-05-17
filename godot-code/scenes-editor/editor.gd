@@ -118,13 +118,16 @@ func _ready() -> void:
 func _connect_terrain_spinboxes() -> void:
 	for i in range(selectors.size()):
 		var sb = selectors[i].get_node_or_null("SpinBox")
-		if sb and not sb.value_changed.is_connected(_on_h_box_container_value_changed):
-			sb.value_changed.connect(_on_h_box_container_value_changed.bind(i))
-
+		if sb:
+			_lock_spinbox_to_integers(sb)  # ADD THIS
+			if not sb.value_changed.is_connected(_on_h_box_container_value_changed):
+				sb.value_changed.connect(_on_h_box_container_value_changed.bind(i))
 	for i in range(TEselector2.size()):
 		var sb = TEselector2[i].get_node_or_null("SpinBox")
-		if sb and not sb.value_changed.is_connected(_on_h_box_container_value_changed2):
-			sb.value_changed.connect(_on_h_box_container_value_changed2.bind(i))
+		if sb:
+			_lock_spinbox_to_integers(sb)  # ADD THIS
+			if not sb.value_changed.is_connected(_on_h_box_container_value_changed2):
+				sb.value_changed.connect(_on_h_box_container_value_changed2.bind(i))
 
 var _filling_terrain_details := false
 func fillTerrainDetails() -> void:
@@ -558,6 +561,7 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 
 var library = {
 	Vector3i(2,0,0): "res://entites-editor/object_2_0_tree.tscn",
+	Vector3i(2,1,0): "res://entites-editor/object_2_1_stone.tscn",
 	Vector3i(2,2,0): "res://entites-editor/object_2_2_dolmen.tscn",
 	Vector3i(3,4,0): "res://entites-editor/object_3_4_player.tscn",
 	Vector3i(5,1,0): "res://entites-editor/object_5_1_goat.tscn",
@@ -569,7 +573,10 @@ var library = {
 	Vector3i(15,2,0): "res://entites-editor/object_15_2_vase.tscn",
 	Vector3i(10,45,0): "res://entites-editor/object_10_45_house.tscn",
 	Vector3i(10,0,0): "res://entites-editor/object_10_0_explosion.tscn",
-	Vector3i(10,1,0): "res://entites-editor/object_10_1_big_explosion.tscn",
+	Vector3i(10,1,0): "res://entites-editor/object_10_0_explosion.tscn",
+	Vector3i(10,4,0): "res://entites-editor/object_3_4_player.tscn",
+	Vector3i(10,5,0): "res://entites-editor/object_10_5_splash.tscn",
+	Vector3i(10,6,0): "res://entites-editor/object_10_6_fire.tscn",
 	Vector3i(10,59,0): "res://entites-editor/object_10_59_smoke1.tscn",
 	Vector3i(10,60,0): "res://entites-editor/object_10_60_smoke2.tscn",
 	Vector3i(0,993,0): "res://entites-editor/object_arrow_stage.tscn",
@@ -1688,6 +1695,7 @@ func _on_file_id_pressed(id: int) -> void:
 			_runGame()
 		MENU_FILE_CLEAN_LEVEL:
 			Global.MBEX.REMC2EditorCleanLevel()
+			Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 			_on_map_type_state_changed_graphics_typeInt(Global.editorLevel["map_type"])
 		MENU_FILE_EXAMPLE_LEVEL:
 			_ensure_example_select_dialog()
@@ -2107,8 +2115,8 @@ var subtype_names = {
 		#3: "Thermals", 4: "Wind",
 	#},
 	10: {
-		0: "Explosion",    1: "Big Explosion", 2: "Dust",
-		3: "Blood",        4: "Spark",         5: "Splash(explo3)",
+		0: "Explosion",    1: "Big Explosion", 2: "none",
+		3: "none",         4: "Wizard",         5: "Splash",
 		6: "Fire",         7: "Freeze",        8: "Mini Volcano",
 		9: "Volcano",      10: "Mini Crater",  11: "Crater",
 		12: "Possession",  13: "White Smoke",  14: "Black Smoke",
@@ -2187,7 +2195,9 @@ var subtype_icons = {
 	10: {
 		0:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_040_00.png",#ok
 		1:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_040_00.png",#ok
-		5:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_040_00.png",#ok
+		4:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_004_00.png",#ok
+		5:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_190_00.png",#ok
+		6:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_077_07.png",#ok
 		45: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_099.png",#ok
 		59: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_057_00.png",#ok
 		60: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_063_00.png",#ok
