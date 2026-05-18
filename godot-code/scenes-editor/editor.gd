@@ -1522,6 +1522,7 @@ const MENU_FILE_RUN_LEVEL = 5
 const MENU_FILE_CLEAN_LEVEL = 6
 const MENU_FILE_GAME_LEVEL = 7
 const MENU_FILE_EXAMPLE_LEVEL = 8
+const MENU_FILE_EXIT = 9
 
 const MENU_FILTER_SELECTRAY = 0
 const MENU_FILTER_SELECTFILTER = 1
@@ -1707,6 +1708,8 @@ func _on_file_id_pressed(id: int) -> void:
 		MENU_FILE_GAME_LEVEL:
 			_ensure_level_select_dialog()
 			_level_select_dialog.popup_centered()
+		MENU_FILE_EXIT:
+			get_tree().quit()
 
 const MENU_VIEW_TOGGLEROOF = 0
 func _on_view_id_pressed(id: int) -> void:
