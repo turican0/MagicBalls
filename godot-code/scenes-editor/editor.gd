@@ -1766,7 +1766,7 @@ func _run_atelier(batch_id: int) -> void:
 	await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 
-	for i in range(80):
+	for i in range(76):
 		var uid: Vector3i
 		var entity_pairs: Array = []
 		match batch_id:
@@ -2316,6 +2316,13 @@ var subtype_icons = {
 		45: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_099.png",#ok
 		59: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_057_00.png",#ok
 		60: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_063_00.png",#ok
+	},
+	11: {
+		0: "res://gui/editor/switchEntites/tile000.png",#ok
+		1: "res://gui/editor/switchEntites/tile001.png",#ok
+		2: "res://gui/editor/switchEntites/tile002.png",#ok
+		3: "res://gui/editor/switchEntites/tile003.png",#ok
+		4: "res://gui/editor/switchEntites/tile004.png",#ok
 	},
 	14: {
 		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_259_00.png",#ok
