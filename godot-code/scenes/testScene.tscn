@@ -26,7 +26,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.730773, 3.7468598)
 projection = 2
 current = true
 size = 0.96049106
-frustum_offset = Vector2(-0.70986843, 0)
+frustum_offset = Vector2(-0.31696206, 0)
 near = 0.25
 far = 16400.0
 script = ExtResource("2_sj726")
@@ -43,8 +43,8 @@ _result_z_far = 16400.0
 _result_size = 0.9605
 _result_left_part = -0.66
 _result_desired_center_x = -0.33
-_result_offset_x = -0.7099000000000001
-_result_frustum_offset = Vector2(-0.7099, 0)
+_result_offset_x = -0.317
+_result_frustum_offset = Vector2(-0.317, 0)
 
 [node name="Control" type="Control" parent="." unique_id=1032119700]
 visible = false

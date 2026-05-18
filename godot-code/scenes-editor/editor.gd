@@ -448,42 +448,37 @@ func update_selection() -> void:
 	var ray_nodes = get_tree().get_nodes_in_group("selected_entities_ray")
 	var filter_nodes = get_tree().get_nodes_in_group("selected_entities_filter")
 	for node in get_tree().get_nodes_in_group("selected_entities"):
-		unmark_as_selected(node,"selected_entities")
+		unmark_as_selected(node, "selected_entities")
 	if not Ray_Cylinder.visible and not EntityFilter_On:
 		for node in get_tree().get_nodes_in_group("entities"):
-			mark_as_selected(node,"selected_entities")
+			mark_as_selected(node, "selected_entities")
+		_refresh_3d_entity_colors()
 		return
 
-	# Výpočet průniku
 	var final_selection: Array[Node] = []
-
 	if Ray_Cylinder.visible and EntityFilter_On:
-		# PRŮNIK obou
 		for node in ray_nodes:
-			if node in filter_nodes:           # nebo node.is_in_group("selected_entities_filter")
+			if node in filter_nodes:
 				final_selection.append(node)
-				
 	elif Ray_Cylinder.visible:
-		# Pouze ray/cylinder
 		final_selection = ray_nodes.duplicate()
-		
 	elif EntityFilter_On:
-		# Pouze filter
 		final_selection = filter_nodes.duplicate()
 
-	# Aplikujeme finální výběr
 	for node in final_selection:
 		if is_instance_valid(node):
-			mark_as_selected(node,"selected_entities")
+			mark_as_selected(node, "selected_entities")
 			
 	if FirstSelectedToEdit and not final_selection.is_empty():
 		if is_instance_valid(final_selection[0]):
 			var node = final_selection[0]
 			if node.has_meta("index"):
-				fillEntityDetails(node.get_meta("index"))
+				var new_idx = node.get_meta("index")
+				if new_idx != current_edited_entity:
+					current_edited_entity = new_idx
+					fillEntityDetails(new_idx)
 	
-	# Debug výpis (můžeš smazat)
-	# print("Selection updated: %d entities | Cylinder: %s | Filter: %s" % [selected_count, cylinder_active, filter_active])
+	_refresh_3d_entity_colors()
 
 func _process(delta: float) -> void:
 	if editor_runned:
@@ -876,27 +871,35 @@ func select_entities_by_filter():
 		else:
 			unmark_as_selected(node,"selected_entities_filter")
 
-func mark_as_selected(node: Node3D,type:String):
+func mark_as_selected(node: Node3D, type: String):
 	if node.is_in_group(type): return
-	node.add_to_group(type)#"selected_entities"
-	if(type=="selected_entities"):
-		var mesh = node.get_node_or_null("MeshInstance3D")
-		if mesh:
-			var mat = mesh.get_surface_override_material(0)
-			if not mat:
-				mat = mesh.mesh.surface_get_material(0).duplicate()
-				mesh.set_surface_override_material(0, mat)
-			mat.albedo_color = Color(1.0, 1.0, 0.0)
+	node.add_to_group(type)
 
-func unmark_as_selected(node: Node3D,type:String):
+func unmark_as_selected(node: Node3D, type: String):
 	if not node.is_in_group(type): return
 	node.remove_from_group(type)
-	if(type=="selected_entities"):
+
+func _refresh_3d_entity_colors() -> void:
+	for node in get_tree().get_nodes_in_group("entities"):
 		var mesh = node.get_node_or_null("MeshInstance3D")
-		if mesh:
-			var mat = mesh.get_surface_override_material(0)
-			if mat:
-				mat.albedo_color = Color(1, 1, 1) 
+		if not mesh:
+			continue
+		var mat = mesh.get_surface_override_material(0)
+		if not mat:
+			mat = mesh.mesh.surface_get_material(0).duplicate()
+			mesh.set_surface_override_material(0, mat)
+		
+		var is_active = node.has_meta("index") and node.get_meta("index") == current_edited_entity
+		var is_selected = node.is_in_group("selected_entities")
+		
+		if is_active and is_selected:
+			mat.albedo_color = Color(0.0, 0.85, 0.95)  # azure = both
+		elif is_active:
+			mat.albedo_color = Color(0.25, 0.6, 1.0)   # blue = only active
+		elif is_selected:
+			mat.albedo_color = Color(1.0, 1.0, 0.0)    # yellow = selected
+		else:
+			mat.albedo_color = Color(1, 1, 1)          # white = nothing
 
 func add_entitity():
 	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")
@@ -1460,6 +1463,7 @@ func _on_tree_entity_selected(index: int) -> void:
 	current_edited_stage = -1
 	current_edited_stagevar = -1
 	fillEntityDetails(index)
+	_refresh_3d_entity_colors()
 	
 func _on_tree_wizard_selected(index: int):
 	if Wizards_Edit_Panel.visible:
