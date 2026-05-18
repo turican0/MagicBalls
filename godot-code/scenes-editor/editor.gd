@@ -1522,7 +1522,8 @@ const MENU_FILE_RUN_LEVEL = 5
 const MENU_FILE_CLEAN_LEVEL = 6
 const MENU_FILE_GAME_LEVEL = 7
 const MENU_FILE_EXAMPLE_LEVEL = 8
-const MENU_FILE_EXIT = 9
+const MENU_FILE_ATELIER = 9
+const MENU_FILE_EXIT = 10
 
 const MENU_FILTER_SELECTRAY = 0
 const MENU_FILTER_SELECTFILTER = 1
@@ -1710,6 +1711,113 @@ func _on_file_id_pressed(id: int) -> void:
 			_level_select_dialog.popup_centered()
 		MENU_FILE_EXIT:
 			get_tree().quit()
+		MENU_FILE_ATELIER:
+			_open_atelier_select()
+
+var _atelier_dialog: Window
+
+func _open_atelier_select() -> void:
+	if _atelier_dialog == null:
+		_atelier_dialog = Window.new()
+		_atelier_dialog.title = "Atelier — Select Batch"
+		_atelier_dialog.size = Vector2i(440, 120)
+		_atelier_dialog.exclusive = true
+		_atelier_dialog.transient = true
+		_atelier_dialog.close_requested.connect(func(): _atelier_dialog.hide())
+
+		var vbox = VBoxContainer.new()
+		vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 10)
+
+		var label = Label.new()
+		label.text = "Choose atelier batch (0–9):"
+		vbox.add_child(label)
+
+		var hbox = HBoxContainer.new()
+		hbox.add_theme_constant_override("separation", 6)
+		for i in range(10):
+			var btn = Button.new()
+			btn.text = str(i)
+			btn.custom_minimum_size = Vector2(36, 36)
+			btn.pressed.connect(_run_atelier.bind(i))
+			hbox.add_child(btn)
+		vbox.add_child(hbox)
+		_atelier_dialog.add_child(vbox)
+		add_child(_atelier_dialog)
+
+	_atelier_dialog.popup_centered()
+
+func _run_atelier(batch_id: int) -> void:
+	_atelier_dialog.hide()
+	log_message("Atelier batch %d starting..." % batch_id)
+
+	# Zajisti složku
+	DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path("user://screenshots/")
+	)
+
+	var oldVisible = $UI.visible
+	var oldCylinder = Ray_Cylinder.visible
+	$UI.visible = false
+	Ray_Cylinder.visible = false
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+
+	for i in range(80):
+		var uid: Vector3i
+		var entity_pairs: Array = []
+		match batch_id:
+			0:
+				uid = Vector3i(10, 45, i)
+			# 1–9: doplň dle potřeby
+			_:
+				log_message("Atelier batch %d: no list defined yet." % batch_id)
+				return
+		var type_id    = uid.x
+		var subtype_id = uid.y
+		var par1 = uid.z
+
+		# Clean level
+		Global.MBEX.REMC2EditorCleanLevel()
+		Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+		_on_map_type_state_changed_graphics_typeInt(Global.editorLevel["map_type"])
+		
+		Main_Camera._pitch = deg_to_rad(-90.0)  # kolmo dolů
+		Main_Camera._yaw   = 0.0
+		Main_Camera._apply_absolute_rotation()
+		Main_Camera.position = Vector3(50, 35, 50)
+
+		Global.editorLevel["entities"][1]["type"]    = type_id
+		Global.editorLevel["entities"][1]["subtype"] = subtype_id
+		Global.editorLevel["entities"][1]["par1"] = par1
+		Global.editorLevel["entities"][1]["dis_id"] = -1
+		Global.editorLevel["entities"][1]["axis_x"]  = 50
+		Global.editorLevel["entities"][1]["axis_y"]  = 50
+		Global.editorLevel["entities"][1]["axis_z"]  = 0
+		Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+		EditorStep()
+		Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+		RenderEditorEntites()
+
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		await get_tree().process_frame
+
+		# Screenshot
+		var img = get_viewport().get_texture().get_image()
+		var filename = "user://screenshots/entity_T_%02d_ST_%02dPAR1_%02d.png" % [type_id, subtype_id, par1]
+		var err = img.save_png(ProjectSettings.globalize_path(filename))
+		if err == OK:
+			log_message("Saved: " + filename, "green")
+		else:
+			log_message("Failed to save: " + filename, "red")
+
+	$UI.visible = oldVisible
+	Ray_Cylinder.visible = oldCylinder
+	log_message("Atelier batch %d done." % batch_id, "green")
 
 const MENU_VIEW_TOGGLEROOF = 0
 func _on_view_id_pressed(id: int) -> void:

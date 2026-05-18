@@ -375,7 +375,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="File" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1089930277]
-item_count = 9
+item_count = 11
 item_0/text = "Export to CSV"
 item_0/id = 0
 item_1/text = "Quick Load Level"
@@ -394,6 +394,10 @@ item_7/text = "Load Game Level"
 item_7/id = 7
 item_8/text = "Example Level"
 item_8/id = 8
+item_9/text = "Atelier"
+item_9/id = 9
+item_10/text = "Exit"
+item_10/id = 11
 
 [node name="View" type="PopupMenu" parent="UI/Control/MenuBar" unique_id=1249348343]
 item_count = 1
