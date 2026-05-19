@@ -2323,6 +2323,18 @@ var subtype_icons = {
 		2: "res://gui/editor/switchEntites/tile002.png",#ok
 		3: "res://gui/editor/switchEntites/tile003.png",#ok
 		4: "res://gui/editor/switchEntites/tile004.png",#ok
+		5: "res://gui/editor/switchEntites/tile005.png",#ok
+		6: "res://gui/editor/switchEntites/tile006.png",#ok
+		7: "res://gui/editor/switchEntites/tile007.png",#ok
+		8: "res://gui/editor/switchEntites/tile008.png",#ok
+		9: "res://gui/editor/switchEntites/tile009.png",#ok
+		10: "res://gui/editor/switchEntites/tile010.png",#ok
+		11: "res://gui/editor/switchEntites/tile011.png",#ok
+		12: "res://gui/editor/switchEntites/tile012.png",#ok
+		13: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_408_04.png",#ok
+		15: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_017_00.png",#ok
+		16: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_036_00.png",#ok
+		29: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_009_02.png",#ok
 	},
 	14: {
 		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_259_00.png",#ok
@@ -2334,7 +2346,55 @@ var subtype_icons = {
 	},
 }
 
-func _make_entity_card(num: String, label_text: String, icon_path: String, on_press: Callable) -> Control:
+var subtype_tooltips = {
+	2: {
+		0: "",
+		1: "",
+		2: "",
+	},
+	5: {
+		1:  "",
+		3:  "",
+		4:  "",
+		13: "",
+		19: "",
+	},
+	10: {
+		0:  "",
+		6:  "",
+		45: "",
+	},
+	11: {
+		0: "A hidden switch activated once by the player moving inside its area.",
+		1: "A hidden switch activated once by the player moving outside its area.",
+		2: "A recurring/repeatable hidden switch activated by the player moving inside its area.",
+		3: "A recurring/repeatable hidden switch activated by the player moving outside its area.",
+		4: "This switch type triggers when the player completes the level (i.e. hit mana target). Levels 20 and 22 use this.",
+		5: "A dangerous switch activated once by the player moving inside its area(same as hidden switch, only different use).",
+		6: "A dangerous switch activated once by the player moving outside its area(same as hidden switch, only different use).",
+		7: "A recurring/repeatable dangerous switch activated by the player moving inside its area(same as hidden switch, only different use).",
+		8: "A recurring/repeatable dangerous switch activated by the player moving outside its area(same as hidden switch, only different use).",
+		9: "A visible switch that triggers by the player moving inside its area. Note, this and all obvious type switches shows a small X at its centre.",
+		10: "A visible switch activated once by the player moving outside its area. Note, this and all obvious type switches shows a small X at its centre",
+		11: "A recurring/repeatable visible switch activated by the player moving inside its area. Note, this and all obvious type switches shows a small X at its centre",
+		12: "A recurring/repeatable visible switch activated by the player moving outside its area. Note, this and all obvious type switches shows a small X at its centre",
+		13: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		14: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		15: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		16: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		17: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		18: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		19: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		20: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		21: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		24: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		29: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
+		30: "Triggers once all creatures of all types on the map have been killed.",
+		31: "LEV000049 Uses this switch type, it marks the final level of the game.",
+	},
+}
+
+func _make_entity_card(num: String, label_text: String, icon_path: String, on_press: Callable, tooltip: String = "") -> Control:
 	# Vnější kontejner — Button jako základ, vše ostatní nad ním
 	var container = Control.new()
 	container.custom_minimum_size = Vector2(88, 120)
@@ -2343,6 +2403,8 @@ func _make_entity_card(num: String, label_text: String, icon_path: String, on_pr
 	btn.flat = false
 	btn.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	btn.pressed.connect(on_press)
+	if tooltip != "":
+		btn.tooltip_text = tooltip
 	container.add_child(btn)
 	# VBox s obsahem nad buttonem
 	var col = VBoxContainer.new()
@@ -2430,7 +2492,8 @@ func _open_type_select() -> void:
 			str(type_id),
 			type_names[type_id],
 			icon_path,
-			_on_type_selected.bind(type_id)
+			_on_type_selected.bind(type_id),
+			"Type %d — %s" % [type_id, type_names[type_id]]
 		)
 		hbox.add_child(card)
 
@@ -2517,11 +2580,13 @@ func _open_subtype_select(type_id: int) -> void:
 			var subtype_id = subtypes[i]
 			var icon_path = subtype_icons.get(type_id, {}).get(subtype_id, "")
 			var name_str  = subtype_names.get(type_id, {}).get(subtype_id, "")
+			var tooltip   = subtype_tooltips.get(type_id, {}).get(subtype_id, "")
 			var card = _make_entity_card(
 				str(subtype_id),
 				name_str,
 				icon_path,
-				_on_subtype_selected.bind(type_id, subtype_id)
+				_on_subtype_selected.bind(type_id, subtype_id),
+				tooltip
 			)
 			current_hbox.add_child(card)
 
