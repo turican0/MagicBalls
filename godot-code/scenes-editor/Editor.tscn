@@ -346,6 +346,7 @@ font_names = PackedStringArray("Consolas")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhayq"]
 transparency = 4
+cull_mode = 2
 albedo_color = Color(1, 0.3254902, 0.25882354, 0.11372549)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_jhayq"]
@@ -353,6 +354,8 @@ material = SubResource("StandardMaterial3D_jhayq")
 top_radius = 0.1
 bottom_radius = 0.1
 height = 20.0
+cap_top = false
+cap_bottom = false
 
 [node name="Editor" type="Node3D" unique_id=310193630]
 script = ExtResource("1_wmxca")

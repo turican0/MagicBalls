@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://d13inobenwvvf"]
+
+[ext_resource type="Script" uid="uid://bd36pmxf62x37" path="res://entites-editor/object_11.gd" id="1_plqbj"]
+[ext_resource type="Texture2D" uid="uid://ca3j5hdvgmyav" path="res://gui/editor/switchEntites/tile001.png" id="2_plqbj"]
+[ext_resource type="Script" uid="uid://dow4auvlljop7" path="res://entites-editor/sprite_3dEditorEntity.gd" id="3_guqly"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_atwak"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_atwak"]
+material = SubResource("StandardMaterial3D_atwak")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_42dfj"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0, 1, 0.049999952, 0.09803922)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hl88p"]
+material = SubResource("StandardMaterial3D_42dfj")
+top_radius = 10.0
+bottom_radius = 10.0
+height = 5.0
+cap_top = false
+cap_bottom = false
+
+[node name="Node3D" type="Node3D" unique_id=1207081722]
+script = ExtResource("1_plqbj")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=447533271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+pixel_size = 0.003
+billboard = 1
+alpha_cut = 1
+text = "TEST"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1932770428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("SphereMesh_atwak")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=571625524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 0)
+billboard = 1
+alpha_cut = 1
+texture = ExtResource("2_plqbj")
+script = ExtResource("3_guqly")
+
+[node name="Cylinder" type="MeshInstance3D" parent="." unique_id=376015394]
+mesh = SubResource("CylinderMesh_hl88p")

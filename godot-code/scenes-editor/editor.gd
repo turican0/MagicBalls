@@ -574,6 +574,8 @@ var library = {
 	Vector3i(10,6,0): "res://entites-editor/object_10_6_fire.tscn",
 	Vector3i(10,59,0): "res://entites-editor/object_10_59_smoke1.tscn",
 	Vector3i(10,60,0): "res://entites-editor/object_10_60_smoke2.tscn",
+	Vector3i(11,0,0): "res://entites-editor/object_11_0.tscn",
+	Vector3i(11,1,0): "res://entites-editor/object_11_1.tscn",
 	Vector3i(0,993,0): "res://entites-editor/object_arrow_stage.tscn",
 	Vector3i(0,994,0): "res://entites-editor/object_stageVEditor.tscn",
 	Vector3i(0,995,0): "res://entites-editor/object_stageEditor.tscn",
