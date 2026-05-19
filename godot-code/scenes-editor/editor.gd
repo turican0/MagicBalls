@@ -576,6 +576,10 @@ var library = {
 	Vector3i(10,60,0): "res://entites-editor/object_10_60_smoke2.tscn",
 	Vector3i(11,0,0): "res://entites-editor/object_11_0.tscn",
 	Vector3i(11,1,0): "res://entites-editor/object_11_1.tscn",
+	Vector3i(11,4,0): "res://entites-editor/object_11_4.tscn",
+	Vector3i(11,12,0): "res://entites-editor/object_11_12.tscn",
+	Vector3i(11,16,0): "res://entites-editor/object_11_16.tscn",
+	Vector3i(11,17,0): "res://entites-editor/object_11_17.tscn",
 	Vector3i(0,993,0): "res://entites-editor/object_arrow_stage.tscn",
 	Vector3i(0,994,0): "res://entites-editor/object_stageVEditor.tscn",
 	Vector3i(0,995,0): "res://entites-editor/object_stageEditor.tscn",
@@ -2336,7 +2340,7 @@ var subtype_icons = {
 		13: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_408_04.png",#ok
 		15: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_017_00.png",#ok
 		16: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_036_00.png",#ok
-		29: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_009_02.png",#ok
+		17: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_009_02.png",#ok
 	},
 	14: {
 		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_259_00.png",#ok

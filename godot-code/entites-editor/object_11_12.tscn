@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://cim7imhu75noq"]
+[gd_scene format=3 uid="uid://brtld6txj3x7i"]
 
-[ext_resource type="Script" uid="uid://bd36pmxf62x37" path="res://entites-editor/object_11.gd" id="1_af7l6"]
-[ext_resource type="Script" uid="uid://dow4auvlljop7" path="res://entites-editor/sprite_3dEditorEntity.gd" id="1_d7rmc"]
-[ext_resource type="Texture2D" uid="uid://d0nhuhd1eyfh8" path="res://gui/editor/switchEntites/tile000.png" id="2_tf53v"]
+[ext_resource type="Script" uid="uid://bd36pmxf62x37" path="res://entites-editor/object_11.gd" id="1_4qprf"]
+[ext_resource type="Texture2D" uid="uid://c1urbr45x6yp5" path="res://gui/editor/switchEntites/tile012.png" id="2_4qprf"]
+[ext_resource type="Script" uid="uid://dow4auvlljop7" path="res://entites-editor/sprite_3dEditorEntity.gd" id="3_mo3n1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_atwak"]
 
@@ -14,7 +14,7 @@ height = 0.4
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_42dfj"]
 transparency = 1
 cull_mode = 2
-albedo_color = Color(0, 1, 0.049999952, 0.09803922)
+albedo_color = Color(0, 0.93333316, 1, 0.09803922)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_hl88p"]
 material = SubResource("StandardMaterial3D_42dfj")
@@ -25,7 +25,7 @@ cap_top = false
 cap_bottom = false
 
 [node name="Node3D" type="Node3D" unique_id=1207081722]
-script = ExtResource("1_af7l6")
+script = ExtResource("1_4qprf")
 
 [node name="Label3D" type="Label3D" parent="." unique_id=447533271]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
@@ -42,8 +42,8 @@ mesh = SubResource("SphereMesh_atwak")
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 3.4, 0)
 billboard = 1
 alpha_cut = 1
-texture = ExtResource("2_tf53v")
-script = ExtResource("1_d7rmc")
+texture = ExtResource("2_4qprf")
+script = ExtResource("3_mo3n1")
 
 [node name="Cylinder" type="MeshInstance3D" parent="." unique_id=376015394]
 mesh = SubResource("CylinderMesh_hl88p")
