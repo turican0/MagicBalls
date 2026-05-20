@@ -255,7 +255,7 @@ func _input(event: InputEvent) -> void:
 	if (event is InputEventKey and event.keycode == KEY_X and event.pressed):
 		delete_selected_entities()
 	if (event is InputEventKey and event.keycode == KEY_N and event.pressed):
-		add_entitity()
+		add_entity()
 	if (event is InputEventKey and event.keycode == KEY_E and event.pressed):
 		_open_type_select()
 	# UNDO & REDO
@@ -907,7 +907,36 @@ func _refresh_3d_entity_colors() -> void:
 		else:
 			mat.albedo_color = Color(1, 1, 1)          # white = nothing
 
-func add_entitity():
+func _snapshot_entity_indices() -> Dictionary:
+	var snap := {}
+	for i in range(1, pool_size):
+		var e = Global.editorLevel["entities"][i]
+		if e["type"] != 0 or e["subtype"] != 0:
+			snap[i] = true
+	return snap
+
+func _find_and_select_new_entity(before: Dictionary) -> void:
+	await get_tree().process_frame
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	var found_idx := -1
+	for i in range(1, pool_size):
+		var e = Global.editorLevel["entities"][i]
+		if (e["type"] != 0 or e["subtype"] != 0) and not before.has(i):
+			found_idx = i
+			break
+	if found_idx == -1:
+		var cx = int(Main_Camera.position.x)
+		var cz = int(Main_Camera.position.z)
+		for i in range(1, pool_size):
+			var e = Global.editorLevel["entities"][i]
+			if abs(e.get("axis_x", 0) - cx) <= 2 and abs(e.get("axis_y", 0) - cz) <= 2:
+				found_idx = i
+				break
+	if found_idx == -1:
+		return
+	_on_tree_entity_selected(found_idx)
+
+func add_entity():
 	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")
 	var copy_node: Dictionary={}
 	if(current_edited_entity>-1):
@@ -915,7 +944,10 @@ func add_entitity():
 	else:
 		if !selected_nodes.is_empty():
 			copy_node=Global.editorLevel["entities"][selected_nodes[0].get_meta("index")]
+	var before = _snapshot_entity_indices()
 	Global.MBEX.REMC2EditorAddEntity(copy_node)
+	EditorStep()
+	_find_and_select_new_entity(before)
 
 func delete_selected_entities():
 	var selected_nodes = get_tree().get_nodes_in_group("selected_entities")
@@ -1385,29 +1417,24 @@ var _filling_wizard_details := false
 
 var current_entity_index: int = -1
 
-func fillEntityDetails(index:int):
+func fillEntityDetails(index: int):
 	if index < 0 or index >= pool_size:
 		return
 	current_entity_index = index
 	_filling_entity_details = true
-	var entities = get_tree().get_nodes_in_group("entities")
-	var finded_node = null
-	for node in entities:
-		if node.has_meta("index") and node.get_meta("index") == index:
-			finded_node=node
-	if finded_node:
-		Entity_Edit.get_node_or_null("IDX/SpinBox").value = finded_node.get_meta("index")
-		Entity_Edit.get_node_or_null("POS/SpinBox").value = finded_node.get_meta("axis_x")
-		Entity_Edit.get_node_or_null("POS/SpinBox2").value = finded_node.get_meta("axis_y")
-		Entity_Edit.get_node_or_null("type_0x30311/SpinBox").value = finded_node.get_meta("type_0x30311")
-		Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox").value = finded_node.get_meta("subtype_0x30311")
-		Entity_Edit.get_node_or_null("DisId/SpinBox").value = finded_node.get_meta("DisId")
-		Entity_Edit.get_node_or_null("word_10/SpinBox").value = finded_node.get_meta("word_10")
-		Entity_Edit.get_node_or_null("stageTag_12/SpinBox").value = finded_node.get_meta("stageTag_12")
-		Entity_Edit.get_node_or_null("par1_14/SpinBox").value = finded_node.get_meta("par1_14")
-		Entity_Edit.get_node_or_null("par2_16/SpinBox").value = finded_node.get_meta("par2_16")
-		Entity_Edit.get_node_or_null("par3_18/SpinBox").value = finded_node.get_meta("par3_18")
-		_filling_entity_details = false
+	var e = Global.editorLevel["entities"][index]
+	Entity_Edit.get_node_or_null("IDX/SpinBox").value        = index
+	Entity_Edit.get_node_or_null("POS/SpinBox").value        = e.get("axis_x", 0)
+	Entity_Edit.get_node_or_null("POS/SpinBox2").value       = e.get("axis_y", 0)
+	Entity_Edit.get_node_or_null("type_0x30311/SpinBox").value    = e.get("type", 0)
+	Entity_Edit.get_node_or_null("subtype_0x30311/SpinBox").value = e.get("subtype", 0)
+	Entity_Edit.get_node_or_null("DisId/SpinBox").value      = e.get("dis_id", 0)
+	Entity_Edit.get_node_or_null("word_10/SpinBox").value    = e.get("word10", 0)
+	Entity_Edit.get_node_or_null("stageTag_12/SpinBox").value = e.get("stage_tag", 0)
+	Entity_Edit.get_node_or_null("par1_14/SpinBox").value    = e.get("par1", 0)
+	Entity_Edit.get_node_or_null("par2_16/SpinBox").value    = e.get("par2", 0)
+	Entity_Edit.get_node_or_null("par3_18/SpinBox").value    = e.get("par3", 0)
+	_filling_entity_details = false
 		
 func _on_tree_item_selected() -> void:
 	var selected = Tree_View.get_selected()
@@ -2509,9 +2536,196 @@ func _open_type_select() -> void:
 	_add_entity_dialog.size = Vector2i(700, 210)
 	_add_entity_dialog.popup_centered()
 
+var _pending_details_needed: bool = true
+
 func _on_subtype_selected(type_id: int, subtype_id: int) -> void:
+	# Zkontroluj, zda je zaškrtnuté "Podrobnosti" a daný subtype je podporován
+	if _pending_details_needed:
+		#_pending_details_needed = true
+		if type_id == 10 and subtype_id == 45:
+			_open_building_par1_select(type_id, subtype_id)
+			return
+		elif type_id == 11 and subtype_id == 0:
+			_open_radius_select(type_id, subtype_id)
+			return
+	_do_add_entity(type_id, subtype_id, 0, 0, 0, 0)
+
+var _building_par1_dialog: Window
+
+func _open_building_par1_select(type_id: int, subtype_id: int) -> void:
+	if _building_par1_dialog == null:
+		_building_par1_dialog = Window.new()
+		_building_par1_dialog.title = "Building — Select Variant (par1)"
+		_building_par1_dialog.size = Vector2i(960, 560)
+		_building_par1_dialog.exclusive = true
+		_building_par1_dialog.transient = true
+		_building_par1_dialog.close_requested.connect(func(): _building_par1_dialog.hide())
+		add_child(_building_par1_dialog)
+	else:
+		for c in _building_par1_dialog.get_children():
+			c.queue_free()
+		await get_tree().process_frame
+
+	var preview_panel = Panel.new()
+	preview_panel.size = Vector2i(256, 256)
+	preview_panel.z_index = 100
+	preview_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview_panel.visible = false
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0)
+	style.border_width_left   = 3
+	style.border_width_right  = 3
+	style.border_width_top    = 3
+	style.border_width_bottom = 3
+	style.border_color = Color(0, 0, 0, 1)
+	preview_panel.add_theme_stylebox_override("panel", style)
+	var preview_tex = TextureRect.new()
+	preview_tex.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	preview_tex.offset_left   = 3
+	preview_tex.offset_top    = 3
+	preview_tex.offset_right  = -3
+	preview_tex.offset_bottom = -3
+	preview_tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	preview_tex.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	preview_tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview_panel.add_child(preview_tex)
+	_building_par1_dialog.add_child(preview_panel)
+
+	var vbox = VBoxContainer.new()
+	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 10)
+	var lbl = Label.new()
+	lbl.text = "Choose building variant (par1):"
+	vbox.add_child(lbl)
+
+	var scroll = ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	scroll.custom_minimum_size   = Vector2(0, 450)
+
+	const COLS = 10
+	var grid_vbox = VBoxContainer.new()
+	grid_vbox.add_theme_constant_override("separation", 4)
+
+	var current_hbox: HBoxContainer = null
+	for i in range(76):  # par1 0..75
+		if i % COLS == 0:
+			current_hbox = HBoxContainer.new()
+			current_hbox.add_theme_constant_override("separation", 4)
+			grid_vbox.add_child(current_hbox)
+
+		var icon_path = "res://gui/editor/terrainEntites/icons/entity_T_10_ST_45PAR1_%02d_result.png" % i
+		var big_path  = "res://gui/editor/terrainEntites/big/entity_T_10_ST_45PAR1_%02d_result.png" % i
+		var card = _make_entity_card(
+			str(i),
+			"Var %d" % i,
+			icon_path,
+			func():
+				_building_par1_dialog.hide()
+				_do_add_entity(type_id, subtype_id, i, 0,-1,-1),
+			"Building variant par1 = %d" % i
+		)
+		var btn = card.get_child(0)
+		btn.mouse_entered.connect(func():
+			var tex: Texture2D = null
+			var abs_path = ProjectSettings.globalize_path(big_path)
+			if FileAccess.file_exists(abs_path):
+				var img = Image.load_from_file(abs_path)
+				if img:
+					tex = ImageTexture.create_from_image(img)
+			elif ResourceLoader.exists(big_path):
+				tex = load(big_path)
+			if tex:
+				preview_tex.texture = tex
+				var dialog_size = _building_par1_dialog.size
+				var mpos = _building_par1_dialog.get_mouse_position()
+				if mpos.x > dialog_size.x / 2.0:
+					preview_panel.position = Vector2(10, 10)  # vlevo nahoře
+				else:
+					preview_panel.position = Vector2(dialog_size.x - 266, 10)  # vpravo nahoře
+				preview_panel.visible = true
+			)
+
+		btn.mouse_exited.connect(func():
+			preview_panel.visible = false
+			)
+		current_hbox.add_child(card)
+
+	scroll.add_child(grid_vbox)
+	vbox.add_child(scroll)
+
+	var back_btn = Button.new()
+	back_btn.text = "← Back"
+	back_btn.pressed.connect(func():
+		_building_par1_dialog.hide()
+		_open_subtype_select(type_id))
+	vbox.add_child(back_btn)
+
+	_building_par1_dialog.add_child(vbox)
+	_building_par1_dialog.popup_centered()
+
+
+# ── Detailový dialog pro 11-0: výběr vzdálenosti/radiusu (par1) ──────────────
+
+var _radius_select_dialog: Window
+
+func _open_radius_select(type_id: int, subtype_id: int) -> void:
+	if _radius_select_dialog == null:
+		_radius_select_dialog = Window.new()
+		_radius_select_dialog.title = "Switch — Set Radius (par1)"
+		_radius_select_dialog.size = Vector2i(370, 160)
+		_radius_select_dialog.exclusive = true
+		_radius_select_dialog.transient = true
+		_radius_select_dialog.close_requested.connect(func(): _radius_select_dialog.hide())
+		add_child(_radius_select_dialog)
+	else:
+		for c in _radius_select_dialog.get_children():
+			c.queue_free()
+		await get_tree().process_frame
+
+	var vbox = VBoxContainer.new()
+	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 12)
+	vbox.add_theme_constant_override("separation", 10)
+
+	var lbl = Label.new()
+	lbl.text = "Distance switch activation:"
+	vbox.add_child(lbl)
+
+	var hbox = HBoxContainer.new()
+	var sb = SpinBox.new()
+	sb.min_value = 0
+	sb.max_value = 255
+	sb.step = 1
+	sb.value = 10
+	sb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_lock_spinbox_to_integers(sb)
+	hbox.add_child(sb)
+	vbox.add_child(hbox)
+
+	var btn_row = HBoxContainer.new()
+	var ok_btn = Button.new()
+	ok_btn.text = "OK — Add Entity"
+	ok_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ok_btn.pressed.connect(func():
+		_radius_select_dialog.hide()
+		_do_add_entity(type_id, subtype_id, 0, int(sb.value),0,0))
+	btn_row.add_child(ok_btn)
+
+	var back_btn = Button.new()
+	back_btn.text = "← Back"
+	back_btn.pressed.connect(func():
+		_radius_select_dialog.hide()
+		_open_subtype_select(type_id))
+	btn_row.add_child(back_btn)
+	vbox.add_child(btn_row)
+
+	_radius_select_dialog.add_child(vbox)
+	_radius_select_dialog.popup_centered()
+
+const ENTITY_DEFAULT = -1000000
+
+func _do_add_entity(type_id: int, subtype_id: int, par1_val: int, word10_val: int, disis_val: int, stage_val: int) -> void:
 	_add_entity_dialog.hide()
-	log_message("Adding entity T:%d ST:%d" % [type_id, subtype_id])
+	log_message("Adding entity T:%d ST:%d PAR1:%d" % [type_id, subtype_id, par1_val])
 
 	var copy_node: Dictionary = {}
 	if current_edited_entity > 0:
@@ -2528,13 +2742,18 @@ func _on_subtype_selected(type_id: int, subtype_id: int) -> void:
 			"dis_id": 0, "word10": 0, "stage_tag": 0,
 			"par1": 0, "par2": 0, "par3": 0
 		}
-
-	copy_node["type"] = type_id
+	copy_node["type"]    = type_id
 	copy_node["subtype"] = subtype_id
-	copy_node["axis_x"] = int(Main_Camera.position.x)
-	copy_node["axis_y"] = int(Main_Camera.position.z)
-
+	copy_node["axis_x"]  = int(Main_Camera.position.x)
+	copy_node["axis_y"]  = int(Main_Camera.position.z)
+	copy_node["par1"]    = par1_val
+	copy_node["word10"]  = word10_val
+	copy_node["dis_id"]    = disis_val
+	copy_node["stage_tag"]  = stage_val
+	var before = _snapshot_entity_indices()
 	Global.MBEX.REMC2EditorAddEntity(copy_node)
+	EditorStep()
+	_find_and_select_new_entity(before)
 
 func _open_subtype_select(type_id: int) -> void:
 	_add_entity_dialog.title = "Add Entity — Subtype  (Type %d: %s)" % [type_id, type_names.get(type_id, "?")]
@@ -2551,12 +2770,25 @@ func _open_subtype_select(type_id: int) -> void:
 	var subtypes = subtypes_set.keys()
 	subtypes.sort()
 
+	var any_has_details := false
+	for st in subtypes:
+		if _subtype_has_details(type_id, st):
+			any_has_details = true
+			break
+
 	var vbox = VBoxContainer.new()
 	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 10)
 
 	var label = Label.new()
 	label.text = "Choose subtype for %s:" % type_names.get(type_id, str(type_id))
 	vbox.add_child(label)
+
+	if any_has_details:
+		var cb = CheckBox.new()
+		cb.text = "Set details after select"
+		cb.button_pressed = _pending_details_needed
+		cb.toggled.connect(func(on): _pending_details_needed = on)
+		vbox.add_child(cb)
 
 	var scroll = ScrollContainer.new()
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -2587,6 +2819,8 @@ func _open_subtype_select(type_id: int) -> void:
 			var icon_path = subtype_icons.get(type_id, {}).get(subtype_id, "")
 			var name_str  = subtype_names.get(type_id, {}).get(subtype_id, "")
 			var tooltip   = subtype_tooltips.get(type_id, {}).get(subtype_id, "")
+			if _subtype_has_details(type_id, subtype_id):
+				name_str = ("★ " if name_str == "" else "★ " + name_str)
 			var card = _make_entity_card(
 				str(subtype_id),
 				name_str,
@@ -2608,3 +2842,8 @@ func _open_subtype_select(type_id: int) -> void:
 	var rows = ceili(subtypes.size() / 10.0)
 	_add_entity_dialog.size = Vector2i(min(10, subtypes.size()) * 96 + 40, 160 + rows * 130)
 	_add_entity_dialog.popup_centered()
+
+func _subtype_has_details(type_id: int, subtype_id: int) -> bool:
+	if type_id == 10 and subtype_id == 45: return true
+	if type_id == 11 and subtype_id == 0:  return true
+	return false
