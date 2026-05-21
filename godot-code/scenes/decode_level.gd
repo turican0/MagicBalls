@@ -298,6 +298,8 @@ var library2_scenes = {}
 
 #test stone 2 1 - bad 3d model
 
+#type 5 - subtype 14 - chnage model to trader
+
 var library = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(2,0,0): "res://entites/object_3_0_sorcerer-white.tscn",#player1-Zanzamar

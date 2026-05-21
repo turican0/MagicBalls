@@ -422,7 +422,6 @@ item_2/checkable = 1
 item_2/id = 2
 item_3/text = "First selected to edit"
 item_3/checkable = 1
-item_3/checked = true
 item_3/id = 3
 
 [node name="Undo" type="Button" parent="UI/Control" unique_id=1018523640]

@@ -558,6 +558,7 @@ var library = {
 	Vector3i(2,0,0): "res://entites-editor/object_2_0_tree.tscn",
 	Vector3i(2,1,0): "res://entites-editor/object_2_1_stone.tscn",
 	Vector3i(2,2,0): "res://entites-editor/object_2_2_dolmen.tscn",
+	Vector3i(2,3,0): "res://entites-editor/object_2_3_statue.tscn",
 	Vector3i(3,4,0): "res://entites-editor/object_3_4_player.tscn",
 	Vector3i(5,1,0): "res://entites-editor/object_5_1_goat.tscn",
 	Vector3i(5,3,0): "res://entites-editor/object_5_3_worm.tscn",
@@ -2236,21 +2237,21 @@ var type_names = {
 var subtype_names = {
 	2: {
 		0: "Tree",
-		1: "Standing Stone",
-		2: "Dolmen",
+		1: "Standing Stone / Statue",
+		2: "Satue",
 		3: "Bad Stone",
 		4: "Blue Dome",
 		5: "Blue Dome 2",
 	},
 	3: {
-		0: "Flyer1 (Player)",
-		1: "Flyer1 (Player)",
-		2: "Flyer1 (Player)",
-		3: "Flyer1 (Player)",
-		4: "Zanzamar mainPlayer",
-		5: "Flyer2",
+		4: "Flyer1(Zanzamar-white)-mainPlayer",
+		5: "Flyer2(Nymphur-red)",
 		6: "Flyer3",
 		7: "Flyer4",
+		8: "Flyer5",
+		9: "Flyer6",
+		10: "Flyer7",
+		11: "Flyer8",
 	},
 	5: {
 		0: "Dragon",    1: "Goat",     2: "Bee",      3: "Worm",
@@ -2325,6 +2326,7 @@ var subtype_icons = {
 		0: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_075_00.png",#ok
 		1: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_078_00.png",#ok
 		2: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_079_00.png",#ok
+		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_198_00.png",#ok
 	},
 	3:  {
 		0: "res://entites-editor/icons/2_0_tree.png",
@@ -2383,9 +2385,10 @@ var subtype_icons = {
 
 var subtype_tooltips = {
 	2: {
-		0: "",
-		1: "",
+		0: "There are two types of tree used in the game. It doesn't seem possible to choose which is used where, they are set pseudo-randomly (as they use a seed they will always be the same choice when the level is loaded)",
+		1: "In day level stone, in night and cave levels statue",
 		2: "",
+		3: "The weird looking stone with the kind of witch creature statue carved into it",
 	},
 	5: {
 		1:  "",
@@ -2396,8 +2399,9 @@ var subtype_tooltips = {
 	},
 	10: {
 		0:  "",
+		1:  "",
 		6:  "",
-		45: "",
+		45: "Many different buildings",
 	},
 	11: {
 		0: "A hidden switch activated once by the player moving inside its area.",
