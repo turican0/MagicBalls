@@ -580,6 +580,7 @@ var library = {
 	Vector3i(11,12,0): "res://entites-editor/object_11_12.tscn",
 	Vector3i(11,16,0): "res://entites-editor/object_11_16.tscn",
 	Vector3i(11,17,0): "res://entites-editor/object_11_17.tscn",
+	Vector3i(11,32,0): "res://entites-editor/object_11_32.tscn",
 	Vector3i(0,993,0): "res://entites-editor/object_arrow_stage.tscn",
 	Vector3i(0,994,0): "res://entites-editor/object_stageVEditor.tscn",
 	Vector3i(0,995,0): "res://entites-editor/object_stageEditor.tscn",
@@ -2368,6 +2369,7 @@ var subtype_icons = {
 		15: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_017_00.png",#ok
 		16: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_036_00.png",#ok
 		17: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_009_02.png",#ok
+		32: "res://gui/editor/switchEntites/tile032.png",#ok
 	},
 	14: {
 		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_259_00.png",#ok
@@ -2424,6 +2426,7 @@ var subtype_tooltips = {
 		29: "These 'creature' switches trigger once all creatures of their respective type on the map have been killed.",
 		30: "Triggers once all creatures of all types on the map have been killed.",
 		31: "LEV000049 Uses this switch type, it marks the final level of the game.",
+		32: "This switch type triggers when the player completes a stage within a multi-stage level."
 	},
 }
 
