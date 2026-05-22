@@ -372,22 +372,22 @@ func update_tree():
 	if Entity_Edit_Panel.visible and current_edited_entity >= 0:
 		if current_edited_entity != _last_scrolled_entity:
 			_last_scrolled_entity = current_edited_entity
-			_on_tree_entity_selected(current_edited_entity)
+			#_on_tree_entity_selected(current_edited_entity)
 			_scroll_tree_to_active("Entities", current_edited_entity)
 	elif Wizards_Edit_Panel.visible and current_edited_wizard >= 0:
 		if current_edited_wizard != _last_scrolled_wizard:
 			_last_scrolled_wizard = current_edited_wizard
-			_on_tree_wizard_selected(current_edited_wizard)
+			#_on_tree_wizard_selected(current_edited_wizard)
 			_scroll_tree_to_active("Wizards", current_edited_wizard)
 	elif Stages_Edit_Panel.visible and current_edited_stage >= 0:
 		if current_edited_stage != _last_scrolled_stage:
 			_last_scrolled_stage = current_edited_stage
-			_on_tree_stages_selected(current_edited_stage)
+			#_on_tree_stages_selected(current_edited_stage)
 			_scroll_tree_to_active("Stages", current_edited_stage)
 	elif StagesVars_Edit_Panel.visible and current_edited_stagevar >= 0:
 		if current_edited_stagevar != _last_scrolled_stagevar:
 			_last_scrolled_stagevar = current_edited_stagevar
-			_on_tree_stagesVars_selected(current_edited_stagevar)
+			#_on_tree_stagesVars_selected(current_edited_stagevar)
 			_scroll_tree_to_active("StagesVars", current_edited_stagevar)
 
 func _scroll_tree_to_active(section_title: String, item_index: int) -> void:
@@ -1895,7 +1895,7 @@ func UpdatePositionLabel():
 
 var EntityFilter_On:bool=false
 
-var FirstSelectedToEdit:bool=true
+var FirstSelectedToEdit:bool=false
 
 func _on_entity_spinbox_value_changed(_value = null) -> void:
 	if Engine.get_process_frames() <= _filling_entity_frame + 2:
@@ -2219,6 +2219,11 @@ func _on_filter_id_pressed(id: int) -> void:
 			popup.set_item_checked(idx, !popup.is_item_checked(idx))
 			var is_checked = popup.is_item_checked(idx)
 			FirstSelectedToEdit = is_checked
+			if FirstSelectedToEdit:
+				current_edited_entity = 0
+				current_edited_wizard = -1
+				current_edited_stage = -1
+				current_edited_stagevar = -1
 
 func _on_entity_set_button_down() -> void:
 	if current_edited_entity <= 0 or current_edited_entity >= pool_size:
