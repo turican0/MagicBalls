@@ -2924,10 +2924,31 @@ void MBEXclass::REMC2EditorExampleLevel(int type) {
 			break;
 		case 4:
 			for (int i = 0; i < 100; i++) {
-				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 10;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
-				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.y = 10 * (int)(i / 25);
+				tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = 10;
+				tempTerrain.entity_0x30311[lastFreeIndex].subtype_0x30311 = i;
+				tempTerrain.entity_0x30311[lastFreeIndex].DisId = 5+i;
+				tempTerrain.entity_0x30311[lastFreeIndex].stageTag_12 = 5 + i;
+				tempTerrain.entity_0x30311[lastFreeIndex].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex++].axis2d_4.y = 10 * (int)(i / 25);
+
+				tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = 11;
+				tempTerrain.entity_0x30311[lastFreeIndex].subtype_0x30311 = 0;
+				tempTerrain.entity_0x30311[lastFreeIndex].word_10 = 5;
+				tempTerrain.entity_0x30311[lastFreeIndex].stageTag_12 = 5+i;
+				tempTerrain.entity_0x30311[lastFreeIndex].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex++].axis2d_4.y = 10 * (int)(i / 25) + 1;
+
+				tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = 2;
+				tempTerrain.entity_0x30311[lastFreeIndex].subtype_0x30311 = 1;
+				tempTerrain.entity_0x30311[lastFreeIndex].axis2d_4.x = 10 * (i % 25);
+				tempTerrain.entity_0x30311[lastFreeIndex++].axis2d_4.y = 10 * (int)(i / 25) + 2;
+
+				if (i % 10 == 0) {
+					tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = 2;
+					tempTerrain.entity_0x30311[lastFreeIndex].subtype_0x30311 = 1;
+					tempTerrain.entity_0x30311[lastFreeIndex].axis2d_4.x = 10 * (i % 25);
+					tempTerrain.entity_0x30311[lastFreeIndex++].axis2d_4.y = 10 * (int)(i / 25) + 3;
+				}
 			}
 			break;
 		case 5:
