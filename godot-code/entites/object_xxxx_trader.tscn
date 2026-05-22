@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://domxjsok2wamd"]
+
+[ext_resource type="PackedScene" uid="uid://c5n3ytd5dls1v" path="res://entites/sources/trader/arab_trader.tscn" id="1_fx01p"]
+
+[node name="Node3D" type="Node3D" unique_id=1922367494]
+
+[node name="arab_trader" parent="." unique_id=1034497648 instance=ExtResource("1_fx01p")]
+transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)

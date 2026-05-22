@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://c5n3ytd5dls1v"]
+
+[ext_resource type="PackedScene" uid="uid://d3vv76rqkk2de" path="res://entites/sources/trader/arab_trader.blend" id="1_6boac"]
+
+[node name="arab_trader" unique_id=1034497648 instance=ExtResource("1_6boac")]
+
+[node name="Skeleton3D" parent="metarig" parent_id_path=PackedInt32Array(315225158) index="0" unique_id=580285002]
+bones/0/position = Vector3(-3.6507845e-07, 4.8990827, -0.27160355)
+bones/1/rotation = Quaternion(-0.06572204, 0, 0, 0.997838)
+bones/5/rotation = Quaternion(-0.07465379, 0, 0, 0.9972095)
+bones/42/rotation = Quaternion(-0.23190576, -0.34964737, 0.8900778, -0.17812327)
+bones/64/rotation = Quaternion(0.6873595, -0.48180383, -0.3745041, -0.39388922)
+bones/77/rotation = Quaternion(0.6873596, 0.4818038, 0.37450406, -0.39388916)
+bones/81/rotation = Quaternion(0.32960528, 0.7640414, 0.24816553, -0.49599898)
+bones/88/rotation = Quaternion(0.7885303, -0.48191768, 0.3816165, -0.018551685)
+bones/92/rotation = Quaternion(0.7885303, 0.48191768, -0.3816165, -0.018551685)
+bones/123/rotation = Quaternion(0.32260278, 0.69681925, -0.43807778, -0.46739522)
+bones/124/rotation = Quaternion(0.24897122, -0.106232084, -0.0086897025, 0.962628)
+bones/149/rotation = Quaternion(0.966451, 0.025253491, -0.0066686133, 0.25551975)
+bones/150/rotation = Quaternion(0.12996452, 0.011094002, -0.033340473, 0.99089587)
+bones/151/rotation = Quaternion(-0.59139127, -0.035305995, 0.048154347, 0.8041711)
+bones/154/rotation = Quaternion(0.99924326, -0.015913919, 0.0005666883, 0.035489168)
+bones/155/rotation = Quaternion(0.27192885, -0.016100287, 0.026890574, 0.9618069)
+bones/156/rotation = Quaternion(-0.68268037, 0.09941863, 0.040616598, 0.7227821)
+bones/157/rotation = Quaternion(-0.026611807, 0.99585146, -0.06686126, -0.05568987)
+bones/158/rotation = Quaternion(-0.6224568, 0.762236, -0.11266879, -0.13729373)
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=2047044963]
+autoplay = &"metarigAction"
