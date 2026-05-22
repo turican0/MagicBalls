@@ -2147,6 +2147,11 @@ layout_mode = 2
 tooltip_text = "Moves the camera to the stages's position"
 text = "MOVE"
 
+[node name="Button_MoveEnt" type="Button" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=949030151]
+layout_mode = 2
+tooltip_text = "Moves the camera to the stages's entity position"
+text = "TO ENTITY"
+
 [node name="StagesVarsEdit" type="Control" parent="UI" unique_id=1252974492]
 visible = false
 layout_mode = 3
@@ -2281,6 +2286,11 @@ text = "SET"
 layout_mode = 2
 tooltip_text = "Moves the camera to the stageVars's position"
 text = "MOVE"
+
+[node name="Button_MoveEnt" type="Button" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=386991070]
+layout_mode = 2
+tooltip_text = "Moves the camera to the stages's entity position"
+text = "TO ENTITY"
 
 [node name="Console" type="Control" parent="UI" unique_id=1943275785]
 layout_mode = 3
@@ -2529,8 +2539,10 @@ mesh = SubResource("CylinderMesh_jhayq")
 [connection signal="button_down" from="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS/Button_Move" to="." method="_on_entity_move_button_down"]
 [connection signal="button_down" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_Set" to="." method="_on_stage_button_set_button_set_down"]
 [connection signal="button_down" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_Move" to="." method="_on_stage_button_set_button_move_down"]
+[connection signal="button_down" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_MoveEnt" to="." method="_on_stage_button_entity_button_move_down"]
 [connection signal="button_down" from="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_Set" to="." method="_on_stagevars_button_set_button_set_down"]
 [connection signal="button_down" from="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_Move" to="." method="_on_stagevars_button_set_button_move_down"]
+[connection signal="button_down" from="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_MoveEnt" to="." method="_on_stagevars_button_entity_button_move_down"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/SpinBoxType" to="UI/EntityFilter" method="_on_spin_box_type_value_changed"]
 [connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/CheckBoxType" to="UI/EntityFilter" method="_on_check_box_type_toggled"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311/SpinBoxSubType" to="UI/EntityFilter" method="_on_spin_box_sub_type_value_changed"]

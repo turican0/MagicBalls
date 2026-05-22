@@ -2916,9 +2916,34 @@ func _on_stagevars_button_set_button_move_down() -> void:
 	if current_edited_stagevar < 0 or current_edited_stagevar >= Global.editorLevel["stage_vars"].size():
 		return
 	var v = Global.editorLevel["stage_vars"][current_edited_stagevar]
-	var x = v.get("union_axis_2d_x", 0)
-	var y = v.get("union_axis_2d_y", 0)
-	if x == 0 and y == 0:
-		x = v.get("union_dword_axis_x", 0)
-		y = v.get("union_dword_axis_y", 0)
+	#var x = v.get("union_axis_2d_x", 0)
+	#var y = v.get("union_axis_2d_y", 0)
+	#if x == 0 and y == 0:
+	var x = v.get("union_dword_axis_x", 0)
+	var y = v.get("union_dword_axis_y", 0)
+	Main_Camera.position = Vector3(x, Main_Camera.position.y, y)
+
+
+func _on_stage_button_entity_button_move_down() -> void:
+	if current_edited_stage < 0 or current_edited_stage >= Global.editorLevel["stages"].size():
+		return
+	var s = Global.editorLevel["stages"][current_edited_stage]
+	var index = s.get("stage", 0)
+	if index < 0 or index >= Global.editorLevel["entities"].size():
+		return
+	var entity = Global.editorLevel["entities"][index]
+	var x=entity["axis_x"]
+	var y=entity["axis_y"]
+	Main_Camera.position = Vector3(x, Main_Camera.position.y, y)
+
+func _on_stagevars_button_entity_button_move_down() -> void:
+	if current_edited_stagevar < 0 or current_edited_stagevar >= Global.editorLevel["stage_vars"].size():
+		return
+	var v = Global.editorLevel["stage_vars"][current_edited_stagevar]
+	var index = v.get("union_axis_2d_x", 0)
+	if index < 0 or index >= Global.editorLevel["entities"].size():
+		return
+	var entity = Global.editorLevel["entities"][index]
+	var x=entity["axis_x"]
+	var y=entity["axis_y"]	
 	Main_Camera.position = Vector3(x, Main_Camera.position.y, y)
