@@ -1424,6 +1424,7 @@ func fillEntityDetails(index: int):
 		return
 	current_entity_index = index
 	_filling_entity_details = true
+	_filling_entity_frame = Engine.get_process_frames()
 	var e = Global.editorLevel["entities"][index]
 	Entity_Edit.get_node_or_null("IDX/SpinBox").value        = index
 	Entity_Edit.get_node_or_null("POS/SpinBox").value        = e.get("axis_x", 0)
@@ -1437,7 +1438,7 @@ func fillEntityDetails(index: int):
 	Entity_Edit.get_node_or_null("par2_16/SpinBox").value    = e.get("par2", 0)
 	Entity_Edit.get_node_or_null("par3_18/SpinBox").value    = e.get("par3", 0)
 	_filling_entity_details = false
-		
+
 func _on_tree_item_selected() -> void:
 	var selected = Tree_View.get_selected()
 	if selected == null:
@@ -1470,6 +1471,11 @@ var current_edited_entity: int = -1
 var current_edited_wizard: int = -1
 var current_edited_stage: int = -1
 var current_edited_stagevar: int = -1
+
+var _filling_entity_frame: int = -9999
+var _filling_wizard_frame: int = -9999
+var _filling_stages_frame: int = -9999
+var _filling_stagesvars_frame: int = -9999
 
 func _on_tree_terrain_selected(index: int) -> void:
 	log_message("Terrain selected: index=%d" % [index])
@@ -1512,6 +1518,7 @@ func _on_tree_wizard_selected(index: int):
 	current_edited_entity = -1
 	current_edited_stage = -1
 	current_edited_stagevar = -1
+	_filling_wizard_frame = Engine.get_process_frames()
 	_filling_wizard_details = true
 	Wizards_Edit.display_player_data(index)
 	_filling_wizard_details = false
@@ -1528,6 +1535,7 @@ func _on_tree_stages_selected(index: int):
 	current_edited_entity = -1
 	current_edited_wizard = -1
 	current_edited_stagevar = -1
+	_filling_stages_frame = Engine.get_process_frames()
 	_filling_stages_details = true
 	Stages_Edit.display_stages_data(index)
 	_filling_stages_details = false
@@ -1544,6 +1552,7 @@ func _on_tree_stagesVars_selected(index: int):
 	current_edited_entity = -1
 	current_edited_wizard = -1
 	current_edited_stage = -1
+	_filling_stagesvars_frame = Engine.get_process_frames()
 	_filling_stagesvars_details = true
 	StagesVars_Edit.display_stages_data(index)
 	_filling_stagesvars_details = false
@@ -1889,15 +1898,18 @@ var EntityFilter_On:bool=false
 var FirstSelectedToEdit:bool=true
 
 func _on_entity_spinbox_value_changed(_value = null) -> void:
+	if Engine.get_process_frames() <= _filling_entity_frame + 2:
+		return
 	if _filling_entity_details:
 		return
 	_save_current_entity_changes(false)
 	
-func _save_current_entity_changes(commit_spinboxes = true) -> void:
+func _save_current_entity_changes(commit_spinboxes = true) -> void:		
 	if current_entity_index <= 0 or current_entity_index >= pool_size:
 		return
 	if _filling_entity_details:
 		return
+		
 	if commit_spinboxes:
 		_force_commit_all_spinboxes(Entity_Edit)
 	var idx = current_entity_index
@@ -2002,6 +2014,8 @@ func _save_current_wizards_changes(commit_spinboxes = true) -> void:
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 
 func _on_wizard_spinbox_value_changed(_value = null) -> void:
+	if Engine.get_process_frames() <= _filling_stages_frame + 2:
+		return
 	if _filling_wizard_details:
 		return
 	_save_current_wizards_changes(false)
@@ -2024,6 +2038,8 @@ func _save_current_stages_changes(commit_spinboxes = true) -> void:
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 
 func _on_stages_spinbox_value_changed(_value = null) -> void:
+	if Engine.get_process_frames() <= _filling_stages_frame + 2:
+		return
 	if _filling_stages_details:
 		return
 	_save_current_stages_changes(false)
@@ -2045,6 +2061,8 @@ func _save_current_stagesvars_changes(commit_spinboxes = true) -> void:
 	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
 	
 func _on_stagesvars_spinbox_value_changed(_value = null) -> void:
+	if Engine.get_process_frames() <= _filling_stagesvars_frame + 2:
+		return
 	if _filling_stagesvars_details:
 		return
 	_save_current_stagesvars_changes(false)
