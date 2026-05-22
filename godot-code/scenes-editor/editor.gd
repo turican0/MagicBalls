@@ -2877,3 +2877,48 @@ func _subtype_has_details(type_id: int, subtype_id: int) -> bool:
 	if type_id == 10 and subtype_id == 45: return true
 	if type_id == 11 and subtype_id == 0:  return true
 	return false
+
+func _on_stage_button_set_button_set_down() -> void:
+	if current_edited_stage < 0 or current_edited_stage >= Global.editorLevel["stages"].size():
+		return
+	var pos = Main_Camera.position
+	Global.editorLevel["stages"][current_edited_stage]["axis_x"] = int(pos.x)
+	Global.editorLevel["stages"][current_edited_stage]["axis_y"] = int(pos.z)
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	EditorStep()
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	_filling_stages_frame = Engine.get_process_frames()
+	_filling_stages_details = true
+	Stages_Edit.display_stages_data(current_edited_stage)
+	_filling_stages_details = false
+
+func _on_stage_button_set_button_move_down() -> void:
+	if current_edited_stage < 0 or current_edited_stage >= Global.editorLevel["stages"].size():
+		return
+	var s = Global.editorLevel["stages"][current_edited_stage]
+	Main_Camera.position = Vector3(s.get("axis_x", 0), Main_Camera.position.y, s.get("axis_y", 0))
+
+func _on_stagevars_button_set_button_set_down() -> void:
+	if current_edited_stagevar < 0 or current_edited_stagevar >= Global.editorLevel["stage_vars"].size():
+		return
+	var pos = Main_Camera.position
+	Global.editorLevel["stage_vars"][current_edited_stagevar]["union_axis_2d_x"] = int(pos.x)
+	Global.editorLevel["stage_vars"][current_edited_stagevar]["union_axis_2d_y"] = int(pos.z)
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	EditorStep()
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+	_filling_stagesvars_frame = Engine.get_process_frames()
+	_filling_stagesvars_details = true
+	StagesVars_Edit.display_stages_data(current_edited_stagevar)
+	_filling_stagesvars_details = false
+
+func _on_stagevars_button_set_button_move_down() -> void:
+	if current_edited_stagevar < 0 or current_edited_stagevar >= Global.editorLevel["stage_vars"].size():
+		return
+	var v = Global.editorLevel["stage_vars"][current_edited_stagevar]
+	var x = v.get("union_axis_2d_x", 0)
+	var y = v.get("union_axis_2d_y", 0)
+	if x == 0 and y == 0:
+		x = v.get("union_dword_axis_x", 0)
+		y = v.get("union_dword_axis_y", 0)
+	Main_Camera.position = Vector3(x, Main_Camera.position.y, y)

@@ -636,6 +636,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="EntityEdit" type="Control" parent="UI" unique_id=169198194]
+visible = false
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -2133,6 +2134,19 @@ text = "StageY1"
 layout_mode = 2
 max_value = 65535.0
 
+[node name="Buttons" type="HBoxContainer" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=411401772]
+layout_mode = 2
+
+[node name="Button_Set" type="Button" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=932507036]
+layout_mode = 2
+tooltip_text = "Sets the stage's position based on the camera's position"
+text = "SET"
+
+[node name="Button_Move" type="Button" parent="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=240515459]
+layout_mode = 2
+tooltip_text = "Moves the camera to the stages's position"
+text = "MOVE"
+
 [node name="StagesVarsEdit" type="Control" parent="UI" unique_id=1252974492]
 visible = false
 layout_mode = 3
@@ -2254,6 +2268,19 @@ text = "StageY2"
 [node name="SpinBox" type="SpinBox" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/StageY2" unique_id=1910735757]
 layout_mode = 2
 max_value = 65535.0
+
+[node name="Buttons" type="HBoxContainer" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=2067983569]
+layout_mode = 2
+
+[node name="Button_Set" type="Button" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=377557958]
+layout_mode = 2
+tooltip_text = "Sets the stageVars's position based on the camera's position"
+text = "SET"
+
+[node name="Button_Move" type="Button" parent="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" unique_id=1798283372]
+layout_mode = 2
+tooltip_text = "Moves the camera to the stageVars's position"
+text = "MOVE"
 
 [node name="Console" type="Control" parent="UI" unique_id=1943275785]
 layout_mode = 3
@@ -2500,6 +2527,10 @@ mesh = SubResource("CylinderMesh_jhayq")
 [connection signal="value_changed" from="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type/SpinBox" to="UI/TerrainEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/map_type" method="_on_spin_box_value_changed"]
 [connection signal="button_down" from="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS/Button_Set" to="." method="_on_entity_set_button_down"]
 [connection signal="button_down" from="UI/EntityEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/POS/Button_Move" to="." method="_on_entity_move_button_down"]
+[connection signal="button_down" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_Set" to="." method="_on_stage_button_set_button_set_down"]
+[connection signal="button_down" from="UI/StagesEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_Move" to="." method="_on_stage_button_set_button_move_down"]
+[connection signal="button_down" from="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_Set" to="." method="_on_stagevars_button_set_button_set_down"]
+[connection signal="button_down" from="UI/StagesVarsEdit/PreContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/Button_Move" to="." method="_on_stagevars_button_set_button_move_down"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/SpinBoxType" to="UI/EntityFilter" method="_on_spin_box_type_value_changed"]
 [connection signal="toggled" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/type_0x30311/CheckBoxType" to="UI/EntityFilter" method="_on_check_box_type_toggled"]
 [connection signal="value_changed" from="UI/EntityFilter/PreContainer/PanelContainer/MarginContainer/VBoxContainer/subtype_0x30311/SpinBoxSubType" to="UI/EntityFilter" method="_on_spin_box_sub_type_value_changed"]
