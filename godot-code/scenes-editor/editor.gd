@@ -847,6 +847,8 @@ func select_entities_in_radius_2D(center_pos_3d: Vector3, radius: float):
 	var min_dist_sq = INF # Nastavíme na nekonečno
 	
 	# 1. Průchod: Zjistíme co je v kruhu a najdeme nejbližšího kandidáta
+	for node in get_tree().get_nodes_in_group("selected_entities_ray"):
+		unmark_as_selected(node,"selected_entities_ray")
 	if Ray_Cylinder.visible:
 		for node in get_tree().get_nodes_in_group("entities"):
 			var node_pos_2d = Vector2(node.global_position.x, node.global_position.z)
@@ -862,6 +864,8 @@ func select_entities_in_radius_2D(center_pos_3d: Vector3, radius: float):
 			mark_as_selected(closest_node,"selected_entities_ray")
 
 func select_entities_by_filter():
+	for node in get_tree().get_nodes_in_group("selected_entities_filter"):
+		unmark_as_selected(node,"selected_entities_filter")
 	if !EntityFilter_On:
 		return
 	for node in get_tree().get_nodes_in_group("entities"):
