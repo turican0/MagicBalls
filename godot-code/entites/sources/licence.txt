@@ -183,7 +183,7 @@ bone:
 hand:
 	https://sketchfab.com/3d-models/hand-046563449b144c67a2f8cc54bf86835b
 	
-sorcere last:
+sorcerer last:
 	https://sketchfab.com/3d-models/fantasy-woman-ae7f296300ff4bad8364e562bac1f3dc
 	https://sketchfab.com/3d-models/tia-dalma-92ddd6adb9504c358027fb69350d081c
 	https://sketchfab.com/3d-models/gart220-female-viking-29f88c37b399483dbaba79b4650d4752

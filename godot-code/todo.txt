@@ -57,3 +57,7 @@ sub_7A110_load_hscreen FadeClearBlit_7B5D0
 -problem with key-maybe ok
 -problem with mouse warp-ok
 -remove blue sorcerer after dead-ok
+
+rework nodes in editor - only 
+
+type_entity_0x6E8E* sub_4C0B0(axis_3d* position)//22d0b0 - add Trader

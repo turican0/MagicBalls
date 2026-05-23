@@ -385,7 +385,7 @@ var library = {
 	Vector3i(5,124,0): "res://entites/object_5_124_dragon.tscn",#dragon
 	Vector3i(5,132,0): "res://entites/object_5_132_people5.tscn",#people5 132 133 134-OK
 	Vector3i(5,135,0): "res://entites/object_5_135_people6.tscn",#people6 135 136 137-OK
-	Vector3i(5,138,0): "res://entites/object_5_138_people7.tscn",#people7 138 139 140-OK
+	Vector3i(5,138,0): "res://entites/object_5_138_trader1.tscn",#people7 138 139 140-OK-trader
 	Vector3i(5,141,0): "res://entites/object_5_141_people8.tscn",#people8 141 142 143-OK
 	Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat-OK
 	Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157-OK
@@ -958,7 +958,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		var actBitmapScaleHelp = int(data_array[offset+29])
 		var actBitmapScale = int(data_array[offset+30])
 		
-		#if(modelIndex!=144):
+		#if(actClass==5) and (actModel==14):
 			#continue;
 		
 		if modelIndex == 0 and actClass == 3:
