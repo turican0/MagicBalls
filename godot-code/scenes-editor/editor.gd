@@ -220,15 +220,25 @@ func _move_tree_selection(direction: int) -> void:
 		section_title = "Entities"
 		var entities = get_tree().get_nodes_in_group("entities")
 		current_edited_entity=clamp(current_edited_entity + direction, 1, entities.size())
+		fillEntityDetails(current_edited_entity)
 	elif Wizards_Edit_Panel.visible:
 		section_title = "Wizards"
 		current_edited_wizard = clamp(current_edited_wizard + direction, 0, 7)
+		_filling_wizard_details = true
+		Wizards_Edit.display_player_data(current_edited_wizard)
+		_filling_wizard_details = false
 	elif Stages_Edit_Panel.visible:
 		section_title = "Stages"
 		current_edited_stage = clamp(current_edited_stage + direction, 0, 7)
+		_filling_stages_details = true
+		Stages_Edit.display_stages_data(current_edited_stage)
+		_filling_stages_details = false
 	elif StagesVars_Edit_Panel.visible:
 		section_title = "StagesVars"
 		current_edited_stagevar = clamp(current_edited_stagevar + direction, 0, 11)
+		_filling_stagesvars_details = true
+		StagesVars_Edit.display_stages_data(current_edited_stagevar)
+		_filling_stagesvars_details = false
 	else:
 		section_title = "Terrain"
 	
