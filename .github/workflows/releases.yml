@@ -93,10 +93,15 @@ jobs:
             else              { Write-Error "MISSING: $f"; exit 1 }
           }
 
+      - name: Set Godot version
+        id: godot_ver
+        shell: bash
+        run: echo "version=${{ env.GODOT_VERSION }}" >> $GITHUB_OUTPUT
+
       - name: Setup Godot
         uses: chickensoft-games/setup-godot@v2
         with:
-          version: 4.6.2
+          version: ${{ steps.godot_ver.outputs.version }}
           use-dotnet: false
           include-templates: true
 
@@ -335,7 +340,7 @@ jobs:
 
       - name: Install Godot + export templates
         run: |
-          GODOT_VERSION="4.6.2"
+          version: ${{ vars.GODOT_VERSION }}
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
@@ -535,7 +540,7 @@ jobs:
 
       - name: Install Godot + Android export templates
         run: |
-          GODOT_VERSION="4.6.2"
+          version: ${{ vars.GODOT_VERSION }}
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
