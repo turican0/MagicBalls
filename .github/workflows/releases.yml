@@ -10,13 +10,11 @@ permissions:
 
 env:
   GODOT_VERSION: "4.6.3"
-
 # ─────────────────────────────────────────────────────────────
 # JOBS – Windows, Linux and Android run in parallel,
 #         release job waits for all three.
 # ─────────────────────────────────────────────────────────────
 jobs:
-
   # ───────────────────────────────────────────
   # 1) WINDOWS – C++ (CMake) + Godot export
   # ───────────────────────────────────────────
