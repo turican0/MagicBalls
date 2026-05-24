@@ -340,12 +340,12 @@ jobs:
 
       - name: Install Godot + export templates
         run: |
-          version: ${{ vars.GODOT_VERSION }}
+          GODOT_VERSION="${{ env.GODOT_VERSION }}"
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
-          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/${GODOT_FILENAME}.zip"
-          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/${TEMPLATES_FILENAME}"
+          wget -q "https://downloads.godotengine.org/releases/4.x/${GODOT_VERSION}-stable/${GODOT_FILENAME}.zip"
+          wget -q "https://downloads.godotengine.org/releases/4.x/${GODOT_VERSION}-stable/${TEMPLATES_FILENAME}"
 
           unzip -q "${GODOT_FILENAME}.zip"
           chmod +x "${GODOT_FILENAME}"
@@ -540,12 +540,12 @@ jobs:
 
       - name: Install Godot + Android export templates
         run: |
-          version: ${{ vars.GODOT_VERSION }}
+          GODOT_VERSION="${{ env.GODOT_VERSION }}"
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
-          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/${GODOT_FILENAME}.zip"
-          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/${TEMPLATES_FILENAME}"
+          wget -q "https://downloads.godotengine.org/releases/4.x/${GODOT_VERSION}-stable/${GODOT_FILENAME}.zip"
+          wget -q "https://downloads.godotengine.org/releases/4.x/${GODOT_VERSION}-stable/${TEMPLATES_FILENAME}"
 
           unzip -q "${GODOT_FILENAME}.zip"
           chmod +x "${GODOT_FILENAME}"
