@@ -24,7 +24,7 @@ image = SubResource("Image_buiwv")
 [node name="Node3D" type="Node3D" unique_id=1207081722]
 
 [node name="Label3D" type="Label3D" parent="." unique_id=447533271]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
 pixel_size = 0.003
 billboard = 1
 alpha_cut = 1
