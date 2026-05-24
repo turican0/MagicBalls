@@ -69,3 +69,7 @@ type_entity_0x6E8E* sub_4AD70(axis_3d* position)//22bd70 //Spawn ?? add 2 1
 type_entity_0x6E8E* sub_4ED70(axis_3d* position)//22fd70 add 10 17
 
 return sub_513A0(a1_axis3d); 16 48 - add spell
+
+	case 0x23ad90: {
+		break;
+	}

@@ -2953,7 +2953,7 @@ void MBEXclass::REMC2EditorExampleLevel(int type) {
 			}
 			break;
 		case 5:
-			for (int i = 0; i < 169; i++) {
+			for (int i = 0; i < 6; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 14;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
