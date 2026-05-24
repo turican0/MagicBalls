@@ -23,7 +23,6 @@ jobs:
   build-windows:
     name: Windows
     runs-on: windows-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
