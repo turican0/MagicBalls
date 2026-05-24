@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-
 env:
   GODOT_VERSION: "4.6.3"
 
@@ -109,7 +108,7 @@ jobs:
 
       - name: Install Godot + Android export templates
         run: |
-          GODOT_VERSION="${{ env.GODOT_VERSION }}"
+          GODOT_VERSION="4.6.2"
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 

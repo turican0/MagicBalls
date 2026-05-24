@@ -7,20 +7,22 @@ on:
 
 permissions:
   contents: write
-
 env:
   GODOT_VERSION: "4.6.3"
+
 # ─────────────────────────────────────────────────────────────
 # JOBS – Windows, Linux and Android run in parallel,
 #         release job waits for all three.
 # ─────────────────────────────────────────────────────────────
 jobs:
+
   # ───────────────────────────────────────────
   # 1) WINDOWS – C++ (CMake) + Godot export
   # ───────────────────────────────────────────
   build-windows:
     name: Windows
     runs-on: windows-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
@@ -91,15 +93,10 @@ jobs:
             else              { Write-Error "MISSING: $f"; exit 1 }
           }
 
-      - name: Set Godot version
-        id: godot_ver
-        shell: bash
-        run: echo "version=${{ env.GODOT_VERSION }}" >> $GITHUB_OUTPUT
-
       - name: Setup Godot
-      uses: chickensoft-games/setup-godot@v2
+        uses: chickensoft-games/setup-godot@v2
         with:
-          version: ${{ steps.godot_ver.outputs.version }}
+          version: 4.6.2
           use-dotnet: false
           include-templates: true
 
@@ -338,7 +335,7 @@ jobs:
 
       - name: Install Godot + export templates
         run: |
-          GODOT_VERSION="${{ env.GODOT_VERSION }}"
+          GODOT_VERSION="4.6.2"
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
@@ -538,7 +535,7 @@ jobs:
 
       - name: Install Godot + Android export templates
         run: |
-          GODOT_VERSION="${{ env.GODOT_VERSION }}"
+          GODOT_VERSION="4.6.2"
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
