@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  GODOT_VERSION: "4.6.3"
+
 # ─────────────────────────────────────────────────────────────
 # JOBS – Android build + release
 # ─────────────────────────────────────────────────────────────
@@ -106,7 +109,7 @@ jobs:
 
       - name: Install Godot + Android export templates
         run: |
-          GODOT_VERSION="4.6.3"
+          GODOT_VERSION="${{ env.GODOT_VERSION }}"
           GODOT_FILENAME="Godot_v${GODOT_VERSION}-stable_linux.x86_64"
           TEMPLATES_FILENAME="Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
 
@@ -241,7 +244,7 @@ jobs:
             || { echo "CHYBA: META-INF chybi - APK neni podepsano!"; exit 1; }
 
       - name: Upload Android artifacts
-        uses: actions/upload-artifact@v4.6.3
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: android-apk
           path: exports/android/*.apk
