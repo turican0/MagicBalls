@@ -61,3 +61,11 @@ sub_7A110_load_hscreen FadeClearBlit_7B5D0
 rework nodes in editor - only 
 
 type_entity_0x6E8E* sub_4C0B0(axis_3d* position)//22d0b0 - add Trader
+type_entity_0x6E8E* sub_4F040(axis_3d* a1x)//230040 add 10 22
+type_entity_0x6E8E* sub_50500(axis_3d* position)//231500 add 10 54
+type_entity_0x6E8E* sub_4F2A0(axis_3d* a1x)//2302a0 add 10 76
+type_entity_0x6E8E* sub_4AD70(axis_3d* position)//22bd70 //Spawn ?? add 2 1
+
+type_entity_0x6E8E* sub_4ED70(axis_3d* position)//22fd70 add 10 17
+
+return sub_513A0(a1_axis3d); 16 48 - add spell

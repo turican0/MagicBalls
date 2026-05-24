@@ -2226,7 +2226,7 @@ func _on_filter_id_pressed(id: int) -> void:
 			var idx = popup.get_item_index(MENU_FILTER_SHOWFILTER)
 			popup.set_item_checked(idx, !popup.is_item_checked(idx))
 			var is_checked = popup.is_item_checked(idx)
-			Ray_Cylinder.visible = is_checked
+			EntityFilter.visible = is_checked
 		MENU_FILTER_SELECTTOEDIT:
 			var popup = $UI/Control/MenuBar/Filter
 			var idx = popup.get_item_index(MENU_FILTER_SELECTTOEDIT)
