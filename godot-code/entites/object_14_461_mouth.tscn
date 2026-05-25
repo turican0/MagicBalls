@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://c5y357hv3lhq2"]
 
-[ext_resource type="PackedScene" uid="uid://dpwp1xq4p5rhw" path="res://entites/sources/mouth_of_marrow_hollow_-_nightmare.glb" id="1_7etuu"]
 [ext_resource type="Script" uid="uid://cv1oiquo7qe61" path="res://entites/object_14_461_mouth.gd" id="1_wxthu"]
 [ext_resource type="Script" uid="uid://ioujr8tsmg8w" path="res://entites/sources/mouth_of_marrow_hollow___nightmare.gd" id="2_6fre3"]
 [ext_resource type="PackedScene" uid="uid://cgbidiyefwxse" path="res://entites/sources/gate/Meshy_AI_Crimson_Gaze_0525164542_texture.glb" id="4_00md1"]
@@ -12,15 +11,7 @@ duration = 0.6
 
 [node name="Moving" type="Node3D" parent="." unique_id=1811144723]
 
-[node name="Sketchfab_Scene" parent="Moving" unique_id=1009160819 instance=ExtResource("1_7etuu")]
-transform = Transform3D(-5.795555, 0, 1.5529149, 0, 6, 0, -1.5529149, 0, -5.795555, 0, -1.1805794, -0.41424504)
-visible = false
-script = ExtResource("2_6fre3")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="Moving/Sketchfab_Scene" unique_id=623928991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12287426, 0.3401526, -0.04677602)
-
 [node name="Meshy_AI_Crimson_Gaze_0525164542_texture" parent="Moving" unique_id=1818023320 instance=ExtResource("4_00md1")]
-transform = Transform3D(3.577464e-08, 0, -3, 0, 3, 0, 3, 0, 3.577464e-08, 0, 3, 0)
+transform = Transform3D(-6.556708e-08, 0, -1.5, 0, 1.5, 0, 1.5, 0, -6.556708e-08, 0, 1.5, 0)
 script = ExtResource("2_6fre3")
 offset_uhlu = 180.0
