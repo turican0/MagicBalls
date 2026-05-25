@@ -579,8 +579,6 @@ var library = {
 	Vector3i(5,14,0): "res://entites-editor/object_5_14_trader.tscn",
 	Vector3i(5,16,0): "res://entites-editor/object_5_16_wyvern.tscn",
 	Vector3i(5,19,0): "res://entites-editor/object_5_19_firefly.tscn",
-	Vector3i(14,5,0): "res://entites-editor/object_14_5_scroll.tscn",
-	Vector3i(15,2,0): "res://entites-editor/object_15_2_vase.tscn",
 	Vector3i(10,45,0): "res://entites-editor/object_10_45_house.tscn",
 	Vector3i(10,0,0): "res://entites-editor/object_10_0_explosion.tscn",
 	Vector3i(10,1,0): "res://entites-editor/object_10_0_explosion.tscn",
@@ -591,8 +589,12 @@ var library = {
 	Vector3i(10,13,0): "res://entites-editor/object_10_59_smoke1.tscn",
 	Vector3i(10,17,0): "res://entites-editor/object_10_17_Meteor.tscn",
 	Vector3i(10,22,0): "res://entites-editor/object_10_22_Wind.tscn",
+	Vector3i(10,27,0): "res://entites-editor/object_10_27_wall.tscn",
+	Vector3i(10,39,0): "res://entites-editor/object_10_39_mana.tscn",
+	Vector3i(10,58,0): "res://entites-editor/object_10_39_mana.tscn",
 	Vector3i(10,59,0): "res://entites-editor/object_10_59_smoke1.tscn",
 	Vector3i(10,60,0): "res://entites-editor/object_10_60_smoke2.tscn",
+	Vector3i(10,76,0): "res://entites-editor/object_10_76_fire_spheres.tscn",
 	Vector3i(11,0,0): "res://entites-editor/object_11_0.tscn",
 	Vector3i(11,1,0): "res://entites-editor/object_11_1.tscn",
 	Vector3i(11,4,0): "res://entites-editor/object_11_4.tscn",
@@ -600,6 +602,34 @@ var library = {
 	Vector3i(11,16,0): "res://entites-editor/object_11_16.tscn",
 	Vector3i(11,17,0): "res://entites-editor/object_11_17.tscn",
 	Vector3i(11,32,0): "res://entites-editor/object_11_32.tscn",
+	Vector3i(14,3,0): "res://entites-editor/object_14_3_gate.tscn",
+	Vector3i(14,5,0): "res://entites-editor/object_14_5_scroll.tscn",
+	Vector3i(15,0,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,1,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,2,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,3,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,4,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,5,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,6,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,7,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,8,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,9,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,10,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,11,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,12,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,13,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,14,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,15,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,16,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,17,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,18,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,19,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,20,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,21,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,22,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,23,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,24,0): "res://entites-editor/object_15_x_vase.tscn",
+	Vector3i(15,25,0): "res://entites-editor/object_15_x_vase.tscn",
 	Vector3i(0,993,0): "res://entites-editor/object_arrow_stage.tscn",
 	Vector3i(0,994,0): "res://entites-editor/object_stageVEditor.tscn",
 	Vector3i(0,995,0): "res://entites-editor/object_stageEditor.tscn",
@@ -607,190 +637,6 @@ var library = {
 	Vector3i(0,997,0): "res://entites-editor/object_arrow_path.tscn",  # parent arrow
 	Vector3i(0,998,0): "res://entites-editor/object_arrow_parent.tscn",  # parent arrow
 	Vector3i(0,1000,0): "res://entites-editor/object_textEditor.tscn",
-	#Vector3i(2,75,0): "res://entites/object_2_75_tree.tscn",#tree -difColors!!!
-	#Vector3i(2,78,0): "res://entites/object_2_78_statue.tscn",#statue -difmodels!!!
-	#Vector3i(2,79,0): "res://entites/object_2_79_dolmen.tscn",#dolmen
-	#Vector3i(2,87,0): "res://entites/object_2_87_tree.tscn",#tree2
-	#Vector3i(2,178,0): "res://entites/object_2_178_burned_tree.tscn",#burned tree
-	#Vector3i(2,179,0): "res://entites/object_2_179_burned_tree.tscn",#burned tree
-	#Vector3i(2,198,0): "res://entites/object_2_78_statue.tscn",#statue2 - level2 - same models
-	#Vector3i(2,422,0): "res://entites/object_2_422_barell.tscn",#barell
-	#Vector3i(2,423,0): "res://entites/object_2_423_basket.tscn",#basket - yyyyyyyyyyyyyyyyyyyyyyyyy
-	#Vector3i(2,424,0): "res://entites/object_2_424_mushroom1.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
-	#Vector3i(2,425,0): "res://entites/object_2_425_mushroom2.tscn",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
-	#Vector3i(3,0,0): "",#player1-Zanzamar
-	#Vector3i(3,88,0): "res://entites/object_3_88_ballon.tscn",#ballon -difColors!!!
-	#Vector3i(3,89,0): "res://entites/object_3_89_ballon.tscn",#ballon -difColors!!!
-	#Vector3i(3,90,0): "res://entites/object_3_90_ballon.tscn",#ballon -difColors!!!
-	#Vector3i(3,91,0): "res://entites/object_3_91_ballon.tscn",#ballon -difColors!!!
-	#Vector3i(3,92,0): "res://entites/object_3_92_ballon.tscn",#ballon -difColors!!!
-	#Vector3i(3,93,0): "res://entites/object_3_93_ballon.tscn",#ballon -difColors!!!
-	#Vector3i(3,94,0): "res://entites/object_3_94_ballon.tscn",#ballon -difColors!!!
-	#Vector3i(3,95,0): "res://entites/object_3_95_ballon.tscn",#ballon -difColors!!!
-	#Vector3i(3,96,0): "res://entites/object_3_96_posses_building-whiteD.tscn",#castle -difmodels!!!
-	#Vector3i(3,97,0): "res://entites/object_3_97_posses_building-redD.tscn",#castle -difmodels!!!
-	#Vector3i(3,98,0): "res://entites/object_3_98_posses_building-violetD.tscn",#castle -difmodels!!!
-	#Vector3i(3,99,0): "res://entites/object_3_99_posses_building-blueD.tscn",#castle -difmodels!!!
-	#Vector3i(3,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#castle -difmodels!!!
-	#Vector3i(3,101,0): "res://entites/object_3_101_posses_building-pinkD.tscn",#castle -difmodels!!!
-	#Vector3i(3,102,0): "res://entites/object_3_102_posses_building-orangeD.tscn",#castle -difmodels!!!
-	#Vector3i(3,103,0): "res://entites/object_3_103_posses_building-blackD.tscn",#castle -difmodels!!!
-	#Vector3i(3,203,0): "res://entites/object_3_203_sorcerer-blue.tscn",
-	#Vector3i(3,211,0): "res://entites/object_3_211_sorcerer-red.tscn",#sorcerer-red xxxxxxxxxxxxxxxxxxxx
-	#Vector3i(3,219,0): "res://entites/object_3_219_sorcerer-black.tscn",#sorcerer-black xxxxxxxxxxxxxxxxxxxx
-	#Vector3i(3,227,0): "res://entites/object_3_227_sorcerer-orange.tscn",#sorcerer-orange xxxxxxxxxxxxxxxxxxxx
-	#Vector3i(3,235,0): "res://entites/object_3_235_sorcerer-pink.tscn",#sorcerer-pink xxxxxxxxxxxxxxxxxxxx
-	#Vector3i(3,243,0): "res://entites/object_3_243_sorcerer-violet.tscn",#sorcerer-violet xxxxxxxxxxxxxxxxxxxx
-	#Vector3i(3,251,0): "res://entites/object_3_251_sorcerer-green.tscn",#sorcerer-green xxxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,8,0): "res://entites/object_5_8_bowman.tscn",#bowman
-	#Vector3i(5,9,0): "res://entites/object_5_8_bowman.tscn",#bowman
-	#Vector3i(5,10,0): "res://entites/object_5_8_bowman.tscn",#bowman
-	#Vector3i(5,11,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	#Vector3i(5,12,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	#Vector3i(5,13,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow
-	#Vector3i(5,14,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
-	#Vector3i(5,15,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
-	#Vector3i(5,16,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
-	#Vector3i(5,17,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
-	#Vector3i(5,18,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
-	#Vector3i(5,19,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
-	#Vector3i(5,20,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
-	#Vector3i(5,21,0): "res://entites/object_5_11_bowman.tscn",#bowman-arrow -difmodels!!!
-	#Vector3i(5,22,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,23,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,24,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,25,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,26,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,27,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,28,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,29,0): "res://entites/object_5_26_flyingCentipedeHead.tscn",#xxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,30,0): "res://entites/object_5_30_centipedeHead.tscn",#centipede-head-OK
-	#Vector3i(5,56,0): "res://entites/object_5_56_flyingCentipedeBody.tscn",#xxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star-special
-	#Vector3i(5,58,0): "res://entites/object_10_58_goldSphere.tscn",#fliing goldMana -OK
-	#Vector3i(5,66,0): "res://entites/object_5_66_centipedeBody.tscn",#centipede-body-OK
-	#Vector3i(5,67,0): "res://entites/object_10_67_whiteSphere.tscn",
-	#Vector3i(5,68,0): "res://entites/object_10_68_redSphere.tscn",
-	#Vector3i(5,69,0): "res://entites/object_10_69_violedSphere.tscn",#violet sphere xxxxxxxxxxxx
-	#Vector3i(5,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
-	#Vector3i(5,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
-	#Vector3i(5,72,0): "res://entites/object_10_72_pinkSphere.tscn",#pink sphere xxxxxxxxxxxx
-	#Vector3i(5,73,0): "res://entites/object_10_73_orangeSphere.tscn",#orange sphere xxxxxxxxxxxx
-	#Vector3i(5,74,0): "res://entites/object_10_74_blackSphere.tscn",#black sphere xxxxxxxxxxxx
-	#Vector3i(5,110,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
-	#Vector3i(5,111,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
-	#Vector3i(5,112,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
-	#Vector3i(5,113,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
-	#Vector3i(5,114,0): "res://entites/object_5_110_vampire_bowman.tscn",#vampire archer
-	#Vector3i(5,121,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
-	#Vector3i(5,122,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
-	#Vector3i(5,123,0): "res://entites/object_5_121_bowman.tscn",#bowman-crouch-OK
-	#Vector3i(5,124,0): "res://entites/object_5_124_dragon.tscn",#dragon
-	#Vector3i(5,132,0): "res://entites/object_5_132_people5.tscn",#people5 132 133 134-OK
-	#Vector3i(5,135,0): "res://entites/object_5_135_people6.tscn",#people6 135 136 137-OK
-	#Vector3i(5,138,0): "res://entites/object_5_138_people7.tscn",#people7 138 139 140-OK
-	#Vector3i(5,141,0): "res://entites/object_5_141_people8.tscn",#people8 141 142 143-OK
-	#Vector3i(5,152,0): "res://entites/object_5_152_goat.tscn",#goat-OK
-	#Vector3i(5,155,0): "res://entites/object_5_155_people1.tscn",#people1 155 156 157-OK
-	#Vector3i(5,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(5,180,0): "res://entites/object_5_180_people2.tscn",#people2 180 181 182-OK
-	#Vector3i(5,183,0): "res://entites/object_5_183_people3.tscn",#people3 183 184 185-OK
-	#
-	#Vector3i(5,271,0): "res://entites/object_5_271_stoneHead.tscn",#stone head
-	#Vector3i(5,295,0): "res://entites/object_5_295_crabBaloon.tscn",#crab baloon
-	#Vector3i(5,303,0): "res://entites/object_5_303_manticore.tscn",# 5-303-gryf/manticore
-	#
-	#Vector3i(5,328,0): "res://entites/object_5_328_hopper.tscn",#328-335	levá noha pokrčena v koleni, nahoře	ctvrta
-	#Vector3i(5,336,0): "res://entites/object_5_336_hopper.tscn",#336-343	pravá noha mírně za levou, obě na zemi	pata
-	#Vector3i(5,344,0): "res://entites/object_5_344_hopper.tscn",#344-351	pravá noha mírně za levou, obě na zemi, tělo mírně přikrčené	sesta
-	#Vector3i(5,352,0): "res://entites/object_5_352_hopper.tscn",#352-359	pravá noha mírně za levou, obě na zemi, tělo více přikrčené	první
-	#Vector3i(5,360,0): "res://entites/object_5_360_hopper.tscn",#360-367	levá noha před pravou v nákroku, obě na zemi	druha
-	#Vector3i(5,368,0): "res://entites/object_5_368_hopper.tscn",#368-375	levá noha pokrčena v koleni, nahoře, pravá téměř natažena	treti
-	#Vector3i(5,376,0): "res://entites/object_5_376_hopper.tscn",#376-383	nohy kousek od sebe stojací postoj	
-	#Vector3i(5,384,0): "res://entites/object_5_384_hopper.tscn",#376-383	torso
-	#Vector3i(5,392,0): "res://entites/object_5_392_minibasket.tscn",#mini
-	#Vector3i(5,393,0): "res://entites/object_5_393_minibasket.tscn",#mini-torso
-	#Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
-	#Vector3i(5,263,0): "res://entites/object_5_263_darklion.tscn",#lion zzzzzzzzzzzz
-	#Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
-	#Vector3i(5,287,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzz
-	#
-	#Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast
-	#Vector3i(5,319,0): "res://entites/object_5_319_water_beast.tscn",#water beast torso
-	#
-	#Vector3i(5,394,0): "res://entites/object_5_394_bigDragonBody.tscn",#bigDragon-body-move
-	#Vector3i(5,402,0): "res://entites/object_5_402_bigDragonHead.tscn",#bigDragon-head
-	#Vector3i(5,410,0): "res://entites/object_5_410_bigDragonNeck.tscn",#bigDragon-neck
-	#
-	#Vector3i(5,411,0): "res://entites/object_5_411_zombie.tscn",#zombie
-	#
-	#Vector3i(5,437,0): "res://entites/object_5_437_mummy.tscn",#mummy-walk
-	#Vector3i(5,445,0): "res://entites/object_5_445_mummy.tscn",#mummy-stay
-	#
-	#Vector3i(5,453,0): "res://entites/object_5_453_bigDragonBody.tscn",#bigDragon-body-stay
-	#
-	#Vector3i(5,464,0): "res://entites/object_5_464_vissuluth.tscn",#vissuluth
-	#Vector3i(5,472,0): "res://entites/object_5_472_vissuluth.tscn",#vissuluth
-	#Vector3i(5,480,0): "res://entites/object_5_480_vissuluth.tscn",#vissuluth
-	#Vector3i(5,488,0): "res://entites/object_5_488_vissuluth.tscn",#vissuluth
-	#Vector3i(5,496,0): "res://entites/object_5_496_vissuluth.tscn",#vissuluth
-	#
-	#Vector3i(9,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star
-	#Vector3i(9,60,0): "res://entites/object_9_60_green-spell.tscn",#green-spell
-	#Vector3i(9,61,0): "res://entites/object_9_61_castleball.tscn",#castleball-OK
-	#Vector3i(9,64,0): "res://entites/object_9_64_meteor.tscn",#meteor-OK
-	#Vector3i(9,80,0): "res://entites/object_10_80_castle_orb.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(9,105,0): "res://entites/object_9_105_arrow.tscn",#arrow-OK
-	#Vector3i(9,116,0): "res://entites/object_9_116_firearrow.tscn",#arrow xxxxxxxxxxxxxxxxx
-	#Vector3i(9,144,0): "res://entites/object_9_144_posses.tscn",#posses-OK - more star
-	#Vector3i(9,148,0): "res://entites/object_9_148_red_hand.tscn",#red hand-OK
-	#Vector3i(9,149,0): "res://entites/object_9_149_violet_orb.tscn",#violet orb-OK
-	#Vector3i(9,151,0): "res://entites/object_9_151_lighting.tscn",#fix this to better
-	#Vector3i(9,419,0): "res://entites/object_9_419_spider_web.tscn",#spide web zzzzzzzzzzzzzzOK
-	#Vector3i(9,420,0): "res://entites/object_9_420_walnut.tscn",#walnul ball zzzzzzzzzzzzzzOK
-	#Vector3i(9,421,0): "res://entites/object_9_421_red_sphere.tscn",#red sphere-OK
-	#Vector3i(9,145,0): "res://entites/object_9_146_lump.tscn",#tremor ball zzzzzzzzzzzzzzOK
-	#Vector3i(9,146,0): "res://entites/object_9_146_lump.tscn",#crater ball zzzzzzzzzzzzzzOK
-	#Vector3i(9,260,0): "res://entites/object_9_260_bone.tscn",#bone spell zzzzzzzzzzzzzzOK
-	#Vector3i(9,463,0): "res://entites/object_9_463_sunball.tscn",#sunball-OK
-	#Vector3i(10,8,0): "res://entites/object_10_8_fair.tscn",#fair-fake number 8 not true index of model xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(10,38,0): "res://entites/object_10_8_fair.tscn",#end-of explosion-OK
-	#Vector3i(10,54,0): "res://entites/object_10_54_explosion.tscn",#explosion-final-OK
-	#Vector3i(10,55,0): "res://entites/object_9_55_fireball.tscn",#fireball-OK-make as star-special
-	#Vector3i(10,57,0): "res://entites/object_10_57_smoke.tscn",#smoke1-OK
-	#Vector3i(10,58,0): "res://entites/object_10_58_goldSphere.tscn",#goldMana -OK-standartMana
-	#Vector3i(10,63,0): "res://entites/object_10_63_smoke.tscn",#smoke2 -OK
-	#Vector3i(10,67,0): "res://entites/object_10_67_whiteSphere.tscn",#whiteMana -OK
-	#Vector3i(10,68,0): "res://entites/object_10_68_redSphere.tscn",#red sphere xxxxxxxxxxxx
-	#Vector3i(10,69,0): "res://entites/object_10_69_violedSphere.tscn",#violet sphere xxxxxxxxxxxx
-	#Vector3i(10,70,0): "res://entites/object_10_70_blueSphere.tscn",#blue sphere xxxxxxxxxxxx
-	#Vector3i(10,71,0): "res://entites/object_10_71_greenSphere.tscn",#green sphere xxxxxxxxxxxx
-	#Vector3i(10,72,0): "res://entites/object_10_72_pinkSphere.tscn",#pink sphere xxxxxxxxxxxx
-	#Vector3i(10,73,0): "res://entites/object_10_73_orangeSphere.tscn",#orange sphere xxxxxxxxxxxx
-	#Vector3i(10,74,0): "res://entites/object_10_74_blackSphere.tscn",#black sphere xxxxxxxxxxxx	
-	#Vector3i(10,77,0): "res://entites/object_10_77_fire.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(10,80,0): "res://entites/object_10_80_castle_orb.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(10,81,0): "res://entites/object_10_81_remains.tscn",#remains xxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(10,96,0): "res://entites/object_3_96_posses_building-whiteD.tscn",#building -difmodels!!!
-	#Vector3i(10,97,0): "res://entites/object_3_97_posses_building-redD.tscn",#building -difmodels!!!
-	#Vector3i(10,98,0): "res://entites/object_3_98_posses_building-violetD.tscn",#building -difmodels!!!
-	#Vector3i(10,99,0): "res://entites/object_3_99_posses_building-blueD.tscn",#building -difmodels!!!
-	#Vector3i(10,100,0): "res://entites/object_3_100_posses_building-greenD.tscn",#building -difmodels!!!
-	#Vector3i(10,101,0): "res://entites/object_3_101_posses_building-pinkD.tscn",#building -difmodels!!!
-	#Vector3i(10,102,0): "res://entites/object_3_102_posses_building-orangeD.tscn",#building -difmodels!!!
-	#Vector3i(10,103,0): "res://entites/object_3_103_posses_building-blackD.tscn",#building -difmodels!!!
-	#Vector3i(10,145,0): "res://entites/object_9_64_meteor.tscn",#meteor
-	#Vector3i(10,158,0): "res://entites/object_5_158_puerla.tscn",#puerla xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(10,168,0): "res://entites/object_10_168_FacePortal.tscn",#fire xxxxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(10,186,0): "res://entites/object_10_186_splash.tscn",#splash -difmodels!!! - in cave buble
-	#Vector3i(10,202,0): "res://entites/object_10_202_blue_orb.tscn",#blue orb
-	#Vector3i(10,327,0): "res://entites/object_10_327_tornado.tscn",#tornado xxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(10,426,0): "res://entites/object_10_426_bubble.tscn",#bubble - zzzzzzzzzzzzzzzzzzzzzzzzzz
-	#Vector3i(10,463,0): "res://entites/object_10_463_fireball-object.tscn",#fireball-object xxxxxxxxxxxxxxxxxxxxxxxxxx
-	#Vector3i(14,259,0): "res://entites/object_14_259_scroll.tscn",#scroll -OK
-	#Vector3i(14,461,0): "res://entites/object_14_461_mouth.tscn",#mouth-gate -OK
-	#Vector3i(14,462,0): "res://entites/object_14_462_portal.tscn",#day portal
-	#Vector3i(15,59,0): "res://entites/object_15_59_jar.tscn",#jar -OK
 }
 
 var entites_pool:Dictionary
@@ -2276,7 +2122,7 @@ var type_names = {
 	11: "Switches",
 	#12: "Spells",
 	14: "Special",
-	15: "Special2",
+	15: "Vase",
 }
 
 var subtype_names = {
@@ -2315,14 +2161,18 @@ var subtype_names = {
 		6: "Fire",         7: "Freeze",        8: "Mini Volcano",
 		9: "Volcano",      10: "Mini Crater",  11: "Crater",
 		12: "Possession",  13: "White Smoke",  14: "Black Smoke",
-		15: "Earthquake",  17: "Meteor",       21: "Steal Mana",
+		15: "Earthquake",  17: "Meteor",       21: "Steal Mana", 
 		22: "Wind",
 		23: "Lightning",   24: "Rain of Fire", 25: "Unknown",
+		27: "Wall",
 		28: "Wall",        29: "Path",         31: "Canyon",
 		34: "Teleport",    39: "Mana Ball",    45: "Building",
 		50: "Ridge Node",  52: "Crab Egg",
+		54: "Auxiliary entity",
+		58: "Mana Ball 2560",
 		59: "Smoke1",
 		60: "Smoke2",
+		76: "Fire Spheres",
 	},
 	11: {
 		0: "Hidden In",    1: "Hidden Out",    2: "Hidden In Re",
@@ -2346,11 +2196,36 @@ var subtype_names = {
 		#21: "Reverse Spd", 22: "Global Death", 23: "Rapid Fireball",
 	#},
 	14: {
-		3: "Scroll",
+		3: "Gate",
 		5: "Scroll",
 	},
 	15: {
-		2: "Vase",
+		0: "Vase-Fireball",
+		1: "Vase-Possession",
+		2: "Vase-Castle",
+		3: "Vase-Speed Up",
+		4: "Vase-Morph",
+		5: "Vase-Heal",
+		6: "Vase-Shield",
+		7: "Vase-Lightning",
+		8: "Vase-Rebound",
+		9: "Vase-Meteor",
+		10: "Vase-Teleport",
+		11: "Vase-Invisible",
+		12: "Vase-Steal Mana",
+		13: "Vase-Beyond Sight",
+		14: "Vase-Duel",
+		15: "Vase-Tremor",
+		16: "Vase-Crater",
+		17: "Vase-Earthquake",
+		18: "Vase-Volcano",
+		19: "Vase-Summon Army",
+		20: "Vase-Gravity Well",
+		21: "Vase-Whirlwind",
+		22: "Vase-Foll'S Mana",
+		23: "Vase-Magic Mine",
+		24: "Vase-Alliance",
+		25: "Vase-Cave In",
 	},
 }
 
@@ -2364,6 +2239,7 @@ var type_icons = {
 	11: "res://gui/editor/switch up.png",#ok
 	#12: "user://convertdata/TMAPS/TMAPS-day/",
 	14: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_084.png",#ok
+	15: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_059_00.png",#ok
 }
 
 # Obrázky pro subtypes — type_id -> subtype_id -> cesta
@@ -2400,10 +2276,15 @@ var subtype_icons = {
 		6:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_077_07.png",#ok
 		10: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_115.png",#ok
 		13: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_057_00.png",#ok
+		14: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_063_00.png",#ok
 		22: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_244.png",#ok
+		27: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_159.png",#ok
+		39: "user://convertdata/HSPR/HSPR-day/TMAPS0-0.DAT_058_00.png",#ok
 		45: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_099.png",#ok
+		58: "user://convertdata/HSPR/HSPR-day/TMAPS0-0.DAT_058_00.png",#ok
 		59: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_057_00.png",#ok
 		60: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_063_00.png",#ok
+		76: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_463_00.png",#ok
 	},
 	11: {
 		0: "res://gui/editor/switchEntites/tile000.png",#ok
@@ -2426,12 +2307,36 @@ var subtype_icons = {
 		32: "res://gui/editor/switchEntites/tile032.png",#ok
 	},
 	14: {
-		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_259_00.png",#ok
+		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_461_00.png",#ok
 		5: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_259_00.png",#ok
 	},
 	15: {
-		2: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_059_00.png",#ok
-		3: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_059_00.png",#ok
+		0: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_097.png",
+		1: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_098.png",
+		2: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_099.png",
+		3: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_100.png",
+		4: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_101.png",
+		5: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_102.png",
+		6: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_103.png",
+		7: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_104.png",
+		8: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_105.png",
+		9: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_106.png",
+		10: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_107.png",
+		11: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_108.png",
+		12: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_109.png",
+		13: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_110.png",
+		14: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_111.png",
+		15: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_112.png",
+		16: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_113.png",
+		17: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_114.png",
+		18: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_115.png",
+		19: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_116.png",
+		20: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_117.png",
+		21: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_118.png",
+		22: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_119.png",
+		23: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_120.png",
+		24: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_121.png",
+		25: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_122.png",
 	},
 }
 
@@ -2456,8 +2361,13 @@ var subtype_tooltips = {
 		0:  "",
 		1:  "",
 		6:  "",
+		17:  "Explosions—many small fires.",
 		22:  "",
-		45: "Many different buildings",
+		39:  "These start as a single small ball with a value of 512 mana. To get bigger values, more small balls are placed on the same point, and they will auto-merge into a larger size on level start.",
+		45:  "The Parent field value determines building type. 1 = Tent, various other values determine other building types",
+		54:  "An auxiliary entity. It has no meaning on its own, but is used for switches, etc.",
+		58:  "These start as a single small ball with a value of 2560 mana. To get bigger values, more small balls are placed on the same point, and they will auto-merge into a larger size on level start.",
+		76:  "It creates several rows of fireballs that spin in various ways and then disappear.",
 	},
 	11: {
 		0: "A hidden switch activated once by the player moving inside its area.",
@@ -2487,6 +2397,9 @@ var subtype_tooltips = {
 		30: "Triggers once all creatures of all types on the map have been killed.",
 		31: "LEV000049 Uses this switch type, it marks the final level of the game.",
 		32: "This switch type triggers when the player completes a stage within a multi-stage level."
+	},
+	14: {
+		5: "Adds 50 XP in single-player mode or 4 XP in multiplayer mode for all 26 spells.",
 	},
 }
 
