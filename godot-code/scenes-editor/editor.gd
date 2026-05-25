@@ -569,11 +569,15 @@ var library = {
 	Vector3i(2,1,0): "res://entites-editor/object_2_1_stone.tscn",
 	Vector3i(2,2,0): "res://entites-editor/object_2_2_dolmen.tscn",
 	Vector3i(2,3,0): "res://entites-editor/object_2_3_statue.tscn",
-	Vector3i(3,4,0): "res://entites-editor/object_3_4_player.tscn",
+	Vector3i(3,4,0): "res://entites-editor/object_3_4_player1.tscn",
+	Vector3i(3,5,0): "res://entites-editor/object_3_5_player2.tscn",
 	Vector3i(5,1,0): "res://entites-editor/object_5_1_goat.tscn",
+	Vector3i(5,2,0): "res://entites-editor/object_5_2_bee.tscn",
 	Vector3i(5,3,0): "res://entites-editor/object_5_3_worm.tscn",
 	Vector3i(5,4,0): "res://entites-editor/object_5_4_archer.tscn",
 	Vector3i(5,13,0): "res://entites-editor/object_5_13_people.tscn",
+	Vector3i(5,14,0): "res://entites-editor/object_5_14_trader.tscn",
+	Vector3i(5,16,0): "res://entites-editor/object_5_16_wyvern.tscn",
 	Vector3i(5,19,0): "res://entites-editor/object_5_19_firefly.tscn",
 	Vector3i(14,5,0): "res://entites-editor/object_14_5_scroll.tscn",
 	Vector3i(15,2,0): "res://entites-editor/object_15_2_vase.tscn",
@@ -583,6 +587,10 @@ var library = {
 	Vector3i(10,4,0): "res://entites-editor/object_3_4_player.tscn",
 	Vector3i(10,5,0): "res://entites-editor/object_10_5_splash.tscn",
 	Vector3i(10,6,0): "res://entites-editor/object_10_6_fire.tscn",
+	Vector3i(10,9,0): "res://entites-editor/object_10_9_volcano.tscn",
+	Vector3i(10,13,0): "res://entites-editor/object_10_59_smoke1.tscn",
+	Vector3i(10,17,0): "res://entites-editor/object_10_17_Meteor.tscn",
+	Vector3i(10,22,0): "res://entites-editor/object_10_22_Wind.tscn",
 	Vector3i(10,59,0): "res://entites-editor/object_10_59_smoke1.tscn",
 	Vector3i(10,60,0): "res://entites-editor/object_10_60_smoke2.tscn",
 	Vector3i(11,0,0): "res://entites-editor/object_11_0.tscn",
@@ -2308,6 +2316,7 @@ var subtype_names = {
 		9: "Volcano",      10: "Mini Crater",  11: "Crater",
 		12: "Possession",  13: "White Smoke",  14: "Black Smoke",
 		15: "Earthquake",  17: "Meteor",       21: "Steal Mana",
+		22: "Wind",
 		23: "Lightning",   24: "Rain of Fire", 25: "Unknown",
 		28: "Wall",        29: "Path",         31: "Canyon",
 		34: "Teleport",    39: "Mana Ball",    45: "Building",
@@ -2374,9 +2383,12 @@ var subtype_icons = {
 	},
 	5:  {
 		1:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_153_01.png",#ok
+		2:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_018_00.png",#ok
 		3:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_036_05.png",#ok
 		4:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_009_01.png",#ok
 		13: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_134_03.png",#ok
+		14: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_139_01.png",#ok
+		16: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_130_03.png",#ok
 		19: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_285_00.png",#ok
 		45: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_115.png",
 	},
@@ -2386,6 +2398,9 @@ var subtype_icons = {
 		4:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_004_00.png",#ok
 		5:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_190_00.png",#ok
 		6:  "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_077_07.png",#ok
+		10: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_115.png",#ok
+		13: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_057_00.png",#ok
+		22: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_244.png",#ok
 		45: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_099.png",#ok
 		59: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_057_00.png",#ok
 		60: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_063_00.png",#ok
@@ -2429,15 +2444,19 @@ var subtype_tooltips = {
 	},
 	5: {
 		1:  "",
+		2:  "",
 		3:  "",
 		4:  "",
 		13: "",
+		14: "",
+		16: "",
 		19: "",
 	},
 	10: {
 		0:  "",
 		1:  "",
 		6:  "",
+		22:  "",
 		45: "Many different buildings",
 	},
 	11: {
