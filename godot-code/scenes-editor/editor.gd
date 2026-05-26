@@ -590,6 +590,8 @@ var library = {
 	Vector3i(10,17,0): "res://entites-editor/object_10_17_Meteor.tscn",
 	Vector3i(10,22,0): "res://entites-editor/object_10_22_Wind.tscn",
 	Vector3i(10,27,0): "res://entites-editor/object_10_27_wall.tscn",
+	Vector3i(10,28,0): "res://entites-editor/object_10_27_wall.tscn",
+	Vector3i(10,29,0): "res://entites-editor/object_10_29_wall.tscn",
 	Vector3i(10,39,0): "res://entites-editor/object_10_39_mana.tscn",
 	Vector3i(10,58,0): "res://entites-editor/object_10_39_mana.tscn",
 	Vector3i(10,59,0): "res://entites-editor/object_10_59_smoke1.tscn",
@@ -2279,6 +2281,8 @@ var subtype_icons = {
 		14: "user://convertdata/TMAPS/TMAPS-day/TMAPS0-0.DAT_063_00.png",#ok
 		22: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_244.png",#ok
 		27: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_159.png",#ok
+		28: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_159.png",#ok
+		29: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_159.png",#ok
 		39: "user://convertdata/HSPR/HSPR-day/TMAPS0-0.DAT_058_00.png",#ok
 		45: "user://convertdata/HSPR/HSPR-day/HSPRD0-0.DAT_099.png",#ok
 		58: "user://convertdata/HSPR/HSPR-day/TMAPS0-0.DAT_058_00.png",#ok

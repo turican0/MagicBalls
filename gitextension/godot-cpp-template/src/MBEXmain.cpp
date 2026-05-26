@@ -2730,13 +2730,15 @@ void MBEXclass::REMC2EditorExportToCSV() {
 					case 2:
 						return "Scenery-Dolmen";
 					case 3:
-						return "Scenery-Statue (witch)";
+						return "Scenery-Statue";
+					/*
 					case 4:
 						return "Scenery-Blue Dome";
 					case 5:
-						return "Scenery-Blue Dome (dup)";
+						return "Scenery-Blue Dome (dup)";					
 					default:
 						return "Scenery-Unknown";
+					*/
 				}
 			}
 			case 3: { // Player Spawn
@@ -2757,14 +2759,18 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Spawn-Flyer7";
 					case 11:
 						return "Spawn-Flyer8";
+					/*
 					default:
 						return "Spawn-Unknown";
+					*/
 				}
 			}
 			case 5: { // Creatures
 				switch (subtype) {
+					/*
 					case 0:
 						return "Creatures-Dragon";
+					*/
 					case 1:
 						return "Creatures-Goat";
 					case 2:
@@ -2773,6 +2779,7 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Creatures-Worm";
 					case 4:
 						return "Creatures-Archer";
+					/*
 					case 5:
 						return "Creatures-Crab";
 					case 6:
@@ -2789,6 +2796,7 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Creatures-Genie";
 					case 12:
 						return "Creatures-Builder";
+					*/
 					case 13:
 						return "Creatures-Townie";
 					case 14:
@@ -2797,10 +2805,13 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Creatures-Wyvern";
 					case 19:
 						return "Creatures-FireFly";
+					/*
 					default:
 						return "Creatures-Unknown";
+					*/
 				}
 			}
+			/*
 			case 7: { // Weather
 				switch (subtype) {
 					case 0:
@@ -2875,72 +2886,89 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Spell-Unknown";
 				}
 			}
+			*/
 			case 10: { // Effects
 				switch (subtype) {
 					case 0:
 						return "Effect-Explosion";
 					case 1:
 						return "Effect-Big Explosion";
+					/*
 					case 2:
 						return "Effect-Dust";
 					case 3:
 						return "Effect-Blood";
+					*/
 					case 4:
 						return "Effect-Wizard";
 					case 5:
 						return "Effect-Splash";
 					case 6:
 						return "Effect-Fire";
+					/*
 					case 7:
 						return "Effect-Freeze";
 					case 8:
 						return "Effect-Mini Volcano";
+					*/
 					case 9:
 						return "Effect-Volcano";
+					/*
 					case 10:
-						return "Effect-Mini Crater";
+						return "Effect-Mini Crater";					
 					case 11:
 						return "Effect-Crater";
 					case 12:
 						return "Effect-Possession";
+					*/
 					case 13:
 						return "Effect-White Smoke";
 					case 14:
 						return "Effect-Black Smoke";
+					/*
 					case 15:
 						return "Effect-Earthquake";
+					*/
 					case 17:
 						return "Effect-Meteor";
+					/*
 					case 21:
 						return "Effect-Steal Mana Trap";
+					*/
 					case 22:
 						return "Effect-Wind";
+					/*
 					case 23:
 						return "Effect-Lightning";
 					case 24:
 						return "Effect-Rain of Fire";
 					case 25:
 						return "Effect-Unknown";
+					*/
 					case 27:
-						return "Effect-Wall";
+						return "Effect-Wall2";
 					case 28:
-						return "Effect-Wall";
+						return "Effect-Wall";					
 					case 29:
 						return "Effect-Path";
+					/*
 					case 31:
 						return "Effect-Canyon";
 					case 34:
 						return "Effect-Teleport";
+					*/
 					case 39:
 						return "Effect-Mana Ball 512";
 					case 45:
 						return "Effect-Villager Building";
+					/*
 					case 49:
 						return "Effect-Unknown";
 					case 50:
 						return "Effect-Ridge Node";
 					case 52:
 						return "Effect-Crab Egg";
+					*/
 					case 54:
 						return "Effect-Auxiliary Entity";
 					case 58:
@@ -2951,8 +2979,10 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Effect-Smoke2";
 					case 76:
 						return "Effect-Fire Spheres";
+					/*
 					default:
 						return "Effect-Unknown";
+					*/
 				}
 			}
 			case 11: { // Switches
@@ -2983,6 +3013,7 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Switch-Obvious Inside Re";
 					case 12:
 						return "Switch-Obvious Outside Re";
+					/*
 					case 13:
 						return "Switch-Dragon";
 					case 14:
@@ -3009,12 +3040,16 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Switch-Creature All";
 					case 31:
 						return "Switch-Exit Level";
+					*/
 					case 32:
 						return "Switch-Stage Complete";
+					/*
 					default:
 						return "Switch-Unknown";
+					*/
 				}
 			}
+			/*
 			case 12: { // Spells (vases)
 				switch (subtype) {
 					case 0:
@@ -3073,72 +3108,77 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Vase-Unknown";
 				}
 			}
+			*/
 			case 14: { // SubTypes 14
 				switch (subtype) {
 					case 3:
-						return "Type14-Exit Gateway";
+						return "Special-Exit Gateway";
 					case 5:
-						return "Type14-Scroll";
+						return "Special-Scroll";
+					/*
 					default:
 						return "Type14-Unknown";
+					*/
 				}
 			}
 			case 15: { // Spell vases (alt type)
 				switch (subtype) {
 					case 0:
-						return "Vase2-Fireball";
+						return "Vase-Fireball";
 					case 1:
-						return "Vase2-Possession";
+						return "Vase-Possession";
 					case 2:
-						return "Vase2-Castle";
+						return "Vase-Castle";
 					case 3:
-						return "Vase2-Speed Up";
+						return "Vase-Speed Up";
 					case 4:
-						return "Vase2-Morph";
+						return "Vase-Morph";
 					case 5:
-						return "Vase2-Heal";
+						return "Vase-Heal";
 					case 6:
-						return "Vase2-Shield";
+						return "Vase-Shield";
 					case 7:
-						return "Vase2-Lightning";
+						return "Vase-Lightning";
 					case 8:
-						return "Vase2-Rebound";
+						return "Vase-Rebound";
 					case 9:
-						return "Vase2-Meteor";
+						return "Vase-Meteor";
 					case 10:
-						return "Vase2-Teleport";
+						return "Vase-Teleport";
 					case 11:
-						return "Vase2-Invisible";
+						return "Vase-Invisible";
 					case 12:
-						return "Vase2-Steal Mana";
+						return "Vase-Steal Mana";
 					case 13:
-						return "Vase2-Beyond Sight";
+						return "Vase-Beyond Sight";
 					case 14:
-						return "Vase2-Duel";
+						return "Vase-Duel";
 					case 15:
-						return "Vase2-Tremor";
+						return "Vase-Tremor";
 					case 16:
-						return "Vase2-Crater";
+						return "Vase-Crater";
 					case 17:
-						return "Vase2-Earthquake";
+						return "Vase-Earthquake";
 					case 18:
-						return "Vase2-Volcano";
+						return "Vase-Volcano";
 					case 19:
-						return "Vase2-Summon Army";
+						return "Vase-Summon Army";
 					case 20:
-						return "Vase2-Gravity Well";
+						return "Vase-Gravity Well";
 					case 21:
-						return "Vase2-Whirlwind";
+						return "Vase-Whirlwind";
 					case 22:
-						return "Vase2-Foll's Mana";
+						return "Vase-Foll's Mana";
 					case 23:
-						return "Vase2-Magic Mine";
+						return "Vase-Magic Mine";
 					case 24:
-						return "Vase2-Alliance";
+						return "Vase-Alliance";
 					case 25:
-						return "Vase2-Cave In";
+						return "Vase-Cave In";
+					/*
 					default:
-						return "Vase2-Unknown";
+						return "Vase-Unknown";
+					*/
 				}
 			}
 			default:
