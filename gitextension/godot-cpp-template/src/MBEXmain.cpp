@@ -2979,6 +2979,16 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Effect-Smoke2";
 					case 76:
 						return "Effect-Fire Spheres";
+					case 80:
+						return "Effect-Terrain Tunnel";
+					case 82:
+						return "Effect-Terrain Hall";
+					case 83:
+						return "Effect-Terrain Fat Stalagmit";
+					case 84:
+						return "Effect-Terrain Stalaktit";
+					case 85:
+						return "Effect-Terrain Stalagmit";
 					/*
 					default:
 						return "Effect-Unknown";
