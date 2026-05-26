@@ -249,6 +249,28 @@ func _input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			return
 			
+	if _move_entities_mode:
+		# M samotné ignorujeme — nechceme okamžité zapnutí+vypnutí
+		if event is InputEventKey and event.keycode == KEY_M:
+			get_viewport().set_input_as_handled()
+			return
+		if !(event is InputEventMouseButton):
+			return
+		# Cokoliv jiného (klávesa nebo tlačítko myši) mode ukončí
+		var should_stop := false
+		if event is InputEventKey and event.pressed and not event.is_echo():
+			should_stop = true
+		elif event is InputEventMouseButton and event.pressed:
+			should_stop = true
+		if should_stop:
+			_move_entities_mode = false
+			_commit_moved_entities()
+			log_message("Move-entities mode OFF — changes saved")
+			get_viewport().set_input_as_handled()
+			return
+		# Pohyb kamerou (a tedy entit) necháme projít normálně
+		return
+			
 	if Tree_View.has_focus() and event is InputEventKey and event.pressed:
 		if event.keycode == KEY_UP:
 			_move_tree_selection(-1)
@@ -268,6 +290,8 @@ func _input(event: InputEvent) -> void:
 		add_entity()
 	if (event is InputEventKey and event.keycode == KEY_E and event.pressed):
 		_open_type_select()
+	if (event is InputEventKey and event.keycode == KEY_M and event.pressed):
+		_toggle_move_entities_mode()
 	# UNDO & REDO
 	if event is InputEventKey and event.pressed:
 		var command_or_ctrl = event.ctrl_pressed or event.meta_pressed
@@ -490,9 +514,73 @@ func update_selection() -> void:
 	
 	_refresh_3d_entity_colors()
 
+var _move_entities_mode := false
+var _move_anchor_cam := Vector2.ZERO          # zapamatovaná XZ pozice kamery
+var _move_anchor_entity_pos: Dictionary = {}  # index → Vector2(axis_x, axis_y)
+
+func _toggle_move_entities_mode() -> void:
+	# Přepíná jen v kamera-módu (is_ui_visible == false)
+	if is_ui_visible:
+		return
+
+	_move_entities_mode = !_move_entities_mode
+
+	if _move_entities_mode:
+		# Zapamatuj výchozí stav
+		_move_anchor_cam = Vector2(Ray_Cylinder.position.x, Ray_Cylinder.position.z)
+		_move_anchor_entity_pos.clear()
+		for node in get_tree().get_nodes_in_group("selected_entities"):
+			if node.has_meta("index"):
+				var idx = node.get_meta("index")
+				var e   = Global.editorLevel["entities"][idx]
+				_move_anchor_entity_pos[idx] = Vector2(e.get("axis_x", 0), e.get("axis_y", 0))
+				log_message("Move-entities mode ON  (%d entities)" % _move_anchor_entity_pos.size())
+	else:
+		# Commitni finální pozice
+		_commit_moved_entities()
+		log_message("Move-entities mode OFF — changes saved")
+
+func _commit_moved_entities() -> void:
+	if _move_anchor_entity_pos.is_empty():
+		return
+	var cam_now = Vector2(Ray_Cylinder.position.x, Ray_Cylinder.position.z)
+	var delta   = cam_now - _move_anchor_cam
+	for idx in _move_anchor_entity_pos:
+		var orig = _move_anchor_entity_pos[idx]
+		var nx   = int(orig.x + delta.x) % 256
+		var ny   = int(orig.y + delta.y) % 256
+		if nx < 0: nx += 256
+		if ny < 0: ny += 256
+		var nz   = int(Global.MBEX.REMC2GetTerrainAlt(nx, ny))
+		Global.editorLevel["entities"][idx]["axis_x"] = nx
+		Global.editorLevel["entities"][idx]["axis_y"] = ny
+		Global.editorLevel["entities"][idx]["axis_z"] = nz
+	Global.MBEX.REMC2EditorSetLevelData(Global.editorLevel)
+	EditorStep()
+	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
+
+func _update_move_entities_preview() -> void:
+	if not _move_entities_mode:
+		return
+	var cam_now = Vector2(Ray_Cylinder.position.x, Ray_Cylinder.position.z)
+	var delta   = cam_now - _move_anchor_cam
+	for idx in _move_anchor_entity_pos:
+		var orig = _move_anchor_entity_pos[idx]
+		var nx   = int(orig.x + delta.x) % 256
+		var ny   = int(orig.y + delta.y) % 256
+		if nx < 0: nx += 256
+		if ny < 0: ny += 256
+		var nz   = int(Global.MBEX.REMC2GetTerrainAlt(nx, ny))
+		Global.editorLevel["entities"][idx]["axis_x"] = nx
+		Global.editorLevel["entities"][idx]["axis_y"] = ny
+		Global.editorLevel["entities"][idx]["axis_z"] = nz
+	# Vizuální preview bez commitu do C++ – stačí přepsat editorLevel lokálně,
+	# RenderEditorEntites() to zobrazí v příštím _process framu
+
 func _process(delta: float) -> void:
 	if editor_runned:
 		EditorStep()
+		#if not _move_entities_mode:
 		Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 		#fillTerrainDetails()
 		#refreshWizardDetails()
@@ -501,6 +589,7 @@ func _process(delta: float) -> void:
 		UpdatePositionLabel()
 		select_entities_by_filter()
 		update_selection()
+		_update_move_entities_preview()
 		RenderEditorEntites()
 
 func gameInit():
