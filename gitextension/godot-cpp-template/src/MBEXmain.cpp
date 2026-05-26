@@ -2688,7 +2688,7 @@ void MBEXclass::REMC2EditorExportToCSV() {
 	// Získání dat ze stávající funkce (vrací Dictionary)
 	Dictionary d = REMC2EditorGetLevelData();
 
-	// ── HLAVIČKA (Použití std::vector pro inicializaci klíčů) ────
+	// ── HLAVIČKA ────────────────────────────────────────────────
 	f->store_line("SECTION;Header");
 	f->store_line("Key;Value");
 
@@ -2718,9 +2718,437 @@ void MBEXclass::REMC2EditorExportToCSV() {
 	}
 	f->store_line("");
 
+	// ── HELPER: popis entity dle type+subtype ───────────────────
+	auto get_entity_description = [](int type, int subtype) -> String {
+		switch (type) {
+			case 2: { // Scenery
+				switch (subtype) {
+					case 0:
+						return "Scenery-Tree";
+					case 1:
+						return "Scenery-Standing Stone/Statue";
+					case 2:
+						return "Scenery-Dolmen";
+					case 3:
+						return "Scenery-Statue (witch)";
+					case 4:
+						return "Scenery-Blue Dome";
+					case 5:
+						return "Scenery-Blue Dome (dup)";
+					default:
+						return "Scenery-Unknown";
+				}
+			}
+			case 3: { // Player Spawn
+				switch (subtype) {
+					case 4:
+						return "Spawn-Flyer1";
+					case 5:
+						return "Spawn-Flyer2";
+					case 6:
+						return "Spawn-Flyer3";
+					case 7:
+						return "Spawn-Flyer4";
+					case 8:
+						return "Spawn-Flyer5";
+					case 9:
+						return "Spawn-Flyer6";
+					case 10:
+						return "Spawn-Flyer7";
+					case 11:
+						return "Spawn-Flyer8";
+					default:
+						return "Spawn-Unknown";
+				}
+			}
+			case 5: { // Creatures
+				switch (subtype) {
+					case 0:
+						return "Creatures-Dragon";
+					case 1:
+						return "Creatures-Goat";
+					case 2:
+						return "Creatures-Bee";
+					case 3:
+						return "Creatures-Worm";
+					case 4:
+						return "Creatures-Archer";
+					case 5:
+						return "Creatures-Crab";
+					case 6:
+						return "Creatures-Kraken";
+					case 7:
+						return "Creatures-Troll/Ape";
+					case 8:
+						return "Creatures-Griffin";
+					case 9:
+						return "Creatures-Skeleton";
+					case 10:
+						return "Creatures-Emu";
+					case 11:
+						return "Creatures-Genie";
+					case 12:
+						return "Creatures-Builder";
+					case 13:
+						return "Creatures-Townie";
+					case 14:
+						return "Creatures-Trader";
+					case 16:
+						return "Creatures-Wyvern";
+					case 19:
+						return "Creatures-FireFly";
+					default:
+						return "Creatures-Unknown";
+				}
+			}
+			case 7: { // Weather
+				switch (subtype) {
+					case 0:
+						return "Weather-Tornado";
+					case 1:
+						return "Weather-Rain Cloud";
+					case 2:
+						return "Weather-Thunder Cloud";
+					case 3:
+						return "Weather-Thermals";
+					case 4:
+						return "Weather-Wind";
+					default:
+						return "Weather-Unknown";
+				}
+			}
+			case 9: { // Spells
+				switch (subtype) {
+					case 0:
+						return "Spell-Fireball";
+					case 1:
+						return "Spell-Possession";
+					case 2:
+						return "Spell-Castle";
+					case 3:
+						return "Spell-Speed Up";
+					case 4:
+						return "Spell-Morph";
+					case 5:
+						return "Spell-Heal";
+					case 6:
+						return "Spell-Shield";
+					case 7:
+						return "Spell-Lightning";
+					case 8:
+						return "Spell-Rebound";
+					case 9:
+						return "Spell-Meteor";
+					case 10:
+						return "Spell-Teleport";
+					case 11:
+						return "Spell-Invisible";
+					case 12:
+						return "Spell-Steal Mana";
+					case 13:
+						return "Spell-Beyond Sight";
+					case 14:
+						return "Spell-Duel";
+					case 15:
+						return "Spell-Tremor";
+					case 16:
+						return "Spell-Crater";
+					case 17:
+						return "Spell-Earthquake";
+					case 18:
+						return "Spell-Volcano";
+					case 19:
+						return "Spell-Summon Army";
+					case 20:
+						return "Spell-Gravity Well";
+					case 21:
+						return "Spell-Whirlwind";
+					case 22:
+						return "Spell-Foll's Mana";
+					case 23:
+						return "Spell-Magic Mine";
+					case 24:
+						return "Spell-Alliance";
+					case 25:
+						return "Spell-Cave In";
+					default:
+						return "Spell-Unknown";
+				}
+			}
+			case 10: { // Effects
+				switch (subtype) {
+					case 0:
+						return "Effect-Explosion";
+					case 1:
+						return "Effect-Big Explosion";
+					case 2:
+						return "Effect-Dust";
+					case 3:
+						return "Effect-Blood";
+					case 4:
+						return "Effect-Wizard";
+					case 5:
+						return "Effect-Splash";
+					case 6:
+						return "Effect-Fire";
+					case 7:
+						return "Effect-Freeze";
+					case 8:
+						return "Effect-Mini Volcano";
+					case 9:
+						return "Effect-Volcano";
+					case 10:
+						return "Effect-Mini Crater";
+					case 11:
+						return "Effect-Crater";
+					case 12:
+						return "Effect-Possession";
+					case 13:
+						return "Effect-White Smoke";
+					case 14:
+						return "Effect-Black Smoke";
+					case 15:
+						return "Effect-Earthquake";
+					case 17:
+						return "Effect-Meteor";
+					case 21:
+						return "Effect-Steal Mana Trap";
+					case 22:
+						return "Effect-Wind";
+					case 23:
+						return "Effect-Lightning";
+					case 24:
+						return "Effect-Rain of Fire";
+					case 25:
+						return "Effect-Unknown";
+					case 27:
+						return "Effect-Wall";
+					case 28:
+						return "Effect-Wall";
+					case 29:
+						return "Effect-Path";
+					case 31:
+						return "Effect-Canyon";
+					case 34:
+						return "Effect-Teleport";
+					case 39:
+						return "Effect-Mana Ball 512";
+					case 45:
+						return "Effect-Villager Building";
+					case 49:
+						return "Effect-Unknown";
+					case 50:
+						return "Effect-Ridge Node";
+					case 52:
+						return "Effect-Crab Egg";
+					case 54:
+						return "Effect-Auxiliary Entity";
+					case 58:
+						return "Effect-Mana Ball 2560";
+					case 59:
+						return "Effect-Smoke";
+					case 60:
+						return "Effect-Smoke2";
+					case 76:
+						return "Effect-Fire Spheres";
+					default:
+						return "Effect-Unknown";
+				}
+			}
+			case 11: { // Switches
+				switch (subtype) {
+					case 0:
+						return "Switch-Hidden Inside";
+					case 1:
+						return "Switch-Hidden Outside";
+					case 2:
+						return "Switch-Hidden Inside Re";
+					case 3:
+						return "Switch-Hidden Outside Re";
+					case 4:
+						return "Switch-On Victory";
+					case 5:
+						return "Switch-Death Inside";
+					case 6:
+						return "Switch-Death Outside";
+					case 7:
+						return "Switch-Death Inside Re";
+					case 8:
+						return "Switch-Death Outside Re";
+					case 9:
+						return "Switch-Obvious Inside";
+					case 10:
+						return "Switch-Obvious Outside";
+					case 11:
+						return "Switch-Obvious Inside Re";
+					case 12:
+						return "Switch-Obvious Outside Re";
+					case 13:
+						return "Switch-Dragon";
+					case 14:
+						return "Switch-Vulture";
+					case 15:
+						return "Switch-Bee";
+					case 16:
+						return "Switch-Worm";
+					case 17:
+						return "Switch-Archer";
+					case 18:
+						return "Switch-Crab";
+					case 19:
+						return "Switch-Kraken";
+					case 20:
+						return "Switch-Troll";
+					case 21:
+						return "Switch-Griffon";
+					case 24:
+						return "Switch-Genie";
+					case 29:
+						return "Switch-Wyvern";
+					case 30:
+						return "Switch-Creature All";
+					case 31:
+						return "Switch-Exit Level";
+					case 32:
+						return "Switch-Stage Complete";
+					default:
+						return "Switch-Unknown";
+				}
+			}
+			case 12: { // Spells (vases)
+				switch (subtype) {
+					case 0:
+						return "Vase-Fireball";
+					case 1:
+						return "Vase-Possession";
+					case 2:
+						return "Vase-Castle";
+					case 3:
+						return "Vase-Speed Up";
+					case 4:
+						return "Vase-Morph";
+					case 5:
+						return "Vase-Heal";
+					case 6:
+						return "Vase-Shield";
+					case 7:
+						return "Vase-Lightning";
+					case 8:
+						return "Vase-Rebound";
+					case 9:
+						return "Vase-Meteor";
+					case 10:
+						return "Vase-Teleport";
+					case 11:
+						return "Vase-Invisible";
+					case 12:
+						return "Vase-Steal Mana";
+					case 13:
+						return "Vase-Beyond Sight";
+					case 14:
+						return "Vase-Duel";
+					case 15:
+						return "Vase-Tremor";
+					case 16:
+						return "Vase-Crater";
+					case 17:
+						return "Vase-Earthquake";
+					case 18:
+						return "Vase-Volcano";
+					case 19:
+						return "Vase-Summon Army";
+					case 20:
+						return "Vase-Gravity Well";
+					case 21:
+						return "Vase-Whirlwind";
+					case 22:
+						return "Vase-Foll's Mana";
+					case 23:
+						return "Vase-Magic Mine";
+					case 24:
+						return "Vase-Alliance";
+					case 25:
+						return "Vase-Cave In";
+					default:
+						return "Vase-Unknown";
+				}
+			}
+			case 14: { // SubTypes 14
+				switch (subtype) {
+					case 3:
+						return "Type14-Exit Gateway";
+					case 5:
+						return "Type14-Scroll";
+					default:
+						return "Type14-Unknown";
+				}
+			}
+			case 15: { // Spell vases (alt type)
+				switch (subtype) {
+					case 0:
+						return "Vase2-Fireball";
+					case 1:
+						return "Vase2-Possession";
+					case 2:
+						return "Vase2-Castle";
+					case 3:
+						return "Vase2-Speed Up";
+					case 4:
+						return "Vase2-Morph";
+					case 5:
+						return "Vase2-Heal";
+					case 6:
+						return "Vase2-Shield";
+					case 7:
+						return "Vase2-Lightning";
+					case 8:
+						return "Vase2-Rebound";
+					case 9:
+						return "Vase2-Meteor";
+					case 10:
+						return "Vase2-Teleport";
+					case 11:
+						return "Vase2-Invisible";
+					case 12:
+						return "Vase2-Steal Mana";
+					case 13:
+						return "Vase2-Beyond Sight";
+					case 14:
+						return "Vase2-Duel";
+					case 15:
+						return "Vase2-Tremor";
+					case 16:
+						return "Vase2-Crater";
+					case 17:
+						return "Vase2-Earthquake";
+					case 18:
+						return "Vase2-Volcano";
+					case 19:
+						return "Vase2-Summon Army";
+					case 20:
+						return "Vase2-Gravity Well";
+					case 21:
+						return "Vase2-Whirlwind";
+					case 22:
+						return "Vase2-Foll's Mana";
+					case 23:
+						return "Vase2-Magic Mine";
+					case 24:
+						return "Vase2-Alliance";
+					case 25:
+						return "Vase2-Cave In";
+					default:
+						return "Vase2-Unknown";
+				}
+			}
+			default:
+				return "";
+		}
+	};
+
 	// ── ENTITY (Filtrace type 0 && subtype 0) ───────────────────
 	f->store_line("SECTION;Entities");
-	f->store_line("ID;Type;Subtype;Axis_X;Axis_Y;Axis_Z;Dis_ID;Word10;Stage_Tag;Par1;Par2;Par3");
+	f->store_line("ID;Type;Subtype;Axis_X;Axis_Y;Axis_Z;Dis_ID;Word10;Stage_Tag;Par1;Par2;Par3;;Description");
 
 	if (d.has("entities")) {
 		Array entities = d["entities"];
@@ -2729,7 +3157,6 @@ void MBEXclass::REMC2EditorExportToCSV() {
 			int type = ed["type"];
 			int subtype = ed["subtype"];
 
-			// Přeskočit entity, které nemají nastavený typ ani podtyp
 			if (type == 0 && subtype == 0) {
 				continue;
 			}
@@ -2745,7 +3172,8 @@ void MBEXclass::REMC2EditorExportToCSV() {
 			row += itos(ed["stage_tag"]) + ";";
 			row += itos(ed["par1"]) + ";";
 			row += itos(ed["par2"]) + ";";
-			row += itos(ed["par3"]);
+			row += itos(ed["par3"]) + ";;";
+			row += get_entity_description(type, subtype);
 			f->store_line(row);
 		}
 	}
@@ -2953,7 +3381,7 @@ void MBEXclass::REMC2EditorExampleLevel(int type) {
 			}
 			break;
 		case 5:
-			for (int i = 0; i < 200; i++) {
+			for (int i = 0; i < 169; i++) {
 				tempTerrain.entity_0x30311[lastFreeIndex + i].type_0x30311 = 14;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].subtype_0x30311 = i;
 				tempTerrain.entity_0x30311[lastFreeIndex + i].axis2d_4.x = 10 * (i % 25);
