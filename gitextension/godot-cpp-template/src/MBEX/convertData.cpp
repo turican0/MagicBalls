@@ -764,6 +764,7 @@ void MBEXsaveBitmap(String path, char *name, int width, int height, uint8_t *dat
 void MBEXhscreenConverts(String path) {
 	//x_WORD_180660_VGA_type_resolution = 1;
 	char dataPath[MAX_PATH];
+	char pathBuffer[MAX_PATH];
 	x_DWORD_17DE38str.x_DWORD_17DE54 = &x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[301787];
 	x_DWORD_17DE38str.x_DWORD_17DEC0 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[308527];
 	x_DWORD_17DE38str.x_DWORD_17DEC4 = (bitmap_pos_struct2_t *)&x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226[310159];
@@ -777,14 +778,14 @@ void MBEXhscreenConverts(String path) {
 		sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
 	else
 		sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
-	for (int i = 0; i <= 271; i++)
+	for (int i = 0; i < 256; i++)
 		MBEXsaveSprite(path + "/INTRO-B", i, xy_DWORD_17DEC0_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
 	//x_WORD_180660_VGA_type_resolution = 8;
 
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);//4,6,7,12,14,15
 	for (int i = 0; i <= 312; i++)
 		MBEXsaveSprite(path + "/4", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28,true);
-	for (int i = 0; i <= 271; i++)
+	for (int i = 0; i < 256; i++)
 		MBEXsaveSprite(path + "/4-B", i, xy_DWORD_17DEC0_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
 
 	MBEXsaveBitmap(path, "menuBackground", 640, 480, x_DWORD_E9C38_smalltit, (TColor *)*xadatapald0dat2.colorPalette_var28, false,0);
@@ -795,15 +796,23 @@ void MBEXhscreenConverts(String path) {
 			MBEXsaveSprite(path + "/6", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, false);
 		else
 			MBEXsaveSprite(path + "/6", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
-	for (int i = 0; i <= 271; i++)
+	for (int i = 0; i < 256; i++)
 		MBEXsaveSprite(path + "/6-B", i, xy_DWORD_17DEC0_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
-	for (int i = 0; i <= 271; i++)
+	for (int i = 0; i < 256; i++)
 		MBEXsaveSprite(path + "/6-C", i, xy_DWORD_17DEC8_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28, true);
 
 	memset(pdwScreenBuffer_351628, 255, 640*480);
 	sub_85CC3_draw_round_frame((uint16_t *)x_DWORD_17DE38str.x_DWORD_17DE5C_border_bitmap);
 	MBEXsaveBitmap(path, "gameWorldMapForeground", 640, 480, pdwScreenBuffer_351628, (TColor *)*xadatapald0dat2.colorPalette_var28, true,255);
 	MBEXsaveBitmap(path, "gameWorldMap", 1280, 960, x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map, (TColor *)*xadatapald0dat2.colorPalette_var28, false,0);
+
+	for (int i = 0; i < 8; i++) {
+		type_E1BAC_0x3c4 *v1x = &str_E1BAC_0x2ec[i];
+		sub_7AA70_load_and_decompres_dat_file(dataPath, &x_DWORD_E9C38_smalltit[307200], v1x->dword_0, v1x->dword_4);
+		sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DE3C, v1x->dword_8, v1x->dword_12);
+		sprintf(pathBuffer , "player%d", i);
+		MBEXsaveBitmap(path, pathBuffer, v1x->word_20, v1x->word_22, &x_DWORD_E9C38_smalltit[307200], (TColor *)x_DWORD_17DE38str.x_DWORD_17DE3C, false, 0);
+	}
 
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 7); //4,6,7,12,14,15
 	MBEXsaveBitmap(path, "multiplayer", 640, 480, x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226, (TColor *)*xadatapald0dat2.colorPalette_var28, false, 0);
@@ -1989,15 +1998,4 @@ int MBEXcdExtract(char *pathGOG, char *pathOut) {
 	return 2;
 }
 
-//136
-/*
-case 1:
-	sub_7AA70_load_and_decompres_dat_file(dataPath, &x_DWORD_E9C38_smalltit[307200], v1x->dword_0, v1x->dword_4);
-	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DE3C, v1x->dword_8, v1x->dword_12);
-	x_DWORD_17DE38str.palMulti_17DF02 = 0;
-	x_DWORD_17DE38str.x_WORD_17DEF6 = 3;
-	v2x = str_E1BAC_0x1b8;
-	v3 = sub_7CB10();
-	break;
-*/
 
