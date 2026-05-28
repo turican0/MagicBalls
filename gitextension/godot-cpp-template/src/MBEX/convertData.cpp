@@ -772,7 +772,7 @@ void MBEXhscreenConverts(String path) {
 	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DEC0, 0x165329, 0x224);
 	sub_7AA70_load_and_decompres_dat_file(0, 0, 0, 0);
 	sub_7AA70_load_and_decompres_dat_file(dataPath, *xadatapald0dat2.colorPalette_var28, 0x17C118, 0x300);
-	
+
 	if (x_WORD_180660_VGA_type_resolution & 1)
 		sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
 	else
@@ -806,6 +806,7 @@ void MBEXhscreenConverts(String path) {
 	MBEXsaveBitmap(path, "gameWorldMap", 1280, 960, x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map, (TColor *)*xadatapald0dat2.colorPalette_var28, false,0);
 
 	sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 7); //4,6,7,12,14,15
+	MBEXsaveBitmap(path, "multiplayer", 640, 480, x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226, (TColor *)*xadatapald0dat2.colorPalette_var28, false, 0);
 	for (int i = 0; i <= 32; i++)
 		MBEXsaveSprite(path + "/7", i, xy_DWORD_17DED4_spritestr[i], (TColor *)*xadatapald0dat2.colorPalette_var28,true);
 	for (int i = 0; i <= 271; i++)
