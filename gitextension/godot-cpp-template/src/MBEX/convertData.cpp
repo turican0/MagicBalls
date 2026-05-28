@@ -1989,4 +1989,15 @@ int MBEXcdExtract(char *pathGOG, char *pathOut) {
 	return 2;
 }
 
+//136
+/*
+case 1:
+	sub_7AA70_load_and_decompres_dat_file(dataPath, &x_DWORD_E9C38_smalltit[307200], v1x->dword_0, v1x->dword_4);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t *)x_DWORD_17DE38str.x_DWORD_17DE3C, v1x->dword_8, v1x->dword_12);
+	x_DWORD_17DE38str.palMulti_17DF02 = 0;
+	x_DWORD_17DE38str.x_WORD_17DEF6 = 3;
+	v2x = str_E1BAC_0x1b8;
+	v3 = sub_7CB10();
+	break;
+*/
 
