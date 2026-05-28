@@ -2977,6 +2977,10 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Effect-Smoke";
 					case 60:
 						return "Effect-Smoke2";
+					case 63:
+						return "Effect-Auxiliary entity2";
+					case 64:
+						return "Effect-Nothing";
 					case 76:
 						return "Effect-Fire Spheres";
 					case 80:
@@ -2989,6 +2993,8 @@ void MBEXclass::REMC2EditorExportToCSV() {
 						return "Effect-Terrain Stalaktit";
 					case 85:
 						return "Effect-Terrain Stalagmit";
+					case 86:
+						return "Effect-Bubble";
 					/*
 					default:
 						return "Effect-Unknown";
@@ -3402,7 +3408,9 @@ void MBEXclass::REMC2EditorExampleLevel(int type) {
 			break;
 		case 4:
 			for (int i = 0; i < 100; i++) {
-				int subtype = 17;
+				int subtype = 64;
+				if(i%2==0)
+					subtype = 63;
 				tempTerrain.entity_0x30311[lastFreeIndex].type_0x30311 = 10;
 				tempTerrain.entity_0x30311[lastFreeIndex].subtype_0x30311 = subtype;
 				tempTerrain.entity_0x30311[lastFreeIndex].DisId = 5 + i;

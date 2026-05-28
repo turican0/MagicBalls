@@ -75,3 +75,19 @@ return sub_513A0(a1_axis3d); 16 48 - add spell
 	}
 	
 sub_59C80(a1_6E8E); - update spells-ok
+
+	case 0x22edc0: {
+		return NULL;
+		break;
+	}
+	case 0x22ee80: {
+		return NULL;
+		break;
+	}
+	case 0x22ee90: {
+		return NULL;
+		break;
+	}
+	
+type_entity_0x6E8E* sub_4F900(axis_3d* position)//230900 add 10 63
+type_entity_0x6E8E* sub_4F950(axis_3d* position)//230950 add 10 64
