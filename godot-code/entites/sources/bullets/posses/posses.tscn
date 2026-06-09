@@ -3,7 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://bq0suphb2xbgl" path="res://entites/sources/bullets/posses/posses.blend" id="1_4y8js"]
 
 [sub_resource type="Gradient" id="Gradient_4y8js"]
-colors = PackedColorArray(0.7792914, 0.7792914, 0.7792913, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0, 0.20457433, 1)
+colors = PackedColorArray(0.92, 0.8847333, 0.49679998, 1, 0.9, 0.9, 0.9, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_8qdaa"]
 
@@ -11,10 +12,27 @@ colors = PackedColorArray(0.7792914, 0.7792914, 0.7792913, 1, 1, 1, 1, 1)
 noise = SubResource("FastNoiseLite_8qdaa")
 color_ramp = SubResource("Gradient_4y8js")
 
+[sub_resource type="Gradient" id="Gradient_8qdaa"]
+offsets = PackedFloat32Array(0, 0.89834815, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1igq0"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0ou33"]
+noise = SubResource("FastNoiseLite_1igq0")
+color_ramp = SubResource("Gradient_8qdaa")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0ou33"]
 albedo_texture = SubResource("NoiseTexture2D_1igq0")
+emission_enabled = true
+emission_texture = SubResource("NoiseTexture2D_0ou33")
+uv1_scale = Vector3(25, 25, 25)
 
 [node name="posses" unique_id=1478039552 instance=ExtResource("1_4y8js")]
 
-[node name="Icosphere" parent="." index="0" unique_id=655577393]
+[node name="Icosphere" parent="." index="0" unique_id=1898706180]
 surface_material_override/0 = SubResource("StandardMaterial3D_0ou33")
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=2129545393]
+autoplay = &"IcosphereAction"
+speed_scale = 2.0
