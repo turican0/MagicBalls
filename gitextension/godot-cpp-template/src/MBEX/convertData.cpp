@@ -586,6 +586,10 @@ void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* pale
 	int inWidth = bitmap.width_4;
 	int inHeight = bitmap.height_5;
 	uint8_t* data = bitmap.data;
+
+	if (data == nullptr || inWidth <= 0 || inHeight <= 0 || inWidth > 4096 || inHeight > 4096)
+	return;
+
 	char pal[768];
 	for (int i=0;i<256;i++)
 		{
