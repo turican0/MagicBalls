@@ -1731,7 +1731,7 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 				(char *)persistentGamePath.c_str());
 		UtilityFunctions::print("Thread 2: finished");
 	});
-	t2.detach();
+	//t2.detach();
 	UtilityFunctions::print("REMC2BeginGame thread 2 detached, waiting...");
 	{
 		std::unique_lock<std::mutex> lock(main_mutex);
@@ -1795,7 +1795,22 @@ void REMC2Continue() {
 	main_cv.notify_one();
 }
 
+void MBEXclass::request_thread2_quit() {
+	if (!t2.joinable())
+		return;
+	{
+		std::lock_guard<std::mutex> lock(main_mutex);
+		thread2_quit_requested.store(true);
+		thread2_waiting = false;
+		thread1_waiting = false;
+	}
+	main_cv.notify_all();
+	t2.join();
+	thread2_quit_requested.store(false);
+}
+
 void MBEXclass::REMC2EndGame() { //OK!!
+	request_thread2_quit();
 	sub_main_mod_end();
 	support_end();
 	//MBEXstate = 6;

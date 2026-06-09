@@ -68,7 +68,11 @@ protected:
 
 public:
 	MBEXclass() = default;
-	~MBEXclass() override = default;
+	~MBEXclass() {
+		request_thread2_quit(); // covers WM-close and SIGTERM paths
+	}
+
+	void request_thread2_quit();
 
 	PackedByteArray deRNC(PackedByteArray bytearray);
 	//void MakeTerrain(PackedByteArray bytearray);
@@ -168,5 +172,7 @@ public:
 	bool REMC2GetMapMode();
 	bool REMC2GetWizardsLabelsVisible();
 };
+
+extern std::atomic<bool> thread2_quit_requested;
 
 void MBEXaudioExtract(String path);

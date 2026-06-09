@@ -124,6 +124,8 @@ extern bool oneFrameRun;
 
 extern int specialAction;
 
+extern std::atomic<bool> thread2_quit_requested;
+
 void InitLanguage_76A40_mod_only_language();
 
 void sub_main_mod_end();

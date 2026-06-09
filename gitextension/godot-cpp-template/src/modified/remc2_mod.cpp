@@ -111,6 +111,8 @@ Thread2_State thread2_state = Thread2_State::BEGIN;
 bool thread1_waiting = false;
 bool thread2_waiting = false;
 
+std::atomic<bool> thread2_quit_requested{ false };
+
 void thread2_wait_for_continue(Thread2_State sendstate) {
 	{
 		std::lock_guard<std::mutex> lock(main_mutex);
@@ -121,7 +123,14 @@ void thread2_wait_for_continue(Thread2_State sendstate) {
 	main_cv.notify_all();
 
 	std::unique_lock<std::mutex> lock(main_mutex);
-	main_cv.wait(lock, [] { return !thread2_waiting; });
+	main_cv.wait(lock, [] {
+		return !thread2_waiting || thread2_quit_requested.load();
+	});
+
+	// If we were woken by a quit signal, throw so sub_main_mod unwinds.
+	if (thread2_quit_requested.load()) {
+		throw thread_exit_exception();
+	}
 }
 
 void thread1_wait_for_continue(Thread1_State sendstate) {

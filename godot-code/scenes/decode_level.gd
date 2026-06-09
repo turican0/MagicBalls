@@ -1163,6 +1163,7 @@ func _notification(what):
 				child.hide()
 		set_process(false)
 		set_physics_process(false)
+		$MBEX.REMC2EndGame()
 		get_tree().quit()
 	if !Global.canNotification:
 		return;
