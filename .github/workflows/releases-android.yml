@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write
 env:
-  GODOT_VERSION: "4.7.0"
+  GODOT_VERSION: "4.7"
 
 # ─────────────────────────────────────────────────────────────
 # JOBS – Android build + release
