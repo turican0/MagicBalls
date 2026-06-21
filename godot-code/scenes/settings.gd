@@ -37,7 +37,7 @@ const UI_COUNTDOWN_COLOR   = Color(1.00, 0.40, 0.40)
 
 const CONFIG_PATH       = "user://config.cfg"
 const COUNTDOWN_SECONDS = 3
-const EDITOR_KEY      = KEY_E
+const EDITOR_KEY        = KEY_E
 const SETTINGS_KEY      = KEY_S
 const REIMPORT_KEY      = KEY_R
 
@@ -52,6 +52,9 @@ const DEFAULTS = {
 		#"vsync":            0,   # 0=On 1=Off 2=Adaptive
 		"texture_quality":  2,   # 0=Low 1=Medium 2=High
 		#"view_distance":    7,   # 1..10
+		"hdr_enabled":      0,   # 0=Off 1=On (requires display/window/hdr/request_hdr_output=true in project.godot)
+		"hdr_ref_luminance": 0,  # Brightness / Paperwhite in nits; 0 = Auto (-1 in API); Windows only
+		"hdr_max_luminance": 0,  # Max luminance in nits;   0 = Auto (-1 in API); Windows + macOS
 	},
 	"audio": {
 		"master_volume":    100,
@@ -65,15 +68,10 @@ const DEFAULTS = {
 		#"gamepad":           0,  # 0=Auto 1=Always 2=Never
 	},
 		"game": {
-		"level_mode":  0,
+		"level_mode":   0,
 		"custom_level": 0,
-		"fps_limit":        1,   # 0=30 1=60 2=144 3=Unlimited
+		"fps_limit":    1,   # 0=20 1=24 2=30 3=40 4=50
 	},
-	#"game": {
-		#"language":    0,        # 0=English (add more as needed)
-		#"difficulty":  1,        # 0=Easy 1=Normal 2=Hard
-		#"autosave":    0,        # 0=On 1=Off
-	#},
 }
 
 const RESOLUTIONS = [
@@ -120,6 +118,12 @@ var _sel_texture:       OptionButton
 var _sl_view_dist:      HSlider
 var _sel_fps:           OptionButton
 
+# HDR controls
+var _sel_hdr:           OptionButton
+var _lbl_hdr_warn:      Label
+var _sl_hdr_ref:        HSlider  # Jas / Paperwhite (pouze Windows)
+var _sl_hdr_max:        HSlider  # Max jas (Windows + macOS)
+
 var _sl_master:         HSlider
 var _sl_music:          HSlider
 var _sl_sfx:            HSlider
@@ -134,7 +138,7 @@ var _sel_difficulty:    OptionButton
 var _sel_autosave:      OptionButton
 
 var _sel_level_mode:    OptionButton
-var _sel_custom_level:  OptionButton  # changed from HSlider to OptionButton
+var _sel_custom_level:  OptionButton
 
 # =============================================
 # READY
@@ -145,7 +149,6 @@ func _ready() -> void:
 	_show_countdown()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	#await get_tree().create_timer(0.1).timeout
 	_apply_settings()
 
 func _input(event: InputEvent) -> void:
@@ -183,12 +186,10 @@ func _process(delta: float) -> void:
 
 func _load_config() -> void:
 	_cfg = ConfigFile.new()
-	# Start with defaults
 	for section in DEFAULTS:
 		_settings[section] = {}
 		for key in DEFAULTS[section]:
 			_settings[section][key] = DEFAULTS[section][key]
-	# Overlay saved values
 	if _cfg.load(CONFIG_PATH) == OK:
 		for section in DEFAULTS:
 			for key in DEFAULTS[section]:
@@ -207,12 +208,12 @@ func _apply_settings() -> void:
 	print("display_mode: ", _settings["video"]["display_mode"])
 	if not is_instance_valid(get_tree()) or not is_instance_valid(get_tree().root):
 		return
-	var idx = _settings["video"]["resolution_index"]
+	var idx  = _settings["video"]["resolution_index"]
 	var mode = _settings["video"]["display_mode"]
 	var res: Vector2i
 	var is_native = (idx == RESOLUTIONS.size() - 1)
 	if is_native:
-		res = DisplayServer.screen_get_size()   # aktuální rozlišení monitoru
+		res = DisplayServer.screen_get_size()
 	else:
 		res = RESOLUTIONS[idx]
 	match mode:
@@ -227,56 +228,81 @@ func _apply_settings() -> void:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		2:  # Exclusive Fullscreen
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-	var target_scale = res
-	get_tree().root.content_scale_size = target_scale
-	#get_tree().root.call_deferred("set", "content_scale_size", target_scale)
+	get_tree().root.content_scale_size = res
 
-	## VSync
-	#match _settings["video"]["vsync"]:
-		#0: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
-		#1: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-		#2: DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ADAPTIVE)
-
-	## FPS limit
-	var fps_idx = _settings["game"]["fps_limit"]
-	fps_idx = clamp(fps_idx, 0, FPS_VALUES.size() - 1)    
+	# FPS limit
+	var fps_idx = clamp(_settings["game"]["fps_limit"], 0, FPS_VALUES.size() - 1)
 	Engine.max_fps = FPS_VALUES[fps_idx]
 
-	# Master volume
-	#var master_idx = AudioServer.get_bus_index("Master")
-	#AudioServer.set_bus_volume_db(master_idx,
-		#linear_to_db(_settings["audio"]["master_volume"] / 100.0))
-
-	# Add Music / SFX buses here if you have them:
-	# var music_idx = AudioServer.get_bus_index("Music")
-	# AudioServer.set_bus_volume_db(music_idx,
-	#     linear_to_db(_settings["audio"]["music_volume"] / 100.0))
+	# HDR (Godot 4.7+)
+	_apply_hdr(
+		_settings["video"].get("hdr_enabled",      0),
+		_settings["video"].get("hdr_ref_luminance", 0),
+		_settings["video"].get("hdr_max_luminance", 0)
+	)
 
 func _read_controls_into_settings() -> void:
 	_settings["video"]["resolution_index"] = _sel_resolution.selected
 	_settings["video"]["display_mode"]     = _sel_display.selected
-	#_settings["video"]["vsync"]            = _sel_vsync.selected
-	#_settings["video"]["texture_quality"]  = _sel_texture.selected
-	#_settings["video"]["view_distance"]    = int(_sl_view_dist.value)
 
+	# HDR
+	_settings["video"]["hdr_enabled"] = _sel_hdr.selected if not _sel_hdr.disabled else 0
+	if _hdr_ref_lum_supported() and is_instance_valid(_sl_hdr_ref):
+		_settings["video"]["hdr_ref_luminance"] = int(_sl_hdr_ref.value)
+	if _hdr_max_lum_supported() and is_instance_valid(_sl_hdr_max):
+		_settings["video"]["hdr_max_luminance"] = int(_sl_hdr_max.value)
 
-	_settings["audio"]["master_volume"]    = int(_sl_master.value)
-	_settings["audio"]["music_volume"]     = int(_sl_music.value)
-	_settings["audio"]["sfx_volume"]       = int(_sl_sfx.value)
-	_settings["audio"]["speech_volume"]    = int(_sl_speech.value)
+	_settings["audio"]["master_volume"] = int(_sl_master.value)
+	_settings["audio"]["music_volume"]  = int(_sl_music.value)
+	_settings["audio"]["sfx_volume"]    = int(_sl_sfx.value)
+	_settings["audio"]["speech_volume"] = int(_sl_speech.value)
 
-	#_settings["input"]["mouse_sensitivity"] = int(_sl_sensitivity.value)
-	_settings["input"]["invert_y"]          = _sel_invert_y.selected
-	#_settings["input"]["gamepad"]           = _sel_gamepad.selected
+	_settings["input"]["invert_y"] = _sel_invert_y.selected
 
-	#_settings["game"]["language"]   = _sel_language.selected
-	#_settings["game"]["difficulty"] = _sel_difficulty.selected
-	#_settings["game"]["autosave"]   = _sel_autosave.selected
+	_settings["game"]["level_mode"]   = _sel_level_mode.selected
+	_settings["game"]["custom_level"] = Global.VALID_LEVELS[_sel_custom_level.selected]
+	_settings["game"]["fps_limit"]    = _sel_fps.selected
 
-	_settings["game"]["level_mode"]    = _sel_level_mode.selected
-	_settings["game"]["custom_level"]  = Global.VALID_LEVELS[_sel_custom_level.selected]  # store actual level index
-	_settings["game"]["fps_limit"]     = _sel_fps.selected
-	
+# =============================================
+# HDR HELPERS  (Godot 4.7+)
+# Zdroj API: godot-demo-projects/misc/hdr_output
+# =============================================
+
+# Returns true if the current window/display supports HDR output.
+# Internally calls DisplayServer.window_is_hdr_output_supported() — available since 4.7.
+func _is_hdr_supported() -> bool:
+	if not DisplayServer.has_method("window_is_hdr_output_supported"):
+		return false
+	return DisplayServer.window_is_hdr_output_supported(get_window().get_window_id())
+
+# Manual brightness (paperwhite) override is supported on Windows only.
+func _hdr_ref_lum_supported() -> bool:
+	return DisplayServer.get_name() == &"Windows"
+
+# Manual max luminance override is supported on Windows and macOS.
+func _hdr_max_lum_supported() -> bool:
+	var ds := DisplayServer.get_name()
+	return ds == &"Windows" or ds == &"macOS" \
+		or (ds == &"embedded" and OS.get_name() == &"macOS")
+
+# Applies HDR settings to the main window.
+# enabled_idx: 0=Off 1=On
+# ref_lum / max_lum: value in nits; 0 = Auto (passes -1 to the API)
+func _apply_hdr(enabled_idx: int, ref_lum: int, max_lum: int) -> void:
+	# window.hdr_output_requested is a runtime toggle (Window property, not DisplayServer).
+	# Requires the following in project.godot:
+	#   display/window/hdr/request_hdr_output = true
+	get_window().hdr_output_requested = (enabled_idx == 1)
+
+	if enabled_idx == 1:
+		var window_id := get_window().get_window_id()
+		if _hdr_ref_lum_supported():
+			DisplayServer.window_set_hdr_output_reference_luminance(
+				float(ref_lum) if ref_lum > 0 else -1.0, window_id)
+		if _hdr_max_lum_supported():
+			DisplayServer.window_set_hdr_output_max_luminance(
+				float(max_lum) if max_lum > 0 else -1.0, window_id)
+
 # =============================================
 # COUNTDOWN UI
 # =============================================
@@ -350,8 +376,8 @@ func _launch_game() -> void:
 	_apply_settings()
 	var canvas = CanvasLayer.new()
 	canvas.name = "GlobalLoadingCanvas"
-	canvas.layer = 128 # Maximální priorita
-	get_tree().root.add_child(canvas) # KLÍČOVÁ ZMĚNA: Přidáno do Rootu
+	canvas.layer = 128
+	get_tree().root.add_child(canvas)
 	var bg = ColorRect.new()
 	bg.color = Color(0, 0, 0, 1)
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -359,7 +385,7 @@ func _launch_game() -> void:
 	var label = Label.new()
 	label.text = "Starting game MagicBalls"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.offset_bottom = -80
 	label.add_theme_font_size_override("font_size", 26)
@@ -367,7 +393,7 @@ func _launch_game() -> void:
 	canvas.add_child(label)
 	var spinner = Label.new()
 	spinner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	spinner.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	spinner.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	spinner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	spinner.offset_top = 100
 	spinner.add_theme_font_size_override("font_size", 48)
@@ -387,8 +413,8 @@ func _launch_editor() -> void:
 	_apply_settings()
 	var canvas = CanvasLayer.new()
 	canvas.name = "GlobalLoadingCanvas"
-	canvas.layer = 128 # Maximální priorita
-	get_tree().root.add_child(canvas) # KLÍČOVÁ ZMĚNA: Přidáno do Rootu
+	canvas.layer = 128
+	get_tree().root.add_child(canvas)
 	var bg = ColorRect.new()
 	bg.color = Color(0, 0, 0, 1)
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -396,7 +422,7 @@ func _launch_editor() -> void:
 	var label = Label.new()
 	label.text = "Starting game Editor"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.offset_bottom = -80
 	label.add_theme_font_size_override("font_size", 26)
@@ -404,7 +430,7 @@ func _launch_editor() -> void:
 	canvas.add_child(label)
 	var spinner = Label.new()
 	spinner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	spinner.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	spinner.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	spinner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	spinner.offset_top = 100
 	spinner.add_theme_font_size_override("font_size", 48)
@@ -414,7 +440,7 @@ func _launch_editor() -> void:
 	SetGlobals()
 	await get_tree().create_timer(0.1).timeout
 	get_tree().change_scene_to_file("res://scenes-editor/Editor.tscn")
-	
+
 func _reimport_scene() -> void:
 	_countdown_active = false
 	if _countdown_canvas:
@@ -424,8 +450,8 @@ func _reimport_scene() -> void:
 	_apply_settings()
 	var canvas = CanvasLayer.new()
 	canvas.name = "GlobalLoadingCanvas"
-	canvas.layer = 128 # Maximální priorita
-	get_tree().root.add_child(canvas) # KLÍČOVÁ ZMĚNA: Přidáno do Rootu
+	canvas.layer = 128
+	get_tree().root.add_child(canvas)
 	var bg = ColorRect.new()
 	bg.color = Color(0, 0, 0, 1)
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -433,7 +459,7 @@ func _reimport_scene() -> void:
 	var label = Label.new()
 	label.text = "Loading Importer"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.offset_bottom = -80
 	label.add_theme_font_size_override("font_size", 26)
@@ -441,7 +467,7 @@ func _reimport_scene() -> void:
 	canvas.add_child(label)
 	var spinner = Label.new()
 	spinner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	spinner.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	spinner.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	spinner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	spinner.offset_top = 100
 	spinner.add_theme_font_size_override("font_size", 48)
@@ -450,50 +476,44 @@ func _reimport_scene() -> void:
 	_animate_simple_spinner(spinner)
 	SetGlobals()
 	await get_tree().create_timer(0.1).timeout
-	#_spinner_active = false
-	#await get_tree().process_frame
-	#canvas.queue_free()
-	#await get_tree().process_frame
 	get_tree().change_scene_to_file("res://scenes/Importer.tscn")
-	
-func SetGlobals():
-	Global.master_volume=_settings["audio"]["master_volume"]/100.0
-	Global.music_volume=_settings["audio"]["music_volume"]/100.0
-	Global.sounds_volume=_settings["audio"]["sfx_volume"]/100.0
-	Global.speech_volume=_settings["audio"]["speech_volume"]/100.0
-	Global.inverse_mouseY=_settings["input"]["invert_y"]
-	Global.level_mode    = _settings["game"]["level_mode"]
-	Global.custom_level  = _settings["game"]["custom_level"]
-	var fps_idx = _settings["game"]["fps_limit"]
-	Global.max_fps = FPS_VALUES[clamp(fps_idx, 0, FPS_VALUES.size() - 1)]
 
-func _animate_simple_spinner(spinner: Label):
+func SetGlobals() -> void:
+	Global.master_volume   = _settings["audio"]["master_volume"] / 100.0
+	Global.music_volume    = _settings["audio"]["music_volume"]  / 100.0
+	Global.sounds_volume   = _settings["audio"]["sfx_volume"]    / 100.0
+	Global.speech_volume   = _settings["audio"]["speech_volume"] / 100.0
+	Global.inverse_mouseY  = _settings["input"]["invert_y"]
+	Global.level_mode      = _settings["game"]["level_mode"]
+	Global.custom_level    = _settings["game"]["custom_level"]
+	var fps_idx            = clamp(_settings["game"]["fps_limit"], 0, FPS_VALUES.size() - 1)
+	Global.max_fps         = FPS_VALUES[fps_idx]
+
+func _animate_simple_spinner(spinner: Label) -> void:
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
-
 	var i = 0
 	while is_instance_valid(spinner):
 		spinner.text = frames[i % frames.size()]
 		i += 1
 		await get_tree().create_timer(0.1).timeout
+
 # =============================================
 # SETTINGS UI — open / close
 # =============================================
 
 func _open_settings() -> void:
 	_countdown_active = false
-	_settings_open = true
+	_settings_open    = true
 
-	_settings_canvas = CanvasLayer.new()
+	_settings_canvas      = CanvasLayer.new()
 	_settings_canvas.name = "SettingsCanvas"
 	add_child(_settings_canvas)
 
-	# Backdrop
 	var backdrop = ColorRect.new()
 	backdrop.color = Color(0, 0, 0, 0.85)
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_settings_canvas.add_child(backdrop)
 
-	# Panel
 	var panel = Panel.new()
 	var screen = get_viewport().get_visible_rect().size
 	var pw = min(screen.x * 0.85, 860.0)
@@ -549,44 +569,75 @@ func _on_cancel_pressed() -> void:
 
 func _build_video_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("VIDEO", tc)
+
+	# --- DISPLAY ---
 	vbox.add_child(_section("DISPLAY"))
-	_sel_resolution = _option(vbox, "Resolution", RESOLUTION_NAMES, 
+	_sel_resolution = _option(vbox, "Resolution", RESOLUTION_NAMES,
 							  _settings["video"]["resolution_index"])
 	_sel_display = _option(vbox, "Display Mode",
 		["Windowed", "Fullscreen", "Exclusive Fullscreen"],
 		_settings["video"]["display_mode"])
-	#_sel_vsync = _option(vbox, "VSync",
-		#["On", "Off", "Adaptive"],
-		#_settings["video"]["vsync"])
 
-	#vbox.add_child(_section("QUALITY"))
-	#_sel_texture = _option(vbox, "Texture Quality",
-		#["Low", "Medium", "High"],
-		#_settings["video"]["texture_quality"])
-	#_sl_view_dist = _slider(vbox, "View Distance", 1, 10,
-		#_settings["video"]["view_distance"])
+	# --- HDR (Godot 4.7+) ---
+	vbox.add_child(_section("HDR"))
+
+	var hdr_ok := _is_hdr_supported()
+
+	# On/Off toggle
+	_sel_hdr = _option(vbox, "HDR Output", ["Off", "On"],
+		_settings["video"]["hdr_enabled"] if hdr_ok else 0)
+	if not hdr_ok:
+		_sel_hdr.disabled = true
+		_sel_hdr.select(0)
+
+	# Status label below the toggle
+	_lbl_hdr_warn = Label.new()
+	_lbl_hdr_warn.add_theme_font_size_override("font_size", 12)
+	_lbl_hdr_warn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if hdr_ok:
+		_lbl_hdr_warn.text = "✓ HDR output is supported on this display."
+		_lbl_hdr_warn.add_theme_color_override("font_color", Color(0.40, 1.00, 0.50))
+	else:
+		_lbl_hdr_warn.text = "⚠ HDR is not available (display, GPU, or platform does not support it). " \
+			+ "On Linux, Wayland is required. The Compatibility renderer does not support HDR."
+		_lbl_hdr_warn.add_theme_color_override("font_color", Color(1.00, 0.40, 0.40))
+	vbox.add_child(_lbl_hdr_warn)
+
+	# Brightness / Paperwhite — Windows only
+	# Value in nits; 0 = Auto (passed to the API as -1).
+	var saved_ref: int = _settings["video"]["hdr_ref_luminance"]
+	_sl_hdr_ref = _slider(vbox, "Brightness / Paperwhite (nits)", 80, 500,
+		saved_ref if saved_ref > 0 else 200)
+	# Hide the parent HBoxContainer if the platform does not support this
+	_sl_hdr_ref.get_parent().visible = hdr_ok and _hdr_ref_lum_supported()
+
+	# Max luminance — Windows + macOS
+	var saved_max: int = _settings["video"]["hdr_max_luminance"]
+	_sl_hdr_max = _slider(vbox, "Max Luminance (nits)", 200, 2000,
+		saved_max if saved_max > 0 else 1000)
+	_sl_hdr_max.get_parent().visible = hdr_ok and _hdr_max_lum_supported()
+
+	# Note about project.godot
+	var note_hdr = Label.new()
+	note_hdr.add_theme_font_size_override("font_size", 11)
+	note_hdr.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
+	note_hdr.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	note_hdr.text = "HDR requires in project.godot: display/window/hdr/request_hdr_output = true"
+	vbox.add_child(note_hdr)
 
 func _build_audio_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("AUDIO", tc)
-
 	vbox.add_child(_section("VOLUME"))
 	_sl_master = _slider(vbox, "Master Volume", 0, 100, _settings["audio"]["master_volume"])
 	_sl_music  = _slider(vbox, "Music",         0, 100, _settings["audio"]["music_volume"])
-	_sl_sfx    = _slider(vbox, "Sounds", 0, 100, _settings["audio"]["sfx_volume"])
-	_sl_speech    = _slider(vbox, "Speech", 0, 100, _settings["audio"]["speech_volume"])
+	_sl_sfx    = _slider(vbox, "Sounds",        0, 100, _settings["audio"]["sfx_volume"])
+	_sl_speech = _slider(vbox, "Speech",        0, 100, _settings["audio"]["speech_volume"])
 
 func _build_input_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("INPUT", tc)
-
 	vbox.add_child(_section("MOUSE & CAMERA"))
-	#_sl_sensitivity = _slider(vbox, "Mouse Sensitivity", 1, 20,
-		#_settings["input"]["mouse_sensitivity"])
-	_sel_invert_y = _option(vbox, "Invert Y Axis",
-		["No", "Yes"],
+	_sel_invert_y = _option(vbox, "Invert Y Axis", ["No", "Yes"],
 		_settings["input"]["invert_y"])
-	#_sel_gamepad = _option(vbox, "Gamepad",
-		#["Auto", "Always", "Never"],
-		#_settings["input"]["gamepad"])
 
 const FPS_VALUES = [20, 24, 30, 40, 50]
 const FPS_NAMES  = ["20", "24", "30", "40", "50"]
@@ -602,14 +653,11 @@ func _build_game_tab(tc: TabContainer) -> void:
 		level_names.append(str(lvl))
 	var saved_opt_idx = max(Global.VALID_LEVELS.find(_settings["game"]["custom_level"]), 0)
 	_sel_custom_level = _option(vbox, "Level Number", level_names, saved_opt_idx)
-	# Selector is visible only in Custom Mode
 	_sel_level_mode.item_selected.connect(_on_level_mode_changed)
 	_update_custom_level_visibility()
-	
-	_sel_fps = _option(vbox, "FPS Limit(game speed)",
-	FPS_NAMES,
-	_settings["game"]["fps_limit"])
-		
+
+	_sel_fps = _option(vbox, "FPS Limit (game speed)", FPS_NAMES, _settings["game"]["fps_limit"])
+
 	var fps_note = Label.new()
 	fps_note.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
 	fps_note.add_theme_font_size_override("font_size", 12)
@@ -618,33 +666,18 @@ func _build_game_tab(tc: TabContainer) -> void:
 
 	var _update_fps_note = func(idx: int) -> void:
 		if FPS_VALUES[idx] >= 30:
-			fps_note.text = "⚠ Warning, at higher FPS the game becomes harder to control — only for hardcore players(best experience is at 24 FPS)."
+			fps_note.text = "⚠ Warning: at higher FPS the game becomes harder to control — " \
+				+ "only for hardcore players (best experience is at 24 FPS)."
 		else:
 			fps_note.text = ""
 	_sel_fps.item_selected.connect(_update_fps_note)
 	_update_fps_note.call(_settings["game"]["fps_limit"])
 
-func _on_level_mode_changed(idx: int) -> void:
+func _on_level_mode_changed(_idx: int) -> void:
 	_update_custom_level_visibility()
 
 func _update_custom_level_visibility() -> void:
-	# Parent HBoxContainer of the selector
-	var row = _sel_custom_level.get_parent()
-	row.visible = (_sel_level_mode.selected == 1)
-
-#func _build_game_tab(tc: TabContainer) -> void:
-	#var vbox = _make_tab("GAME", tc)
-
-	#vbox.add_child(_section("GENERAL"))
-	#_sel_language = _option(vbox, "Language",
-		#["English"],
-		#_settings["game"]["language"])
-	#_sel_difficulty = _option(vbox, "Difficulty",
-		#["Easy", "Normal", "Hard"],
-		#_settings["game"]["difficulty"])
-	#_sel_autosave = _option(vbox, "Autosave",
-		#["On", "Off"],
-		#_settings["game"]["autosave"])
+	_sel_custom_level.get_parent().visible = (_sel_level_mode.selected == 1)
 
 # =============================================
 # UI HELPERS
@@ -693,7 +726,6 @@ func _make_tab(tab_name: String, tc: TabContainer) -> VBoxContainer:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tc.add_child(scroll)
-
 	var mg = MarginContainer.new()
 	mg.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	mg.add_theme_constant_override("margin_top",    16)
@@ -701,7 +733,6 @@ func _make_tab(tab_name: String, tc: TabContainer) -> VBoxContainer:
 	mg.add_theme_constant_override("margin_left",   20)
 	mg.add_theme_constant_override("margin_right",  20)
 	scroll.add_child(mg)
-
 	var vbox = VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vbox.add_theme_constant_override("separation", 6)
@@ -720,7 +751,6 @@ func _option(parent: VBoxContainer, label_text: String,
 	var row = HBoxContainer.new()
 	row.custom_minimum_size = Vector2(0, 36)
 	parent.add_child(row)
-
 	var lbl = Label.new()
 	lbl.text = label_text
 	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -728,7 +758,6 @@ func _option(parent: VBoxContainer, label_text: String,
 	lbl.add_theme_color_override("font_color", UI_TEXT_COLOR)
 	lbl.add_theme_font_size_override("font_size", 14)
 	row.add_child(lbl)
-
 	var opt = OptionButton.new()
 	opt.custom_minimum_size = Vector2(180, 32)
 	opt.add_theme_color_override("font_color", UI_TEXT_COLOR)
@@ -743,7 +772,6 @@ func _slider(parent: VBoxContainer, label_text: String,
 	var row = HBoxContainer.new()
 	row.custom_minimum_size = Vector2(0, 36)
 	parent.add_child(row)
-
 	var lbl = Label.new()
 	lbl.text = label_text
 	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -751,7 +779,6 @@ func _slider(parent: VBoxContainer, label_text: String,
 	lbl.add_theme_color_override("font_color", UI_TEXT_COLOR)
 	lbl.add_theme_font_size_override("font_size", 14)
 	row.add_child(lbl)
-
 	var sl = HSlider.new()
 	sl.min_value = min_val
 	sl.max_value = max_val
@@ -759,21 +786,19 @@ func _slider(parent: VBoxContainer, label_text: String,
 	sl.value     = value
 	sl.custom_minimum_size = Vector2(160, 32)
 	row.add_child(sl)
-
 	var val_lbl = Label.new()
 	val_lbl.text = str(int(value))
 	val_lbl.custom_minimum_size = Vector2(36, 0)
 	val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	val_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	val_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	val_lbl.add_theme_color_override("font_color", UI_TEXT_SELECT_COLOR)
 	val_lbl.add_theme_font_size_override("font_size", 14)
 	row.add_child(val_lbl)
-
 	sl.value_changed.connect(func(v): val_lbl.text = str(int(v)))
 	return sl
 
 # =============================================
-# THEME HELPERS (same as original)
+# THEME HELPERS
 # =============================================
 
 func _apply_button_theme(btn: Button) -> void:
