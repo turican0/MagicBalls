@@ -952,27 +952,27 @@ bool DrawAndServe_pre_sub_7B250_mod(uint32_t var, type_menuButtons_E1F84 *var2x)
 			break;
 		}
 		case 0x25dcf0: {
-			return sub_7CCF0(/*var*/);
+			return MultiplayerPreviousLevel_7CCF0(/*var*/);
 			break;
 		}
 		case 0x25dd30: {
-			return sub_7CD30(/*var*/);
+			return MultiplayerNextLevel_7CD30(/*var*/);
 			break;
 		}
 		case 0x25dca0: {
-			return sub_7CCA0(/*var*/);
+			return MultiplayerExit_7CCA0(/*var*/);
 			break;
 		}
 		case 0x25dda0: {
-			return sub_7CDA0(/*var*/);
+			return MultiplayerPlayLevel_7CDA0(/*var*/);
 			break;
 		}
 		case 0x25dbf0: {
-			return sub_7CBF0(/*var*/);
+			return MultiplayerPreviousWizard_7CBF0(/*var*/);
 			break;
 		}
 		case 0x25dc40: {
-			return sub_7CC40(/*var*/);
+			return MultiplayerNextWizard_7CC40(/*var*/);
 			break;
 		}
 		case 0x25ee80: {

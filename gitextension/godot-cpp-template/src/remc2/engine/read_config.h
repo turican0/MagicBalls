@@ -24,9 +24,6 @@
 #include "../engine/CommandLineParser.h"
 #include "../utilities/Maths.h"
 #include "defs.h"
-#include "rapidjson/document.h"
-#include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
 
 #ifndef READ_CONFIG
 #define READ_CONFIG
@@ -49,10 +46,13 @@ extern bool startWindowed;
 extern bool bigTextures;
 extern bool bigSprites;
 extern bool fixedMenuGraphics;
+extern bool extendedFonts;
 extern bool sky;
 extern bool reflections;
 extern bool dynamicLighting;
+extern int viewDistanceScale;
 extern bool openGLRender;
+extern float sizePercentToThreadRender;
 extern bool multiThreadedRender;
 extern int numberOfRenderThreads;
 extern bool assignToSpecificCores;

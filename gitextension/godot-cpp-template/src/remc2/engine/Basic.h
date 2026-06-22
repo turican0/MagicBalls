@@ -36,8 +36,8 @@
 #pragma pack (push,1)
 typedef struct//lenght 11
 {
-	int8_t connected_0;
-	uint8_t arrayColors_1[8];
+	int8_t makeUpdate_0;
+	uint8_t playerIndex_1[8];
 	int8_t action_9;
 	int8_t selectedLevel_10;
 } type_BYTE_17DE68x;
@@ -200,7 +200,9 @@ extern uint8_t* x_BYTE_FAEE0_tablesx_pre;
 
 extern std::array<uint8_t*, 256> x_DWORD_DDF50_texture_adresses; /*= { 0,32 }*/ // weak
 
-extern type_E9C38_smalltit Str_E9C38_smalltit[21 * 40];
+const uint16_t TILE_ROWS_COUNT = 21;
+const uint16_t TILE_COLUMNS_COUNT = 40;
+extern type_E9C38_smalltit Str_E9C38_smalltit[TILE_ROWS_COUNT * TILE_COLUMNS_COUNT];
 
 extern type_F2C20ar str_F2C20ar;
 
@@ -272,7 +274,7 @@ type_TMAPS00TAB_BEGIN_BUFFER;
 
 extern int filearrayindex_POINTERSDATTAB;
 extern int filearrayindex_FONTS0DATTAB;
-extern int filearrayindex_MSPRDDATTAB;
+extern int filearrayindex_FONTS1DATTAB;
 extern int filearrayindex_ZERO1;
 extern int filearrayindex_MSPRD00DATTAB;
 extern int filearrayindex_ZERO2;

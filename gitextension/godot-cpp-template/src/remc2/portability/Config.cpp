@@ -132,14 +132,14 @@ void Config::LoadControls(rapidjson::GenericObject<false, rapidjson::Value>& set
 				{
 					m_Controls.m_Mouse.m_InvertXAxis = ReadBoolValue(mouse, "invertXAxis");
 					m_Controls.m_Mouse.m_InvertYAxis = ReadBoolValue(mouse, "invertYAxis");
-					m_Controls.m_Mouse.m_mouseScaleX = ReadFloatValue(mouse, "mouseScaleX");
-					m_Controls.m_Mouse.m_mouseScaleY = ReadFloatValue(mouse, "mouseScaleY");
-					m_Controls.m_Mouse.m_disableLRButtonsMenuOpen = ReadBoolValue(mouse, "disableLRButtonsMenuOpen");
-					m_Controls.m_Mouse.m_spellLeft = ReadIntValue(mouse, "spellLeft");
-					m_Controls.m_Mouse.m_spellRight = ReadIntValue(mouse, "spellRight");
-					m_Controls.m_Mouse.m_map = ReadIntValue(mouse, "map");
-					m_Controls.m_Mouse.m_spellMenu = ReadIntValue(mouse, "spellMenu");
-					m_Controls.m_Mouse.m_spellMenuMark = ReadIntValue(mouse, "spellMenuMark");
+					m_Controls.m_Mouse.m_MouseScaleX = ReadFloatValue(mouse, "mouseScaleX");
+					m_Controls.m_Mouse.m_MouseScaleY = ReadFloatValue(mouse, "mouseScaleY");
+					m_Controls.m_Mouse.m_DisableLRButtonsMenuOpen = ReadBoolValue(mouse, "disableLRButtonsMenuOpen");
+					m_Controls.m_Mouse.m_SpellLeft = ReadIntValue(mouse, "spellLeft");
+					m_Controls.m_Mouse.m_SpellRight = ReadIntValue(mouse, "spellRight");
+					m_Controls.m_Mouse.m_Map = ReadIntValue(mouse, "map");
+					m_Controls.m_Mouse.m_SpellMenu = ReadIntValue(mouse, "spellMenu");
+					m_Controls.m_Mouse.m_SpellMenuMark = ReadIntValue(mouse, "spellMenuMark");
 					break;
 				}
 			}
@@ -331,9 +331,10 @@ void Config::LoadThreading(rapidjson::GenericObject<false, rapidjson::Value>& gr
 #endif
 	if (graphics.HasMember("threading"))
 	{
-		m_Graphics.m_Threading.m_isActive = threading["isActive"].GetBool();
-		if (m_Graphics.m_Threading.m_isActive)
+		m_Graphics.m_Threading.m_IsActive = threading["isActive"].GetBool();
+		if (m_Graphics.m_Threading.m_IsActive)
 		{
+			m_Graphics.m_Threading.m_SizePercentToThreadRender = ReadFloatValue(threading, "sizePercentToThreadRender");
 			m_Graphics.m_Threading.m_NumberOfRenderThreads = (uint8_t)ReadIntValue(threading,"numberOfRenderThreads");
 			m_Graphics.m_Threading.m_AssignToSpecificCores = ReadBoolValue(threading, "assignToSpecificCores");
 		}
@@ -397,3 +398,7 @@ std::string Config::ReadFileToString(std::string fileName)
 #endif
 	return json;
 };
+
+Config &Config::GetSettingsFromDoc() {
+	return *this;
+}
