@@ -1428,6 +1428,14 @@ void handleInputs(Dictionary inputs, int type) {
 	if (type == 0) {
 		//mouse_pos = inputs["mouse_pos"];
 		mouse_pos = inputs["mouse_pos2"];
+		if (mouse_pos.x < 1)
+			mouse_pos.x = 1;
+		if (mouse_pos.y < 1)
+			mouse_pos.y = 1;
+		if (mouse_pos.x > 640 - 2)
+			mouse_pos.x = 640 - 2;
+		if (mouse_pos.y > 480 - 2)
+			mouse_pos.y = 480 - 2;
 		if (x_WORD_18072C_cursor_sizex == 0 && inverse_mouseY)
 			MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y - 1);
 		else
