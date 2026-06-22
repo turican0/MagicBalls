@@ -1429,7 +1429,7 @@ void handleInputs(Dictionary inputs, int type) {
 		//mouse_pos = inputs["mouse_pos"];
 		mouse_pos = inputs["mouse_pos2"];
 		if (x_WORD_18072C_cursor_sizex == 0 && inverse_mouseY)
-			MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y);
+			MouseEvents(buttonresult, mouse_pos.x, 480 - mouse_pos.y - 1);
 		else
 			MouseEvents(buttonresult, mouse_pos.x, mouse_pos.y);
 	}

@@ -15,6 +15,7 @@ var direction2: Vector3 = Vector3(1,0,0)
 var Main_Player: Node
 var Main_UI: Node
 var Main_Filter: Node
+var Main_Navigation: Node
 
 var fadeNode: Node3D
 
@@ -1145,13 +1146,16 @@ func getInputs():
 	_pending_mouse_changes = []
 	var real_mouse_pos = get_viewport().get_mouse_position()
 	var screen_size = get_viewport().get_visible_rect().size
-	var m_x = clamp((real_mouse_pos.x / screen_size.x) * SCREEN_WIDTH, 0, SCREEN_WIDTH)
-	var m_y = clamp((real_mouse_pos.y / screen_size.y) * SCREEN_HEIGHT, 0, SCREEN_HEIGHT)
+	var m_x = clamp((real_mouse_pos.x / screen_size.x) * SCREEN_WIDTH, 1, SCREEN_WIDTH - 2)
+	var m_y = clamp((real_mouse_pos.y / screen_size.y) * SCREEN_HEIGHT, 1, SCREEN_HEIGHT - 2)
 	input_state = {
 		"key_changes": key_changes,
 		"mouse_button_changes": mouse_changes,
 		"mouse_pos2": Vector2(m_x, m_y)
 	}
+	
+	var arrowNode = Main_Navigation.get_node("arrow")
+	arrowNode.target_position =Vector2(real_mouse_pos.x/2+screen_size.x/4, real_mouse_pos.y/2+screen_size.y/4)
 	
 	if Input.is_key_pressed(KEY_F1):
 		Main_UI.get_node("CanvasLayerHelp").start_fade_out()
@@ -1693,3 +1697,9 @@ func generate_level_map_43830() -> void:
 	
 func MBgetWarpMouse():
 	return Global.MBEX.REMC2getWarpMouse()
+	
+func showNavigation(show):
+	if(show):
+		Main_Navigation.show()
+	else:
+		Main_Navigation.hide()

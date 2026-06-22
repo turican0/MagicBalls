@@ -10,6 +10,7 @@ var music_volume:float
 var	sounds_volume:float
 var speech_volume:float
 var max_fps:int
+var show_navigation:bool
 
 var inverse_mouseY = true
 
