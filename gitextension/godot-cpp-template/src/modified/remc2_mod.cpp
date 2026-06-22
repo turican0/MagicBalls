@@ -390,6 +390,9 @@ void Intros_76D10_mod(char introType) //257d10
 	else
 		sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
 
+	if (extendedFonts)
+		LoadFixedFonts(0, (char *)"intro");
+
 	StopSubtitles_2EB40();
 	if (soundAble_E3798 && x_D41A0_BYTEARRAY_4_struct.SelectedLangIndex == 2) {
 		DisplaySubtitles_D41C1 = 0;
@@ -1327,6 +1330,10 @@ void PlayInGameFmv_82670_mod() //263670
 					char cutScenePath[MAX_PATH];
 					sprintf(cutScenePath, "%s/INTRO/CUT%d.DAT", cdDataPath.c_str(), cutScene_E16E0[cutSceneIndex].fileIndex_6);
 					sprintf(printbuffer, "%s", cutScenePath);
+
+					if (extendedFonts)
+						LoadFixedFonts(0, (char *)"intro");
+
 					numberOfIntroVideos = cutSceneIndex;
 					PlayInfoFmv_mod(0, 1, cutScene_E16E0[cutSceneIndex].pSoundEvent_0, cutScenePath);
 					sub_90B27_VGA_pal_fadein_fadeout_mod(0, 0x10u, 0);
