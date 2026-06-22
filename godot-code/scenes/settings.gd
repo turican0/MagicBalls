@@ -71,6 +71,7 @@ const DEFAULTS = {
 		"level_mode":   0,
 		"custom_level": 0,
 		"fps_limit":    1,   # 0=20 1=24 2=30 3=40 4=50
+		"show_navigation": 0,  # 0=Off 1=On
 	},
 }
 
@@ -117,6 +118,7 @@ var _sel_vsync:         OptionButton
 var _sel_texture:       OptionButton
 var _sl_view_dist:      HSlider
 var _sel_fps:           OptionButton
+var _sel_show_navigation: OptionButton
 
 # HDR controls
 var _sel_hdr:           OptionButton
@@ -262,6 +264,7 @@ func _read_controls_into_settings() -> void:
 	_settings["game"]["level_mode"]   = _sel_level_mode.selected
 	_settings["game"]["custom_level"] = Global.VALID_LEVELS[_sel_custom_level.selected]
 	_settings["game"]["fps_limit"]    = _sel_fps.selected
+	_settings["game"]["show_navigation"] = _sel_show_navigation.selected
 
 # =============================================
 # HDR HELPERS  (Godot 4.7+)
@@ -488,6 +491,7 @@ func SetGlobals() -> void:
 	Global.custom_level    = _settings["game"]["custom_level"]
 	var fps_idx            = clamp(_settings["game"]["fps_limit"], 0, FPS_VALUES.size() - 1)
 	Global.max_fps         = FPS_VALUES[fps_idx]
+	Global.show_navigation = _settings["game"]["show_navigation"] == 1
 
 func _animate_simple_spinner(spinner: Label) -> void:
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
@@ -657,6 +661,9 @@ func _build_game_tab(tc: TabContainer) -> void:
 	_update_custom_level_visibility()
 
 	_sel_fps = _option(vbox, "FPS Limit (game speed)", FPS_NAMES, _settings["game"]["fps_limit"])
+
+	vbox.add_child(_section("NAVIGATION"))
+	_sel_show_navigation = _option(vbox, "Show Navigation", ["Off", "On"], _settings["game"]["show_navigation"])
 
 	var fps_note = Label.new()
 	fps_note.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))

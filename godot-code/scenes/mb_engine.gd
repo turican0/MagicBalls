@@ -140,6 +140,10 @@ func _process(_p_delta) -> void:
 			beginAnimation(9)
 			inGameLoop=false
 			Engine.max_fps = 30
+	if Global.show_navigation && inGameLoop && warpMouse["yRevert"]:
+		Main_DecodeLevel.showNavigation(true)
+	else:
+		Main_DecodeLevel.showNavigation(false)
 	#if(inGameLoop):
 		#Main_Filter.show()
 	#else:

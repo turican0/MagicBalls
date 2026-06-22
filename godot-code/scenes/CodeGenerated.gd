@@ -6,6 +6,7 @@ var Main_DecodeLevel
 var Main_Player
 var Main_UI
 var Main_Filter
+var Main_Navigation
 var MBEngine
 #var Main_Sounds
 var Main_TerrainsMB
@@ -20,6 +21,7 @@ func _ready() -> void:
 	Main_Player = get_node("Player")
 	Main_UI = get_node("UILayer/UI")
 	Main_Filter = get_node("Filter").get_node("ColorRect")
+	Main_Navigation = get_node("LoadScr/Control/Navigation")
 	Main_TerrainsMB = $TerrainsMB
 	Main_DecodeLevel.Main_Player = Main_Player
 	Main_DecodeLevel.Main_UI = Main_UI
@@ -33,6 +35,7 @@ func _ready() -> void:
 	MBEngine.LoadScrRect=$LoadScr/Control/Foreground
 	MBEngine.FlagRect=$LoadScr/Control/LangRect
 	MBEngine.Main_Filter = Main_Filter
+	Main_DecodeLevel.Main_Navigation = Main_Navigation
 	MBEngine.init()
 	
 	var loader = get_tree().root.get_node_or_null("GlobalLoadingCanvas")
