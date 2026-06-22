@@ -1146,8 +1146,8 @@ func getInputs():
 	_pending_mouse_changes = []
 	var real_mouse_pos = get_viewport().get_mouse_position()
 	var screen_size = get_viewport().get_visible_rect().size
-	var m_x = clamp((real_mouse_pos.x / screen_size.x) * SCREEN_WIDTH, 0, SCREEN_WIDTH - 1)
-	var m_y = clamp((real_mouse_pos.y / screen_size.y) * SCREEN_HEIGHT, 0, SCREEN_HEIGHT - 1)
+	var m_x = clamp((real_mouse_pos.x / screen_size.x) * SCREEN_WIDTH, 0, SCREEN_WIDTH - 2)
+	var m_y = clamp((real_mouse_pos.y / screen_size.y) * SCREEN_HEIGHT, 0, SCREEN_HEIGHT - 2)
 	input_state = {
 		"key_changes": key_changes,
 		"mouse_button_changes": mouse_changes,
