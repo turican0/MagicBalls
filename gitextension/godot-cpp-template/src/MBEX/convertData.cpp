@@ -27,6 +27,11 @@
 #include <string>
 #include <vector>
 
+#include <godot_cpp/classes/dir_access.hpp>
+#include <godot_cpp/classes/file_access.hpp>
+#include <godot_cpp/classes/zip_reader.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
+
 #if defined(_WIN32)
 #include <direct.h>
 #define MKDIR(path) _wmkdir(path)
@@ -220,7 +225,7 @@ void MBEXconvertData(String path, String path2) {
 	MBEXextractLang(path + "/language", "res://hidata/language/", "/LANGUAGE/");
 	UtilityFunctions::print("MBEXconvertData MBEXextractLang done");
 	UtilityFunctions::print("MBEXconvertData calling MBEXcopyRecurse...");
-	MBEXcopyRecurse(path + "/fixed", "res://hidata/fixed/");
+	MBEXunzipTo(path + "", "res://hidata/fixed.zip");
 	UtilityFunctions::print("MBEXconvertData MBEXcopyRecurse done");
 	UtilityFunctions::print("MBEXconvertData calling MBEXtmapsConverts...");
 	MBEXtmapsConverts(path + "/TMAPS");
@@ -228,54 +233,69 @@ void MBEXconvertData(String path, String path2) {
 	UtilityFunctions::print("MBEXconvertData END");
 }
 
-void MBEXcopyRecurse(String to, String from) {
-	Ref<DirAccess> dir_from = DirAccess::open(from);
-	if (dir_from.is_null()) {
-		UtilityFunctions::push_error("Failed to open source directory: " + from);
+void MBEXunzipTo(String to, String zip_path) {
+	Ref<ZIPReader> zip_reader;
+	zip_reader.instantiate();
+
+	Error err = zip_reader->open(zip_path);
+	if (err != OK) {
+		UtilityFunctions::push_error("Failed to open ZIP file: " + zip_path);
 		return;
 	}
 
-	// Create the destination directory if it doesn't exist yet
-	Ref<DirAccess> dir_to = DirAccess::open(to);
-	if (dir_to.is_null()) {
-		Error err = DirAccess::make_dir_recursive_absolute(to);
-		if (err != OK) {
+	// Ujistíme se, že cílová složka existuje
+	if (!DirAccess::dir_exists_absolute(to)) {
+		Error dir_err = DirAccess::make_dir_recursive_absolute(to);
+		if (dir_err != OK) {
 			UtilityFunctions::push_error("Failed to create destination directory: " + to);
+			zip_reader->close();
 			return;
 		}
 	}
 
-	// Start iterating through the source directory
-	dir_from->list_dir_begin();
-	String file_name = dir_from->get_next();
+	// ZIPReader nám vrátí pole všech cest uvnitř ZIPu
+	PackedStringArray files = zip_reader->get_files();
 
-	while (file_name != "") {
-		// Ignore navigation links
-		if (file_name == "." || file_name == "..") {
-			file_name = dir_from->get_next();
+	for (int i = 0; i < files.size(); i++) {
+		String internal_path = files[i];
+		String target_path = to.path_join(internal_path);
+
+		// Pokud cesta končí lomítkem, jedná se o adresář
+		if (internal_path.ends_with("/")) {
+			if (!DirAccess::dir_exists_absolute(target_path)) {
+				DirAccess::make_dir_recursive_absolute(target_path);
+			}
 			continue;
 		}
 
-		String path_from = from.path_join(file_name);
-		String path_to = to.path_join(file_name);
-
-		if (dir_from->current_is_dir()) {
-			// If it's a directory, recurse into it
-			MBEXcopyRecurse(path_to, path_from);
-		} else {
-			// If it's a file, copy it
-			Error err = dir_from->copy(path_from, path_to);
-			if (err != OK) {
-				UtilityFunctions::push_error("Failed to copy file from: " + path_from + " to: " + path_to);
-			}
+		// Pro jistotu ověříme, že existuje nadřazená složka pro soubor
+		// (některé ZIP archivy nemusí mít pro složky samostatné záznamy)
+		String base_dir = target_path.get_base_dir();
+		if (!DirAccess::dir_exists_absolute(base_dir)) {
+			DirAccess::make_dir_recursive_absolute(base_dir);
 		}
 
-		file_name = dir_from->get_next();
+		// Načtení dat ze ZIPu do bufferu
+		PackedByteArray file_data = zip_reader->read_file(internal_path);
+		if (file_data.is_empty()) {
+			UtilityFunctions::push_error("Failed to read file from ZIP: " + internal_path);
+			continue;
+		}
+
+		// Zápis bufferu na disk
+		Ref<FileAccess> file_to = FileAccess::open(target_path, FileAccess::WRITE);
+		if (file_to.is_null()) {
+			UtilityFunctions::push_error("Failed to open target file for writing: " + target_path);
+			continue;
+		}
+
+		file_to->store_buffer(file_data);
+		file_to->close();
 	}
 
-	dir_from->list_dir_end();
+	zip_reader->close();
+	UtilityFunctions::print("ZIP extraction completed successfully.");
 }
-
 void MBEXextractLang(String path, String langPath, String cdLangPath) {
 	if (!make_dir_godot(path)) {
 		return;
