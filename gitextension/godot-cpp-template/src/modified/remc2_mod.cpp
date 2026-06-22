@@ -2949,8 +2949,8 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		gameFolder = std::string(real_cdPathch) + "GAME/NETHERW";
 		cdFolder = std::string(real_cdPathch) + "CD_Files";
 		highResGraphicsFolder = std::string(real_gamePath) + "";
-		fixedMenuGraphicsFolder = std::string(real_gamePath) + "fixed/menu";
-		extendedFontsFolder = std::string(real_gamePath) + "fixed/fonts";
+		fixedMenuGraphicsFolder = std::string(real_cdPathch) + "../convertdata/fixed/menu";
+		extendedFontsFolder = std::string(real_cdPathch) + "../convertdata/fixed/fonts";
 		extendedFonts = true; //added
 		inputMapping.Forward = 0x1a; //added
 		inputMapping.Backwards = 0x16; //added
