@@ -2943,6 +2943,8 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		cdFolder = std::string(real_cdPathch) + "CD_Files";
 		highResGraphicsFolder = std::string(real_gamePath) + "";
 		fixedMenuGraphicsFolder = std::string(real_gamePath) + "fixed/menu";
+		extendedFontsFolder = std::string(real_gamePath) + "fixed/fonts";
+		extendedFonts = true; //added
 		inputMapping.Forward = 0x1a; //added
 		inputMapping.Backwards = 0x16; //added
 		inputMapping.Left = 0x04; //added
