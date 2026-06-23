@@ -1084,7 +1084,7 @@ func changeFog():
 func _input(event):
 	if event is InputEventKey and event.is_pressed():
 		if event.keycode == KEY_F4:
-			if event.ctrl_pressed:
+			if event.ctrl_pressed and not event.alt_pressed:
 				exit_game()
 	if event is InputEventKey and not event.echo:
 		var physical_key = event.keycode
