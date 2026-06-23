@@ -1286,14 +1286,16 @@ void handleInputs(Dictionary inputs, int type) {
 					mainSetPress(is_pressed, 0x011B); //ESC
 					break;
 				case 0x3b00: //F1
-					if (alt_pressed)
+					if (alt_pressed) {
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, key_index);
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x3c00: //F2
 					if (!shift_pressed && !alt_pressed)
 						mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
-					else if (!chatMenuOpened) {
+					else if (!chatMenuOpened || shift_pressed) {
 							mainSetPress(is_pressed, key_index);
 					}
 					break;
@@ -1302,8 +1304,7 @@ void handleInputs(Dictionary inputs, int type) {
 					{
 						if (x_D41A0_BYTEARRAY_4_struct.speedIndex < 2)
 							mainSetPress(is_pressed, 0x3d00); //F3 - change speed
-					}
-					else if (!chatMenuOpened)
+					} else if (!chatMenuOpened || shift_pressed)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x3e00: //F4
@@ -1314,8 +1315,7 @@ void handleInputs(Dictionary inputs, int type) {
 								x_D41A0_BYTEARRAY_4_struct.speedIndex = (x_D41A0_BYTEARRAY_4_struct.speedIndex + 1) % 3;
 							mainSetPress(is_pressed, 0x3d00); //F3 - change speed
 						}
-					}
-					else if (!chatMenuOpened)
+					} else if (!chatMenuOpened || shift_pressed)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x3f00: //F5
@@ -1329,23 +1329,27 @@ void handleInputs(Dictionary inputs, int type) {
 							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;							
 							HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
 						}
-					} else if (!chatMenuOpened)
+					} else if (!chatMenuOpened || shift_pressed)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4000: //F6
-					if (alt_pressed)
+					if (alt_pressed) {
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, key_index);
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4100: //F7
-					if (alt_pressed)
+					if (alt_pressed) {
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, key_index);
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4200: //F8
 					if (!shift_pressed && !alt_pressed)
 						mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
-					else if (!chatMenuOpened)
+					else if (!chatMenuOpened || shift_pressed)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4300: //F9
@@ -1358,13 +1362,16 @@ void handleInputs(Dictionary inputs, int type) {
 							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
 							HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
 						}
-					} else if (!chatMenuOpened)
+					} else if (!chatMenuOpened || shift_pressed)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4400: //F10
-					if (alt_pressed)
+					if (alt_pressed) {
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, key_index);
+					}
+					else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x5700: //F11
 					if (shift_pressed)
