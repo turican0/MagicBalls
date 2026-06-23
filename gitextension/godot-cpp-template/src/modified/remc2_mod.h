@@ -87,6 +87,7 @@ enum class Thread2_State {
 	IN_GAME_END,
 	LOAD_SCREEN,
 	KEY_SETTINGS_LOOP,
+	IN_GAME_CREDITS,
 	RUNNING
 };
 

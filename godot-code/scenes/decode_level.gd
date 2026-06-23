@@ -505,6 +505,7 @@ var library2 = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
 	Vector3i(0,0,0): "",#unknown
 	Vector3i(0,426,0): "",#unknown
+	Vector3i(2,425,0): "",#mushroom1 - zzzzzzzzzzzzzzzzzzzzzzzzzz
 	Vector3i(3,0,0): "",#unknown
 	Vector3i(3,88,0): "",#unknown
 	Vector3i(3,203,0): "",#sorcerer-blue xxxxxxxxxxxxxxxxxxxx
