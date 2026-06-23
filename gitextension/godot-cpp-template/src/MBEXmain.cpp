@@ -1339,7 +1339,10 @@ void handleInputs(Dictionary inputs, int type) {
 				case 0x186f: //O - objective
 					mainSetPress(is_pressed, 0x186f); //O
 					break;
-				case 0x1769: //I - one step in pause mode
+				case 0x1769: //I - open messages
+					mainSetPress(is_pressed, 0x1769); //I
+					break;
+				case 0x246a: //J - one step in pause mode
 					if (game_paused)
 						oneFrameRun = true;
 					break;
