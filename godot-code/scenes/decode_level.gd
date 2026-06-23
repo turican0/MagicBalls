@@ -100,6 +100,8 @@ const KEY_INDEX := {
 	KEY_F8: 0x4200,
 	KEY_F9: 0x4300,
 	KEY_F10: 0x4400,
+	KEY_F11: 0x5700,
+	KEY_F12: 0x5800,
 
 	# Pohyb a navigace
 	KEY_HOME: 0x4700,
@@ -1085,7 +1087,7 @@ func _input(event):
 		if DL_inGame:
 			if key_remap.has(physical_key):
 				physical_key = key_remap[physical_key]
-		if (Input.is_key_pressed(KEY_ALT) or Input.is_key_pressed(KEY_SHIFT)):
+		if not (Input.is_key_pressed(KEY_ALT) or Input.is_key_pressed(KEY_SHIFT)):
 			if event.pressed:
 				match physical_key:
 					KEY_F7:
