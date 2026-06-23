@@ -1,45 +1,8 @@
 [gd_scene format=3 uid="uid://c844fu0be5nd8"]
 
 [ext_resource type="PackedScene" uid="uid://fld224c8dumo" path="res://entites/sources/bullets/posses/posses.tscn" id="1_6687t"]
-[ext_resource type="Texture2D" uid="uid://bjt1sp1gdxf3d" path="res://entites/sources/bullets/posses/decorative-sparkles-set-0-2.png" id="1_n5yi4"]
-
-[sub_resource type="Curve" id="Curve_lxcym"]
-_limits = [-2.0, 2.0, 0.0, 1.0]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_s2q5d"]
-curve = SubResource("Curve_lxcym")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7hled"]
-direction = Vector3(0, 0, 0)
-spread = 180.0
-initial_velocity_min = 4.0
-initial_velocity_max = 5.0
-orbit_velocity_min = 0.5000001
-orbit_velocity_max = 0.5000001
-orbit_velocity_curve = SubResource("CurveTexture_s2q5d")
-gravity = Vector3(0, 0, 0)
-linear_accel_min = 9.999997
-linear_accel_max = 9.999997
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b0wp"]
-transparency = 1
-blend_mode = 1
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_n5yi4")
-billboard_mode = 1
-
-[sub_resource type="QuadMesh" id="QuadMesh_v5wgy"]
-material = SubResource("StandardMaterial3D_8b0wp")
 
 [node name="Node3D" type="Node3D" unique_id=1822028480]
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=454688779]
-amount = 20
-lifetime = 0.5
-process_material = SubResource("ParticleProcessMaterial_7hled")
-draw_pass_1 = SubResource("QuadMesh_v5wgy")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2073244314]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0506482, 0)
