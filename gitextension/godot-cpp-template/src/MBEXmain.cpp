@@ -1289,17 +1289,11 @@ void handleInputs(Dictionary inputs, int type) {
 					if (alt_pressed)
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, key_index);
-					if (shift_pressed)
-						if (!chatMenuOpened)
-							mainSetPress(is_pressed, 0x2e63);//shift+C
 					break;
 				case 0x3c00: //F2
 					if (!shift_pressed && !alt_pressed)
 						mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
 					else if (!chatMenuOpened) {
-						if (shift_pressed)
-							mainSetPress(is_pressed, 0x2064);//shift+D
-						else
 							mainSetPress(is_pressed, key_index);
 					}
 					break;
@@ -1371,6 +1365,16 @@ void handleInputs(Dictionary inputs, int type) {
 					if (alt_pressed)
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, key_index);
+					break;
+				case 0x5700: //F11
+					if (shift_pressed)
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, 0x2e63); //shift+C
+					break;
+				case 0x5800: //F12
+					if (shift_pressed)
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, 0x2064); //shift+D
 					break;
 				case 0x2d78: //X
 					if (chatMenuOpened)
