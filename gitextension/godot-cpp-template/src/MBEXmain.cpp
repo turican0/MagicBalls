@@ -1227,10 +1227,17 @@ bool inverse_mouseY;
 bool shift_pressed = false;
 bool ctrl_pressed = false;
 bool alt_pressed = false;
+bool chatMenuOpened = false;
 void handleInputs(Dictionary inputs, int type) {
 	LastPressedKey_1806E4 = 0;
 	//type==0 game
 	//type==1 mapmenu
+
+	if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].MenuState_0x3DF_2BE4_12221 == (int)MenuState::SHOW_CHAT_MENU)
+		chatMenuOpened = true;
+	else
+		chatMenuOpened = false;
+
 	Array key_changes = inputs["key_changes"];
 	for (int i = 0; i < key_changes.size(); i++) {
 		Dictionary change = key_changes[i];
@@ -1248,16 +1255,28 @@ void handleInputs(Dictionary inputs, int type) {
 		} else
 			switch (key_index) {
 				case 0x1177:
-					mainSetPress(is_pressed, /*inputMapping.Forward*/ 0x4800); //UP
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, /*inputMapping.Forward*/ 0x4800); //UP
 					break;
 				case 0x1f73:
-					mainSetPress(is_pressed, /*inputMapping.Backwards*/ 0x5000); //DOWN
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, /*inputMapping.Backwards*/ 0x5000); //DOWN
 					break;
 				case 0x1e61:
-					mainSetPress(is_pressed, /*inputMapping.Left*/ 0x4b00); //LEFT
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, /*inputMapping.Left*/ 0x4b00); //LEFT
 					break;
 				case 0x2064:
-					mainSetPress(is_pressed, /*inputMapping.Right*/ 0x4d00); //RIGHT
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, /*inputMapping.Right*/ 0x4d00); //RIGHT
 					break;
 				case 0x3920:
 					mainSetPress(is_pressed, 0x3920); //SPACE
@@ -1287,7 +1306,10 @@ void handleInputs(Dictionary inputs, int type) {
 						mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
 					break;
 				case 0x2d78: //X
-					mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
 					break;
 				case 0x1de0:
 					//mainSetPress(is_pressed, 0x1d00); //CTRL
@@ -1317,24 +1339,34 @@ void handleInputs(Dictionary inputs, int type) {
 					}
 					break;*/
 				case 0x2368: //H - change graphics type
-					if (is_pressed) {
-						graphics_enhance = 1 - graphics_enhance;
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						if (is_pressed) {
+							graphics_enhance = 1 - graphics_enhance;
 
-						if (graphics_enhance) {
-							D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
-						} else
-							D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
-					}
+							if (graphics_enhance) {
+								D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
+							} else
+								D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
+						}
 					break;
 				case 0x1970: //P - pause
-					if (is_pressed)
-						game_paused = 1 - game_paused;
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						if (is_pressed)
+							game_paused = 1 - game_paused;
 					break;
 				case 0x2e63: //C - pause + spell menu
-					game_paused = 1 - game_paused;
-					ctrl_pressed = is_pressed;
-					mainSetPress(is_pressed, 0x1de0); //CTRL
-					//mainSetPress(is_pressed, 0x186f);
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else {
+						game_paused = 1 - game_paused;
+						ctrl_pressed = is_pressed;
+						mainSetPress(is_pressed, 0x1de0); //CTRL
+						//mainSetPress(is_pressed, 0x186f);
+					}
 					break;
 				case 0x186f: //O - objective
 					mainSetPress(is_pressed, 0x186f); //O
@@ -1343,22 +1375,31 @@ void handleInputs(Dictionary inputs, int type) {
 					mainSetPress(is_pressed, 0x1769); //I
 					break;
 				case 0x246a: //J - one step in pause mode
-					if (game_paused)
-						oneFrameRun = true;
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						if (game_paused)
+							oneFrameRun = true;
 					break;
 				case 0x1c0d: //Enter - change map type
 					if (is_pressed)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x266c: //L - destroy castle
-					if (is_pressed) {
-						type_entity_0x6E8E *event = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
-						if (event->dword_0xA4_164x->CastleEntityIndex_0x3A_58)
-							HandleButtonClick_191B0(42, 0);
-					}
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						if (is_pressed) {
+							type_entity_0x6E8E *event = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+							if (event->dword_0xA4_164x->CastleEntityIndex_0x3A_58)
+								HandleButtonClick_191B0(42, 0);
+						}
 					break;
 				case 0x256b: //K - kill all creatures - cheat
-					KillAllCreatures_1B5F0();
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						KillAllCreatures_1B5F0();
 					break;
 				case 0x3f00: //F5
 					if (!shift_pressed && !alt_pressed) {
@@ -1384,6 +1425,8 @@ void handleInputs(Dictionary inputs, int type) {
 					}
 					break;
 				default:
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);					
 					break;
 			}
 	}
