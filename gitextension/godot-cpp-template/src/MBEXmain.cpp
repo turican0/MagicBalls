@@ -1282,16 +1282,18 @@ void handleInputs(Dictionary inputs, int type) {
 					mainSetPress(is_pressed, 0x3920); //SPACE
 					break;
 				case 0x011B:
+					x_D41A0_BYTEARRAY_4_struct.byte_38544 = 0;
 					mainSetPress(is_pressed, 0x011B); //ESC
 					break;
 				case 0x3b00: //F1
-					if (alt_pressed)						
-						mainSetPress(is_pressed, key_index);
+					if (alt_pressed)
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, key_index);
 					break;
 				case 0x3c00: //F2
 					if (!shift_pressed && !alt_pressed)
 						mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
-					else
+					else if (!chatMenuOpened)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x3d00: //F3
@@ -1300,7 +1302,7 @@ void handleInputs(Dictionary inputs, int type) {
 						if (x_D41A0_BYTEARRAY_4_struct.speedIndex < 2)
 							mainSetPress(is_pressed, 0x3d00); //F3 - change speed
 					}
-					else
+					else if (!chatMenuOpened)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x3e00: //F4
@@ -1312,7 +1314,7 @@ void handleInputs(Dictionary inputs, int type) {
 							mainSetPress(is_pressed, 0x3d00); //F3 - change speed
 						}
 					}
-					else
+					else if (!chatMenuOpened)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x3f00: //F5
@@ -1320,26 +1322,29 @@ void handleInputs(Dictionary inputs, int type) {
 						if (type != 0)
 							break;
 						if (is_pressed) {
+							x_D41A0_BYTEARRAY_4_struct.byte_38544 = 0;
 							SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
 							x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
-							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
+							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;							
 							HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
 						}
-					} else
+					} else if (!chatMenuOpened)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4000: //F6
 					if (alt_pressed)
-						mainSetPress(is_pressed, key_index);
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4100: //F7
 					if (alt_pressed)
-						mainSetPress(is_pressed, key_index);
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4200: //F8
 					if (!shift_pressed && !alt_pressed)
 						mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
-					else
+					else if (!chatMenuOpened)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4300: //F9
@@ -1347,20 +1352,18 @@ void handleInputs(Dictionary inputs, int type) {
 						if (type != 0)
 							break;
 						if (is_pressed) {
+							x_D41A0_BYTEARRAY_4_struct.byte_38544 = 0;
 							LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
 							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
 							HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
 						}
-					} else
+					} else if (!chatMenuOpened)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4400: //F10
 					if (alt_pressed)
-						mainSetPress(is_pressed, key_index);
-					break;
-				case 0x5700: //F11
-					if (alt_pressed)
-						mainSetPress(is_pressed, 0x3f00); //F4
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, key_index);
 					break;
 				case 0x2d78: //X
 					if (chatMenuOpened)
