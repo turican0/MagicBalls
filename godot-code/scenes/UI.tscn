@@ -155,7 +155,8 @@ O - current objective
 H - change graphics type
 P - pause
 C - pause + spell menu
-I - step frame
+I - messages
+J - step frame
 Enter - map view, ALT(in map view) - show wizards status
 L - destroy castle
 K - kill all creatures(cheat)

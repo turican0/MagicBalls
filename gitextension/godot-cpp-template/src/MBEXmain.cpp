@@ -1225,10 +1225,19 @@ Array MBEXclass::getPaletteModifications() {
 
 bool inverse_mouseY;
 bool shift_pressed = false;
+bool ctrl_pressed = false;
+bool alt_pressed = false;
+bool chatMenuOpened = false;
 void handleInputs(Dictionary inputs, int type) {
 	LastPressedKey_1806E4 = 0;
 	//type==0 game
 	//type==1 mapmenu
+
+	if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].MenuState_0x3DF_2BE4_12221 == (int)MenuState::SHOW_CHAT_MENU)
+		chatMenuOpened = true;
+	else
+		chatMenuOpened = false;
+
 	Array key_changes = inputs["key_changes"];
 	for (int i = 0; i < key_changes.size(); i++) {
 		Dictionary change = key_changes[i];
@@ -1246,42 +1255,139 @@ void handleInputs(Dictionary inputs, int type) {
 		} else
 			switch (key_index) {
 				case 0x1177:
-					mainSetPress(is_pressed, /*inputMapping.Forward*/ 0x4800); //UP
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, /*inputMapping.Forward*/ 0x4800); //UP
 					break;
 				case 0x1f73:
-					mainSetPress(is_pressed, /*inputMapping.Backwards*/ 0x5000); //DOWN
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, /*inputMapping.Backwards*/ 0x5000); //DOWN
 					break;
 				case 0x1e61:
-					mainSetPress(is_pressed, /*inputMapping.Left*/ 0x4b00); //LEFT
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, /*inputMapping.Left*/ 0x4b00); //LEFT
 					break;
 				case 0x2064:
-					mainSetPress(is_pressed, /*inputMapping.Right*/ 0x4d00); //RIGHT
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, /*inputMapping.Right*/ 0x4d00); //RIGHT
 					break;
 				case 0x3920:
 					mainSetPress(is_pressed, 0x3920); //SPACE
 					break;
 				case 0x011B:
+					x_D41A0_BYTEARRAY_4_struct.byte_38544 = 0;
 					mainSetPress(is_pressed, 0x011B); //ESC
 					break;
+				case 0x3b00: //F1
+					if (alt_pressed) {
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, key_index);
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
 				case 0x3c00: //F2
-					mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
-					break;
-				case 0x3d00: //F3
-					if (x_D41A0_BYTEARRAY_4_struct.speedIndex < 2)
-						mainSetPress(is_pressed, 0x3d00); //F3 - change speed
-					break;
-				case 0x3e00: //F4
-					if (x_D41A0_BYTEARRAY_4_struct.speedIndex > 0) {
-						if (is_pressed)
-							x_D41A0_BYTEARRAY_4_struct.speedIndex = (x_D41A0_BYTEARRAY_4_struct.speedIndex + 1) % 3;
-						mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+					if (!shift_pressed && !alt_pressed)
+						mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
+					else if (!chatMenuOpened || shift_pressed) {
+							mainSetPress(is_pressed, key_index);
 					}
 					break;
+				case 0x3d00: //F3
+					if (!shift_pressed && !alt_pressed)
+					{
+						if (x_D41A0_BYTEARRAY_4_struct.speedIndex < 2)
+							mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
+				case 0x3e00: //F4
+					if (!shift_pressed && !alt_pressed)
+					{
+						if (x_D41A0_BYTEARRAY_4_struct.speedIndex > 0) {
+							if (is_pressed)
+								x_D41A0_BYTEARRAY_4_struct.speedIndex = (x_D41A0_BYTEARRAY_4_struct.speedIndex + 1) % 3;
+							mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+						}
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
+				case 0x3f00: //F5
+					if (!shift_pressed && !alt_pressed) {
+						if (type != 0)
+							break;
+						if (is_pressed) {
+							x_D41A0_BYTEARRAY_4_struct.byte_38544 = 0;
+							SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
+							x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
+							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;							
+							HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+						}
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
+				case 0x4000: //F6
+					if (alt_pressed) {
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, key_index);
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
+				case 0x4100: //F7
+					if (alt_pressed) {
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, key_index);
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
 				case 0x4200: //F8
-					mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
+					if (!shift_pressed && !alt_pressed)
+						mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
+					else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
+				case 0x4300: //F9
+					if (!shift_pressed && !alt_pressed) {
+						if (type != 0)
+							break;
+						if (is_pressed) {
+							x_D41A0_BYTEARRAY_4_struct.byte_38544 = 0;
+							LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
+							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
+							HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+						}
+					} else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
+				case 0x4400: //F10
+					if (alt_pressed) {
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, key_index);
+					}
+					else if (!chatMenuOpened || shift_pressed)
+						mainSetPress(is_pressed, key_index);
+					break;
+				case 0x5700: //F11
+					if (shift_pressed)
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, 0x2e63); //shift+C
+					break;
+				case 0x5800: //F12
+					if (shift_pressed)
+						if (!chatMenuOpened)
+							mainSetPress(is_pressed, 0x2064); //shift+D
 					break;
 				case 0x2d78: //X
-					mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
 					break;
 				case 0x1de0:
 					//mainSetPress(is_pressed, 0x1d00); //CTRL
@@ -1300,6 +1406,7 @@ void handleInputs(Dictionary inputs, int type) {
 					mainSetPress(is_pressed, 0x2ae1); //SHIFT
 					break;
 				case 0x38e2: //ALT
+					alt_pressed = is_pressed;
 					mainSetPress(is_pressed, 0x38e2); //ALT
 					break;
 				/*
@@ -1310,65 +1417,71 @@ void handleInputs(Dictionary inputs, int type) {
 					}
 					break;*/
 				case 0x2368: //H - change graphics type
-					if (is_pressed) {
-						graphics_enhance = 1 - graphics_enhance;
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						if (is_pressed) {
+							graphics_enhance = 1 - graphics_enhance;
 
-						if (graphics_enhance) {
-							D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
-						} else
-							D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
-					}
+							if (graphics_enhance) {
+								D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 1;
+							} else
+								D41A0_0.m_GameSettings.str_0x2196.transparency_0x2198 = 0;
+						}
 					break;
 				case 0x1970: //P - pause
-					if (is_pressed)
-						game_paused = 1 - game_paused;
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						if (is_pressed)
+							game_paused = 1 - game_paused;
 					break;
 				case 0x2e63: //C - pause + spell menu
-					game_paused = 1 - game_paused;
-					mainSetPress(is_pressed, 0x1de0); //CTRL
-					//mainSetPress(is_pressed, 0x186f);
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else {
+						game_paused = 1 - game_paused;
+						ctrl_pressed = is_pressed;
+						mainSetPress(is_pressed, 0x1de0); //CTRL
+						//mainSetPress(is_pressed, 0x186f);
+					}
 					break;
 				case 0x186f: //O - objective
 					mainSetPress(is_pressed, 0x186f); //O
 					break;
-				case 0x1769: //I - one step in pause mode
-					if (game_paused)
-						oneFrameRun = true;
+				case 0x1769: //I - open messages
+					mainSetPress(is_pressed, 0x1769); //I
+					break;
+				case 0x246a: //J - one step in pause mode
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						if (game_paused)
+							oneFrameRun = true;
 					break;
 				case 0x1c0d: //Enter - change map type
 					if (is_pressed)
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x266c: //L - destroy castle
-					if (is_pressed) {
-						type_entity_0x6E8E *event = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
-						if (event->dword_0xA4_164x->CastleEntityIndex_0x3A_58)
-							HandleButtonClick_191B0(42, 0);
-					}
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						if (is_pressed) {
+							type_entity_0x6E8E *event = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
+							if (event->dword_0xA4_164x->CastleEntityIndex_0x3A_58)
+								HandleButtonClick_191B0(42, 0);
+						}
 					break;
 				case 0x256b: //K - kill all creatures - cheat
-					KillAllCreatures_1B5F0();
-					break;
-				case 0x3f00: //F5
-					if (type != 0)
-						break;
-					if (is_pressed) {
-						SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
-						x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
-						x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
-						HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
-					}
-					break;
-				case 0x4300: //F9
-					if (type != 0)
-						break;
-					if (is_pressed) {
-						LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
-						x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
-						HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
-					}
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);
+					else
+						KillAllCreatures_1B5F0();
 					break;
 				default:
+					if (chatMenuOpened)
+						mainSetPress(is_pressed, key_index);					
 					break;
 			}
 	}

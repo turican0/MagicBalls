@@ -100,6 +100,8 @@ const KEY_INDEX := {
 	KEY_F8: 0x4200,
 	KEY_F9: 0x4300,
 	KEY_F10: 0x4400,
+	KEY_F11: 0x5700,
+	KEY_F12: 0x5800,
 
 	# Pohyb a navigace
 	KEY_HOME: 0x4700,
@@ -1080,15 +1082,20 @@ func changeFog():
 	
 
 func _input(event):
+	if event is InputEventKey and event.is_pressed():
+		if event.keycode == KEY_F4:
+			if event.ctrl_pressed and not event.alt_pressed:
+				exit_game()
 	if event is InputEventKey and not event.echo:
 		var physical_key = event.keycode
 		if DL_inGame:
 			if key_remap.has(physical_key):
 				physical_key = key_remap[physical_key]
-		if event.pressed:
-			match physical_key:
-				KEY_F7:
-					changeFog()
+		if not (Input.is_key_pressed(KEY_ALT) or Input.is_key_pressed(KEY_SHIFT)):
+			if event.pressed:
+				match physical_key:
+					KEY_F7:
+						changeFog()
 		if physical_key in KEY_INDEX:
 			var index = KEY_INDEX[physical_key]
 			var is_pressed: bool = event.pressed
@@ -1157,18 +1164,28 @@ func getInputs():
 	var arrowNode = Main_Navigation.get_node("arrow")
 	arrowNode.target_position =Vector2(real_mouse_pos.x/2+screen_size.x/4, real_mouse_pos.y/2+screen_size.y/4)
 	
-	if Input.is_key_pressed(KEY_F1):
+	if Input.is_key_pressed(KEY_F1) and not (Input.is_key_pressed(KEY_ALT) or Input.is_key_pressed(KEY_SHIFT)):
 		Main_UI.get_node("CanvasLayerHelp").start_fade_out()
+
+func _unhandled_input(event: InputEvent) -> void:	
+	if event.is_action_pressed("custom_exit"):
+		exit_game()
+
+var is_exiting: bool = false
+func exit_game() -> void:
+	if is_exiting:
+		return
+	is_exiting = true
+	if Global.MBEX:
+		Global.MBEX.REMC2EndGame()
+	set_process(false)
+	set_physics_process(false)
+	get_tree().quit()
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		for child in get_tree().root.get_children():
-			if child is Window:
-				child.hide()
-		set_process(false)
-		set_physics_process(false)
-		Global.MBEX.REMC2EndGame()
-		get_tree().quit()
+		if not Input.is_key_pressed(KEY_ALT):
+			exit_game()
 	if !Global.canNotification:
 		return;
 	if DL_inGame:
