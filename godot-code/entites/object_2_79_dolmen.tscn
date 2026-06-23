@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dhgrsghv0qvm4"]
 
-[ext_resource type="PackedScene" uid="uid://k1ewtbggruem" path="res://entites/sources/dolmen_03.glb" id="1_mkb2h"]
+[ext_resource type="PackedScene" uid="uid://dkkuo0nvefyt2" path="res://entites/sources/dolmen/dolmen.blend" id="1_ct0qg"]
 
 [node name="Node3D" type="Node3D" unique_id=1784247897]
 
-[node name="Sketchfab_Scene" parent="." unique_id=440351420 instance=ExtResource("1_mkb2h")]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+[node name="dolmen" parent="." unique_id=562666187 instance=ExtResource("1_ct0qg")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)

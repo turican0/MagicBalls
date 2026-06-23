@@ -30,8 +30,9 @@ uv1_scale = Vector3(25, 25, 25)
 
 [node name="Icosphere" parent="." index="0" unique_id=1608208152]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0345459, 0.19329834, -0.13442993)
+"blend_shapes/Key 1" = 0.19796014
 surface_material_override/0 = SubResource("StandardMaterial3D_0ou33")
 
 [node name="AnimationPlayer" parent="." index="1" unique_id=971207686]
 autoplay = &"IcosphereAction"
-speed_scale = 2.0
+speed_scale = 5.0
