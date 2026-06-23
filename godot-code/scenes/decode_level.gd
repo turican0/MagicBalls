@@ -1085,10 +1085,11 @@ func _input(event):
 		if DL_inGame:
 			if key_remap.has(physical_key):
 				physical_key = key_remap[physical_key]
-		if event.pressed:
-			match physical_key:
-				KEY_F7:
-					changeFog()
+		if (Input.is_key_pressed(KEY_ALT) or Input.is_key_pressed(KEY_SHIFT)):
+			if event.pressed:
+				match physical_key:
+					KEY_F7:
+						changeFog()
 		if physical_key in KEY_INDEX:
 			var index = KEY_INDEX[physical_key]
 			var is_pressed: bool = event.pressed
