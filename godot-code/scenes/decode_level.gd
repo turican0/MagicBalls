@@ -1157,7 +1157,7 @@ func getInputs():
 	var arrowNode = Main_Navigation.get_node("arrow")
 	arrowNode.target_position =Vector2(real_mouse_pos.x/2+screen_size.x/4, real_mouse_pos.y/2+screen_size.y/4)
 	
-	if Input.is_key_pressed(KEY_F1):
+	if Input.is_key_pressed(KEY_F1) and not (Input.is_key_pressed(KEY_ALT) or Input.is_key_pressed(KEY_SHIFT)):
 		Main_UI.get_node("CanvasLayerHelp").start_fade_out()
 
 func _notification(what):

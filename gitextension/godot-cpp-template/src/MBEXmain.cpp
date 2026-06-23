@@ -1225,6 +1225,8 @@ Array MBEXclass::getPaletteModifications() {
 
 bool inverse_mouseY;
 bool shift_pressed = false;
+bool ctrl_pressed = false;
+bool alt_pressed = false;
 void handleInputs(Dictionary inputs, int type) {
 	LastPressedKey_1806E4 = 0;
 	//type==0 game
@@ -1264,21 +1266,25 @@ void handleInputs(Dictionary inputs, int type) {
 					mainSetPress(is_pressed, 0x011B); //ESC
 					break;
 				case 0x3c00: //F2
-					mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
+					if (!shift_pressed && !alt_pressed)
+						mainSetPress(is_pressed, 0x3b00); //F1 - help on/off
 					break;
 				case 0x3d00: //F3
-					if (x_D41A0_BYTEARRAY_4_struct.speedIndex < 2)
-						mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+					if (!shift_pressed && !alt_pressed)
+						if (x_D41A0_BYTEARRAY_4_struct.speedIndex < 2)
+							mainSetPress(is_pressed, 0x3d00); //F3 - change speed
 					break;
 				case 0x3e00: //F4
-					if (x_D41A0_BYTEARRAY_4_struct.speedIndex > 0) {
-						if (is_pressed)
-							x_D41A0_BYTEARRAY_4_struct.speedIndex = (x_D41A0_BYTEARRAY_4_struct.speedIndex + 1) % 3;
-						mainSetPress(is_pressed, 0x3d00); //F3 - change speed
-					}
+					if (!shift_pressed && !alt_pressed)
+						if (x_D41A0_BYTEARRAY_4_struct.speedIndex > 0) {
+							if (is_pressed)
+								x_D41A0_BYTEARRAY_4_struct.speedIndex = (x_D41A0_BYTEARRAY_4_struct.speedIndex + 1) % 3;
+							mainSetPress(is_pressed, 0x3d00); //F3 - change speed
+						}
 					break;
 				case 0x4200: //F8
-					mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
+					if (!shift_pressed && !alt_pressed)
+						mainSetPress(is_pressed, 0x4200); //F8 - hide/show wizard names
 					break;
 				case 0x2d78: //X
 					mainSetPress(is_pressed, 0x0E08); //BackSpace - stop move
@@ -1300,6 +1306,7 @@ void handleInputs(Dictionary inputs, int type) {
 					mainSetPress(is_pressed, 0x2ae1); //SHIFT
 					break;
 				case 0x38e2: //ALT
+					alt_pressed = is_pressed;
 					mainSetPress(is_pressed, 0x38e2); //ALT
 					break;
 				/*
@@ -1325,6 +1332,7 @@ void handleInputs(Dictionary inputs, int type) {
 					break;
 				case 0x2e63: //C - pause + spell menu
 					game_paused = 1 - game_paused;
+					ctrl_pressed = is_pressed;
 					mainSetPress(is_pressed, 0x1de0); //CTRL
 					//mainSetPress(is_pressed, 0x186f);
 					break;
@@ -1350,22 +1358,26 @@ void handleInputs(Dictionary inputs, int type) {
 					KillAllCreatures_1B5F0();
 					break;
 				case 0x3f00: //F5
-					if (type != 0)
-						break;
-					if (is_pressed) {
-						SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
-						x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
-						x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
-						HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+					if (!shift_pressed && !alt_pressed) {
+						if (type != 0)
+							break;
+						if (is_pressed) {
+							SaveLevel_55080(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, (char *)""); //SAVE
+							x_D41A0_BYTEARRAY_4_struct.byteindex_208 = DataFileIO::sub_55C00_TestSaveFile2(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w);
+							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
+							HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+						}
 					}
 					break;
 				case 0x4300: //F9
-					if (type != 0)
-						break;
-					if (is_pressed) {
-						LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
-						x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
-						HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+					if (!shift_pressed && !alt_pressed) {
+						if (type != 0)
+							break;
+						if (is_pressed) {
+							LoadLevel_555D0(0, x_D41A0_BYTEARRAY_4_struct.levelnumber_43w); //LOAD
+							x_D41A0_BYTEARRAY_4_struct.SelectedMenuItem_38546 = 0;
+							HandleButtonClick_191B0(20, x_D41A0_BYTEARRAY_4_struct.byte_38544);
+						}
 					}
 					break;
 				default:
