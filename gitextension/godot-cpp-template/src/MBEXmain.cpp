@@ -3608,6 +3608,16 @@ void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 	loadlevel(levelIndex);
 }
 
+//get blur (D41A0_0.str_0x21AE.xxxx_0x21B1 &&D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 &&x_DWORD_E9C3C)
+/*
+var env : Environment = get_viewport().get_environment()
+
+	if env:
+		env.motion_blur_enabled = true
+		env.motion_blur_intensity = 0.5
+		env.motion_blur_quality = Environment.MOTION_BLUR_QUALITY_HIGH
+*/
+
 /*
 debug in android : adb logcat -s godot
 
