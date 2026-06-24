@@ -1478,16 +1478,22 @@ func setLoadScreenBuffer(locTextureRect):
 var DL_inGame=false;
 var oldMapMode=null
 var cameraState=0
+var cameraStateBlur=0
 
 var defaultFovA=75
 var defaultFovB=125
+var defaultFovC=140
 var defaultNearA=0.25
 var defaultNearB=0.25
+var defaultNearC=0.1
 var defaultFarA=16384.0
 var defaultFarB=16384.0
+var defaultFarC=16384.0
 var defaultLeftA=0
 var defaultLeftB=-0.66
+var defaultLeftC=0
 var defaultStepsCount=5
+var defaultStepsCountBlur=5
 func MBrun(inGame):
 	DL_inGame=inGame
 	var locGraphicsEnhance = Global.MBEX.REMC2GetGraphicsEenhance()
@@ -1496,23 +1502,31 @@ func MBrun(inGame):
 	var result=Global.MBEX.REMC2Run(input_state,0)
 	if(inGame):
 		var mapMode=Global.MBEX.REMC2GetMapMode()
-		var camera = get_viewport().get_camera_3d()		
-		if mapMode:
-			camera.projection = Camera3D.PROJECTION_FRUSTUM
-			cameraState=cameraState+1.0/defaultStepsCount
-			if(cameraState>1):
-				cameraState=1
+		var camera = get_viewport().get_camera_3d()
+		if(blurOn):
+			cameraStateBlur=cameraStateBlur+1.0/defaultStepsCountBlur
+			if(cameraStateBlur>1):
+				cameraStateBlur=1
 		else:
-			camera.projection = Camera3D.PROJECTION_FRUSTUM
-			cameraState=cameraState-1.0/defaultStepsCount
-			if(cameraState<0):
-				cameraState=0
+			cameraStateBlur=cameraStateBlur-1.0/defaultStepsCountBlur
+			if(cameraStateBlur<0):
+				cameraStateBlur=0
+			if mapMode:
+				camera.projection = Camera3D.PROJECTION_FRUSTUM
+				cameraState=cameraState+1.0/defaultStepsCount
+				if(cameraState>1):
+					cameraState=1
+			else:
+				camera.projection = Camera3D.PROJECTION_FRUSTUM
+				cameraState=cameraState-1.0/defaultStepsCount
+				if(cameraState<0):
+					cameraState=0
 		
-		var fov = defaultFovB*cameraState+defaultFovA*(1-cameraState)
-		var z_near = defaultNearB*cameraState+defaultNearA*(1-cameraState)
-		var z_far = defaultFarB*cameraState+defaultFarB*(1-cameraState)
+		var fov = defaultFovC*cameraStateBlur+(1-cameraStateBlur)*(defaultFovB*cameraState+defaultFovA*(1-cameraState))
+		var z_near = defaultNearC*cameraStateBlur+(1-cameraStateBlur)*(defaultNearB*cameraState+defaultNearA*(1-cameraState))
+		var z_far = defaultFarC*cameraStateBlur+(1-cameraStateBlur)*(defaultFarB*cameraState+defaultFarB*(1-cameraState))
 		var aspect = get_viewport().size.x / float(get_viewport().size.y)
-		var leftPart = defaultLeftB*cameraState+defaultLeftA*(1-cameraState)
+		var leftPart = defaultLeftC*cameraStateBlur+(1-cameraStateBlur)*(defaultLeftB*cameraState+defaultLeftA*(1-cameraState))
 		var size = 2.0 * tan(deg_to_rad(fov / 2.0)) * z_near
 		var desired_center_x = (leftPart + 1.0) / 2.0 - 0.5
 		var offset_x = desired_center_x * (size * aspect)
@@ -1718,31 +1732,9 @@ func showNavigation(show):
 	else:
 		Main_Navigation.hide()
 
+var blurOn:bool=false
 func SetBlur(inGameLoop):
-	var blurOn:bool=false
 	if(inGameLoop):
 		blurOn=Global.MBEX.REMC2getBlur()
-
-	#var cam : Camera3D = get_viewport().get_camera_3d()
-	#if not cam:
-		#return
-#
-	#var compositor : Compositor = cam.compositor
-	#if not compositor:
-		#compositor = Compositor.new()
-		#cam.compositor = compositor
-#
-	#var blur_effect : MotionBlurCompositor = null
-	#for effect in compositor.compositor_effects:
-		#if effect is MotionBlurCompositor:
-			#blur_effect = effect
-			#break
-#
-	#if not blur_effect:
-		#blur_effect = MotionBlurCompositor.new()
-		#compositor.compositor_effects.append(blur_effect)
-#
-	#blur_effect.enabled_blur = blurOn
-	#if blurOn:
-		#blur_effect.intensity = 0.5
-		#blur_effect.quality = MotionBlurCompositor.QUALITY_HIGH
+	else:
+		blurOn=false
