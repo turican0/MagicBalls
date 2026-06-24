@@ -1176,7 +1176,7 @@ Array MBEXclass::getPaletteModifications() {
 	float BasicMB_Palette_gain[3] = { 1.0f, 1.0f, 1.0f };
 	float BasicMB_Paletteoffset[3] = { 0.0f, 0.0f, 0.0f };
 	float BasicMB_Palettesat_multiplier = 1.0f;
-	float speedCorrection = 0.01f;
+	float speedCorrection = 0.005f;
 	MB_Palette_gain[0] = MB_Palette_gain[0] * (1 - speedCorrection)+BasicMB_Palette_gain[0]*speedCorrection;
 	MB_Palette_gain[1] = MB_Palette_gain[1] * (1 - speedCorrection) + BasicMB_Palette_gain[1] * speedCorrection;
 	MB_Palette_gain[2] = MB_Palette_gain[2] * (1 - speedCorrection) + BasicMB_Palette_gain[2] * speedCorrection;
