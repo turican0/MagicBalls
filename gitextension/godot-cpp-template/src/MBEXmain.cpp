@@ -221,6 +221,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorCleanLevel"), &MBEXclass::REMC2EditorCleanLevel);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorExampleLevel", "int"), &MBEXclass::REMC2EditorExampleLevel);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadInGameLevel", "Int"), &MBEXclass::REMC2EditorLoadInGameLevel);
+	godot::ClassDB::bind_method(D_METHOD("REMC2getBlur"), &MBEXclass::REMC2getBlur);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -3606,6 +3607,10 @@ void MBEXclass::REMC2EditorExampleLevel(int type) {
 
 void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 	loadlevel(levelIndex);
+}
+
+bool MBEXclass::REMC2getBlur() {
+	return (D41A0_0.str_0x21AE.xxxx_0x21B1 && D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 && x_DWORD_E9C3C);
 }
 
 //get blur (D41A0_0.str_0x21AE.xxxx_0x21B1 &&D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 &&x_DWORD_E9C3C)

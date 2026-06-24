@@ -171,6 +171,9 @@ public:
 
 	bool REMC2GetMapMode();
 	bool REMC2GetWizardsLabelsVisible();
+
+	bool REMC2getBlur();
+
 };
 
 extern std::atomic<bool> thread2_quit_requested;
