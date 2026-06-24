@@ -1172,6 +1172,21 @@ Array MBEXclass::getPaletteModifications() {
 	Vector3 out_offset = Vector3(MB_Paletteoffset[0], MB_Paletteoffset[1], MB_Paletteoffset[2]);
 	float out_sat_multiplier = MB_Palettesat_multiplier;
 
+	//fix color mechanismus
+	float BasicMB_Palette_gain[3] = { 1.0f, 1.0f, 1.0f };
+	float BasicMB_Paletteoffset[3] = { 0.0f, 0.0f, 0.0f };
+	float BasicMB_Palettesat_multiplier = 1.0f;
+	float speedCorrection = 0.01f;
+	MB_Palette_gain[0] = MB_Palette_gain[0] * (1 - speedCorrection)+BasicMB_Palette_gain[0]*speedCorrection;
+	MB_Palette_gain[1] = MB_Palette_gain[1] * (1 - speedCorrection) + BasicMB_Palette_gain[1] * speedCorrection;
+	MB_Palette_gain[2] = MB_Palette_gain[2] * (1 - speedCorrection) + BasicMB_Palette_gain[2] * speedCorrection;
+	MB_Paletteoffset[0] = MB_Paletteoffset[0] * (1 - speedCorrection) + BasicMB_Paletteoffset[0] * speedCorrection;
+	MB_Paletteoffset[1] = MB_Paletteoffset[1] * (1 - speedCorrection) + BasicMB_Paletteoffset[1] * speedCorrection;
+	MB_Paletteoffset[2] = MB_Paletteoffset[2] * (1 - speedCorrection) + BasicMB_Paletteoffset[2] * speedCorrection;
+	if (MB_Palettesat_multiplier>0.2f)
+		MB_Palettesat_multiplier = MB_Palettesat_multiplier * (1 - speedCorrection) + BasicMB_Palettesat_multiplier * speedCorrection;
+	//fix color mechanismus
+
 	/*
 	float mod_max_sat_after_correction = 0.0f;
 	uint8_t *mod_palette = VGA_Get_Palette();
