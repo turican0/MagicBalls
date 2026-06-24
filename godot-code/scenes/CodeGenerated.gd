@@ -13,7 +13,7 @@ var Main_TerrainsMB
 #var MainMusic
 func _ready() -> void:
 	await get_tree().process_frame
-	await get_tree().process_frame	
+	await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 	Engine.max_fps = 60
 	Main_DecodeLevel = get_node("DecodeLevel")
@@ -21,7 +21,8 @@ func _ready() -> void:
 	Main_Player = get_node("Player")
 	Main_UI = get_node("UILayer/UI")
 	Main_Filter = get_node("Filter").get_node("ColorRect")
-	Main_Navigation = get_node("LoadScr/Control/Navigation")
+	#Main_Navigation = get_node("LoadScr/Control/Navigation")
+	Main_Navigation = get_node("Navigation")
 	Main_TerrainsMB = $TerrainsMB
 	Main_DecodeLevel.Main_Player = Main_Player
 	Main_DecodeLevel.Main_UI = Main_UI

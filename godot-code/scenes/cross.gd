@@ -1,8 +1,8 @@
 @tool
 extends Sprite2D
 
-@export var cross_size: float = 20.0
-@export var cross_thickness: float = 2.0
+@export var cross_size: float = 10.0
+@export var cross_thickness: float = 1.0
 @export var cross_color: Color = Color.WHITE
 
 func _ready() -> void:

@@ -1493,7 +1493,7 @@ var defaultLeftA=0
 var defaultLeftB=-0.66
 var defaultLeftC=0
 var defaultStepsCount=5
-var defaultStepsCountBlur=5
+var defaultStepsCountBlur=15
 func MBrun(inGame):
 	DL_inGame=inGame
 	var locGraphicsEnhance = Global.MBEX.REMC2GetGraphicsEenhance()

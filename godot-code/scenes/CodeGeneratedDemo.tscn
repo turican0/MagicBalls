@@ -36,6 +36,19 @@ shader_parameter/alpha = 0.50000002375
 [node name="CodeGenerated" type="Node3D" unique_id=753120922]
 script = ExtResource("1_h7vyv")
 
+[node name="Navigation" type="Node2D" parent="." unique_id=907062064]
+
+[node name="cross" type="Sprite2D" parent="Navigation" unique_id=2064889871]
+position = Vector2(630.5, 374.5)
+script = ExtResource("14_gj3i4")
+cross_size = 20.0
+cross_thickness = 2.0
+cross_color = Color(0.5211406, 0.5211406, 0.5211405, 1)
+
+[node name="arrow" type="Sprite2D" parent="Navigation" unique_id=1106034725]
+script = ExtResource("15_lxf2h")
+arrow_color = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
 [node name="MBEngine" type="Node3D" parent="." unique_id=1184480590]
 script = ExtResource("2_kfkod")
 
@@ -122,11 +135,3 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("13_76h4m")
-
-[node name="Navigation" type="Node2D" parent="LoadScr/Control" unique_id=907062064]
-
-[node name="cross" type="Sprite2D" parent="LoadScr/Control/Navigation" unique_id=2064889871]
-script = ExtResource("14_gj3i4")
-
-[node name="arrow" type="Sprite2D" parent="LoadScr/Control/Navigation" unique_id=1106034725]
-script = ExtResource("15_lxf2h")
