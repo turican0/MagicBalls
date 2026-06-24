@@ -43,11 +43,11 @@ position = Vector2(493.5, 374.5)
 script = ExtResource("14_gj3i4")
 cross_size = 20.0
 cross_thickness = 2.0
-cross_color = Color(0, 0, 0.6666667, 1)
+cross_color = Color(0, 1, 0.5019608, 1)
 
 [node name="arrow" type="Sprite2D" parent="Navigation" unique_id=1106034725]
 script = ExtResource("15_lxf2h")
-arrow_color = Color(0, 0, 0.6666667, 1)
+arrow_color = Color(0, 1, 0.5019608, 1)
 
 [node name="MBEngine" type="Node3D" parent="." unique_id=1184480590]
 script = ExtResource("2_kfkod")
