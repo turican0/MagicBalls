@@ -83,6 +83,7 @@ func _process(_p_delta) -> void:
 	print("FPS:", Engine.get_frames_per_second(), "Limit:", Engine.max_fps)
 
 	var endRunVar = Main_DecodeLevel.MBrun(inGameLoop)
+	Main_DecodeLevel.SetBlur(inGameLoop)
 	var warpMouse = Main_DecodeLevel.MBgetWarpMouse()
 	if(warpMouse["is"]):
 		if get_window().has_focus():
@@ -98,7 +99,8 @@ func _process(_p_delta) -> void:
 	match(endRunVar):
 		1:
 			Global.Main_Sounds.stopAllSounds()
-			get_tree().quit()
+			Main_DecodeLevel.exit_game()
+			#get_tree().quit()
 		2:
 			Global.defaultLangIndex=(Global.defaultLangIndex+1)%Global.countLang;
 			set_language_texture(Global.defaultLangIndex+1)

@@ -1168,10 +1168,6 @@ func getInputs():
 	if Input.is_key_pressed(KEY_F1) and not (Input.is_key_pressed(KEY_ALT) or Input.is_key_pressed(KEY_SHIFT)):
 		Main_UI.get_node("CanvasLayerHelp").start_fade_out()
 
-func _unhandled_input(event: InputEvent) -> void:	
-	if event.is_action_pressed("custom_exit"):
-		exit_game()
-
 var is_exiting: bool = false
 func exit_game() -> void:
 	if is_exiting:
@@ -1584,8 +1580,8 @@ func mainMenuStep() -> int:
 	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
 	return mapMenuOut
 
-func exitGame():
-	Global.MBEX.REMC2EndGame()
+#func exitGame():
+	#Global.MBEX.REMC2EndGame()
 
 #func mainenuEnd():
 	#Global.MBEX.REMC2EndMain()
@@ -1721,3 +1717,32 @@ func showNavigation(show):
 		Main_Navigation.show()
 	else:
 		Main_Navigation.hide()
+
+func SetBlur(inGameLoop):
+	var blurOn:bool=false
+	if(inGameLoop):
+		blurOn=Global.MBEX.REMC2getBlur()
+
+	#var cam : Camera3D = get_viewport().get_camera_3d()
+	#if not cam:
+		#return
+#
+	#var compositor : Compositor = cam.compositor
+	#if not compositor:
+		#compositor = Compositor.new()
+		#cam.compositor = compositor
+#
+	#var blur_effect : MotionBlurCompositor = null
+	#for effect in compositor.compositor_effects:
+		#if effect is MotionBlurCompositor:
+			#blur_effect = effect
+			#break
+#
+	#if not blur_effect:
+		#blur_effect = MotionBlurCompositor.new()
+		#compositor.compositor_effects.append(blur_effect)
+#
+	#blur_effect.enabled_blur = blurOn
+	#if blurOn:
+		#blur_effect.intensity = 0.5
+		#blur_effect.quality = MotionBlurCompositor.QUALITY_HIGH
