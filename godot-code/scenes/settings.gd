@@ -663,7 +663,7 @@ func _build_video_tab(tc: TabContainer) -> void:
 	note_vertex.add_theme_font_size_override("font_size", 11)
 	note_vertex.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
 	note_vertex.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note_vertex.text = "Forces per-vertex shading instead of per-pixel — improves performance on low-end GPUs at the cost of lighting quality."
+	note_vertex.text = "Forces per-vertex shading instead of per-pixel — improves performance on low-end GPUs at the cost of lighting quality.(experimenal, some 3D objects is dark)"
 	vbox.add_child(note_vertex)
 
 func _build_audio_tab(tc: TabContainer) -> void:
