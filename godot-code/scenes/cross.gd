@@ -1,4 +1,3 @@
-@tool
 extends Sprite2D
 @export var cross_size: float = 10.0
 @export var cross_thickness: float = 1.0
