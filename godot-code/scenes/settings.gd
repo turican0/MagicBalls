@@ -55,6 +55,7 @@ const DEFAULTS = {
 		"hdr_enabled":      0,   # 0=Off 1=On (requires display/window/hdr/request_hdr_output=true in project.godot)
 		"hdr_ref_luminance": 0,  # Brightness / Paperwhite in nits; 0 = Auto (-1 in API); Windows only
 		"hdr_max_luminance": 0,  # Max luminance in nits;   0 = Auto (-1 in API); Windows + macOS
+		"force_vertex_shader": 0, # 0=Off 1=On (forces per-vertex shading instead of per-pixel, for low-end GPUs)
 	},
 	"audio": {
 		"master_volume":    100,
@@ -125,6 +126,9 @@ var _sel_hdr:           OptionButton
 var _lbl_hdr_warn:      Label
 var _sl_hdr_ref:        HSlider  # Jas / Paperwhite (pouze Windows)
 var _sl_hdr_max:        HSlider  # Max jas (Windows + macOS)
+
+# Rendering controls
+var _sel_force_vertex:  OptionButton
 
 var _sl_master:         HSlider
 var _sl_music:          HSlider
@@ -243,6 +247,9 @@ func _apply_settings() -> void:
 		_settings["video"].get("hdr_max_luminance", 0)
 	)
 
+	# Force vertex shading
+	_apply_force_vertex_shader(_settings["video"].get("force_vertex_shader", 0))
+
 func _read_controls_into_settings() -> void:
 	_settings["video"]["resolution_index"] = _sel_resolution.selected
 	_settings["video"]["display_mode"]     = _sel_display.selected
@@ -253,6 +260,9 @@ func _read_controls_into_settings() -> void:
 		_settings["video"]["hdr_ref_luminance"] = int(_sl_hdr_ref.value)
 	if _hdr_max_lum_supported() and is_instance_valid(_sl_hdr_max):
 		_settings["video"]["hdr_max_luminance"] = int(_sl_hdr_max.value)
+
+	# Force vertex shading
+	_settings["video"]["force_vertex_shader"] = _sel_force_vertex.selected
 
 	_settings["audio"]["master_volume"] = int(_sl_master.value)
 	_settings["audio"]["music_volume"]  = int(_sl_music.value)
@@ -305,6 +315,20 @@ func _apply_hdr(enabled_idx: int, ref_lum: int, max_lum: int) -> void:
 		if _hdr_max_lum_supported():
 			DisplayServer.window_set_hdr_output_max_luminance(
 				float(max_lum) if max_lum > 0 else -1.0, window_id)
+
+# =============================================
+# RENDERING HELPERS
+# =============================================
+
+# Forces per-vertex shading instead of per-pixel shading.
+# Godot 4 has no built-in global ProjectSettings switch equivalent to Godot 3's
+# "rendering/quality/shading/force_vertex_shading", so this stores the flag in
+# Global for the rest of the game (materials/shaders) to read and react to.
+func _apply_force_vertex_shader(enabled_idx: int) -> void:
+	var enabled := (enabled_idx == 1)
+	if ProjectSettings.get_setting("rendering/shading/overrides/force_vertex_shading", false) != enabled:
+		ProjectSettings.set_setting("rendering/shading/overrides/force_vertex_shading", enabled)
+		ProjectSettings.save()
 
 # =============================================
 # COUNTDOWN UI
@@ -492,6 +516,7 @@ func SetGlobals() -> void:
 	var fps_idx            = clamp(_settings["game"]["fps_limit"], 0, FPS_VALUES.size() - 1)
 	Global.max_fps         = FPS_VALUES[fps_idx]
 	Global.show_navigation = _settings["game"]["show_navigation"] == 1
+	Global.force_vertex_shader = _settings["video"]["force_vertex_shader"] == 1
 
 func _animate_simple_spinner(spinner: Label) -> void:
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
@@ -628,6 +653,18 @@ func _build_video_tab(tc: TabContainer) -> void:
 	note_hdr.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note_hdr.text = "HDR requires in project.godot: display/window/hdr/request_hdr_output = true"
 	vbox.add_child(note_hdr)
+
+	# --- RENDERING ---
+	vbox.add_child(_section("RENDERING"))
+	_sel_force_vertex = _option(vbox, "Force Vertex Shader", ["Off", "On"],
+		_settings["video"]["force_vertex_shader"])
+
+	var note_vertex = Label.new()
+	note_vertex.add_theme_font_size_override("font_size", 11)
+	note_vertex.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
+	note_vertex.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	note_vertex.text = "Forces per-vertex shading instead of per-pixel — improves performance on low-end GPUs at the cost of lighting quality."
+	vbox.add_child(note_vertex)
 
 func _build_audio_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("AUDIO", tc)
