@@ -44,6 +44,23 @@ var target_level: String = ""
 
 var editorLevel: Dictionary
 
+var current_fog_index: int = 5
+
+var fog_presets = [
+	{"begin": 1024.0, "end": 8192.0, "density": 0.00},
+	{"begin": 1024.0, "end": 8192.0, "density": 0.01},
+	{"begin": 512.0, "end": 4096.0, "density": 0.01},
+	{"begin": 256.0, "end": 2048.0, "density": 0.01},
+	{"begin": 128.0, "end": 1024.0, "density": 0.01},
+	{"begin": 64.0, "end": 512.0, "density": 0.01},
+	{"begin": 32.0, "end": 256.0, "density": 0.01},
+	{"begin": 16.0, "end": 128.0, "density": 0.01},
+	{"begin": 8.0,  "end": 64.0,  "density": 0.03},
+	{"begin": 4.0,  "end": 32.0,  "density": 0.08},
+	{"begin": 2.0,  "end": 16.0,  "density": 0.2},
+	{"begin": 0.0,  "end": 8.0,   "density": 0.5}
+]
+
 func getLevelType():
 	return LevelType
 

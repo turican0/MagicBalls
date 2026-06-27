@@ -73,6 +73,7 @@ const DEFAULTS = {
 		"custom_level": 0,
 		"fps_limit":    1,   # 0=20 1=24 2=30 3=40 4=50
 		"show_navigation": 0,  # 0=Off 1=On
+		"current_fog_index": 5,  # index do Global.fog_presets; rozsah 0..Global.fog_presets.size()-1
 	},
 }
 
@@ -120,6 +121,7 @@ var _sel_texture:       OptionButton
 var _sl_view_dist:      HSlider
 var _sel_fps:           OptionButton
 var _sel_show_navigation: OptionButton
+var _sel_fog_index:     OptionButton
 
 # HDR controls
 var _sel_hdr:           OptionButton
@@ -275,6 +277,7 @@ func _read_controls_into_settings() -> void:
 	_settings["game"]["custom_level"] = Global.VALID_LEVELS[_sel_custom_level.selected]
 	_settings["game"]["fps_limit"]    = _sel_fps.selected
 	_settings["game"]["show_navigation"] = _sel_show_navigation.selected
+	_settings["game"]["current_fog_index"] = _sel_fog_index.selected
 
 # =============================================
 # HDR HELPERS  (Godot 4.7+)
@@ -517,6 +520,7 @@ func SetGlobals() -> void:
 	Global.max_fps         = FPS_VALUES[fps_idx]
 	Global.show_navigation = _settings["game"]["show_navigation"] == 1
 	Global.force_vertex_shader = _settings["video"]["force_vertex_shader"] == 1
+	Global.current_fog_index = clamp(_settings["game"]["current_fog_index"], 0, Global.fog_presets.size() - 1)
 
 func _animate_simple_spinner(spinner: Label) -> void:
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
@@ -701,6 +705,13 @@ func _build_game_tab(tc: TabContainer) -> void:
 
 	vbox.add_child(_section("NAVIGATION"))
 	_sel_show_navigation = _option(vbox, "Show Navigation", ["Off", "On"], _settings["game"]["show_navigation"])
+
+	vbox.add_child(_section("FOG"))
+	var fog_names: Array = []
+	for i in range(Global.fog_presets.size()):
+		fog_names.append(str(i))
+	var saved_fog_idx = clamp(_settings["game"]["current_fog_index"], 0, Global.fog_presets.size() - 1)
+	_sel_fog_index = _option(vbox, "Fog Preset", fog_names, saved_fog_idx)
 
 	var fps_note = Label.new()
 	fps_note.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
