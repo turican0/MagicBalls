@@ -173,6 +173,7 @@ public:
 	bool REMC2GetWizardsLabelsVisible();
 
 	bool REMC2getBlur();
+	void REMC2setMessage(String message);
 
 };
 

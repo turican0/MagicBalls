@@ -222,6 +222,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorExampleLevel", "int"), &MBEXclass::REMC2EditorExampleLevel);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EditorLoadInGameLevel", "Int"), &MBEXclass::REMC2EditorLoadInGameLevel);
 	godot::ClassDB::bind_method(D_METHOD("REMC2getBlur"), &MBEXclass::REMC2getBlur);
+	godot::ClassDB::bind_method(D_METHOD("REMC2setMessage", "text"), &MBEXclass::REMC2setMessage);
 }
 
 //PlayIntoSoundEvents_1B280
@@ -1359,7 +1360,7 @@ void handleInputs(Dictionary inputs, int type) {
 					if (alt_pressed) {
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, key_index);
-					} else if (!chatMenuOpened || shift_pressed)
+					} else if ((!chatMenuOpened || shift_pressed) && (shift_pressed || alt_pressed || ctrl_pressed))
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4200: //F8
@@ -3626,6 +3627,10 @@ void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 
 bool MBEXclass::REMC2getBlur() {
 	return (D41A0_0.str_0x21AE.xxxx_0x21B1 && D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 && x_DWORD_E9C3C);
+}
+
+void MBEXclass::REMC2setMessage(String message) {
+	SetCurrentNotificationMessage_19760((char *)message.utf8().get_data(), 3u, 50);
 }
 
 //get blur (D41A0_0.str_0x21AE.xxxx_0x21B1 &&D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 &&x_DWORD_E9C3C)

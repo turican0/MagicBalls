@@ -1065,13 +1065,20 @@ var _pending_mouse_changes: Array = []
 #var mouse_640: Vector2 = Vector2.ZERO
 
 var fog_presets = [
-	{"begin": 10.0, "end": 100.0, "density": 0.01},
-	{"begin": 5.0,  "end": 50.0,  "density": 0.03},
-	{"begin": 2.0,  "end": 30.0,  "density": 0.08},
-	{"begin": 1.0,  "end": 15.0,  "density": 0.2},
+	{"begin": 1024.0, "end": 8192.0, "density": 0.00},
+	{"begin": 1024.0, "end": 8192.0, "density": 0.01},
+	{"begin": 512.0, "end": 4096.0, "density": 0.01},
+	{"begin": 256.0, "end": 2048.0, "density": 0.01},
+	{"begin": 128.0, "end": 1024.0, "density": 0.01},
+	{"begin": 64.0, "end": 512.0, "density": 0.01},
+	{"begin": 32.0, "end": 256.0, "density": 0.01},
+	{"begin": 16.0, "end": 128.0, "density": 0.01},
+	{"begin": 8.0,  "end": 64.0,  "density": 0.03},
+	{"begin": 4.0,  "end": 32.0,  "density": 0.08},
+	{"begin": 2.0,  "end": 16.0,  "density": 0.2},
 	{"begin": 0.0,  "end": 8.0,   "density": 0.5}
 ]
-var current_fog_index: int = 0
+var current_fog_index: int = 5
 func changeFog():
 	current_fog_index += 1
 	if current_fog_index >= fog_presets.size():
@@ -1080,6 +1087,7 @@ func changeFog():
 	sefFogEnd(target_values["end"])
 	setFogFall(target_values["begin"])
 	setFogDensity(target_values["density"])
+	Global.MBEX.REMC2setMessage("Fog level:" + str(current_fog_index))
 	
 
 func _input(event):
