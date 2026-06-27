@@ -1360,7 +1360,7 @@ void handleInputs(Dictionary inputs, int type) {
 					if (alt_pressed) {
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, key_index);
-					} else if ((!chatMenuOpened || shift_pressed) && (shift_pressed || alt_pressed || ctrl_pressed))
+					} else if ((!chatMenuOpened || shift_pressed) && (shift_pressed || alt_pressed))
 						mainSetPress(is_pressed, key_index);
 					break;
 				case 0x4200: //F8
