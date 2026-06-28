@@ -756,7 +756,7 @@ func _on_teleport() -> void:
 	_freeze_rect.texture = ImageTexture.create_from_image(img)
 	_freeze_rect.visible = true
 	await RenderingServer.frame_post_draw
-	await RenderingServer.frame_post_draw
+	#await RenderingServer.frame_post_draw
 	_freeze_rect.visible = false
 	_teleport_busy = false
 func updatePlayer(playerPosRot) -> void:
@@ -774,6 +774,12 @@ func updatePlayer(playerPosRot) -> void:
 	Main_Player.position = new_pos
 	Main_Player.rotation = Vector3(-pitch, -yaw, -roll)
 	_prev_position = new_pos
+func _exit_tree() -> void:
+	if _freeze_canvas != null:
+		_freeze_canvas.queue_free()
+		_freeze_canvas = null
+		_freeze_rect = null
+	_teleport_busy = false
 	
 var last_gain: Vector3
 var last_offset: Vector3
