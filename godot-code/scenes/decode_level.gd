@@ -735,51 +735,58 @@ func setPlayerActiveSubSpell(spell_index: int,sub_spell_index: int,button:int):
 	last_sub_button = button
 	Global.MBEX.setPlayerActiveSubSpell(spell_index,sub_spell_index,button)
 
-const TELEPORT_THRESHOLD := 20.0
-var _prev_position := Vector3.ZERO
-var _first_update  := true
-var _teleport_busy := false
-var _freeze_canvas : CanvasLayer = null
-var _freeze_rect   : TextureRect = null          # ← TextureRect, ne ColorRect
-func _init_overlay() -> void:
-	_freeze_canvas = CanvasLayer.new()
-	_freeze_canvas.layer = 127
-	_freeze_rect = TextureRect.new()
-	_freeze_rect.visible = false
-	_freeze_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	_freeze_canvas.add_child(_freeze_rect)
-	get_tree().root.add_child(_freeze_canvas)
-	_freeze_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-func _on_teleport() -> void:
-	_teleport_busy = true
-	var img := get_viewport().get_texture().get_image()
-	_freeze_rect.texture = ImageTexture.create_from_image(img)
-	_freeze_rect.visible = true
-	await RenderingServer.frame_post_draw
+#const TELEPORT_THRESHOLD := 20.0#remove blinking on end level
+#var _prev_position := Vector3.ZERO
+#var _first_update  := true
+#var _teleport_busy := false
+#var _freeze_canvas : CanvasLayer = null
+#var _freeze_rect   : TextureRect = null          # ← TextureRect, ne ColorRect
+#func _init_overlay() -> void:
+	#_freeze_canvas = CanvasLayer.new()
+	#_freeze_canvas.layer = 127
+	#_freeze_rect = TextureRect.new()
+	#_freeze_rect.visible = false
+	#_freeze_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	#_freeze_canvas.add_child(_freeze_rect)
+	#get_tree().root.add_child(_freeze_canvas)
+	#_freeze_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+#func _on_teleport() -> void:
+	#_teleport_busy = true
+	#var img := get_viewport().get_texture().get_image()
+	#_freeze_rect.texture = ImageTexture.create_from_image(img)
+	#_freeze_rect.visible = true
 	#await RenderingServer.frame_post_draw
-	_freeze_rect.visible = false
-	_teleport_busy = false
+	##await RenderingServer.frame_post_draw
+	#_freeze_rect.visible = false
+	#_teleport_busy = false
+#func updatePlayer(playerPosRot) -> void:
+	#var new_pos :Vector3 = playerPosRot.position / 256.0
+	#var yaw = PI*playerPosRot.rotation.yaw/(256*4)
+	#var pitch = PI*playerPosRot.rotation.pitch/(256*4)
+	#var roll = PI*playerPosRot.rotation.roll/(256*4)
+	#if _first_update:
+		#_init_overlay()
+		#_first_update = false
+	#elif not _teleport_busy:
+		#var d := (new_pos - _prev_position).abs()
+		#if d.x > TELEPORT_THRESHOLD or d.y > TELEPORT_THRESHOLD or d.z > TELEPORT_THRESHOLD:
+			#_on_teleport()#when player skip
+	#Main_Player.position = new_pos
+	#Main_Player.rotation = Vector3(-pitch, -yaw, -roll)
+	#_prev_position = new_pos
+#func _exit_tree() -> void:
+	#if _freeze_canvas != null:
+		#_freeze_canvas.queue_free()
+		#_freeze_canvas = null
+		#_freeze_rect = null
+	#_teleport_busy = false
+	
 func updatePlayer(playerPosRot) -> void:
-	var new_pos :Vector3 = playerPosRot.position / 256.0
 	var yaw = PI*playerPosRot.rotation.yaw/(256*4)
 	var pitch = PI*playerPosRot.rotation.pitch/(256*4)
 	var roll = PI*playerPosRot.rotation.roll/(256*4)
-	if _first_update:
-		_init_overlay()
-		_first_update = false
-	elif not _teleport_busy:
-		var d := (new_pos - _prev_position).abs()
-		if d.x > TELEPORT_THRESHOLD or d.y > TELEPORT_THRESHOLD or d.z > TELEPORT_THRESHOLD:
-			_on_teleport()#when player skip
-	Main_Player.position = new_pos
+	Main_Player.position = playerPosRot.position / 256.0
 	Main_Player.rotation = Vector3(-pitch, -yaw, -roll)
-	_prev_position = new_pos
-func _exit_tree() -> void:
-	if _freeze_canvas != null:
-		_freeze_canvas.queue_free()
-		_freeze_canvas = null
-		_freeze_rect = null
-	_teleport_busy = false
 	
 var last_gain: Vector3
 var last_offset: Vector3
