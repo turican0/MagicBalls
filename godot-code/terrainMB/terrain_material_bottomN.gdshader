@@ -126,7 +126,12 @@ void fragment() {
 		rotated_uv = UV;
 	}
 	
-	vec2 atlas_res = vec2(textureSize(atlas_texture, 0));
+	vec2 atlas_res;
+	if (nearest_filtering) {
+		atlas_res = vec2(textureSize(atlas_texture_nearest, 0));
+	} else {
+		atlas_res = vec2(textureSize(atlas_texture, 0));
+	}	
     vec2 tile_uv_size = 1.0 / atlas_grid_size;
     vec2 border_uv = atlas_border_px / atlas_res;
 	
