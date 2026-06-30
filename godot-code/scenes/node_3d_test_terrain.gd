@@ -140,6 +140,8 @@ func changeTerrain(levelType:String):
 			if material_top == null:
 				return
 			material_top.set_shader_parameter("atlas_texture", atlas_tex)
+			material_top.set_shader_parameter("atlas_texture_nearest", atlas_tex)
+			material_top.set_shader_parameter("nearest_filtering", Global.nearest_texture_filtering == 1)
 			material_bottom = load("res://terrainMB/terrain_material_bottomC.tres")
 		else:
 			if(levelType=="Night" or levelType=="Final"):
@@ -149,6 +151,8 @@ func changeTerrain(levelType:String):
 		var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
 		material_bottom.set_shader_parameter("reflect_texture", reflect_tex)
 		material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
+		material_bottom.set_shader_parameter("atlas_texture_nearest", atlas_tex)
+		material_bottom.set_shader_parameter("nearest_filtering", Global.nearest_texture_filtering == 1)
 		mesh_instance_bottom.material_override = material_bottom
 
 func initialize_nodes():
@@ -171,7 +175,10 @@ func initialize_nodes():
 	var atlas_tex = Global.load_custom_texture(Global.convertdata+"textures/night/BL32N0-0.DAT-borders.png")
 	var reflect_tex = load("res://levels/tmaps/out-vert-refl-border.png")
 	material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
+	material_bottom.set_shader_parameter("atlas_texture_nearest", atlas_tex)
 	material_bottom.set_shader_parameter("reflect_texture", reflect_tex)
+	material_bottom.set_shader_parameter("nearest_filtering", Global.nearest_texture_filtering == 1)
+	
 	mesh_instance_bottom.material_override = material_bottom
 
 	mesh_instance_top = MeshInstance3D.new()
@@ -179,7 +186,9 @@ func initialize_nodes():
 	add_child(mesh_instance_top)
 	material_top = load("res://terrainMB/terrain_material_top.tres")
 	material_top.set_shader_parameter("atlas_texture", atlas_tex)
+	material_top.set_shader_parameter("atlas_texture_nearest", atlas_tex)
 	material_top.set_shader_parameter("reflect_texture", reflect_tex)
+	material_top.set_shader_parameter("nearest_filtering", Global.nearest_texture_filtering == 1)
 	mesh_instance_top.material_override = material_top
 
 #func initialize_grid_data():

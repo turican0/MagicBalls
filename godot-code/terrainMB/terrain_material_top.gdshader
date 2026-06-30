@@ -6,9 +6,11 @@ uniform sampler2D control_map : filter_nearest, repeat_enable;
 uniform float height_scale : hint_range(0.0, 100.0) = 1.0;
 
 uniform sampler2D atlas_texture : source_color, filter_linear_mipmap_anisotropic;
+uniform sampler2D atlas_texture_nearest : source_color, filter_nearest_mipmap;
 uniform sampler2D reflect_texture : source_color, filter_linear_mipmap;
 uniform vec2 atlas_grid_size;
 uniform vec2 atlas_border_px;
+uniform bool nearest_filtering = true;
 
 uniform float wave_height : hint_range(0.0, 1.0) = 0.5;
 uniform float wave_speed : hint_range(0.1, 5.0) = 2.0;
@@ -47,7 +49,11 @@ void fragment() {
 	vec2 min_uv = atlas_offset + border_uv;
 	vec2 max_uv = atlas_offset + tile_uv_size - border_uv;
 	vec2 final_uv = mix(min_uv, max_uv, UV);
-	ALBEDO = texture(atlas_texture, final_uv).rgb;
+	if (nearest_filtering) {
+		ALBEDO = texture(atlas_texture_nearest, final_uv).rgb;
+	} else {
+		ALBEDO = texture(atlas_texture, final_uv).rgb;
+	}
 	ROUGHNESS = 1.0;
 	METALLIC = 0.0;
 }

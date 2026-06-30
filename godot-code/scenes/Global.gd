@@ -46,6 +46,8 @@ var editorLevel: Dictionary
 
 var current_fog_index: int = 5
 
+var nearest_texture_filtering=0
+
 var fog_presets = [
 	{"begin": 1024.0, "end": 8192.0, "density": 0.00},
 	{"begin": 1024.0, "end": 8192.0, "density": 0.01},

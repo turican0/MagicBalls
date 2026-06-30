@@ -56,6 +56,7 @@ const DEFAULTS = {
 		"hdr_ref_luminance": 0,  # Brightness / Paperwhite in nits; 0 = Auto (-1 in API); Windows only
 		"hdr_max_luminance": 0,  # Max luminance in nits;   0 = Auto (-1 in API); Windows + macOS
 		"force_vertex_shader": 0, # 0=Off 1=On (forces per-vertex shading instead of per-pixel, for low-end GPUs)
+		"bilinear_filtering": 1,  # 0=Nearest (pixelated) 1=Linear (bilinear, smooth)
 	},
 	"audio": {
 		"master_volume":    100,
@@ -131,6 +132,7 @@ var _sl_hdr_max:        HSlider  # Max jas (Windows + macOS)
 
 # Rendering controls
 var _sel_force_vertex:  OptionButton
+var _sel_bilinear_filter: OptionButton
 
 var _sl_master:         HSlider
 var _sl_music:          HSlider
@@ -252,6 +254,9 @@ func _apply_settings() -> void:
 	# Force vertex shading
 	_apply_force_vertex_shader(_settings["video"].get("force_vertex_shader", 0))
 
+	# Bilinear filtering
+	_apply_bilinear_filtering(_settings["video"].get("bilinear_filtering", 1))
+
 func _read_controls_into_settings() -> void:
 	_settings["video"]["resolution_index"] = _sel_resolution.selected
 	_settings["video"]["display_mode"]     = _sel_display.selected
@@ -265,6 +270,7 @@ func _read_controls_into_settings() -> void:
 
 	# Force vertex shading
 	_settings["video"]["force_vertex_shader"] = _sel_force_vertex.selected
+	_settings["video"]["bilinear_filtering"]  = _sel_bilinear_filter.selected
 
 	_settings["audio"]["master_volume"] = int(_sl_master.value)
 	_settings["audio"]["music_volume"]  = int(_sl_music.value)
@@ -332,6 +338,21 @@ func _apply_force_vertex_shader(enabled_idx: int) -> void:
 	if ProjectSettings.get_setting("rendering/shading/overrides/force_vertex_shading", false) != enabled:
 		ProjectSettings.set_setting("rendering/shading/overrides/force_vertex_shading", enabled)
 		ProjectSettings.save()
+
+# Toggles the default texture filtering used by 2D CanvasItems (UI controls,
+# Sprite2D, etc. that don't have an explicit texture_filter override).
+# 0 = Nearest (sharp/pixelated), 1 = Linear (bilinear, smooth).
+# Note: this does NOT affect 3D mesh materials — those would need their own
+# BaseMaterial3D.texture_filter override per material.
+func _apply_bilinear_filtering(enabled_idx: int) -> void:	
+	if not is_instance_valid(get_viewport()):
+		return
+	if enabled_idx == 1:
+		Global.nearest_texture_filtering=0
+		get_viewport().canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR
+	else:
+		Global.nearest_texture_filtering=1
+		get_viewport().canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 
 # =============================================
 # COUNTDOWN UI
@@ -669,6 +690,16 @@ func _build_video_tab(tc: TabContainer) -> void:
 	note_vertex.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note_vertex.text = "Forces per-vertex shading instead of per-pixel — improves performance on low-end GPUs at the cost of lighting quality.(experimenal, some 3D objects is dark)"
 	vbox.add_child(note_vertex)
+
+	_sel_bilinear_filter = _option(vbox, "Bilinear Filtering", ["Off (Nearest)", "On (Linear)"],
+		_settings["video"]["bilinear_filtering"])
+
+	var note_filter = Label.new()
+	note_filter.add_theme_font_size_override("font_size", 11)
+	note_filter.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
+	note_filter.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	note_filter.text = "Off = sharp/pixelated textures, On = smooth/blurred textures. Affects UI and 2D sprites (not 3D mesh materials)."
+	vbox.add_child(note_filter)
 
 func _build_audio_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("AUDIO", tc)

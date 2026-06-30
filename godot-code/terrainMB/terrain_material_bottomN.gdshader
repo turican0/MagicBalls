@@ -5,9 +5,11 @@ uniform sampler2D control_map : filter_nearest, repeat_enable;
 uniform float height_scale : hint_range(0.0, 100.0) = 1.0;
 
 uniform sampler2D atlas_texture : source_color, filter_linear_mipmap_anisotropic;
+uniform sampler2D atlas_texture_nearest : source_color, filter_nearest_mipmap;
 uniform sampler2D reflect_texture : source_color, filter_linear_mipmap;
 uniform vec2 atlas_grid_size;
 uniform vec2 atlas_border_px;
+uniform bool nearest_filtering = true;
 
 uniform float wave_height : hint_range(0.0, 1.0) = 0.5;
 uniform float wave_speed : hint_range(0.1, 5.0) = 2.0;
@@ -134,7 +136,12 @@ void fragment() {
 	vec2 min_uv1 = atlas_offset1 + border_uv ;
 	vec2 max_uv1 = atlas_offset1 + tile_uv_size - border_uv ;
 	vec2 final_uv1 = mix(min_uv1, max_uv1, rotated_uv);
-	vec3 tex1 = texture(atlas_texture, final_uv1).rgb;
+	vec3 tex1;
+	if (nearest_filtering) {
+		tex1 = texture(atlas_texture_nearest, final_uv1).rgb;
+	} else {
+		tex1 = texture(atlas_texture, final_uv1).rgb;
+	}
 	float refl1 = texture(reflect_texture, final_uv1).r;
 	
 	ALBEDO = tex1;
