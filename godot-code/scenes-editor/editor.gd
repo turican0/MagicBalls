@@ -629,6 +629,11 @@ func gameInit():
 			Main_DecodeLevel.setFogDensity(0.01)
 			Main_DecodeLevel.setAtmDayTint(Color(0.8,0.9,1.0))
 			Main_DecodeLevel.setSunMoon(true,true,1.0,1.0)
+	disableEditorFog()
+
+func disableEditorFog() -> void:
+	Main_DecodeLevel.setFogDensity(0.0)
+	Main_DecodeLevel.setFog(0.0)
 
 func EditorInit(cdPath):
 	Global.MBEX.REMC2EditorBegin(cdPath)
@@ -2146,6 +2151,7 @@ func _on_map_type_state_changed_graphics_type(state_name: String) -> void:
 	Global.setLevelType(state_name)
 	Global.MBEX.REMC2SetLevelType(state_name)
 	Main_DecodeLevel.gameInit(false)
+	disableEditorFog()
 	Main_TerrainsMB.updateMeshes(false)
 	Global.editorLevel = Global.MBEX.REMC2EditorGetLevelData()
 	RenderEditorEntites()
