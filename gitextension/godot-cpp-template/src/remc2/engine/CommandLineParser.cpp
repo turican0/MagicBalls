@@ -15,8 +15,19 @@ void CommandLineParser::Init(int argc, char **argv) {
     m_test_save_index = -1;
 	m_mode_regression_type = -1;
     m_mode_debug_onstart = false;
-    m_mode_test_network = false;
+    m_mode_network = false;
 
+	m_network_debug = false;
+	m_auto_test = false;
+	m_net_delay_ms = 0;
+	m_net_jitter_ms = 0;
+	m_net_stall_ms = 0;
+	m_net_stall_every = 0;
+	m_net_kill_after_s = 0;
+	m_quit_after_s = 0;
+	m_auto_test_matches = 1;
+	m_auto_test_match_s = 0;
+	m_auto_test_players = 2;
     m_analyze_entity = true;
     m_alternative_gamespeed_control = true;
     m_auto_change_res = false;
@@ -31,7 +42,7 @@ void CommandLineParser::Init(int argc, char **argv) {
     m_load_edited_level = false;
     m_mouse_off2 = false;
     m_move_player = false;
-    m_no_show_new_procedures = false;
+    m_no_show_new_procedures = true;
     m_off_pause_5 = false;
     m_right_button = false;
     m_test_regression = false;
@@ -73,7 +84,7 @@ void CommandLineParser::InterpretParams() {
         "--mode_release_game",
         "--mode_playing_game",
         "--mode_debug_onstart",
-        "--mode_test_network",
+        "--network",
 		"--mode_test_regressions",
     };
     auto is_in_all_params = [&all_modes](const std::string &s) {
@@ -194,8 +205,8 @@ void CommandLineParser::InterpretParams() {
             //m_move_player = true;
             m_hide_graphics = false;
         }
-        else if (param == "--mode_test_network") {
-            m_mode_test_network = true;
+        else if (param == "--network") {
+            m_mode_network = true;
             //m_copy_skip_config = true;
             //m_hide_graphics = false;
             //m_debugafterload = true;
@@ -205,6 +216,17 @@ void CommandLineParser::InterpretParams() {
             //m_text_output_to_console = true;
             //m_show_debug_messages1 = true;
         }
+		else if (param == "--network_debug")				    m_network_debug = true;
+		else if (param == "--auto_test")                        m_auto_test = true;
+		else if (param == "--net_delay")                        m_net_delay_ms = atoi((++p)->c_str());
+		else if (param == "--net_jitter")                       m_net_jitter_ms = atoi((++p)->c_str());
+		else if (param == "--net_stall")                        m_net_stall_ms = atoi((++p)->c_str());
+		else if (param == "--net_stall_every")                  m_net_stall_every = atoi((++p)->c_str());
+		else if (param == "--net_kill_after")                   m_net_kill_after_s = atoi((++p)->c_str());
+		else if (param == "--quit_after")                       m_quit_after_s = atoi((++p)->c_str());
+		else if (param == "--auto_test_matches")                m_auto_test_matches = atoi((++p)->c_str());
+		else if (param == "--auto_test_match_seconds")          m_auto_test_match_s = atoi((++p)->c_str());
+		else if (param == "--auto_test_players")                m_auto_test_players = atoi((++p)->c_str());
         else if (param == "--no_alternative_gamespeed_control") m_alternative_gamespeed_control = false;
         else if (param == "--no_analyze_entity")                m_analyze_entity = false;
         else if (param == "--auto_change_res")                  m_auto_change_res = true;

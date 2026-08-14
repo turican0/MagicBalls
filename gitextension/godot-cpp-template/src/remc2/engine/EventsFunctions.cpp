@@ -99,7 +99,7 @@ array_E1328 - ok, remowed at now, but maybe must rewrite in future
 byte_E16E0 - ok
 x_BYTE_E1711 - ok, rewrited to str_BYTE_E1711
 unk_E1748x - ok
-off_E1BAC - rewrited str_E1BAC_0x1b8 str_E1BAC_0x3c4//buttons pos - must fix str_E1BAC_0x3c4
+off_E1BAC - rewrited str_E1BAC_0x1b8 mainMenuButtons_E1BAC_0x3c4//buttons pos - must fix mainMenuButtons_E1BAC_0x3c4
 x_WORD_E1F70 //ok
 x_WORD_E1F84 - ok, rewrited to type_menuButtons_E1F84
 x_WORD_E2008 - ok, rewrited to str_WORD_E2008 //type_menuButtons_E1F84
@@ -28025,7 +28025,9 @@ int AddHouse0A_2D_38330(type_entity_0x6E8E* event)//219330
 				event->struct_byte_0xc_12_15.dword &= 0xFFDFFFFE;
 				event->struct_byte_0xc_12_15.byte[2] |= 0x20u;
 				SetEntityIndexAndRot_49CD0(event, 177);
-				event->word_0x5A_90 += Entities_EA3E4[event->str_0x5E_94.word_0x68_104]->dword_0xA4_164x->playerColorIndex_0x38_56;
+				// this is fixed bug from original game!!!!!!
+				// claimed building used to fly wizard 0's white banner in multiplayer.
+				event->word_0x5A_90 += TransformPlayerColorIndex_616D0(Entities_EA3E4[event->str_0x5E_94.word_0x68_104]->dword_0xA4_164x->playerColorIndex_0x38_56);
 			}
 			else if (!(event->struct_byte_0xc_12_15.byte[2] & 0x20))
 			{
@@ -28034,7 +28036,9 @@ int AddHouse0A_2D_38330(type_entity_0x6E8E* event)//219330
 				PrepareEventSound_6E450(v8, -1, 4);
 				event->struct_byte_0xc_12_15.byte[0] &= 0xFEu;
 				SetEntityIndexAndRot_49CD0(event, 177);
-				event->word_0x5A_90 += Entities_EA3E4[event->str_0x5E_94.word_0x68_104]->dword_0xA4_164x->playerColorIndex_0x38_56;
+				// this is fixed bug from original game!!!!!!
+				// claimed building used to fly wizard 0's white banner in multiplayer.
+				event->word_0x5A_90 += TransformPlayerColorIndex_616D0(Entities_EA3E4[event->str_0x5E_94.word_0x68_104]->dword_0xA4_164x->playerColorIndex_0x38_56);
 			}
 		}
 		event->str_0x5E_94.word_0x68_104 = 0;
@@ -31319,6 +31323,14 @@ void sub_46830_main_loop(unsigned __int16 actLevel)//227830
 		*/
 		//!!!!test area1
 
+		if (CommandLineParams.DoNetworkDebug()) {
+			static int menuSeenFor = -1;
+			if (menuSeenFor != g_autotest_match) {
+				menuSeenFor = g_autotest_match;
+				debug_net_printf("MATCHEND: entering MenusAndIntros for match %d (skipMenus=%d)\n",
+					g_autotest_match, (int)skipMenus);
+			}
+		}
 		MenusAndIntros_76930(skipMenus);//set language, intro, menu, atd. //257930
 
 		//debug
@@ -31548,6 +31560,15 @@ void sub_46830_main_loop(unsigned __int16 actLevel)//227830
 					break;//must be here
 				}
 			}
+			// The level is over and we are on our way back to the menu.  Give the network
+			// session back here, or the next network game is refused before it sends a
+			// single packet - see NetworkLeaveSession().
+			if (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE)
+				NetworkLeaveSession();
+
+			if (CommandLineParams.DoNetworkDebug())
+				debug_net_printf("MATCHEND: level torn down, heading for the menu\n");
+
 			nextMenu_E29D8 = MenuItem::MainMenu;
 			skipMenus = false;
 			setLevel = -1;
@@ -31617,6 +31638,7 @@ void InGameLoop_47320()//228320
 	//fix res on begin level for hidden levels-neoriginal code
 
 	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
+	g_inGameLoop = true;
 
 	while (1)
 	{
@@ -31686,10 +31708,14 @@ void InGameLoop_47320()//228320
 			}
 		}
 	}
+	g_inGameLoop = false;
 	//Clear pause status
 	x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 &= ~GAME_PAUSED;
 
 	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::GAMEPLAY_ENDED);
+
+	if(IsRecording())
+		m_InputRecorder->SaveRecording();
 
 	sub_90E07_VGA_set_video_mode_640x480_and_Palette((TColor*)*xadatapald0dat2.colorPalette_var28);
 }
@@ -37532,10 +37558,104 @@ void PlayerEvents_51BB0()//232bb0
 	type_entity_0x6E8E* actEvent;
 	bool useSound;
 
+	// Playing a recording back in a network game: only the node that holds the token may
+	// replay, and it has to do so BEFORE the exchange below.  The recorded inputs then
+	// travel over the wire like any other input, so every node runs on exactly the same
+	// array and the simulations stay in step.
+	//
+	// Replaying on each node separately does not work: the lookup below is indexed by
+	// that node's own turn counter (array_0x2BDE[own index].Turn), and those counters are
+	// not kept in sync between nodes, so the same "turn" is a different moment on each
+	// machine.  Feeding the array in after the exchange would also overwrite the only
+	// thing keeping the nodes together.
+	// Scripted endings for unattended tests: leave the game, or drop the network link to
+	// see how the other side copes with a peer that vanishes.
+	if ((x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE)
+		&& (CommandLineParams.QuitAfterS() > 0 || CommandLineParams.NetKillAfterS() > 0))
+	{
+		static long inGameSince = 0;
+		if (inGameSince == 0) inGameSince = (long)j___clock();
+		long secondsInGame = ((long)j___clock() - inGameSince) / 100;
+
+		if (CommandLineParams.NetKillAfterS() > 0 && secondsInGame >= CommandLineParams.NetKillAfterS()) {
+			static bool linkDropped = false;
+			if (!linkDropped) {
+				linkDropped = true;
+				debug_net_printf("AUTOTEST: dropping the network link now\n");
+				EndMyNetLib();
+			}
+		}
+		if (CommandLineParams.QuitAfterS() > 0 && secondsInGame >= CommandLineParams.QuitAfterS()) {
+			static bool leftGame = false;
+			if (!leftGame) {
+				leftGame = true;
+				debug_net_printf("AUTOTEST: leaving the game now\n");
+				D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 = 1;
+			}
+		}
+	}
+
+	// End this match and go round again, for the multi-match test.
+	//
+	// Deliberately NOT byte_0x004_2BE0_11234, which is what --quit_after sets: that one is
+	// tested at the top of sub_46830_main_loop as well, so it leaves the application
+	// altogether.  Bit 3 of dw_w_b_0_2BDE_11230.byte[2] only breaks InGameLoop_47320, and the
+	// outer while(1) then runs MenusAndIntros_76930 again - which is exactly the path a
+	// player takes back to the menu, and the one that has to rebuild the network state.
+	if ((x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE)
+		&& CommandLineParams.AutoTest() && CommandLineParams.AutoTestMatchSeconds() > 0
+		&& CommandLineParams.AutoTestMatches() > 1)
+	{
+		static long matchSince = 0;
+		static int  matchInProgress = -1;
+		if (matchInProgress != g_autotest_match) { matchInProgress = g_autotest_match; matchSince = 0; }
+		if (matchSince == 0) matchSince = (long)j___clock();
+
+		if (((long)j___clock() - matchSince) / 100 >= CommandLineParams.AutoTestMatchSeconds())
+		{
+			if (g_autotest_match + 1 < CommandLineParams.AutoTestMatches())
+			{
+				debug_net_printf("AUTOTEST: match %d over, returning to the menu for match %d\n",
+					g_autotest_match, g_autotest_match + 1);
+				g_autotest_match++;
+				D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] |= 8;
+			}
+			else
+			{
+				debug_net_printf("AUTOTEST: last match (%d) over, leaving\n", g_autotest_match);
+				D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 = 1;
+			}
+		}
+	}
+
+	bool replayingOverNetwork = false;
+	if (m_InputRecorder != nullptr && m_InputRecorder->m_IsPlaying
+		&& (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE))
+	{
+		replayingOverNetwork = true;
+		if (GetIndexNetwork_74536() == GetIndexNetwork2_74515())
+		{
+			int32_t turn = D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].Turn_2BE0_11248;
+			for (int pi = 0; pi < D41A0_0.NumberOfPlayers_0xe; pi++)
+			{
+				RecordedEventTurn* rec = m_InputRecorder->GetCurrentPlayerActions(
+					x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, pi, turn);
+				if (rec && rec->Bytes)
+				{
+					size_t n = (size_t)rec->SizeBytes;
+					if (n > sizeof(Type_PlayerInput_0x6E3E)) n = sizeof(Type_PlayerInput_0x6E3E);
+					memcpy(&D41A0_0.playerInputs_0x6E3E[pi], rec->Bytes, n);
+				}
+			}
+		}
+	}
+
 	if (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE)
 	{
 		NetworkUpdateConnections2_74374();
 		ReceiveSendAll_7438A((uint8_t*)D41A0_0.playerInputs_0x6E3E, sizeof(Type_PlayerInput_0x6E3E));//multi receive
+
+
 		bool playerFound = false;
 		for (int i = 0; i < D41A0_0.NumberOfPlayers_0xe; i++)
 		{
@@ -37566,7 +37686,9 @@ void PlayerEvents_51BB0()//232bb0
 	}
 	for (int i = 0; i < D41A0_0.NumberOfPlayers_0xe; i++)
 	{
-		if (m_InputRecorder != nullptr && m_InputRecorder->m_IsPlaying && m_InputRecorder->GetCurrentPlayerActions(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, i, D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].Turn_2BE0_11248) != nullptr)
+		// !replayingOverNetwork: in a network game the recording was already applied
+		// above, before the exchange, so the array now holds what every node agreed on.
+		if (!replayingOverNetwork && m_InputRecorder != nullptr && m_InputRecorder->m_IsPlaying && m_InputRecorder->GetCurrentPlayerActions(x_D41A0_BYTEARRAY_4_struct.levelnumber_43w, i, D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].Turn_2BE0_11248) != nullptr)
 		{
 			if (CommandLineParams.ModeRegressionsTestType()==-1)
 			{
@@ -37682,6 +37804,20 @@ void PlayerEvents_51BB0()//232bb0
 				SetCenterScreenForFlyAssistant_6EDB0();
 			}
 			SetMenuCursorPosition_52E90(&D41A0_0.array_0x2BDE[i], 3, true);
+			// Opening the panel starts a fresh message, so the slot it types into starts empty.
+			//
+			// Sending (0x13) leaves the text in names_81, and only zeroing the counter here
+			// meant the box came back up showing the message just sent, with the caret at the
+			// end of it - the text looked editable, but the first keypress dropped the whole
+			// line (loc_520C4 below: names_81[slot][0] = 0 while the counter is still 0).  That
+			// deferred wipe is what players report as "the previous message is still there and
+			// it blanks as I start typing".  Clearing here makes the box show what typing will
+			// actually produce.
+			//
+			// The eight slots stay usable: selecting one (0x23) does NOT clear, so picking a
+			// slot with Shift+F1..F8 and pressing Enter still sends what is stored in it.  Only
+			// the slot the panel opens on is treated as the scratch line.
+			D41A0_0.array_0x2BDE[i].names_81[D41A0_0.array_0x2BDE[i].byte_0x3E0_2BE4_12222][0] = 0;
 			D41A0_0.array_0x2BDE[i].byte_0x3E2_2BE4_12224 = 0;
 			if (i == D41A0_0.LevelIndex_0xc)
 			{
@@ -37691,10 +37827,14 @@ void PlayerEvents_51BB0()//232bb0
 		case 0x11:
 			if (D41A0_0.playerInputs_0x6E3E[i].str_0x6E3E_byte1 == 8)
 			{
-				if (strlen(D41A0_0.array_0x2BDE[i].names_81[D41A0_0.array_0x2BDE[i].byte_0x3E0_2BE4_12222]) + 1 != 1)
+				// Backspace removes the last character: loc_520C4 zeroes names_81[len - 1].
+				// Taking one off that (as this used to) ate two characters at a time, and on a
+				// one-character message it wrote the byte in front of the string - which is
+				// word_0x04f_2C2D_11309, the notification type.
+				if (strlen(D41A0_0.array_0x2BDE[i].names_81[D41A0_0.array_0x2BDE[i].byte_0x3E0_2BE4_12222]) != 0)
 				{
 					D41A0_0.array_0x2BDE[i].byte_0x3E2_2BE4_12224--;
-					D41A0_0.array_0x2BDE[i].names_81[D41A0_0.array_0x2BDE[i].byte_0x3E0_2BE4_12222][strlen(D41A0_0.array_0x2BDE[i].names_81[D41A0_0.array_0x2BDE[i].byte_0x3E0_2BE4_12222]) - 2] = 0;
+					D41A0_0.array_0x2BDE[i].names_81[D41A0_0.array_0x2BDE[i].byte_0x3E0_2BE4_12222][strlen(D41A0_0.array_0x2BDE[i].names_81[D41A0_0.array_0x2BDE[i].byte_0x3E0_2BE4_12222]) - 1] = 0;
 				}
 			}
 			else if (D41A0_0.playerInputs_0x6E3E[i].str_0x6E3E_byte1)
@@ -38010,25 +38150,53 @@ void PlayerEvents_51BB0()//232bb0
 					&& x_toupper(printbuffer[3]) == 'D'
 					&& x_toupper(printbuffer[4]) == 'Y')
 				{
-					if (i == D41A0_0.LevelIndex_0xc)
+					// WINDY is a single-player cheat and is ignored in a network game.
+					//
+					// Setting the top bit turns setting_byte2_23 (an int8_t) negative, and every
+					// "setting_byte2_23 < 0" test in PlayerInput.cpp is that byte being read as
+					// "cheats are on" - it hands out the debug keys, and it also lifts the castle
+					// experience gate in EventsFunctions.  None of that is exchanged with anyone:
+					// the other players neither agree to it nor ever find out, so one node would
+					// be playing by rules of its own while the rest keep to the game's.  There is
+					// already one key excluded from multiplayer this way (PlayerInput.cpp, the
+					// "setting_byte2_23 < 0 && !MULTIPLAYER_MODE" test); this is the same reason
+					// applied at the source.
+					//
+					// The word is still recognised and swallowed rather than passed on, so typing
+					// it in a network game does nothing at all - it is not broadcast as an
+					// ordinary chat line either.
+					if (i == D41A0_0.LevelIndex_0xc
+						&& !(x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE))
 						x_D41A0_BYTEARRAY_4_struct.setting_byte2_23 |= 0x80u;
 				}
 				else
 				{
+					// loc_522C2: your own message is always shown to you; whether someone
+					// else's reaches you is decided by the mode they sent it in
+					// (byte_0x3E1: 0 = in view, 1 = nearest, 2 = everyone, 3 = allies).
+					// This test used to be the wrong way round - the switch ran for the
+					// local player and remote messages were dropped without being read,
+					// so chat never arrived from anyone else in a network game.
 					bool bool1 = false;
 					if (i == D41A0_0.LevelIndex_0xc)
+					{
+						bool1 = true;
+					}
+					else
 					{
 						switch (D41A0_0.array_0x2BDE[i].byte_0x3E1_2BE4_12223)
 						{
 						case 0:
 							if (!(sub_61810(actEvent, Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]) == 0))
 								bool1 = true;
+							break;
 						case 1:
 							if (!(sub_61620(actEvent, Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]) == 0))
 								bool1 = true;
 							break;
 						case 2:
 							bool1 = true;
+							break;
 						case 3:
 							if ((1 << D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dword_0x3E6_2BE4_12228.playerColorIndex_0x38_56) & D41A0_0.array_0x2BDE[i].byte_0x3E3_2BE4_12225)
 								bool1 = true;
@@ -39037,6 +39205,13 @@ void write_pngs()
 }
 
 //----- (00056210) --------------------------------------------------------
+static int ClampPort(int port)
+{
+	if (port < 0) return 0;
+	if (port > 99999) return 99999;
+	return port;
+}
+
 void sub_56210_process_command_line(int argc, char** argv)//237210
 {
 	int32_t x_DWORD_355208;//3551CE+3A DWORD
@@ -39192,27 +39367,26 @@ void sub_56210_process_command_line(int argc, char** argv)//237210
 			{
 				x_BYTE_355238_music2 = 1;
 			}
-			else if (!_stricmp("client", (char*)actarg))//set to all one computer adress
+			// client <server ip> <server port> <own port>
+			else if (!_stricmp("client", (char*)actarg))
 			{
 				Iam_client = true;
 				strcpy(serverIP, (char*)argv[++argnumber]);
-				ServerPort = atoi(argv[++argnumber]);
-				if (ServerPort < 0)ServerPort = 0;
-				if (ServerPort > 99999)ServerPort = 99999;
-				NetworkPort = atoi(argv[++argnumber]);
-				if (NetworkPort < 0)
-					NetworkPort = 0;
-				if (NetworkPort > 99999)
-					NetworkPort = 99999;
+				ServerPort = ClampPort(atoi(argv[++argnumber]));
+				NetworkPort = ClampPort(atoi(argv[++argnumber]));
 			}
-			else if (!_stricmp("server", (char*)actarg))//set to all one computer adress
+			// server <own port> - and nothing else.  The host holds one port, which serves
+			// both the control traffic it answers and the game data it exchanges, so there is
+			// nothing left to say: its address is loopback and its data port is that same
+			// port.  It used to need a "client 127.0.0.1 <same port> <another port>" after
+			// this, which named the host twice and gave it a second port to keep track of.
+			else if (!_stricmp("server", (char*)actarg))
 			{
 				Iam_server = true;
-				ServerPort = atoi(argv[++argnumber]);
-				if (ServerPort < 0)
-					ServerPort = 0;
-				if (ServerPort > 99999)
-					ServerPort = 99999;
+				Iam_client = true;              // the host plays too, through its own server
+				ServerPort = ClampPort(atoi(argv[++argnumber]));
+				NetworkPort = ServerPort;
+				strcpy(serverIP, "127.0.0.1");
 			}
 		}
 		argnumber++;
@@ -42989,7 +43163,7 @@ void Initialize()//23c8d0
 }
 
 //----- (00046DD0) --------------------------------------------------------
-void sub_46DD0_init_sound_and_music()
+void sub_46DD0_init_sound_and_music()//227DD0
 {
 	//char* v3; // eax
 	//int v4; // edx
@@ -43046,6 +43220,50 @@ void sub_46DD0_init_sound_and_music()
 	sub_83CC0(21);
 }
 
+static void (*slow_tick_cb)(void) = nullptr;     // náhrada _chain_intr -> starý handler
+
+static std::thread       gameTimerThread;
+static std::atomic<bool> gameTimerRunning{ false };
+
+static void sub_6FD30()
+{
+	// 119 Hz ~ 8.4 ms perioda; sleep_for(1ms) jako v netThread, tick řešíme akumulátorem
+	auto nextTick = std::chrono::steady_clock::now();
+	const auto interval = std::chrono::microseconds(1000000 / 119);
+
+	while (gameTimerRunning.load())
+	{
+		auto now = std::chrono::steady_clock::now();
+		if (now >= nextTick)
+		{
+			nextTick += interval;
+			GameTimerTurn_17DB54++;
+			x_D41A0_BYTEARRAY_4_struct.dwordindex_2392 += x_D41A0_BYTEARRAY_4_struct.dwordindex_2388;
+			if (x_D41A0_BYTEARRAY_4_struct.dwordindex_2392 >= 0x10000)
+			{
+				x_D41A0_BYTEARRAY_4_struct.dwordindex_2392 -= 0x10000;
+
+				if (slow_tick_cb)
+					slow_tick_cb();
+			}
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+}
+
+void StopProgrammableIntervalTimer()
+{
+	if (!gameTimerRunning.load()) return;
+	gameTimerRunning.store(false);
+	if (gameTimerThread.joinable())
+		gameTimerThread.join();
+}
+
+struct GameTimerGuard {
+	~GameTimerGuard() { StopProgrammableIntervalTimer(); }
+};
+static GameTimerGuard g_gameTimerGuard;
+
 //----- (0006FDA0) --------------------------------------------------------
 void SetProgrammableIntervalTimer_6FDA0()//fix//250da0
 {
@@ -43071,6 +43289,9 @@ void SetProgrammableIntervalTimer_6FDA0()//fix//250da0
 	 //result = dos_setvect(8, (DWORD)sub_6FD30, (unsigned __int16)__CS__);
 	 //BYTE1(result) = 1;
 	x_BYTE_DB734 = 1;
+	if (gameTimerRunning.load()) return;
+	gameTimerRunning.store(true);
+	gameTimerThread = std::thread(sub_6FD30);
 	//return result;
 }
 
@@ -52019,13 +52240,6 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout(TColor* newpalbufferx, uint8_t shadow_l
 	}*/
 	//return 0;
 	return x_WORD_181B44;
-}
-
-void fix_sub_9A0FC_wait_to_screen_beam(int32_t delay)//27B0fc
-{
-	VGA_Blit(nullptr);
-	if (delay > 0)
-		mydelay(delay);
 }
 
 //----- (00090B27) --------------------------------------------------------

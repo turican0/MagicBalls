@@ -27,6 +27,10 @@ void _strupr(char* s)
 #else //__linux__
 #endif //__linux__
 
+// Unattended network testing (--auto_test): drives the menus so a test script can run a
+// multiplayer session without anyone clicking through the front end.
+extern bool Iam_server;
+
 bool first_enter = true;
 char x_BYTE_D41AD_skip_screen = 0; // weak
 int8_t LoadLevelNumber_D419C = -1; // weak
@@ -331,7 +335,7 @@ type_menuButtons_E1F84 str_WORD_E1F84[3] = {
 {0x00000000,0x00000000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x00,0x00,0x00,0x00,0x00,0x00,{0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000}}
 };
 
-type_menuButtons_E1F84 str_E1BAC[10] = {
+type_menuButtons_E1F84 mainMenuButtons_E1BAC[10] = {
 {0x00258350,0x00000000,0x0000,0x00CE,0x0043,0x0050,0x0050,0x019A,0x3B,0x33,0x06,0x01,0x00,0x00,{0x004E,0x004E,0x0000,0x0000,0x0050,0x0000,0x0000,0x0000,0x0003}},
 {0x00259E00,0x00000000,0x0000,0x0119,0x0041,0x0050,0x0050,0x0194,0x3C,0x34,0x0A,0x01,0x00,0x00,{0x0164,0x0070,0x0000,0x0000,0x0050,0x0000,0x01A4,0x0000,0x0003}},
 {0x0025EE80,0x00000000,0x0000,0x016A,0x0048,0x0050,0x0050,0x0199,0x3D,0x35,0x07,0x01,0x00,0x00,{0x01AE,0x004E,0x0000,0x0000,0x0050,0x0000,0x019C,0x0000,0x0003}},
@@ -579,6 +583,10 @@ void MenusAndIntros_76930(bool skipMenus)//257930
 {
 	//1 -351660
 	x_BYTE_E29DF_skip_screen = x_BYTE_D41AD_skip_screen;
+	// Skip the intro animations so an unattended test reaches the menu straight away.
+	// Set after E29DF has been read, so the network session number stays untouched.
+	if (CommandLineParams.AutoTest() && !skipMenus)
+		x_BYTE_D41AD_skip_screen = 1;
 	if (skipMenus)
 	{
 		x_BYTE_D41AD_skip_screen = 1;
@@ -1076,7 +1084,7 @@ signed int MouseEvents_7E0E0()//25f0e0
 		else if (InRegion_7B200(&str_WORD_E1F84[ix], x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx, x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony))//change language
 		{
 			PlaySample_8F100(0, 14, 127, 64, 0x64u, 0, 3u);
-			DrawBitmap_2BB40(str_WORD_E1F84[ix].xmin_10, str_WORD_E1F84[ix].ymin_12, xy_DWORD_17DED4_spritestr[str_WORD_E1F84[ix].xmin_10 & 0xff]);//asi vykresleni stisknuteho tlacitka
+			DrawBitmap_2BB40(str_WORD_E1F84[ix].xmin_10, str_WORD_E1F84[ix].ymin_12, xy_DWORD_17DED4_spritestr[str_WORD_E1F84[ix].byte_20]);//drawing pushed button (gold sprite)
 			result = str_WORD_E1F84[ix].byte_22;
 		}
 		ix++;
@@ -1221,6 +1229,7 @@ char LanguageSettingDialog_779E0(type_menuButtons_E1F84* a1y)//2589E0
 		SetCursor_8CD27(xy_DWORD_17DED4_spritestr[37]);//26dd27
 		while (mouseClick != 2)//adress 258c30
 		{
+			SetFrameStart(std::chrono::system_clock::now());
 			if (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == 59)
 			{
 				x_D41A0_BYTEARRAY_4_struct.showHelp_10 = x_D41A0_BYTEARRAY_4_struct.showHelp_10 != 1;
@@ -1257,9 +1266,9 @@ char LanguageSettingDialog_779E0(type_menuButtons_E1F84* a1y)//2589E0
 			if (frame)
 			{
 				if (x_WORD_180660_VGA_type_resolution & 1)
-					sub_90478_VGA_Blit320();
+					sub_90478_VGA_Blit320(menuFps);
 				else
-					sub_75200_VGA_Blit640(480);//draw //256200
+					sub_75200_VGA_Blit640(480, menuFps);//draw //256200
 			}
 			else
 			{
@@ -2030,11 +2039,11 @@ void DrawMenuAnimations_7AB00()//25bb00
 		}
 	}
 	// draw selected main menu item
-	for (int iy = 0; (str_E1BAC[iy].xmin_10<<16) + str_E1BAC[iy].ymin_12; iy++)
+	for (int iy = 0; (mainMenuButtons_E1BAC[iy].xmin_10<<16) + mainMenuButtons_E1BAC[iy].ymin_12; iy++)
 	{
-		if (str_E1BAC[iy].canSelect_23 && str_E1BAC[iy].gold_color_24)
+		if (mainMenuButtons_E1BAC[iy].canSelect_23 && mainMenuButtons_E1BAC[iy].gold_color_24)
 		{
-			DrawBitmap_2BB40(str_E1BAC[iy].xmin_10, str_E1BAC[iy].ymin_12, xy_DWORD_17DED4_spritestr[str_E1BAC[iy].byte_21]);
+			DrawBitmap_2BB40(mainMenuButtons_E1BAC[iy].xmin_10, mainMenuButtons_E1BAC[iy].ymin_12, xy_DWORD_17DED4_spritestr[mainMenuButtons_E1BAC[iy].byte_21]);
 		}
 	}
 }
@@ -2169,18 +2178,18 @@ void sub_7BEC0()//25cec0
 	unsigned __int8 v1; // dl
 
 	//for (result = off_E1BAC; *((uint16_t*)result + 5); result += 44)
-	for (resultx = 0; str_E1BAC[resultx].xmin_10; resultx++)
+	for (resultx = 0; mainMenuButtons_E1BAC[resultx].xmin_10; resultx++)
 	{
-		str_E1BAC[resultx].selected_8 = 0;
-		v1 = str_E1BAC[resultx].byte_22;
-		str_E1BAC[resultx].gold_color_24 = 0;
+		mainMenuButtons_E1BAC[resultx].selected_8 = 0;
+		v1 = mainMenuButtons_E1BAC[resultx].byte_22;
+		mainMenuButtons_E1BAC[resultx].gold_color_24 = 0;
 		if (v1 == 7u)
 		{
-			str_E1BAC[resultx].canSelect_23 = x_D41A0_BYTEARRAY_4_struct.isNetwork_216w != 0;
+			mainMenuButtons_E1BAC[resultx].canSelect_23 = x_D41A0_BYTEARRAY_4_struct.isNetwork_216w != 0;
 		}
 		else if (v1 == 13)
 		{
-			str_E1BAC[resultx].canSelect_23 = 1;
+			mainMenuButtons_E1BAC[resultx].canSelect_23 = 1;
 		}		
 	}
 	//return result;
@@ -3207,14 +3216,14 @@ int NewGameDraw_7EAE0(int16_t* posx, int16_t* posy, __int16* portPosX, __int16* 
 			}
 		}
 		int tempPosX;
-		if (index4 != -1)
+		if ((index4 != -1) && (index4 != 0))
 		{
 			mapScreenPortals_E17CC[index4 - 1].activated_18 = 2;
 			tempPosX = mapScreenPortals_E17CC[index4].viewPortPosX_4;
 			mapScreenPortals_E17CC[index4].viewPortPosX_4 = 0;
 		}
 		MapMenuPortalsDraw_81760();
-		if (index4 != -1)
+		if ((index4 != -1) && (index4 != 0))
 		{
 			mapScreenPortals_E17CC[index4 - 1].activated_18 = 1;
 			mapScreenPortals_E17CC[index4].viewPortPosX_4 = tempPosX;
@@ -5337,12 +5346,30 @@ char MultiplayerMenu_7DE80(type_menuButtons_E1F84* a2x)//25ee80
 
 	memset(printbuffer, 0, 10);
 	a2x->dword_4 = 0;
+	// Confirm the session-number dialog once and go straight on to the level selection.
+	if (CommandLineParams.AutoTest()) {
+		static int autoSessionConfirmedFor = -1;
+		if (autoSessionConfirmedFor != g_autotest_match) {
+			autoSessionConfirmedFor = g_autotest_match;
+			debug_net_printf("AUTOTEST: confirming session %d (match %d)\n",
+				(int)(unsigned __int8)x_BYTE_E29DF_skip_screen, g_autotest_match);
+			x_WORD_E131A = 0;
+			x_DWORD_17DE38str.networkSession_17DEFA = (unsigned __int8)x_BYTE_E29DF_skip_screen;
+			ResetMouse_7B5A0();
+			a2x->dword_4 = sub_77680() != 0;
+			return 1;
+		}
+	}
 	v3 = j___clock();
 	GetFont_6FC50(1);
 	v22 = a2x->str_26.x1_26_0 + 10;
 	v20 = v22 + xy_DWORD_17DED4_spritestr[72].width_4 - 22;
 	v8 = a2x->str_26.word_34_4 / 2 + a2x->str_26.y1_28_1 - GetLetterHeight_6FC30();
 	v23 = DrawScrollDialog_7BF20(&a2x->str_26);
+
+	//Skip Game Number entry
+	v23 = 1;
+
 	if (a2x->str_26.word_36_5 > a2x->str_26.word_34_4 / 2)
 	{
 		if ((unsigned __int8)x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode != 0xFu)
@@ -5663,7 +5690,7 @@ int DrawScrollDialog2_7B660(int a1, int a2, __int16 a3, type_str_word_26* a4x, c
 			}
 		}
 		/*
-		if (CommandLineParams.ModeTestNetwork()) {
+		if (CommandLineParams.ModeNetwork()) {
 			if (first_enter)
 			{
 				first_enter = false;
@@ -5740,8 +5767,77 @@ char sub_77680()//258680
 			x_DWORD_17DE38str.array_BYTE_17DE68x[x_DWORD_17DE38str.serverIndex_17DEFC].selectedLevel_10 = 50;
 		x_DWORD_17DE38str.array_BYTE_17DE68x[x_DWORD_17DE38str.serverIndex_17DEFC].action_9 = 2;
 		x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons = 0;
+		if (CommandLineParams.AutoTest())
+			debug_net_printf("AUTOTEST: level selection reached, myIdx=%d token=%d server=%d\n",
+				(int)x_DWORD_17DE38str.serverIndex_17DEFC, (int)GetIndexNetwork2_74515(), (int)Iam_server);
 		while (!a3a)
 		{
+			// Once every player has joined, the host starts the level.
+			if (CommandLineParams.AutoTest()) {
+				static int   autoFrames = 0;
+				static int   autoLevelStartedFor = -1;
+				// A second match comes back through this screen, so the settle counters have
+				// to start over with it - otherwise the level is rolled on the frame count
+				// and connection history left behind by the match before.
+				static int   autoMatchSeen = -1;
+				if (autoMatchSeen != g_autotest_match) { autoMatchSeen = g_autotest_match; autoFrames = 0; }
+				autoFrames++;
+				const int autoNeedPlayers = CommandLineParams.AutoTestPlayers() > 0
+					? CommandLineParams.AutoTestPlayers() : 2;
+				// The peers must be connected, and STAY connected for a while, before the
+				// level is rolled.  After a server hand-over the new server reaches its
+				// player count at once - the slots are all still there - and a peer that has
+				// just died still reads as connected for a few frames, until its NCB is
+				// marked closed.  Starting on that broadcasts "start" to nobody: this node
+				// goes in-game while the other survivor is left behind in the lobby, and from
+				// then on they exchange different-sized records at each other.
+				// Watch WHICH peers are connected, not how many: a hand-over swaps the old
+				// server for the other survivor and leaves the count unchanged, so a counter
+				// alone never dips and the wait it is supposed to impose never happens.
+				static int  autoStableFrames = 0;
+				static int  autoLastMask = -1;
+				static bool autoWasServer = false;
+				const int   autoMask = NetworkConnectedMask();
+				int         autoConnected = 0;
+				for (int b = 0; b < 8; b++) if (autoMask & (1 << b)) autoConnected++;
+
+				// Becoming the server restarts the wait.  At the instant the role is taken
+				// over nothing else has moved yet - the dead server still reads as connected
+				// for another ~80 ms, so neither the count nor the mask has noticed - and the
+				// level would be rolled before the survivors have found each other.
+				if (Iam_server != autoWasServer) { autoWasServer = Iam_server; autoStableFrames = 0; }
+
+				if (autoMask != autoLastMask) { autoLastMask = autoMask; autoStableFrames = 0; }
+				else if (autoConnected >= autoNeedPlayers) autoStableFrames++;
+				else autoStableFrames = 0;
+
+				// ...and the count is not enough on its own.  It includes this node, and a peer
+				// that has just been killed goes on being counted until its NCB is marked
+				// closed, so "me and the player about to die" reaches the bar just as well as
+				// "me and the player that will still be here".  Measured: with three players and
+				// a bar of two, the host started 1.2 s after the middle player was killed, on a
+				// count made up of itself and that corpse, while the survivor had not finished
+				// its LISTEN - which NetworkCancelAll_7449C() then cancelled on the way into the
+				// level.  The survivor was stranded in the lobby for the rest of the run.
+				//
+				// So require the peers by NAME: everybody the transport still lists has to be in
+				// a session with us.  The list drops a killed node as soon as its control
+				// connection closes, which is immediate, rather than after the five-second data
+				// heartbeat - so this says "the players that are really here are all in" without
+				// waiting for the corpse to be declared.
+				const bool autoPeersAllIn = NetworkAllRosterPeersConnected();
+
+				if (Iam_server && autoLevelStartedFor != g_autotest_match
+					&& x_DWORD_17DE38str.x_WORD_17DEFE >= autoNeedPlayers
+					&& autoPeersAllIn
+					&& autoStableFrames > 180 && autoFrames > 180) {
+					autoLevelStartedFor = g_autotest_match;
+					int me = x_DWORD_17DE38str.serverIndex_17DEFC;
+					x_DWORD_17DE38str.array_BYTE_17DE68x[me].action_9 = 5;
+					x_DWORD_17DE38str.array_BYTE_17DE68x[me].makeUpdate_0 = 1;
+					debug_net_printf("AUTOTEST: host starts the level (match %d)\n", g_autotest_match);
+				}
+			}
 			if (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == 59)
 			{
 				x_D41A0_BYTEARRAY_4_struct.showHelp_10 = x_D41A0_BYTEARRAY_4_struct.showHelp_10 != 1;
@@ -5799,35 +5895,39 @@ bool DrawAndServe_7B250()//25c250
 	typeTextBoxtextBoxStr_E24BCx textBoxStr[2];
 
 	if (CommandLineParams.ModeRegressionsTestType()==0) {
-		str_E1BAC[0].dword_0 = 0x258350;
-		str_E1BAC[0].selected_8 = 1;
+		mainMenuButtons_E1BAC[0].dword_0 = 0x258350;
+		mainMenuButtons_E1BAC[0].selected_8 = 1;
 	}
-	/*
-	if (CommandLineParams.ModeTestNetwork()) {
-		if (first_enter)
-		{
-			str_E1BAC[2].selected_8 = 1;
+	// Pick the network-game button once, on behalf of the tester.
+	if (CommandLineParams.AutoTest()) {
+		// Once per MATCH, not once per process: a second match comes back to this menu and
+		// has to pick the network game again.
+		static int autoNetworkPickedFor = -1;
+		if (autoNetworkPickedFor != g_autotest_match) {
+			autoNetworkPickedFor = g_autotest_match;
+			mainMenuButtons_E1BAC[2].selected_8 = 1;
+			debug_net_printf("AUTOTEST: entering network game (match %d)\n", g_autotest_match);
 		}
-	}*/
+	}
 
-	for (int i = 0; str_E1BAC[i].xmin_10; i++)
+	for (int i = 0; mainMenuButtons_E1BAC[i].xmin_10; i++)
 	{
-		if (str_E1BAC[i].selected_8 && str_E1BAC[i].dword_0)
+		if (mainMenuButtons_E1BAC[i].selected_8 && mainMenuButtons_E1BAC[i].dword_0)
 		{
-			if (DrawAndServe_pre_sub_7B250(str_E1BAC[i].dword_0, &str_E1BAC[i]))
+			if (DrawAndServe_pre_sub_7B250(mainMenuButtons_E1BAC[i].dword_0, &mainMenuButtons_E1BAC[i]))
 			{
-				str_E1BAC[i].selected_8 = 0;
+				mainMenuButtons_E1BAC[i].selected_8 = 0;
 				ResetMouse_7B5A0();
 			}
-			if (str_E1BAC[i].dword_4)
+			if (mainMenuButtons_E1BAC[i].dword_4)
 			{
-				str_E1BAC[i].selected_8 = 0;
+				mainMenuButtons_E1BAC[i].selected_8 = 0;
 				SetCenterScreenForFlyAssistant_6EDB0();
 				sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 				ResetMouse_7B5A0();
 				SetCursor_8CD27(xy_DWORD_17DED4_spritestr[39]);
-				if (str_E1BAC[i].dword_4 == 2)
-					str_E1BAC[i].dword_4 = 0;
+				if (mainMenuButtons_E1BAC[i].dword_4 == 2)
+					mainMenuButtons_E1BAC[i].dword_4 = 0;
 				return 1;
 			}
 			return 0;
@@ -5835,12 +5935,12 @@ bool DrawAndServe_7B250()//25c250
 	}
 	//clear/set off_E1BAC
 	int jx;
-	for (jx = 0; str_E1BAC[jx].xmin_10; jx++)//clear/set off_E1BAC
+	for (jx = 0; mainMenuButtons_E1BAC[jx].xmin_10; jx++)//clear/set off_E1BAC
 	{
-		str_E1BAC[jx].selected_8 = 0;
-		str_E1BAC[jx].gold_color_24 = 0;
-		if (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == 1 && str_E1BAC[jx].byte_22 == 11)
-			str_E1BAC[jx].selected_8 = 1;
+		mainMenuButtons_E1BAC[jx].selected_8 = 0;
+		mainMenuButtons_E1BAC[jx].gold_color_24 = 0;
+		if (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == 1 && mainMenuButtons_E1BAC[jx].byte_22 == 11)
+			mainMenuButtons_E1BAC[jx].selected_8 = 1;
 	}
 	if (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == 1)
 	{
@@ -5848,20 +5948,20 @@ bool DrawAndServe_7B250()//25c250
 	}
 	else
 	{
-		for (jx = 0; str_E1BAC[jx].xmin_10; jx++)
+		for (jx = 0; mainMenuButtons_E1BAC[jx].xmin_10; jx++)
 		{
-			if (InRegion_7B200(&str_E1BAC[jx], x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx, x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony)
-				&& str_E1BAC[jx].canSelect_23)
+			if (InRegion_7B200(&mainMenuButtons_E1BAC[jx], x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx, x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony)
+				&& mainMenuButtons_E1BAC[jx].canSelect_23)
 			{
 				if (x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons & 1)
 				{
 					PlaySample_8F100(0, 14, 127, 64, 0x64u, 0, 3u);
-					str_E1BAC[jx].selected_8 = 1;
+					mainMenuButtons_E1BAC[jx].selected_8 = 1;
 					ResetMouse_7B5A0();
 				}
 				else
 				{
-					str_E1BAC[jx].gold_color_24 = 1;
+					mainMenuButtons_E1BAC[jx].gold_color_24 = 1;
 					x_BYTE_17DBC6 = 1;
 				}
 				break;
@@ -5884,17 +5984,17 @@ bool DrawAndServe_7B250()//25c250
 		textBoxStr[0] = textBoxStr_E25DC[x_WORD_17DBC4];
 		int index = 0;
 		sub_7E840_draw_textbox_with_line(textBoxStr, 80, 89);
-		if (!str_E1BAC[0].xmin_10)
+		if (!mainMenuButtons_E1BAC[0].xmin_10)
 			return 0;
 		do
 		{
-			if (str_E1BAC[index].byte_22 == str_BYTE_E25ED_0x[x_WORD_17DBC4].byte_0)
+			if (mainMenuButtons_E1BAC[index].byte_22 == str_BYTE_E25ED_0x[x_WORD_17DBC4].byte_0)
 			{
-				str_E1BAC[index].gold_color_24 = 1;//turn on gold selection
+				mainMenuButtons_E1BAC[index].gold_color_24 = 1;//turn on gold selection
 				return 0;
 			}
 			index++;
-		} while (str_E1BAC[index].xmin_10);
+		} while (mainMenuButtons_E1BAC[index].xmin_10);
 		return false;
 	}
 	else
@@ -5912,7 +6012,7 @@ bool DrawAndServe_7B250()//25c250
 		int index2 = 0;
 		if (textBoxStr_E25DC[index2].minx2_2)
 		{
-			while (textBoxStr_E25DC[index2].byte_17 != str_E1BAC[jx].byte_22)
+			while (textBoxStr_E25DC[index2].byte_17 != mainMenuButtons_E1BAC[jx].byte_22)
 			{
 				index2++;
 				if (!textBoxStr_E25DC[index2].minx2_2)

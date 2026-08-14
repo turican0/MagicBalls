@@ -39,7 +39,7 @@ void InitLanguage_76A40_mod_only_language() //257A40
 void sub_main_mod_end() {
 	sub_5BC20(); //23CC20 //remove devices?
 	sub_56730_clean_memory(); //237730
-	if (CommandLineParams.ModeTestNetwork()) {
+	if (CommandLineParams.ModeNetwork()) {
 		if (Iam_server || Iam_client) {
 			EndMyNetLib();
 		}
@@ -1110,30 +1110,30 @@ bool DrawAndServe_7B250_mod() //25c250
 	typeTextBoxtextBoxStr_E24BCx textBoxStr[2];
 
 	if (CommandLineParams.ModeRegressionsTestType() == 0) {
-		str_E1BAC[0].dword_0 = 0x258350;
-		str_E1BAC[0].selected_8 = 1;
+		mainMenuButtons_E1BAC[0].dword_0 = 0x258350;
+		mainMenuButtons_E1BAC[0].selected_8 = 1;
 	}
 
-	if (CommandLineParams.ModeTestNetwork()) {
+	if (CommandLineParams.ModeNetwork()) {
 		if (first_enter) {
-			str_E1BAC[2].selected_8 = 1;
+			mainMenuButtons_E1BAC[2].selected_8 = 1;
 		}
 	}
 
-	for (int i = 0; str_E1BAC[i].xmin_10; i++) {
-		if (str_E1BAC[i].selected_8 && str_E1BAC[i].dword_0) {
-			if (DrawAndServe_pre_sub_7B250_mod(str_E1BAC[i].dword_0, &str_E1BAC[i])) {
-				str_E1BAC[i].selected_8 = 0;
+	for (int i = 0; mainMenuButtons_E1BAC[i].xmin_10; i++) {
+		if (mainMenuButtons_E1BAC[i].selected_8 && mainMenuButtons_E1BAC[i].dword_0) {
+			if (DrawAndServe_pre_sub_7B250_mod(mainMenuButtons_E1BAC[i].dword_0, &mainMenuButtons_E1BAC[i])) {
+				mainMenuButtons_E1BAC[i].selected_8 = 0;
 				ResetMouse_7B5A0();
 			}
-			if (str_E1BAC[i].dword_4) {
-				str_E1BAC[i].selected_8 = 0;
+			if (mainMenuButtons_E1BAC[i].dword_4) {
+				mainMenuButtons_E1BAC[i].selected_8 = 0;
 				SetCenterScreenForFlyAssistant_6EDB0();
 				sub_7A110_load_hscreen(x_WORD_180660_VGA_type_resolution, 4);
 				ResetMouse_7B5A0();
 				SetCursor_8CD27(xy_DWORD_17DED4_spritestr[39]);
-				if (str_E1BAC[i].dword_4 == 2)
-					str_E1BAC[i].dword_4 = 0;
+				if (mainMenuButtons_E1BAC[i].dword_4 == 2)
+					mainMenuButtons_E1BAC[i].dword_4 = 0;
 				return 1;
 			}
 			return 0;
@@ -1141,24 +1141,24 @@ bool DrawAndServe_7B250_mod() //25c250
 	}
 	//clear/set off_E1BAC
 	int jx;
-	for (jx = 0; str_E1BAC[jx].xmin_10; jx++) //clear/set off_E1BAC
+	for (jx = 0; mainMenuButtons_E1BAC[jx].xmin_10; jx++) //clear/set off_E1BAC
 	{
-		str_E1BAC[jx].selected_8 = 0;
-		str_E1BAC[jx].gold_color_24 = 0;
-		if (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == 1 && str_E1BAC[jx].byte_22 == 11)
-			str_E1BAC[jx].selected_8 = 1;
+		mainMenuButtons_E1BAC[jx].selected_8 = 0;
+		mainMenuButtons_E1BAC[jx].gold_color_24 = 0;
+		if (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == 1 && mainMenuButtons_E1BAC[jx].byte_22 == 11)
+			mainMenuButtons_E1BAC[jx].selected_8 = 1;
 	}
 	if (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode == 1) {
 		x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
 	} else {
-		for (jx = 0; str_E1BAC[jx].xmin_10; jx++) {
-			if (InRegion_7B200(&str_E1BAC[jx], x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx, x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony) && str_E1BAC[jx].canSelect_23) {
+		for (jx = 0; mainMenuButtons_E1BAC[jx].xmin_10; jx++) {
+			if (InRegion_7B200(&mainMenuButtons_E1BAC[jx], x_DWORD_17DE38str.x_DWORD_17DEE4_mouse_positionx, x_DWORD_17DE38str.x_DWORD_17DEE6_mouse_positiony) && mainMenuButtons_E1BAC[jx].canSelect_23) {
 				if (x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons & 1) {
 					PlaySample_8F100(0, 14, 127, 64, 0x64u, 0, 3u);
-					str_E1BAC[jx].selected_8 = 1;
+					mainMenuButtons_E1BAC[jx].selected_8 = 1;
 					ResetMouse_7B5A0();
 				} else {
-					str_E1BAC[jx].gold_color_24 = 1;
+					mainMenuButtons_E1BAC[jx].gold_color_24 = 1;
 					x_BYTE_17DBC6 = 1;
 				}
 				break;
@@ -1179,15 +1179,15 @@ bool DrawAndServe_7B250_mod() //25c250
 		textBoxStr[0] = textBoxStr_E25DC[x_WORD_17DBC4];
 		int index = 0;
 		sub_7E840_draw_textbox_with_line(textBoxStr, 80, 89);
-		if (!str_E1BAC[0].xmin_10)
+		if (!mainMenuButtons_E1BAC[0].xmin_10)
 			return 0;
 		do {
-			if (str_E1BAC[index].byte_22 == str_BYTE_E25ED_0x[x_WORD_17DBC4].byte_0) {
-				str_E1BAC[index].gold_color_24 = 1; //turn on gold selection
+			if (mainMenuButtons_E1BAC[index].byte_22 == str_BYTE_E25ED_0x[x_WORD_17DBC4].byte_0) {
+				mainMenuButtons_E1BAC[index].gold_color_24 = 1; //turn on gold selection
 				return 0;
 			}
 			index++;
-		} while (str_E1BAC[index].xmin_10);
+		} while (mainMenuButtons_E1BAC[index].xmin_10);
 		return false;
 	} else {
 		if (x_BYTE_17DBC6 == 3) {
@@ -1200,7 +1200,7 @@ bool DrawAndServe_7B250_mod() //25c250
 		}
 		int index2 = 0;
 		if (textBoxStr_E25DC[index2].minx2_2) {
-			while (textBoxStr_E25DC[index2].byte_17 != str_E1BAC[jx].byte_22) {
+			while (textBoxStr_E25DC[index2].byte_17 != mainMenuButtons_E1BAC[jx].byte_22) {
 				index2++;
 				if (!textBoxStr_E25DC[index2].minx2_2)
 					return 0;
@@ -3129,7 +3129,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		initposistruct();
 		godot::UtilityFunctions::print("sub_main_mod sub_56210_process_command_line");
 		sub_56210_process_command_line(argc, argv); //236FD4 - 237210
-		if (CommandLineParams.ModeTestNetwork()) {
+		if (CommandLineParams.ModeNetwork()) {
 			if (Iam_server || Iam_client)
 				InitNetworkInfo();
 		}
@@ -3158,7 +3158,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 
 		sub_5BC20(); //23CC20 //remove devices?
 		sub_56730_clean_memory(); //237730
-		if (CommandLineParams.ModeTestNetwork()) {
+		if (CommandLineParams.ModeNetwork()) {
 			if (Iam_server || Iam_client) {
 				EndMyNetLib();
 				/*EndLibNetClient();
