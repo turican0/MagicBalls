@@ -945,6 +945,9 @@ func add_to_entites_pool(uid: Vector3i, sendNode: Node) -> void:
 			"act_index": 0
 		}
 	entites_pool[uid]["array"].append(sendNode)
+	# the new node is taken by this entity - move past it like add_pool_index() does, or the
+	# next entity of the same type in this frame was handed the same node and overwrote it
+	entites_pool[uid]["act_index"] += 1
 	entites_pool[uid]["active_count"] += 1
 
 func get_first_entity_with_uid(uid: Vector3i) -> Node:
@@ -967,14 +970,15 @@ func show_hide_entites() -> void:
 		var active_count = bucket["active_count"]
 		for i in range(arr.size()):
 			var node: Node = arr[i]
-			if i < active_count:
-				node.show()
-				node.set_process(true)
-				node.set_physics_process(true)
-			else:
-				node.hide()
-				node.set_process(false)
-				node.set_physics_process(false)
+			# only touch what changes - this runs for every pooled node every frame
+			var active: bool = i < active_count
+			if node.visible != active:
+				node.visible = active
+			if node.is_processing() != active:
+				node.set_process(active)
+			if node.is_physics_processing() != active:
+				node.set_physics_process(active)
+			if not active:
 				if(node.get_meta("uid")==Vector3i(14,461,0) or node.get_meta("uid")==Vector3i(14,462,0)):#remove entites with start script
 					node.queue_free()
 					arr.remove_at(i)
@@ -1110,25 +1114,37 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				var scale_scene_node = current_node.get_node_or_null("Scale")
 				if scale_scene_node:
 					var s = actBitmapScale * inv_256
-					scale_scene_node.scale = Vector3(s, s, s)
+					var bitmap_scale = Vector3(s, s, s)
+					if scale_scene_node.scale != bitmap_scale:
+						scale_scene_node.scale = bitmap_scale
 			var entityScale = 1.0
 			if actClass == 10 and actModel == 39: # manSphere
 				entityScale = pow(actMana, 1.0 / 3.0) * 0.1 #alternative mana size computing
 				#entityScale = actBitmapScale * inv_256  #original sice mana computing
 			if actClass == 5 and actModel == 22: # manSphere from mana snake
 				entityScale = actBitmapScale * inv_256
-			current_node.scale = Vector3(entityScale, entityScale, entityScale)
+			# transforms are written only when they change: every write is pushed on to the
+			# renderer, and most entities stand still most of the time
+			var new_scale = Vector3(entityScale, entityScale, entityScale)
+			if current_node.scale != new_scale:
+				current_node.scale = new_scale
 			var base_pos_x = data_array[offset] * inv_256
 			var base_pos_y = data_array[offset + 2] * inv_256
 			var base_pos_z = data_array[offset + 1] * inv_256
 			if has_camera:
 				var new_x = cam_pos.x + fposmod(base_pos_x - cam_pos.x + 128.0, 256.0) - 128.0
 				var new_z = cam_pos.z + fposmod(base_pos_z - cam_pos.z + 128.0, 256.0) - 128.0
-				current_node.global_position = Vector3(new_x, base_pos_y, new_z)
+				var new_global = Vector3(new_x, base_pos_y, new_z)
+				if current_node.global_position != new_global:
+					current_node.global_position = new_global
 			else:
-				current_node.position = Vector3(base_pos_x, base_pos_y, base_pos_z)
+				var new_local = Vector3(base_pos_x, base_pos_y, base_pos_z)
+				if current_node.position != new_local:
+					current_node.position = new_local
 			var yaw = -rot2.x * rad_mult
-			current_node.rotation = Vector3(0, yaw, 0)
+			var new_rotation = Vector3(0, yaw, 0)
+			if current_node.rotation != new_rotation:
+				current_node.rotation = new_rotation
 	show_hide_entites()
 
 var last_keys_state: Dictionary = {}
