@@ -1803,6 +1803,13 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
+// Called when the extension is unloaded.  mainTexture is a global, so without this its
+// destructor ran from exit() after Godot itself was gone and the process crashed on quit.
+void MBEXreleaseGodotObjects() {
+	mainTexture.unref();
+	mainScrBufferRect = nullptr;
+}
+
 // Same switches as the multiplayer dialog of remc2-configurator (MC2 HD mod):
 //   mode 1 = host: --network server <port>
 //   mode 2 = join: --network client <server ip> <server port> <own port>
