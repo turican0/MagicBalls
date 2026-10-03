@@ -3,6 +3,8 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 
 void OnNetworkMessageReceived(std::string message); // sub_main.cpp
+extern long AnimCurrentTick; // Animation.cpp
+extern std::chrono::system_clock::time_point AnimCurrentTime; // Animation.cpp
 
 //int NewGameDialog_endAction_mod;
 
@@ -367,6 +369,10 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 		FlvInitSet_473B0(); //2283b0
 		allowSkipVideo_17DB5C = allowSkip;
 		thread2_wait_for_continue(Thread2_State::INTRO_BEGIN);
+		// DrawFrame_75E70 paces the frames against these (sub_75CB0); start the clock for this
+		// video only after Godot has switched to it
+		AnimCurrentTick = 0;
+		AnimCurrentTime = std::chrono::system_clock::now();
 		do {
 			SetFrameStart(std::chrono::system_clock::now());
 			if (stopPlaybackFlag_17DB5A)
