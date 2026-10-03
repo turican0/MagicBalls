@@ -781,11 +781,46 @@ func setPlayerActiveSubSpell(spell_index: int,sub_spell_index: int,button:int):
 		#_freeze_rect = null
 	#_teleport_busy = false
 	
+# The map wraps around: at its edge the engine moves the player 256 units back to the other
+# side.  Moving the camera that way made the screen-space reflections in the water blink for
+# a frame (issue #8) - the renderer had nothing from the previous frame for the new spot.
+# The terrain repeats every 256 units, so the camera instead keeps flying on and the terrain
+# is moved along by the same multiple of 256: the picture is identical, the camera never jumps.
+const MAP_WRAP_SIZE := 256.0
+var _wrap_offset := Vector3.ZERO
+var _prev_raw_position := Vector3.ZERO
+var _has_prev_position := false
+var _terrain_offset := Vector3.ZERO
+
+func _apply_terrain_offset(offset: Vector3) -> void:
+	if offset == _terrain_offset:
+		return
+	_terrain_offset = offset
+	var root = get_parent()
+	for node_name in ["TerrainsMB", "MultiMeshbottom", "MultiMeshtop"]:
+		var node = root.get_node_or_null(node_name)
+		if node:
+			node.position = offset
+
 func updatePlayer(playerPosRot) -> void:
 	var yaw = PI*playerPosRot.rotation.yaw/(256*4)
 	var pitch = PI*playerPosRot.rotation.pitch/(256*4)
 	var roll = PI*playerPosRot.rotation.roll/(256*4)
-	Main_Player.position = playerPosRot.position / 256.0
+	var raw_position: Vector3 = playerPosRot.position / 256.0
+	if _has_prev_position:
+		var delta := raw_position - _prev_raw_position
+		if delta.x > MAP_WRAP_SIZE / 2.0:
+			_wrap_offset.x -= MAP_WRAP_SIZE
+		elif delta.x < -MAP_WRAP_SIZE / 2.0:
+			_wrap_offset.x += MAP_WRAP_SIZE
+		if delta.z > MAP_WRAP_SIZE / 2.0:
+			_wrap_offset.z -= MAP_WRAP_SIZE
+		elif delta.z < -MAP_WRAP_SIZE / 2.0:
+			_wrap_offset.z += MAP_WRAP_SIZE
+	_prev_raw_position = raw_position
+	_has_prev_position = true
+	_apply_terrain_offset(_wrap_offset)
+	Main_Player.position = raw_position + _wrap_offset
 	Main_Player.rotation = Vector3(-pitch, -yaw, -roll)
 	
 var last_gain: Vector3
