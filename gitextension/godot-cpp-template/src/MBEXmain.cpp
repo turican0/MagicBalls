@@ -1805,8 +1805,10 @@ Ref<ImageTexture> mainTexture;
 
 // Called when the extension is unloaded.  mainTexture is a global, so without this its
 // destructor ran from exit() after Godot itself was gone and the process crashed on quit.
+static Ref<Image> scrBufferImage; // getScrBufferImg
 void MBEXreleaseGodotObjects() {
 	mainTexture.unref();
+	scrBufferImage.unref();
 	mainScrBufferRect = nullptr;
 }
 
@@ -1997,49 +1999,34 @@ void MBEXclass::REMC2EndGame() { //OK!!
 	//MBEXstate = 6;
 }
 
-std::set<uint32_t> used_colors; //test used colors in palette
-
+// scrBufferImage (above) is reused every frame instead of allocating a new image for each one.
 Ref<Image> getScrBufferImg(uint8_t transparentColor = 255) {
-	uint8_t locTransparentColor = transparentColor;
-
 	POSITION tempRes = VGA_GetResolution();
 	int crop_w = tempRes.x;
 	int crop_h = tempRes.y;
 	uint8_t *palette = VGA_Get_Palette();
-	int crop_x = 0;
-	int crop_y = 0;
-	PackedByteArray rgba_data;
-	rgba_data.resize(crop_w * crop_h * 4);
-	uint8_t *dest = rgba_data.ptrw();
-	for (int r = 0; r < crop_h; ++r) {
-		int row_offset = (crop_y + r) * screenWidth_18062C;
-		for (int c = 0; c < crop_w; ++c) {
-			//uint32_t color_idx = pdwScreenBuffer_351628[row_offset + (crop_x + c)];
-			uint32_t color_idx = tempVGABuffer[row_offset + (crop_x + c)];
-			int pal_pos = color_idx * 3;
-			//if(transparentColor!=255)
-			if (transparentColor != 255)
-				used_colors.insert(color_idx);
-			if (color_idx == transparentColor && transparentColor != 255) {
-				int dest_pos = (r * crop_w + c) * 4;
-				dest[dest_pos + 0] = 0;
-				dest[dest_pos + 1] = 0;
-				dest[dest_pos + 2] = 0;
-				dest[dest_pos + 3] = 0;
-			} else {
-				uint8_t red = palette[pal_pos + 0] * 4;
-				uint8_t green = palette[pal_pos + 1] * 4;
-				uint8_t blue = palette[pal_pos + 2] * 4;
-				int dest_pos = (r * crop_w + c) * 4;
-				dest[dest_pos + 0] = red;
-				dest[dest_pos + 1] = green;
-				dest[dest_pos + 2] = blue;
-				dest[dest_pos + 3] = 255;
-			}
-		}
+
+	// VGA palette (6 bits per channel) -> RGBA once, then one 32-bit store per pixel
+	uint32_t lut[256];
+	for (int i = 0; i < 256; i++) {
+		uint8_t rgba[4] = { (uint8_t)(palette[i * 3 + 0] * 4), (uint8_t)(palette[i * 3 + 1] * 4), (uint8_t)(palette[i * 3 + 2] * 4), 255 };
+		memcpy(&lut[i], rgba, 4);
 	}
-	Ref<Image> img = Image::create_from_data(crop_w, crop_h, false, Image::FORMAT_RGBA8, rgba_data);
-	return img;
+	if (transparentColor != 255)
+		lut[transparentColor] = 0;
+
+	// write straight into the image's own buffer - going through a PackedByteArray and
+	// set_data() would share it copy-on-write and copy the whole frame again next time
+	if (scrBufferImage.is_null() || scrBufferImage->get_width() != crop_w || scrBufferImage->get_height() != crop_h)
+		scrBufferImage = Image::create_empty(crop_w, crop_h, false, Image::FORMAT_RGBA8);
+	uint8_t *dest = scrBufferImage->ptrw();
+	for (int r = 0; r < crop_h; ++r) {
+		const uint8_t *src = &tempVGABuffer[r * screenWidth_18062C];
+		uint8_t *row = dest + (size_t)r * crop_w * 4;
+		for (int c = 0; c < crop_w; ++c)
+			memcpy(row + c * 4, &lut[src[c]], 4);
+	}
+	return scrBufferImage;
 }
 
 int MBEXclass::REMC2GetGraphicsEenhance() {
