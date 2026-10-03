@@ -29,7 +29,6 @@ Global="*res://scenes/Global.gd"
 
 window/size/viewport_width=1400
 window/size/viewport_height=900
-window/hdr/request_hdr_output=true
 
 [editor_plugins]
 
@@ -49,5 +48,4 @@ textures/canvas_textures/default_texture_repeat=1
 driver/threads/thread_model=2
 textures/vram_compression/import_etc2_astc=true
 textures/default_filters/anisotropic_filtering_level=4
-viewport/hdr_2d=true
 anti_aliasing/quality/screen_space_aa=1

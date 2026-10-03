@@ -52,9 +52,6 @@ const DEFAULTS = {
 		#"vsync":            0,   # 0=On 1=Off 2=Adaptive
 		"texture_quality":  2,   # 0=Low 1=Medium 2=High
 		#"view_distance":    7,   # 1..10
-		"hdr_enabled":      0,   # 0=Off 1=On (requires display/window/hdr/request_hdr_output=true in project.godot)
-		"hdr_ref_luminance": 0,  # Brightness / Paperwhite in nits; 0 = Auto (-1 in API); Windows only
-		"hdr_max_luminance": 0,  # Max luminance in nits;   0 = Auto (-1 in API); Windows + macOS
 		"force_vertex_shader": 0, # 0=Off 1=On (forces per-vertex shading instead of per-pixel, for low-end GPUs)
 		"bilinear_filtering": 1,  # 0=Nearest (pixelated) 1=Linear (bilinear, smooth)
 	},
@@ -132,12 +129,6 @@ var _sl_view_dist:      HSlider
 var _sel_fps:           OptionButton
 var _sel_show_navigation: OptionButton
 var _sel_fog_index:     OptionButton
-
-# HDR controls
-var _sel_hdr:           OptionButton
-var _lbl_hdr_warn:      Label
-var _sl_hdr_ref:        HSlider  # Jas / Paperwhite (pouze Windows)
-var _sl_hdr_max:        HSlider  # Max jas (Windows + macOS)
 
 # Rendering controls
 var _sel_force_vertex:  OptionButton
@@ -260,13 +251,6 @@ func _apply_settings() -> void:
 	var fps_idx = clamp(_settings["game"]["fps_limit"], 0, FPS_VALUES.size() - 1)
 	Engine.max_fps = FPS_VALUES[fps_idx]
 
-	# HDR (Godot 4.7+)
-	_apply_hdr(
-		_settings["video"].get("hdr_enabled",      0),
-		_settings["video"].get("hdr_ref_luminance", 0),
-		_settings["video"].get("hdr_max_luminance", 0)
-	)
-
 	# Force vertex shading
 	_apply_force_vertex_shader(_settings["video"].get("force_vertex_shader", 0))
 
@@ -276,13 +260,6 @@ func _apply_settings() -> void:
 func _read_controls_into_settings() -> void:
 	_settings["video"]["resolution_index"] = _sel_resolution.selected
 	_settings["video"]["display_mode"]     = _sel_display.selected
-
-	# HDR
-	_settings["video"]["hdr_enabled"] = _sel_hdr.selected if not _sel_hdr.disabled else 0
-	if _hdr_ref_lum_supported() and is_instance_valid(_sl_hdr_ref):
-		_settings["video"]["hdr_ref_luminance"] = int(_sl_hdr_ref.value)
-	if _hdr_max_lum_supported() and is_instance_valid(_sl_hdr_max):
-		_settings["video"]["hdr_max_luminance"] = int(_sl_hdr_max.value)
 
 	# Force vertex shading
 	_settings["video"]["force_vertex_shader"] = _sel_force_vertex.selected
@@ -307,46 +284,6 @@ func _read_controls_into_settings() -> void:
 	_settings["multiplayer"]["client_port"] = int(_sp_mp_client_port.value)
 	_settings["multiplayer"]["debug"]       = _sel_mp_debug.selected
 	_settings["multiplayer"]["record_file"] = _le_mp_record_file.text.strip_edges()
-
-# =============================================
-# HDR HELPERS  (Godot 4.7+)
-# Zdroj API: godot-demo-projects/misc/hdr_output
-# =============================================
-
-# Returns true if the current window/display supports HDR output.
-# Internally calls DisplayServer.window_is_hdr_output_supported() — available since 4.7.
-func _is_hdr_supported() -> bool:
-	if not DisplayServer.has_method("window_is_hdr_output_supported"):
-		return false
-	return DisplayServer.window_is_hdr_output_supported(get_window().get_window_id())
-
-# Manual brightness (paperwhite) override is supported on Windows only.
-func _hdr_ref_lum_supported() -> bool:
-	return DisplayServer.get_name() == &"Windows"
-
-# Manual max luminance override is supported on Windows and macOS.
-func _hdr_max_lum_supported() -> bool:
-	var ds := DisplayServer.get_name()
-	return ds == &"Windows" or ds == &"macOS" \
-		or (ds == &"embedded" and OS.get_name() == &"macOS")
-
-# Applies HDR settings to the main window.
-# enabled_idx: 0=Off 1=On
-# ref_lum / max_lum: value in nits; 0 = Auto (passes -1 to the API)
-func _apply_hdr(enabled_idx: int, ref_lum: int, max_lum: int) -> void:
-	# window.hdr_output_requested is a runtime toggle (Window property, not DisplayServer).
-	# Requires the following in project.godot:
-	#   display/window/hdr/request_hdr_output = true
-	get_window().hdr_output_requested = (enabled_idx == 1)
-
-	if enabled_idx == 1:
-		var window_id := get_window().get_window_id()
-		if _hdr_ref_lum_supported():
-			DisplayServer.window_set_hdr_output_reference_luminance(
-				float(ref_lum) if ref_lum > 0 else -1.0, window_id)
-		if _hdr_max_lum_supported():
-			DisplayServer.window_set_hdr_output_max_luminance(
-				float(max_lum) if max_lum > 0 else -1.0, window_id)
 
 # =============================================
 # RENDERING HELPERS
@@ -661,53 +598,6 @@ func _build_video_tab(tc: TabContainer) -> void:
 	_sel_display = _option(vbox, "Display Mode",
 		["Windowed", "Fullscreen", "Exclusive Fullscreen"],
 		_settings["video"]["display_mode"])
-
-	# --- HDR (Godot 4.7+) ---
-	vbox.add_child(_section("HDR"))
-
-	var hdr_ok := _is_hdr_supported()
-
-	# On/Off toggle
-	_sel_hdr = _option(vbox, "HDR Output", ["Off", "On"],
-		_settings["video"]["hdr_enabled"] if hdr_ok else 0)
-	if not hdr_ok:
-		_sel_hdr.disabled = true
-		_sel_hdr.select(0)
-
-	# Status label below the toggle
-	_lbl_hdr_warn = Label.new()
-	_lbl_hdr_warn.add_theme_font_size_override("font_size", 12)
-	_lbl_hdr_warn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if hdr_ok:
-		_lbl_hdr_warn.text = "✓ HDR output is supported on this display."
-		_lbl_hdr_warn.add_theme_color_override("font_color", Color(0.40, 1.00, 0.50))
-	else:
-		_lbl_hdr_warn.text = "⚠ HDR is not available (display, GPU, or platform does not support it). " \
-			+ "On Linux, Wayland is required. The Compatibility renderer does not support HDR."
-		_lbl_hdr_warn.add_theme_color_override("font_color", Color(1.00, 0.40, 0.40))
-	vbox.add_child(_lbl_hdr_warn)
-
-	# Brightness / Paperwhite — Windows only
-	# Value in nits; 0 = Auto (passed to the API as -1).
-	var saved_ref: int = _settings["video"]["hdr_ref_luminance"]
-	_sl_hdr_ref = _slider(vbox, "Brightness / Paperwhite (nits)", 80, 500,
-		saved_ref if saved_ref > 0 else 200)
-	# Hide the parent HBoxContainer if the platform does not support this
-	_sl_hdr_ref.get_parent().visible = hdr_ok and _hdr_ref_lum_supported()
-
-	# Max luminance — Windows + macOS
-	var saved_max: int = _settings["video"]["hdr_max_luminance"]
-	_sl_hdr_max = _slider(vbox, "Max Luminance (nits)", 200, 2000,
-		saved_max if saved_max > 0 else 1000)
-	_sl_hdr_max.get_parent().visible = hdr_ok and _hdr_max_lum_supported()
-
-	# Note about project.godot
-	var note_hdr = Label.new()
-	note_hdr.add_theme_font_size_override("font_size", 11)
-	note_hdr.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
-	note_hdr.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note_hdr.text = "HDR requires in project.godot: display/window/hdr/request_hdr_output = true"
-	vbox.add_child(note_hdr)
 
 	# --- RENDERING ---
 	vbox.add_child(_section("RENDERING"))
