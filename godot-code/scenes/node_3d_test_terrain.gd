@@ -39,59 +39,60 @@ func updateMeshes(useMultimesh):
 	#recalculate_mesh()
 	changeTerrain(Global.getLevelType())
 	
-	mesh_instance_bottom.extra_cull_margin = 1000.0
+	# The terrain mesh is flat - the vertex shader lifts it by the height map (0..32 units) -
+	# so it needs a real AABB for culling; extra_cull_margin = 1000 used to switch culling
+	# off and every copy was drawn (and rendered into the shadow maps) even behind the camera.
+	var size = GRID_SIZE * CELL_SCALE
+	var terrain_aabb = AABB(Vector3(0, -TERRAIN_AABB_BELOW, 0), Vector3(size, TERRAIN_AABB_HEIGHT, size))
+	mesh_instance_bottom.extra_cull_margin = 0.0
+	mesh_instance_bottom.custom_aabb = terrain_aabb
 	if mesh_instance_top:
-		mesh_instance_top.extra_cull_margin = 1000.0
-	
+		mesh_instance_top.extra_cull_margin = 0.0
+		mesh_instance_top.custom_aabb = terrain_aabb
+
+	_clear_terrain_copies()
+	for mmi_name in ["MultiMeshbottom", "MultiMeshtop"]:
+		var mmi: MultiMeshInstance3D = get_parent().get_node_or_null(mmi_name)
+		if mmi and mmi.multimesh:
+			mmi.multimesh.instance_count = 0
+
 	if useMultimesh:
-		#begin of Multimesh
-		var mmi_bottom:MultiMeshInstance3D = get_parent().get_node("MultiMeshbottom")
-		mmi_bottom.extra_cull_margin = 1000.0
-		if not mmi_bottom.multimesh:
-			mmi_bottom.multimesh = MultiMesh.new()
-			mmi_bottom.multimesh.transform_format = MultiMesh.TRANSFORM_3D
-		else:
-			mmi_bottom.multimesh.instance_count = 0
-		mmi_bottom.multimesh.mesh = mesh_instance_bottom.mesh	
-		mmi_bottom.material_override = mesh_instance_bottom.material_override 
-		if not mmi_bottom.material_override:
-			mmi_bottom.material_override = mesh_instance_bottom.mesh.surface_get_material(0)
-		var offset = GRID_SIZE * CELL_SCALE
+		# The copies around the map are separate instances (sharing mesh and material) rather
+		# than one MultiMesh: a MultiMesh is culled as a whole, so all copies were always drawn.
 		var positions = []
 		if(Global.getLevelType()=="Cave"):
 			for x in [-1, 0, 1, 2]:
 				for z in [-1, 0, 1, 2]:
 					if x == 0 and z == 0: continue
-					positions.append(Vector3(x * offset, 0, z * offset))
+					positions.append(Vector3(x * size, 0, z * size))
 		else:
 			for x in [-2, -1, 0, 1, 2]:
 				for z in [-2, -1, 0, 1, 2]:
 					if x == 0 and z == 0: continue
-					positions.append(Vector3(x * offset, 0, z * offset))
-		mmi_bottom.multimesh.instance_count = positions.size()
-		for i in range(positions.size()):
-			var t = Transform3D(Basis(), positions[i])
-			mmi_bottom.multimesh.set_instance_transform(i, t)
-		if(Global.getLevelType()=="Cave"):
-			var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
-			mmi_top.extra_cull_margin = 1000.0
-			if not mmi_top.multimesh:
-				mmi_top.multimesh = MultiMesh.new()
-				mmi_top.multimesh.transform_format = MultiMesh.TRANSFORM_3D
-			else:
-				mmi_top.multimesh.instance_count = 0
-			mmi_top.multimesh.mesh = mesh_instance_top.mesh	
-			mmi_top.material_override = mesh_instance_top.material_override 
-			if not mmi_top.material_override:
-				mmi_top.material_override = mesh_instance_top.mesh.surface_get_material(0)
-			mmi_top.multimesh.instance_count = positions.size()
-			for i in range(positions.size()):
-				var t = Transform3D(Basis(), positions[i])
-				mmi_top.multimesh.set_instance_transform(i, t)
-		else:
-			var mmi_top:MultiMeshInstance3D = get_parent().get_node("MultiMeshtop")
-			if mmi_top.multimesh:
-				mmi_top.multimesh.instance_count = 0
+					positions.append(Vector3(x * size, 0, z * size))
+		var sources = [mesh_instance_bottom]
+		if Global.getLevelType()=="Cave" and mesh_instance_top:
+			sources.append(mesh_instance_top)
+		for source in sources:
+			for pos in positions:
+				var copy := MeshInstance3D.new()
+				copy.mesh = source.mesh
+				copy.material_override = source.material_override
+				copy.custom_aabb = terrain_aabb
+				copy.position = pos
+				copy.cast_shadow = source.cast_shadow
+				add_child(copy)
+				_terrain_copies.append(copy)
+
+const TERRAIN_AABB_BELOW = 16.0   # waves dip under the water level
+const TERRAIN_AABB_HEIGHT = 96.0  # height map tops out at 32, plus cave ceiling and waves
+var _terrain_copies: Array[MeshInstance3D] = []
+
+func _clear_terrain_copies() -> void:
+	for copy in _terrain_copies:
+		if is_instance_valid(copy):
+			copy.queue_free()
+	_terrain_copies.clear()
 
 ## --- FÁZE 1: Inicializace ---
 var material_bottom

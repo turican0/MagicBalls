@@ -27,6 +27,12 @@ Please install that version. If you have a different version and can’t get it 
 6) The game saves user files to this folder, which also contains save files, etc. If you want to transfer them between the original game and the remake, or if you no longer need the game, you can delete this folder(you can use script removeUserMBFolder.bat):
 user\AppData\Roaming\Godot\app_userdata\MagicBalls\
 
+# For developers:
+1) Use **Godot 4.7.2** (standard version, not .NET) - the same version the release builds use (`GODOT_VERSION` in `.github/workflows/releases.yml`).
+2) Install **Blender 5.1** and set its path in Godot: Editor Settings → FileSystem → Import → Blender → Blender Path (the models in `godot-code` include `.blend` files).
+3) Build the GDExtension (C++ code in `gitextension/godot-cpp-template`) with CMake, see `build_linux2.sh` or the workflow for the exact commands. The library is copied to `godot-code/MBEXout/bin/<platform>/`.
+4) Open `godot-code` in Godot.
+
 ---
 
 ## What needs to be done to complete the game:

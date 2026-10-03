@@ -781,11 +781,46 @@ func setPlayerActiveSubSpell(spell_index: int,sub_spell_index: int,button:int):
 		#_freeze_rect = null
 	#_teleport_busy = false
 	
+# The map wraps around: at its edge the engine moves the player 256 units back to the other
+# side.  Moving the camera that way made the screen-space reflections in the water blink for
+# a frame (issue #8) - the renderer had nothing from the previous frame for the new spot.
+# The terrain repeats every 256 units, so the camera instead keeps flying on and the terrain
+# is moved along by the same multiple of 256: the picture is identical, the camera never jumps.
+const MAP_WRAP_SIZE := 256.0
+var _wrap_offset := Vector3.ZERO
+var _prev_raw_position := Vector3.ZERO
+var _has_prev_position := false
+var _terrain_offset := Vector3.ZERO
+
+func _apply_terrain_offset(offset: Vector3) -> void:
+	if offset == _terrain_offset:
+		return
+	_terrain_offset = offset
+	var root = get_parent()
+	for node_name in ["TerrainsMB", "MultiMeshbottom", "MultiMeshtop"]:
+		var node = root.get_node_or_null(node_name)
+		if node:
+			node.position = offset
+
 func updatePlayer(playerPosRot) -> void:
 	var yaw = PI*playerPosRot.rotation.yaw/(256*4)
 	var pitch = PI*playerPosRot.rotation.pitch/(256*4)
 	var roll = PI*playerPosRot.rotation.roll/(256*4)
-	Main_Player.position = playerPosRot.position / 256.0
+	var raw_position: Vector3 = playerPosRot.position / 256.0
+	if _has_prev_position:
+		var delta := raw_position - _prev_raw_position
+		if delta.x > MAP_WRAP_SIZE / 2.0:
+			_wrap_offset.x -= MAP_WRAP_SIZE
+		elif delta.x < -MAP_WRAP_SIZE / 2.0:
+			_wrap_offset.x += MAP_WRAP_SIZE
+		if delta.z > MAP_WRAP_SIZE / 2.0:
+			_wrap_offset.z -= MAP_WRAP_SIZE
+		elif delta.z < -MAP_WRAP_SIZE / 2.0:
+			_wrap_offset.z += MAP_WRAP_SIZE
+	_prev_raw_position = raw_position
+	_has_prev_position = true
+	_apply_terrain_offset(_wrap_offset)
+	Main_Player.position = raw_position + _wrap_offset
 	Main_Player.rotation = Vector3(-pitch, -yaw, -roll)
 	
 var last_gain: Vector3
@@ -910,6 +945,9 @@ func add_to_entites_pool(uid: Vector3i, sendNode: Node) -> void:
 			"act_index": 0
 		}
 	entites_pool[uid]["array"].append(sendNode)
+	# the new node is taken by this entity - move past it like add_pool_index() does, or the
+	# next entity of the same type in this frame was handed the same node and overwrote it
+	entites_pool[uid]["act_index"] += 1
 	entites_pool[uid]["active_count"] += 1
 
 func get_first_entity_with_uid(uid: Vector3i) -> Node:
@@ -932,14 +970,15 @@ func show_hide_entites() -> void:
 		var active_count = bucket["active_count"]
 		for i in range(arr.size()):
 			var node: Node = arr[i]
-			if i < active_count:
-				node.show()
-				node.set_process(true)
-				node.set_physics_process(true)
-			else:
-				node.hide()
-				node.set_process(false)
-				node.set_physics_process(false)
+			# only touch what changes - this runs for every pooled node every frame
+			var active: bool = i < active_count
+			if node.visible != active:
+				node.visible = active
+			if node.is_processing() != active:
+				node.set_process(active)
+			if node.is_physics_processing() != active:
+				node.set_physics_process(active)
+			if not active:
 				if(node.get_meta("uid")==Vector3i(14,461,0) or node.get_meta("uid")==Vector3i(14,462,0)):#remove entites with start script
 					node.queue_free()
 					arr.remove_at(i)
@@ -1075,25 +1114,37 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				var scale_scene_node = current_node.get_node_or_null("Scale")
 				if scale_scene_node:
 					var s = actBitmapScale * inv_256
-					scale_scene_node.scale = Vector3(s, s, s)
+					var bitmap_scale = Vector3(s, s, s)
+					if scale_scene_node.scale != bitmap_scale:
+						scale_scene_node.scale = bitmap_scale
 			var entityScale = 1.0
 			if actClass == 10 and actModel == 39: # manSphere
 				entityScale = pow(actMana, 1.0 / 3.0) * 0.1 #alternative mana size computing
 				#entityScale = actBitmapScale * inv_256  #original sice mana computing
 			if actClass == 5 and actModel == 22: # manSphere from mana snake
 				entityScale = actBitmapScale * inv_256
-			current_node.scale = Vector3(entityScale, entityScale, entityScale)
+			# transforms are written only when they change: every write is pushed on to the
+			# renderer, and most entities stand still most of the time
+			var new_scale = Vector3(entityScale, entityScale, entityScale)
+			if current_node.scale != new_scale:
+				current_node.scale = new_scale
 			var base_pos_x = data_array[offset] * inv_256
 			var base_pos_y = data_array[offset + 2] * inv_256
 			var base_pos_z = data_array[offset + 1] * inv_256
 			if has_camera:
 				var new_x = cam_pos.x + fposmod(base_pos_x - cam_pos.x + 128.0, 256.0) - 128.0
 				var new_z = cam_pos.z + fposmod(base_pos_z - cam_pos.z + 128.0, 256.0) - 128.0
-				current_node.global_position = Vector3(new_x, base_pos_y, new_z)
+				var new_global = Vector3(new_x, base_pos_y, new_z)
+				if current_node.global_position != new_global:
+					current_node.global_position = new_global
 			else:
-				current_node.position = Vector3(base_pos_x, base_pos_y, base_pos_z)
+				var new_local = Vector3(base_pos_x, base_pos_y, base_pos_z)
+				if current_node.position != new_local:
+					current_node.position = new_local
 			var yaw = -rot2.x * rad_mult
-			current_node.rotation = Vector3(0, yaw, 0)
+			var new_rotation = Vector3(0, yaw, 0)
+			if current_node.rotation != new_rotation:
+				current_node.rotation = new_rotation
 	show_hide_entites()
 
 var last_keys_state: Dictionary = {}
@@ -1489,9 +1540,19 @@ func setSkyExposure(value:float):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
 	skydome.exposure=value
 	
+var _shadow_max_distance := {}
+
 func sefFogEnd(value:float):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
 	skydome.fog_end=value
+	# Shadows past the end of the fog are never seen, but the lights still render the
+	# scene into their shadow maps out to their full range - keep them within the fog.
+	for light_name in [^"SunLight", ^"MoonLight"]:
+		var light: DirectionalLight3D = NodeSky3D.get_node_or_null(light_name)
+		if light:
+			if not _shadow_max_distance.has(light_name):
+				_shadow_max_distance[light_name] = light.directional_shadow_max_distance
+			light.directional_shadow_max_distance = min(_shadow_max_distance[light_name], value)
 	
 func setFogFall(value:float):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")

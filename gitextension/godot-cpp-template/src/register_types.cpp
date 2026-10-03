@@ -17,10 +17,13 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 	GDREGISTER_CLASS(MBEXclass);
 }
 
+void MBEXreleaseGodotObjects(); // MBEXmain.cpp
+
 void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	MBEXreleaseGodotObjects();
 }
 
 extern "C"

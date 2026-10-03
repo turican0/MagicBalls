@@ -52,6 +52,11 @@ private:
 	float CELL_SCALE = 1.0f;
 
 	PackedByteArray control_data;
+	// copies of the engine maps last sent to the GPU - renew_terrain() uploads only what changed
+	std::vector<uint8_t> uploaded_terrain_type;
+	std::vector<uint8_t> uploaded_terrain_angle;
+	std::vector<uint8_t> uploaded_height_bottom;
+	std::vector<uint8_t> uploaded_height_top;
 	std::vector<float> height_data_bottom;
 	std::vector<float> height_data_top;
 	int texture_indices[GRID_SIZE][GRID_SIZE];
