@@ -1,5 +1,6 @@
 #pragma once
 #include <thread>
+#include <vector>
 
 #include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/classes/wrapped.hpp"
@@ -34,7 +35,9 @@ private:
 	String saved_real_cdPath;
 	String saved_real_gamePath;
 	int saved_argc;
-	char *saved_argv[5];
+	char *saved_argv[16];
+	// extra command line for a network game, set by REMC2SetNetwork() before REMC2BeginGame()
+	std::vector<std::string> network_args;
 
 	MeshInstance3D *mesh_instance_bottom = nullptr;
 	MeshInstance3D *mesh_instance_top = nullptr;
@@ -114,6 +117,7 @@ public:
 	void changeLanguage(int index);
 
 	void REMC2BeginGame(String cdPath, String gamePath, int CustomLevel = -1, String CustomLevelPath = "");
+	void REMC2SetNetwork(int mode, String serverIp, int serverPort, int clientPort, bool debug, String recordFile);
 	void REMC2EndGame();
 	//void REMC2BeginItem();
 	//void REMC2EndItem();

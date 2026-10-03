@@ -3,6 +3,8 @@
 
 //#include <adlmidi.h>
 #include <iostream>
+#include <mutex>
+#include <vector>
 
 #ifdef __linux__
     #include <limits>
@@ -57,6 +59,17 @@ struct MyMix_Timer {
 	std::chrono::steady_clock::time_point NextTick;
 };
 std::list<MyMix_Timer> Timers;
+// Timers are registered/stopped by the engine thread and fired from the Godot thread
+// (getPendingSoundActions -> sound_queue_clear).  Recursive, because a callback may
+// stop or restart a timer itself.
+static std::recursive_mutex TimersMutex;
+
+static std::list<MyMix_Timer>::iterator FindTimer(int timerIdx) {
+	for (auto it = Timers.begin(); it != Timers.end(); ++it)
+		if (it->Id == timerIdx)
+			return it;
+	return Timers.end();
+}
 /*
 10
 29
@@ -654,12 +667,14 @@ uint32_t SOUND_sample_status(HSAMPLE S) {
 }
 
 void SOUND_RegisterTimer(int timerIdx, uint32_t (*callback)(uint32_t)) {
+	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
 	Timers.emplace_back();
 	Timers.back().Id = timerIdx;
 	Timers.back().Callback = callback;
 }
 
 void SOUND_SetTimerPeriod(int timerIdx, uint32_t intervalMs) {
+	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
 	for (auto &t : Timers)
 		if (t.Id == timerIdx) {
 			t.IntervalMs = intervalMs;
@@ -668,6 +683,7 @@ void SOUND_SetTimerPeriod(int timerIdx, uint32_t intervalMs) {
 }
 
 void SOUND_StartTimer(int timerIdx) {
+	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
 	for (auto &t : Timers)
 		if (t.Id == timerIdx) {
 			t.Running = true;
@@ -677,6 +693,7 @@ void SOUND_StartTimer(int timerIdx) {
 }
 
 void SOUND_StopTimer(int timerIdx) {
+	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
 	for (auto it = Timers.begin(); it != Timers.end(); ++it)
 		if (it->Id == timerIdx) {
 			Timers.erase(it);
@@ -685,15 +702,29 @@ void SOUND_StopTimer(int timerIdx) {
 }
 
 void SOUND_UpdateTimers() {
+	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
 	auto now = std::chrono::steady_clock::now();
-	for (auto &t : Timers) {
-		if (t.Running && now >= t.NextTick) {
-			uint32_t next = t.Callback(t.IntervalMs);
-			if (next == 0)
-				t.Running = false;
-			else
-				t.NextTick = now + std::chrono::milliseconds(next);
-		}
+	// A callback can release its own timer (AIL_release_timer_handle -> SOUND_StopTimer),
+	// which erases it from the list.  Walking the list with a range-for then advanced from a
+	// freed node - the crash in issue #29.  Collect the due timers first and look each one
+	// up again around its callback.
+	std::vector<int> due;
+	for (const auto &t : Timers)
+		if (t.Running && now >= t.NextTick)
+			due.push_back(t.Id);
+	for (int timerIdx : due) {
+		auto it = FindTimer(timerIdx);
+		if (it == Timers.end() || !it->Running || !it->Callback)
+			continue;
+		std::function<uint32_t(uint32_t)> callback = it->Callback;
+		uint32_t next = callback(it->IntervalMs);
+		it = FindTimer(timerIdx);
+		if (it == Timers.end())
+			continue;
+		if (next == 0)
+			it->Running = false;
+		else
+			it->NextTick = now + std::chrono::milliseconds(next);
 	}
 }
 

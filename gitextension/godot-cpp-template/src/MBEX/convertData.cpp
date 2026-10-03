@@ -653,13 +653,65 @@ void MBEXhtablesConverts(String path) {
 	//MBEXtextureConverts(path + "/none", 256, 326, "TABLES.DAT", "PALF-0.DAT", false);-only noise
 }
 
+// GameBitmap::DrawMenuGraphic with bounds checks.  The conversion walks fixed index ranges
+// (0..255 etc.), but a screen's TAB often holds fewer sprites; the entries past its end are
+// whatever was left in the buffer, and decoding them with the unchecked engine routine ran
+// over the screen buffer and crashed the first-run setup (issue #24).  Returns false for
+// such an entry so it is skipped.
+static bool MBEXdecodeMenuGraphic(int width, int height, const uint8_t *src, const uint8_t *srcEnd, uint8_t *dest) {
+	const long total = (long)width * height;
+	long line = 0;
+	long lineStart = 0;
+	long pos = 0;
+	while (line < height) {
+		if (src >= srcEnd)
+			return false;
+		int8_t count = (int8_t)*src++;
+		if (count == 0) { // end of line
+			line++;
+			lineStart += width;
+			pos = lineStart;
+			continue;
+		}
+		if (count > 0) { // count pixels follow
+			if (pos + count > lineStart + width || src + count > srcEnd)
+				return false;
+			memcpy(dest + pos, src, count);
+			src += count;
+			pos += count;
+		} else { // skip -count transparent pixels
+			pos -= count;
+			if (pos > lineStart + width)
+				return false;
+		}
+	}
+	return pos <= total;
+}
+
 void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* palette, bool alpha) {
 	int inWidth = bitmap.width_4;
 	int inHeight = bitmap.height_5;
 	uint8_t* data = bitmap.data;
 
-	if (data == nullptr || inWidth <= 0 || inHeight <= 0 || inWidth > 4096 || inHeight > 4096)
-	return;
+	if (data == nullptr || inWidth <= 0 || inHeight <= 0)
+		return;
+
+	// the sprites of the screens live in the game heap - anything else is a stale entry
+	uint8_t *heap = x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226;
+	uint32_t heapSize = x_D41A0_BYTEARRAY_4_struct.dword_0xE6_heapsize_230;
+	// longest possible RLE of a width x height sprite: every pixel plus a count byte per run
+	const uint8_t *dataEnd = data + (size_t)inHeight * (inWidth * 2 + 1);
+	if (heap != nullptr && heapSize != 0) {
+		if (data < heap || data >= heap + heapSize)
+			return;
+		if (dataEnd > heap + heapSize)
+			dataEnd = heap + heapSize;
+	}
+	std::vector<uint8_t> pixels((size_t)inWidth * inHeight, 0);
+	if (!MBEXdecodeMenuGraphic(inWidth, inHeight, data, dataEnd, pixels.data())) {
+		UtilityFunctions::print("Sprite skipped (no valid data): ", path, " ", i);
+		return;
+	}
 
 	char pal[768];
 	for (int i=0;i<256;i++)
@@ -676,13 +728,10 @@ void MBEXsaveSprite(String path, int i, bitmap_pos_struct_t bitmap, TColor* pale
 	}
 	std::vector<uint8_t> palette_final(768, 0);
 	memcpy(palette_final.data(), pal, 768);
-	memset(pdwScreenBuffer_351628, 0, 640*480);
-	GameBitmap::DrawMenuGraphic(inWidth, inHeight, 1, data, pdwScreenBuffer_351628);
-
 	//--------------------------
 	int p_channels = 4;
 	std::vector<unsigned char> rgba_data((size_t)inWidth * inHeight * p_channels);
-	const uint8_t *indices = pdwScreenBuffer_351628;
+	const uint8_t *indices = pixels.data();
 
 	bool alpha2 = (indices[0] == 0 ||
 			indices[inWidth - 1] == 0 ||

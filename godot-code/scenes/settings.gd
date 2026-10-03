@@ -76,6 +76,15 @@ const DEFAULTS = {
 		"show_navigation": 0,  # 0=Off 1=On
 		"current_fog_index": 5,  # index do Global.fog_presets; rozsah 0..Global.fog_presets.size()-1
 	},
+	# Same options as the multiplayer dialog of remc2-configurator (MC2 HD mod)
+	"multiplayer": {
+		"mode":        0,            # 0=Off (single player) 1=Host 2=Join
+		"server_ip":   "127.0.0.1",  # Join: address of the host
+		"server_port": 3030,         # Host: own port / Join: port of the host
+		"client_port": 3031,         # Join: own port
+		"debug":       0,            # 0=Off 1=On (--network_debug)
+		"record_file": "",           # Host: record the session to this file
+	},
 }
 
 const RESOLUTIONS = [
@@ -149,6 +158,13 @@ var _sel_autosave:      OptionButton
 
 var _sel_level_mode:    OptionButton
 var _sel_custom_level:  OptionButton
+
+var _sel_mp_mode:        OptionButton
+var _le_mp_server_ip:    LineEdit
+var _sp_mp_server_port:  SpinBox
+var _sp_mp_client_port:  SpinBox
+var _sel_mp_debug:       OptionButton
+var _le_mp_record_file:  LineEdit
 
 # =============================================
 # READY
@@ -284,6 +300,13 @@ func _read_controls_into_settings() -> void:
 	_settings["game"]["fps_limit"]    = _sel_fps.selected
 	_settings["game"]["show_navigation"] = _sel_show_navigation.selected
 	_settings["game"]["current_fog_index"] = _sel_fog_index.selected
+
+	_settings["multiplayer"]["mode"]        = _sel_mp_mode.selected
+	_settings["multiplayer"]["server_ip"]   = _le_mp_server_ip.text.strip_edges()
+	_settings["multiplayer"]["server_port"] = int(_sp_mp_server_port.value)
+	_settings["multiplayer"]["client_port"] = int(_sp_mp_client_port.value)
+	_settings["multiplayer"]["debug"]       = _sel_mp_debug.selected
+	_settings["multiplayer"]["record_file"] = _le_mp_record_file.text.strip_edges()
 
 # =============================================
 # HDR HELPERS  (Godot 4.7+)
@@ -542,6 +565,12 @@ func SetGlobals() -> void:
 	Global.show_navigation = _settings["game"]["show_navigation"] == 1
 	Global.force_vertex_shader = _settings["video"]["force_vertex_shader"] == 1
 	Global.current_fog_index = clamp(_settings["game"]["current_fog_index"], 0, Global.fog_presets.size() - 1)
+	Global.mp_mode         = _settings["multiplayer"]["mode"]
+	Global.mp_server_ip    = _settings["multiplayer"]["server_ip"]
+	Global.mp_server_port  = _settings["multiplayer"]["server_port"]
+	Global.mp_client_port  = _settings["multiplayer"]["client_port"]
+	Global.mp_debug        = _settings["multiplayer"]["debug"] == 1
+	Global.mp_record_file  = _settings["multiplayer"]["record_file"]
 
 func _animate_simple_spinner(spinner: Label) -> void:
 	var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
@@ -599,6 +628,7 @@ func _open_settings() -> void:
 	_build_audio_tab(tabs)
 	_build_input_tab(tabs)
 	_build_game_tab(tabs)
+	_build_multiplayer_tab(tabs)
 
 	root_vbox.add_child(_make_footer())
 
@@ -759,6 +789,39 @@ func _build_game_tab(tc: TabContainer) -> void:
 	_sel_fps.item_selected.connect(_update_fps_note)
 	_update_fps_note.call(_settings["game"]["fps_limit"])
 
+func _build_multiplayer_tab(tc: TabContainer) -> void:
+	var vbox = _make_tab("MULTIPLAYER", tc)
+	vbox.add_child(_section("NETWORK GAME"))
+	_sel_mp_mode = _option(vbox, "Mode", ["Off (single player)", "Host", "Join"],
+		_settings["multiplayer"]["mode"])
+	_le_mp_server_ip = _line_edit(vbox, "Server IP", _settings["multiplayer"]["server_ip"],
+		"Address of the host to join")
+	_sp_mp_server_port = _spin(vbox, "Server Port", 0, 65535, _settings["multiplayer"]["server_port"])
+	_sp_mp_client_port = _spin(vbox, "Client Port", 0, 65535, _settings["multiplayer"]["client_port"])
+	_le_mp_record_file = _line_edit(vbox, "Record Session To", _settings["multiplayer"]["record_file"],
+		"Optional file to record the session (e.g. user://session.dem)")
+	_sel_mp_debug = _option(vbox, "Debug Network", ["Off", "On"], _settings["multiplayer"]["debug"])
+
+	var note = Label.new()
+	note.add_theme_font_size_override("font_size", 11)
+	note.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	note.text = "Host: runs the game server on Server Port (default 3030), the other players join it.\n" \
+		+ "Join: connects to Server IP : Server Port, this game uses Client Port (default 3031).\n" \
+		+ "Open Multiplayer in the main menu after the game starts. Debug Network writes a verbose network log."
+	vbox.add_child(note)
+
+	_sel_mp_mode.item_selected.connect(func(_idx): _update_multiplayer_visibility())
+	_update_multiplayer_visibility()
+
+func _update_multiplayer_visibility() -> void:
+	var mode = _sel_mp_mode.selected
+	_le_mp_server_ip.get_parent().visible   = (mode == 2)
+	_sp_mp_server_port.get_parent().visible = (mode != 0)
+	_sp_mp_client_port.get_parent().visible = (mode == 2)
+	_le_mp_record_file.get_parent().visible = (mode == 1)
+	_sel_mp_debug.get_parent().visible      = (mode != 0)
+
 func _on_level_mode_changed(_idx: int) -> void:
 	_update_custom_level_visibility()
 
@@ -852,6 +915,47 @@ func _option(parent: VBoxContainer, label_text: String,
 	opt.select(selected_idx)
 	row.add_child(opt)
 	return opt
+
+func _line_edit(parent: VBoxContainer, label_text: String,
+		value: String, placeholder: String = "") -> LineEdit:
+	var row = HBoxContainer.new()
+	row.custom_minimum_size = Vector2(0, 36)
+	parent.add_child(row)
+	var lbl = Label.new()
+	lbl.text = label_text
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.add_theme_color_override("font_color", UI_TEXT_COLOR)
+	lbl.add_theme_font_size_override("font_size", 14)
+	row.add_child(lbl)
+	var le = LineEdit.new()
+	le.text = value
+	le.placeholder_text = placeholder
+	le.custom_minimum_size = Vector2(240, 32)
+	le.add_theme_color_override("font_color", UI_TEXT_COLOR)
+	row.add_child(le)
+	return le
+
+func _spin(parent: VBoxContainer, label_text: String,
+		min_val: int, max_val: int, value: int) -> SpinBox:
+	var row = HBoxContainer.new()
+	row.custom_minimum_size = Vector2(0, 36)
+	parent.add_child(row)
+	var lbl = Label.new()
+	lbl.text = label_text
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.add_theme_color_override("font_color", UI_TEXT_COLOR)
+	lbl.add_theme_font_size_override("font_size", 14)
+	row.add_child(lbl)
+	var sp = SpinBox.new()
+	sp.min_value = min_val
+	sp.max_value = max_val
+	sp.step      = 1
+	sp.value     = value
+	sp.custom_minimum_size = Vector2(180, 32)
+	row.add_child(sp)
+	return sp
 
 func _slider(parent: VBoxContainer, label_text: String,
 		min_val: float, max_val: float, value: float) -> HSlider:

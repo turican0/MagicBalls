@@ -2,6 +2,10 @@
 
 #include <godot_cpp/variant/utility_functions.hpp>
 
+void OnNetworkMessageReceived(std::string message); // sub_main.cpp
+extern long AnimCurrentTick; // Animation.cpp
+extern std::chrono::system_clock::time_point AnimCurrentTime; // Animation.cpp
+
 //int NewGameDialog_endAction_mod;
 
 int graphics_enhance = 0;
@@ -36,7 +40,15 @@ void InitLanguage_76A40_mod_only_language() //257A40
 	}
 }
 
+// sub_main_mod cleans up itself when it leaves its loop normally; when it is unwound by a
+// quit request (thread_exit_exception) REMC2EndGame does it here instead - never both,
+// the second pass would free the same memory and EventDispatcher again.
+static bool sub_main_cleaned = false;
+
 void sub_main_mod_end() {
+	if (sub_main_cleaned)
+		return;
+	sub_main_cleaned = true;
 	sub_5BC20(); //23CC20 //remove devices?
 	sub_56730_clean_memory(); //237730
 	if (CommandLineParams.ModeNetwork()) {
@@ -44,7 +56,14 @@ void sub_main_mod_end() {
 			EndMyNetLib();
 		}
 	}
+	if (m_Messages != nullptr) {
+		EventDispatcher::I->UnregisterEvent<std::string>(EventType::E_SHOW_NETWORK_MESSAGE, OnNetworkMessageReceived);
+		ClearMessages();
+		delete m_Messages;
+		m_Messages = nullptr;
+	}
 	delete EventDispatcher::I;
+	EventDispatcher::I = nullptr;
 }
 
 std::vector<GraphicsAction> graphics_queue;
@@ -174,11 +193,11 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 	bool samePal = false;
 	if (singlestep) {
 		if (x_BYTE_E390C_VGA_pal_not_begin) {
-			x_WORD_181B44++;
-			if (shadow_levels == x_WORD_181B44)
+			CurrentPaletteFade_181B44++;
+			if (shadow_levels == CurrentPaletteFade_181B44)
 				x_BYTE_E390C_VGA_pal_not_begin = 0;
 		} else {
-			x_WORD_181B44 = 0;
+			CurrentPaletteFade_181B44 = 0;
 			x_BYTE_E390C_VGA_pal_not_begin = 1;
 			sub_A0D2C_VGA_get_Palette(x_BYTE_181544_oldpalbufferx);
 			if (!newpalbufferx)
@@ -190,9 +209,9 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 			//fadeout = true;
 		}
 		for (i = 0; i < 0x100; i++) {
-			outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((x_WORD_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels);
-			outbufferx[i].green = x_BYTE_181544_oldpalbufferx[i].green + ((x_WORD_181B44) * (newpalbufferx[i].green - x_BYTE_181544_oldpalbufferx[i].green) / shadow_levels);
-			outbufferx[i].blue = x_BYTE_181544_oldpalbufferx[i].blue + ((x_WORD_181B44) * (newpalbufferx[i].blue - x_BYTE_181544_oldpalbufferx[i].blue) / shadow_levels);
+			outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((CurrentPaletteFade_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels);
+			outbufferx[i].green = x_BYTE_181544_oldpalbufferx[i].green + ((CurrentPaletteFade_181B44) * (newpalbufferx[i].green - x_BYTE_181544_oldpalbufferx[i].green) / shadow_levels);
+			outbufferx[i].blue = x_BYTE_181544_oldpalbufferx[i].blue + ((CurrentPaletteFade_181B44) * (newpalbufferx[i].blue - x_BYTE_181544_oldpalbufferx[i].blue) / shadow_levels);
 		}
 		sub_41A90_VGA_Palette_install(outbufferx);
 		fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
@@ -260,11 +279,11 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 		samePal = new_sum == old_sum;
 		//compute darker palette
 
-		for (x_WORD_181B44 = 0; x_WORD_181B44 < shadow_levels; x_WORD_181B44++) {
+		for (CurrentPaletteFade_181B44 = 0; CurrentPaletteFade_181B44 < shadow_levels; CurrentPaletteFade_181B44++) {
 			for (i = 0; i < 0x100; i++) {
-				outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((x_WORD_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels); //352b42 352544
-				outbufferx[i].green = x_BYTE_181544_oldpalbufferx[i].green + ((x_WORD_181B44) * (newpalbufferx[i].green - x_BYTE_181544_oldpalbufferx[i].green) / shadow_levels); //352b42 352544
-				outbufferx[i].blue = x_BYTE_181544_oldpalbufferx[i].blue + ((x_WORD_181B44) * (newpalbufferx[i].blue - x_BYTE_181544_oldpalbufferx[i].blue) / shadow_levels); //352b42 352544
+				outbufferx[i].red = x_BYTE_181544_oldpalbufferx[i].red + ((CurrentPaletteFade_181B44) * (newpalbufferx[i].red - x_BYTE_181544_oldpalbufferx[i].red) / shadow_levels); //352b42 352544
+				outbufferx[i].green = x_BYTE_181544_oldpalbufferx[i].green + ((CurrentPaletteFade_181B44) * (newpalbufferx[i].green - x_BYTE_181544_oldpalbufferx[i].green) / shadow_levels); //352b42 352544
+				outbufferx[i].blue = x_BYTE_181544_oldpalbufferx[i].blue + ((CurrentPaletteFade_181B44) * (newpalbufferx[i].blue - x_BYTE_181544_oldpalbufferx[i].blue) / shadow_levels); //352b42 352544
 			}
 			sub_41A90_VGA_Palette_install(outbufferx);
 			fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
@@ -285,7 +304,7 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 		}
 		x_BYTE_E390C_VGA_pal_not_begin = 0;
 	}
-	return x_WORD_181B44;
+	return CurrentPaletteFade_181B44;
 }
 
 void ShowWelcomeScreen_83850_mod() //264850
@@ -359,6 +378,10 @@ void PlayInfoFmv_mod(__int16 allowSkip, __int16 redrawText, Type_SoundEvent_E17C
 		FlvInitSet_473B0(); //2283b0
 		allowSkipVideo_17DB5C = allowSkip;
 		thread2_wait_for_continue(Thread2_State::INTRO_BEGIN);
+		// DrawFrame_75E70 paces the frames against these (sub_75CB0); start the clock for this
+		// video only after Godot has switched to it
+		AnimCurrentTick = 0;
+		AnimCurrentTime = std::chrono::system_clock::now();
 		do {
 			SetFrameStart(std::chrono::system_clock::now());
 			if (stopPlaybackFlag_17DB5A)
@@ -534,7 +557,7 @@ void ShowEndCredits_833C0_mod() //2643c0
 			if (!_stricmp(off_DB558[index3], "!"))
 				break;
 			uint8_t colorIndex = getPaletteIndex_5BE80(x_DWORD_17DE38str.palette_17DE38x, 0x3Fu, 0x3Fu, 0x3Fu);
-			sub_7FCB0_draw_text_with_border(off_DB558[index3], 10, 620, (signed __int16)(i + 200), 5, colorIndex, 0);
+			DrawTextWithBoarder_7FCB0(off_DB558[index3], 10, 620, (signed __int16)(i + 200), 5, colorIndex, 0);
 			index1++;
 		}
 		if (!reachedEnd && (time2 - time) / 100 > 2) {
@@ -847,7 +870,7 @@ char SetKeysDialog_79610_mod() //25a610
 	temp_screen_buffer = pdwScreenBuffer_351628;
 	pdwScreenBuffer_351628 = x_DWORD_E9C38_smalltit;
 	for (int v2_int = 0; str_BYTE_E25ED_2BB[v2_int].word_0; v2_int++)
-		sub_7FCB0_draw_text_with_border(x_DWORD_E9C4C_langindexbuffer[str_BYTE_E25ED_2BB[v2_int].word_12], str_BYTE_E25ED_2BB[v2_int].word_0, v39, str_BYTE_E25ED_2BB[v2_int].word_2, 4, 0, 0);
+		DrawTextWithBoarder_7FCB0(x_DWORD_E9C4C_langindexbuffer[str_BYTE_E25ED_2BB[v2_int].word_12], str_BYTE_E25ED_2BB[v2_int].word_0, v39, str_BYTE_E25ED_2BB[v2_int].word_2, 4, 0, 0);
 	pdwScreenBuffer_351628 = temp_screen_buffer;
 	ResetMouse_7B5A0();
 	for (int v2_int = 0; str_BYTE_E25ED_2BB[v2_int].word_0; v2_int++)
@@ -895,7 +918,7 @@ char SetKeysDialog_79610_mod() //25a610
 			memset(textBuff, 0, 60);
 			if (!str_BYTE_E25ED_2BB[v14_int].word_14) {
 				sub_79E10(textBuff, *keyIter);
-				sub_7FCB0_draw_text_with_border(textBuff, keyNameX, buttonAreaWidth, str_BYTE_E25ED_2BB[v14_int].word_2, 4, 0, 0);
+				DrawTextWithBoarder_7FCB0(textBuff, keyNameX, buttonAreaWidth, str_BYTE_E25ED_2BB[v14_int].word_2, 4, 0, 0);
 			}
 			keyIter++;
 			v14_int++;
@@ -908,7 +931,7 @@ char SetKeysDialog_79610_mod() //25a610
 				if (keySlotState <= 1u) {
 					memset(textBuff, 0, 60);
 					sub_79E10(textBuff, *keyIter2);
-					sub_7FCB0_draw_text_with_border(textBuff, keyNameX, buttonAreaWidth, str_BYTE_E25ED_2BB[v2_int].word_2, 4, 0, 0);
+					DrawTextWithBoarder_7FCB0(textBuff, keyNameX, buttonAreaWidth, str_BYTE_E25ED_2BB[v2_int].word_2, 4, 0, 0);
 					if (elapsedTime > 0x32) {
 						str_BYTE_E25ED_2BB[v2_int].word_14 = 2;
 						clock3 = clockNow;
@@ -1114,12 +1137,6 @@ bool DrawAndServe_7B250_mod() //25c250
 		mainMenuButtons_E1BAC[0].selected_8 = 1;
 	}
 
-	if (CommandLineParams.ModeNetwork()) {
-		if (first_enter) {
-			mainMenuButtons_E1BAC[2].selected_8 = 1;
-		}
-	}
-
 	for (int i = 0; mainMenuButtons_E1BAC[i].xmin_10; i++) {
 		if (mainMenuButtons_E1BAC[i].selected_8 && mainMenuButtons_E1BAC[i].dword_0) {
 			if (DrawAndServe_pre_sub_7B250_mod(mainMenuButtons_E1BAC[i].dword_0, &mainMenuButtons_E1BAC[i])) {
@@ -1171,14 +1188,14 @@ bool DrawAndServe_7B250_mod() //25c250
 		times_17DBB8[1] = j___clock();
 		if ((times_17DBB8[1] - times_17DBB8[0]) / 0x64u > 1) {
 			x_WORD_17DBC4++;
-			if (!textBoxStr_E25DC[x_WORD_17DBC4].minx2_2)
+			if (!textBoxStr_E25DC[x_WORD_17DBC4].left_2)
 				x_WORD_17DBC4 = 0;
 			times_17DBB8[0] = times_17DBB8[1];
 		}
 		memset(textBoxStr, 0, 36);
 		textBoxStr[0] = textBoxStr_E25DC[x_WORD_17DBC4];
 		int index = 0;
-		sub_7E840_draw_textbox_with_line(textBoxStr, 80, 89);
+		DrawTextBoxWithLine_7E840(textBoxStr, 80, 89);
 		if (!mainMenuButtons_E1BAC[0].xmin_10)
 			return 0;
 		do {
@@ -1199,15 +1216,15 @@ bool DrawAndServe_7B250_mod() //25c250
 			return 0;
 		}
 		int index2 = 0;
-		if (textBoxStr_E25DC[index2].minx2_2) {
+		if (textBoxStr_E25DC[index2].left_2) {
 			while (textBoxStr_E25DC[index2].byte_17 != mainMenuButtons_E1BAC[jx].byte_22) {
 				index2++;
-				if (!textBoxStr_E25DC[index2].minx2_2)
+				if (!textBoxStr_E25DC[index2].left_2)
 					return 0;
 			}
 			memset(textBoxStr, 0, 36);
 			textBoxStr[0] = textBoxStr_E25DC[index2];
-			sub_7E840_draw_textbox_with_line(textBoxStr, 80, 89);
+			DrawTextBoxWithLine_7E840(textBoxStr, 80, 89);
 			int time = j___clock();
 			times_17DBB8[1] = time;
 			times_17DBB8[0] = time;
@@ -1263,6 +1280,132 @@ void PlayIntros_83250_mod(char a1) //264250
 }
 
 //----- (00076FA0) --------------------------------------------------------
+void ShowScores_mod()
+{
+	int time = j___clock();
+
+	char dataPath[MAX_PATH];
+
+	sprintf(dataPath, "%s/%s", cdDataPath.c_str(), "DATA/SCREENS/HSCREEN0.DAT");
+
+	bool noFade = false;
+	x_DWORD_17DE38str.palette_17DE38x = (TColor*)*xadatapald0dat2.colorPalette_var28;
+	x_DWORD_17DE38str.x_WORD_17DEEC = 0;
+	x_DWORD_17DE38str.x_DWORD_17DE40 = pdwScreenBuffer_351628;
+	x_DWORD_17DE38str.x_DWORD_17DEE0_filedesc = NULL;
+	x_DWORD_17DE38str.x_DWORD_17DEDC = 0;
+	x_DWORD_17DE38str.x_DWORD_17DE48c = x_D41A0_BYTEARRAY_4_struct.pointer_0xE2_heapbuffer_226;
+	FadeClearBlit_7B5D0();
+	x_DWORD_17DE38str.x_DWORD_17DE54 = x_DWORD_17DE38str.x_DWORD_17DE48c + 0x49ADB;
+	x_DWORD_17DE38str.x_DWORD_17DEC4 = (bitmap_pos_struct2_t*)(x_DWORD_17DE38str.x_DWORD_17DE48c + 0x4D313);
+	x_DWORD_17DE38str.x_DWORD_17DE58 = x_DWORD_17DE38str.x_DWORD_17DE48c + 0x4D313;
+	x_DWORD_17DE38str.x_DWORD_17DEC8 = (bitmap_pos_struct2_t*)(x_DWORD_17DE38str.x_DWORD_17DE48c + 0x4ECC2);
+	x_DWORD_17DE38str.x_DWORD_17DECC = (bitmap_pos_struct2_t*)(x_DWORD_17DE38str.x_DWORD_17DE48c + 0x4F31C);
+	x_DWORD_17DE38str.x_DWORD_17DED4 = (bitmap_pos_struct2_t*)(x_DWORD_17DE38str.x_DWORD_17DE48c + 0x4F31C);
+	x_DWORD_17DE38str.x_DWORD_17DED8 = (bitmap_pos_struct2_t*)(x_DWORD_17DE38str.x_DWORD_17DE48c + 0x4FA72);
+	x_DWORD_17DE38str.x_DWORD_17DE60 = x_DWORD_17DE38str.x_DWORD_17DE44;
+	x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map = x_DWORD_17DE38str.x_DWORD_17DE48c + 0x4FA72;
+	x_DWORD_17DE38str.x_DWORD_17DE3C = (TcolNext*)(x_DWORD_17DE38str.x_DWORD_17DE48c + 0x17BA72);
+	x_DWORD_17DE38str.x_DWORD_17DEC0 = (bitmap_pos_struct2_t*)(x_DWORD_17DE38str.x_DWORD_17DE48c + 0x4CCAD);
+	x_DWORD_17DE38str.x_DWORD_17DE5C_border_bitmap = x_DWORD_17DE38str.x_DWORD_17DE48c + 0x17FA72;
+
+	while (sub_9A10A_check_keyboard())
+	{
+		LastPressedKey_1806E4 = 0;
+		sub_7A060_get_mouse_and_keyboard_events();
+	}
+
+	SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t*)x_DWORD_17DE38str.x_DWORD_17DE54, 0x1641FC, 1214);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t*)x_DWORD_17DE38str.x_DWORD_17DEC0, 0x1646BA, 589);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t*)x_DWORD_17DE38str.x_DWORD_17DE58, 0x164907, 1191);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t*)x_DWORD_17DE38str.x_DWORD_17DEC8, 0x164DAE, 543);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, (uint8_t*)x_DWORD_17DE38str.palette_17DE38x, 0x178B5F, 768);
+	sub_7AA70_load_and_decompres_dat_file(dataPath, x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map, 0x16554D, 79378);
+	sub_7AA70_load_and_decompres_dat_file(0, 0, 0, 0);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+	{
+		sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+	}
+	else
+	{
+		sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC0, x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr);
+	}
+	if (x_WORD_180660_VGA_type_resolution & 1)
+	{
+		sub_98709_create_index_dattab_power(x_DWORD_17DE38str.x_DWORD_17DEC8, x_DWORD_17DE38str.x_DWORD_17DECC, x_DWORD_17DE38str.x_DWORD_17DE58, xy_DWORD_17DEC8_spritestr);
+	}
+	else
+	{
+		sub_9874D_create_index_dattab(x_DWORD_17DE38str.x_DWORD_17DEC8, x_DWORD_17DE38str.x_DWORD_17DECC, x_DWORD_17DE38str.x_DWORD_17DE58, xy_DWORD_17DEC8_spritestr);
+	}
+	x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
+	x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons = 0;
+	if (x_WORD_180660_VGA_type_resolution & 1)
+	{
+		sub_98709_create_index_dattab_power_add((uint8_t*)x_DWORD_17DE38str.x_DWORD_17DEC0, (uint8_t*)x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr, 6);
+	}
+	else
+	{
+		sub_9874D_create_index_dattab_add((uint8_t*)x_DWORD_17DE38str.x_DWORD_17DEC0, (uint8_t*)x_DWORD_17DE38str.x_DWORD_17DEC4, x_DWORD_17DE38str.x_DWORD_17DE54, xy_DWORD_17DEC0_spritestr, 6);
+	}
+	x_DWORD_17DE38str.x_DWORD_17DEC0++;
+
+	auto lines = SplitLines(g_matchResultPending);
+
+	while (!x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode && !x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons)
+	{
+		int timeDiff = (j___clock() - time) / 100;
+
+		if (x_WORD_180660_VGA_type_resolution & 1)
+			CopyScreen((void*)x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map, (void*)pdwScreenBuffer_351628, 320, 200);
+		else
+			CopyScreen((void*)x_DWORD_17DE38str.x_DWORD_17DE64_game_world_map, (void*)pdwScreenBuffer_351628, 640, 480);
+
+		int i = 0;
+		for (const std::string& line : lines)
+		{
+			i += xy_DWORD_17DEC0_spritestr[65].height_5 + 2;
+			uint8_t colorIndex = getPaletteIndex_5BE80(x_DWORD_17DE38str.palette_17DE38x, 0x3Fu, 0x3Fu, 0x3Fu);
+			DrawTextWithBoarder_7FCB0((char*)line.c_str(), 10, 620, (signed __int16)(i + 200), 5, colorIndex, 0);
+		}
+
+		if (timeDiff > 2)
+			sub_7A060_get_mouse_and_keyboard_events();
+
+		if (noFade)
+		{
+			if (x_WORD_180660_VGA_type_resolution & 1)
+				sub_90478_VGA_Blit320();
+			else
+				sub_75200_VGA_Blit640(480);
+		}
+		else
+		{
+			sub_90B27_VGA_pal_fadein_fadeout(x_DWORD_17DE38str.palette_17DE38x, 0x20u, 0);
+			noFade = true;
+		}
+		thread2_wait_for_continue(Thread2_State::IN_GAME_CREDITS);
+	}
+	sub_90B27_VGA_pal_fadein_fadeout(0, 0x10u, 0);
+	memset((void*)*xadatapald0dat2.colorPalette_var28, 0, 768);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		ClearGraphicsBuffer_72883((void*)pdwScreenBuffer_351628, 320, 200, 0);
+	else
+		ClearGraphicsBuffer_72883((void*)pdwScreenBuffer_351628, 640, 480, 0);
+	if (x_WORD_180660_VGA_type_resolution & 1)
+		sub_90478_VGA_Blit320();
+	else
+		sub_75200_VGA_Blit640(480);
+	while (x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode || x_DWORD_17DE38str.x_WORD_17DEEE_mouse_buttons) {
+		sub_7A060_get_mouse_and_keyboard_events();
+		thread2_wait_for_continue(Thread2_State::IN_GAME_CREDITS);
+	}
+	x_DWORD_17DE38str.x_BYTE_17DF10_get_key_scancode = 0;
+
+	g_matchResultPending.clear();
+}
+
 void MainMenu_76FA0_mod() //257fa0
 {
 	//fixed
@@ -1281,6 +1424,14 @@ void MainMenu_76FA0_mod() //257fa0
 	StopMusic_8E020(); //26f020
 	StartMusic_8E160(4, 0x7Fu); //26f160
 	x_WORD_17DE26 = 0;
+
+	if (!g_matchResultPending.empty()) {
+		if (CommandLineParams.DoNetworkDebug())
+			debug_net_printf("MENU: showing result %s\n", g_matchResultPending.c_str());
+		if (!CommandLineParams.AutoTest())
+			ShowScores_mod();
+	}
+
 	VGA_cleanKeyBuffer();
 	if (x_BYTE_E29E1 || x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE || (NewGameDialog_77350_mod(0), !m_ExitMenuLoop_E29DC)) {
 		x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 &= 0xEFu;
@@ -2142,7 +2293,7 @@ void BlendAndBlit_40F80_mod() //221f80
 		const int stride = (uint16_t)iScreenWidth_DE560;
 		const int width_dwords = (uint16_t)viewPort.Width_DE564 >> 2;
 		const int half_height = (uint16_t)viewPort.Height_DE568 / 2;
-		uint8_t *scan = x_DWORD_E9C3C;
+		uint8_t *scan = ptrMemoryBuffer_E9C3C;
 		uint8_t *vp = ViewPortRenderBufferStart_DE558;
 		for (int row = half_height; row; row--) {
 			uint8_t *s = scan;
@@ -2212,7 +2363,7 @@ void MBChangePalette(int type, int shadow_levels) {
 
 		case 1: // Fade In
 		{
-			float t = (float)x_WORD_181B44 / (shadow_levels-1);
+			float t = (float)CurrentPaletteFade_181B44 / (shadow_levels-1);
 			MB_Palette_gain[0] = t;
 			MB_Palette_gain[1] = t;
 			MB_Palette_gain[2] = t;
@@ -2298,7 +2449,7 @@ void MBChangePalette(int type, int shadow_levels) {
 
 		case 9: // Fade Out
 		{
-			float t = 1.0-((float)x_WORD_181B44 / (shadow_levels - 1));
+			float t = 1.0-((float)CurrentPaletteFade_181B44 / (shadow_levels - 1));
 			MB_Palette_gain[0] = t;
 			MB_Palette_gain[1] = t;
 			MB_Palette_gain[2] = t;
@@ -2321,7 +2472,7 @@ void MBChangePalette(int type, int shadow_levels) {
 
 		case 11: // Fade In 2
 		{
-			float t = (float)x_WORD_181B44 / shadow_levels;
+			float t = (float)CurrentPaletteFade_181B44 / shadow_levels;
 			MB_Palette_gain[0] = t;
 			MB_Palette_gain[1] = t;
 			MB_Palette_gain[2] = t;
@@ -2334,7 +2485,7 @@ void MBChangePalette(int type, int shadow_levels) {
 
 		case 12: // Fade Out 2
 		{
-			float t = 1.0 - ((float)x_WORD_181B44 / shadow_levels);
+			float t = 1.0 - ((float)CurrentPaletteFade_181B44 / shadow_levels);
 			MB_Palette_gain[0] = t;
 			MB_Palette_gain[1] = t;
 			MB_Palette_gain[2] = t;
@@ -2798,6 +2949,7 @@ void InGameLoop_47320_mod() //228320
 	//fix res on begin level for hidden levels-neoriginal code
 
 	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
+	g_inGameLoop = true;
 	thread2_wait_for_continue(Thread2_State::IN_GAME_BEGIN);
 	while (1) {
 
@@ -2834,8 +2986,13 @@ void InGameLoop_47320_mod() //228320
 		*/
 		thread2_wait_for_continue(Thread2_State::IN_GAME_LOOP);
 	}
+	g_inGameLoop = false;
+	// a level left while paused must not start the next one paused
+	x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 &= ~GAME_PAUSED;
 	thread2_wait_for_continue(Thread2_State::IN_GAME_END);
 	EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::GAMEPLAY_ENDED);
+	if (IsRecording())
+		m_InputRecorder->SaveRecording();
 
 #ifdef DEBUG_PALETTE
 	//debug palette log
@@ -2952,12 +3109,12 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 					else if (!strcmp(forceRender.c_str(), "Original"))
 						m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
 					else if (!strcmp(forceRender.c_str(), "HD"))
-						m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores, sizePercentToThreadRender, viewDistanceScale);
 					else {
 						if ((gameResWidth <= 640) && (gameResHeight <= 480)) {
 							m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
 						} else {
-							m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+							m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores, sizePercentToThreadRender, viewDistanceScale);
 						}
 					}
 				}
@@ -3026,6 +3183,17 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 					break; //must be here
 				}
 			}
+			// The level is over and we are on our way back to the menu.  Give the network
+			// session back here, or the next network game is refused before it sends a
+			// single packet - see NetworkLeaveSession().
+			if (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE)
+				NetworkLeaveSession();
+
+			// The scoreboard belongs to the match that has just ended, so it is worked out here,
+			// while its numbers still stand; MainMenu_76FA0_mod shows it.
+			if (x_D41A0_BYTEARRAY_4_struct.setting_byte1_22 & Setting::MULTIPLAYER_MODE)
+				g_matchResultPending = MatchScoreResultLine();
+
 			nextMenu_E29D8 = MenuItem::MainMenu;
 			skipMenus = false;
 			setLevel = -1;
@@ -3039,6 +3207,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 	godot::UtilityFunctions::print("sub_main_mod begin");
 	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
 	int exitCode = 0;
+	sub_main_cleaned = false;
 	godot::UtilityFunctions::print("sub_main_mod SetTimeStart");
 	SetTimeStart();
 #ifndef __ANDROID__
@@ -3062,6 +3231,10 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		EventDispatcher::I = new EventDispatcher();
 		EventDispatcher::I->RegisterEvent(new Event<Scene>(EventType::E_SCENE_CHANGE, sceneChangeCallBack));
 		EventDispatcher::I->DispatchEvent(EventType::E_GAME_STATE_CHANGE, GameState::STARTED);
+
+		std::function<void(std::string)> resCallBack = OnNetworkMessageReceived;
+		EventDispatcher::I->RegisterEvent(new Event<std::string>(EventType::E_SHOW_NETWORK_MESSAGE, resCallBack));
+		m_Messages = new std::vector<Type_Message *>();
 
 		godot::UtilityFunctions::print("sub_main_mod gameFolder");
 		//SetConfig();
@@ -3141,6 +3314,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 			StartPlayback(CommandLineParams.GetPlaybackPath().c_str());
 		} else if (CommandLineParams.GetRecordingPath().length() > 0) {
 			StartRecording(CommandLineParams.GetRecordingPath().c_str());
+			m_InputRecorder->m_ResavePath = CommandLineParams.GetRecordingPath(); //with --record_file: add level saves
 		}
 		godot::UtilityFunctions::print("sub_main_mod Initialize");
 		Initialize(); //236FDC - 23C8D0//rozdil 1E1000
@@ -3166,7 +3340,14 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 					EndLibNetServer();*/
 			}
 		}
+
+		EventDispatcher::I->UnregisterEvent<std::string>(EventType::E_SHOW_NETWORK_MESSAGE, OnNetworkMessageReceived);
+		ClearMessages();
+		delete m_Messages;
+		m_Messages = nullptr;
 		delete EventDispatcher::I;
+		EventDispatcher::I = nullptr;
+		sub_main_cleaned = true;
 	}
 #ifndef __ANDROID__
 	catch (const thread_exit_exception &e) {
@@ -3178,7 +3359,19 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 #endif
 	//Logger->info("Exited Game");
 
-	thread2_wait_for_continue(Thread2_State::SUB_MAIN_END_FUNCTION);
+	// Tell Godot the game is over.  When we got here because Godot asked us to quit, there
+	// is nobody left to tell, and waiting would throw thread_exit_exception again - outside
+	// the try above that ended in std::terminate()/abort() (issue #25).
+	if (!thread2_quit_requested.load()) {
+#ifndef __ANDROID__
+		try {
+			thread2_wait_for_continue(Thread2_State::SUB_MAIN_END_FUNCTION);
+		} catch (const thread_exit_exception &) {
+		}
+#else
+		thread2_wait_for_continue(Thread2_State::SUB_MAIN_END_FUNCTION);
+#endif
+	}
 
 	return exitCode;
 }

@@ -146,8 +146,8 @@ target_sources(${LIBNAME}
     src/remc2/engine/Player.h
     src/remc2/engine/PlayerInput.cpp
     src/remc2/engine/PlayerInput.h
-    src/remc2/engine/ProjectionPolygon.cpp
-    src/remc2/engine/ProjectionPolygon.h
+    src/remc2/engine/ProjectionVertex.cpp
+    src/remc2/engine/ProjectionVertex.h
     src/remc2/engine/RenderThread.cpp
     src/remc2/engine/RenderThread.h
     src/remc2/engine/Sound.cpp

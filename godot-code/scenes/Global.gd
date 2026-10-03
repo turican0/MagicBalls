@@ -18,6 +18,14 @@ var inverse_mouseY = true
 var level_mode:int = 0
 var custom_level:int = 0
 
+# multiplayer (settings.gd, MULTIPLAYER tab) - 0=Off 1=Host 2=Join
+var mp_mode:int = 0
+var mp_server_ip:String = "127.0.0.1"
+var mp_server_port:int = 3030
+var mp_client_port:int = 3031
+var mp_debug:bool = false
+var mp_record_file:String = ""
+
 var soundInited:bool = false
 var sounds_map = {}
 var music_map = {}
