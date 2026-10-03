@@ -454,8 +454,9 @@ namespace NetFaults {
 		s_stallEvery = stallEvery;
 		s_configured = (delayMs > 0 || jitterMs > 0 || (stallMs > 0 && stallEvery > 0));
 		if (s_configured)
-			debug_net_printf("NETFAULT: delay=%dms jitter=%dms stall=%dms every %d messages\n",
-				delayMs, jitterMs, stallMs, stallEvery);
+			if (m_network_debug)
+				debug_net_printf("NETFAULT: delay=%dms jitter=%dms stall=%dms every %d messages\n",
+					delayMs, jitterMs, stallMs, stallEvery);
 	}
 
 	bool Enabled() { return s_configured; }
@@ -484,7 +485,8 @@ namespace NetFaults {
 			if (++counter >= s_stallEvery) {
 				counter = 0;
 				ms += s_stallMs;
-				debug_net_printf("NETFAULT: stalling a message by %dms (retransmit-like)\n", s_stallMs);
+				if (m_network_debug)
+					debug_net_printf("NETFAULT: stalling a message by %dms (retransmit-like)\n", s_stallMs);
 			}
 		}
 		return ms;
@@ -547,7 +549,12 @@ int GetNameNetworkIndex(std::string name)
 
 void AddNetworkName(std::string name, TypeIpPort ip)
 {
-	if (GetNameNetwork(name).empty()) { NetworkName.push_back(name); clientIpPort.push_back(ip); }
+	if (GetNameNetwork(name).empty()) {
+		NetworkName.push_back(name); clientIpPort.push_back(ip);
+		if (m_network_debug)
+			debug_net_printf("NAMES: +[%.15s] %s:%d (%d total)\n",
+				name.c_str(), ip.adress.c_str(), ip.port, (int)NetworkName.size());
+	}
 }
 
 bool ExistNetworkName(std::string name, TypeIpPort ip)
@@ -564,6 +571,9 @@ void RemoveNetworkName(std::string name)
 {
 	int idx = GetNameNetworkIndex(name);
 	if (idx < 0) return;
+	if (m_network_debug)
+		debug_net_printf("NAMES: -[%.15s] (%d left)\n",
+			NetworkName[idx].c_str(), (int)NetworkName.size() - 1);
 	NetworkName.erase(NetworkName.begin() + idx);
 	clientIpPort.erase(clientIpPort.begin() + idx);
 }
@@ -615,14 +625,16 @@ bool AddListenName2(const shadow_myNCB* c)
 	// the outside.
 	TypeIpPort id1 = GetIpPortFromName(c->ncb_callName_10);
 	if (id1.adress == "x999") {
-		debug_net_printf("CALLREJ: no address for the listener [%.16s] (caller [%.16s])\n",
-			c->ncb_callName_10, c->ncb_name_26);
+		if (m_network_debug)
+			debug_net_printf("CALLREJ: no address for the listener [%.16s] (caller [%.16s])\n",
+				c->ncb_callName_10, c->ncb_name_26);
 		return false;
 	}
 	TypeIpPort id2 = GetIpPortFromName(c->ncb_name_26);
 	if (id2.adress == "x999") {
-		debug_net_printf("CALLREJ: no address for the caller [%.16s] (listener [%.16s])\n",
-			c->ncb_name_26, c->ncb_callName_10);
+		if (m_network_debug)
+			debug_net_printf("CALLREJ: no address for the caller [%.16s] (listener [%.16s])\n",
+				c->ncb_name_26, c->ncb_callName_10);
 		return false;
 	}
 	int idx = GetNameListenIndex(c->ncb_name_26);
@@ -632,8 +644,9 @@ bool AddListenName2(const shadow_myNCB* c)
 			armed += "[" + TrimName(ListenName[i].c_str(), (int)ListenName[i].size()) + "->"
 				+ TrimName(ListenName2[i].c_str(), (int)ListenName2[i].size()) + "] ";
 		}
-		debug_net_printf("CALLREJ: nobody is listening for [%.16s]; armed listens: %s\n",
-			c->ncb_name_26, armed.empty() ? "none" : armed.c_str());
+		if (m_network_debug)
+			debug_net_printf("CALLREJ: nobody is listening for [%.16s]; armed listens: %s\n",
+				c->ncb_name_26, armed.empty() ? "none" : armed.c_str());
 		return false;
 	}
 	clientListenID[idx] = id1;
@@ -891,10 +904,12 @@ static bool StartPeerListen(int& port)
 	a.sin_addr.s_addr = INADDR_ANY;
 	if (::bind(peerListenSock, (sockaddr*)&a, sizeof(a)) != 0) {
 		int e = sock_errno();
-		debug_net_printf("PeerListen: data port %d unavailable (err=%d) - taking an OS-assigned port instead\n", port, e);
+		if (m_network_debug)
+			debug_net_printf("PeerListen: data port %d unavailable (err=%d) - taking an OS-assigned port instead\n", port, e);
 		sockaddr_in any{}; any.sin_family = AF_INET; any.sin_port = 0; any.sin_addr.s_addr = INADDR_ANY;
 		if (::bind(peerListenSock, (sockaddr*)&any, sizeof(any)) != 0) {
-			debug_net_printf("PeerListen: FATAL - no data port could be bound (err=%d)\n", sock_errno());
+			if (m_network_debug)
+				debug_net_printf("PeerListen: FATAL - no data port could be bound (err=%d)\n", sock_errno());
 			CLOSE_SOCKET(peerListenSock); peerListenSock = SOCK_INVALID; return false;
 		}
 		sockaddr_in got{}; socklen_t gl = sizeof(got);
@@ -902,7 +917,8 @@ static bool StartPeerListen(int& port)
 			CLOSE_SOCKET(peerListenSock); peerListenSock = SOCK_INVALID; return false;
 		}
 		port = ntohs(got.sin_port);
-		debug_net_printf("PeerListen: using data port %d\n", port);
+		if (m_network_debug)
+			debug_net_printf("PeerListen: using data port %d\n", port);
 	}
 	else if (port == 0) {
 		// Caller asked the OS to choose; report back what we actually got, because this
@@ -912,7 +928,8 @@ static bool StartPeerListen(int& port)
 			CLOSE_SOCKET(peerListenSock); peerListenSock = SOCK_INVALID; return false;
 		}
 		port = ntohs(got.sin_port);
-		debug_net_printf("PeerListen: using data port %d\n", port);
+		if (m_network_debug)
+			debug_net_printf("PeerListen: using data port %d\n", port);
 	}
 	listen(peerListenSock, 8);
 	if (m_network_debug)
@@ -955,8 +972,65 @@ struct RosterEntry {
 // Everyone's copy of the membership, in name order.
 static std::vector<RosterEntry> knownRoster;
 static std::mutex rosterMtx;
-// What this node registered itself as, so it can find its own place in that list.
+
+// A peer that drops out of the membership list is not coming back under that name, so any
+// command still waiting for it has to be told.  Without this the slot it occupied keeps a
+// LISTEN pending for ever (measured: "lsn=0 cplt=pending" on the host for the rest of the
+// run), the game never re-arms it, and a newcomer can only be accommodated by taking a
+// different slot - which is what handing out a fresh name did.  Releasing the slot is what
+// lets a name be used again once its holder is gone.
+static void ReleasePendingForName(const char* goneName)
+{
+	if (!goneName || !goneName[0]) return;
+	std::string want = TrimName(goneName, (int)strlen(goneName));
+	std::lock_guard<std::mutex> lk(connections_mutex);
+	for (auto& c : handleConnections) {
+		if (!c.connection) continue;
+		std::string call = TrimName(c.connection->ncb_callName_10, 16);
+		if (call != want) continue;
+		if (c.connection->ncb_cmd_cplt_49 != NRC_PENDING) continue;
+		c.connection->ncb_retcode_1 = NRC_SCLOSED;
+		c.connection->ncb_cmd_cplt_49 = NRC_SCLOSED;
+		if (m_network_debug)
+			debug_net_printf("PEERGONE: released a pending command waiting for [%s]\n", want.c_str());
+	}
+}
+
+// Names that were in the previous list and are missing from the new one.
+static void ReleasePendingForVanished(const std::vector<RosterEntry>& before,
+	const std::vector<RosterEntry>& after)
+{
+	for (auto& b : before) {
+		bool stillThere = false;
+		for (auto& a : after)
+			if (strncmp(a.name, b.name, sizeof(a.name)) == 0) { stillThere = true; break; }
+		if (!stillThere) ReleasePendingForName(b.name);
+	}
+}
+
+// What this node is registered as, so it can find its own place in the membership list.
+//
+// Only ever set from the server's acceptance.  It used to be written when the name was
+// ASKED for, and a name that comes back rejected then stays behind as ours: joining a
+// second match, a node asked for NETH200 (refused - it belongs to the host) and NETH201
+// (refused - the other survivor had just taken it) and was still working through the
+// indices when the host died.  Both survivors then compared the successor's name with
+// their own, both matched NETH201, and both declared themselves the new server: each
+// seeded a membership list of one, they never opened a session, and the level was never
+// started for want of a second player.
 static std::string myNetName;
+// The name asked for and not yet answered.
+static std::string pendingNetName;
+
+// Set when this node follows a hand-over: the new server has to be told who we are.
+//
+// Following one only re-points the address and reconnects, and the new server seeds its
+// name table from the roster - so the newcomer shows up in the membership list at first and
+// then falls out of it again, because that entry is not backed by a control client that has
+// identified itself.  Measured after a hand-over in the lobby: the list said two members,
+// then one, and from then on each survivor saw only itself, never opened a session with the
+// other, and the level was never started for want of a second player.
+static bool reRegisterWithNewServer = false;
 
 // ---------------------------------------------------------------------------
 // Connect / disconnect notice for the game to show on screen.
@@ -996,6 +1070,8 @@ static void PublishConnectionNotice(bool connected, const std::string& addr, int
 	notices.push_back({ line, clock() });
 	while (notices.size() > NOTICE_MAX)
 		notices.pop_front();
+
+	EventDispatcher::I->DispatchEvent(EventType::E_SHOW_NETWORK_MESSAGE, std::string(line));
 }
 
 // Control-channel liveness.  A closed socket is noticed at once, but a node that stops
@@ -1167,8 +1243,9 @@ namespace MyNetworkLib {
 			else {
 				// Always report this: hosting is impossible and every later symptom
 				// (clients looping on "server disconnected") follows from it.
-				debug_net_printf("NetworkClass: FATAL - cannot listen on control port %d (err=%d); "
-					"another program or game instance already uses it\n", clServerPort, sock_errno());
+				if (m_network_debug)
+					debug_net_printf("NetworkClass: FATAL - cannot listen on control port %d (err=%d); "
+						"another program or game instance already uses it\n", clServerPort, sock_errno());
 				CLOSE_SOCKET(ctrlListenSock); ctrlListenSock = SOCK_INVALID;
 			}
 		}
@@ -1180,8 +1257,9 @@ namespace MyNetworkLib {
 		if (!clIam_server && clPort == clServerPort &&
 			(clHost.compare(0, 4, "127.") == 0 || clHost == "localhost" || clHost == "::1"))
 		{
-			debug_net_printf("NetworkClass: data port %d is the local server's control port - "
-				"taking an OS-assigned data port instead\n", clPort);
+			if (m_network_debug)
+				debug_net_printf("NetworkClass: data port %d is the local server's control port - "
+					"taking an OS-assigned data port instead\n", clPort);
 			clPort = 0; // ask the OS; StartPeerListen reports what we actually got
 		}
 
@@ -1195,7 +1273,8 @@ namespace MyNetworkLib {
 				debug_net_printf("NetworkClass: one port %d for control and data\n", clPort);
 		}
 		else if (!StartPeerListen(clPort))
-			debug_net_printf("NetworkClass: FATAL - no data port available; peers cannot connect\n");
+			if (m_network_debug)
+				debug_net_printf("NetworkClass: FATAL - no data port available; peers cannot connect\n");
 	}
 
 	NetworkClass::~NetworkClass()
@@ -1249,6 +1328,18 @@ namespace MyNetworkLib {
 		IpPortIsSet = true;
 		if (m_network_debug)
 			debug_net_printf("ConnectToServer: connected to %s:%d\n", clHost.c_str(), clServerPort);
+
+		// Introduce ourselves again after a hand-over.  Without this the new server keeps only
+		// the seeded entry, which nothing refreshes.
+		if (reRegisterWithNewServer && !myNetName.empty()) {
+			reRegisterWithNewServer = false;
+			shadow_myNCB n{}; n.ncb_command_0 = 0xFE;
+			char padded[16] = { 0 };
+			snprintf(padded, sizeof(padded), "%-15s", myNetName.c_str());
+			SendCtrl(Pack_Message(MESS_CLIENT_TESTADDNAME, n, 0, clPort, padded, 16));
+			if (m_network_debug)
+				debug_net_printf("TAKEOVER: registering [%s] with the new server\n", myNetName.c_str());
+		}
 
 	}
 
@@ -1377,8 +1468,9 @@ namespace MyNetworkLib {
 				static clock_t lastWhy = 0;
 				if (lastWhy == 0 || (long)((clock() - lastWhy) * 1000 / CLOCKS_PER_SEC) >= 1000) {
 					lastWhy = clock();
-					debug_net_printf("AcceptPeer: nobody listening for caller [%s] yet, connection parked\n",
-						callerName.c_str());
+					if (m_network_debug)
+						debug_net_printf("AcceptPeer: nobody listening for caller [%s] yet, connection parked\n",
+							callerName.c_str());
 				}
 			}
 			return false;
@@ -1496,10 +1588,13 @@ namespace MyNetworkLib {
 		std::sort(entries.begin(), entries.end(),
 			[](const RosterEntry& a, const RosterEntry& b) { return strncmp(a.name, b.name, sizeof(a.name)) < 0; });
 
+		std::vector<RosterEntry> previous;
 		{
 			std::lock_guard<std::mutex> lk(rosterMtx);
+			previous = knownRoster;
 			knownRoster = entries;
 		}
+		ReleasePendingForVanished(previous, entries);
 
 		shadow_myNCB n{}; n.ncb_command_0 = 0xFE;
 		std::string msg = Pack_Message(MESS_SERVER_ROSTER, n, (int32_t)entries.size(), clPort,
@@ -1517,7 +1612,8 @@ namespace MyNetworkLib {
 				snprintf(b, sizeof(b), "%s@%s:%d ", e.name, e.ip, e.port);
 				list += b;
 			}
-			debug_net_printf("ROSTER: %d member(s) sent: %s\n", (int)entries.size(), list.c_str());
+			if (m_network_debug)
+				debug_net_printf("ROSTER: %d member(s) sent: %s\n", (int)entries.size(), list.c_str());
 		}
 	}
 
@@ -1550,8 +1646,9 @@ namespace MyNetworkLib {
 			if (ok && cc.lastRx != 0) {
 				const long silence = MsSince(cc.lastRx);
 				if (silence >= HEARTBEAT_TIMEOUT_MS) {
-					debug_net_printf("PollCtrlClients: client %s:%d silent for %ld ms - dropping it\n",
-						cc.addr.c_str(), cc.port, silence);
+					if (m_network_debug)
+						debug_net_printf("PollCtrlClients: client %s:%d silent for %ld ms - dropping it\n",
+							cc.addr.c_str(), cc.port, silence);
 					ok = false;
 				}
 				else if (silence >= HEARTBEAT_PROBE_MS && MsSince(cc.lastProbe) >= HEARTBEAT_PROBE_MS) {
@@ -1595,7 +1692,8 @@ namespace MyNetworkLib {
 			roster = knownRoster;
 		}
 		if (roster.empty()) {
-			debug_net_printf("TAKEOVER: server lost, but no membership is known - staying put\n");
+			if (m_network_debug)
+				debug_net_printf("TAKEOVER: server lost, but no membership is known - staying put\n");
 			return;
 		}
 
@@ -1611,15 +1709,17 @@ namespace MyNetworkLib {
 			break;
 		}
 		if (!successor) {
-			debug_net_printf("TAKEOVER: server [%s] lost and nobody else is left\n", deadName.c_str());
+			if (m_network_debug)
+				debug_net_printf("TAKEOVER: server [%s] lost and nobody else is left\n", deadName.c_str());
 			return;
 		}
 
 		if (!myNetName.empty() && myNetName == successor->name) {
 			// Our turn.  We already listen on our own port - the control and data ports are
 			// one - so there is nothing to open, only a table to seed and a role to assume.
-			debug_net_printf("TAKEOVER: server [%s] is gone, [%s] takes over on %s:%d\n",
-				deadName.c_str(), successor->name, successor->ip, successor->port);
+			if (m_network_debug)
+				debug_net_printf("TAKEOVER: server [%s] is gone, [%s] takes over on %s:%d\n",
+					deadName.c_str(), successor->name, successor->ip, successor->port);
 
 			NetworkName.clear();
 			clientIpPort.clear();
@@ -1644,10 +1744,12 @@ namespace MyNetworkLib {
 			BroadcastRoster();
 		}
 		else {
-			debug_net_printf("TAKEOVER: server [%s] is gone, following [%s] to %s:%d\n",
-				deadName.c_str(), successor->name, successor->ip, successor->port);
+			if (m_network_debug)
+				debug_net_printf("TAKEOVER: server [%s] is gone, following [%s] to %s:%d\n",
+					deadName.c_str(), successor->name, successor->ip, successor->port);
 			clHost = successor->ip;
 			clServerPort = successor->port;
+			reRegisterWithNewServer = true;   // say who we are once the connection is up
 			// ConnectToServer() picks this up on the next tick; until it answers we keep
 			// trying, which is what a node that is still starting up needs.
 		}
@@ -1686,7 +1788,8 @@ namespace MyNetworkLib {
 		if (ok && ctrlLastRx != 0) {
 			const long silence = MsSince(ctrlLastRx);
 			if (silence >= HEARTBEAT_TIMEOUT_MS) {
-				debug_net_printf("PollCtrlSocket: server silent for %ld ms - treating it as gone\n", silence);
+				if (m_network_debug)
+					debug_net_printf("PollCtrlSocket: server silent for %ld ms - treating it as gone\n", silence);
 				ok = false;
 			}
 			else if (silence >= HEARTBEAT_PROBE_MS && MsSince(ctrlLastProbe) >= HEARTBEAT_PROBE_MS) {
@@ -1787,8 +1890,9 @@ namespace MyNetworkLib {
 						static int s_backlogReports = 0;
 						if (s_backlogReports < 10) {
 							s_backlogReports++;
-							debug_net_printf("PollSessions: NOTE data queue depth %zu for peer %s:%d - "
-								"receives now run one turn behind\n", depth, sess->peerAddr.c_str(), sess->peerPort);
+							if (m_network_debug)
+								debug_net_printf("PollSessions: NOTE data queue depth %zu for peer %s:%d - "
+									"receives now run one turn behind\n", depth, sess->peerAddr.c_str(), sess->peerPort);
 						}
 					}
 				}
@@ -1940,6 +2044,40 @@ namespace MyNetworkLib {
 		if (u.message == MESS_CLIENT_TESTADDNAME) {
 			TypeIpPort ip{ senderAddr, u.port };
 			shadow_myNCB n{}; n.ncb_command_0 = 0xFE;
+			// The session's first name belongs to the node hosting it.
+			//
+			// Every node drops its name when a match ends and asks for one again for the next, so
+			// between matches the whole name space is briefly free.  A node arriving in that gap
+			// used to be handed the first name - measured: the newcomer ended up as NETH200 and the
+			// machine actually hosting the session was pushed to NETH201, after which nothing was
+			// exchanged at all.  The protocol already says joiners should wait for the server to
+			// register (MESS_SERVER_GIVE_IP / SERVER_NAME_REGISTERED); this makes the server hold
+			// them off - but ONLY for that one name.  Refusing every name until the host has
+			// registered was tried and breaks restarting: after a match the client asks first, is
+			// turned away from all eight indices and gives up, and the menu reports it could not
+			// join.  A joiner arriving first simply takes the second name and waits in the lobby.
+			{
+				char firstName[16] = { 0 };
+				snprintf(firstName, sizeof(firstName), "NETH2%c0", u.data[5]);
+				while (strlen(firstName) < 15) strcat(firstName, " ");
+				const bool wantsFirstName = (memcmp(u.data, firstName, 15) == 0);
+				// ...and the first name belongs to the node hosting the session, nobody else.
+				//
+				// Its own registration comes over its own control connection, so it is the request
+				// whose data port is the port this server listens on.  Letting anybody else have
+				// that name makes the game treat the joiner as node 0 while the transport server is
+				// somebody else - the two disagree about who is who, and the session comes apart as
+				// soon as they have to work together.
+				const bool senderIsHost = (u.port == clPort);
+				if (wantsFirstName && !senderIsHost) {
+					if (m_network_debug)
+						debug_net_printf("NAME: [%.15s] belongs to the host, refusing it to %s:%d\n",
+							u.data, senderAddr.c_str(), u.port);
+					ReplyToSender(Pack_Message(MESS_SERVER_TESTADDNAME_REJECT, n, u.index, -10));
+					return;
+				}
+
+			}
 			if (GetNameNetwork(u.data).empty()) {
 				AddNetworkName(u.data, ip);
 				ReplyToSender(Pack_Message(MESS_SERVER_TESTADDNAME_OK, n, u.index, -10));
@@ -2026,6 +2164,17 @@ namespace MyNetworkLib {
 		}
 		else if (u.message == MESS_CLIENT_DELETE) {
 			CleanMessages(myNCBfromShadow(u.messNCB));
+			{
+				// The host handing its own name back ends the "server is registered" state, so the
+				// rule above applies again to the next match rather than only to the first.
+				char firstName[16] = { 0 };
+				snprintf(firstName, sizeof(firstName), "NETH2%c0", u.data[5]);
+				while (strlen(firstName) < 15) strcat(firstName, " ");
+				if (memcmp(u.data, firstName, 15) == 0) {
+					serverAddname = false;
+					receiveServerAddName = false;
+				}
+			}
 			RemoveNetworkName(u.data);
 			BroadcastRoster();   // membership changed
 		}
@@ -2048,10 +2197,13 @@ namespace MyNetworkLib {
 				e.ip[sizeof(e.ip) - 1] = 0;
 				entries.push_back(e);
 			}
+			std::vector<RosterEntry> previous;
 			{
 				std::lock_guard<std::mutex> lk(rosterMtx);
+				previous = knownRoster;
 				knownRoster = entries;
 			}
+			ReleasePendingForVanished(previous, entries);
 			if (m_network_debug) {
 				std::string list;
 				for (auto& e : entries) {
@@ -2059,7 +2211,8 @@ namespace MyNetworkLib {
 					snprintf(b, sizeof(b), "%s@%s:%d ", e.name, e.ip, e.port);
 					list += b;
 				}
-				debug_net_printf("ROSTER: %d member(s) received: %s\n", (int)entries.size(), list.c_str());
+				if (m_network_debug)
+					debug_net_printf("ROSTER: %d member(s) received: %s\n", (int)entries.size(), list.c_str());
 			}
 			return;
 		}
@@ -2081,11 +2234,18 @@ namespace MyNetworkLib {
 		}
 
 		if (u.message == MESS_SERVER_TESTADDNAME_OK) {
+			if (!pendingNetName.empty()) {
+				myNetName = pendingNetName;
+				pendingNetName.clear();
+				if (m_network_debug)
+					debug_net_printf("NAMES: this node is [%s]\n", myNetName.c_str());
+			}
 			std::lock_guard<std::mutex> lk(connections_mutex);
 			connectionTime* ct = GetConnection(u.index);
 			if (ct) ct->state = NETI_ADD_NAME_OK;
 		}
 		else if (u.message == MESS_SERVER_TESTADDNAME_REJECT) {
+			pendingNetName.clear();      // that one was not ours
 			std::lock_guard<std::mutex> lk(connections_mutex);
 			connectionTime* ct = GetConnection(u.index);
 			if (ct) ct->state = NETI_ADD_NAME_REJECT;
@@ -2447,9 +2607,8 @@ namespace MyNetworkLib {
 	// ---------------------------------------------------------------------------
 	void NetworkClass::AddName(myNCB* c, int32_t index)
 	{
-		// Remember what we call ourselves: the hand-over needs it to find our own place in
-		// the membership and work out whether we are the one that has to take over.
-		myNetName = TrimName(c->ncb_name_26, (int)sizeof(c->ncb_name_26));
+		// Asked for, not owned yet - myNetName is written when the server says yes.
+		pendingNetName = TrimName(c->ncb_name_26, (int)sizeof(c->ncb_name_26));
 		SendCtrl(Pack_Message(MESS_CLIENT_TESTADDNAME, myNCBtoShadow(*c), index, clPort,
 			c->ncb_name_26, sizeof(c->ncb_name_26)));
 	}
@@ -2464,6 +2623,13 @@ namespace MyNetworkLib {
 
 	void NetworkClass::DeleteNetwork(myNCB* c, int32_t index)
 	{
+		{
+			// Handing the name back makes this node nameless until it registers again; a
+			// stale one here is what made two nodes believe they were the same player.
+			const std::string gone = TrimName(c->ncb_name_26, (int)sizeof(c->ncb_name_26));
+			if (gone == myNetName) myNetName.clear();
+			if (gone == pendingNetName) pendingNetName.clear();
+		}
 		SendCtrl(Pack_Message(MESS_CLIENT_DELETE, myNCBtoShadow(*c), index, clPort,
 			c->ncb_name_26, sizeof(c->ncb_name_26)));
 		// No network tick from here.  This is the game thread - simulateInterupt(DELETE_NAME),
@@ -2676,29 +2842,6 @@ void printState(myNCB** connections) {
 	}
 }
 // See port_net.h for why the game layer needs this.
-// How many connect / disconnect notices are still on screen.  Drops the ones whose five
-// seconds are up, which is what makes the rest move up a line: they are drawn from this list
-// in order, so losing the front entry shifts everything below it.
-int NetworkConnectionNoticeCount()
-{
-	std::lock_guard<std::mutex> lk(noticeMtx);
-	while (!notices.empty() && MsSince(notices.front().at) >= NOTICE_SHOW_MS)
-		notices.pop_front();
-	return (int)notices.size();
-}
-
-// Notice number index, 0 being the oldest one still up and so the top line.  See the note
-// where these are published: the text is copied into the caller's buffer under the lock,
-// because the writer is the network thread and this is read from the game thread every frame.
-bool NetworkConnectionNotice(int index, char* out, int outSize)
-{
-	if (!out || outSize <= 0 || index < 0) return false;
-	std::lock_guard<std::mutex> lk(noticeMtx);
-	if ((size_t)index >= notices.size()) return false;
-	snprintf(out, outSize, "%s", notices[index].text.c_str());
-	return true;
-}
-
 int NetworkRosterPlayers(const char* namePrefix, bool present[8])
 {
 	for (int i = 0; i < 8; i++) present[i] = false;

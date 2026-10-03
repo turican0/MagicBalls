@@ -3626,14 +3626,14 @@ void MBEXclass::REMC2EditorLoadInGameLevel(int levelIndex) {
 }
 
 bool MBEXclass::REMC2getBlur() {
-	return (D41A0_0.str_0x21AE.xxxx_0x21B1 && D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 && x_DWORD_E9C3C);
+	return (D41A0_0.str_0x21AE.xxxx_0x21B1 && D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 && ptrMemoryBuffer_E9C3C);
 }
 
 void MBEXclass::REMC2setMessage(String message) {
 	SetCurrentNotificationMessage_19760((char *)message.utf8().get_data(), 3u, 50);
 }
 
-//get blur (D41A0_0.str_0x21AE.xxxx_0x21B1 &&D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 &&x_DWORD_E9C3C)
+//get blur (D41A0_0.str_0x21AE.xxxx_0x21B1 &&D41A0_0.m_GameSettings.m_Display.xxxx_0x2191 &&ptrMemoryBuffer_E9C3C)
 /*
 var env : Environment = get_viewport().get_environment()
 

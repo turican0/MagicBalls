@@ -28,6 +28,7 @@ void CommandLineParser::Init(int argc, char **argv) {
 	m_auto_test_matches = 1;
 	m_auto_test_match_s = 0;
 	m_auto_test_players = 2;
+	m_auto_test_mp_level = -1;
     m_analyze_entity = true;
     m_alternative_gamespeed_control = true;
     m_auto_change_res = false;
@@ -39,6 +40,7 @@ void CommandLineParser::Init(int argc, char **argv) {
     m_fix_flyasistant = false;
     m_fix_mouse = false;
     m_interval_save = false;
+    m_all_spells = false;
     m_load_edited_level = false;
     m_mouse_off2 = false;
     m_move_player = false;
@@ -227,6 +229,7 @@ void CommandLineParser::InterpretParams() {
 		else if (param == "--auto_test_matches")                m_auto_test_matches = atoi((++p)->c_str());
 		else if (param == "--auto_test_match_seconds")          m_auto_test_match_s = atoi((++p)->c_str());
 		else if (param == "--auto_test_players")                m_auto_test_players = atoi((++p)->c_str());
+		else if (param == "--auto_test_mp_level")               m_auto_test_mp_level = atoi((++p)->c_str());
         else if (param == "--no_alternative_gamespeed_control") m_alternative_gamespeed_control = false;
         else if (param == "--no_analyze_entity")                m_analyze_entity = false;
         else if (param == "--auto_change_res")                  m_auto_change_res = true;
@@ -238,6 +241,7 @@ void CommandLineParser::InterpretParams() {
         else if (param == "--fix_flyasistant")                  m_fix_flyasistant = true;
         else if (param == "--fix_mouse")                        m_fix_mouse = true;
         else if (param == "--interval_save")                    m_interval_save = true;
+        else if (param == "--all_spells")                       m_all_spells = true;
         else if (param == "--load_edited_level")                m_load_edited_level = true;
         else if (param == "--mouse_off")                        m_mouse_off = true;
         else if (param == "--mouse_off2")                       m_mouse_off2 = true;
@@ -275,7 +279,7 @@ void CommandLineParser::InterpretParams() {
 		}
 		else if (param == "--set_max_regressions_steps") {
 			std::string maxStepsStr = *(++p);
-			uint16_t maxSteps = std::stoi(maxStepsStr);
+			int maxSteps = std::stoi(maxStepsStr);
 			if (maxSteps > -1)
 			{
 				m_max_regressions_steps = maxSteps;
