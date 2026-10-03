@@ -37,6 +37,10 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3.2.1
+        with:
+          # the default 'tools platform-tools' fails: the 'tools' package is no longer in the SDK
+          # repository.  Everything else is installed by the next step.
+          packages: 'platform-tools'
 
       - name: Install Android SDK packages
         run: |
