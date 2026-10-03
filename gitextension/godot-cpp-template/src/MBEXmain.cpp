@@ -822,27 +822,53 @@ void MBEXclass::recalculate_mesh(bool isCave) {
 	//renew_terrain();
 }
 
+// True when src differs from the copy last uploaded (and then remembers it).  The maps only
+// change now and then (spells, castles), so most frames upload nothing.
+static bool terrain_map_changed(std::vector<uint8_t> &uploaded, const uint8_t *src, bool force) {
+	const size_t size = 256 * 256;
+	if (!force && uploaded.size() == size && memcmp(uploaded.data(), src, size) == 0)
+		return false;
+	uploaded.assign(src, src + size);
+	return true;
+}
+
 void MBEXclass::renew_terrain(bool isCave) {
-	if (control_image.is_null())
+	bool fresh_control = control_image.is_null();
+	if (fresh_control)
 		initialize_controlmap(isCave);
-	if (control_data.size() != GRID_SIZE * GRID_SIZE * 4) {
-		control_data.resize(GRID_SIZE * GRID_SIZE * 4);
-	}
-	uint8_t *cd_ptr = control_data.ptrw();
-	for (int y = 0; y < GRID_SIZE; ++y) {
-		for (int x = 0; x < GRID_SIZE; ++x) {
-			int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
-			int final_c = mapTerrainType_10B4E0[idx];
-			int textUV_42 = (mapAngle_13B4E0[idx] >> 2) & 0x1C;
-			int write_idx = (y * GRID_SIZE + x) * 4;
-			cd_ptr[write_idx + 0] = (uint8_t)final_c;
-			cd_ptr[write_idx + 1] = (uint8_t)textUV_42;
-			cd_ptr[write_idx + 2] = 0;
-			cd_ptr[write_idx + 3] = 0;
+	bool type_changed = terrain_map_changed(uploaded_terrain_type, mapTerrainType_10B4E0, fresh_control);
+	bool angle_changed = terrain_map_changed(uploaded_terrain_angle, mapAngle_13B4E0, fresh_control);
+	if (type_changed || angle_changed) {
+		if (control_data.size() != GRID_SIZE * GRID_SIZE * 4) {
+			control_data.resize(GRID_SIZE * GRID_SIZE * 4);
 		}
+		uint8_t *cd_ptr = control_data.ptrw();
+		for (int y = 0; y < GRID_SIZE; ++y) {
+			for (int x = 0; x < GRID_SIZE; ++x) {
+				int idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
+				int final_c = mapTerrainType_10B4E0[idx];
+				int textUV_42 = (mapAngle_13B4E0[idx] >> 2) & 0x1C;
+				int write_idx = (y * GRID_SIZE + x) * 4;
+				cd_ptr[write_idx + 0] = (uint8_t)final_c;
+				cd_ptr[write_idx + 1] = (uint8_t)textUV_42;
+				cd_ptr[write_idx + 2] = 0;
+				cd_ptr[write_idx + 3] = 0;
+			}
+		}
+		update_gpu_controlmap();
 	}
+
+	bool fresh_height = height_image_bottom.is_null() || (isCave && height_image_top.is_null());
 	if (height_image_bottom.is_null())
 		initialize_heightmap(0);
+	bool height_changed = terrain_map_changed(uploaded_height_bottom, mapHeightmap_11B4E0, fresh_height);
+	if (isCave) {
+		if (height_image_top.is_null())
+			initialize_heightmap(1);
+		height_changed = terrain_map_changed(uploaded_height_top, x_BYTE_14B4E0_second_heightmap, fresh_height) || height_changed;
+	}
+	if (!height_changed)
+		return;
 	height_data_bottom.resize(GRID_SIZE * GRID_SIZE);
 	for (int y = 0; y < GRID_SIZE; ++y) {
 		for (int x = 0; x < GRID_SIZE; ++x) {
@@ -851,8 +877,6 @@ void MBEXclass::renew_terrain(bool isCave) {
 		}
 	}
 	if (isCave) {
-		if (height_image_top.is_null())
-			initialize_heightmap(1);
 		height_data_top.resize(GRID_SIZE * GRID_SIZE);
 		for (int y = 0; y < GRID_SIZE; ++y) {
 			for (int x = 0; x < GRID_SIZE; ++x) {
@@ -862,7 +886,6 @@ void MBEXclass::renew_terrain(bool isCave) {
 		}
 	}
 	update_gpu_heightmap(isCave);
-	update_gpu_controlmap();
 }
 
 void MBEXclass::update_gpu_heightmap(bool isCave) {
