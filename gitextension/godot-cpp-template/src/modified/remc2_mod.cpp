@@ -40,7 +40,15 @@ void InitLanguage_76A40_mod_only_language() //257A40
 	}
 }
 
+// sub_main_mod cleans up itself when it leaves its loop normally; when it is unwound by a
+// quit request (thread_exit_exception) REMC2EndGame does it here instead - never both,
+// the second pass would free the same memory and EventDispatcher again.
+static bool sub_main_cleaned = false;
+
 void sub_main_mod_end() {
+	if (sub_main_cleaned)
+		return;
+	sub_main_cleaned = true;
 	sub_5BC20(); //23CC20 //remove devices?
 	sub_56730_clean_memory(); //237730
 	if (CommandLineParams.ModeNetwork()) {
@@ -55,6 +63,7 @@ void sub_main_mod_end() {
 		m_Messages = nullptr;
 	}
 	delete EventDispatcher::I;
+	EventDispatcher::I = nullptr;
 }
 
 std::vector<GraphicsAction> graphics_queue;
@@ -3198,6 +3207,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 	godot::UtilityFunctions::print("sub_main_mod begin");
 	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
 	int exitCode = 0;
+	sub_main_cleaned = false;
 	godot::UtilityFunctions::print("sub_main_mod SetTimeStart");
 	SetTimeStart();
 #ifndef __ANDROID__
@@ -3336,6 +3346,8 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		delete m_Messages;
 		m_Messages = nullptr;
 		delete EventDispatcher::I;
+		EventDispatcher::I = nullptr;
+		sub_main_cleaned = true;
 	}
 #ifndef __ANDROID__
 	catch (const thread_exit_exception &e) {
@@ -3347,7 +3359,19 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 #endif
 	//Logger->info("Exited Game");
 
-	thread2_wait_for_continue(Thread2_State::SUB_MAIN_END_FUNCTION);
+	// Tell Godot the game is over.  When we got here because Godot asked us to quit, there
+	// is nobody left to tell, and waiting would throw thread_exit_exception again - outside
+	// the try above that ended in std::terminate()/abort() (issue #25).
+	if (!thread2_quit_requested.load()) {
+#ifndef __ANDROID__
+		try {
+			thread2_wait_for_continue(Thread2_State::SUB_MAIN_END_FUNCTION);
+		} catch (const thread_exit_exception &) {
+		}
+#else
+		thread2_wait_for_continue(Thread2_State::SUB_MAIN_END_FUNCTION);
+#endif
+	}
 
 	return exitCode;
 }
