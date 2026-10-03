@@ -171,6 +171,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("initLanguage", "Int"), &MBEXclass::initLanguage);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text", "text", "int"), &MBEXclass::REMC2BeginGame);
+	godot::ClassDB::bind_method(D_METHOD("REMC2SetNetwork", "mode", "serverIp", "serverPort", "clientPort", "debug", "recordFile"), &MBEXclass::REMC2SetNetwork);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
@@ -1802,6 +1803,36 @@ void TerrainMake(PackedByteArray bytearray, String cdPath) {
 godot::TextureRect *mainScrBufferRect = nullptr;
 Ref<ImageTexture> mainTexture;
 
+// Same switches as the multiplayer dialog of remc2-configurator (MC2 HD mod):
+//   mode 1 = host: --network server <port>
+//   mode 2 = join: --network client <server ip> <server port> <own port>
+// plus --network_debug and --record_file.  mode 0 = single player.
+void MBEXclass::REMC2SetNetwork(int mode, String serverIp, int serverPort, int clientPort, bool debug, String recordFile) {
+	network_args.clear();
+	if (mode != 1 && mode != 2)
+		return;
+	network_args.push_back("--network");
+	if (mode == 1) {
+		network_args.push_back("server");
+		network_args.push_back(std::to_string(serverPort));
+	} else {
+		std::string ip = serverIp.strip_edges().utf8().get_data();
+		if (ip.empty())
+			ip = "127.0.0.1";
+		network_args.push_back("client");
+		network_args.push_back(ip);
+		network_args.push_back(std::to_string(serverPort));
+		network_args.push_back(std::to_string(clientPort));
+	}
+	if (debug)
+		network_args.push_back("--network_debug");
+	String record = recordFile.strip_edges();
+	if (mode == 1 && !record.is_empty()) {
+		network_args.push_back("--record_file");
+		network_args.push_back(PLATFORM_GLOBALIZE_PATH(record).utf8().get_data());
+	}
+}
+
 void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, String CustomLevelPath) {
 	UtilityFunctions::print("REMC2BeginGame START");
 	UtilityFunctions::print("REMC2BeginGame cdPath: ", cdPath);
@@ -1814,7 +1845,7 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 	// ── konec Android výjimky ─────────────────────────────────────────────────
 	UtilityFunctions::print("REMC2BeginGame saved_real_cdPath: ", saved_real_cdPath);
 	UtilityFunctions::print("REMC2BeginGame saved_real_gamePath: ", saved_real_gamePath);
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 16; ++i)
 		saved_argv[i] = nullptr;
 	saved_argv[0] = (char *)"game.exe";
 	saved_argv[1] = (char *)"";
@@ -1839,6 +1870,11 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 		snprintf(levelBuffer, sizeof(levelBuffer), "%d", customLevel);
 		saved_argv[4] = levelBuffer;
 		UtilityFunctions::print("REMC2BeginGame mode: set_level index: ", customLevel);
+	}
+	for (std::string &arg : network_args) {
+		if (saved_argc >= 16)
+			break;
+		saved_argv[saved_argc++] = (char *)arg.c_str();
 	}
 	UtilityFunctions::print("REMC2BeginGame calling CommandLineParams.Init...");
 	CommandLineParams.Init(saved_argc, saved_argv);

@@ -1686,6 +1686,8 @@ func getVGABuffer():
 func MBEXinit():
 	if !Global.MBEX:
 		Global.MBEX = MBEXclass.new()
+		Global.MBEX.REMC2SetNetwork(Global.mp_mode, Global.mp_server_ip, Global.mp_server_port,
+			Global.mp_client_port, Global.mp_debug, Global.mp_record_file)
 		if(Global.level_mode==0):
 			Global.MBEX.REMC2BeginGame(Global.cdPath,Global.hidata,-1,Global.target_level)
 		else:
