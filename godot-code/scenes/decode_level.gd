@@ -1524,9 +1524,19 @@ func setSkyExposure(value:float):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
 	skydome.exposure=value
 	
+var _shadow_max_distance := {}
+
 func sefFogEnd(value:float):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
 	skydome.fog_end=value
+	# Shadows past the end of the fog are never seen, but the lights still render the
+	# scene into their shadow maps out to their full range - keep them within the fog.
+	for light_name in [^"SunLight", ^"MoonLight"]:
+		var light: DirectionalLight3D = NodeSky3D.get_node_or_null(light_name)
+		if light:
+			if not _shadow_max_distance.has(light_name):
+				_shadow_max_distance[light_name] = light.directional_shadow_max_distance
+			light.directional_shadow_max_distance = min(_shadow_max_distance[light_name], value)
 	
 func setFogFall(value:float):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")
