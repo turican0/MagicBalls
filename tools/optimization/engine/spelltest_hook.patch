@@ -1,0 +1,57 @@
+diff --git a/gitextension/godot-cpp-template/src/modified/remc2_mod.cpp b/gitextension/godot-cpp-template/src/modified/remc2_mod.cpp
+index eb3ad958..ad54c84c 100644
+--- a/gitextension/godot-cpp-template/src/modified/remc2_mod.cpp
++++ b/gitextension/godot-cpp-template/src/modified/remc2_mod.cpp
+@@ -1,8 +1,10 @@
+ #include "remc2_mod.h"
++void HandleButtonClick_191B0(int16_t hiSetting, char loSetting); // TEST ONLY
+ 
+ #include <godot_cpp/variant/utility_functions.hpp>
+ 
+ void OnNetworkMessageReceived(std::string message); // sub_main.cpp
++void GiveAllSpells_Cheat(type_entity_0x6E8E* actEvent); // EventsFunctions.cpp (test only)
+ extern long AnimCurrentTick; // Animation.cpp
+ extern std::chrono::system_clock::time_point AnimCurrentTime; // Animation.cpp
+ 
+@@ -2956,6 +2958,29 @@ void InGameLoop_47320_mod() //228320
+ 		if (D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].byte_0x004_2BE0_11234 || D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 8)
+ 			break; //end level
+ 		DrawAndEventsInGame_47560_mod(GameTimerTurn_17DB54);
++		{ // TEST ONLY (analysis, not committed): prepare the player to cast MB_TEST_SPELL="spell,level"
++			static int testFrames = 0; const char *sp = getenv("MB_TEST_SPELL");
++			if (sp) {
++				++testFrames;
++				int spell = atoi(sp); const char *c = strchr(sp, ','); int level = c ? atoi(c + 1) : 0;
++				type_entity_0x6E8E *pl = Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240];
++				if (testFrames == 20) {
++					GiveAllSpells_Cheat(pl);
++					x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 |= 0x20; // free spell usage
++				}
++				if (testFrames >= 30) { // keep the choice (the cast comes later)
++					int ent = pl->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[spell];
++					if (ent && testFrames == 30) SetSpell_6D5E0(Entities_EA3E4[ent], level);
++					pl->dword_0xA4_164x->str_611.array_0x437_1079x.SpellIndex[spell] = level;
++					pl->dword_0xA4_164x->str_611.SpellIndexLeft_0x451_1105 = spell;
++					pl->dword_0xA4_164x->str_611.SubSpellIndexLeft_1109 = level;
++					x_D41A0_BYTEARRAY_4_struct.leftSpellPlayerIndex_38400 = 8;
++					if (testFrames % 40 == 30 && ent) fprintf(stderr, "MBTRACE f%d spell %d level %d ent %d lvl %d maxlvl %d charge %d maxMana %d w30 %d b3b %d sub %d\n", testFrames, spell, level, ent, Entities_EA3E4[ent]->byte_0x46_70, SPELLS_BEGIN_BUFFER_str[Entities_EA3E4[ent]->model_0x40_64].byte_0, Entities_EA3E4[ent]->word_0x2E_46, Entities_EA3E4[ent]->maxMana_0x8C_140, Entities_EA3E4[ent]->word_0x30_48, Entities_EA3E4[ent]->byte_0x3B_59, Entities_EA3E4[ent]->subSpellIndex_0x2A_42);
++					pl->mana_0x90_144 = 30000; if (ent) Entities_EA3E4[ent]->manaRegen_0x88_136 = 0; // TEST: unlimited mana, no castle needed
++					{ static int lastF = -1, lastA = -1; int f = pl->struct_byte_0xc_12_15.dword; int a = D41A0_0.playerInputs_0x6E3E[D41A0_0.LevelIndex_0xc].PlayerAction_byte0; if (f != lastF || a != lastA || (ent && Entities_EA3E4[ent]->word_0x2E_46)) fprintf(stderr, "MBTRACE f%d flags %x action %d charge %d mana %d\n", testFrames, f, a, ent ? Entities_EA3E4[ent]->word_0x2E_46 : -1, pl->mana_0x90_144); lastF = f; lastA = a; }
++				}
++			}
++		}
+ 		if (gameTurn < 2) {
+ 			StopMusic_8E020();
+ 			if (gameTurn == 1)
+diff --git a/gitextension/godot-cpp-template/src/remc2/engine/EventsFunctions.cpp b/gitextension/godot-cpp-template/src/remc2/engine/EventsFunctions.cpp
+index b20698ad..fea9f78b 100644
+--- a/gitextension/godot-cpp-template/src/remc2/engine/EventsFunctions.cpp
++++ b/gitextension/godot-cpp-template/src/remc2/engine/EventsFunctions.cpp
+@@ -55801,6 +55801,7 @@ int sub_68C70(type_entity_0x6E8E* a1x)//249c70
+ //----- (00068D50) --------------------------------------------------------
+ bool sub_68D50(type_entity_0x6E8E* locEvent1, type_entity_0x6E8E* locEvent2)//249d50
+ {
++	if (getenv("MB_TEST_SPELL") && locEvent2->dword_0xA4_164x && locEvent2 == Entities_EA3E4[D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].playerIndex_0x00a_2BE4_11240]) return true; // TEST ONLY: player casts without mana/castle limits
+ 	if (locEvent2->mana_0x90_144 < 0)
+ 		return false;
+ 	if (locEvent2->life_0x8 < 0)
