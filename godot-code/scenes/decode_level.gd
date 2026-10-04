@@ -1022,15 +1022,48 @@ const LEVEL_SPELLS_CHECK_FRAMES := 300
 var _pool_targets: Dictionary = {}
 var _pool_fill_queue: Array = []
 var _known_level_spells: Dictionary = {}
+var _known_wizards: Dictionary = {}
+var _level_mana_spheres := 0
 var _pool_frame := 0
+
+# What belongs to a wizard of a colour (0 white, 1 red, 2 violet, 3 blue, 4 green, 5 pink, 6 orange,
+# 7 black): its model, castle, flags of the buildings it has, balloons, and mana spheres of its colour -
+# as many as there are in the level, it can take them all. Prepared for every wizard in the level,
+# however many players there are.
+const WIZARD_MODELS := {3: 203, 1: 211, 7: 219, 6: 227, 5: 235, 2: 243, 4: 251} # colour -> model; white is the player's own, not drawn
+const WIZARD_CASTLES := 2
+const WIZARD_FLAGS := 4
+const WIZARD_BALLOONS := 4
+const MIN_MANA_SPHERES := 32 # when the level's are not known
+
+func _wizard_kit(colour: int) -> Dictionary:
+	var kit := {
+		Vector3i(3, 96 + colour, 1): WIZARD_CASTLES,
+		Vector3i(10, 96 + colour, 1): WIZARD_FLAGS,
+		Vector3i(3, 88 + colour, 1): WIZARD_BALLOONS,
+		Vector3i(10, 67 + colour, 1): _level_mana_spheres,
+	}
+	if WIZARD_MODELS.has(colour):
+		kit[Vector3i(3, WIZARD_MODELS[colour], 1)] = 1
+	return kit
 
 func _begin_level_pool() -> void:
 	_pool_targets.clear()
 	_pool_fill_queue.clear()
 	_known_level_spells.clear()
+	_known_wizards.clear()
 	_pool_frame = 0
 	var level: int = Global.MBEX.GetLevelSpells()["level"]
 	var counts: Dictionary = PrefillData.LEVELS.get(level, {}).duplicate()
+	# all the mana spheres of the level, golden or taken by someone
+	_level_mana_spheres = counts.get(Vector3i(10, 58, 1), 0)
+	for colour in 8:
+		_level_mana_spheres += counts.get(Vector3i(10, 67 + colour, 1), 0)
+	_level_mana_spheres = max(_level_mana_spheres, MIN_MANA_SPHERES)
+	# the wizards are known only once the level runs, their things are loaded now
+	for colour in 8:
+		for uid in _wizard_kit(colour):
+			_set_pool_target(uid, 0, true)
 	for spell in PrefillData.LEVEL_SPELLS.get(level, []):
 		_known_level_spells[spell] = true
 	_add_spell_counts(counts, _known_level_spells.keys())
@@ -1041,10 +1074,18 @@ func _begin_level_pool() -> void:
 	_fill_pool(-1)
 	_request_library_load()
 
-# the wizards get their spells only after the level starts, and they find more during it
+# the wizards are there and get their spells only after the level starts, and they find more
+# spells during it
 func _check_level_spells() -> void:
+	var info: Dictionary = Global.MBEX.GetLevelSpells()
+	for colour in info["wizards"]:
+		if not _known_wizards.has(colour):
+			_known_wizards[colour] = true
+			var kit := _wizard_kit(colour)
+			for uid in kit:
+				_set_pool_target(uid, max(_pool_targets.get(uid, 0), kit[uid]), false)
 	var new_spells := []
-	for spell in Global.MBEX.GetLevelSpells()["spells"]:
+	for spell in info["spells"]:
 		if not _known_level_spells.has(spell):
 			_known_level_spells[spell] = true
 			new_spells.append(spell)
@@ -1080,7 +1121,7 @@ func _set_pool_target(uid: Vector3i, count: int, load_now: bool) -> void:
 
 func _fill_pool_step() -> void:
 	_pool_frame += 1
-	if _pool_frame % LEVEL_SPELLS_CHECK_FRAMES == 30:
+	if _pool_frame % LEVEL_SPELLS_CHECK_FRAMES == 10:
 		_check_level_spells()
 	_background_load_step()
 	_fill_pool(POOL_FILL_BUDGET_USEC)
