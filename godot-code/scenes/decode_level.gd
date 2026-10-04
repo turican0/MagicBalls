@@ -498,8 +498,13 @@ var library = {
 #5 287 - spider
 #9 419 - spider miniweb - 
 func updateLibrary(a:int,b:int,c:int,path:String):
-	library[Vector3i(a, b, c)] = path
-	library_scenes[Vector3i(a, b, c)] = load(path)
+	var key = Vector3i(a, b, c)
+	if library.get(key, "") == path and library_scenes.has(key):
+		return
+	library[key] = path
+	# loaded when it is needed (_get_library_scene) or ahead of it (_begin_level_pool)
+	library_scenes.erase(key)
+	_request_scene(path)
 
 var library2 = {
 	Vector3i(0,999,0): "res://entites/object_text.tscn",
@@ -697,16 +702,76 @@ var filter_material: ShaderMaterial
 var data_img: Image
 var data_tex: ImageTexture
 
-func _preload_library(source_dict: Dictionary, target_dict: Dictionary):
-	for key in source_dict:
-		var path = source_dict[key]
-		if path != "":
-			target_dict[key] = load(path)
+# The library scenes are not loaded all at the start any more (that took minutes): the ones a
+# level needs are loaded when it begins and the rest are loaded in the background during it.
+const DEFAULT_LIBRARY_KEY := Vector3i(0, 999, 0)
+var _requested_scenes: Dictionary = {}
+var _loaded_scenes: Dictionary = {}
+# scenes loaded in the background one after another, so the loading does not compete with the game
+var _background_scenes: Array = []
+
+func _request_scene(path: String) -> void:
+	if path == "" or _requested_scenes.has(path) or _loaded_scenes.has(path):
+		return
+	_requested_scenes[path] = true
+	ResourceLoader.load_threaded_request(path, "PackedScene")
+
+func _request_library_load() -> void:
+	for source_dict in [library, library2]:
+		for key in source_dict:
+			var path: String = source_dict[key]
+			if path != "" and not _loaded_scenes.has(path) and not _background_scenes.has(path):
+				_background_scenes.append(path)
+
+func _background_load_step() -> void:
+	while not _background_scenes.is_empty():
+		var path: String = _background_scenes[0]
+		if _loaded_scenes.has(path):
+			_background_scenes.pop_front()
+			continue
+		if _requested_scenes.has(path):
+			if ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				return # one at a time
+			_loaded_scenes[path] = ResourceLoader.load_threaded_get(path)
+			_background_scenes.pop_front()
+			continue
+		_request_scene(path)
+		return
+
+# The scene of a library entry: loaded now when wait is set, else null while it is still loading.
+func _get_library_scene(source_dict: Dictionary, target_dict: Dictionary, key: Vector3i, wait: bool) -> PackedScene:
+	var scene = target_dict.get(key)
+	if scene != null:
+		return scene
+	var path: String = source_dict.get(key, "")
+	if path == "":
+		return null
+	if _loaded_scenes.has(path):
+		scene = _loaded_scenes[path] # null when it failed to load
+	else:
+		if _requested_scenes.has(path):
+			if not wait and ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				return null
+			scene = ResourceLoader.load_threaded_get(path) # waits for it when it is not loaded yet
+		elif wait or ResourceLoader.has_cached(path):
+			scene = load(path)
+		else:
+			_request_scene(path)
+			return null
+		_loaded_scenes[path] = scene
+	target_dict[key] = scene
+	return scene
 
 func _ready():
 	updateRemap()
-	_preload_library(library, library_scenes)
-	_preload_library(library2, library2_scenes)	
+	_light_budget = EntityLightBudget.new()
+	add_child(_light_budget)
+	_entity_particles = EntityParticles.new()
+	add_child(_entity_particles)
+	_entity_multimesh = EntityMultiMesh.new()
+	add_child(_entity_multimesh)
+	_get_library_scene(library, library_scenes, DEFAULT_LIBRARY_KEY, true)
+	_get_library_scene(library2, library2_scenes, DEFAULT_LIBRARY_KEY, true)
 	#create_default_key_remap()
 	#node_pool.resize(pool_size)
 	#for i in range(pool_size):
@@ -938,17 +1003,144 @@ func _do_change_scene():
 var entites_pool:Dictionary
 
 func add_to_entites_pool(uid: Vector3i, sendNode: Node) -> void:
-	if not entites_pool.has(uid):
-		entites_pool[uid] = {
-			"array": [],
-			"active_count": 0,
-			"act_index": 0
-		}
-	entites_pool[uid]["array"].append(sendNode)
+	_add_pool_node(uid, sendNode)
+	entites_pool[uid]["ran_out"] = true
 	# the new node is taken by this entity - move past it like add_pool_index() does, or the
 	# next entity of the same type in this frame was handed the same node and overwrote it
 	entites_pool[uid]["act_index"] += 1
 	entites_pool[uid]["active_count"] += 1
+
+# Nodes are made ahead of time, while the level loads, for every kind of entity the level and
+# the spells which can be cast in it will need, so they do not have to be made when many of them
+# show up at once (Meteor, Volcano, ...). See entity_prefill_data.gd. What turns up later (spells
+# found during the level, more of a kind than expected) is made a few per frame.
+const PrefillData = preload("res://scenes/entity_prefill_data.gd")
+const POOL_FILL_BUDGET_USEC := 3000
+const POOL_SPARE := 0.25
+const POOL_MIN_SPARE := 2
+const LEVEL_SPELLS_CHECK_FRAMES := 300
+var _pool_targets: Dictionary = {}
+var _pool_fill_queue: Array = []
+var _known_level_spells: Dictionary = {}
+var _pool_frame := 0
+
+func _begin_level_pool() -> void:
+	_pool_targets.clear()
+	_pool_fill_queue.clear()
+	_known_level_spells.clear()
+	_pool_frame = 0
+	var level: int = Global.MBEX.GetLevelSpells()["level"]
+	var counts: Dictionary = PrefillData.LEVELS.get(level, {}).duplicate()
+	for spell in PrefillData.LEVEL_SPELLS.get(level, []):
+		_known_level_spells[spell] = true
+	_add_spell_counts(counts, _known_level_spells.keys())
+	for uid in counts:
+		_set_pool_target(uid, counts[uid], true)
+	# made now, while the level is loading - some kinds take long to make (wizards build CSG and a
+	# viewport), which would be a hitch during the game
+	_fill_pool(-1)
+	_request_library_load()
+
+# the wizards get their spells only after the level starts, and they find more during it
+func _check_level_spells() -> void:
+	var new_spells := []
+	for spell in Global.MBEX.GetLevelSpells()["spells"]:
+		if not _known_level_spells.has(spell):
+			_known_level_spells[spell] = true
+			new_spells.append(spell)
+	if new_spells.is_empty():
+		return
+	var counts := {}
+	_add_spell_counts(counts, new_spells)
+	for uid in counts:
+		_set_pool_target(uid, _pool_targets.get(uid, 0) + counts[uid], false)
+
+func _add_spell_counts(counts: Dictionary, spells: Array) -> void:
+	var spell_counts := {}
+	for spell in spells:
+		var made: Dictionary = PrefillData.SPELLS.get(spell, {})
+		for uid in made:
+			spell_counts[uid] = max(spell_counts.get(uid, 0), made[uid])
+	for uid in spell_counts:
+		counts[uid] = counts.get(uid, 0) + spell_counts[uid]
+
+func _set_pool_target(uid: Vector3i, count: int, load_now: bool) -> void:
+	if uid.x == 14 and (uid.y == 461 or uid.y == 462):
+		return # entites with a start script are never pooled
+	var key = Vector3i(uid.x, uid.y, 0)
+	var source_dict = library if uid.z == 1 else library2
+	if source_dict.get(key, "") == "":
+		return # not drawn, or drawn by the default scene (its label is set when it is made)
+	if load_now:
+		_get_library_scene(source_dict, library_scenes if uid.z == 1 else library2_scenes, key, true)
+	if count > _pool_targets.get(uid, 0):
+		_pool_targets[uid] = count
+		if not _pool_fill_queue.has(uid):
+			_pool_fill_queue.append(uid)
+
+func _fill_pool_step() -> void:
+	_pool_frame += 1
+	if _pool_frame % LEVEL_SPELLS_CHECK_FRAMES == 30:
+		_check_level_spells()
+	_background_load_step()
+	_fill_pool(POOL_FILL_BUDGET_USEC)
+
+# makes the missing pool nodes, for at most budget_usec (all of them when it is negative)
+func _fill_pool(budget_usec: int) -> void:
+	var start := Time.get_ticks_usec()
+	var waiting := 0
+	while waiting < _pool_fill_queue.size():
+		var uid: Vector3i = _pool_fill_queue[0]
+		var have: int = entites_pool[uid]["array"].size() if entites_pool.has(uid) else 0
+		if have >= _pool_targets.get(uid, 0):
+			_pool_fill_queue.pop_front()
+			continue
+		var key = Vector3i(uid.x, uid.y, 0)
+		var scene = _get_library_scene(library if uid.z == 1 else library2, library_scenes if uid.z == 1 else library2_scenes, key, false)
+		if scene == null: # still loading - try the others
+			_pool_fill_queue.push_back(_pool_fill_queue.pop_front())
+			waiting += 1
+			continue
+		if _entity_multimesh.can_batch(scene): # drawn by a MultiMesh, needs no nodes
+			_pool_fill_queue.pop_front()
+			continue
+		waiting = 0
+		var node = scene.instantiate()
+		node.set_meta("uid", uid)
+		node.visible = false
+		node.set_process(false)
+		node.set_physics_process(false)
+		add_child(node)
+		_add_pool_node(uid, node)
+		if budget_usec >= 0 and Time.get_ticks_usec() - start > budget_usec:
+			return
+
+const EntityLightBudget = preload("res://scenes/entity_light_budget.gd")
+const EntityParticles = preload("res://scenes/entity_particles.gd")
+const EntityMultiMesh = preload("res://scenes/entity_multimesh.gd")
+var _entity_multimesh: Node3D
+var _light_budget: Node3D
+var _entity_particles: Node3D
+var _frame_lights: Array = []
+var _frame_particles: Array = []
+
+# a new entity node goes into its pool bucket, inactive (beyond active_count)
+func _add_pool_node(uid: Vector3i, node: Node) -> void:
+	if not entites_pool.has(uid):
+		entites_pool[uid] = {"array": [], "active_count": 0, "act_index": 0, "lights": false, "particles": false, "ran_out": false}
+	entites_pool[uid]["array"].append(node)
+	var particles = _entity_particles.register(node)
+	if not particles.is_empty():
+		node.set_meta("entity_particles", particles)
+		entites_pool[uid]["particles"] = true
+	var lights := []
+	for light in node.find_children("*", "OmniLight3D", true, false):
+		# the scene's own hidden lights are left alone
+		if light.visible and not light.shadow_enabled:
+			lights.append(light)
+	if not lights.is_empty():
+		node.set_meta("entity_lights", lights)
+		entites_pool[uid]["lights"] = true
 
 func get_first_entity_with_uid(uid: Vector3i) -> Node:
 	if entites_pool.has(uid) and not entites_pool[uid]["array"].is_empty():
@@ -965,29 +1157,57 @@ func add_pool_index(uid: Vector3i):
 		entites_pool[uid]["active_count"] += 1
 
 func show_hide_entites() -> void:
-	for bucket in entites_pool.values():
+	_frame_lights.clear()
+	_frame_particles.clear()
+	for uid in entites_pool.keys():
+		var bucket = entites_pool[uid]
 		var arr = bucket["array"]
 		var active_count = bucket["active_count"]
-		for i in range(arr.size()):
+		if bucket["particles"]:
+			for i in min(active_count, arr.size()):
+				_frame_particles.append_array(arr[i].get_meta("entity_particles", []))
+		# entites with a start script are freed instead of pooled, so they start again next time
+		var free_inactive: bool = uid.x == 14 and (uid.y == 461 or uid.y == 462)
+		# this kind ran out of nodes (one had to be made at once): keep some spare ones of it from
+		# now on, so more of it can show up without a hitch
+		if bucket["ran_out"]:
+			bucket["ran_out"] = false
+			_set_pool_target(uid, active_count + max(POOL_MIN_SPARE, int(active_count * POOL_SPARE)), false)
+		# backwards, so remove_at() does not shift the nodes still to be visited
+		for i in range(arr.size() - 1, -1, -1):
 			var node: Node = arr[i]
 			# only touch what changes - this runs for every pooled node every frame
 			var active: bool = i < active_count
+			if not active and free_inactive:
+				node.queue_free()
+				arr.remove_at(i)
+				continue
 			if node.visible != active:
 				node.visible = active
 			if node.is_processing() != active:
 				node.set_process(active)
 			if node.is_physics_processing() != active:
 				node.set_physics_process(active)
-			if not active:
-				if(node.get_meta("uid")==Vector3i(14,461,0) or node.get_meta("uid")==Vector3i(14,462,0)):#remove entites with start script
-					node.queue_free()
-					arr.remove_at(i)
 		if arr.is_empty():
-			entites_pool.erase(bucket)
+			entites_pool.erase(uid)
+			continue
+		if bucket["lights"]:
+			for i in min(active_count, arr.size()):
+				for light in arr[i].get_meta("entity_lights", []):
+					# not in a part the entity's script has hidden (mushroom variants)
+					if light.get_parent().is_visible_in_tree():
+						_frame_lights.append(light)
 		bucket["act_index"] = 0
 		bucket["active_count"] = 0
+	var camera = get_viewport().get_camera_3d()
+	if camera:
+		_light_budget.update_lights(_frame_lights, camera.global_position)
+	_entity_particles.emit(_frame_particles, get_process_delta_time())
 
 func clear_entites_pool() -> void:
+	_light_budget.clear()
+	_entity_particles.clear()
+	_entity_multimesh.clear()
 	for bucket in entites_pool.values():
 		var arr = bucket["array"]
 		for node in arr:
@@ -1073,20 +1293,39 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			var libType:int = 0
 			if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
 				libType = 1
-				if library_scenes.has(uid2):
-					scene_to_instance = library_scenes[uid2]
+				if library.has(uid2):
+					# null while the scene is still loading in the background - drawn once it is there
+					scene_to_instance = _get_library_scene(library, library_scenes, uid2, false)
 					fromlib = true
-				elif not library.has(uid2):
+				else:
 					scene_to_instance = library_scenes.get(default_key)
 			else:
 				libType = 2
-				if library2_scenes.has(uid2):
-					scene_to_instance = library2_scenes[uid2]
+				if library2.has(uid2):
+					scene_to_instance = _get_library_scene(library2, library2_scenes, uid2, false)
 					fromlib = true
-				elif not library2.has(uid2):
+				else:
 					scene_to_instance = library2_scenes.get(default_key)
 			var uid = Vector3i(actClass,modelIndex,libType)
-			if scene_to_instance != null:
+			if scene_to_instance != null and fromlib and _entity_multimesh.can_batch(scene_to_instance):
+				# only meshes - drawn with the others of its kind by a MultiMesh, no node of its own
+				var mm_scale = 1.0
+				if actClass == 10 and actModel == 39:
+					mm_scale = pow(actMana, 1.0 / 3.0) * 0.1
+				if actClass == 5 and actModel == 22:
+					mm_scale = actBitmapScale * inv_256
+				var mm_position = Vector3(data_array[offset] * inv_256, data_array[offset + 2] * inv_256, data_array[offset + 1] * inv_256)
+				if has_camera:
+					mm_position.x = cam_pos.x + fposmod(mm_position.x - cam_pos.x + 128.0, 256.0) - 128.0
+					mm_position.z = cam_pos.z + fposmod(mm_position.z - cam_pos.z + 128.0, 256.0) - 128.0
+					mm_position = to_local(mm_position)
+				var mm_basis = Basis.from_euler(Vector3(0, -rot2.x * rad_mult, 0)).scaled(Vector3(mm_scale, mm_scale, mm_scale))
+				var mm_bitmap_scale = null
+				if actBitmapScaleHelp:
+					var bs = actBitmapScale * inv_256
+					mm_bitmap_scale = Vector3(bs, bs, bs)
+				_entity_multimesh.add(scene_to_instance, Transform3D(mm_basis, mm_position), mm_bitmap_scale)
+			elif scene_to_instance != null:
 				current_node = get_first_entity_with_uid(uid)
 				if current_node == null:
 					var new_node = scene_to_instance.instantiate()
@@ -1145,7 +1384,9 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			var new_rotation = Vector3(0, yaw, 0)
 			if current_node.rotation != new_rotation:
 				current_node.rotation = new_rotation
+	_entity_multimesh.update()
 	show_hide_entites()
+	_fill_pool_step()
 
 var last_keys_state: Dictionary = {}
 var last_mouse_buttons_state: Dictionary = {}
@@ -1400,6 +1641,7 @@ func gameInit(useMultimesh):
 		if useMultimesh:
 			get_parent().get_node("MultiMeshtop").hide()
 	clear_entites_pool()
+	_begin_level_pool()
 	setFog2()
 
 func setDayEntites():	

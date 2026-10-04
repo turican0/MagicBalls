@@ -148,6 +148,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("TerrainGetAngle"), &MBEXclass::TerrainGetAngle);
 	godot::ClassDB::bind_method(D_METHOD("RunGameStep", "Dictionary"), &MBEXclass::RunGameStep);
 	godot::ClassDB::bind_method(D_METHOD("GetEntites"), &MBEXclass::GetEntites);
+	godot::ClassDB::bind_method(D_METHOD("GetLevelSpells"), &MBEXclass::GetLevelSpells);
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &MBEXclass::GetPlayerPositionRotation);
 	godot::ClassDB::bind_method(D_METHOD("set_mesh_instances", "Node3D", "Node3D", "bool"), &MBEXclass::set_mesh_instances);
 	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh", "bool"), &MBEXclass::recalculate_mesh);
@@ -1026,6 +1027,33 @@ bool MBEXclass::REMC2GetWebInfo() {
 	if (playerEntity->dword_0xA4_164x->mobilizeCounter_0x14E_334)
 		return true;
 	return false;
+}
+
+// Spells which can show up in the current level: the ones any wizard already has and the
+// ones placed in the level to be found. Used to prepare the entity pool before the level starts.
+Dictionary MBEXclass::GetLevelSpells() {
+	bool used[26] = {};
+	for (int i = 0; i < 1000; i++) {
+		type_entity_0x6E8E *entity = Entities_EA3E4[i];
+		if (entity->class_0x3F_63 != 3 || entity->model_0x40_64 != 0 || !entity->dword_0xA4_164x)
+			continue; // not a wizard
+		for (int k = 0; k < 26; k++)
+			if (entity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[k])
+				used[k] = true;
+	}
+	for (int i = 0; i < 1200; i++) {
+		auto &levelEntity = D41A0_0.terrain_2FECE.entity_0x30311[i];
+		if (levelEntity.type_0x30311 == 9 && levelEntity.subtype_0x30311 >= 0 && levelEntity.subtype_0x30311 < 26) // spell placed in the level
+			used[levelEntity.subtype_0x30311] = true;
+	}
+	PackedInt32Array spells;
+	for (int k = 0; k < 26; k++)
+		if (used[k])
+			spells.push_back(k);
+	Dictionary result;
+	result["level"] = (int)x_D41A0_BYTEARRAY_4_struct.levelnumber_43w;
+	result["spells"] = spells;
+	return result;
 }
 
 PackedFloat32Array MBEXclass::GetEntites() {
