@@ -764,6 +764,8 @@ func _get_library_scene(source_dict: Dictionary, target_dict: Dictionary, key: V
 
 func _ready():
 	updateRemap()
+	_light_budget = EntityLightBudget.new()
+	add_child(_light_budget)
 	_get_library_scene(library, library_scenes, DEFAULT_LIBRARY_KEY, true)
 	_get_library_scene(library2, library2_scenes, DEFAULT_LIBRARY_KEY, true)
 	#create_default_key_remap()
@@ -1106,11 +1108,23 @@ func _fill_pool(budget_usec: int) -> void:
 		if budget_usec >= 0 and Time.get_ticks_usec() - start > budget_usec:
 			return
 
+const EntityLightBudget = preload("res://scenes/entity_light_budget.gd")
+var _light_budget: Node3D
+var _frame_lights: Array = []
+
 # a new entity node goes into its pool bucket, inactive (beyond active_count)
 func _add_pool_node(uid: Vector3i, node: Node) -> void:
 	if not entites_pool.has(uid):
-		entites_pool[uid] = {"array": [], "active_count": 0, "act_index": 0, "ran_out": false}
+		entites_pool[uid] = {"array": [], "active_count": 0, "act_index": 0, "lights": false, "ran_out": false}
 	entites_pool[uid]["array"].append(node)
+	var lights := []
+	for light in node.find_children("*", "OmniLight3D", true, false):
+		# the scene's own hidden lights are left alone
+		if light.visible and not light.shadow_enabled:
+			lights.append(light)
+	if not lights.is_empty():
+		node.set_meta("entity_lights", lights)
+		entites_pool[uid]["lights"] = true
 
 func get_first_entity_with_uid(uid: Vector3i) -> Node:
 	if entites_pool.has(uid) and not entites_pool[uid]["array"].is_empty():
@@ -1127,6 +1141,7 @@ func add_pool_index(uid: Vector3i):
 		entites_pool[uid]["active_count"] += 1
 
 func show_hide_entites() -> void:
+	_frame_lights.clear()
 	for uid in entites_pool.keys():
 		var bucket = entites_pool[uid]
 		var arr = bucket["array"]
@@ -1156,10 +1171,20 @@ func show_hide_entites() -> void:
 		if arr.is_empty():
 			entites_pool.erase(uid)
 			continue
+		if bucket["lights"]:
+			for i in min(active_count, arr.size()):
+				for light in arr[i].get_meta("entity_lights", []):
+					# not in a part the entity's script has hidden (mushroom variants)
+					if light.get_parent().is_visible_in_tree():
+						_frame_lights.append(light)
 		bucket["act_index"] = 0
 		bucket["active_count"] = 0
+	var camera = get_viewport().get_camera_3d()
+	if camera:
+		_light_budget.update_lights(_frame_lights, camera.global_position)
 
 func clear_entites_pool() -> void:
+	_light_budget.clear()
 	for bucket in entites_pool.values():
 		var arr = bucket["array"]
 		for node in arr:
