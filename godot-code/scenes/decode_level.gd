@@ -965,25 +965,30 @@ func add_pool_index(uid: Vector3i):
 		entites_pool[uid]["active_count"] += 1
 
 func show_hide_entites() -> void:
-	for bucket in entites_pool.values():
+	for uid in entites_pool.keys():
+		var bucket = entites_pool[uid]
 		var arr = bucket["array"]
 		var active_count = bucket["active_count"]
-		for i in range(arr.size()):
+		# entites with a start script are freed instead of pooled, so they start again next time
+		var free_inactive: bool = uid.x == 14 and (uid.y == 461 or uid.y == 462)
+		# backwards, so remove_at() does not shift the nodes still to be visited
+		for i in range(arr.size() - 1, -1, -1):
 			var node: Node = arr[i]
 			# only touch what changes - this runs for every pooled node every frame
 			var active: bool = i < active_count
+			if not active and free_inactive:
+				node.queue_free()
+				arr.remove_at(i)
+				continue
 			if node.visible != active:
 				node.visible = active
 			if node.is_processing() != active:
 				node.set_process(active)
 			if node.is_physics_processing() != active:
 				node.set_physics_process(active)
-			if not active:
-				if(node.get_meta("uid")==Vector3i(14,461,0) or node.get_meta("uid")==Vector3i(14,462,0)):#remove entites with start script
-					node.queue_free()
-					arr.remove_at(i)
 		if arr.is_empty():
-			entites_pool.erase(bucket)
+			entites_pool.erase(uid)
+			continue
 		bucket["act_index"] = 0
 		bucket["active_count"] = 0
 
