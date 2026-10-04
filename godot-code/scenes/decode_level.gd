@@ -766,6 +766,8 @@ func _ready():
 	updateRemap()
 	_light_budget = EntityLightBudget.new()
 	add_child(_light_budget)
+	_entity_particles = EntityParticles.new()
+	add_child(_entity_particles)
 	_get_library_scene(library, library_scenes, DEFAULT_LIBRARY_KEY, true)
 	_get_library_scene(library2, library2_scenes, DEFAULT_LIBRARY_KEY, true)
 	#create_default_key_remap()
@@ -1109,14 +1111,21 @@ func _fill_pool(budget_usec: int) -> void:
 			return
 
 const EntityLightBudget = preload("res://scenes/entity_light_budget.gd")
+const EntityParticles = preload("res://scenes/entity_particles.gd")
 var _light_budget: Node3D
+var _entity_particles: Node3D
 var _frame_lights: Array = []
+var _frame_particles: Array = []
 
 # a new entity node goes into its pool bucket, inactive (beyond active_count)
 func _add_pool_node(uid: Vector3i, node: Node) -> void:
 	if not entites_pool.has(uid):
-		entites_pool[uid] = {"array": [], "active_count": 0, "act_index": 0, "lights": false, "ran_out": false}
+		entites_pool[uid] = {"array": [], "active_count": 0, "act_index": 0, "lights": false, "particles": false, "ran_out": false}
 	entites_pool[uid]["array"].append(node)
+	var particles = _entity_particles.register(node)
+	if not particles.is_empty():
+		node.set_meta("entity_particles", particles)
+		entites_pool[uid]["particles"] = true
 	var lights := []
 	for light in node.find_children("*", "OmniLight3D", true, false):
 		# the scene's own hidden lights are left alone
@@ -1142,10 +1151,14 @@ func add_pool_index(uid: Vector3i):
 
 func show_hide_entites() -> void:
 	_frame_lights.clear()
+	_frame_particles.clear()
 	for uid in entites_pool.keys():
 		var bucket = entites_pool[uid]
 		var arr = bucket["array"]
 		var active_count = bucket["active_count"]
+		if bucket["particles"]:
+			for i in min(active_count, arr.size()):
+				_frame_particles.append_array(arr[i].get_meta("entity_particles", []))
 		# entites with a start script are freed instead of pooled, so they start again next time
 		var free_inactive: bool = uid.x == 14 and (uid.y == 461 or uid.y == 462)
 		# this kind ran out of nodes (one had to be made at once): keep some spare ones of it from
@@ -1182,9 +1195,11 @@ func show_hide_entites() -> void:
 	var camera = get_viewport().get_camera_3d()
 	if camera:
 		_light_budget.update_lights(_frame_lights, camera.global_position)
+	_entity_particles.emit(_frame_particles, get_process_delta_time())
 
 func clear_entites_pool() -> void:
 	_light_budget.clear()
+	_entity_particles.clear()
 	for bucket in entites_pool.values():
 		var arr = bucket["array"]
 		for node in arr:
