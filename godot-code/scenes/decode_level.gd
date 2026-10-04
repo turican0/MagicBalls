@@ -768,6 +768,8 @@ func _ready():
 	add_child(_light_budget)
 	_entity_particles = EntityParticles.new()
 	add_child(_entity_particles)
+	_entity_multimesh = EntityMultiMesh.new()
+	add_child(_entity_multimesh)
 	_get_library_scene(library, library_scenes, DEFAULT_LIBRARY_KEY, true)
 	_get_library_scene(library2, library2_scenes, DEFAULT_LIBRARY_KEY, true)
 	#create_default_key_remap()
@@ -1099,6 +1101,9 @@ func _fill_pool(budget_usec: int) -> void:
 			_pool_fill_queue.push_back(_pool_fill_queue.pop_front())
 			waiting += 1
 			continue
+		if _entity_multimesh.can_batch(scene): # drawn by a MultiMesh, needs no nodes
+			_pool_fill_queue.pop_front()
+			continue
 		waiting = 0
 		var node = scene.instantiate()
 		node.set_meta("uid", uid)
@@ -1112,6 +1117,8 @@ func _fill_pool(budget_usec: int) -> void:
 
 const EntityLightBudget = preload("res://scenes/entity_light_budget.gd")
 const EntityParticles = preload("res://scenes/entity_particles.gd")
+const EntityMultiMesh = preload("res://scenes/entity_multimesh.gd")
+var _entity_multimesh: Node3D
 var _light_budget: Node3D
 var _entity_particles: Node3D
 var _frame_lights: Array = []
@@ -1200,6 +1207,7 @@ func show_hide_entites() -> void:
 func clear_entites_pool() -> void:
 	_light_budget.clear()
 	_entity_particles.clear()
+	_entity_multimesh.clear()
 	for bucket in entites_pool.values():
 		var arr = bucket["array"]
 		for node in arr:
@@ -1299,7 +1307,25 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 				else:
 					scene_to_instance = library2_scenes.get(default_key)
 			var uid = Vector3i(actClass,modelIndex,libType)
-			if scene_to_instance != null:
+			if scene_to_instance != null and fromlib and _entity_multimesh.can_batch(scene_to_instance):
+				# only meshes - drawn with the others of its kind by a MultiMesh, no node of its own
+				var mm_scale = 1.0
+				if actClass == 10 and actModel == 39:
+					mm_scale = pow(actMana, 1.0 / 3.0) * 0.1
+				if actClass == 5 and actModel == 22:
+					mm_scale = actBitmapScale * inv_256
+				var mm_position = Vector3(data_array[offset] * inv_256, data_array[offset + 2] * inv_256, data_array[offset + 1] * inv_256)
+				if has_camera:
+					mm_position.x = cam_pos.x + fposmod(mm_position.x - cam_pos.x + 128.0, 256.0) - 128.0
+					mm_position.z = cam_pos.z + fposmod(mm_position.z - cam_pos.z + 128.0, 256.0) - 128.0
+					mm_position = to_local(mm_position)
+				var mm_basis = Basis.from_euler(Vector3(0, -rot2.x * rad_mult, 0)).scaled(Vector3(mm_scale, mm_scale, mm_scale))
+				var mm_bitmap_scale = null
+				if actBitmapScaleHelp:
+					var bs = actBitmapScale * inv_256
+					mm_bitmap_scale = Vector3(bs, bs, bs)
+				_entity_multimesh.add(scene_to_instance, Transform3D(mm_basis, mm_position), mm_bitmap_scale)
+			elif scene_to_instance != null:
 				current_node = get_first_entity_with_uid(uid)
 				if current_node == null:
 					var new_node = scene_to_instance.instantiate()
@@ -1358,6 +1384,7 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 			var new_rotation = Vector3(0, yaw, 0)
 			if current_node.rotation != new_rotation:
 				current_node.rotation = new_rotation
+	_entity_multimesh.update()
 	show_hide_entites()
 	_fill_pool_step()
 
