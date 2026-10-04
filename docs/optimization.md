@@ -27,6 +27,13 @@ generovala data, jsou v `tools/optimization/`.
   2. + kouzla z `PrefillData.LEVEL_SPELLS[level]` → `PrefillData.SPELLS[spell]` (max. přes kouzla, přičteno).
   3. Scény se načtou hned (`wait=true`) a všechny uzly se vytvoří hned (`_fill_pool(-1)`) – během načítání.
   4. Zbytek knihovny se načítá na pozadí po jedné (`_background_load_step`).
+- Čarodějové: při startu levelu se načtou scény „sady“ všech 8 barev (hrad 3,96+b, vlajky budov 10,96+b,
+  balony 3,88+b, mana koule 10,67+b, model čaroděje); jakmile engine ohlásí čaroděje v levelu
+  (`GetLevelSpells()["wizards"]`, snímek 10 a pak každých 300), dostane každá přítomná barva sadu:
+  hrad 2, vlajky 4, balony 4, model 1 a mana koule tolik, kolik jich v levelu je (zlaté + barevné, min. 32).
+  Funguje pro libovolný počet hráčů v multiplayeru. Barva: 0 bílá, 1 červená, 2 fialová, 3 modrá,
+  4 zelená, 5 růžová, 6 oranžová, 7 černá; u hráče z `GetTrueWizardNumber`, u počítačového čaroděje
+  z jeho modelu (203 modrá, 211 červená, 219 černá, 227 oranžová, 235 růžová, 243 fialová, 251 zelená).
 - Za hry: `_check_level_spells` (každých 300 snímků) přidá nově nalezená kouzla; druh, kterému dojdou
   uzly (`ran_out`), dostane rezervu 25 % (min. 2). Doplňuje se s rozpočtem 3 ms/snímek.
 - Entity se startovacím skriptem (14,461 / 14,462) se nepoolují – po zmizení se uvolní.

@@ -1029,14 +1029,27 @@ bool MBEXclass::REMC2GetWebInfo() {
 	return false;
 }
 
-// Spells which can show up in the current level: the ones any wizard already has and the
-// ones placed in the level to be found. Used to prepare the entity pool before the level starts.
+// What can show up in the current level: the spells any wizard already has and the ones placed
+// in the level to be found, and the colours of the wizards (players and computer ones). Used to
+// prepare the entity pool.
 Dictionary MBEXclass::GetLevelSpells() {
 	bool used[26] = {};
+	PackedInt32Array wizards;
 	for (int i = 0; i < 1000; i++) {
 		type_entity_0x6E8E *entity = Entities_EA3E4[i];
-		if (entity->class_0x3F_63 != 3 || entity->model_0x40_64 != 0 || !entity->dword_0xA4_164x)
-			continue; // not a wizard
+		// wizards: the players (model 0) and the computer ones (model 1); 2 is a castle, 3 a balloon
+		if (entity->class_0x3F_63 != 3 || entity->model_0x40_64 > 1 || !entity->dword_0xA4_164x)
+			continue;
+		// the wizard's colour: 0 white, 1 red, 2 violet, 3 blue, 4 green, 5 pink, 6 orange, 7 black -
+		// the order of its castle, balloons and mana spheres. A player's comes from the wizard
+		// chosen (multiplayer); a computer wizard's from its model, which is drawn by colour.
+		int colour = GetTrueWizardNumber_61790(entity->dword_0xA4_164x->playerColorIndex_0x38_56);
+		int model = particlesParameters_D951C[entity->word_0x5A_90].word_0;
+		if (entity->model_0x40_64 == 1 && model >= 203 && model < 203 + 7 * 8) {
+			static const int modelColours[7] = { 3, 1, 7, 6, 5, 2, 4 }; // 203 blue, 211 red, 219 black, ...
+			colour = modelColours[(model - 203) / 8];
+		}
+		wizards.push_back(colour);
 		for (int k = 0; k < 26; k++)
 			if (entity->dword_0xA4_164x->str_611.SpellsEnabled_0x333_819x.SpellEnabled[k])
 				used[k] = true;
@@ -1053,6 +1066,7 @@ Dictionary MBEXclass::GetLevelSpells() {
 	Dictionary result;
 	result["level"] = (int)x_D41A0_BYTEARRAY_4_struct.levelnumber_43w;
 	result["spells"] = spells;
+	result["wizards"] = wizards;
 	return result;
 }
 
