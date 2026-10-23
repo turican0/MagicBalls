@@ -2,24 +2,10 @@
 #ifndef PORT_SDL_SOUND_H
 #define PORT_SDL_SOUND_H
 
-
-//#define SOUND_OPENAL
+// MagicBalls: the sound requests of the engine go to Godot through sound_queue,
+// see port_sdl_sound.cpp.
 
 #include "bitmap_pos_struct.h"
-//#include "SfxEffectWrapper.h"
-//#include <SDL2/SDL.h>
-
-#define SOUND_SDLMIXER
-
-#ifdef SOUND_SDLMIXER
-	//#include <SDL2/SDL_mixer.h>
-#endif
-
-#ifdef SOUND_OPENAL
-	#include <al.h>
-	#include <alc.h>
-#endif//SOUND_OPENAL
-
 #include "xmi2mid.h"
 #include <time.h>
 #include <string>
@@ -173,18 +159,6 @@ shadow_type_E3808_music_header;
 //shadow shadow_type_E3808_music_header
 #pragma pack (16)
 
-//#ifndef SOUND_SDLMIXER
-typedef struct {
-	int allocated;
-	uint8_t* abuf;
-	uint32_t alen;
-	uint8_t volume;
-} Mix_Chunk;
-//#endif//SOUND_SDLMIXER
-
-//#define USE_SDL2
-
-//#define DEBUG_SOUND
 extern bool debug_first_sound;
 
 extern bool hqsound;
@@ -196,21 +170,30 @@ extern bool autoShowObjectivesForForeignLanguages;
 extern int maxSimultaniousSounds;
 extern char speechFolder[512];
 
-extern Mix_Chunk* m_ptrSpeechChunk;
-extern int m_ptrSpeechBytesOffSet;
+extern std::string musicType;
+extern std::string awe32RomFolder;
+extern bool awe32Music;//the XMI music of the game plays through the AWE32 emulation (musicType "awe32" and the ROM found)
+extern bool useMagicCarpet1Music;
+extern bool awe32GmIntroMusic;//the intro and the cutscenes play the General MIDI version of the XMI music instead of the AWE32 one
+extern int awe32BufferMs;//how far ahead the AWE32 emulation renders, more for slow (debug) builds
+
+void SOUND_ShowMusicWarning();
+uint8_t* SOUND_DosRealPointer(uint16_t segment, uint16_t offset);
+uint16_t SOUND_DosRealAlloc(uint32_t bytes);
+void SOUND_DosRealFree(uint16_t segment);
+
+bool SOUND_IsAwe32Music();
+// Stereo 16-bit frames at 44100 Hz of the AWE32 emulation, pulled by Godot.
+void SOUND_RenderAwe32Music(int16_t* out, int frames);
 
 bool init_sound();
-//bool load_sound_files();
 void clean_up_sound();
-void playmusic2(int32_t track_number);
 extern uint8_t sound_buffer[4][20000];
-//extern HSAMPLE last_sample;
 
 int32_t ac_sound_call_driver(AIL_DRIVER* drvr, int32_t fn, VDI_CALL* out);
 
 void ac_set_real_vect(uint32_t vectnum, uint16_t real_ptr);
 uint16_t ac_get_real_vect(uint32_t vectnum);
-AIL_DRIVER* ac_AIL_API_install_driver(int a1, uint8_t* a2, int a3);
 
 void SOUND_init_MIDI_sequence(uint8_t* datax, type_E3808_music_header* headerx, int32_t track_number);
 
@@ -229,35 +212,23 @@ void SOUND_set_sequence_volume(int32_t volume, int32_t  milliseconds);
 void SOUND_set_master_volume(int32_t volume);
 void SOUND_set_sample_volume_panning(HSAMPLE S, int32_t panning);
 void SetSamplePosition(HSAMPLE S, int16_t angle, uint8_t distance);
-void SOUND_UPDATE();
-void ChannelFinished(int channel);
 
 void SOUND_RegisterTimer(int timerIdx, uint32_t(*callback)(uint32_t));
 void SOUND_SetTimerPeriod(int timerIdx, uint32_t intervalMs);
 void SOUND_StartTimer(int timerIdx);
 void SOUND_StopTimer(int timerIdx);
-void SOUND_ChangeSamplePlaybackRate(HSAMPLE S, float percent);
 
 bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosSec, int32_t lengthMs);
 bool IsCdTrackPlaying();
 bool EndPlayingCdTrackSegment();
-bool ClearCdTrackSegment();
 bool AreCdTracksAvailable();
 int GetCdTrackCount();
 
-void RegisterEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format);
-template <typename T> void LoadAudioEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format);
-
-//void test_midi_play(uint8_t* data, uint8_t* header, int32_t track_number);
-#ifdef SOUND_OPENAL
-//void ALSOUND_load_wav(char* alBuffer, long alBufferLen);
-void ALSOUND_play(int which, Mix_Chunk* chunk, int loops);
-void ALSOUND_init();
-#endif//SOUND_OPENAL
-
 void sound_queue_add_action(const std::string &action, int p1, int p2, int p3, int p4);
-void sound_queue_clear();
-void sound_update_playing(const std::vector<int> &free_indices);
+// Godot takes the pending actions once a frame and then clears the queue (which also fires the AIL timers).
 std::vector<SoundAction> sound_queue_get_pending_actions();
+void sound_queue_clear();
+// Which sample players of Godot play (1) or not (0), indexed by the AIL channel.
+void sound_update_playing(const std::vector<int> &playing);
 
 #endif //PORT_SDL_SOUND

@@ -115,6 +115,7 @@ public:
 	Array getPendingSoundActions();
 		//void soundQueueClear();
 	void updateFreeSoundPlayers(const godot::Array &p_indices);
+	PackedVector2Array getAwe32MusicFrames(int frames);
 	PackedByteArray getVGABuffer();
 	//void mapMenuInit();
 	//int mapMenuStep(int run);
@@ -124,6 +125,7 @@ public:
 
 	void REMC2BeginGame(String cdPath, String gamePath, int CustomLevel = -1, String CustomLevelPath = "");
 	void REMC2SetNetwork(int mode, String serverIp, int serverPort, int clientPort, bool debug, String recordFile);
+	void REMC2SetMusic(String musicType, String awe32RomFolder, bool useMagicCarpet1Music, bool awe32GmIntroMusic, int awe32BufferMs);
 	void REMC2EndGame();
 	//void REMC2BeginItem();
 	//void REMC2EndItem();

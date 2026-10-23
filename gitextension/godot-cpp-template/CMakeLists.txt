@@ -116,8 +116,6 @@ target_sources(${LIBNAME}
     src/remc2/engine/GameBitmap.cpp
     src/remc2/engine/GameBitmap.h
     src/remc2/engine/GameBitmapIndexes.h
-    src/remc2/engine/GameRenderGL.cpp
-    src/remc2/engine/GameRenderGL.h
     src/remc2/engine/GameRenderHD.cpp
     src/remc2/engine/GameRenderHD.h
     src/remc2/engine/GameRenderInterface.h
@@ -169,8 +167,8 @@ target_sources(${LIBNAME}
     src/remc2/engine/Type_MapScreenPortals_E17CC.h
     src/remc2/engine/Type_SecretMapScreenPortals_E2970.cpp
     src/remc2/engine/Type_SecretMapScreenPortals_E2970.h
-    src/remc2/engine/Type_WORD_D951C.cpp
-    src/remc2/engine/Type_WORD_D951C.h
+    src/remc2/engine/Type_SpriteDef_D951C.cpp
+    src/remc2/engine/Type_SpriteDef_D951C.h
     src/remc2/engine/Unk_D47E0.cpp
     src/remc2/engine/Unk_D47E0.h
     src/remc2/engine/Unk_D4A30.cpp
@@ -247,6 +245,27 @@ target_sources(${LIBNAME}
     src/remc2/portability/port_outputs.h
     src/remc2/portability/port_sdl_sound.cpp
     src/remc2/portability/port_sdl_sound.h
+    src/remc2/portability/awe32/Awe32Mdi.cpp
+    src/remc2/portability/awe32/Awe32Rom.cpp
+    src/remc2/portability/awe32/Emu8000.cpp
+    src/remc2/portability/awe32/Emu8000Box.cpp
+    src/remc2/portability/awe32/I18n.cpp
+    src/remc2/portability/awe32/SoundFont.cpp
+    src/remc2/portability/awe32/Synth.cpp
+    src/remc2/portability/awe32/86box/snd_emu8k.c
+    src/remc2/portability/awe32/Awe32Curves.h
+    src/remc2/portability/awe32/Awe32Driver.h
+    src/remc2/portability/awe32/Awe32InitArrays.h
+    src/remc2/portability/awe32/Awe32Mdi.h
+    src/remc2/portability/awe32/Awe32Rom.h
+    src/remc2/portability/awe32/Emu8000.h
+    src/remc2/portability/awe32/Emu8000Box.h
+    src/remc2/portability/awe32/Emu8000Effects.h
+    src/remc2/portability/awe32/Emu8000Regs.h
+    src/remc2/portability/awe32/I18n.h
+    src/remc2/portability/awe32/MidiTypes.h
+    src/remc2/portability/awe32/SoundFont.h
+    src/remc2/portability/awe32/Synth.h
     src/remc2/portability/Config.cpp
     src/remc2/portability/Config.h
     src/remc2/portability/KeyboardInputMapping.h
@@ -286,6 +305,9 @@ target_link_libraries(${LIBNAME} PRIVATE godot-cpp)
 set_property(TARGET ${LIBNAME} PROPERTY CXX_STANDARD 17)
 
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_LIST_DIR}/src/lib")
+# AWE32 music: the EMU8000 chip of 86Box (same as remc2/CMakeLists.txt)
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_LIST_DIR}/src/remc2/portability/awe32/86box/include")
+target_compile_definitions(${LIBNAME} PRIVATE AWE32EMU_WITH_86BOX)
 
 set_target_properties(${LIBNAME}
     PROPERTIES

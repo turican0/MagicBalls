@@ -5,6 +5,12 @@ var MainMusicHi:AudioStreamPlayer
 var MainMusicHi2:AudioStreamPlayer
 var MainSpeech:AudioStreamPlayer
 
+# AWE32 music: the engine emulates the card and renders PCM ahead in its own thread,
+# this player pulls it every frame (SOUND_music_mode from port_sdl_sound.cpp)
+var MainMusicAwe32:AudioStreamPlayer
+var _awe32_playback:AudioStreamGeneratorPlayback
+const AWE32_GODOT_BUFFER_SEC := 0.25
+
 #func _load_wav_as_sample(file_path: String) -> AudioStream:
 	#var file = FileAccess.open(file_path, FileAccess.READ)
 	#if file == null:
@@ -189,12 +195,40 @@ func updateSounds(soundActions:Array):
 			"EndPlayingCdTrackSegment":
 				stop_speech()
 				matchok=true
-
-			#sound_queue_add_action("PlayCdTrackSegment", trackIdx, startPosMs, lengthMs);
-			#sound_queue_add_action("EndPlayingCdTrackSegment", 0, 0, 0);
-			#sound_queue_add_action("ClearCdTrackSegment", 0, 0, 0);
+			"SOUND_music_mode":
+				if p1 == 1:
+					start_awe32_music(p2)
+				else:
+					stop_awe32_music()
+				matchok=true
 		if(!matchok):
 			matchok=true
+
+func start_awe32_music(mix_rate: int) -> void:
+	stop_music()
+	if MainMusicAwe32 == null:
+		MainMusicAwe32 = AudioStreamPlayer.new()
+		MainMusicAwe32.name = "AudioStreamPlayerAwe32"
+		add_child(MainMusicAwe32)
+	var generator := AudioStreamGenerator.new()
+	generator.mix_rate = mix_rate
+	generator.buffer_length = AWE32_GODOT_BUFFER_SEC
+	MainMusicAwe32.stream = generator
+	MainMusicAwe32.volume_db = linear_to_db(Global.music_volume)
+	MainMusicAwe32.play()
+	_awe32_playback = MainMusicAwe32.get_stream_playback()
+
+func stop_awe32_music() -> void:
+	_awe32_playback = null
+	if MainMusicAwe32 != null:
+		MainMusicAwe32.stop()
+
+func _process(_delta: float) -> void:
+	if _awe32_playback == null or Global.MBEX == null:
+		return
+	var frames := _awe32_playback.get_frames_available()
+	if frames > 0:
+		_awe32_playback.push_buffer(Global.MBEX.getAwe32MusicFrames(frames))
 
 var soundBank=0
 func setSoundBank(bank):

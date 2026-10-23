@@ -51,6 +51,7 @@ void sub_main_mod_end() {
 	sub_main_cleaned = true;
 	sub_5BC20(); //23CC20 //remove devices?
 	sub_56730_clean_memory(); //237730
+	clean_up_sound();
 	if (CommandLineParams.ModeNetwork()) {
 		if (Iam_server || Iam_client) {
 			EndMyNetLib();
@@ -1580,7 +1581,7 @@ void PlayInGameFmv_82670_mod() //263670
 					}
 					SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
 					memset((void *)pdwScreenBuffer_351628, 0, 640 * 480);
-					if (x_WORD_180660_VGA_type_resolution != 1) {
+					if (x_WORD_180660_VGA_type_resolution != 1 || screenWidth_18062C != 320 || screenHeight_180624 != 200) {
 						sub_54600_mouse_reset();
 						memset((void *)*xadatapald0dat2.colorPalette_var28, 0, 768);
 						if (x_WORD_180660_VGA_type_resolution & 1)
@@ -1833,7 +1834,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 
 				std::string help_buffer_name;
 				std::string screenbuffer_buffer_name;
-				if (typeid(*m_ptrGameRender) == typeid(GameRenderHD)) {
+				if (typeid(*m_ptrGameRender) == typeid(GameRenderNG)) {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
 					m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
@@ -1842,7 +1843,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 				} else {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
-					m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+					m_ptrGameRender = (GameRenderInterface *)new GameRenderNG(viewDistanceScale, fogScale, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
 					help_buffer_name = "ScreenBuffer_Original.bmp";
 					screenbuffer_buffer_name = "ScreenBuffer_HD.bmp";
 				}
@@ -1879,14 +1880,14 @@ void DrawGameFrame_2BE30_mod() //20CE30
 					WriteBufferToBMP(screenWidth_18062C, screenHeight_180624, *xadatapald0dat2.colorPalette_var28, help_ScreenBuffer, helpScreenBufferName.str().c_str());
 				}
 
-				if (typeid(*m_ptrGameRender) == typeid(GameRenderHD)) {
+				if (typeid(*m_ptrGameRender) == typeid(GameRenderNG)) {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
 					m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
 				} else {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
-					m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+					m_ptrGameRender = (GameRenderInterface *)new GameRenderNG(viewDistanceScale, fogScale, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
 				}
 			}
 			*/
@@ -1904,41 +1905,8 @@ void DrawGameFrame_2BE30_mod() //20CE30
 				DrawPauseMenu_2FD90(scale);
 			} else {
 				if (x_DWORD_D4188 && playerEntity->dword_0xA4_164x->mobilizeCounter_0x14E_334) {
-					//Draw Spiders Web
-					/*
-					int16_t offSetX = 0;
-					int16_t offSetY = 0;
-					int maxCountX;
-					int maxCountY;
-					if (x_WORD_180660_VGA_type_resolution & 1) {
-						maxCountY = 2;
-						maxCountX = 4;
-					} else {
-						maxCountY = 4;
-						maxCountX = 6;
-					}
-					if (x_WORD_180660_VGA_type_resolution != 1)
-						if (!DefaultResolutions()) {
-							offSetX = (screenWidth_18062C - 640) / 2;
-							offSetY = (screenHeight_180624 - 480) / 2;
-						}
-					actPlayerIndex = 1;
-					int countY = 0;
-					int y = 0;
-					int yAdd = x_DWORD_D418C[1].height_5;
-					while (countY < maxCountY) {
-						int countX = 0;
-						int x = 0;
-						while (countX < maxCountX) {
-							DrawBitmap_2BB40(offSetX + x, offSetY + y, x_DWORD_D4188t_spritestr[actPlayerIndex]);
-							countX++;
-							actPlayerIndex++;
-							x += x_DWORD_D4188t_spritestr[actPlayerIndex].width_4;
-							yAdd = x_DWORD_D4188t_spritestr[1].height_5;
-						}
-						countY++;
-						y += yAdd;
-					}*/
+					//Draw Spiders Web - Godot draws it
+					//actPlayerIndex = DrawSpiderWeb();
 				}
 				if (D41A0_0.m_GameSettings.m_Display.m_wMiniMap) {
 					//added code
@@ -2114,7 +2082,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 
 				std::string help_buffer_name;
 				std::string screenbuffer_buffer_name;
-				if (typeid(*m_ptrGameRender) == typeid(GameRenderHD)) {
+				if (typeid(*m_ptrGameRender) == typeid(GameRenderNG)) {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
 					m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
@@ -2123,7 +2091,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 				} else {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
-					m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+					m_ptrGameRender = (GameRenderInterface *)new GameRenderNG(viewDistanceScale, fogScale, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
 					help_buffer_name = "ScreenBuffer_Original.bmp";
 					screenbuffer_buffer_name = "ScreenBuffer_HD.bmp";
 				}
@@ -2152,14 +2120,14 @@ void DrawGameFrame_2BE30_mod() //20CE30
 					Logger->error("Differences between HD and Original renderer in frame {0}: {1}", renderer_tests_frame_count, difference);
 				}
 
-				if (typeid(*m_ptrGameRender) == typeid(GameRenderHD)) {
+				if (typeid(*m_ptrGameRender) == typeid(GameRenderNG)) {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
 					m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
 				} else {
 					delete m_ptrGameRender;
 					m_ptrGameRender = nullptr;
-					m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
+					m_ptrGameRender = (GameRenderInterface *)new GameRenderNG(viewDistanceScale, fogScale, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores);
 				}
 			}
 			*/
@@ -2958,8 +2926,10 @@ void InGameLoop_47320_mod() //228320
 		DrawAndEventsInGame_47560_mod(GameTimerTurn_17DB54);
 		if (gameTurn < 2) {
 			StopMusic_8E020();
-			if (gameTurn == 1)
+			if (gameTurn == 1) {
 				StartMusic_8E160(D41A0_0.maptypeMusic_0x235, 0x7Fu);
+				SOUND_ShowMusicWarning();
+			}
 			gameTurn++;
 		}
 
@@ -3105,16 +3075,16 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 				SetCenterScreenForFlyAssistant_6EDB0();
 				if (m_ptrGameRender == nullptr) {
 					if (!strcmp(forceRender.c_str(), "NG"))
-						m_ptrGameRender = (GameRenderInterface *)new GameRenderNG();
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderNG(viewDistanceScale, fogScale, multiThreadedRender ? numberOfRenderThreads : 0, assignToSpecificCores, sizePercentToThreadRender);
 					else if (!strcmp(forceRender.c_str(), "Original"))
 						m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
 					else if (!strcmp(forceRender.c_str(), "HD"))
-						m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores, sizePercentToThreadRender, viewDistanceScale);
+						m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores, sizePercentToThreadRender, sizePercentToThreadRenderSprites, viewDistanceScale);
 					else {
 						if ((gameResWidth <= 640) && (gameResHeight <= 480)) {
 							m_ptrGameRender = (GameRenderInterface *)new GameRenderOriginal();
 						} else {
-							m_ptrGameRender = (GameRenderInterface *)new GameRenderHD(pdwScreenBuffer_351628, *xadatapald0dat2.colorPalette_var28, (multiThreadedRender ? numberOfRenderThreads : 0), assignToSpecificCores, sizePercentToThreadRender, viewDistanceScale);
+							m_ptrGameRender = (GameRenderInterface *)new GameRenderNG(viewDistanceScale, fogScale, multiThreadedRender ? numberOfRenderThreads : 0, assignToSpecificCores, sizePercentToThreadRender);
 						}
 					}
 				}
@@ -3256,6 +3226,8 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		gameResWidth = 640; //added
 		gameResHeight = 480; //added
 		maxGameFps = 1000; //added
+		//musicType and the AWE32 settings come from Godot (REMC2SetMusic); in remc2 VGA_Init calls it
+		init_sound();
 
 		godot::UtilityFunctions::print("sub_main_mod DoDisableGraphicsEnhance");
 

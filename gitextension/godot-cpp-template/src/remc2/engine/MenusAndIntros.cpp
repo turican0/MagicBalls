@@ -665,7 +665,20 @@ void InitLanguage_76A40()//257A40
 	memset(&configDat, 0, sizeof(TypeConfigDat));
 	sprintf(printbuffer, "%s/%s", gameDataPath.c_str(), "CONFIG.DAT");
 	configdatfile = DataFileIO::CreateOrOpenFile(printbuffer, 512);
-	if (configdatfile == NULL)//config is not found
+	if (configdatfile == NULL && PackedGameData())//regression tests without the game: no dialog, CONFIG.DAT defaults, empty texts
+	{
+		x_D41A0_BYTEARRAY_4_struct.configDatSign_0 = 0xfffffff7;
+		x_D41A0_BYTEARRAY_4_struct.soundVolume_6 = 0x7f;
+		x_D41A0_BYTEARRAY_4_struct.musicVolume_8 = 0x7f;
+		x_D41A0_BYTEARRAY_4_struct.showHelp_10 = 1;
+		if (!x_DWORD_D41BC_langbuffer)
+		{
+			x_DWORD_D41BC_langbuffer = (char*)Malloc_83CD0(471);
+			memset(x_DWORD_D41BC_langbuffer, 0, 471);
+		}
+		sub_5B870_copy_sentence(x_DWORD_D41BC_langbuffer, x_DWORD_E9C4C_langindexbuffer, 471);
+	}
+	else if (configdatfile == NULL)//config is not found
 	{
 		LoadAndSetGraphicsAndPalette_7AC00();//25BC00 //change screen radio
 		LanguageSettingDialog_779E0(0);//2589E0 //set language
@@ -4138,7 +4151,7 @@ void PlayInGameFmv_82670()//263670
 					}
 					SetCursor_8CD27((*filearray_2aa18c[filearrayindex_POINTERSDATTAB].posistruct)[0]); //Set cursor to Null (Don't Draw)
 					memset((void*)pdwScreenBuffer_351628, 0, 640 * 480);
-					if (x_WORD_180660_VGA_type_resolution != 1)
+					if (x_WORD_180660_VGA_type_resolution != 1 || screenWidth_18062C != 320 || screenHeight_180624 != 200)
 					{
 						sub_54600_mouse_reset();
 						memset((void*)*xadatapald0dat2.colorPalette_var28, 0, 768);

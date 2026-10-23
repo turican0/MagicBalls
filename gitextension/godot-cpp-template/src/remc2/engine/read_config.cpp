@@ -34,13 +34,16 @@ bool startWindowed = false;
 bool bigTextures = false;
 bool bigSprites = false;
 bool fixedMenuGraphics = false;
+bool fixedTmaps = false;
 bool extendedFonts = false;
 bool sky = true;
 bool reflections = false;
 bool dynamicLighting = false;
 int viewDistanceScale = 1;
+float fogScale = 1.0f;
 bool multiThreadedRender = false;
 float sizePercentToThreadRender = 0;
+float sizePercentToThreadRenderSprites = 0;
 int numberOfRenderThreads = 0;
 bool assignToSpecificCores = false;
 bool openGLRender = false;
@@ -142,10 +145,24 @@ bool SetConfig() {
 	hqsound = settingsValue.m_Sound.m_HqSound;
 	fixspeedsound = settingsValue.m_Sound.m_FixSpeedSound;
 	autoShowObjectivesForForeignLanguages = settingsValue.m_Sound.m_AutoShowObjectivesForForeignLanguages;
-	if (settingsValue.m_Sound.m_OggMusic)
+
+	musicType = settingsValue.m_Sound.m_MusicType;
+	strcpy(oggmusicFolder, settingsValue.m_Sound.m_OggFolder.c_str());
+
+	if (musicType.compare("ogg") == 0)
 	{
 		oggmusic = true;
-		hqsound = true;//for mp3 music must be activate hqsound
+		hqsound = true;
+		oggmusicalternative = settingsValue.m_Sound.m_OggMusicAlternative;
+	}
+	else if(musicType.compare("awe32") == 0)
+	{
+		awe32Music = true;
+		hqsound = true;
+		awe32RomFolder = settingsValue.m_Sound.m_Awe32RomFolder;
+		useMagicCarpet1Music = settingsValue.m_Sound.m_UseMagicCarpet1Music;
+		awe32GmIntroMusic = settingsValue.m_Sound.m_Awe32GmIntroMusic;
+		awe32BufferMs = settingsValue.m_Sound.m_Awe32BufferMs;
 	}
 	else
 		oggmusic = false;
@@ -153,8 +170,6 @@ bool SetConfig() {
 	if (settingsValue.m_Sound.m_MaxSimultaniousSounds > 10)
 		maxSimultaniousSounds = settingsValue.m_Sound.m_MaxSimultaniousSounds;
 
-	oggmusicalternative = settingsValue.m_Sound.m_OggMusicAlternative;
-	strcpy(oggmusicFolder, settingsValue.m_Sound.m_OggFolder.c_str());
 	strcpy(speechFolder, settingsValue.m_Sound.m_SpeechFolder.c_str());
 
 	//Graphics
@@ -205,6 +220,13 @@ bool SetConfig() {
 		fixedMenuGraphics = true;
 	}
 
+	fixedTmapsFolder = settingsValue.m_Graphics.m_GameDetail.m_FixedTmapsFolder;
+	if (settingsValue.m_Graphics.m_GameDetail.m_UseFixedTmaps && strlen(fixedTmapsFolder.c_str()) > 0
+		&& std::filesystem::is_directory(GetSubDirectoryPath(fixedTmapsFolder.c_str())))
+	{
+		fixedTmaps = true;
+	}
+
 	extendedFontsFolder = settingsValue.m_Graphics.m_GameDetail.m_ExtendedFontsFolder;
 	if (settingsValue.m_Graphics.m_GameDetail.m_UseExtendedFonts && strlen(extendedFontsFolder.c_str()) > 0
 		&& std::filesystem::is_directory(GetSubDirectoryPath(extendedFontsFolder.c_str())))
@@ -215,8 +237,10 @@ bool SetConfig() {
 	sky = settingsValue.m_Graphics.m_GameDetail.m_Sky;
 	reflections = settingsValue.m_Graphics.m_GameDetail.m_Reflections;
 	dynamicLighting = settingsValue.m_Graphics.m_GameDetail.m_DynamicLighting;
-	if (settingsValue.m_Graphics.m_GameDetail.m_ViewDistanceScale > 0 && settingsValue.m_Graphics.m_GameDetail.m_ViewDistanceScale < 4)
+	if (settingsValue.m_Graphics.m_GameDetail.m_ViewDistanceScale > 0)
 		viewDistanceScale = settingsValue.m_Graphics.m_GameDetail.m_ViewDistanceScale;
+	if (settingsValue.m_Graphics.m_GameDetail.m_FogScale > 0)
+		fogScale = settingsValue.m_Graphics.m_GameDetail.m_FogScale;
 
 	multiThreadedRender = settingsValue.m_Graphics.m_Threading.m_IsActive;
 	sizePercentToThreadRender = settingsValue.m_Graphics.m_Threading.m_SizePercentToThreadRender;

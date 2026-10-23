@@ -19,6 +19,7 @@ std::string gameFolder = "NETHERW";
 std::string cdFolder = "CD_Files";
 std::string highResGraphicsFolder = "graphics/high-res";
 std::string fixedMenuGraphicsFolder = "graphics/fixed/menu";
+std::string fixedTmapsFolder = "graphics/fixed/tmaps";//sprites taken instead of the TMAPS ones (TextureMaps.cpp LoadFixedTmaps)
 std::string extendedFontsFolder = "graphics/fixed/fonts";
 std::string forceRender = "";
 spdlog::logger *Logger = nullptr;
@@ -534,6 +535,8 @@ long ReadGraphicsfile(const char* path, uint8_t* buffer, long size)
 
 std::string getExistingDataPath(std::filesystem::path path) 
 {
+	if (path.is_absolute())//e.g. the packed game data of the regression tests
+		return std::filesystem::exists(path) ? path.string() : std::string();
 	std::vector<std::string> file_locations;
 #ifdef __ANDROID__
 	std::string direct = path.string();

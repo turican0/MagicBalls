@@ -321,17 +321,27 @@ signed int DataFileIO::UnpackAndLoadMemoryFromPath(Pathstruct path)//27B32d
 	else
 	{
 		path.var36_size_buffer = (signed int)sub_AB9E1_get_file_unpack_size(path.path);
+		if (path.var36_size_buffer <= 0 && PackedGameData())//regression tests without the game: zeros (palette, empty sprites)
+		{
+			path.var36_size_buffer = 0x100000;//more than any file of pstr (BLOCK32 is 26000h)
+			*(path.colorPalette_var28) = (uint8_t*)Malloc_83CD0(path.var36_size_buffer);
+			memset(*(path.colorPalette_var28), 0, path.var36_size_buffer);
+			if (path.var32_end_buffer)//a .TAB: 1000 empty bitmaps (width 0), its posistruct array holds 1700
+				(*path.var32_end_buffer) = (*path.colorPalette_var28) + 1000 * sizeof(bitmap_pos_struct2_t);
+			return 1;
+		}
 		if (path.var36_size_buffer <= 0)
 			return 0;
+		const int allocated = path.var36_size_buffer + 0x10000;//texel row 255 of BLOCK32 lies 64 KB past its start, in DOS the next buffer
 		if (path.var40_alloc_type & 1)
 		{
-			*(path.colorPalette_var28) = (uint8_t*)Malloc_83D70(path.var36_size_buffer);//asi init a malloc bufferu
-			memset(*(path.colorPalette_var28), 0, path.var36_size_buffer);
+			*(path.colorPalette_var28) = (uint8_t*)Malloc_83D70(allocated);//asi init a malloc bufferu
+			memset(*(path.colorPalette_var28), 0, allocated);
 		}
 		else
 		{
-			*(path.colorPalette_var28) = (uint8_t*)Malloc_83CD0(path.var36_size_buffer);//asi init a malloc bufferu
-			memset(*(path.colorPalette_var28), 0, path.var36_size_buffer);
+			*(path.colorPalette_var28) = (uint8_t*)Malloc_83CD0(allocated);//asi init a malloc bufferu
+			memset(*(path.colorPalette_var28), 0, allocated);
 		}
 		//v4 = *(int **)path.colorPalette_var28;
 		//*v4 = v3;

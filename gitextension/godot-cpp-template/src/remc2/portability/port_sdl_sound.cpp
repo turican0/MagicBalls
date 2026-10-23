@@ -1,34 +1,42 @@
 #include "../engine/engine_support.h"
 #include "port_sdl_sound.h"
 
-//#include <adlmidi.h>
+#include "../engine/PlayerInput.h"
+#include "awe32/Awe32Mdi.h"
+#include "awe32/Awe32Rom.h"
+
 #include <iostream>
+#include <list>
 #include <mutex>
 #include <vector>
 
-#ifdef __linux__
-    #include <limits>
-    #define MAX_PATH PATH_MAX
-#endif
+// MagicBalls: the engine does not play any sound itself. Every request of the AIL layer is put
+// into sound_queue as a SoundAction; Godot takes the queue once a frame (getPendingSoundActions)
+// and plays the samples, the music and the speech with its own players (scenes/sounds.gd).
+// Godot reports back which sample players still play (updateFreeSoundPlayers).
+// The AWE32 music is the exception: the EMU8000 emulation renders PCM in its own thread and
+// Godot pulls it into an AudioStreamGenerator (SOUND_RenderAwe32Music).
 
-/*This source code copyrighted by Lazy Foo' Productions (2004-2013)
-and may not be redistributed without written permission.*/
+bool debug_first_sound = true;
 
-bool debug_first_sound=true;
-
-bool hqsound=false;
-bool oggmusic=false;
+bool hqsound = false;
+bool oggmusic = false;
 bool oggmusicalternative = false;
 char oggmusicFolder[512];
 char speechFolder[512];
-Mix_Chunk* m_ptrSpeechChunk;
-int m_ptrSpeechBytesOffSet;
 
 bool fixspeedsound = false;
 bool autoShowObjectivesForForeignLanguages = false;
 int maxSimultaniousSounds = 10;
 
-int32_t last_sequence_num = 0;
+std::string musicType = "ogg";
+std::string awe32RomFolder = "awe32data";
+bool awe32Music = false;
+bool useMagicCarpet1Music = false;
+bool awe32GmIntroMusic = true;
+int awe32BufferMs = 200;
+static std::string awe32RomPath;
+static std::string musicWarning;//shown in the game when the AWE32 music could not be used
 
 int lastMusicVolume = -1;
 int settingsMusicVolume = 127;
@@ -36,406 +44,206 @@ int num_IO_configurations = 3;
 int service_rate = -1;
 int master_volume = -1;
 
-//The music that will be played
-#ifdef SOUND_SDLMIXER
-//Mix_Music* GAME_music[20] = { NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL };
-#endif//SOUND_SDLMIXER
-#ifdef SOUND_OPENAL
-//Mix_Music* GAME_music[20] = { NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL };
-ALint source_state[32];
-ALuint alSource[32];      //source
-ALuint alSampleSet[32];
-#endif//SOUND_OPENAL
-std::map<int, Mix_Chunk> GameChunks = std::map<int, Mix_Chunk>();
-std::map<int, HSAMPLE> GameChunkHSamples = std::map<int, HSAMPLE>();
-
 uint8_t sound_buffer[4][20000];
 
-struct MyMix_Timer {
-	int Id;
-	uint32_t IntervalMs;
-	std::function<uint32_t(uint32_t)> Callback;
-	bool Running{ false };
-	std::chrono::steady_clock::time_point NextTick;
-};
-std::list<MyMix_Timer> Timers;
-// Timers are registered/stopped by the engine thread and fired from the Godot thread
-// (getPendingSoundActions -> sound_queue_clear).  Recursive, because a callback may
-// stop or restart a timer itself.
-static std::recursive_mutex TimersMutex;
+std::vector<SoundAction> sound_queue;
 
-static std::list<MyMix_Timer>::iterator FindTimer(int timerIdx) {
-	for (auto it = Timers.begin(); it != Timers.end(); ++it)
-		if (it->Id == timerIdx)
-			return it;
-	return Timers.end();
+void sound_queue_add_action(const std::string &action, int p1, int p2, int p3, int p4) {
+	SoundAction sa;
+	sa.action = action;
+	sa.p1 = p1;
+	sa.p2 = p2;
+	sa.p3 = p3;
+	sa.p4 = p4;
+	sound_queue.push_back(sa);
 }
-/*
-10
-29
 
-128-0
-0-0
-0-10
-0-29
-0-80
-0-76
-0-78
-0-78
+//----------------------------------------------------------------------------------------------
+// Samples
+//----------------------------------------------------------------------------------------------
 
- channel 1
- 2
+// Godot reports which players play (updateFreeSoundPlayers) at the start of a frame, after it
+// played the actions of the previous one. A start still waiting in sound_queue is not in that
+// report yet, so it counts as playing; otherwise AIL_sample_status says "done" right after
+// AIL_start_sample and the game starts the sound again (the repeating sounds).
+static std::vector<int> playingSamples;
+static std::map<int, HSAMPLE> channelSamples;
+static std::map<int, uint32_t> sampleStartsQueued;
+static std::map<int, uint32_t> sampleStartsDelivered;
 
-*/
+static bool SampleStartPending(int channel) {
+	return sampleStartsQueued[channel] != sampleStartsDelivered[channel];
+}
 
-void test_midi_play(uint8_t*  /*data*/, uint8_t* header, int32_t track_number)
-{
-	uint8_t* acttrack = &header[32 + track_number * 32];
-	//int testsize = *(uint32_t*)(&header[32 + (track_number + 1) * 32] + 18) - *(uint32_t*)(acttrack + 18);
-	int testsize2 = *(uint32_t*)(acttrack + 26);
+static bool IsChannelPlaying(int channel) {
+	if (channel < 0)
+		return false;
+	return SampleStartPending(channel) || (channel < (int)playingSamples.size() && playingSamples[channel] > 0);
+}
 
-	//unsigned char* TranscodeXmiToMid(const unsigned char* pXmiData,	size_t iXmiLength, size_t* pMidLength);
-	size_t iXmiLength = testsize2;
-	size_t pMidLength;
-	uint8_t* outmidi = TranscodeXmiToMid((const uint8_t*)*(uint32_t*)(acttrack + 18), iXmiLength, &pMidLength);
-	//SDL_RWops* rwmidi = SDL_RWFromMem(outmidi, pMidLength);
+static void ChannelFinished(int channel) {
+	auto it = channelSamples.find(channel);
+	if (it == channelSamples.end() || !it->second)
+		return;
+	HSAMPLE S = it->second;
+	const bool wasPlaying = (S->status_1 == 4);//AilSampleStarted
+	S->status_1 = 2;
+	// The original AIL driver calls the EOS callback (sample+0x850) when the last buffer
+	// finishes; the game's EOS handler (sub_9EE70) starts the next sample of a chain.
+	// An explicit AIL_end_sample sets status 2 before halting and calls EOS itself.
+	if (wasPlaying && S->sam_var532_EOS_ptr)
+		S->sam_var532_EOS_ptr();
+}
 
-	//Timidity_Init();
-	if (track_number > 20)
-	{
-		exit(0);
-	}
-#ifdef SOUND_SDLMIXER
-	//GAME_music[track_number] = Mix_LoadMUSType_RW(rwmidi, MUS_MID, SDL_TRUE);
-#endif//SOUND_SDLMIXER
-	//music2 = Mix_LoadMUSType_RW(rwmidi, MIX_MUSIC_TIMIDITY, SDL_TRUE);
-	playmusic2(track_number);
+void sound_update_playing(const std::vector<int> &playing) {
+	playingSamples = playing;
+	// a started sample whose player is quiet has ended (Mix_ChannelFinished in remc2)
+	std::vector<int> finished;
+	for (const auto &[channel, S] : channelSamples)
+		if (S && S->status_1 == 4 && !IsChannelPlaying(channel))
+			finished.push_back(channel);
+	for (int channel : finished)
+		ChannelFinished(channel);
+}
+
+void SOUND_start_sample(HSAMPLE S) {
+	if (unitTests || S->channel < 0)
+		return;
+	channelSamples[S->channel] = S;
+	sampleStartsQueued[S->channel]++;
+	sound_queue_add_action("SOUND_start_sample", S->channel, S->id2_19, S->volume_16, S->playback_rate_15);
+}
+
+void SOUND_end_sample(HSAMPLE S) {
+	if (S->channel < 0)
+		return;
+	sound_queue_add_action("SOUND_end_sample", S->channel, 0, 0, 0);
+	channelSamples.erase(S->channel);
+}
+
+uint32_t SOUND_sample_status(HSAMPLE S) {
+	if (unitTests)
+		return 0;
+	//original AIL_sample_status returns status_1: 1=free, 2=done, 4=playing
+	return IsChannelPlaying(S->channel) ? 4 : 2;
+}
+
+void SOUND_set_master_volume(int32_t volume) {
+	master_volume = volume;
+	sound_queue_add_action("SOUND_set_master_volume", volume, 0, 0, 0);
+}
+
+void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
+	sound_queue_add_action("SOUND_set_sample_volume", S->channel, volume, 0, 0);
+}
+
+void SOUND_set_sample_volume_panning(HSAMPLE S, int32_t panning) {
+	sound_queue_add_action("SOUND_set_sample_volume_panning", S->channel, panning, 0, 0);
+}
+
+void SetSamplePosition(HSAMPLE S, int16_t angle, uint8_t distance) {
+	sound_queue_add_action("SetSamplePosition", S->channel, angle, distance, 0);
+}
+
+//----------------------------------------------------------------------------------------------
+// Music (ogg/MIDI in Godot)
+//----------------------------------------------------------------------------------------------
+
+// Godot loads the music itself (the MIDI files converted from the XMI, or the ogg tracks).
+void SOUND_init_MIDI_sequence(uint8_t* /*datax*/, type_E3808_music_header* /*headerx*/, int32_t /*track_number*/) {
 }
 
 void SOUND_start_sequence(int32_t sequence_num) {
+	if (unitTests)
+		return;
 	sound_queue_add_action("SOUND_start_sequence", sequence_num, 0, 0, 0);
-	if (unitTests)return;
-	//3 - menu
-	//4 - intro
-#ifdef SOUND_SDLMIXER
-	last_sequence_num = sequence_num;
 	//volume fix
 	if (lastMusicVolume == -1)
-	{
 		SOUND_set_sequence_volume(0x64, 0);
-	}
 	if (lastMusicVolume != settingsMusicVolume)
-	{
 		SOUND_set_sequence_volume(settingsMusicVolume, 0);
-	}
-	//volume fix
-#endif//SOUND_SDLMIXER
-};
+}
 
 void WarMusicSetVolume(int32_t volume) {
 	sound_queue_add_action("SOUND_warmusic_setvolume", volume, 0, 0, 0);
-#ifdef SOUND_SDLMIXER
-	//Mix_Volume(music_war_channel_index, ((volume * settingsMusicVolume) / 127));
-	//Mix_VolumeChunk(GAME_music_war, 128);
-#endif //SOUND_SDLMIXER
 }
 
-void SOUND_pause_sequence(int32_t  /*sequence_num*/) {
-	if (unitTests)return;
-#ifdef SOUND_SDLMIXER
-	//Mix_PauseMusic();
-#endif//SOUND_SDLMIXER
-};
+void SOUND_pause_sequence(int32_t /*sequence_num*/) {
+}
 
-void SOUND_stop_sequence(int32_t  /*sequence_num*/) {
+void SOUND_stop_sequence(int32_t /*sequence_num*/) {
+	if (unitTests)
+		return;
 	sound_queue_add_action("SOUND_stop_sequence", 0, 0, 0, 0);
-	if (unitTests)return;
-#ifdef SOUND_SDLMIXER
-	//Mix_HaltMusic();
-#endif//SOUND_SDLMIXER
-};
-void SOUND_resume_sequence(int32_t  /*sequence_num*/) {
-	/*
-	if (unitTests)return;
-#ifdef SOUND_SDLMIXER
-	//Mix_ResumeMusic();
-#endif//SOUND_SDLMIXER
-*/
-};
+}
 
-void SOUND_set_sequence_volume(int32_t volume, int32_t  milliseconds) {
+void SOUND_resume_sequence(int32_t /*sequence_num*/) {
+}
+
+void SOUND_set_sequence_volume(int32_t volume, int32_t milliseconds) {
 	sound_queue_add_action("SOUND_set_sequence_volume", volume, milliseconds, 0, 0);
-	/*
-	if (unitTests)return;
-#ifdef SOUND_SDLMIXER
-#ifndef __linux__
-	if ((milliseconds > 0) && (volume == 0))
-	{
-		//if (GAME_music[last_sequence_num])
-		{
-			//double position = Mix_GetMusicPosition(GAME_music[last_sequence_num]);
-			//if (position != 0)
-			{
-				//Mix_FadeOutMusic(milliseconds);
-				//Mix_SetMusicPosition(position);
-			}
-		}
-	}
-	else if ((milliseconds > 0) && (lastMusicVolume == 0))
-	{
-		//if (GAME_music[last_sequence_num])
-		{
-			//double position = Mix_GetMusicPosition(GAME_music[last_sequence_num]);
-			//if (position != 0)
-			{
-				//Mix_FadeInMusicPos(GAME_music[last_sequence_num], 1, milliseconds, position);
-			}
-		}
-	}
-	else
-#endif //__linux__
-		//Mix_VolumeMusic(volume);
 	lastMusicVolume = volume;
 	if (milliseconds == 0)
 		settingsMusicVolume = volume;
-#endif//SOUND_SDLMIXER
-*/
 }
 
-void SOUND_init_MIDI_sequence(uint8_t*  , type_E3808_music_header* headerx, int32_t track_number)
-{	
-	/*
-	if (unitTests)return;
-	//uint8_t* acttrack = &header[32 + track_number * 32];
-	uint8_t* acttrack = headerx->str_8.track_10[track_number].xmiData_0;
-	//int testsize = *(uint32_t*)(&header[32 + (track_number + 1) * 32] + 18) - *(uint32_t*)(acttrack + 18);
-	int testsize2 = *(uint32_t*)(acttrack + 26);
+//----------------------------------------------------------------------------------------------
+// Music (AWE32 emulation)
+//----------------------------------------------------------------------------------------------
 
-	//we can translate datax from xmi to mid and play(with bad quality or slow midi emulators), at now but we use ogg samples
-	//unsigned char* TranscodeXmiToMid(const unsigned char* pXmiData,	size_t iXmiLength, size_t* pMidLength);
-	size_t iXmiLength = testsize2;
-	size_t pMidLength;
-	dirsstruct helpdirsstruct;
-
-	if (oggmusic) {
-
-		std::string oggmusicPath = GetSubDirectoryPath(oggmusicFolder);
-		char alternativeMusicPath[512] = "";
-		char selectedTrackPath[512] = "";
-		//if (track_number > 1)track_number = 0;
-		if (oggmusicalternative)///&&track_number==4
-		{
-			if (track_number == 0)
-			{
-				sprintf(alternativeMusicPath, "%s/alternative/day", oggmusicPath.c_str());
-			}
-			else if (track_number == 1)
-			{
-				sprintf(alternativeMusicPath, "%s/alternative/night", oggmusicPath.c_str());
-			}
-			else if (track_number == 2)
-			{
-				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
-			}
-			else if (track_number == 3)
-			{
-				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
-			}
-			else if (track_number == 4)
-			{
-				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
-			}
-			else if (track_number == 5)
-			{
-				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
-			}
-			else
-			{
-				sprintf(alternativeMusicPath, "%s/alternative/cave", oggmusicPath.c_str());
-			}
-
-			helpdirsstruct = getListDir(alternativeMusicPath);
-
-			if (helpdirsstruct.number > 0)
-			{
-				int randtrack = rand()%(helpdirsstruct.number + 1);
-				if(randtrack==0)
-					sprintf(selectedTrackPath, "%s/music%d.ogg", oggmusicPath.c_str(), track_number);
-				else
-					sprintf(selectedTrackPath, "%s/%s", alternativeMusicPath ,helpdirsstruct.dir[randtrack-1]);
-			}
-			else
-				sprintf(selectedTrackPath, "%s/music%d.ogg", oggmusicPath.c_str(), track_number);
-		}
-		else
-			sprintf(selectedTrackPath, "%s/music%d.ogg", oggmusicPath.c_str(), track_number);
-#ifdef SOUND_SDLMIXER
-		//GAME_music[track_number] = Mix_LoadMUS(selectedTrackPath);
-		//if (!GAME_music[track_number]) {
-		//	Logger->error("Mix_LoadMUS() error: {}", Mix_GetError());
-		//}
-#endif//SOUND_SDLMIXER
-	}
-	else
-	{
-		uint8_t* outmidi = TranscodeXmiToMid(acttrack, iXmiLength, &pMidLength);
-		//SDL_RWops* rwmidi = SDL_RWFromMem(outmidi, pMidLength);
-
-		//Timidity_Init();
-#ifdef SOUND_SDLMIXER
-		//GAME_music[track_number] = Mix_LoadMUSType_RW(rwmidi, MUS_MID, SDL_TRUE);
-		//if (!GAME_music[track_number]) {
-		//	Logger->error("Mix_LoadMUSType_RW() error: {}", Mix_GetError());
-		//}
-#endif//SOUND_SDLMIXER
-		//music2 = Mix_LoadMUSType_RW(rwmidi, MIX_MUSIC_TIMIDITY, SDL_TRUE);
-
-	}
-#ifdef SOUND_OPENAL
-#endif//SOUND_OPENAL
-*/
+bool SOUND_IsAwe32Music() {
+	return awe32Music;
 }
 
-
-
-
-//Mix_Chunk mychunk;
-
-/*bool load_sound_files()
-{
-	//Load the sound effects
-	scratch = Mix_LoadWAV("scratch.wav");
-	high = Mix_LoadWAV("high.wav");
-	med = Mix_LoadWAV("medium.wav");
-	low = Mix_LoadWAV("low.wav");
-
-	//If there was a problem loading the sound effects
-	if ((scratch == NULL) || (high == NULL) || (med == NULL) || (low == NULL))
-	{
-		return false;
-	}
-
-	//If everything loaded fine
-	return true;
-}*/
-
-void clean_up_sound()
-{
-	sound_queue_add_action("clean_up_sound", 0, 0, 0, 0);
-	if (unitTests)return;
-	/*//Free the sound effects
-	Mix_FreeChunk(scratch);
-	Mix_FreeChunk(high);
-	Mix_FreeChunk(med);
-	Mix_FreeChunk(low);*/
-
-	//Free the music
-	//Mix_FreeMusic(music);
-#ifdef SOUND_SDLMIXER
-	for (int i = 0;i < 10;i++)
-	{
-		//Mix_FreeChunk(GAME_musicmp3[i]);
-		//Mix_FreeMusic(GAME_music[i]);
-	}
-
-	//Quit SDL_mixer
-	//Mix_CloseAudio();
-#endif//SOUND_SDLMIXER
+void SOUND_RenderAwe32Music(int16_t* out, int frames) {
+	Awe32Mdi::Render(out, frames);
 }
-/*
-int load_music_files() {
-	GAME_musicmp3[0] = Mix_LoadMUS("music.mp3");
-}*/
-/*
-int playsound1()
-{
-	//Play the scratch effect
-	if (Mix_PlayChannel(-1, scratch, 0) == -1)
-	{
-		return 1;
+
+void SOUND_ShowMusicWarning() {
+	if (musicWarning.empty())
+		return;
+	SetCurrentNotificationMessage_19760(musicWarning.c_str(), 3u, 100);
+	musicWarning.clear();
+}
+
+//DOS conventional memory (DPMI 0x100/0x101) for the real mode buffers the game hands over to the driver
+static const uint16_t dosRealFirstSegment = 0x1000;
+static const uint16_t dosRealLastSegment = 0xA000;
+static std::vector<uint8_t> dosRealMemory;
+static std::list<std::pair<uint16_t, uint16_t>> dosRealBlocks;//segment, paragraphs
+
+uint16_t SOUND_DosRealAlloc(uint32_t bytes) {
+	if (dosRealMemory.empty())
+		dosRealMemory.resize((dosRealLastSegment - dosRealFirstSegment) * 16);
+	const uint32_t paragraphs = (bytes + 15) >> 4;
+	uint32_t segment = dosRealFirstSegment;
+	auto it = dosRealBlocks.begin();
+	for (; it != dosRealBlocks.end(); ++it) {
+		if (segment + paragraphs <= it->first)
+			break;
+		segment = it->first + it->second;
 	}
-	return 0;
+	if (paragraphs == 0 || segment + paragraphs > dosRealLastSegment)
+		return 0;
+	dosRealBlocks.insert(it, std::make_pair((uint16_t)segment, (uint16_t)paragraphs));
+	memset(&dosRealMemory[(segment - dosRealFirstSegment) * 16], 0, paragraphs * 16);
+	return (uint16_t)segment;
 }
-int playsound2()
-{
-	//Play the scratch effect
-	if (Mix_PlayChannel(-1, high, 0) == -1)
-	{
-		return 1;
-	}
-	return 0;
+
+void SOUND_DosRealFree(uint16_t segment) {
+	dosRealBlocks.remove_if([segment](const std::pair<uint16_t, uint16_t>& block) { return block.first == segment; });
 }
-int playsound3()
-{
-	//Play the scratch effect
-	if (Mix_PlayChannel(-1, med, 0) == -1)
-	{
-		return 1;
-	}
-	return 0;
+
+uint8_t* SOUND_DosRealPointer(uint16_t segment, uint16_t offset) {
+	for (const auto& block : dosRealBlocks)
+		if (block.first == segment && offset < block.second * 16)
+			return &dosRealMemory[(segment - dosRealFirstSegment) * 16 + offset];
+	return nullptr;
 }
-int playsound4()
-{
-	//Play the scratch effect
-	if (Mix_PlayChannel(-1, low, 0) == -1)
-	{
-		return 1;
-	}
-	return 0;
-}
-*/
-/*
-void playmusic1()
-{
-	if (Mix_PlayingMusic() == 0)
-	{
-		//Play the music
-		if (Mix_PlayMusic(music, -1) == -1)
-			if (Mix_PausedMusic() == 1)
-			{
-				//Resume the music
-				Mix_ResumeMusic();
-			}
-		//If the music is playing
-			else
-			{
-				//Pause the music
-				Mix_PauseMusic();
-			}
-	}
-}
-*/
-/*
-void stopmusic1()
-{
-	Mix_HaltMusic();
-}
-*/
-void playmusic2(int32_t track_number)
-{
-	sound_queue_add_action("playmusic2", 0, 0, 0, 0);
-	if (unitTests)return;
-#ifdef SOUND_SDLMIXER
-	/*
-	if (Mix_PlayingMusic() == 0)
-	{
-		//Play the music
-		if (Mix_PlayMusic(GAME_music[track_number], -1) == -1)
-			if (Mix_PausedMusic() == 1)
-			{
-				//Resume the music
-				Mix_ResumeMusic();
-			}
-		//If the music is playing
-			else
-			{
-				//Pause the music
-				Mix_PauseMusic();
-			}
-	}
-	*/
-#endif//SOUND_SDLMIXER
-}
+
+//----------------------------------------------------------------------------------------------
+// AIL driver
+//----------------------------------------------------------------------------------------------
 
 struct {
 	int a;
@@ -446,6 +254,47 @@ struct {
 } environment_string;
 
 int32_t ac_sound_call_driver(AIL_DRIVER* drvr, int32_t fn, VDI_CALL* out) {
+	if (awe32Music && drvr->type_5 == 1) {
+		switch (fn) {
+		case 0x300://install: the driver image read from the file
+			Awe32Mdi::Install(drvr->buf_2, drvr->size_3, awe32RomPath);
+			break;
+		case 0x306://shutdown
+			Awe32Mdi::Shutdown();
+			return 1;
+		case 0x501: {//init instrument manager
+			std::string error;
+			const bool ok = Awe32Mdi::InitInstruments(error);
+			if (!ok)
+				Logger->error("AWE32: {}", error);
+			if (out)
+				out->AX = ok ? 1 : 0;
+			return 1;
+		}
+		case 0x502: {//send the buffered MIDI messages
+			HMDIDRIVER mdi = (HMDIDRIVER)drvr->descriptor_10;
+			if (mdi)
+				Awe32Mdi::SendMessages((const uint8_t*)mdi->DST_2->MIDI_data, mdi->message_count);
+			return 1;
+		}
+		case 0x503://install timbre bank: everything is in the ROM and the user bank
+			if (out)
+				out->AX = 1;
+			return 1;
+		case 0x506: {//AWE32 functions
+			if (!out)
+				return 1;
+			Awe32Mdi::Regs regs = { out->AX, out->BX, out->CX, out->DX };
+			Awe32Mdi::Extension(regs, SOUND_DosRealPointer, SOUND_DosRealAlloc);
+			out->AX = regs.AX;
+			out->CX = regs.CX;
+			out->DX = regs.DX;
+			return 1;
+		}
+		default:
+			break;
+		}
+	}
 	switch (fn) {
 	case 0x300: {//AIL_API_install_driver
 		drvr->VHDR_4->VDI_HDR_var10 = (void*)&common_IO_configurations;
@@ -454,216 +303,50 @@ int32_t ac_sound_call_driver(AIL_DRIVER* drvr, int32_t fn, VDI_CALL* out) {
 		drvr->VHDR_4->VDI_HDR_var46 = service_rate;
 		break;
 	}
-	case 0x301: {//AIL_API_install_DIG_driver_file/AIL_API_install_MDI_driver_file		
+	case 0x301: {//AIL_API_install_DIG_driver_file/AIL_API_install_MDI_driver_file
 		out->AX = 1;//offset
 		out->BX = 2;//offset
 		out->SI = 0;
 		out->DI = 0;
 		break;
 	}
-	case 0x304: {//AIL_API_install_DIG_driver_file/AIL_API_install_MDI_driver_file
-		break;
-	}
-	case 0x305: {//AIL_API_install_DIG_driver_file/AIL_API_install_MDI_driver_file
-		break;
-	}
-	case 0x306: {//AIL_API_uninstall_driver/AIL_API_uninstall_MDI_driver_file
-		break;
-	}
-	case 0x401: {
-		/*		mychunk.abuf=(uint8_t*)last_sample->start_2_3[0];
-				mychunk.alen = last_sample->len_4_5[0];
-				mychunk.volume = last_sample->volume_16;
-				//mychunk.allocated = 0;
-
-				#ifdef USE_SDL2
-						Mix_PlayChannel(-1, &mychunk, 0);
-				#else
-						Mix_PlayChannel(-1, &mychunk, 0);
-				#endif*/
-		break;
-	}
-	case 0x501: {//AIL_API_install_MDI_INI
-		break;
-	}
-	case 0x502: {//AIL_API_install_MDI_INI
-		break;
-	}
 	default:
-	{
 		break;
-	}
 	}
 	return 1;
+}
+
+uint16_t actvect[4096];
+
+void ac_set_real_vect(uint32_t vectnum, uint16_t real_ptr) {
+	actvect[vectnum] = real_ptr;
+}
+
+uint16_t ac_get_real_vect(uint32_t vectnum) {
+	return actvect[vectnum];
+}
+
+//----------------------------------------------------------------------------------------------
+// AIL timers - fired from the Godot thread (getPendingSoundActions -> sound_queue_clear)
+//----------------------------------------------------------------------------------------------
+
+struct SoundTimer {
+	int Id;
+	uint32_t IntervalMs;
+	std::function<uint32_t(uint32_t)> Callback;
+	bool Running{ false };
+	std::chrono::steady_clock::time_point NextTick;
 };
+static std::list<SoundTimer> Timers;
+// Timers are registered/stopped by the engine and fired from the Godot thread.
+// Recursive, because a callback may stop or restart a timer itself.
+static std::recursive_mutex TimersMutex;
 
-void SOUND_set_master_volume(int32_t volume) {
-	sound_queue_add_action("SOUND_set_master_volume", volume, 0, 0, 0);
-	//gamechunk[S->channel].volume = volume;
-#ifdef SOUND_SDLMIXER
-	master_volume = volume;
-
-	for (int i = 0; i < maxSimultaniousSounds; i++)
-	{
-		//Mix_Volume(i, (int)((GameChunks[i].volume * master_volume) / 127));
-	}
-#endif//SOUND_SDLMIXER
-
-	//may be can fix - must analyze
-
-}
-
-void SOUND_set_sample_volume(HSAMPLE S, int32_t volume) {
-	sound_queue_add_action("SOUND_set_sample_volume", S->channel, volume, 0, 0);
-	return;
-#ifdef SOUND_SDLMIXER
-	if (master_volume == -1)
-		master_volume = 127;
-
-	GameChunks[S->channel].volume = volume;
-	//Mix_Volume(S->channel, (int)((GameChunks[S->channel].volume * master_volume) / 127));
-#endif//SOUND_SDLMIXER
-}
-
-void SOUND_set_sample_volume_panning(HSAMPLE S, int32_t panning) {
-	sound_queue_add_action("SOUND_set_sample_volume_panning", S->channel, panning, 0, 0);
-	return;
-	auto left = uint8_t(255.0f * ((float)(127 - panning) / 127));// * masterPercent);
-	auto right = uint8_t(255.0f * ((float)panning / 127));// * masterPercent);
-
-	//Mix_SetPanning(S->channel, left, right);
-}
-
-void SetSamplePosition(HSAMPLE S, int16_t angle, uint8_t distance) 
-{
-	sound_queue_add_action("SetSamplePosition", S->channel, angle, distance, 0);
-	//Mix_SetPosition(S->channel, angle, distance);
-}
-
-void SOUND_start_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_start_sample", S->channel, S->id2_19, S->volume_16, S->playback_rate_15);
-	return;
-	if (unitTests)return;
-#ifdef SOUND_SDLMIXER
-
-	if (hqsound)
-	{
-		/*
-		// load sample.wav in to sample
-		uint8_t* presample = malloc(S->len_4_5[0] * 4 + 10);
-		Mix_Chunk* sample;
-		sample = Mix_LoadWAV_RW(presample, 0);
-		if (!sample) {
-			printf("Mix_LoadWAV_RW: %s\n", Mix_GetError());
-			// handle error
-		}
-		*/
-
-		//44100, AUDIO_S16, 2, 4096
-		//src/dst
-		/*SDL_AudioCVT cvt;
-		SDL_BuildAudioCVT(&cvt, AUDIO_U8, 1, S->playback_rate_15, AUDIO_S16, 2, 44100);
-		SDL_assert(cvt.needed); // obviously, this one is always needed.
-		cvt.len = S->len_4_5[0];// 1024 * 2 * 4;  // 1024 stereo float32 sample frames.
-		cvt.buf = (Uint8*)S->start_2_3[0];//(Uint8*)SDL_malloc(cvt.len * cvt.len_mult);
-		// read your float32 data into cvt.buf here.
-		SDL_ConvertAudio(&cvt);*/
-
-		GameChunks[S->channel].abuf = /*sample->abuf;//*/ (uint8_t*)S->start_44mhz;
-		if (fixspeedsound)
-			GameChunks[S->channel].alen = /*sample->alen;//*/S->len_4_5[0] * 16;
-		else
-			GameChunks[S->channel].alen = /*sample->alen;//*/S->len_4_5[0] * 8;
-			if (debug_first_sound) {
-				Logger->trace("SOUND_start_sample-hq:{}", S->start_44mhz);
-				debug_first_sound = false;
-			}
-	}
-	else
-	{
-		if (debug_first_sound) {
-			Logger->trace("SOUND_start_sample:{}", S->start_44mhz);
-			debug_first_sound = false;
-		}
-		GameChunks[S->channel].abuf = (uint8_t*)S->start_2_3[0];
-		GameChunks[S->channel].alen = S->len_4_5[0];
-	}
-	
-	GameChunks[S->channel].volume = S->volume_16;
-	GameChunkHSamples[S->channel] = S;
-
-	float percentage = (float)S->playback_rate_15 / (float)22050;
-	if (percentage != 1.0f)
-		SOUND_ChangeSamplePlaybackRate(S, percentage);
-
-	//Mix_PlayChannel(S->channel, &GameChunks[S->channel], S->loop_count_12);
-	//Mix_ChannelFinished(ChannelFinished);
-
-#endif//SOUND_SDLMIXER
-#ifdef SOUND_OPENAL
-	//sound_load_wav((char*)S->start_44mhz, sizeof(S->start_44mhz));
-	if (hqsound)
-	{
-		gamechunk[S->channel].abuf = (uint8_t*)S->start_44mhz;
-		gamechunk[S->channel].alen = S->len_4_5[0] * 4;
-	}
-	else
-	{
-		gamechunk[S->channel].abuf = (uint8_t*)S->start_2_3[0];
-		gamechunk[S->channel].alen = S->len_4_5[0];
-	}
-
-	gamechunk[S->channel].volume = S->volume_16;
-	gamechunkHSAMPLE[S->channel] = S;
-	ALSOUND_play(S->channel,&gamechunk[S->channel],0);
-#endif//SOUND_OPENAL
-};
-
-std::vector<int> playing_sound_now;
-
-int Mix_Playing(int which) {
-	int status = 0;
-	if (which == -1) {
-		for (int idx:playing_sound_now) {
-			if (idx > 0) {
-				++status;
-			}
-		}
-	} else if (which < 10) {
-		if (playing_sound_now[which] > 0) {
-			++status;
-		}
-	}
-	return (status);
-}
-
-void ChannelFinished(int channel)
-{
-	if (GameChunkHSamples.count(channel) > 0)
-	{
-		GameChunkHSamples[channel]->status_1 = 2;
-	}
-
-	if (channel == maxSimultaniousSounds && !IsCdTrackPlaying())
-	{
-		ClearCdTrackSegment();
-	}
-}
-
-void sound_update_playing(const std::vector<int> &free_indices) {
-	playing_sound_now = free_indices;
-}
-
-uint32_t SOUND_sample_status(HSAMPLE S) {
-	if (unitTests)return 0;
-#ifdef SOUND_SDLMIXER
-	if (Mix_Playing(S->channel) == 0)
-		return 2;
-#endif //SOUND_SDLMIXER
-#ifdef SOUND_OPENAL
-	return 2;
-#endif //SOUND_SDLMIXER
-	return 0;
+static std::list<SoundTimer>::iterator FindTimer(int timerIdx) {
+	for (auto it = Timers.begin(); it != Timers.end(); ++it)
+		if (it->Id == timerIdx)
+			return it;
+	return Timers.end();
 }
 
 void SOUND_RegisterTimer(int timerIdx, uint32_t (*callback)(uint32_t)) {
@@ -675,33 +358,28 @@ void SOUND_RegisterTimer(int timerIdx, uint32_t (*callback)(uint32_t)) {
 
 void SOUND_SetTimerPeriod(int timerIdx, uint32_t intervalMs) {
 	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
-	for (auto &t : Timers)
-		if (t.Id == timerIdx) {
-			t.IntervalMs = intervalMs;
-			break;
-		}
+	auto it = FindTimer(timerIdx);
+	if (it != Timers.end())
+		it->IntervalMs = intervalMs;
 }
 
 void SOUND_StartTimer(int timerIdx) {
 	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
-	for (auto &t : Timers)
-		if (t.Id == timerIdx) {
-			t.Running = true;
-			t.NextTick = std::chrono::steady_clock::now() + std::chrono::milliseconds(t.IntervalMs);
-			break;
-		}
+	auto it = FindTimer(timerIdx);
+	if (it != Timers.end()) {
+		it->Running = true;
+		it->NextTick = std::chrono::steady_clock::now() + std::chrono::milliseconds(it->IntervalMs);
+	}
 }
 
 void SOUND_StopTimer(int timerIdx) {
 	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
-	for (auto it = Timers.begin(); it != Timers.end(); ++it)
-		if (it->Id == timerIdx) {
-			Timers.erase(it);
-			break;
-		}
+	auto it = FindTimer(timerIdx);
+	if (it != Timers.end())
+		Timers.erase(it);
 }
 
-void SOUND_UpdateTimers() {
+static void SOUND_UpdateTimers() {
 	std::lock_guard<std::recursive_mutex> lock(TimersMutex);
 	auto now = std::chrono::steady_clock::now();
 	// A callback can release its own timer (AIL_release_timer_handle -> SOUND_StopTimer),
@@ -728,790 +406,73 @@ void SOUND_UpdateTimers() {
 	}
 }
 
-void SOUND_end_sample(HSAMPLE S) {
-	sound_queue_add_action("SOUND_end_sample", S->channel, 0, 0, 0);
-#ifdef SOUND_SDLMIXER
-	//Mix_HaltChannel(S->channel);
+//----------------------------------------------------------------------------------------------
+// Speech (CD tracks, played by Godot)
+//----------------------------------------------------------------------------------------------
 
-	if (GameChunks.count(S->channel) == 0)
-		return;
-
-	GameChunks.erase(S->channel);
-	GameChunkHSamples.erase(S->channel);
-
-#endif//SOUND_SDLMIXER
-};
-
-void SOUND_finalize(int channel) {
-	if (GameChunks.count(channel) == 0)
-		return;
-
-	HSAMPLE S = GameChunkHSamples[channel];
-	if (S)
-	{
-		S->channel = -1;
-
-		if (S->status_1 != 1)
-		{
-			if (S->status_1 != 2)
-			{
-				S->status_1 = 2;
-			}
-		}
-		S->vol_scale_18[0][0] = 0;
-		S->id_9 = 0;
-		S->flags_14 = 0;
-		S->vol_scale_18[0][2] = 0;
-		S->vol_scale_18[0][3] = 0;
-	}
-	sound_queue_add_action("SOUND_finalize", 0, 0, 0, 0);
-}
-
-int run();
-
-bool init_sound()
-{
-	sound_queue_add_action("init_sound", 0, 0, 0, 0);
-	//ActiveAudioEffects.resize(maxSimultaniousSounds);
-
-	//run();
-	//#define MUSIC_MID_FLUIDSYNTH
-	//Initialize SDL_mixer
-	srand(time(NULL));
-#ifdef SOUND_SDLMIXER
-	if (hqsound) {
-		//if (Mix_OpenAudio(44100, AUDIO_S16, 2, 4096) == -1)//4096
-		//if (Mix_OpenAudio(44100, AUDIO_S16, 2, 4096) == -1)//4096
-		//if (Mix_OpenAudio(11025, AUDIO_S8, 1, 4096) == -1)//4096
-		{
-			return false;
-		}
-	}
-	else
-	{
-		/*if (Mix_OpenAudio(22050, AUDIO_U8 , 2, 4096) == -1) //4096
-		{
-			return false;
-		}*/
-	}
-
-	//Mix_AllocateChannels(maxSimultaniousSounds + 1);
-
-	//Mix_SetSoundFonts("c:\\prenos\\Magic2\\sf2\\TOM-SF2.sf2");
-	//load_sound_files();
-	/*if(mp3music)
-		load_music_files();*/
-	/*
-Mix_HookMusicFinished(void (SDLCALL *music_finished)(void));
-*/
-	//Mix_ChannelFinished(SOUND_finalize);
-#endif//SOUND_SDLMIXER
-#ifdef SOUND_OPENAL
-	if (hqsound) {
-		ALSOUND_init();
-	}
-	else
-	{
-		ALSOUND_init();
-	}
-
-#endif//SOUND_OPENAL
+bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs) {
+	sound_queue_add_action("PlayCdTrackSegment", trackIdx - 1, startPosMs, lengthMs, 0);
 	return true;
 }
 
-void SOUND_ChangeSamplePlaybackRate(HSAMPLE S, float percent)
-{
-	sound_queue_add_action("SOUND_ChangeSamplePlaybackRate", 0, 0, 0, 0);
-	/*
-	if (hqsound)
-		RegisterEffect(S->channel, &GameChunks[S->channel], percent, 44100, 2, AUDIO_S16);
-	else
-		RegisterEffect(S->channel, &GameChunks[S->channel], percent, 22050, 2, AUDIO_U8);
-	*/
-}
-
-void RegisterEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format)
-{
-	sound_queue_add_action("RegisterEffect", 0, 0, 0, 0);
-	/*
-	Logger->debug("Attempting to register effect on channel {}", channel);
-	if (ActiveAudioEffects[channel].effect != nullptr) { return; }
-
-	switch (format)
-	{
-		case AUDIO_U16: LoadAudioEffect<uint16_t>(channel, chunk, speed, frequency, channels, format); break;
-		case AUDIO_S16: LoadAudioEffect<int16_t>(channel, chunk, speed, frequency, channels, format); break;
-		case AUDIO_S32: LoadAudioEffect<int32_t>(channel, chunk, speed, frequency, channels, format); break;
-		case AUDIO_F32: LoadAudioEffect<float>(channel, chunk, speed, frequency, channels, format); break;
-	}
-	*/
-}
-
-template <typename T>
-void LoadAudioEffect(int channel, const Mix_Chunk* chunk, float speed, int frequency, int channels, uint16_t format)
-{
-	sound_queue_add_action("LoadAudioEffect", 0, 0, 0, 0);
-	//ActiveAudioEffects[channel].effect = new SfxEffectWrapper<T>(chunk, speed, frequency, channels, format);
-	//Mix_RegisterEffect(channel, SfxEffectWrapper<T>::EffectModifierCallback, SfxEffectWrapper<T>::EffectDoneCallback, nullptr);
-}
-
-bool PlayCdTrackSegment(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs)
-{
-	sound_queue_add_action("PlayCdTrackSegment", trackIdx-1, startPosMs, lengthMs, 0);
+// Godot does not report the speech player; the game only asks before it starts the next one.
+bool IsCdTrackPlaying() {
 	return true;
-	/*
-	try
-	{
-		double startPosSec = startPosMs / 1000;
-		m_ptrSpeechBytesOffSet = (44100 * startPosSec * 16 * 2) / 8;
-		char speechPath[512];
-		sprintf(speechPath, "%s/TRACK%02d.WAV", GetSubDirectoryPath(speechFolder).c_str(), trackIdx);
-		//m_ptrSpeechChunk = Mix_LoadWAV(speechPath);
-		m_ptrSpeechChunk->volume = (uint8_t)master_volume;
-		m_ptrSpeechChunk->abuf = m_ptrSpeechChunk->abuf + m_ptrSpeechBytesOffSet;
-		m_ptrSpeechChunk->alen = m_ptrSpeechChunk->alen - m_ptrSpeechBytesOffSet;
-		//Mix_HaltChannel(maxSimultaniousSounds);
-		//if (Mix_PlayChannelTimed(maxSimultaniousSounds, m_ptrSpeechChunk, 0, lengthMs) < 0)
-		{
-			//fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-			return false;
-		}
-
-		return true;
-	}
-	catch (std::exception ex)
-	{
-		return false;
-	}
-	*/
 }
 
-bool IsCdTrackPlaying()
-{
-	sound_queue_add_action("IsCdTrackPlaying", 0, 0, 0, 0);
-	//return Mix_Playing(maxSimultaniousSounds) == 1;
-	return 1;
-}
-
-bool EndPlayingCdTrackSegment()
-{
+bool EndPlayingCdTrackSegment() {
 	sound_queue_add_action("EndPlayingCdTrackSegment", 0, 0, 0, 0);
-	if (IsCdTrackPlaying())
-	{
-		//auto success = Mix_HaltChannel(maxSimultaniousSounds) == 0;
-		//if (success)
-		//	success = ClearCdTrackSegment();
-
-		//return success;
-	}
 	return true;
 }
 
-bool ClearCdTrackSegment()
-{
-	sound_queue_add_action("ClearCdTrackSegment", 0, 0, 0, 0);
-	if (m_ptrSpeechChunk != nullptr)
-	{
-		m_ptrSpeechChunk->abuf = m_ptrSpeechChunk->abuf - m_ptrSpeechBytesOffSet;
-		m_ptrSpeechChunk->alen = m_ptrSpeechChunk->alen + m_ptrSpeechBytesOffSet;
-		//Mix_FreeChunk(m_ptrSpeechChunk);
-		m_ptrSpeechChunk = nullptr;
-		return true;
-	}
-	return true;
-}
-
-bool AreCdTracksAvailable()
-{
+bool AreCdTracksAvailable() {
 	return GetCdTrackCount() > 0;
 }
 
-int GetCdTrackCount()
-{
+int GetCdTrackCount() {
 	return 27;
-	/*
-	char speechPath[512];
-	int count = 0;
-	try
-	{
-		for (int i = 1; i < 1000; i++)
-		{
-			sprintf(speechPath, "%s/TRACK%02d.WAV", GetSubDirectoryPath(speechFolder).c_str(), i);
+}
 
-			if (FILE* file = fopen(speechPath, "r")) {
-				fclose(file);
-				count++;
-			}
-			else
-			{
-				break;
-			}
+//----------------------------------------------------------------------------------------------
+// Init / cleanup
+//----------------------------------------------------------------------------------------------
+
+bool init_sound() {
+	srand(time(NULL));
+	awe32Music = false;
+	if (musicType == "awe32") {
+		std::string error;
+		awe32RomPath = Awe32Rom::Locate(awe32RomFolder, error);
+		if (awe32RomPath.empty()) {
+			Logger->warn("AWE32 music: {}; the ogg music plays instead", error);
+			musicWarning = "AWE32 ROM missing, ogg music plays";
+		} else {
+			awe32Music = true;
+			Awe32Mdi::SetBufferMs(awe32BufferMs);
+			Logger->info("AWE32 music: wave ROM {}, buffer {} ms", awe32RomPath, awe32BufferMs);
 		}
 	}
-	catch (std::exception ex)
-	{
-		return count;
-	}
-	return count;*/
+	//as in remc2 (read_config.cpp) the Magic Carpet 1 music needs the AWE32 music
+	if (!awe32Music)
+		useMagicCarpet1Music = false;
+	//Godot opens the AWE32 stream player and pulls SOUND_RenderAwe32Music; p1 = 1 when the
+	//emulation plays the music, 0 when Godot plays its own ogg/MIDI music
+	sound_queue_add_action("SOUND_music_mode", awe32Music ? 1 : 0, Awe32Mdi::kSampleRate, awe32BufferMs, 0);
+	return true;
 }
 
-AIL_DRIVER* ac_AIL_API_install_driver(int  /*a1*/, uint8_t*  /*a2*/, int  /*a3*/)/*driver_image,n_bytes*///27f720
-{
-	sound_queue_add_action("ac_AIL_API_install_driver", 0, 0, 0, 0);
-	//printf("drvr:%08X, fn:%08X, in:%08X, out:%08X\n", drvr, fn, in, out);
-	return 0;
-}
-
-uint16_t actvect[4096];
-
-void ac_set_real_vect(uint32_t vectnum, uint16_t real_ptr)
-{
-	actvect[vectnum] = real_ptr;
-	//66
-};
-
-uint16_t ac_get_real_vect(uint32_t vectnum)
-{
-	return actvect[vectnum];
-};
-
-void test_music()
-{
-	sound_queue_add_action("test_music", 0, 0, 0, 0);
-}
-
-void my_audio_callback(void *midi_player, uint8_t *stream, int len);
-
-/* variable declarations */
-static uint32_t is_playing = 0; /* remaining length of the sample we have to play */
-static short buffer[4096]; /* Audio buffer */
-
-int run()
-{
-	/* local variables */
-	//static SDL_AudioSpec            spec; /* the specs of our piece of music */
-	static struct ADL_MIDIPlayer    *midi_player = NULL; /* Instance of ADLMIDI player */
-	static const char               *music_path = NULL; /* Path to music file */
-	/*
-	music_path = "c:\\prenos\\remc2\\remc2\\memimages\\midi\\Music001.mid";
-
-	if (SDL_Init(SDL_INIT_AUDIO) < 0)
-		return 1;
-
-	spec.freq = 44100;
-	spec.format = AUDIO_S16SYS;
-	spec.channels = 2;
-	spec.samples = 2048;
-
-	midi_player = adl_init(spec.freq);
-	if (!midi_player)
-	{
-		fprintf(stderr, "Couldn't initialize ADLMIDI: %s\n", adl_errorString());
-		return 1;
-	}
-	spec.callback = my_audio_callback;
-	spec.userdata = midi_player;
-	if (Mix_OpenAudio(spec.freq, spec.format, spec.channels, spec.samples) < 0)
-	{
-		fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-		return 1;
-	}
-
-	if (adl_openFile(midi_player, music_path) < 0)
-	{
-		fprintf(stderr, "Couldn't open music file: %s\n", adl_errorInfo(midi_player));
-		Mix_CloseAudio();
-		adl_close(midi_player);
-		return 1;
-	}
-
-	is_playing = 1;
-	Mix_PauseAudio(0);
-
-	Logger->info("Playing... Hit Ctrl+C to quit!");
-
-	while (is_playing)
-	{
-		SDL_Delay(100);
-	}
-
-	SDL_CloseAudio();
-	adl_close(midi_player);
-	*/
-	return 0;
-}
-
-/*
- audio callback function
- here you have to copy the data of your audio buffer into the
- requesting audio buffer (stream)
- you should only copy as much as the requested length (len)
-*/
-void my_audio_callback(void *midi_player, uint8_t *stream, int len)
-{
-	sound_queue_add_action("debug", 0, 0, 0, 0);
-	/*
-	struct ADL_MIDIPlayer* p = (struct ADL_MIDIPlayer*)midi_player;
-	int samples_count = len / 2;
-	samples_count = adl_play(p, samples_count, (short*)buffer);
-	if (samples_count <= 0)
-	{
-		is_playing = 0;
-		SDL_memset(stream, 0, len);
+void clean_up_sound() {
+	if (unitTests)
 		return;
-	}
-	SDL_memcpy(stream, (uint8_t*)buffer, samples_count * 2);
-	*/
+	Awe32Mdi::Shutdown();
+	awe32Music = false;
+	channelSamples.clear();
+	sound_queue_add_action("SOUND_music_mode", 0, Awe32Mdi::kSampleRate, awe32BufferMs, 0);
 }
 
-#define TEST_ERROR(_msg)		\
-	error = alGetError();		\
-	if (error != AL_NO_ERROR) {	\
-		fprintf(stderr, _msg "\n");	\
-		return;		\
-	}
-//------------------
-
-void SOUND_UPDATE() {
-	sound_queue_add_action("debug", 0, 0, 0, 0);
-#ifdef SOUND_OPENAL
-	for (int i = 0; i < 32; i++)
-	{
-		if (source_state[i] == AL_PLAYING)
-		{
-			alGetSourcei(alSource[i], AL_SOURCE_STATE, &source_state[i]);
-			//TEST_ERROR("source state get");
-		}
-		else
-		{
-			alDeleteSources(1, &alSource[i]);
-			alDeleteBuffers(1, &alSampleSet[i]);
-		}
-	}
-	/*while (source_state == AL_PLAYING) {
-		alGetSourcei(alSource, AL_SOURCE_STATE, &source_state);
-		TEST_ERROR("source state get");
-	}*/
-#endif//SOUND_OPENAL
-};
-
-
-#ifdef SOUND_OPENAL
-ALCcontext* context;
-ALCdevice* device;
-const ALCchar* defaultDeviceName;
-ALCenum error;
-
-static void list_audio_devices(const ALCchar* devices)
-{
-	const ALCchar* device = devices, * next = devices + 1;
-	size_t len = 0;
-
-	fprintf(stdout, "Devices list:\n");
-	fprintf(stdout, "----------\n");
-	while (device && *device != '\0' && next && *next != '\0') {
-		fprintf(stdout, "%s\n", device);
-		len = strlen(device);
-		device += (len + 1);
-		next += (len + 2);
-	}
-	fprintf(stdout, "----------\n");
-}
-void ALSOUND_init()
-{
-	ALboolean enumeration;
-	const ALCchar* devices;
-	//const ALCchar* defaultDeviceName = argv[1];
-	int ret;
-#ifdef LIBAUDIO
-	WaveInfo* wave;
-#endif
-	char* bufferData;
-	ALCdevice* device;
-	ALvoid* data;
-	ALCcontext* context;
-	ALsizei size, freq;
-	ALenum format;
-	//ALuint buffer, source;
-	ALfloat listenerOri[] = { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
-	ALboolean loop = AL_FALSE;
-
-	//fprintf(stdout, "Using " BACKEND " as audio backend\n");
-
-	enumeration = alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT");
-	if (enumeration == AL_FALSE)
-		fprintf(stderr, "enumeration extension not available\n");
-
-	list_audio_devices(alcGetString(NULL, ALC_DEVICE_SPECIFIER));
-
-	//if (!defaultDeviceName)
-	defaultDeviceName = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
-
-	device = alcOpenDevice(defaultDeviceName);
-	if (!device) {
-		fprintf(stderr, "unable to open default device\n");
-		return;
-	}
-
-	fprintf(stdout, "Device: %s\n", alcGetString(device, ALC_DEVICE_SPECIFIER));
-
-	alGetError();
-
-	context = alcCreateContext(device, NULL);
-	if (!alcMakeContextCurrent(context)) {
-		fprintf(stderr, "failed to make default context\n");
-		return;
-	}
-	TEST_ERROR("make default context");
-
-	/* set orientation */
-	alListener3f(AL_POSITION, 0, 0, 1.0f);
-	TEST_ERROR("listener position");
-	alListener3f(AL_VELOCITY, 0, 0, 0);
-	TEST_ERROR("listener velocity");
-	alListenerfv(AL_ORIENTATION, listenerOri);
-	TEST_ERROR("listener orientation");
-	/*
-	for (int i = 0; i < 32; i++)
-	{
-		alGenSources((ALuint)1, &alSource[i]);
-		TEST_ERROR("source generation");
-
-		alSourcef(alSource[i], AL_PITCH, 1);
-		TEST_ERROR("source pitch");
-		alSourcef(alSource[i], AL_GAIN, 1);
-		TEST_ERROR("source gain");
-		alSource3f(alSource[i], AL_POSITION, 0, 0, 0);
-		TEST_ERROR("source position");
-		alSource3f(alSource[i], AL_VELOCITY, 0, 0, 0);
-		TEST_ERROR("source velocity");
-		alSourcei(alSource[i], AL_LOOPING, AL_FALSE);
-		TEST_ERROR("source looping");
-
-		alGenBuffers(1, &alSampleSet[i]);
-		TEST_ERROR("buffer generation");
-	}*/
-}
-
-ALenum alFormatBuffer = AL_FORMAT_MONO16/*AL_FORMAT_MONO16*/;    //buffer format
-ALsizei alFreqBuffer = 44100;       //frequency
-//ALint source_state;
-/*void ALSOUND_load_wav(char* alBuffer,long alBufferLen)
-{
-	//Now for the second part, loading a wav file.You have to open a file, fill buffers with dataand then attach it to a source.
-
-	//char* alBuffer;             //data for the buffer
-	
-	//long       alBufferLen;        //bit depth
-	//ALboolean    alLoop;         //loop
-
-
-	//load the wave file
-	//alutLoadWAVFile("my_music.wav", alFormatBuffer, (void**) alBuffer, (unsigned int*) alBufferLen, alFreqBuffer);//, alLoop);
-
-	//create a source
-	alGenSources(1, &alSource);
-
-	//create  buffer
-	alGenBuffers(1, &alSampleSet);
-
-	//put the data into our sampleset buffer
-	alBufferData(alSampleSet, alFormatBuffer, alBuffer, alBufferLen, alFreqBuffer);
-
-	//assign the buffer to this source
-	alSourcei(alSource, AL_BUFFER, alSampleSet);
-
-	//release the data
-	//alutUnloadWAV(alFormatBuffer, alBuffer, alBufferLen, alFreqBuffer);
-}*/
-void ALSOUND_play(int which, Mix_Chunk* mixchunk, int loops)
-{
-	/*
-	//Once the sound is loaded we can play it.To do this we use alSourcePlay.
-
-	alSourcei(alSource, AL_LOOPING, AL_TRUE);
-
-	//play
-	alSourcePlay(alSource);
-
-	//alSourcePlay(source);
-
-	//to stop
-	//alSourceStop(alSource);
-	*/
-	/*
-	alSourcePlay(): Play, replay, or resume a source.
-	alSourceStop(): Stop one or more sources.
-	alSourceRewind(): Rewind a source (set the playback position to the beginning).
-	alSourcePause(): Pause a source.
-	*/
-	//alutLoadWAVFile("test.wav", &format, &data, &size, &freq, &loop);
-	//TEST_ERROR("loading wav file");
-	
-	//----
-	//delete
-	//alDeleteSources(1, &alSource);
-	//delete our buffer
-	//alDeleteBuffers(1, &alSampleSet);
-    //----
-	alGenSources((ALuint)1, &alSource[which]);
-	TEST_ERROR("source generation");
-
-	alSourcef(alSource[which], AL_PITCH, 1);
-	TEST_ERROR("source pitch");
-	alSourcef(alSource[which], AL_GAIN, 1);
-	TEST_ERROR("source gain");
-	alSource3f(alSource[which], AL_POSITION, 0, 0, 0);
-	TEST_ERROR("source position");
-	alSource3f(alSource[which], AL_VELOCITY, 0, 0, 0);
-	TEST_ERROR("source velocity");
-	alSourcei(alSource[which], AL_LOOPING, AL_FALSE);
-	TEST_ERROR("source looping");
-
-	alGenBuffers(1, &alSampleSet[which]);
-	TEST_ERROR("buffer generation");
-	//------
-
-
-	alBufferData(alSampleSet[which], alFormatBuffer, mixchunk->abuf, mixchunk->alen, alFreqBuffer);
-	TEST_ERROR("buffer copy");
-
-	alSourcei(alSource[which], AL_BUFFER, alSampleSet[which]);
-	TEST_ERROR("buffer binding");
-
-	alSourcePlay(alSource[which]);
-	TEST_ERROR("source playing");
-
-	alGetSourcei(alSource[which], AL_SOURCE_STATE, &source_state[which]);
-	TEST_ERROR("source state get");
-	/*while (source_state == AL_PLAYING) {
-		alGetSourcei(alSource, AL_SOURCE_STATE, &source_state);
-		TEST_ERROR("source state get");
-	}
-
-	alDeleteSources(1, &alSource);
-	alDeleteBuffers(1, &alSampleSet);*/
-}
-
-void ALSOUND_delete()
-{
-	//Once you�ve finished don�t forget to clean memoryand release OpenAL contextand device
-
-	//alDeleteSources(1, &alSource);
-
-	//delete our buffer
-	//alDeleteBuffers(1, &alSampleSet);
-
-	context = alcGetCurrentContext();
-
-	//Get device for active context
-	device = alcGetContextsDevice(context);
-
-	//Disable context
-	alcMakeContextCurrent(NULL);
-
-	//Release context(s)
-	alcDestroyContext(context);
-
-	//Close device
-	alcCloseDevice(device);
-}
-
-
-/*#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <stdint.h>
-#include <inttypes.h>
-#include <unistd.h>
-#include <stdbool.h>
-
-#include <AL/al.h>
-#include <AL/alc.h>
-*/
-/*
-#ifdef LIBAUDIO
-#include <audio/wave.h>
-#define BACKEND	"libaudio"
-#else
-#include <AL/alut.h>
-#define BACKEND "alut"
-#endif
-*/
-
-
-
-	
-static inline ALenum to_al_format(short channels, short samples)
-{
-	bool stereo = (channels > 1);
-
-	switch (samples) {
-	case 16:
-		if (stereo)
-			return AL_FORMAT_STEREO16;
-		else
-			return AL_FORMAT_MONO16;
-	case 8:
-		if (stereo)
-			return AL_FORMAT_STEREO8;
-		else
-			return AL_FORMAT_MONO8;
-	default:
-		return -1;
-	}
-}
-#endif//SOUND_OPENAL
-/*
-int main(int argc, char** argv)
-{
-	ALboolean enumeration;
-	const ALCchar* devices;
-	const ALCchar* defaultDeviceName = argv[1];
-	int ret;
-#ifdef LIBAUDIO
-	WaveInfo* wave;
-#endif
-	char* bufferData;
-	ALCdevice* device;
-	ALvoid* data;
-	ALCcontext* context;
-	ALsizei size, freq;
-	ALenum format;
-	ALuint buffer, source;
-	ALfloat listenerOri[] = { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
-	ALboolean loop = AL_FALSE;
-	ALCenum error;
-	ALint source_state;
-
-	//fprintf(stdout, "Using " BACKEND " as audio backend\n");
-
-	enumeration = alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT");
-	if (enumeration == AL_FALSE)
-		fprintf(stderr, "enumeration extension not available\n");
-
-	list_audio_devices(alcGetString(NULL, ALC_DEVICE_SPECIFIER));
-
-	if (!defaultDeviceName)
-		defaultDeviceName = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
-
-	device = alcOpenDevice(defaultDeviceName);
-	if (!device) {
-		fprintf(stderr, "unable to open default device\n");
-		return -1;
-	}
-
-	fprintf(stdout, "Device: %s\n", alcGetString(device, ALC_DEVICE_SPECIFIER));
-
-	alGetError();
-
-	context = alcCreateContext(device, NULL);
-	if (!alcMakeContextCurrent(context)) {
-		fprintf(stderr, "failed to make default context\n");
-		return -1;
-	}
-	TEST_ERROR("make default context");
-
-	alListener3f(AL_POSITION, 0, 0, 1.0f);
-	TEST_ERROR("listener position");
-	alListener3f(AL_VELOCITY, 0, 0, 0);
-	TEST_ERROR("listener velocity");
-	alListenerfv(AL_ORIENTATION, listenerOri);
-	TEST_ERROR("listener orientation");
-
-	alGenSources((ALuint)1, &source);
-	TEST_ERROR("source generation");
-
-	alSourcef(source, AL_PITCH, 1);
-	TEST_ERROR("source pitch");
-	alSourcef(source, AL_GAIN, 1);
-	TEST_ERROR("source gain");
-	alSource3f(source, AL_POSITION, 0, 0, 0);
-	TEST_ERROR("source position");
-	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	TEST_ERROR("source velocity");
-	alSourcei(source, AL_LOOPING, AL_FALSE);
-	TEST_ERROR("source looping");
-
-	alGenBuffers(1, &buffer);
-	TEST_ERROR("buffer generation");
-
-#ifdef LIBAUDIO
-	wave = WaveOpenFileForReading("test.wav");
-	if (!wave) {
-		fprintf(stderr, "failed to read wave file\n");
-		return -1;
-	}
-
-	ret = WaveSeekFile(0, wave);
-	if (ret) {
-		fprintf(stderr, "failed to seek wave file\n");
-		return -1;
-	}
-
-	bufferData = malloc(wave->dataSize);
-	if (!bufferData) {
-		perror("malloc");
-		return -1;
-	}
-
-	ret = WaveReadFile(bufferData, wave->dataSize, wave);
-	if (ret != wave->dataSize) {
-		fprintf(stderr, "short read: %d, want: %d\n", ret, wave->dataSize);
-		return -1;
-	}
-
-	alBufferData(buffer, to_al_format(wave->channels, wave->bitsPerSample),
-		bufferData, wave->dataSize, wave->sampleRate);
-	TEST_ERROR("failed to load buffer data");
-#else
-	//alutLoadWAVFile("test.wav", &format, &data, &size, &freq, &loop);
-	TEST_ERROR("loading wav file");
-
-	alBufferData(buffer, format, data, size, freq);
-	TEST_ERROR("buffer copy");
-#endif
-
-	alSourcei(source, AL_BUFFER, buffer);
-	TEST_ERROR("buffer binding");
-
-	alSourcePlay(source);
-	TEST_ERROR("source playing");
-
-	alGetSourcei(source, AL_SOURCE_STATE, &source_state);
-	TEST_ERROR("source state get");
-	while (source_state == AL_PLAYING) {
-		alGetSourcei(source, AL_SOURCE_STATE, &source_state);
-		TEST_ERROR("source state get");
-	}
-
-	alDeleteSources(1, &source);
-	alDeleteBuffers(1, &buffer);
-	device = alcGetContextsDevice(context);
-	alcMakeContextCurrent(NULL);
-	alcDestroyContext(context);
-	alcCloseDevice(device);
-
-	return 0;
-}
-*/
-
-std::vector<SoundAction> sound_queue;
-
-void sound_queue_add_action(const std::string &action, int p1, int p2, int p3, int p4) {
-	SoundAction sa;
-	sa.action = action;
-	sa.p1 = p1;
-	sa.p2 = p2;
-	sa.p3 = p3;
-	sa.p4 = p4;
-	sound_queue.push_back(sa);
-}
-
-void sound_queue_add_actionSA(const SoundAction &sa) {
-	sound_queue.push_back(sa);
-}
+//----------------------------------------------------------------------------------------------
+// Queue for Godot
+//----------------------------------------------------------------------------------------------
 
 std::vector<SoundAction> sound_queue_get_pending_actions() {
 	return sound_queue;
@@ -1519,5 +480,7 @@ std::vector<SoundAction> sound_queue_get_pending_actions() {
 
 void sound_queue_clear() {
 	sound_queue.clear();
+	// everything queued until now is handed to Godot
+	sampleStartsDelivered = sampleStartsQueued;
 	SOUND_UpdateTimers();
 }

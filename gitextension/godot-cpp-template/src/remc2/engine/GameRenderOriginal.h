@@ -16,7 +16,7 @@
 #include "Type_F2C20ar.h"
 #include "Type_E9C38_Smalltit.h"
 #include "Type_Unk_F0E20x.h"
-#include "Type_WORD_D951C.h"
+#include "Type_SpriteDef_D951C.h"
 #include "UVTable_D4350.h"
 #include "Type_D404C.h"
 #include "Type_D94F0_Bldgprmbuffer.h"
@@ -52,7 +52,8 @@ private:
 		0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0C,0x0C,0x0C
 	};
 
-	type_unk_F0E20x m_str_F0E20x[640]; // Originally 640
+	type_unk_F0E20x m_str_F0E20xMemory[1 + 640];//[0]: the end of unk_F0A20x, before unk_F0E20x in the original memory
+	type_unk_F0E20x* const m_str_F0E20x = &m_str_F0E20xMemory[1]; // Originally 640
 
 	std::array<uint8_t*, 256> m_textureAddresses;
 	
@@ -72,7 +73,7 @@ private:
 
 	void DrawSky_40950(int16_t roll);
 	void DrawTerrainAndParticles_3C080(__int16 posX, __int16 posY, __int16 yaw, signed int posZ, int pitch, int16_t roll, int fov);
-	void DrawSprite_41BD3(uint32 a1);
+	void DrawSprite_41BD3(uint32 pass);
 	void DrawSprites_3E360(int a2x);
 	void DrawTriangleInProjectionSpace_B6253(x_DWORD* a1, x_DWORD* a2, x_DWORD* a3);
 	int32_t* x_DWORD_DB350_ret(uint32_t adress);

@@ -1060,9 +1060,9 @@ void MBEXbullConverts(String path, String texture, String palette, int max_image
 		uint8_t *indexPtr = 10 * index + tempTMAPS00TAB_BEGIN_BUFFER;
 		temp_F66F0x[index] = LoadTMapMetadata_71E70(x_DWORD_E9C28_str, (unsigned __int16)(4 * ((unsigned int)(*(x_DWORD *)indexPtr + 13) >> 2)), index);
 
-		//type_particle_str** index6 = temp_F66F0[index];
+		//Type_Sprite** index6 = temp_F66F0[index];
 		//uint8_t **subpointer = (uint8_t **)temp_F66F0[index];
-		temp_F66F0x[index]->partstr_0 = (type_particle_str *)malloc(unpacksize);
+		temp_F66F0x[index]->partstr_0 = (Type_Sprite *)malloc(unpacksize);
 		memcpy(temp_F66F0x[index]->partstr_0, buffer.data(), unpacksize);
 
 		if (temp_F66F0x[index]->partstr_0->word_0 & 1)
@@ -1087,8 +1087,8 @@ void MBEXbullConverts(String path, String texture, String palette, int max_image
 		index = 0;
 
 		for (index = 0; index < max_images; index++) {
-			type_particle_str *subpointer = temp_F66F0x[index]->partstr_0;
-			type_particle_str **index6x = &temp_F66F0x[index]->partstr_0;
+			Type_Sprite *subpointer = temp_F66F0x[index]->partstr_0;
+			Type_Sprite **index6x = &temp_F66F0x[index]->partstr_0;
 			type_animations1 *anim;
 			int width = subpointer->width;
 			int height = subpointer->height;
@@ -1097,17 +1097,17 @@ void MBEXbullConverts(String path, String texture, String palette, int max_image
 			if ((*index6x)->word_0 & 1) {
 				anim = sub_721C0_initTmap(tempAnimations_E9C08x, index6x, index);
 				
-				width = anim->Particles_4->width;
-				height = anim->Particles_4->height;
-				indices = (uint8_t *)anim->Particles_4->textureBuffer;
+				width = anim->Sprite_4->width;
+				height = anim->Sprite_4->height;
+				indices = (uint8_t *)anim->Sprite_4->textureBuffer;
 				countOfFrames = anim->CountOfFrames_16;
 			}
 			for (int mainindex = 0; mainindex < countOfFrames; mainindex++) {
 			if (mainindex > 0) {
 				sub_72350(anim);
-				width = anim->Particles_4->width;
-				height = anim->Particles_4->height;
-				indices = (uint8_t *)anim->Particles_4->textureBuffer;
+				width = anim->Sprite_4->width;
+				height = anim->Sprite_4->height;
+				indices = (uint8_t *)anim->Sprite_4->textureBuffer;
 			}
 
 			bool alpha = (indices[0] == 0 || indices[width - 1] == 0 ||

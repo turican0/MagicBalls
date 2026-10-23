@@ -60,6 +60,11 @@ const DEFAULTS = {
 		"music_volume":     100,
 		"sfx_volume":       100,
 		"speech_volume":    100,
+		# Same music options as the sound dialog of remc2-configurator (config.json "sound")
+		"music_type":       0,    # 0=OGG 1=MIDI (SoundFont) 2=AWE32 emulation
+		"mc1_music":        0,    # 0=Off 1=On (AWE32 only: Magic Carpet 1 music in the levels)
+		"awe32_gm_intro":   1,    # 0=Off 1=On (AWE32 only: General MIDI music in the intro and cutscenes)
+		"awe32_buffer_ms":  200,  # 100..2000, how far ahead the AWE32 emulation renders
 	},
 	"input": {
 		"mouse_sensitivity": 8,
@@ -138,6 +143,10 @@ var _sl_master:         HSlider
 var _sl_music:          HSlider
 var _sl_sfx:            HSlider
 var _sl_speech:         HSlider
+var _sel_music_type:    OptionButton
+var _sel_mc1_music:     OptionButton
+var _sel_awe32_gm_intro: OptionButton
+var _sp_awe32_buffer:   SpinBox
 
 var _sl_sensitivity:    HSlider
 var _sel_invert_y:      OptionButton
@@ -269,6 +278,10 @@ func _read_controls_into_settings() -> void:
 	_settings["audio"]["music_volume"]  = int(_sl_music.value)
 	_settings["audio"]["sfx_volume"]    = int(_sl_sfx.value)
 	_settings["audio"]["speech_volume"] = int(_sl_speech.value)
+	_settings["audio"]["music_type"]      = _sel_music_type.selected
+	_settings["audio"]["mc1_music"]       = _sel_mc1_music.selected
+	_settings["audio"]["awe32_gm_intro"]  = _sel_awe32_gm_intro.selected
+	_settings["audio"]["awe32_buffer_ms"] = int(_sp_awe32_buffer.value)
 
 	_settings["input"]["invert_y"] = _sel_invert_y.selected
 
@@ -494,6 +507,11 @@ func SetGlobals() -> void:
 	Global.music_volume    = _settings["audio"]["music_volume"]  / 100.0
 	Global.sounds_volume   = _settings["audio"]["sfx_volume"]    / 100.0
 	Global.speech_volume   = _settings["audio"]["speech_volume"] / 100.0
+	Global.music_type      = _settings["audio"]["music_type"]
+	Global.himusic         = Global.music_type != Global.MUSIC_MIDI
+	Global.mc1_music       = _settings["audio"]["mc1_music"] == 1
+	Global.awe32_gm_intro  = _settings["audio"]["awe32_gm_intro"] == 1
+	Global.awe32_buffer_ms = _settings["audio"]["awe32_buffer_ms"]
 	Global.inverse_mouseY  = _settings["input"]["invert_y"]
 	Global.level_mode      = _settings["game"]["level_mode"]
 	Global.custom_level    = _settings["game"]["custom_level"]
@@ -628,6 +646,39 @@ func _build_audio_tab(tc: TabContainer) -> void:
 	_sl_music  = _slider(vbox, "Music",         0, 100, _settings["audio"]["music_volume"])
 	_sl_sfx    = _slider(vbox, "Sounds",        0, 100, _settings["audio"]["sfx_volume"])
 	_sl_speech = _slider(vbox, "Speech",        0, 100, _settings["audio"]["speech_volume"])
+
+	vbox.add_child(_section("MUSIC"))
+	_sel_music_type = _option(vbox, "Music Type",
+		["OGG (recorded)", "MIDI (SoundFont)", "AWE32 (emulation)"],
+		_settings["audio"]["music_type"])
+	_sel_mc1_music = _option(vbox, "Magic Carpet 1 Music in Levels", ["Off", "On"],
+		_settings["audio"]["mc1_music"])
+	_sel_awe32_gm_intro = _option(vbox, "General MIDI in Intro and Cutscenes", ["Off", "On"],
+		_settings["audio"]["awe32_gm_intro"])
+	_sp_awe32_buffer = _spin(vbox, "AWE32 Buffer (ms)", 100, 2000, _settings["audio"]["awe32_buffer_ms"])
+
+	var note_music = Label.new()
+	note_music.add_theme_font_size_override("font_size", 11)
+	note_music.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
+	note_music.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(note_music)
+
+	var _update_music = func(idx: int) -> void:
+		var awe32 = (idx == Global.MUSIC_AWE32)
+		_sel_mc1_music.get_parent().visible      = awe32
+		_sel_awe32_gm_intro.get_parent().visible = awe32
+		_sp_awe32_buffer.get_parent().visible    = awe32
+		match idx:
+			Global.MUSIC_OGG:
+				note_music.text = "Recorded music re-imagined from the MIDI tracks (uses less CPU)."
+			Global.MUSIC_MIDI:
+				note_music.text = "The original MIDI tracks through a General MIDI SoundFont."
+			_:
+				note_music.text = "The original XMI music of the game through the Sound Blaster AWE32 emulation. " \
+					+ "Raise the buffer when the music crackles; the music starts this much later. " \
+					+ "Without the AWE32 wave ROM the OGG music plays."
+	_sel_music_type.item_selected.connect(_update_music)
+	_update_music.call(_settings["audio"]["music_type"])
 
 func _build_input_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("INPUT", tc)

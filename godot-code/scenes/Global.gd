@@ -34,6 +34,31 @@ var music_hi_map = {}
 var himusic = true
 var sfx_players: Array[AudioStreamPlayer2D] = []
 
+# music (settings.gd, AUDIO tab) - the music options of remc2-configurator
+const MUSIC_OGG = 0
+const MUSIC_MIDI = 1
+const MUSIC_AWE32 = 2
+const MUSIC_TYPE_NAMES = ["ogg", "midi", "awe32"]
+var music_type:int = MUSIC_OGG
+var mc1_music:bool = false
+var awe32_gm_intro:bool = true
+var awe32_buffer_ms:int = 200
+# the AWE32 wave ROM ships in res:// (packed by Godot); the engine reads it from user://
+const AWE32_ROM_RES = "res://hidata/awe32data/data.binz"
+const AWE32_ROM_DIR = "user://awe32data/"
+
+# The engine reads the ROM with std::filesystem, so it has to be a real file.
+func prepareAwe32Rom() -> void:
+	var dest = AWE32_ROM_DIR + "data.binz"
+	if FileAccess.file_exists(dest) or not FileAccess.file_exists(AWE32_ROM_RES):
+		return
+	DirAccess.make_dir_recursive_absolute(AWE32_ROM_DIR)
+	var data = FileAccess.get_file_as_bytes(AWE32_ROM_RES)
+	var f = FileAccess.open(dest, FileAccess.WRITE)
+	if f:
+		f.store_buffer(data)
+		f.close()
+
 var Main_Sounds: Node
 var Main_Music
 

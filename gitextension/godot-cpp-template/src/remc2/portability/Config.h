@@ -31,6 +31,11 @@ private:
 		bool m_AutoShowObjectivesForForeignLanguages = false;
 		int m_MaxSimultaniousSounds = 10;
 		std::string m_SpeechFolder;
+		std::string m_MusicType = "ogg";
+		std::string m_Awe32RomFolder;
+		bool m_UseMagicCarpet1Music = false;
+		bool m_Awe32GmIntroMusic = true;
+		int m_Awe32BufferMs = 200;
 	};
 
 	struct GameDetail
@@ -42,12 +47,15 @@ private:
 		std::string m_HighResGraphicsFolder = "";
 		bool m_UseFixedMenuGraphics = false;
 		std::string m_FixedMenuGraphicsFolder = "";
+		bool m_UseFixedTmaps = false;
+		std::string m_FixedTmapsFolder = "";
 		bool m_UseExtendedFonts = false;
 		std::string m_ExtendedFontsFolder = "";
 		bool m_Sky = true;
 		bool m_Reflections = true;
 		bool m_DynamicLighting = true;
 		int m_ViewDistanceScale = 1;
+		float m_FogScale = 1.0f;
 	};
 
 	struct Threading

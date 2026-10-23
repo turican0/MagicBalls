@@ -319,6 +319,10 @@ void Config::LoadGameDetail(rapidjson::GenericObject<false, rapidjson::Value>& g
 		m_Graphics.m_GameDetail.m_Sky = ReadBoolValue(gameDetail, "sky");
 		m_Graphics.m_GameDetail.m_Reflections = ReadBoolValue(gameDetail, "reflections");
 		m_Graphics.m_GameDetail.m_DynamicLighting = ReadBoolValue(gameDetail, "dynamicLighting");
+		m_Graphics.m_GameDetail.m_UseFixedTmaps = ReadBoolValue(gameDetail, "useFixedTmaps");
+		m_Graphics.m_GameDetail.m_FixedTmapsFolder = ReadStringValue(gameDetail, "fixedTmapsFolder");
+		if (gameDetail.HasMember("fogScale"))
+			m_Graphics.m_GameDetail.m_FogScale = ReadFloatValue(gameDetail, "fogScale");
 	}
 }
 
@@ -358,6 +362,16 @@ void Config::LoadSound(rapidjson::GenericObject<false, rapidjson::Value>& settin
 		m_Sound.m_AutoShowObjectivesForForeignLanguages = ReadBoolValue(sound, "autoShowObjectivesForForeignLanguages");
 		m_Sound.m_MaxSimultaniousSounds = ReadIntValue(sound, "maxSimultaniousSounds");
 		m_Sound.m_SpeechFolder = ReadStringValue(sound, "speechFolder");
+		if (sound.HasMember("musicType"))
+			m_Sound.m_MusicType = ReadStringValue(sound, "musicType");
+		else
+			m_Sound.m_MusicType = m_Sound.m_OggMusic ? "ogg" : "midi";
+		m_Sound.m_Awe32RomFolder = ReadStringValue(sound, "awe32RomFolder");
+		m_Sound.m_UseMagicCarpet1Music = ReadBoolValue(sound, "useMagicCarpet1Music");
+		if (sound.HasMember("awe32GmIntroMusic"))
+			m_Sound.m_Awe32GmIntroMusic = ReadBoolValue(sound, "awe32GmIntroMusic");
+		if (sound.HasMember("awe32BufferMs"))
+			m_Sound.m_Awe32BufferMs = ReadIntValue(sound, "awe32BufferMs");
 	}
 }
 

@@ -165,6 +165,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("getPendingSoundActions"), &MBEXclass::getPendingSoundActions);
 	//godot::ClassDB::bind_method(D_METHOD("getPendingGraphicsActions"), &MBEXclass::getPendingGraphicsActions);
 	godot::ClassDB::bind_method(D_METHOD("updateFreeSoundPlayers", "indices"), &MBEXclass::updateFreeSoundPlayers);
+	godot::ClassDB::bind_method(D_METHOD("getAwe32MusicFrames", "frames"), &MBEXclass::getAwe32MusicFrames);
 	godot::ClassDB::bind_method(D_METHOD("getVGABuffer"), &MBEXclass::getVGABuffer);
 
 	godot::ClassDB::bind_method(D_METHOD("getLangTexts"), &MBEXclass::getLangTexts);
@@ -173,6 +174,7 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text", "text", "int"), &MBEXclass::REMC2BeginGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetNetwork", "mode", "serverIp", "serverPort", "clientPort", "debug", "recordFile"), &MBEXclass::REMC2SetNetwork);
+	godot::ClassDB::bind_method(D_METHOD("REMC2SetMusic", "musicType", "awe32RomFolder", "useMagicCarpet1Music", "awe32GmIntroMusic", "awe32BufferMs"), &MBEXclass::REMC2SetMusic);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2GetLevelType"), &MBEXclass::REMC2GetLevelType);
@@ -407,6 +409,20 @@ void MBEXclass::updateFreeSoundPlayers(const godot::Array &p_indices) {
 		standard_vector.push_back(static_cast<int>(p_indices[i]));
 	}
 	sound_update_playing(standard_vector);
+}
+
+// The AWE32 emulation renders ahead in its own thread; this only copies its ring buffer.
+PackedVector2Array MBEXclass::getAwe32MusicFrames(int frames) {
+	PackedVector2Array result;
+	if (frames <= 0 || !SOUND_IsAwe32Music())
+		return result;
+	std::vector<int16_t> pcm((size_t)frames * 2);
+	SOUND_RenderAwe32Music(pcm.data(), frames);
+	result.resize(frames);
+	Vector2 *out = result.ptrw();
+	for (int i = 0; i < frames; i++)
+		out[i] = Vector2(pcm[2 * i] / 32768.0f, pcm[2 * i + 1] / 32768.0f);
+	return result;
 }
 
 int tempX_WORD_180660_VGA_type_resolution;
@@ -1044,7 +1060,7 @@ Dictionary MBEXclass::GetLevelSpells() {
 		// the order of its castle, balloons and mana spheres. A player's comes from the wizard
 		// chosen (multiplayer); a computer wizard's from its model, which is drawn by colour.
 		int colour = GetTrueWizardNumber_61790(entity->dword_0xA4_164x->playerColorIndex_0x38_56);
-		int model = particlesParameters_D951C[entity->word_0x5A_90].word_0;
+		int model = spriteDefsTable_D951C[entity->word_0x5A_90].textureIdx_0;
 		if (entity->model_0x40_64 == 1 && model >= 203 && model < 203 + 7 * 8) {
 			static const int modelColours[7] = { 3, 1, 7, 6, 5, 2, 4 }; // 203 blue, 211 red, 219 black, ...
 			colour = modelColours[(model - 203) / 8];
@@ -1081,9 +1097,9 @@ PackedFloat32Array MBEXclass::GetEntites() {
 	for (int i = 0; i < count; i++) {
 		type_entity_0x6E8E *actEntity = Entities_EA3E4[i];
 
-		if (!(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x20u) && (particlesParameters_D951C[actEntity->word_0x5A_90].word_0 == 461))
+		if (!(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x20u) && (spriteDefsTable_D951C[actEntity->word_0x5A_90].textureIdx_0 == 461))
 			continue; //not show mount before end level
-		if (!(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x20u) && (particlesParameters_D951C[actEntity->word_0x5A_90].word_0 == 462))
+		if (!(D41A0_0.array_0x2BDE[D41A0_0.LevelIndex_0xc].dw_w_b_0_2BDE_11230.byte[2] & 0x20u) && (spriteDefsTable_D951C[actEntity->word_0x5A_90].textureIdx_0 == 462))
 			continue; //not show mount before end level
 
 		write_ptr[idx++] = (float)actEntity->position_0x4C_76.x; //1
@@ -1109,7 +1125,7 @@ PackedFloat32Array MBEXclass::GetEntites() {
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[1]; //19
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[2]; //20
 		write_ptr[idx++] = (float)actEntity->struct_byte_0xc_12_15.byte[3]; //21
-		write_ptr[idx++] = (float)particlesParameters_D951C[actEntity->word_0x5A_90].word_0; //22
+		write_ptr[idx++] = (float)spriteDefsTable_D951C[actEntity->word_0x5A_90].textureIdx_0; //22
 		write_ptr[idx++] = (float)actEntity->yaw_0x1C_28; //23
 		write_ptr[idx++] = (float)actEntity->pitch_0x1E_30; //24
 		write_ptr[idx++] = (float)actEntity->mana_0x90_144; //25
@@ -1117,8 +1133,8 @@ PackedFloat32Array MBEXclass::GetEntites() {
 		write_ptr[idx++] = (float)actEntity->maxMana_0x8C_140; //27
 		write_ptr[idx++] = (float)actEntity->maxLife_0x4; //28
 		write_ptr[idx++] = (float)actEntity->playerEntityIndex_0x94_148; //29
-		write_ptr[idx++] = (float)particlesParameters_D951C[actEntity->word_0x5A_90].speed_6; //30
-		write_ptr[idx++] = (float)particlesParameters_D951C[actEntity->word_0x5A_90].rotSpeed_8; //31
+		write_ptr[idx++] = (float)spriteDefsTable_D951C[actEntity->word_0x5A_90].speed_6; //30
+		write_ptr[idx++] = (float)spriteDefsTable_D951C[actEntity->word_0x5A_90].worldSize_8; //31
 
 		//playerEntity->dword_0xA4_164x->mobilizeCounter_0x14E_334
 
@@ -1127,9 +1143,9 @@ PackedFloat32Array MBEXclass::GetEntites() {
 
 		//v5x->str_0x5E_94.word_0x68_104 = a1x->id_0x1A_26;
 
-		type_WORD_D951C part = particlesParameters_D951C[actEntity->word_0x5A_90];
+		Type_SpriteDef_D951C part = spriteDefsTable_D951C[actEntity->word_0x5A_90];
 
-		int test = particlesParameters_D951C[actEntity->word_0x5A_90].word_0;
+		int test = spriteDefsTable_D951C[actEntity->word_0x5A_90].textureIdx_0;
 		switch (test) {
 			case 0: //hrac0-ok
 				break;
@@ -1905,6 +1921,17 @@ void MBEXclass::REMC2SetNetwork(int mode, String serverIp, int serverPort, int c
 		network_args.push_back("--record_file");
 		network_args.push_back(PLATFORM_GLOBALIZE_PATH(record).utf8().get_data());
 	}
+}
+
+// The music options of remc2-configurator (config.json "sound"), read by init_sound() in sub_main_mod.
+//   musicType: "ogg" or "midi" = Godot plays its own music, "awe32" = the XMI music through the
+//   Sound Blaster AWE32 emulation (falls back to the Godot music when the wave ROM is missing).
+void MBEXclass::REMC2SetMusic(String musicTypeName, String romFolder, bool magicCarpet1Music, bool gmIntroMusic, int bufferMs) {
+	musicType = musicTypeName.utf8().get_data();
+	awe32RomFolder = PLATFORM_GLOBALIZE_PATH(romFolder).utf8().get_data();
+	useMagicCarpet1Music = magicCarpet1Music;
+	awe32GmIntroMusic = gmIntroMusic;
+	awe32BufferMs = bufferMs;
 }
 
 void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, String CustomLevelPath) {
