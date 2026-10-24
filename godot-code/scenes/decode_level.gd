@@ -1464,6 +1464,9 @@ func _input(event):
 				exit_game()
 	if event is InputEventKey and not event.echo:
 		var physical_key = event.keycode
+		# Keypad Enter behaves like the main Enter key (big map, menus, ...)
+		if physical_key == KEY_KP_ENTER:
+			physical_key = KEY_ENTER
 		if DL_inGame:
 			if key_remap.has(physical_key):
 				physical_key = key_remap[physical_key]
@@ -1516,6 +1519,8 @@ func getInputs():
 				keycode = key_remap[keycode]
 		var index = KEY_INDEX[keycode]
 		var is_actually_pressed = Input.is_key_pressed(physical_key)
+		if physical_key == KEY_ENTER and not is_actually_pressed:
+			is_actually_pressed = Input.is_key_pressed(KEY_KP_ENTER)
 		var last_state = last_keys_state.get(index, false)
 		if last_state == true and not is_actually_pressed:
 			_pending_key_changes.append({
