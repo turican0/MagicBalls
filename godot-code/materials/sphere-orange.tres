@@ -24,6 +24,7 @@ albedo_texture = SubResource("NoiseTexture2D_n4ltv")
 albedo_texture_force_srgb = true
 metallic = 1.0
 roughness = 0.2
+emission = Color(0.3, 0.16000001, 0, 1)
 normal_enabled = true
 normal_texture = SubResource("NoiseTexture2D_rkbbe")
 clearcoat_enabled = true

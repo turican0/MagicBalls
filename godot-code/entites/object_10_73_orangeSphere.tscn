@@ -1,16 +1,31 @@
 [gd_scene format=3 uid="uid://cy0rm8gptvime"]
 
-[ext_resource type="Material" uid="uid://cx7wi1ugi7bct" path="res://materials/sphere-orange.tres" id="1_64mjt"]
+[sub_resource type="Gradient" id="Gradient_33ura"]
+colors = PackedColorArray(1, 0.5833334, 0, 1, 1, 0.68333334, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5lbyl"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yuigv"]
+noise = SubResource("FastNoiseLite_5lbyl")
+color_ramp = SubResource("Gradient_33ura")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cesw6"]
+albedo_texture = SubResource("NoiseTexture2D_yuigv")
+metallic = 1.0
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.3, 0.19500001, 0, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_2ml7a"]
-material = ExtResource("1_64mjt")
+material = SubResource("StandardMaterial3D_cesw6")
 
 [node name="MeshInstance3D" type="Node3D" unique_id=517972840]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=18347612]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1298925519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("SphereMesh_2ml7a")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="MeshInstance3D" unique_id=663756586]
+[node name="OmniLight3D" type="OmniLight3D" parent="MeshInstance3D2" unique_id=1592710861]
 transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 2, 0)
 omni_range = 3.0
