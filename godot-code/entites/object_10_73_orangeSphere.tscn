@@ -10,12 +10,22 @@ noise = SubResource("FastNoiseLite_5lbyl")
 color_ramp = SubResource("Gradient_33ura")
 seamless = true
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h3h6h"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n7mbi"]
+noise = SubResource("FastNoiseLite_h3h6h")
+seamless = true
+as_normal_map = true
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cesw6"]
 albedo_texture = SubResource("NoiseTexture2D_yuigv")
 metallic = 1.0
 roughness = 0.2
 emission_enabled = true
 emission = Color(0.3, 0.19500001, 0, 1)
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_n7mbi")
+clearcoat_enabled = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_2ml7a"]
 material = SubResource("StandardMaterial3D_cesw6")
