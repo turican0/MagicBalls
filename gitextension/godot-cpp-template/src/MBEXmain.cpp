@@ -2087,7 +2087,15 @@ void MBEXclass::request_thread2_quit() {
 	thread2_quit_requested.store(false);
 }
 
+// Set once the game is ended: its memory is freed and its thread is gone, so the calls still made
+// in the same frame (the window close comes before the frame's _process) must not run the game -
+// REMC2Run would wait forever for the thread and read the freed buffers.
+static bool gameEnded = false;
+
 void MBEXclass::REMC2EndGame() { //OK!!
+	if (gameEnded)
+		return;
+	gameEnded = true;
 	request_thread2_quit();
 	sub_main_mod_end();
 	support_end();
@@ -2166,6 +2174,8 @@ void MBEXclass::REMC2SetInverseMouse(bool locInverse_mouseY) {
 int inGameBeginSteps = 0;
 
 int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
+	if (gameEnded)
+		return 0;
 	switch (stage) {
 		case 0: {
 			if (thread2_state == Thread2_State::IN_GAME_LOOP) {
