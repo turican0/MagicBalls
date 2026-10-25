@@ -77,7 +77,7 @@ var target_level: String = ""
 
 var editorLevel: Dictionary
 
-var current_fog_index: int = 5
+var current_fog_index: int = 7
 
 var nearest_texture_filtering=0
 

@@ -76,7 +76,7 @@ const DEFAULTS = {
 		"custom_level": 0,
 		"fps_limit":    1,   # 0=20 1=24 2=30 3=40 4=50
 		"show_navigation": 0,  # 0=Off 1=On
-		"current_fog_index": 5,  # index do Global.fog_presets; rozsah 0..Global.fog_presets.size()-1
+		"current_fog_index": 7,  # index do Global.fog_presets; rozsah 0..Global.fog_presets.size()-1
 	},
 	# Same options as the multiplayer dialog of remc2-configurator (MC2 HD mod)
 	"multiplayer": {
