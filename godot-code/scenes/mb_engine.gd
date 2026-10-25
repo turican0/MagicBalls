@@ -79,6 +79,8 @@ var inGameLoop=false
 func _process(_p_delta) -> void:
 	if(!runned):
 		return
+	if Main_DecodeLevel.is_exiting:
+		return # the game is ended (window closed) - its memory is freed, the engine must not run
 
 	print("FPS:", Engine.get_frames_per_second(), "Limit:", Engine.max_fps)
 
