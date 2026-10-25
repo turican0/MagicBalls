@@ -86,7 +86,7 @@ func _process(_p_delta) -> void:
 	Main_DecodeLevel.SetBlur(inGameLoop)
 	var warpMouse = Main_DecodeLevel.MBgetWarpMouse()
 	if(warpMouse["is"]):
-		if get_window().has_focus():
+		if get_window().has_focus() and not Main_DecodeLevel.mouse_released:
 			var screen_size = get_viewport().get_visible_rect().size
 			if(warpMouse["yRevert"]):
 				if(Global.inverse_mouseY):

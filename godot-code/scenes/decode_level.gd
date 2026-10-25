@@ -1458,6 +1458,8 @@ func setFog2():
 	
 
 func _input(event):
+	if mouse_released and event is InputEventMouseButton and event.pressed and get_window().has_focus():
+		_mouse_grab()
 	if event is InputEventKey and event.is_pressed():
 		if event.keycode == KEY_F4:
 			if event.ctrl_pressed and not event.alt_pressed:
@@ -1485,6 +1487,8 @@ func _input(event):
 					"action": "pressed" if is_pressed else "released"
 			})
 	if event is InputEventMouseButton:
+		if event.pressed and not get_window().has_focus():
+			return	# a window in the background must not react to the mouse
 		if event.button_index in MOUSE_BUTTON_INDEX:
 			var index = MOUSE_BUTTON_INDEX[event.button_index]
 			var is_pressed: bool = event.pressed
@@ -1533,6 +1537,11 @@ func getInputs():
 	_pending_key_changes = []
 	_pending_mouse_changes = []
 	var real_mouse_pos = get_viewport().get_mouse_position()
+	if get_window().has_focus():
+		_last_focused_mouse_pos = real_mouse_pos
+		_has_last_focused_mouse_pos = true
+	elif _has_last_focused_mouse_pos:
+		real_mouse_pos = _last_focused_mouse_pos	# unfocused: the game sees a mouse that does not move
 	var screen_size = get_viewport().get_visible_rect().size
 	var m_x = clamp((real_mouse_pos.x / screen_size.x) * SCREEN_WIDTH, 0, SCREEN_WIDTH - 1)
 	var m_y = clamp((real_mouse_pos.y / screen_size.y) * SCREEN_HEIGHT, 0, SCREEN_HEIGHT - 1)
@@ -1559,32 +1568,69 @@ func exit_game() -> void:
 	set_physics_process(false)
 	get_tree().quit()
 
+# --- Mouse grab ---------------------------------------------------------------
+# The game draws its own cursor, so while it is played the OS cursor is hidden and confined
+# to the window. That must never trap the user: the grab is dropped as soon as the window
+# loses the focus (Alt+Tab, Win key, a click on another window, another monitor ...) and it
+# is taken back when the user returns - at once in fullscreen, with a click into the window
+# in windowed mode (so the title bar, the borders and the other windows stay usable).
+# While `mouse_released` is true the game does not warp or confine the cursor.
+const MOUSE_REGRAB_ON_CLICK_WINDOWED := true
+var _last_focused_mouse_pos := Vector2.ZERO
+var _has_last_focused_mouse_pos := false
+var mouse_released := false
+
+func _is_fullscreen() -> bool:
+	var m := DisplayServer.window_get_mode()
+	return m == DisplayServer.WINDOW_MODE_FULLSCREEN or m == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+
+func _mouse_grab() -> void:
+	mouse_released = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+
+func _mouse_release() -> void:
+	mouse_released = true
+	_release_all_inputs()	# keys held during Alt+Tab would stay pressed in the game
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func _mouse_return_to_window() -> void:
+	_release_all_inputs()
+	if _is_fullscreen() or not MOUSE_REGRAB_ON_CLICK_WINDOWED:
+		_mouse_grab()
+	else:
+		mouse_released = true	# windowed: the next click into the window grabs it (see _input)
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+# Called every frame: a missed focus notification (some platforms do not send
+# APPLICATION_FOCUS_OUT on Alt+Tab) must not leave the cursor confined to a window
+# the user has already left.
+func _mouse_watchdog() -> void:
+	if !Global.canNotification:
+		return
+	if !get_window().has_focus():
+		if !mouse_released:
+			_mouse_release()
+	elif mouse_released and _is_fullscreen():
+		_mouse_grab()
+
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		if not Input.is_key_pressed(KEY_ALT):
 			exit_game()
 	if !Global.canNotification:
 		return;
-	if DL_inGame:
-		match what:
-			NOTIFICATION_APPLICATION_FOCUS_OUT:
+	match what:
+		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT:
+			_mouse_release()
+		NOTIFICATION_APPLICATION_FOCUS_IN, NOTIFICATION_WM_WINDOW_FOCUS_IN:
+			_mouse_return_to_window()
+		NOTIFICATION_WM_MOUSE_EXIT:
+			if not DL_inGame:
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			NOTIFICATION_APPLICATION_FOCUS_IN:
-				_release_all_inputs()
+		NOTIFICATION_WM_MOUSE_ENTER:
+			# only a focused window may take the cursor - moving it over a background window must not
+			if not DL_inGame and not mouse_released and get_window().has_focus():
 				Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
-	else:
-		match what:
-			NOTIFICATION_APPLICATION_FOCUS_OUT:
-				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			NOTIFICATION_WM_MOUSE_EXIT:
-				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			NOTIFICATION_APPLICATION_FOCUS_IN, NOTIFICATION_WM_MOUSE_ENTER:
-				Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
-	#if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-		#_release_all_inputs()
-		#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	#elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
-		#Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
 
 #func getInputsX():
 	#var changes = []
@@ -1888,6 +1934,7 @@ var defaultStepsCount=5
 var defaultStepsCountBlur=15
 func MBrun(inGame):
 	DL_inGame=inGame
+	_mouse_watchdog()
 	var locGraphicsEnhance = Global.MBEX.REMC2GetGraphicsEenhance()
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())
