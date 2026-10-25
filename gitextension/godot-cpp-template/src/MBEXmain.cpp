@@ -1482,6 +1482,9 @@ void handleInputs(Dictionary inputs, int type) {
 						if (!chatMenuOpened)
 							mainSetPress(is_pressed, 0x2064); //shift+D
 					break;
+				case 0x0E08: //BackSpace - stop move (in the chat it deletes a character)
+					mainSetPress(is_pressed, 0x0E08);
+					break;
 				case 0x2d78: //X
 					if (chatMenuOpened)
 						mainSetPress(is_pressed, key_index);
