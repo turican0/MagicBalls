@@ -22,7 +22,7 @@ bump_strength = 6.2
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_860lq"]
 albedo_texture = SubResource("NoiseTexture2D_n4ltv")
 albedo_texture_force_srgb = true
-metallic = 0.85
+metallic = 0.8
 roughness = 0.2
 emission = Color(0.27000004, 0, 0.3, 1)
 normal_enabled = true

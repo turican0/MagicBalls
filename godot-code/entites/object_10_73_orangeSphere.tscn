@@ -19,7 +19,7 @@ as_normal_map = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cesw6"]
 albedo_texture = SubResource("NoiseTexture2D_yuigv")
-metallic = 0.85
+metallic = 0.8
 roughness = 0.2
 emission = Color(0.3, 0.19500001, 0, 1)
 normal_enabled = true
