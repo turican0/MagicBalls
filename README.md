@@ -6,6 +6,7 @@ Rewrite game Magic Carpet 2 with Engine [GODOT](https://godotengine.org/) and RE
 # Screenshots
 <img src="docs/screenshots/level20-dragons.jpg" width="49%"> <img src="docs/screenshots/level05-coast.jpg" width="49%">
 <img src="docs/screenshots/level11-spiders.jpg" width="49%"> <img src="docs/screenshots/level05-army.jpg" width="49%">
+<img src="docs/screenshots/level15-cave.jpg" width="49%"> <img src="docs/screenshots/level15-lava.jpg" width="49%">
 <img src="docs/screenshots/level07-explosion.jpg" width="49%"> <img src="docs/screenshots/level20-castle.jpg" width="49%">
 <img src="docs/screenshots/level01-village.jpg" width="49%"> <img src="docs/screenshots/level25-gate.jpg" width="49%">
 
