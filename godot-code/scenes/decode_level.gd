@@ -1152,6 +1152,7 @@ func _fill_pool(budget_usec: int) -> void:
 		node.visible = false
 		node.set_process(false)
 		node.set_physics_process(false)
+		node.process_mode = Node.PROCESS_MODE_DISABLED # also what is below it, until it is used
 		add_child(node)
 		_add_pool_node(uid, node)
 		if budget_usec >= 0 and Time.get_ticks_usec() - start > budget_usec:

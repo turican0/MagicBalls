@@ -419,6 +419,11 @@ Dictionary EntityRenderer::finish_frame() {
 				node->set_process(active);
 			if (node->is_physics_processing() != active)
 				node->set_physics_process(active);
+			// the whole node stops, not only its root: the animation players, scripts and skeletons
+			// below it ran on in every hidden pool node
+			const Node::ProcessMode mode = active ? Node::PROCESS_MODE_INHERIT : Node::PROCESS_MODE_DISABLED;
+			if (node->get_process_mode() != mode)
+				node->set_process_mode(mode);
 		}
 		if (b.nodes.empty()) {
 			buckets.erase(buckets.begin() + bi);
