@@ -26,6 +26,10 @@ var mp_client_port:int = 3031
 var mp_debug:bool = false
 var mp_record_file:String = ""
 
+# the debug output of the sounds (sounds.gd) - every played sample, music and speech;
+# on with the user argument --debug-sounds (MagicBalls.exe -- --debug-sounds)
+var debug_sounds:bool = "--debug-sounds" in OS.get_cmdline_user_args()
+
 var soundInited:bool = false
 var sounds_map = {}
 var music_map = {}
