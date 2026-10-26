@@ -54,7 +54,7 @@ const DEFAULTS = {
 		#"view_distance":    7,   # 1..10
 		"force_vertex_shader": 0, # 0=Off 1=On (forces per-vertex shading instead of per-pixel, for low-end GPUs)
 		"bilinear_filtering": 1,  # 0=Nearest (pixelated) 1=Linear (bilinear, smooth)
-		"separate_render_thread": 0, # 0=Off 1=On (Godot's experimental render thread, after a restart)
+		"separate_render_thread": 1, # 0=Off 1=On (Godot's experimental render thread, after a restart; taken from the project setting)
 	},
 	"audio": {
 		"master_volume":    100,
@@ -223,6 +223,9 @@ func _load_config() -> void:
 			for key in DEFAULTS[section]:
 				if _cfg.has_section_key(section, key):
 					_settings[section][key] = _cfg.get_value(section, key)
+	# what the engine started with (the project's default for this system, or user://override.cfg)
+	var model := int(ProjectSettings.get_setting_with_override("rendering/" + THREAD_MODEL_KEY))
+	_settings["video"]["separate_render_thread"] = 1 if model == 2 else 0
 
 func _save_config() -> void:
 	for section in _settings:
@@ -315,9 +318,10 @@ func _apply_force_vertex_shader(enabled_idx: int) -> void:
 		ProjectSettings.set_setting("rendering/shading/overrides/force_vertex_shading", enabled)
 		ProjectSettings.save()
 
-# Godot's separate render thread is experimental and crashed the game on Linux at the start
-# ("corrupted size vs. prev_size"), so the project renders on the main thread (thread_model 1) and
-# the render thread is a setting. The engine reads the thread model only when it starts: the
+# Godot's separate render thread is experimental (Godot warns it can crash; the game crashed on
+# Linux at random at the start, "corrupted size vs. prev_size" - maybe because of it, not proven).
+# It is on by default (project.godot thread_model=2) and the player can switch it off. The engine
+# reads the thread model only when it starts: the
 # setting is written to user://override.cfg (application/config/project_settings_override) and
 # the game restarts. Returns true when it restarts.
 const OVERRIDE_PATH := "user://override.cfg"
@@ -325,7 +329,7 @@ const THREAD_MODEL_KEY := "driver/threads/thread_model"
 
 func _apply_render_thread() -> bool:
 	var model := 2 if _settings["video"].get("separate_render_thread", 0) == 1 else 1
-	if model == int(ProjectSettings.get_setting("rendering/" + THREAD_MODEL_KEY)):
+	if model == int(ProjectSettings.get_setting_with_override("rendering/" + THREAD_MODEL_KEY)):
 		return false
 	var cfg := ConfigFile.new()
 	cfg.load(OVERRIDE_PATH) # a missing file is fine
@@ -668,7 +672,7 @@ func _build_video_tab(tc: TabContainer) -> void:
 		_settings["video"]["separate_render_thread"])
 	vbox.add_child(_warning_note("Prepares the picture on its own processor core while the game runs on another one. " +
 		"On processors with several cores it can give a few more frames per second. It is an experimental " +
-		"feature of the Godot engine: the game can crash, already at the start (seen on Linux). If the game " +
+		"feature of the Godot engine: the game can crash, even right at the start. If the game " +
 		"crashes or freezes, switch it off. A change restarts the game."))
 
 func _build_audio_tab(tc: TabContainer) -> void:
