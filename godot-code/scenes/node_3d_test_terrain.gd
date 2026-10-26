@@ -141,9 +141,9 @@ func changeTerrain(levelType:String):
 			if material_top == null:
 				return
 			if( Global.nearest_texture_filtering == 1):
-				material_bottom.set_shader_parameter("atlas_texture_nearest", atlas_tex)
+				material_top.set_shader_parameter("atlas_texture_nearest", atlas_tex)
 			else:
-				material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
+				material_top.set_shader_parameter("atlas_texture", atlas_tex)
 			material_top.set_shader_parameter("nearest_filtering", Global.nearest_texture_filtering == 1)
 			material_bottom = load("res://terrainMB/terrain_material_bottomC.tres")
 		else:
@@ -193,9 +193,9 @@ func initialize_nodes():
 	add_child(mesh_instance_top)
 	material_top = load("res://terrainMB/terrain_material_top.tres")
 	if( Global.nearest_texture_filtering == 1):
-		material_bottom.set_shader_parameter("atlas_texture_nearest", atlas_tex)
+		material_top.set_shader_parameter("atlas_texture_nearest", atlas_tex)
 	else:
-		material_bottom.set_shader_parameter("atlas_texture", atlas_tex)
+		material_top.set_shader_parameter("atlas_texture", atlas_tex)
 	material_top.set_shader_parameter("reflect_texture", reflect_tex)
 	material_top.set_shader_parameter("nearest_filtering", Global.nearest_texture_filtering == 1)
 	mesh_instance_top.material_override = material_top
