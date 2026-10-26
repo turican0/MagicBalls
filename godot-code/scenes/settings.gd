@@ -54,7 +54,7 @@ const DEFAULTS = {
 		#"view_distance":    7,   # 1..10
 		"force_vertex_shader": 0, # 0=Off 1=On (forces per-vertex shading instead of per-pixel, for low-end GPUs)
 		"bilinear_filtering": 1,  # 0=Nearest (pixelated) 1=Linear (bilinear, smooth)
-		"separate_render_thread": 1, # 0=Off 1=On (Godot's experimental render thread, after a restart; taken from the project setting)
+		"separate_render_thread": 0, # 0=Off 1=On (Godot's experimental render thread, after a restart; taken from the project setting)
 	},
 	"audio": {
 		"master_volume":    100,
@@ -320,8 +320,9 @@ func _apply_force_vertex_shader(enabled_idx: int) -> void:
 		ProjectSettings.save()
 
 # Godot's separate render thread is experimental (Godot warns it can crash; the game crashed on
-# Linux at random at the start, "corrupted size vs. prev_size" - maybe because of it, not proven).
-# It is on by default (project.godot thread_model=2) and the player can switch it off. The engine
+# Linux at random at the start, "corrupted size vs. prev_size" - maybe because of it, not proven;
+# and it lost the Vulkan device once in 17 replays on Windows). It is off by default (Godot's Safe
+# model) and the player can switch it on: 0.2-1.2 ms faster frames, 2.5-4 ms at p95/p99. The engine
 # reads the thread model only when it starts: the
 # setting is written to user://override.cfg (application/config/project_settings_override) and
 # the game restarts. Returns true when it restarts.

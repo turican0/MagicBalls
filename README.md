@@ -57,7 +57,7 @@ user\AppData\Roaming\Godot\app_userdata\MagicBalls\
 -Entities are drawn from C++, hidden entities no longer run their animations<br>
 -Lighter splash particles with seamless textures<br>
 -The mouse is free while the game loads or runs in the background<br>
--Setting for the separate render thread (Video), on by default<br>
+-Setting for the separate render thread (Video), off by default<br>
 -Fixed the cave ceiling drawn without its texture<br>
 -Linux: fixed the file search and the path of the game<br>
 -Debug log for crash reports (`-- --debug-log`), sound debug output only with `-- --debug-sounds`<br>

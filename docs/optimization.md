@@ -99,7 +99,8 @@ Pořadí kouzel (správné, `Spells.h` je špatně – je tam „???“): 0 Fire
 - Level 25 (`record041/mc2l24.dem`): medián 7,8 → 4,4 ms, p99 15,8 → 8,8 ms, nejhorší snímek
   687 ms → 48 ms (zvukové printy, synchronizace částic, zastavené skryté uzly).
 - Render na hlavním vlákně (`--render-thread safe`) by stál 0,2–1,2 ms na mediánu, 2,5–4 ms na p95/p99;
-  samostatné renderovací vlákno je výchozí, v nastavení VIDEO jde vypnout.
+  samostatné renderovací vlákno je výchozí vypnuté (experimentální v Godotu, v 1 ze 17 replayů ztratilo
+  Vulkan zařízení), v nastavení VIDEO jde zapnout.
 - Zkoušeno a zamítnuto: načíst celou knihovnu při startu levelu (+3,5 s, trhnutí nezmizí), zahřát
   pipeline vykreslením poolu, naučené předvyplnění (`user://entity_counts.cfg`, +0,8 s – po zastavení
   skrytých uzlů už nic nepřineslo).
