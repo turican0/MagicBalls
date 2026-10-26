@@ -1,0 +1,489 @@
+"keys","en","fr","de","es","it","sv","cs","pl"
+"LAUNCH_LOADING","Loading...","Chargement...","Wird geladen...","Cargando...","Caricamento...","Laddar...","Načítání...","Wczytywanie..."
+"LAUNCH_HINT","Press  [Esc]  to START NOW  |  Press  [R]  for Reimport data  |  Press  [S]  for Settings  |  Press  [E]  for Editor","[Échap]  DÉMARRER MAINTENANT  |  [R]  réimporter les données  |  [S]  paramètres  |  [E]  éditeur","[Esc]  JETZT STARTEN  |  [R]  Daten neu importieren  |  [S]  Einstellungen  |  [E]  Editor","[Esc]  EMPEZAR AHORA  |  [R]  reimportar datos  |  [S]  ajustes  |  [E]  editor","[Esc]  AVVIA ORA  |  [R]  reimporta i dati  |  [S]  impostazioni  |  [E]  editor","[Esc]  STARTA NU  |  [R]  importera data igen  |  [S]  inställningar  |  [E]  redigerare","[Esc]  SPUSTIT HNED  |  [R]  znovu importovat data  |  [S]  nastavení  |  [E]  editor","[Esc]  URUCHOM TERAZ  |  [R]  ponowny import danych  |  [S]  ustawienia  |  [E]  edytor"
+"SETTINGS","SETTINGS","PARAMÈTRES","EINSTELLUNGEN","AJUSTES","IMPOSTAZIONI","INSTÄLLNINGAR","NASTAVENÍ","USTAWIENIA"
+"LAUNCH_STARTING_GAME","Starting MagicBalls","Démarrage de MagicBalls","MagicBalls wird gestartet","Iniciando MagicBalls","Avvio di MagicBalls","Startar MagicBalls","Spouštím MagicBalls","Uruchamianie MagicBalls"
+"LAUNCH_STARTING_EDITOR","Starting the Editor","Démarrage de l'éditeur","Editor wird gestartet","Iniciando el editor","Avvio dell'editor","Startar redigeraren","Spouštím editor","Uruchamianie edytora"
+"LAUNCH_LOADING_IMPORTER","Loading the Importer","Chargement de l'importateur","Importer wird geladen","Cargando el importador","Caricamento dell'importatore","Laddar importören","Načítám importér","Wczytywanie importera"
+"CANCEL","CANCEL","ANNULER","ABBRECHEN","CANCELAR","ANNULLA","AVBRYT","ZRUŠIT","ANULUJ"
+"APPLY_CONTINUE","APPLY & CONTINUE","APPLIQUER ET CONTINUER","ÜBERNEHMEN & WEITER","APLICAR Y CONTINUAR","APPLICA E CONTINUA","VERKSTÄLL OCH FORTSÄTT","POUŽÍT A POKRAČOVAT","ZASTOSUJ I KONTYNUUJ"
+"TAB_VIDEO","VIDEO","VIDÉO","GRAFIK","VÍDEO","VIDEO","GRAFIK","OBRAZ","OBRAZ"
+"TAB_AUDIO","AUDIO","AUDIO","AUDIO","AUDIO","AUDIO","LJUD","ZVUK","DŹWIĘK"
+"TAB_INPUT","INPUT","COMMANDES","STEUERUNG","CONTROLES","COMANDI","KONTROLLER","OVLÁDÁNÍ","STEROWANIE"
+"TAB_GAME","GAME","JEU","SPIEL","JUEGO","GIOCO","SPEL","HRA","GRA"
+"TAB_MULTIPLAYER","MULTIPLAYER","MULTIJOUEUR","MEHRSPIELER","MULTIJUGADOR","MULTIGIOCATORE","FLERSPELARE","VÍCE HRÁČŮ","WIELU GRACZY"
+"SEC_DISPLAY","DISPLAY","AFFICHAGE","ANZEIGE","PANTALLA","SCHERMO","SKÄRM","ZOBRAZENÍ","WYŚWIETLANIE"
+"SEC_RENDERING","RENDERING","RENDU","RENDERING","RENDERIZADO","RENDERING","RENDERING","VYKRESLOVÁNÍ","RENDEROWANIE"
+"SEC_VOLUME","VOLUME","VOLUME","LAUTSTÄRKE","VOLUMEN","VOLUME","VOLYM","HLASITOST","GŁOŚNOŚĆ"
+"SEC_MUSIC","MUSIC","MUSIQUE","MUSIK","MÚSICA","MUSICA","MUSIK","HUDBA","MUZYKA"
+"SEC_MOUSE_CAMERA","MOUSE & CAMERA","SOURIS ET CAMÉRA","MAUS & KAMERA","RATÓN Y CÁMARA","MOUSE E TELECAMERA","MUS OCH KAMERA","MYŠ A KAMERA","MYSZ I KAMERA"
+"SEC_LANGUAGE","LANGUAGE","LANGUE","SPRACHE","IDIOMA","LINGUA","SPRÅK","JAZYK","JĘZYK"
+"SEC_LEVEL","LEVEL","NIVEAU","LEVEL","NIVEL","LIVELLO","NIVÅ","ÚROVEŇ","POZIOM"
+"SEC_NAVIGATION","NAVIGATION","NAVIGATION","NAVIGATION","NAVEGACIÓN","NAVIGAZIONE","NAVIGERING","NAVIGACE","NAWIGACJA"
+"SEC_FOG","FOG","BROUILLARD","NEBEL","NIEBLA","NEBBIA","DIMMA","MLHA","MGŁA"
+"SEC_NETWORK_GAME","NETWORK GAME","PARTIE EN RÉSEAU","NETZWERKSPIEL","PARTIDA EN RED","PARTITA IN RETE","NÄTVERKSSPEL","SÍŤOVÁ HRA","GRA SIECIOWA"
+"OFF","Off","Désactivé","Aus","Desactivado","Disattivato","Av","Vypnuto","Wyłączone"
+"ON","On","Activé","An","Activado","Attivato","På","Zapnuto","Włączone"
+"NO","No","Non","Nein","No","No","Nej","Ne","Nie"
+"YES","Yes","Oui","Ja","Sí","Sì","Ja","Ano","Tak"
+"ON_EXPERIMENTAL","On (experimental)","Activé (expérimental)","An (experimentell)","Activado (experimental)","Attivato (sperimentale)","På (experimentell)","Zapnuto (experimentální)","Włączone (eksperymentalne)"
+"SET_RESOLUTION","Resolution","Résolution","Auflösung","Resolución","Risoluzione","Upplösning","Rozlišení","Rozdzielczość"
+"RES_NATIVE","Native Resolution","Résolution native","Native Auflösung","Resolución nativa","Risoluzione nativa","Inbyggd upplösning","Nativní rozlišení","Rozdzielczość natywna"
+"SET_DISPLAY_MODE","Display Mode","Mode d'affichage","Anzeigemodus","Modo de pantalla","Modalità schermo","Visningsläge","Režim zobrazení","Tryb wyświetlania"
+"DISPLAY_WINDOWED","Windowed","Fenêtré","Fenster","Ventana","Finestra","Fönster","V okně","W oknie"
+"DISPLAY_FULLSCREEN","Fullscreen","Plein écran","Vollbild","Pantalla completa","Schermo intero","Helskärm","Celá obrazovka","Pełny ekran"
+"DISPLAY_EXCLUSIVE","Exclusive Fullscreen","Plein écran exclusif","Exklusives Vollbild","Pantalla completa exclusiva","Schermo intero esclusivo","Exklusiv helskärm","Exkluzivní celá obrazovka","Wyłączny pełny ekran"
+"SET_FORCE_VERTEX","Force Vertex Shader","Forcer le vertex shader","Vertex-Shader erzwingen","Forzar vertex shader","Forza vertex shader","Tvinga vertex-shader","Vynutit vertex shader","Wymuś vertex shader"
+"NOTE_FORCE_VERTEX","Forces per-vertex shading instead of per-pixel — improves performance on low-end GPUs at the cost of lighting quality (experimental, some 3D objects are dark).","Force l'ombrage par sommet au lieu de par pixel — améliore les performances sur les cartes graphiques modestes au détriment de la qualité de l'éclairage (expérimental, certains objets 3D sont sombres).","Erzwingt Schattierung pro Vertex statt pro Pixel — verbessert die Leistung auf schwachen Grafikkarten auf Kosten der Beleuchtungsqualität (experimentell, manche 3D-Objekte sind dunkel).","Fuerza el sombreado por vértice en lugar de por píxel: mejora el rendimiento en tarjetas gráficas modestas a costa de la calidad de la iluminación (experimental, algunos objetos 3D se ven oscuros).","Forza l'ombreggiatura per vertice invece che per pixel — migliora le prestazioni sulle schede video meno potenti a scapito della qualità dell'illuminazione (sperimentale, alcuni oggetti 3D sono scuri).","Tvingar skuggning per hörn i stället för per pixel — ger bättre prestanda på svaga grafikkort men sämre ljussättning (experimentellt, vissa 3D-objekt blir mörka).","Vynutí stínování po vrcholech místo po pixelech — zrychlí hru na slabších grafických kartách za cenu horšího osvětlení (experimentální, některé 3D objekty jsou tmavé).","Wymusza cieniowanie na wierzchołek zamiast na piksel — poprawia wydajność na słabszych kartach graficznych kosztem jakości oświetlenia (eksperymentalne, niektóre obiekty 3D są ciemne)."
+"SET_BILINEAR","Bilinear Filtering","Filtrage bilinéaire","Bilineare Filterung","Filtrado bilineal","Filtro bilineare","Bilinjär filtrering","Bilineární filtrování","Filtrowanie dwuliniowe"
+"FILTER_NEAREST","Off (Nearest)","Désactivé (plus proche)","Aus (nächster Nachbar)","Desactivado (más cercano)","Disattivato (più vicino)","Av (närmaste)","Vypnuto (nejbližší)","Wyłączone (najbliższy)"
+"FILTER_LINEAR","On (Linear)","Activé (linéaire)","An (linear)","Activado (lineal)","Attivato (lineare)","På (linjär)","Zapnuto (lineární)","Włączone (liniowe)"
+"NOTE_BILINEAR","Off = sharp/pixelated textures, On = smooth/blurred textures. Affects UI and 2D sprites (not 3D mesh materials).","Désactivé = textures nettes/pixelisées, activé = textures lisses/floues. Concerne l'interface et les sprites 2D (pas les matériaux des modèles 3D).","Aus = scharfe/pixelige Texturen, An = weiche/unscharfe Texturen. Betrifft Oberfläche und 2D-Sprites (nicht die Materialien der 3D-Modelle).","Desactivado = texturas nítidas/pixeladas, activado = texturas suaves/difuminadas. Afecta a la interfaz y a los sprites 2D (no a los materiales de los modelos 3D).","Disattivato = texture nitide/pixelate, attivato = texture morbide/sfocate. Riguarda l'interfaccia e gli sprite 2D (non i materiali dei modelli 3D).","Av = skarpa/pixliga texturer, På = mjuka/suddiga texturer. Gäller gränssnittet och 2D-sprites (inte materialen på 3D-modeller).","Vypnuto = ostré/pixelové textury, zapnuto = hladké/rozmazané textury. Platí pro rozhraní a 2D sprity (ne pro materiály 3D modelů).","Wyłączone = ostre/pikselowe tekstury, włączone = gładkie/rozmyte tekstury. Dotyczy interfejsu i sprite'ów 2D (nie materiałów modeli 3D)."
+"SET_RENDER_THREAD","Separate Render Thread","Thread de rendu séparé","Separater Render-Thread","Hilo de renderizado separado","Thread di rendering separato","Separat renderingstråd","Samostatné vykreslovací vlákno","Osobny wątek renderowania"
+"NOTE_RENDER_THREAD","Prepares the picture on its own processor core while the game runs on another one. On processors with several cores it can give a few more frames per second. It is an experimental feature of the Godot engine: the game can crash, even right at the start. If the game crashes or freezes, switch it off. A change restarts the game.","Prépare l'image sur son propre cœur de processeur pendant que le jeu tourne sur un autre. Sur les processeurs à plusieurs cœurs, cela peut donner quelques images par seconde de plus. C'est une fonction expérimentale du moteur Godot : le jeu peut planter, même dès le démarrage. Si le jeu plante ou se fige, désactivez-la. Un changement redémarre le jeu.","Bereitet das Bild auf einem eigenen Prozessorkern vor, während das Spiel auf einem anderen läuft. Auf Prozessoren mit mehreren Kernen kann das einige Bilder pro Sekunde mehr bringen. Es ist eine experimentelle Funktion der Godot-Engine: Das Spiel kann abstürzen, sogar gleich beim Start. Wenn das Spiel abstürzt oder einfriert, schalten Sie sie aus. Eine Änderung startet das Spiel neu.","Prepara la imagen en su propio núcleo del procesador mientras el juego se ejecuta en otro. En procesadores con varios núcleos puede dar algunos fotogramas por segundo más. Es una función experimental del motor Godot: el juego puede fallar, incluso nada más empezar. Si el juego falla o se congela, desactívala. Un cambio reinicia el juego.","Prepara l'immagine su un proprio core del processore mentre il gioco gira su un altro. Sui processori con più core può dare qualche fotogramma al secondo in più. È una funzione sperimentale del motore Godot: il gioco può andare in crash, anche subito all'avvio. Se il gioco va in crash o si blocca, disattivala. Una modifica riavvia il gioco.","Förbereder bilden på en egen processorkärna medan spelet körs på en annan. På processorer med flera kärnor kan det ge några fler bilder per sekund. Det är en experimentell funktion i Godot-motorn: spelet kan krascha, även direkt vid start. Om spelet kraschar eller fryser, stäng av den. En ändring startar om spelet.","Připravuje obraz na vlastním jádře procesoru, zatímco hra běží na jiném. Na vícejádrových procesorech může přidat několik snímků za sekundu. Je to experimentální funkce enginu Godot: hra může spadnout, i hned při spuštění. Pokud hra padá nebo zamrzá, vypněte ji. Změna hru restartuje.","Przygotowuje obraz na osobnym rdzeniu procesora, podczas gdy gra działa na innym. Na procesorach wielordzeniowych może dać kilka klatek na sekundę więcej. To eksperymentalna funkcja silnika Godot: gra może się wyłączyć z błędem, nawet zaraz po uruchomieniu. Jeśli gra się wyłącza lub zawiesza, wyłącz tę opcję. Zmiana uruchamia grę ponownie."
+"SET_MASTER_VOLUME","Master Volume","Volume général","Gesamtlautstärke","Volumen general","Volume generale","Huvudvolym","Celková hlasitost","Głośność główna"
+"SET_MUSIC","Music","Musique","Musik","Música","Musica","Musik","Hudba","Muzyka"
+"SET_SOUNDS","Sounds","Sons","Geräusche","Sonidos","Suoni","Ljud","Zvuky","Dźwięki"
+"SET_SPEECH","Speech","Voix","Sprache","Voces","Voci","Tal","Řeč","Mowa"
+"SET_MUSIC_TYPE","Music Type","Type de musique","Musiktyp","Tipo de música","Tipo di musica","Musiktyp","Typ hudby","Rodzaj muzyki"
+"MUSIC_OGG","OGG (recorded)","OGG (enregistrée)","OGG (aufgenommen)","OGG (grabada)","OGG (registrata)","OGG (inspelad)","OGG (nahraná)","OGG (nagrana)"
+"MUSIC_MIDI","MIDI (SoundFont)","MIDI (SoundFont)","MIDI (SoundFont)","MIDI (SoundFont)","MIDI (SoundFont)","MIDI (SoundFont)","MIDI (SoundFont)","MIDI (SoundFont)"
+"MUSIC_AWE32","AWE32 (emulation)","AWE32 (émulation)","AWE32 (Emulation)","AWE32 (emulación)","AWE32 (emulazione)","AWE32 (emulering)","AWE32 (emulace)","AWE32 (emulacja)"
+"SET_MC1_MUSIC","Magic Carpet 1 Music in Levels","Musique de Magic Carpet 1 dans les niveaux","Musik aus Magic Carpet 1 in den Levels","Música de Magic Carpet 1 en los niveles","Musica di Magic Carpet 1 nei livelli","Musik från Magic Carpet 1 i nivåerna","Hudba z Magic Carpet 1 v úrovních","Muzyka z Magic Carpet 1 w poziomach"
+"SET_GM_INTRO","General MIDI in Intro and Cutscenes","General MIDI dans l'intro et les cinématiques","General MIDI im Intro und in Zwischensequenzen","General MIDI en la intro y las escenas","General MIDI nell'intro e negli intermezzi","General MIDI i intro och mellansekvenser","General MIDI v úvodu a animacích","General MIDI we wstępie i przerywnikach"
+"SET_AWE32_BUFFER","AWE32 Buffer (ms)","Tampon AWE32 (ms)","AWE32-Puffer (ms)","Búfer AWE32 (ms)","Buffer AWE32 (ms)","AWE32-buffert (ms)","Vyrovnávací paměť AWE32 (ms)","Bufor AWE32 (ms)"
+"NOTE_MUSIC_OGG","Recorded music re-imagined from the MIDI tracks (uses less CPU).","Musique enregistrée, réinterprétée à partir des pistes MIDI (utilise moins le processeur).","Aufgenommene Musik, neu interpretiert aus den MIDI-Stücken (braucht weniger CPU).","Música grabada reinterpretada a partir de las pistas MIDI (usa menos CPU).","Musica registrata reinterpretata dalle tracce MIDI (usa meno CPU).","Inspelad musik nytolkad från MIDI-spåren (använder mindre CPU).","Nahraná hudba nově zpracovaná z MIDI skladeb (méně zatěžuje procesor).","Nagrana muzyka zinterpretowana na nowo z utworów MIDI (mniej obciąża procesor)."
+"NOTE_MUSIC_MIDI","The original MIDI tracks through a General MIDI SoundFont.","Les pistes MIDI d'origine via une SoundFont General MIDI.","Die originalen MIDI-Stücke über einen General-MIDI-SoundFont.","Las pistas MIDI originales a través de una SoundFont General MIDI.","Le tracce MIDI originali tramite un SoundFont General MIDI.","De ursprungliga MIDI-spåren via en General MIDI-SoundFont.","Původní MIDI skladby přes General MIDI SoundFont.","Oryginalne utwory MIDI przez SoundFont General MIDI."
+"NOTE_MUSIC_AWE32","The original XMI music of the game through the Sound Blaster AWE32 emulation. Raise the buffer when the music crackles; the music starts this much later. Without the AWE32 wave ROM the OGG music plays.","La musique XMI d'origine du jeu via l'émulation de la Sound Blaster AWE32. Augmentez le tampon si la musique grésille ; la musique démarre alors d'autant plus tard. Sans la ROM de sons AWE32, c'est la musique OGG qui est jouée.","Die originale XMI-Musik des Spiels über die Emulation der Sound Blaster AWE32. Erhöhen Sie den Puffer, wenn die Musik knackt; die Musik startet dann um so viel später. Ohne das AWE32-Wave-ROM läuft die OGG-Musik.","La música XMI original del juego mediante la emulación de la Sound Blaster AWE32. Aumenta el búfer si la música chisporrotea; la música empezará ese tiempo más tarde. Sin la ROM de sonidos AWE32 suena la música OGG.","La musica XMI originale del gioco tramite l'emulazione della Sound Blaster AWE32. Aumenta il buffer se la musica gracchia; la musica partirà altrettanto più tardi. Senza la ROM dei suoni AWE32 viene riprodotta la musica OGG.","Spelets ursprungliga XMI-musik via emulering av Sound Blaster AWE32. Höj bufferten om musiken knastrar; musiken startar då så mycket senare. Utan AWE32-ljud-ROM spelas OGG-musiken.","Původní XMI hudba hry přes emulaci Sound Blaster AWE32. Pokud hudba praská, zvyšte vyrovnávací paměť; hudba pak začne o tolik později. Bez zvukové ROM AWE32 hraje hudba OGG.","Oryginalna muzyka XMI z gry przez emulację Sound Blaster AWE32. Zwiększ bufor, gdy muzyka trzeszczy; muzyka zacznie się wtedy o tyle później. Bez pamięci ROM z dźwiękami AWE32 odtwarzana jest muzyka OGG."
+"SET_INVERT_Y","Invert Y Axis","Inverser l'axe Y","Y-Achse umkehren","Invertir eje Y","Inverti asse Y","Invertera Y-axeln","Obrátit osu Y","Odwróć oś Y"
+"SET_LANGUAGE","Language","Langue","Sprache","Idioma","Lingua","Språk","Jazyk","Język"
+"NOTE_LANGUAGE","The language of the game and of these settings. It can also be changed with the flag in the main menu of the game.","La langue du jeu et de ces paramètres. Elle peut aussi être changée avec le drapeau dans le menu principal du jeu.","Die Sprache des Spiels und dieser Einstellungen. Sie lässt sich auch mit der Flagge im Hauptmenü des Spiels ändern.","El idioma del juego y de estos ajustes. También se puede cambiar con la bandera del menú principal del juego.","La lingua del gioco e di queste impostazioni. Si può cambiare anche con la bandiera nel menu principale del gioco.","Språket i spelet och i dessa inställningar. Det kan också ändras med flaggan i spelets huvudmeny.","Jazyk hry i tohoto nastavení. Lze ho změnit také vlajkou v hlavním menu hry.","Język gry i tych ustawień. Można go też zmienić flagą w menu głównym gry."
+"SET_GAME_MODE","Game Mode","Mode de jeu","Spielmodus","Modo de juego","Modalità di gioco","Spelläge","Režim hry","Tryb gry"
+"MODE_STANDARD","Standard Game","Partie normale","Normales Spiel","Partida normal","Partita normale","Vanligt spel","Standardní hra","Standardowa gra"
+"MODE_CUSTOM","Custom Level","Niveau personnalisé","Eigenes Level","Nivel personalizado","Livello personalizzato","Egen nivå","Vlastní úroveň","Własny poziom"
+"SET_LEVEL_NUMBER","Level Number","Numéro du niveau","Level-Nummer","Número de nivel","Numero del livello","Nivånummer","Číslo úrovně","Numer poziomu"
+"SET_FPS_LIMIT","FPS Limit (game speed)","Limite d'IPS (vitesse du jeu)","FPS-Limit (Spielgeschwindigkeit)","Límite de FPS (velocidad del juego)","Limite FPS (velocità di gioco)","FPS-gräns (spelhastighet)","Limit FPS (rychlost hry)","Limit FPS (szybkość gry)"
+"NOTE_FPS","⚠ Warning: at higher FPS the game becomes harder to control — only for hardcore players (best experience is at 24 FPS).","⚠ Attention : avec plus d'IPS, le jeu devient plus difficile à contrôler — seulement pour les joueurs aguerris (meilleure expérience à 24 IPS).","⚠ Achtung: Bei höheren FPS wird das Spiel schwerer zu steuern — nur für Hardcore-Spieler (am besten spielt es sich mit 24 FPS).","⚠ Aviso: con más FPS el juego se vuelve más difícil de controlar; solo para jugadores expertos (la mejor experiencia es a 24 FPS).","⚠ Attenzione: con più FPS il gioco diventa più difficile da controllare — solo per giocatori esperti (l'esperienza migliore è a 24 FPS).","⚠ Varning: med högre FPS blir spelet svårare att styra — bara för vana spelare (bäst upplevelse vid 24 FPS).","⚠ Upozornění: při vyšších FPS se hra hůře ovládá — jen pro zkušené hráče (nejlepší zážitek je při 24 FPS).","⚠ Uwaga: przy wyższych FPS grą trudniej sterować — tylko dla zaawansowanych graczy (najlepiej gra się przy 24 FPS)."
+"SET_SHOW_NAVIGATION","Show Navigation","Afficher la navigation","Navigation anzeigen","Mostrar navegación","Mostra navigazione","Visa navigering","Zobrazit navigaci","Pokaż nawigację"
+"SET_FOG_PRESET","Fog Preset","Préréglage du brouillard","Nebel-Voreinstellung","Ajuste de niebla","Preimpostazione nebbia","Dimförinställning","Předvolba mlhy","Ustawienie mgły"
+"SET_MP_MODE","Mode","Mode","Modus","Modo","Modalità","Läge","Režim","Tryb"
+"MP_OFF","Off (single player)","Désactivé (un joueur)","Aus (Einzelspieler)","Desactivado (un jugador)","Disattivato (giocatore singolo)","Av (en spelare)","Vypnuto (jeden hráč)","Wyłączone (jeden gracz)"
+"MP_HOST","Host","Héberger","Hosten","Anfitrión","Ospita","Vara värd","Hostitel","Gospodarz"
+"MP_JOIN","Join","Rejoindre","Beitreten","Unirse","Unisciti","Anslut","Připojit","Dołącz"
+"SET_SERVER_IP","Server IP","IP du serveur","Server-IP","IP del servidor","IP del server","Serverns IP","IP serveru","IP serwera"
+"PH_SERVER_IP","Address of the host to join","Adresse de l'hôte à rejoindre","Adresse des Hosts, dem beigetreten wird","Dirección del anfitrión al que unirse","Indirizzo dell'host a cui unirsi","Adress till värden att ansluta till","Adresa hostitele, ke kterému se připojit","Adres gospodarza, do którego dołączyć"
+"SET_SERVER_PORT","Server Port","Port du serveur","Server-Port","Puerto del servidor","Porta del server","Serverport","Port serveru","Port serwera"
+"SET_CLIENT_PORT","Client Port","Port du client","Client-Port","Puerto del cliente","Porta del client","Klientport","Port klienta","Port klienta"
+"SET_RECORD_TO","Record Session To","Enregistrer la session dans","Sitzung aufzeichnen in","Grabar la sesión en","Registra la sessione in","Spela in sessionen till","Nahrát relaci do","Zapisz sesję do"
+"PH_RECORD","Optional file to record the session (e.g. user://session.dem)","Fichier facultatif pour enregistrer la session (p. ex. user://session.dem)","Optionale Datei für die Aufzeichnung der Sitzung (z. B. user://session.dem)","Archivo opcional para grabar la sesión (p. ej. user://session.dem)","File facoltativo per registrare la sessione (es. user://session.dem)","Valfri fil att spela in sessionen i (t.ex. user://session.dem)","Volitelný soubor pro záznam relace (např. user://session.dem)","Opcjonalny plik do zapisu sesji (np. user://session.dem)"
+"SET_DEBUG_NETWORK","Debug Network","Débogage réseau","Netzwerk-Debug","Depuración de red","Debug di rete","Nätverksfelsökning","Ladění sítě","Debugowanie sieci"
+"NOTE_MULTIPLAYER","Host: runs the game server on Server Port (default 3030), the other players join it.
+Join: connects to Server IP : Server Port, this game uses Client Port (default 3031).
+Open Multiplayer in the main menu after the game starts. Debug Network writes a verbose network log.","Héberger : lance le serveur de jeu sur le port du serveur (3030 par défaut), les autres joueurs le rejoignent.
+Rejoindre : se connecte à IP du serveur : port du serveur, ce jeu utilise le port du client (3031 par défaut).
+Ouvrez Multijoueur dans le menu principal une fois le jeu lancé. Le débogage réseau écrit un journal réseau détaillé.","Hosten: startet den Spielserver auf dem Server-Port (Standard 3030), die anderen Spieler treten ihm bei.
+Beitreten: verbindet sich mit Server-IP : Server-Port, dieses Spiel nutzt den Client-Port (Standard 3031).
+Öffnen Sie nach dem Start des Spiels Mehrspieler im Hauptmenü. Netzwerk-Debug schreibt ein ausführliches Netzwerkprotokoll.","Anfitrión: inicia el servidor de juego en el puerto del servidor (3030 por defecto) y los demás jugadores se unen a él.
+Unirse: se conecta a IP del servidor : puerto del servidor; este juego usa el puerto del cliente (3031 por defecto).
+Abre Multijugador en el menú principal cuando empiece el juego. La depuración de red escribe un registro de red detallado.","Ospita: avvia il server di gioco sulla porta del server (predefinita 3030), gli altri giocatori si uniscono.
+Unisciti: si collega a IP del server : porta del server, questo gioco usa la porta del client (predefinita 3031).
+Apri Multigiocatore nel menu principale dopo l'avvio del gioco. Il debug di rete scrive un registro di rete dettagliato.","Vara värd: startar spelservern på serverporten (standard 3030), de andra spelarna ansluter till den.
+Anslut: ansluter till serverns IP : serverport, det här spelet använder klientporten (standard 3031).
+Öppna Flerspelare i huvudmenyn när spelet har startat. Nätverksfelsökning skriver en utförlig nätverkslogg.","Hostitel: spustí herní server na portu serveru (výchozí 3030), ostatní hráči se k němu připojí.
+Připojit: připojí se na IP serveru : port serveru, tato hra používá port klienta (výchozí 3031).
+Po spuštění hry otevřete v hlavním menu hru více hráčů. Ladění sítě zapisuje podrobný síťový log.","Gospodarz: uruchamia serwer gry na porcie serwera (domyślnie 3030), pozostali gracze dołączają do niego.
+Dołącz: łączy się z IP serwera : port serwera, ta gra używa portu klienta (domyślnie 3031).
+Po uruchomieniu gry otwórz grę wieloosobową w menu głównym. Debugowanie sieci zapisuje szczegółowy dziennik sieci."
+"IMP_WELCOME","Magic Carpet 2 setup required.
+Please select the source of your Magic Carpet 2 game data:
+a folder with CD image, a GOG installation folder, or an inserted CD.","Configuration de Magic Carpet 2 nécessaire.
+Choisissez la source des données de votre jeu Magic Carpet 2 :
+un dossier avec l'image du CD, le dossier d'installation GOG ou un CD inséré.","Einrichtung von Magic Carpet 2 erforderlich.
+Wählen Sie die Quelle Ihrer Magic-Carpet-2-Spieldaten:
+einen Ordner mit CD-Image, den GOG-Installationsordner oder eine eingelegte CD.","Es necesario configurar Magic Carpet 2.
+Selecciona el origen de los datos de tu Magic Carpet 2:
+una carpeta con la imagen del CD, la carpeta de instalación de GOG o un CD insertado.","È necessario configurare Magic Carpet 2.
+Seleziona l'origine dei dati del tuo Magic Carpet 2:
+una cartella con l'immagine del CD, la cartella di installazione GOG o un CD inserito.","Magic Carpet 2 behöver ställas in.
+Välj källan till dina speldata för Magic Carpet 2:
+en mapp med en cd-avbild, GOG-installationsmappen eller en isatt cd.","Je potřeba nastavit Magic Carpet 2.
+Vyberte zdroj herních dat Magic Carpet 2:
+složku s obrazem CD, instalační složku GOG nebo vložené CD.","Wymagana konfiguracja Magic Carpet 2.
+Wybierz źródło danych gry Magic Carpet 2:
+folder z obrazem płyty CD, folder instalacji GOG lub włożoną płytę CD."
+"IMP_SELECT_FOLDER","SELECT FOLDER","CHOISIR UN DOSSIER","ORDNER WÄHLEN","ELEGIR CARPETA","SCEGLI CARTELLA","VÄLJ MAPP","VYBRAT SLOŽKU","WYBIERZ FOLDER"
+"IMP_PICKER_TITLE","SELECT INSTALLATION FOLDER","CHOISISSEZ LE DOSSIER D'INSTALLATION","INSTALLATIONSORDNER WÄHLEN","ELIGE LA CARPETA DE INSTALACIÓN","SCEGLI LA CARTELLA DI INSTALLAZIONE","VÄLJ INSTALLATIONSMAPP","VYBERTE INSTALAČNÍ SLOŽKU","WYBIERZ FOLDER INSTALACJI"
+"IMP_DRIVE","Drive:","Lecteur :","Laufwerk:","Unidad:","Unità:","Enhet:","Disk:","Dysk:"
+"IMP_PATH","Path: %s","Chemin : %s","Pfad: %s","Ruta: %s","Percorso: %s","Sökväg: %s","Cesta: %s","Ścieżka: %s"
+"IMP_SELECT_CURRENT","SELECT CURRENT FOLDER","CHOISIR CE DOSSIER","DIESEN ORDNER WÄHLEN","ELEGIR ESTA CARPETA","SCEGLI QUESTA CARTELLA","VÄLJ DEN HÄR MAPPEN","VYBRAT TUTO SLOŽKU","WYBIERZ TEN FOLDER"
+"IMP_QUICK_ACCESS","Quick access:","Accès rapide :","Schnellzugriff:","Acceso rápido:","Accesso rapido:","Snabbåtkomst:","Rychlý přístup:","Szybki dostęp:"
+"IMP_DOWNLOADS","Downloads","Téléchargements","Downloads","Descargas","Download","Hämtade filer","Stažené soubory","Pobrane"
+"IMP_DOCUMENTS","Documents","Documents","Dokumente","Documentos","Documenti","Dokument","Dokumenty","Dokumenty"
+"IMP_SD_CARD","SD Card","Carte SD","SD-Karte","Tarjeta SD","Scheda SD","SD-kort","SD karta","Karta SD"
+"IMP_GO_BACK",".. (Go Back)",".. (Retour)",".. (Zurück)",".. (Atrás)",".. (Indietro)",".. (Tillbaka)",".. (Zpět)",".. (Wstecz)"
+"IMP_EXTRACTING","Extracting and converting game data...
+Please wait.","Extraction et conversion des données du jeu...
+Veuillez patienter.","Spieldaten werden entpackt und konvertiert...
+Bitte warten.","Extrayendo y convirtiendo los datos del juego...
+Espera, por favor.","Estrazione e conversione dei dati di gioco...
+Attendere prego.","Packar upp och konverterar speldata...
+Vänta.","Rozbaluji a převádím herní data...
+Čekejte prosím.","Wypakowywanie i konwersja danych gry...
+Proszę czekać."
+"IMP_DONE_RESTART","Data extraction complete.
+Thank you for your patience.
+The application will now restart.","Extraction des données terminée.
+Merci de votre patience.
+L'application va redémarrer.","Entpacken der Daten abgeschlossen.
+Danke für Ihre Geduld.
+Die Anwendung wird jetzt neu gestartet.","Extracción de datos completada.
+Gracias por tu paciencia.
+La aplicación se reiniciará ahora.","Estrazione dei dati completata.
+Grazie per la pazienza.
+L'applicazione ora verrà riavviata.","Uppackningen av data är klar.
+Tack för ditt tålamod.
+Programmet startas nu om.","Rozbalení dat je dokončeno.
+Děkujeme za trpělivost.
+Aplikace se nyní restartuje.","Wypakowywanie danych zakończone.
+Dziękujemy za cierpliwość.
+Aplikacja zostanie teraz uruchomiona ponownie."
+"IMP_ERR_NO_GAME","The GAME folder was not found in the selected location.
+You must select a CD, a CD image, or the GOG installation.
+Try again :)","Le dossier GAME est introuvable à l'emplacement choisi.
+Vous devez choisir un CD, une image de CD ou l'installation GOG.
+Réessayez :)","Der Ordner GAME wurde am gewählten Ort nicht gefunden.
+Sie müssen eine CD, ein CD-Image oder die GOG-Installation wählen.
+Versuchen Sie es noch einmal :)","No se encontró la carpeta GAME en la ubicación elegida.
+Debes elegir un CD, una imagen de CD o la instalación de GOG.
+Inténtalo de nuevo :)","La cartella GAME non è stata trovata nella posizione scelta.
+Devi scegliere un CD, un'immagine del CD o l'installazione GOG.
+Riprova :)","Mappen GAME hittades inte på den valda platsen.
+Du måste välja en cd, en cd-avbild eller GOG-installationen.
+Försök igen :)","Ve vybraném umístění nebyla nalezena složka GAME.
+Vyberte CD, obraz CD nebo instalaci GOG.
+Zkuste to znovu :)","W wybranej lokalizacji nie znaleziono folderu GAME.
+Musisz wybrać płytę CD, obraz płyty CD lub instalację GOG.
+Spróbuj ponownie :)"
+"IMP_ERR_EMPTY","The selected folder appears to be empty.
+You must select a CD, a CD image, or the GOG installation.
+Try again :)","Le dossier choisi semble vide.
+Vous devez choisir un CD, une image de CD ou l'installation GOG.
+Réessayez :)","Der gewählte Ordner scheint leer zu sein.
+Sie müssen eine CD, ein CD-Image oder die GOG-Installation wählen.
+Versuchen Sie es noch einmal :)","La carpeta elegida parece estar vacía.
+Debes elegir un CD, una imagen de CD o la instalación de GOG.
+Inténtalo de nuevo :)","La cartella scelta sembra vuota.
+Devi scegliere un CD, un'immagine del CD o l'installazione GOG.
+Riprova :)","Den valda mappen verkar vara tom.
+Du måste välja en cd, en cd-avbild eller GOG-installationen.
+Försök igen :)","Vybraná složka je zřejmě prázdná.
+Vyberte CD, obraz CD nebo instalaci GOG.
+Zkuste to znovu :)","Wybrany folder wydaje się pusty.
+Musisz wybrać płytę CD, obraz płyty CD lub instalację GOG.
+Spróbuj ponownie :)"
+"IMP_ERR_IMAGE","The selected file could not be read as a CD image (ISO/BIN).
+The image may be corrupted or in an unsupported format.
+Try again :)","Le fichier choisi n'a pas pu être lu comme image de CD (ISO/BIN).
+L'image est peut-être endommagée ou dans un format non pris en charge.
+Réessayez :)","Die gewählte Datei konnte nicht als CD-Image (ISO/BIN) gelesen werden.
+Das Image ist möglicherweise beschädigt oder in einem nicht unterstützten Format.
+Versuchen Sie es noch einmal :)","El archivo elegido no se pudo leer como imagen de CD (ISO/BIN).
+La imagen puede estar dañada o en un formato no compatible.
+Inténtalo de nuevo :)","Il file scelto non può essere letto come immagine del CD (ISO/BIN).
+L'immagine potrebbe essere danneggiata o in un formato non supportato.
+Riprova :)","Den valda filen kunde inte läsas som en cd-avbild (ISO/BIN).
+Avbilden kan vara skadad eller i ett format som inte stöds.
+Försök igen :)","Vybraný soubor nelze přečíst jako obraz CD (ISO/BIN).
+Obraz může být poškozený nebo v nepodporovaném formátu.
+Zkuste to znovu :)","Wybranego pliku nie można odczytać jako obrazu płyty CD (ISO/BIN).
+Obraz może być uszkodzony lub w nieobsługiwanym formacie.
+Spróbuj ponownie :)"
+"IMP_ERR_NO_EXE","NETHERW.EXE was not found in the selected location.
+This does not appear to be a valid Magic Carpet 2 installation.
+Try again :)","NETHERW.EXE est introuvable à l'emplacement choisi.
+Ceci ne semble pas être une installation valide de Magic Carpet 2.
+Réessayez :)","NETHERW.EXE wurde am gewählten Ort nicht gefunden.
+Dies scheint keine gültige Magic-Carpet-2-Installation zu sein.
+Versuchen Sie es noch einmal :)","No se encontró NETHERW.EXE en la ubicación elegida.
+No parece una instalación válida de Magic Carpet 2.
+Inténtalo de nuevo :)","NETHERW.EXE non è stato trovato nella posizione scelta.
+Non sembra un'installazione valida di Magic Carpet 2.
+Riprova :)","NETHERW.EXE hittades inte på den valda platsen.
+Det verkar inte vara en giltig installation av Magic Carpet 2.
+Försök igen :)","Ve vybraném umístění nebyl nalezen NETHERW.EXE.
+Nevypadá to jako platná instalace Magic Carpet 2.
+Zkuste to znovu :)","W wybranej lokalizacji nie znaleziono pliku NETHERW.EXE.
+To nie wygląda na prawidłową instalację Magic Carpet 2.
+Spróbuj ponownie :)"
+"IMP_ERR_MKDIR","Failed to create the output directory.
+Check that the destination path is valid and you have write permissions.
+Try again :)","Impossible de créer le dossier de sortie.
+Vérifiez que le chemin de destination est valide et que vous avez les droits d'écriture.
+Réessayez :)","Der Ausgabeordner konnte nicht erstellt werden.
+Prüfen Sie, ob der Zielpfad gültig ist und Sie Schreibrechte haben.
+Versuchen Sie es noch einmal :)","No se pudo crear la carpeta de salida.
+Comprueba que la ruta de destino es válida y que tienes permisos de escritura.
+Inténtalo de nuevo :)","Impossibile creare la cartella di destinazione.
+Verifica che il percorso di destinazione sia valido e di avere i permessi di scrittura.
+Riprova :)","Det gick inte att skapa utdatamappen.
+Kontrollera att målsökvägen är giltig och att du har skrivbehörighet.
+Försök igen :)","Nepodařilo se vytvořit výstupní složku.
+Zkontrolujte, že je cílová cesta platná a máte oprávnění k zápisu.
+Zkuste to znovu :)","Nie udało się utworzyć folderu docelowego.
+Sprawdź, czy ścieżka docelowa jest prawidłowa i czy masz uprawnienia do zapisu.
+Spróbuj ponownie :)"
+"IMP_ERR_COPY","Failed to copy files from the selected location.
+The folder may be unreadable or access was denied.
+Try again :)","Impossible de copier les fichiers depuis l'emplacement choisi.
+Le dossier est peut-être illisible ou l'accès a été refusé.
+Réessayez :)","Die Dateien konnten nicht vom gewählten Ort kopiert werden.
+Der Ordner ist möglicherweise nicht lesbar oder der Zugriff wurde verweigert.
+Versuchen Sie es noch einmal :)","No se pudieron copiar los archivos desde la ubicación elegida.
+Puede que la carpeta no se pueda leer o que se haya denegado el acceso.
+Inténtalo de nuevo :)","Impossibile copiare i file dalla posizione scelta.
+La cartella potrebbe essere illeggibile o l'accesso è stato negato.
+Riprova :)","Det gick inte att kopiera filer från den valda platsen.
+Mappen kanske inte går att läsa eller så nekades åtkomst.
+Försök igen :)","Nepodařilo se zkopírovat soubory z vybraného umístění.
+Složku možná nelze číst nebo byl odepřen přístup.
+Zkuste to znovu :)","Nie udało się skopiować plików z wybranej lokalizacji.
+Folder może być nieczytelny lub odmówiono dostępu.
+Spróbuj ponownie :)"
+"IMP_ERR_SUBDIRS","Failed to create required game subdirectories in the output folder.
+Check that the destination path is valid and you have write permissions.
+Try again :)","Impossible de créer les sous-dossiers du jeu dans le dossier de sortie.
+Vérifiez que le chemin de destination est valide et que vous avez les droits d'écriture.
+Réessayez :)","Die benötigten Unterordner des Spiels konnten im Ausgabeordner nicht erstellt werden.
+Prüfen Sie, ob der Zielpfad gültig ist und Sie Schreibrechte haben.
+Versuchen Sie es noch einmal :)","No se pudieron crear las subcarpetas del juego en la carpeta de salida.
+Comprueba que la ruta de destino es válida y que tienes permisos de escritura.
+Inténtalo de nuevo :)","Impossibile creare le sottocartelle del gioco nella cartella di destinazione.
+Verifica che il percorso di destinazione sia valido e di avere i permessi di scrittura.
+Riprova :)","Det gick inte att skapa spelets undermappar i utdatamappen.
+Kontrollera att målsökvägen är giltig och att du har skrivbehörighet.
+Försök igen :)","Nepodařilo se vytvořit potřebné podsložky hry ve výstupní složce.
+Zkontrolujte, že je cílová cesta platná a máte oprávnění k zápisu.
+Zkuste to znovu :)","Nie udało się utworzyć wymaganych podfolderów gry w folderze docelowym.
+Sprawdź, czy ścieżka docelowa jest prawidłowa i czy masz uprawnienia do zapisu.
+Spróbuj ponownie :)"
+"IMP_ERR_NO_DATA","No data files (DATA/) were found in the selected location.
+This does not appear to be a valid Magic Carpet 2 installation.
+Try again :)","Aucun fichier de données (DATA/) trouvé à l'emplacement choisi.
+Ceci ne semble pas être une installation valide de Magic Carpet 2.
+Réessayez :)","Am gewählten Ort wurden keine Datendateien (DATA/) gefunden.
+Dies scheint keine gültige Magic-Carpet-2-Installation zu sein.
+Versuchen Sie es noch einmal :)","No se encontraron archivos de datos (DATA/) en la ubicación elegida.
+No parece una instalación válida de Magic Carpet 2.
+Inténtalo de nuevo :)","Nessun file di dati (DATA/) trovato nella posizione scelta.
+Non sembra un'installazione valida di Magic Carpet 2.
+Riprova :)","Inga datafiler (DATA/) hittades på den valda platsen.
+Det verkar inte vara en giltig installation av Magic Carpet 2.
+Försök igen :)","Ve vybraném umístění nebyly nalezeny datové soubory (DATA/).
+Nevypadá to jako platná instalace Magic Carpet 2.
+Zkuste to znovu :)","W wybranej lokalizacji nie znaleziono plików danych (DATA/).
+To nie wygląda na prawidłową instalację Magic Carpet 2.
+Spróbuj ponownie :)"
+"IMP_ERR_NO_LEVELS","No level files (LEVELS/) were found in the selected location.
+This does not appear to be a valid Magic Carpet 2 installation.
+Try again :)","Aucun fichier de niveau (LEVELS/) trouvé à l'emplacement choisi.
+Ceci ne semble pas être une installation valide de Magic Carpet 2.
+Réessayez :)","Am gewählten Ort wurden keine Level-Dateien (LEVELS/) gefunden.
+Dies scheint keine gültige Magic-Carpet-2-Installation zu sein.
+Versuchen Sie es noch einmal :)","No se encontraron archivos de niveles (LEVELS/) en la ubicación elegida.
+No parece una instalación válida de Magic Carpet 2.
+Inténtalo de nuevo :)","Nessun file dei livelli (LEVELS/) trovato nella posizione scelta.
+Non sembra un'installazione valida di Magic Carpet 2.
+Riprova :)","Inga nivåfiler (LEVELS/) hittades på den valda platsen.
+Det verkar inte vara en giltig installation av Magic Carpet 2.
+Försök igen :)","Ve vybraném umístění nebyly nalezeny soubory úrovní (LEVELS/).
+Nevypadá to jako platná instalace Magic Carpet 2.
+Zkuste to znovu :)","W wybranej lokalizacji nie znaleziono plików poziomów (LEVELS/).
+To nie wygląda na prawidłową instalację Magic Carpet 2.
+Spróbuj ponownie :)"
+"IMP_OK_IMAGE","Extraction from CD image completed successfully!
+Magic Carpet 2 is ready to play. Enjoy! :)","Extraction depuis l'image du CD réussie !
+Magic Carpet 2 est prêt. Bon jeu ! :)","Entpacken aus dem CD-Image erfolgreich abgeschlossen!
+Magic Carpet 2 ist spielbereit. Viel Spaß! :)","¡Extracción desde la imagen del CD completada!
+Magic Carpet 2 está listo para jugar. ¡Que lo disfrutes! :)","Estrazione dall'immagine del CD completata!
+Magic Carpet 2 è pronto per giocare. Buon divertimento! :)","Uppackningen från cd-avbilden lyckades!
+Magic Carpet 2 är redo att spelas. Ha så kul! :)","Rozbalení z obrazu CD proběhlo úspěšně!
+Magic Carpet 2 je připraven ke hraní. Užijte si to! :)","Wypakowanie z obrazu płyty CD zakończone powodzeniem!
+Magic Carpet 2 jest gotowy do gry. Miłej zabawy! :)"
+"IMP_OK_FILES","Files copied successfully!
+Magic Carpet 2 is ready to play. Enjoy! :)","Fichiers copiés avec succès !
+Magic Carpet 2 est prêt. Bon jeu ! :)","Dateien erfolgreich kopiert!
+Magic Carpet 2 ist spielbereit. Viel Spaß! :)","¡Archivos copiados correctamente!
+Magic Carpet 2 está listo para jugar. ¡Que lo disfrutes! :)","File copiati correttamente!
+Magic Carpet 2 è pronto per giocare. Buon divertimento! :)","Filerna har kopierats!
+Magic Carpet 2 är redo att spelas. Ha så kul! :)","Soubory byly úspěšně zkopírovány!
+Magic Carpet 2 je připraven ke hraní. Užijte si to! :)","Pliki zostały skopiowane!
+Magic Carpet 2 jest gotowy do gry. Miłej zabawy! :)"
+"HELP_KEYS","WASD - move
+SPACE - confirm
+ESC - exit
+CTRL - spell menu, SHIFT + left/right mouse button (in the spell menu) - select
+F1 - this help
+F2 - hide/show the in-game help
+F3 - increase speed
+F4 - decrease speed
+F5 - quick save
+F7 - fog level
+F8 - hide/show wizard names
+F9 - quick load
+X - stop moving
+O - current objective
+H - change graphics type
+P - pause
+C - pause + spell menu
+I - messages
+J - step one frame
+Enter - map view, ALT (in the map view) - wizards' status
+L - destroy castle
+K - kill all creatures (cheat)","WASD - se déplacer
+ESPACE - confirmer
+ÉCHAP - quitter
+CTRL - menu des sorts, MAJ + bouton gauche/droit de la souris (dans le menu des sorts) - choisir
+F1 - cette aide
+F2 - masquer/afficher l'aide en jeu
+F3 - accélérer
+F4 - ralentir
+F5 - sauvegarde rapide
+F7 - niveau du brouillard
+F8 - masquer/afficher les noms des sorciers
+F9 - chargement rapide
+X - s'arrêter
+O - objectif actuel
+H - changer le type de graphismes
+P - pause
+C - pause + menu des sorts
+I - messages
+J - avancer d'une image
+Entrée - carte, ALT (sur la carte) - état des sorciers
+L - détruire le château
+K - tuer toutes les créatures (triche)","WASD - bewegen
+LEERTASTE - bestätigen
+ESC - beenden
+STRG - Zaubermenü, UMSCHALT + linke/rechte Maustaste (im Zaubermenü) - auswählen
+F1 - diese Hilfe
+F2 - Hilfe im Spiel aus-/einblenden
+F3 - schneller
+F4 - langsamer
+F5 - Schnellspeichern
+F7 - Nebelstufe
+F8 - Namen der Zauberer aus-/einblenden
+F9 - Schnellladen
+X - anhalten
+O - aktuelles Ziel
+H - Grafikart wechseln
+P - Pause
+C - Pause + Zaubermenü
+I - Nachrichten
+J - einen Frame weiter
+Eingabe - Kartenansicht, ALT (in der Karte) - Status der Zauberer
+L - Burg zerstören
+K - alle Kreaturen töten (Cheat)","WASD - moverse
+ESPACIO - confirmar
+ESC - salir
+CTRL - menú de hechizos, MAYÚS + botón izquierdo/derecho del ratón (en el menú de hechizos) - elegir
+F1 - esta ayuda
+F2 - ocultar/mostrar la ayuda en el juego
+F3 - aumentar la velocidad
+F4 - reducir la velocidad
+F5 - guardado rápido
+F7 - nivel de niebla
+F8 - ocultar/mostrar los nombres de los magos
+F9 - carga rápida
+X - detenerse
+O - objetivo actual
+H - cambiar el tipo de gráficos
+P - pausa
+C - pausa + menú de hechizos
+I - mensajes
+J - avanzar un fotograma
+Intro - mapa, ALT (en el mapa) - estado de los magos
+L - destruir el castillo
+K - matar a todas las criaturas (truco)","WASD - muoversi
+SPAZIO - conferma
+ESC - esci
+CTRL - menu degli incantesimi, MAIUSC + tasto sinistro/destro del mouse (nel menu degli incantesimi) - scegli
+F1 - questo aiuto
+F2 - nascondi/mostra l'aiuto in gioco
+F3 - aumenta la velocità
+F4 - diminuisci la velocità
+F5 - salvataggio rapido
+F7 - livello della nebbia
+F8 - nascondi/mostra i nomi dei maghi
+F9 - caricamento rapido
+X - fermati
+O - obiettivo attuale
+H - cambia il tipo di grafica
+P - pausa
+C - pausa + menu degli incantesimi
+I - messaggi
+J - avanza di un fotogramma
+Invio - mappa, ALT (nella mappa) - stato dei maghi
+L - distruggi il castello
+K - uccidi tutte le creature (trucco)","WASD - förflytta dig
+MELLANSLAG - bekräfta
+ESC - avsluta
+CTRL - trollformelmeny, SKIFT + vänster/höger musknapp (i trollformelmenyn) - välj
+F1 - den här hjälpen
+F2 - dölj/visa hjälpen i spelet
+F3 - öka hastigheten
+F4 - minska hastigheten
+F5 - snabbspara
+F7 - dimnivå
+F8 - dölj/visa trollkarlarnas namn
+F9 - snabbladda
+X - stanna
+O - aktuellt uppdrag
+H - byt grafiktyp
+P - paus
+C - paus + trollformelmeny
+I - meddelanden
+J - stega en bildruta
+Enter - kartvy, ALT (i kartvyn) - trollkarlarnas status
+L - förstör slottet
+K - döda alla varelser (fusk)","WASD - pohyb
+MEZERNÍK - potvrzení
+ESC - konec
+CTRL - nabídka kouzel, SHIFT + levé/pravé tlačítko myši (v nabídce kouzel) - výběr
+F1 - tato nápověda
+F2 - skrýt/zobrazit nápovědu ve hře
+F3 - zvýšit rychlost
+F4 - snížit rychlost
+F5 - rychlé uložení
+F7 - úroveň mlhy
+F8 - skrýt/zobrazit jména čarodějů
+F9 - rychlé nahrání
+X - zastavit pohyb
+O - aktuální úkol
+H - změnit typ grafiky
+P - pauza
+C - pauza + nabídka kouzel
+I - zprávy
+J - krok o jeden snímek
+Enter - mapa, ALT (v mapě) - stav čarodějů
+L - zničit hrad
+K - zabít všechna stvoření (cheat)","WASD - ruch
+SPACJA - potwierdź
+ESC - wyjście
+CTRL - menu czarów, SHIFT + lewy/prawy przycisk myszy (w menu czarów) - wybór
+F1 - ta pomoc
+F2 - ukryj/pokaż pomoc w grze
+F3 - zwiększ prędkość
+F4 - zmniejsz prędkość
+F5 - szybki zapis
+F7 - poziom mgły
+F8 - ukryj/pokaż imiona czarodziejów
+F9 - szybkie wczytanie
+X - zatrzymaj ruch
+O - bieżący cel
+H - zmień rodzaj grafiki
+P - pauza
+C - pauza + menu czarów
+I - wiadomości
+J - krok o jedną klatkę
+Enter - mapa, ALT (na mapie) - stan czarodziejów
+L - zniszcz zamek
+K - zabij wszystkie stworzenia (kod)"

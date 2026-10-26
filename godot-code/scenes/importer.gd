@@ -55,6 +55,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	Global.canNotification = false
+	Global.apply_game_language()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Main_DecodeLevel = get_node("DecodeLevel")
 	_show_welcome_dialog()
@@ -105,7 +106,7 @@ func _show_welcome_dialog():
 	canvas.add_child(bg)
 
 	var label = Label.new()
-	label.text = "Magic Carpet 2 setup required.\nPlease select the source of your Magic Carpet 2 game data:\na folder with CD image, a GOG installation folder, or an inserted CD."
+	label.text = "IMP_WELCOME" # keys of translations/texts.csv, translated by Godot
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -115,7 +116,8 @@ func _show_welcome_dialog():
 	canvas.add_child(label)
 
 	var btn = Button.new()
-	btn.text = "SELECT FOLDER"
+	btn.text = "IMP_SELECT_FOLDER"
+	btn.grow_horizontal = Control.GROW_DIRECTION_BOTH # a longer translation widens it to both sides
 	btn.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
 	btn.offset_top = -120
 	btn.offset_bottom = -60
@@ -174,7 +176,7 @@ func _show_custom_dir_picker():
 	margin.add_child(vbox)
 
 	var title = Label.new()
-	title.text = "SELECT INSTALLATION FOLDER"
+	title.text = "IMP_PICKER_TITLE"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", UI_TITLE_COLOR)
 	title.add_theme_font_size_override("font_size", UI_TITLE_FONT_SIZE)
@@ -187,7 +189,7 @@ func _show_custom_dir_picker():
 		vbox.add_child(drive_hbox)
 
 		var drive_label = Label.new()
-		drive_label.text = "Drive:"
+		drive_label.text = "IMP_DRIVE"
 		drive_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
 		drive_label.add_theme_font_size_override("font_size", 14)
 		drive_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -204,7 +206,7 @@ func _show_custom_dir_picker():
 				drive_hbox.add_child(btn_drive)
 
 	_picker_path_label = Label.new()
-	_picker_path_label.text = "Path: /"
+	_picker_path_label.text = tr("IMP_PATH") % "/"
 	_picker_path_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6))
 	_picker_path_label.add_theme_font_size_override("font_size", 14)
 	vbox.add_child(_picker_path_label)
@@ -230,7 +232,7 @@ func _show_custom_dir_picker():
 	hbox.add_child(btn_cancel)
 
 	var btn_select = Button.new()
-	btn_select.text = "SELECT CURRENT FOLDER"
+	btn_select.text = "IMP_SELECT_CURRENT"
 	btn_select.custom_minimum_size = Vector2(200, 40)
 	_apply_button_theme(btn_select)
 	btn_select.pressed.connect(_on_picker_select_pressed)
@@ -260,7 +262,7 @@ func _show_android_quick_links():
 	if not vbox: return
 
 	var quick_label = Label.new()
-	quick_label.text = "Quick access:"
+	quick_label.text = "IMP_QUICK_ACCESS"
 	quick_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.8))
 	quick_label.add_theme_font_size_override("font_size", 13)
 	vbox.add_child(quick_label)
@@ -272,9 +274,9 @@ func _show_android_quick_links():
 	vbox.move_child(hbox, _picker_tree.get_index())
 
 	var shortcuts = {
-		"Downloads": OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS),
-		"Documents": OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS),
-		"SD Card": "/storage/emulated/0",
+		"IMP_DOWNLOADS": OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS),
+		"IMP_DOCUMENTS": OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS),
+		"IMP_SD_CARD": "/storage/emulated/0",
 	}
 	for label_text in shortcuts:
 		var path = shortcuts[label_text]
@@ -290,7 +292,7 @@ func _show_android_quick_links():
 func _picker_navigate(path: String):
 	_picker_current_path = path
 	_picker_selected_path = path
-	_picker_path_label.text = "Current Path: " + path
+	_picker_path_label.text = tr("IMP_PATH") % path
 	_picker_tree.clear()
 
 	var root = _picker_tree.create_item()
@@ -298,7 +300,7 @@ func _picker_navigate(path: String):
 	
 	if normalized != "" and normalized != "C:":
 		var up_item = _picker_tree.create_item(root)
-		up_item.set_text(0, " .. (Go Back)")
+		up_item.set_text(0, " " + tr("IMP_GO_BACK"))
 		up_item.set_metadata(0, {"type": "up", "path": path.get_base_dir()})
 		up_item.set_custom_color(0, Color(0.5, 0.6, 1.0))
 
@@ -371,6 +373,8 @@ func _on_work_done2(result):
 func _on_work_done():
 	_thread.wait_to_finish()
 	Global.canNotification = true
+	# the new game data starts in English (CONFIG.DAT) - in the language the importer was in
+	Global.write_game_language(max(Global.text_language(), 1))
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	await _run_ending()
 	OS.create_process(OS.get_executable_path(), OS.get_cmdline_args())
@@ -389,7 +393,7 @@ func _show_loading_ui():
 
 	var label = Label.new()
 	label.name = "StatusLabel"
-	label.text = "Extracting and converting game data...\nPlease wait."
+	label.text = "IMP_EXTRACTING"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -422,7 +426,7 @@ func _run_ending() -> void:
 	_stop_spinner = true # Disable the animation loop
 	var canvas = get_node("LoadingCanvas")
 	var label = canvas.get_node("StatusLabel")
-	label.text = "Data extraction complete.\nThank you for your patience.\nThe application will now restart."
+	label.text = "IMP_DONE_RESTART"
 	var countdown_label = canvas.get_node("Spinner")
 	countdown_label.add_theme_color_override("font_color", UI_COUNTDOWN_COLOR)
 	countdown_label.add_theme_font_size_override("font_size", 48)
@@ -436,27 +440,27 @@ func _run_ending2(result) -> void:
 	var label = canvas.get_node("StatusLabel")
 	match(result):
 		-1:
-			label.text = "The GAME folder was not found in the selected location.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+			label.text = "IMP_ERR_NO_GAME"
 		-2:
-			label.text = "The selected folder appears to be empty.\nYou must select a CD, a CD image, or the GOG installation.\nTry again :)"
+			label.text = "IMP_ERR_EMPTY"
 		-3:
-			label.text = "The selected file could not be read as a CD image (ISO/BIN).\nThe image may be corrupted or in an unsupported format.\nTry again :)"
+			label.text = "IMP_ERR_IMAGE"
 		-4:
-			label.text = "NETHERW.EXE was not found in the selected location.\nThis does not appear to be a valid Magic Carpet 2 installation.\nTry again :)"
+			label.text = "IMP_ERR_NO_EXE"
 		-5:
-			label.text = "Failed to create the output directory.\nCheck that the destination path is valid and you have write permissions.\nTry again :)"
+			label.text = "IMP_ERR_MKDIR"
 		-6:
-			label.text = "Failed to copy files from the selected location.\nThe folder may be unreadable or access was denied.\nTry again :)"
+			label.text = "IMP_ERR_COPY"
 		-7:
-			label.text = "Failed to create required game subdirectories in the output folder.\nCheck that the destination path is valid and you have write permissions.\nTry again :)"
+			label.text = "IMP_ERR_SUBDIRS"
 		-8:
-			label.text = "No data files (DATA/) were found in the selected location.\nThis does not appear to be a valid Magic Carpet 2 installation.\nTry again :)"
+			label.text = "IMP_ERR_NO_DATA"
 		-9:
-			label.text = "No level files (LEVELS/) were found in the selected location.\nThis does not appear to be a valid Magic Carpet 2 installation.\nTry again :)"
+			label.text = "IMP_ERR_NO_LEVELS"
 		1:
-			label.text = "Extraction from CD image completed successfully!\nMagic Carpet 2 is ready to play. Enjoy! :)"
+			label.text = "IMP_OK_IMAGE"
 		2:
-			label.text = "Files copied successfully!\nMagic Carpet 2 is ready to play. Enjoy! :)"
+			label.text = "IMP_OK_FILES"
 	var countdown_label = canvas.get_node("Spinner")
 	countdown_label.add_theme_color_override("font_color", UI_COUNTDOWN_COLOR)
 	countdown_label.add_theme_font_size_override("font_size", 48)

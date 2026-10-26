@@ -43,6 +43,10 @@ texture={
 &"mipmaps/generate": true
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://translations/texts.en.translation", "res://translations/texts.fr.translation", "res://translations/texts.de.translation", "res://translations/texts.es.translation", "res://translations/texts.it.translation", "res://translations/texts.sv.translation", "res://translations/texts.cs.translation", "res://translations/texts.pl.translation")
+
 [rendering]
 
 textures/canvas_textures/default_texture_repeat=1

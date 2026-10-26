@@ -107,7 +107,7 @@ const RESOLUTION_NAMES = [
 	"1920 × 1080",
 	"2560 × 1440",
 	"3840 × 2160",
-	"Native Resolution",
+	"RES_NATIVE",
 ]
 
 # =============================================
@@ -155,6 +155,7 @@ var _sel_invert_y:      OptionButton
 var _sel_gamepad:       OptionButton
 
 var _sel_language:      OptionButton
+var _language_before:   int # to go back to on Cancel - the choice shows at once
 var _sel_difficulty:    OptionButton
 var _sel_autosave:      OptionButton
 
@@ -174,6 +175,7 @@ var _le_mp_record_file:  LineEdit
 
 func _ready() -> void:
 	MBDebug.log("settings screen")
+	Global.apply_game_language()
 	_load_config()
 	_show_countdown()
 	await get_tree().process_frame
@@ -381,7 +383,7 @@ func _show_countdown() -> void:
 	_countdown_canvas.add_child(_countdown_number)
 
 	_countdown_label = Label.new()
-	_countdown_label.text = "Loading..."
+	_countdown_label.text = "LAUNCH_LOADING"
 	_countdown_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_countdown_label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	_countdown_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -391,7 +393,7 @@ func _show_countdown() -> void:
 	_countdown_canvas.add_child(_countdown_label)
 
 	var hint = Label.new()
-	hint.text = "Press  [Esc]  to START NOW  |  Press  [R]  for Reimport data |  Press  [S]  for Settings |  Press  [E]  for Editor"
+	hint.text = "LAUNCH_HINT"
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	hint.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -402,6 +404,7 @@ func _show_countdown() -> void:
 
 	var btn = Button.new()
 	btn.text = "SETTINGS"
+	btn.grow_horizontal = Control.GROW_DIRECTION_BOTH # a longer translation widens it to both sides
 	btn.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
 	btn.offset_top    = -100
 	btn.offset_bottom = -50
@@ -437,7 +440,7 @@ func _launch_game() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(bg)
 	var label = Label.new()
-	label.text = "Starting game MagicBalls"
+	label.text = "LAUNCH_STARTING_GAME"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -474,7 +477,7 @@ func _launch_editor() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(bg)
 	var label = Label.new()
-	label.text = "Starting game Editor"
+	label.text = "LAUNCH_STARTING_EDITOR"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -511,7 +514,7 @@ func _reimport_scene() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(bg)
 	var label = Label.new()
-	label.text = "Loading Importer"
+	label.text = "LAUNCH_LOADING_IMPORTER"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -572,6 +575,7 @@ func _animate_simple_spinner(spinner: Label) -> void:
 func _open_settings() -> void:
 	_countdown_active = false
 	_settings_open    = true
+	_language_before  = Global.text_language()
 
 	_settings_canvas      = CanvasLayer.new()
 	_settings_canvas.name = "SettingsCanvas"
@@ -620,6 +624,8 @@ func _open_settings() -> void:
 func _on_apply_pressed() -> void:
 	_read_controls_into_settings()
 	_save_config()
+	# into the game's own setting; without game data yet the importer writes it after the import
+	Global.write_game_language(_sel_language.selected + 1)
 	if _apply_render_thread():
 		return
 	_settings_open = false
@@ -631,7 +637,8 @@ func _on_apply_pressed() -> void:
 func _on_cancel_pressed() -> void:
 	_settings_open = false
 	_settings_canvas.queue_free()
-	_countdown_label.text = "Loading..."
+	Global.set_text_language(_language_before)
+	_countdown_label.text = "LAUNCH_LOADING"
 	_reset_countdown(COUNTDOWN_SECONDS)
 
 # =============================================
@@ -639,62 +646,59 @@ func _on_cancel_pressed() -> void:
 # =============================================
 
 func _build_video_tab(tc: TabContainer) -> void:
-	var vbox = _make_tab("VIDEO", tc)
+	var vbox = _make_tab("TAB_VIDEO", tc)
 
 	# --- DISPLAY ---
-	vbox.add_child(_section("DISPLAY"))
-	_sel_resolution = _option(vbox, "Resolution", RESOLUTION_NAMES,
+	vbox.add_child(_section("SEC_DISPLAY"))
+	_sel_resolution = _option(vbox, "SET_RESOLUTION", RESOLUTION_NAMES,
 							  _settings["video"]["resolution_index"])
-	_sel_display = _option(vbox, "Display Mode",
-		["Windowed", "Fullscreen", "Exclusive Fullscreen"],
+	_sel_display = _option(vbox, "SET_DISPLAY_MODE",
+		["DISPLAY_WINDOWED", "DISPLAY_FULLSCREEN", "DISPLAY_EXCLUSIVE"],
 		_settings["video"]["display_mode"])
 
 	# --- RENDERING ---
-	vbox.add_child(_section("RENDERING"))
-	_sel_force_vertex = _option(vbox, "Force Vertex Shader", ["Off", "On"],
+	vbox.add_child(_section("SEC_RENDERING"))
+	_sel_force_vertex = _option(vbox, "SET_FORCE_VERTEX", ["OFF", "ON"],
 		_settings["video"]["force_vertex_shader"])
 
 	var note_vertex = Label.new()
 	note_vertex.add_theme_font_size_override("font_size", 11)
 	note_vertex.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
 	note_vertex.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note_vertex.text = "Forces per-vertex shading instead of per-pixel — improves performance on low-end GPUs at the cost of lighting quality.(experimenal, some 3D objects is dark)"
+	note_vertex.text = "NOTE_FORCE_VERTEX"
 	vbox.add_child(note_vertex)
 
-	_sel_bilinear_filter = _option(vbox, "Bilinear Filtering", ["Off (Nearest)", "On (Linear)"],
+	_sel_bilinear_filter = _option(vbox, "SET_BILINEAR", ["FILTER_NEAREST", "FILTER_LINEAR"],
 		_settings["video"]["bilinear_filtering"])
 
 	var note_filter = Label.new()
 	note_filter.add_theme_font_size_override("font_size", 11)
 	note_filter.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
 	note_filter.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note_filter.text = "Off = sharp/pixelated textures, On = smooth/blurred textures. Affects UI and 2D sprites (not 3D mesh materials)."
+	note_filter.text = "NOTE_BILINEAR"
 	vbox.add_child(note_filter)
 
-	_sel_render_thread = _option(vbox, "Separate Render Thread", ["Off", "On (experimental)"],
+	_sel_render_thread = _option(vbox, "SET_RENDER_THREAD", ["OFF", "ON_EXPERIMENTAL"],
 		_settings["video"]["separate_render_thread"])
-	vbox.add_child(_warning_note("Prepares the picture on its own processor core while the game runs on another one. " +
-		"On processors with several cores it can give a few more frames per second. It is an experimental " +
-		"feature of the Godot engine: the game can crash, even right at the start. If the game " +
-		"crashes or freezes, switch it off. A change restarts the game."))
+	vbox.add_child(_warning_note("NOTE_RENDER_THREAD"))
 
 func _build_audio_tab(tc: TabContainer) -> void:
-	var vbox = _make_tab("AUDIO", tc)
-	vbox.add_child(_section("VOLUME"))
-	_sl_master = _slider(vbox, "Master Volume", 0, 100, _settings["audio"]["master_volume"])
-	_sl_music  = _slider(vbox, "Music",         0, 100, _settings["audio"]["music_volume"])
-	_sl_sfx    = _slider(vbox, "Sounds",        0, 100, _settings["audio"]["sfx_volume"])
-	_sl_speech = _slider(vbox, "Speech",        0, 100, _settings["audio"]["speech_volume"])
+	var vbox = _make_tab("TAB_AUDIO", tc)
+	vbox.add_child(_section("SEC_VOLUME"))
+	_sl_master = _slider(vbox, "SET_MASTER_VOLUME", 0, 100, _settings["audio"]["master_volume"])
+	_sl_music  = _slider(vbox, "SET_MUSIC",         0, 100, _settings["audio"]["music_volume"])
+	_sl_sfx    = _slider(vbox, "SET_SOUNDS",        0, 100, _settings["audio"]["sfx_volume"])
+	_sl_speech = _slider(vbox, "SET_SPEECH",        0, 100, _settings["audio"]["speech_volume"])
 
-	vbox.add_child(_section("MUSIC"))
-	_sel_music_type = _option(vbox, "Music Type",
-		["OGG (recorded)", "MIDI (SoundFont)", "AWE32 (emulation)"],
+	vbox.add_child(_section("SEC_MUSIC"))
+	_sel_music_type = _option(vbox, "SET_MUSIC_TYPE",
+		["MUSIC_OGG", "MUSIC_MIDI", "MUSIC_AWE32"],
 		_settings["audio"]["music_type"])
-	_sel_mc1_music = _option(vbox, "Magic Carpet 1 Music in Levels", ["Off", "On"],
+	_sel_mc1_music = _option(vbox, "SET_MC1_MUSIC", ["OFF", "ON"],
 		_settings["audio"]["mc1_music"])
-	_sel_awe32_gm_intro = _option(vbox, "General MIDI in Intro and Cutscenes", ["Off", "On"],
+	_sel_awe32_gm_intro = _option(vbox, "SET_GM_INTRO", ["OFF", "ON"],
 		_settings["audio"]["awe32_gm_intro"])
-	_sp_awe32_buffer = _spin(vbox, "AWE32 Buffer (ms)", 100, 2000, _settings["audio"]["awe32_buffer_ms"])
+	_sp_awe32_buffer = _spin(vbox, "SET_AWE32_BUFFER", 100, 2000, _settings["audio"]["awe32_buffer_ms"])
 
 	var note_music = Label.new()
 	note_music.add_theme_font_size_override("font_size", 11)
@@ -709,50 +713,55 @@ func _build_audio_tab(tc: TabContainer) -> void:
 		_sp_awe32_buffer.get_parent().visible    = awe32
 		match idx:
 			Global.MUSIC_OGG:
-				note_music.text = "Recorded music re-imagined from the MIDI tracks (uses less CPU)."
+				note_music.text = "NOTE_MUSIC_OGG"
 			Global.MUSIC_MIDI:
-				note_music.text = "The original MIDI tracks through a General MIDI SoundFont."
+				note_music.text = "NOTE_MUSIC_MIDI"
 			_:
-				note_music.text = "The original XMI music of the game through the Sound Blaster AWE32 emulation. " \
-					+ "Raise the buffer when the music crackles; the music starts this much later. " \
-					+ "Without the AWE32 wave ROM the OGG music plays."
+				note_music.text = "NOTE_MUSIC_AWE32"
 	_sel_music_type.item_selected.connect(_update_music)
 	_update_music.call(_settings["audio"]["music_type"])
 
 func _build_input_tab(tc: TabContainer) -> void:
-	var vbox = _make_tab("INPUT", tc)
-	vbox.add_child(_section("MOUSE & CAMERA"))
-	_sel_invert_y = _option(vbox, "Invert Y Axis", ["No", "Yes"],
+	var vbox = _make_tab("TAB_INPUT", tc)
+	vbox.add_child(_section("SEC_MOUSE_CAMERA"))
+	_sel_invert_y = _option(vbox, "SET_INVERT_Y", ["NO", "YES"],
 		_settings["input"]["invert_y"])
 
 const FPS_VALUES = [20, 24, 30, 40, 50]
 const FPS_NAMES  = ["20", "24", "30", "40", "50"]
 
 func _build_game_tab(tc: TabContainer) -> void:
-	var vbox = _make_tab("GAME", tc)
-	vbox.add_child(_section("LEVEL"))
-	_sel_level_mode = _option(vbox, "Game Mode",
-		["Standard Game", "Custom Level"],
+	var vbox = _make_tab("TAB_GAME", tc)
+	vbox.add_child(_section("SEC_LANGUAGE"))
+	# the names in their own languages, not translated; the choice shows at once
+	_sel_language = _option(vbox, "SET_LANGUAGE", Global.LANG_NAMES, max(Global.text_language() - 1, 0))
+	_sel_language.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	_sel_language.item_selected.connect(func(idx): Global.set_text_language(idx + 1))
+	vbox.add_child(_note("NOTE_LANGUAGE"))
+
+	vbox.add_child(_section("SEC_LEVEL"))
+	_sel_level_mode = _option(vbox, "SET_GAME_MODE",
+		["MODE_STANDARD", "MODE_CUSTOM"],
 		_settings["game"]["level_mode"])
 	var level_names: Array = []
 	for lvl in Global.VALID_LEVELS:
 		level_names.append(str(lvl))
 	var saved_opt_idx = max(Global.VALID_LEVELS.find(_settings["game"]["custom_level"]), 0)
-	_sel_custom_level = _option(vbox, "Level Number", level_names, saved_opt_idx)
+	_sel_custom_level = _option(vbox, "SET_LEVEL_NUMBER", level_names, saved_opt_idx)
 	_sel_level_mode.item_selected.connect(_on_level_mode_changed)
 	_update_custom_level_visibility()
 
-	_sel_fps = _option(vbox, "FPS Limit (game speed)", FPS_NAMES, _settings["game"]["fps_limit"])
+	_sel_fps = _option(vbox, "SET_FPS_LIMIT", FPS_NAMES, _settings["game"]["fps_limit"])
 
-	vbox.add_child(_section("NAVIGATION"))
-	_sel_show_navigation = _option(vbox, "Show Navigation", ["Off", "On"], _settings["game"]["show_navigation"])
+	vbox.add_child(_section("SEC_NAVIGATION"))
+	_sel_show_navigation = _option(vbox, "SET_SHOW_NAVIGATION", ["OFF", "ON"], _settings["game"]["show_navigation"])
 
-	vbox.add_child(_section("FOG"))
+	vbox.add_child(_section("SEC_FOG"))
 	var fog_names: Array = []
 	for i in range(Global.fog_presets.size()):
 		fog_names.append(str(i))
 	var saved_fog_idx = clamp(_settings["game"]["current_fog_index"], 0, Global.fog_presets.size() - 1)
-	_sel_fog_index = _option(vbox, "Fog Preset", fog_names, saved_fog_idx)
+	_sel_fog_index = _option(vbox, "SET_FOG_PRESET", fog_names, saved_fog_idx)
 
 	var fps_note = Label.new()
 	fps_note.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
@@ -762,34 +771,26 @@ func _build_game_tab(tc: TabContainer) -> void:
 
 	var _update_fps_note = func(idx: int) -> void:
 		if FPS_VALUES[idx] >= 30:
-			fps_note.text = "⚠ Warning: at higher FPS the game becomes harder to control — " \
-				+ "only for hardcore players (best experience is at 24 FPS)."
+			fps_note.text = "NOTE_FPS"
 		else:
 			fps_note.text = ""
 	_sel_fps.item_selected.connect(_update_fps_note)
 	_update_fps_note.call(_settings["game"]["fps_limit"])
 
 func _build_multiplayer_tab(tc: TabContainer) -> void:
-	var vbox = _make_tab("MULTIPLAYER", tc)
-	vbox.add_child(_section("NETWORK GAME"))
-	_sel_mp_mode = _option(vbox, "Mode", ["Off (single player)", "Host", "Join"],
+	var vbox = _make_tab("TAB_MULTIPLAYER", tc)
+	vbox.add_child(_section("SEC_NETWORK_GAME"))
+	_sel_mp_mode = _option(vbox, "SET_MP_MODE", ["MP_OFF", "MP_HOST", "MP_JOIN"],
 		_settings["multiplayer"]["mode"])
-	_le_mp_server_ip = _line_edit(vbox, "Server IP", _settings["multiplayer"]["server_ip"],
-		"Address of the host to join")
-	_sp_mp_server_port = _spin(vbox, "Server Port", 0, 65535, _settings["multiplayer"]["server_port"])
-	_sp_mp_client_port = _spin(vbox, "Client Port", 0, 65535, _settings["multiplayer"]["client_port"])
-	_le_mp_record_file = _line_edit(vbox, "Record Session To", _settings["multiplayer"]["record_file"],
-		"Optional file to record the session (e.g. user://session.dem)")
-	_sel_mp_debug = _option(vbox, "Debug Network", ["Off", "On"], _settings["multiplayer"]["debug"])
+	_le_mp_server_ip = _line_edit(vbox, "SET_SERVER_IP", _settings["multiplayer"]["server_ip"],
+		"PH_SERVER_IP")
+	_sp_mp_server_port = _spin(vbox, "SET_SERVER_PORT", 0, 65535, _settings["multiplayer"]["server_port"])
+	_sp_mp_client_port = _spin(vbox, "SET_CLIENT_PORT", 0, 65535, _settings["multiplayer"]["client_port"])
+	_le_mp_record_file = _line_edit(vbox, "SET_RECORD_TO", _settings["multiplayer"]["record_file"],
+		"PH_RECORD")
+	_sel_mp_debug = _option(vbox, "SET_DEBUG_NETWORK", ["OFF", "ON"], _settings["multiplayer"]["debug"])
 
-	var note = Label.new()
-	note.add_theme_font_size_override("font_size", 11)
-	note.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
-	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note.text = "Host: runs the game server on Server Port (default 3030), the other players join it.\n" \
-		+ "Join: connects to Server IP : Server Port, this game uses Client Port (default 3031).\n" \
-		+ "Open Multiplayer in the main menu after the game starts. Debug Network writes a verbose network log."
-	vbox.add_child(note)
+	vbox.add_child(_note("NOTE_MULTIPLAYER"))
 
 	_sel_mp_mode.item_selected.connect(func(_idx): _update_multiplayer_visibility())
 	_update_multiplayer_visibility()
@@ -820,7 +821,7 @@ func _make_header() -> PanelContainer:
 	sty.border_width_bottom = 1
 	pc.add_theme_stylebox_override("panel", sty)
 	var lbl = Label.new()
-	lbl.text = "SETTINGS"
+	lbl.text = "SETTINGS" # a key of translations/texts.csv, like the texts below
 	lbl.add_theme_color_override("font_color", UI_TITLE_COLOR)
 	lbl.add_theme_font_size_override("font_size", UI_TITLE_FONT_SIZE)
 	lbl.add_theme_constant_override("margin_left", 16)
@@ -839,7 +840,7 @@ func _make_footer() -> HBoxContainer:
 	btn_cancel.pressed.connect(_on_cancel_pressed)
 	hbox.add_child(btn_cancel)
 	var btn_apply = Button.new()
-	btn_apply.text = "APPLY & CONTINUE"
+	btn_apply.text = "APPLY_CONTINUE"
 	btn_apply.custom_minimum_size = Vector2(180, 36)
 	_apply_button_theme(btn_apply)
 	btn_apply.pressed.connect(_on_apply_pressed)
@@ -867,6 +868,15 @@ func _make_tab(tab_name: String, tc: TabContainer) -> VBoxContainer:
 	vbox.add_theme_constant_override("separation", 6)
 	mg.add_child(vbox)
 	return vbox
+
+# a small grey explanation under a setting
+func _note(text: String) -> Label:
+	var lbl = Label.new()
+	lbl.add_theme_font_size_override("font_size", 11)
+	lbl.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lbl.text = text
+	return lbl
 
 func _section(text: String) -> Label:
 	var lbl = Label.new()
@@ -1004,4 +1014,6 @@ func _make_btn_style(bg: Color, border: Color) -> StyleBoxFlat:
 	s.border_color = border
 	s.set_border_width_all(2)
 	s.set_corner_radius_all(4)
+	s.content_margin_left  = 12 # a longer translation does not touch the border
+	s.content_margin_right = 12
 	return s

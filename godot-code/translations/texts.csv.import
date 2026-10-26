@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://c16m60mhwlkw6"
+
+[deps]
+
+files=["res://translations/texts.en.translation", "res://translations/texts.fr.translation", "res://translations/texts.de.translation", "res://translations/texts.es.translation", "res://translations/texts.it.translation", "res://translations/texts.sv.translation", "res://translations/texts.cs.translation", "res://translations/texts.pl.translation"]
+
+source_file="res://translations/texts.csv"
+dest_files=["res://translations/texts.en.translation", "res://translations/texts.fr.translation", "res://translations/texts.de.translation", "res://translations/texts.es.translation", "res://translations/texts.it.translation", "res://translations/texts.sv.translation", "res://translations/texts.cs.translation", "res://translations/texts.pl.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

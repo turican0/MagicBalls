@@ -104,6 +104,48 @@ var langTexts:Dictionary
 var defaultLangIndex = 1
 var countLang = 0
 
+# The language: the game's own setting (CONFIG.DAT, the flag in the main menu) is the only one -
+# our texts (translations/texts.csv: the settings, the importer, the help) follow it.
+# Index = number of the game's language file L1..L8.TXT.
+const LANG_LOCALES := ["fr", "en", "de", "es", "it", "sv", "cs", "pl"]
+const LANG_NAMES := ["Français", "English", "Deutsch", "Español", "Italiano", "Svenska", "Čeština", "Polski"]
+const CONFIG_DAT_SIGN := 0xFFFFFFF7
+
+func _config_dat_path() -> String:
+	return cdPath + "GAME/NETHERW/CONFIG.DAT"
+
+# the language of the game (1..8), 0 when there is no game data yet
+func read_game_language() -> int:
+	var f := FileAccess.open(_config_dat_path(), FileAccess.READ)
+	if f == null or f.get_length() < 6 or f.get_32() != CONFIG_DAT_SIGN:
+		return 0
+	var index := f.get_16()
+	return index if index >= 1 and index <= LANG_LOCALES.size() else 0
+
+func write_game_language(index: int) -> bool:
+	var f := FileAccess.open(_config_dat_path(), FileAccess.READ_WRITE)
+	if f == null or f.get_length() < 6 or f.get_32() != CONFIG_DAT_SIGN:
+		return false
+	f.seek(4)
+	f.store_16(index)
+	return true
+
+# the language of our texts (1..8)
+func set_text_language(index: int) -> void:
+	if index >= 1 and index <= LANG_LOCALES.size():
+		TranslationServer.set_locale(LANG_LOCALES[index - 1])
+
+func text_language() -> int:
+	return LANG_LOCALES.find(TranslationServer.get_locale().substr(0, 2)) + 1
+
+# Our texts in the language of the game; before the game data is imported in the system's
+# language when the game has it, else in English.
+func apply_game_language() -> void:
+	var index := read_game_language()
+	if index == 0:
+		index = LANG_LOCALES.find(OS.get_locale_language()) + 1
+	set_text_language(index if index > 0 else 2)
+
 var canNotification=true;
 
 var target_level: String = ""

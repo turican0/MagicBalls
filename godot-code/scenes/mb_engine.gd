@@ -37,6 +37,7 @@ func beginMainMenu():
 	Global.Main_Sounds.setSoundBank(0)
 	Global.countLang=getLangCount()
 	Global.defaultLangIndex=Main_DecodeLevel.initLanguage(Global.defaultLangIndex+1)-1
+	Global.set_text_language(Global.defaultLangIndex+1)
 	Main_DecodeLevel.getLangTexts()
 	set_language_texture(Global.defaultLangIndex+1)
 	FlagRect.material.set_shader_parameter("alpha", 1.0)
@@ -122,6 +123,7 @@ func _process(_p_delta) -> void:
 			Global.defaultLangIndex=(Global.defaultLangIndex+1)%Global.countLang;
 			set_language_texture(Global.defaultLangIndex+1)
 			Main_DecodeLevel.changeLanguage(Global.defaultLangIndex+1)
+			Global.set_text_language(Global.defaultLangIndex+1) # our texts (the F1 help) follow the flag
 			FlagRect.material.set_shader_parameter("alpha", 1.0)
 		3:
 			beginMainMenu()
