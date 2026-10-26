@@ -8,7 +8,7 @@
 #   -Godot          the Godot 4.7 executable (default: MB_GODOT, else next to the repository)
 #   -Replays        remc2-regression-test/memimages/regressions of remc2 (default: MB_REPLAYS)
 # Environment passed to the harness as it is: MB_STATE_FRAMES, MB_HIDE_KINDS, MB_DUMP_FRAME,
-# MB_USER_ARGS (user arguments after --, e.g. --debug-log).
+# MB_SHOT_EVERY, MB_WINDOW, MB_USER_ARGS (user arguments after --, e.g. --debug-log).
 param([string]$Prefix, [int]$Frames, [string]$Gpu, [string[]]$Runs, [string]$Level = "4",
 	[string]$Play = "record003/Level5-mine.dem", [string]$RenderThread = "",
 	[string]$Godot = $(if ($env:MB_GODOT) { $env:MB_GODOT } else { "$PSScriptRoot\..\..\..\Godot_v4.7-stable_win64_console.exe" }),
@@ -27,6 +27,7 @@ foreach ($r in $Runs) {
 	$env:MB_SCALE = $scale
 	$env:MB_OUT = "$out/$Prefix-$name.csv"
 	$env:MB_STATE_OUT = "$out/$Prefix-$name-state"
+	$env:MB_SHOT_OUT = "$out/$Prefix-$name-shot"
 	$godotArgs = @("--path", $project)
 	if ($RenderThread -ne "") { $godotArgs += @("--render-thread", $RenderThread) }
 	$godotArgs += "res://zz_tools/profile.tscn"

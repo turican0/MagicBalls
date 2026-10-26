@@ -12,6 +12,8 @@ extends Node
 #
 #   MB_GPU          1 = measure the GPU time of the viewport (makes the renderer sync every frame)
 #   MB_DUMP_FRAME   frame to print the processing scripts and the heaviest geometry
+#   MB_SHOT_EVERY   save a screenshot every N frames to MB_SHOT_OUT-<frame>.png (e.g. for the README)
+#   MB_WINDOW       window size, e.g. 1920x1080
 #
 # Columns (ms): frame_ms = wall time of the frame; process = all _process callbacks (first node to
 # last node); render = RenderingServer draw on the main thread (frame_pre_draw..frame_post_draw);
@@ -164,6 +166,9 @@ class Runner extends Node:
 		pending = row
 		if frame == int(OS.get_environment("MB_DUMP_FRAME")):
 			_dump(scene)
+		var shot_every := int(OS.get_environment("MB_SHOT_EVERY"))
+		if shot_every > 0 and frame % shot_every == 0:
+			get_viewport().get_texture().get_image().save_png(OS.get_environment("MB_SHOT_OUT") + "-%05d.png" % frame)
 		if str(frame) in OS.get_environment("MB_STATE_FRAMES").split(",", false):
 			_dump_state(scene, OS.get_environment("MB_STATE_OUT") + "-%d.txt" % frame)
 		if low_particles and frame % 30 == 1:
@@ -406,6 +411,9 @@ class Runner extends Node:
 
 func _ready():
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	var size := OS.get_environment("MB_WINDOW").split("x")
+	if size.size() == 2:
+		DisplayServer.window_set_size(Vector2i(int(size[0]), int(size[1])))
 	Global.profiling = true # from the start: the pool is filled while the level loads
 	Global.level_mode = 1
 	Global.custom_level = int(OS.get_environment("MB_TEST_LEVEL"))
