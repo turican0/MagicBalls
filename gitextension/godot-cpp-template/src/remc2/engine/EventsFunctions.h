@@ -1630,6 +1630,7 @@ void sub_58F00_game_objectives();
 void sub_57570();
 void sub_575C0();
 void SetProgrammableIntervalTimer_6FDA0();
+void StopProgrammableIntervalTimer(); // ends the timer thread
 void ClearProgrammableIntervalTimer_6FE20();
 void PlayCDTrackSegmentForSecretLevel_86F20(char a1);
 void PlayCDTrackSegmentWithPaletteFlash_86F70(uint8_t trackIdx, int32_t startPosMs, int32_t lengthMs);

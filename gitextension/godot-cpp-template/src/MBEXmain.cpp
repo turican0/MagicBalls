@@ -2103,9 +2103,14 @@ void REMC2Continue() {
 	main_cv.notify_one();
 }
 
+// The game can end without exit_game() - get_tree().quit() elsewhere (the restart for a new render
+// thread setting, a test harness), SIGTERM: the engine is ended here then, while Godot is still
+// whole. Left running, its threads (the music, the timer) ran on into Godot's cleanup and the
+// unloading of this library, and the game crashed at the end now and then.
 MBEXclass::~MBEXclass() {
 	MBDebugLog("MBEX freed");
-	request_thread2_quit(); // covers WM-close and SIGTERM paths
+	if (t2.joinable())
+		REMC2EndGame();
 }
 
 void MBEXclass::request_thread2_quit() {
@@ -2135,6 +2140,7 @@ void MBEXclass::REMC2EndGame() { //OK!!
 	gameEnded = true;
 	MBDebugLog("REMC2EndGame: stopping the engine thread");
 	request_thread2_quit();
+	StopProgrammableIntervalTimer(); // else it runs until the library is unloaded
 	MBDebugLog("REMC2EndGame: freeing the engine");
 	sub_main_mod_end();
 	support_end();
