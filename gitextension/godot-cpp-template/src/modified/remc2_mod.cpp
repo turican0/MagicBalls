@@ -2725,13 +2725,15 @@ void PaletteChanges_47760_mod() //228760
 					break;
 				case 9:
 					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
-					if (sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x10u, 1) == 16) {
+					// no extra 10 ms per step: a step is a game frame, the frame limit paces it (it made
+					// every frame of the fade 10 ms longer on a slow computer) - as "Fade back" above
+					if (sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x10u, 1, 0) == 16) {
 						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
 					}
 					break;
 				case 0xA:
 					x_D41A0_BYTEARRAY_4_struct.moveSpeedFlag_181 = 1;
-					if (sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x1Cu, 1) == 28) {
+					if (sub_90B27_VGA_pal_fadein_fadeout_mod((TColor *)*xadatapald0dat2.colorPalette_var28, 0x1Cu, 1, 0) == 28) {
 						x_D41A0_BYTEARRAY_4_struct.paletteSubMod_180 = 0;
 					}
 					break;
