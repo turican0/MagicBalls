@@ -18,6 +18,9 @@ const EMIT_FLAGS := GPUParticles3D.EMIT_FLAG_POSITION | GPUParticles3D.EMIT_FLAG
 const SHAPES := [ParticleProcessMaterial.EMISSION_SHAPE_POINT, ParticleProcessMaterial.EMISSION_SHAPE_SPHERE,
 	ParticleProcessMaterial.EMISSION_SHAPE_SPHERE_SURFACE, ParticleProcessMaterial.EMISSION_SHAPE_BOX]
 const MAX_PARTICLES := 20000 # per kind of particles - the oldest ones are reused above it
+# A GPUParticles3D draws all of its amount every frame, alive or not (and again in every shadow
+# split): a shared one starts with room for a few entities and grows when more emit at once.
+const START_EMITTERS := 8
 
 # Takes over the particles of an entity node when it can, returns the nodes it took over (their
 # markers, see _replace_with_marker).
@@ -95,18 +98,35 @@ func _make_shared(p: GPUParticles3D) -> Shared:
 	g.cast_shadow = p.cast_shadow
 	g.layers = p.layers
 	g.sorting_offset = p.sorting_offset
-	g.amount = MAX_PARTICLES
+	s.rate = p.amount / p.lifetime
+	g.amount = _capacity(s.rate * p.lifetime * START_EMITTERS)
 	# emitted only through emit_particle(), from wherever the entities are
 	g.emitting = false
 	g.custom_aabb = AABB(Vector3(-100000, -100000, -100000), Vector3(200000, 200000, 200000))
 	add_child(g)
 	s.particles = g
-	s.rate = p.amount / p.lifetime
 	s.material = p.process_material
 	return s
 
+# room for this many particles alive at once: twice that, a power of two, at most MAX_PARTICLES
+func _capacity(alive: float) -> int:
+	return mini(nearest_po2(maxi(int(ceil(alive * 2.0)), 64)), MAX_PARTICLES)
+
+# more entities emit than the particles have room for: a bigger amount (it restarts the particles
+# of this kind once - their oldest would be reused too early otherwise)
+func _make_room(s: Shared, emitters: int) -> void:
+	var alive := s.rate * s.particles.lifetime * emitters
+	if alive > s.particles.amount and s.particles.amount < MAX_PARTICLES:
+		s.particles.amount = _capacity(alive)
+
 # particle_nodes: the taken over particle nodes of the entities drawn this frame
 func emit(particle_nodes: Array, delta: float) -> void:
+	var emitters := {}
+	for p in particle_nodes:
+		var key = p.get_meta("shared_particles")
+		emitters[key] = emitters.get(key, 0) + 1
+	for key in emitters:
+		_make_room(_shared[key], emitters[key])
 	var still := {}
 	for p in particle_nodes:
 		var s: Shared = _shared[p.get_meta("shared_particles")]
