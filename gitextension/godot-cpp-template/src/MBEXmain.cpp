@@ -2103,9 +2103,15 @@ void REMC2Continue() {
 	main_cv.notify_one();
 }
 
+MBEXclass::~MBEXclass() {
+	MBDebugLog("MBEX freed");
+	request_thread2_quit(); // covers WM-close and SIGTERM paths
+}
+
 void MBEXclass::request_thread2_quit() {
 	if (!t2.joinable())
 		return;
+	MBDebugLog("stopping the engine thread");
 	{
 		std::lock_guard<std::mutex> lock(main_mutex);
 		thread2_quit_requested.store(true);
@@ -2114,6 +2120,7 @@ void MBEXclass::request_thread2_quit() {
 	}
 	main_cv.notify_all();
 	t2.join();
+	MBDebugLog("engine thread stopped");
 	thread2_quit_requested.store(false);
 }
 

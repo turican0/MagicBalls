@@ -7,6 +7,7 @@
 // (MagicBalls -- --debug-log). Every line goes at once to stderr and to debug.log in the user data
 // folder, flushed: print() writes to stdout, which an exported game buffers and loses in a crash.
 // A line has the seconds since the log started and the thread it was written from.
+// A crash (also without --debug-log) is written to stderr with its stack, see debug_log.cpp.
 
 void MBDebugLogInit(); // reads the command line - when the extension is initialized
 bool MBDebugLogEnabled();

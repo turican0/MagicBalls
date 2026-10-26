@@ -78,9 +78,7 @@ protected:
 
 public:
 	MBEXclass() = default;
-	~MBEXclass() {
-		request_thread2_quit(); // covers WM-close and SIGTERM paths
-	}
+	~MBEXclass();
 
 	void request_thread2_quit();
 
