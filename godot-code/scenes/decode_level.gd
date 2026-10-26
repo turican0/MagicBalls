@@ -895,12 +895,10 @@ var last_saturation: float
 var runned: bool
 
 func SetRunned(sendRunned) -> void:
-	# the level may finish loading while the player is in another application
-	if get_window().has_focus():
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	else:
-		_mouse_release()
+	mouse_free_for_load()
 	gameInit(true)
+	# the level may finish loading while the player is in another application
+	mouse_back_after_load(Input.MOUSE_MODE_CAPTURED)
 	runned = sendRunned
 
 #func getSpritesActions():
@@ -986,7 +984,9 @@ func _process(_p_delta) -> void:
 			Global.setLevelType(Global.MBEX.REMC2GetLevelType())
 			Global.Main_Sounds.stopAllSounds()
 			get_parent().get_node("TerrainsMB").updateMeshes()
+			var mode := mouse_free_for_load()
 			gameInit(true)
+			mouse_back_after_load(mode)
 			fadeNode = Global.addFadeIn(fadeNode)
 			await fadeNode.fade_finished
 			Global.setLoadingScreenStr("")
@@ -1597,6 +1597,25 @@ func _mouse_release() -> void:
 	mouse_released = true
 	_release_all_inputs()	# keys held during Alt+Tab would stay pressed in the game
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+# A load blocks the main thread for seconds: Godot handles no window messages meanwhile, so it
+# cannot free a confined cursor when the player switches to another application (and the
+# confinement stays even after a crash). The cursor is only hidden during the load and taken
+# back after it - when the window still has the focus.
+# Returns the mode to give back to mouse_back_after_load().
+func mouse_free_for_load() -> Input.MouseMode:
+	var mode := Input.mouse_mode
+	if mode == Input.MOUSE_MODE_CONFINED or mode == Input.MOUSE_MODE_CONFINED_HIDDEN or mode == Input.MOUSE_MODE_CAPTURED:
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	return mode
+
+func mouse_back_after_load(mode: Input.MouseMode) -> void:
+	if mode == Input.MOUSE_MODE_VISIBLE or mode == Input.MOUSE_MODE_HIDDEN:
+		return
+	if get_window().has_focus() and not mouse_released:
+		Input.mouse_mode = mode
+	else:
+		_mouse_release()
 
 func _mouse_return_to_window() -> void:
 	_release_all_inputs()

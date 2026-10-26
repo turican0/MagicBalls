@@ -12,9 +12,8 @@ var FlagRect:TextureRect
 
 func init():
 	Engine.max_fps = 30
-	# not when the player has already switched to another application during the start
-	if get_window().has_focus():
-		Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
+	# only hidden while the engine starts (it blocks), confined after it - see mouse_free_for_load()
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	#Global.loadScreenInit()
 	Main_DecodeLevel.MBEXinit()
 	Global.MBEX.REMC2SetInverseMouse(Global.inverse_mouseY)
@@ -22,6 +21,7 @@ func init():
 	#Main_DecodeLevel.anim1Begin($Control/Foreground)
 	Main_DecodeLevel.setLoadScreenBuffer(LoadScrRect)
 	Global.defaultLangIndex=Main_DecodeLevel.initLanguage(2)-1
+	Main_DecodeLevel.mouse_back_after_load(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	
 	#Global.Main_Sounds.setSoundBank(3)
 	
@@ -73,8 +73,10 @@ func getLangCount() -> int:
 	return count
 
 func beginInGame():
+	var mode = Main_DecodeLevel.mouse_free_for_load()
 	Main_TerrainsMB.init(true)
 	Main_DecodeLevel.gameInit(true)
+	Main_DecodeLevel.mouse_back_after_load(mode)
 
 var inGameLoop=false
 
