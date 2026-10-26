@@ -1,4 +1,5 @@
 #include "remc2_mod.h"
+#include "../MBEX/debug_log.h"
 
 #include <godot_cpp/variant/utility_functions.hpp>
 
@@ -134,6 +135,17 @@ bool thread2_waiting = false;
 std::atomic<bool> thread2_quit_requested{ false };
 
 void thread2_wait_for_continue(Thread2_State sendstate) {
+	// the engine thread's states in the debug log - a new state, not the same one every frame
+	static const char *stateNames[] = { "BEGIN", "SUB_MAIN_END_FUNCTION", "SUB_MAIN_BEFORE_LOOP",
+		"SHOW_WELCOME_SCREEN_LOOP", "PLAY_INFO_FLV_LOOP", "MAIN_MENU_LOOP", "MAP_MENU_LOOP", "MAP_MENU_BEGIN",
+		"IN_GAME_LOOP", "FADEIN_FADEOUT_LOOP", "LANGUAGE_SETTING_CLICKED", "MAIN_MENU_BEGIN", "INTRO_BEGIN",
+		"IN_GAME_BEGIN", "IN_GAME_END", "LOAD_SCREEN", "KEY_SETTINGS_LOOP", "IN_GAME_CREDITS", "RUNNING" };
+	static Thread2_State loggedState = Thread2_State::BEGIN;
+	if (sendstate != loggedState) {
+		loggedState = sendstate;
+		const int index = (int)sendstate;
+		MBDebugLog("engine thread: %s", index >= 0 && index < (int)(sizeof(stateNames) / sizeof(stateNames[0])) ? stateNames[index] : "?");
+	}
 	{
 		std::lock_guard<std::mutex> lock(main_mutex);
 		thread2_state = sendstate;
@@ -3174,19 +3186,19 @@ void sub_46830_main_loop_mod(unsigned __int16 actLevel) //227830
 
 
 int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath) {
-	godot::UtilityFunctions::print("sub_main_mod begin");
+	MBDebugLog("sub_main_mod begin");
 	std::function<void(Scene)> sceneChangeCallBack = SetCurrentScene;
 	int exitCode = 0;
 	sub_main_cleaned = false;
-	godot::UtilityFunctions::print("sub_main_mod SetTimeStart");
+	MBDebugLog("sub_main_mod SetTimeStart");
 	SetTimeStart();
 #ifndef __ANDROID__
 	try
 #endif
 	{
-		godot::UtilityFunctions::print("sub_main_mod begin_plugin");
+		MBDebugLog("sub_main_mod begin_plugin");
 		begin_plugin();
-		godot::UtilityFunctions::print("sub_main_mod preconvert");
+		MBDebugLog("sub_main_mod preconvert");
 		preconvert(); //rewrite and remove it later
 		*xadataclrd0dat.colorPalette_var28 = (uint8_t *)malloc(4096); //fix it
 		signed int v3; // edi
@@ -3194,7 +3206,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		v3 = 0;
 		v4 = 0;
 
-		godot::UtilityFunctions::print("sub_main_mod RegisterEvent");
+		MBDebugLog("sub_main_mod RegisterEvent");
 		//std::cout << "Initializing logger...\n";
 		//spdlog::level::level_enum level = GetLoggingLevelFromString(CommandLineParams.GetLogLevelStr().c_str());
 		//InitializeLogging(level);
@@ -3206,7 +3218,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		EventDispatcher::I->RegisterEvent(new Event<std::string>(EventType::E_SHOW_NETWORK_MESSAGE, resCallBack));
 		m_Messages = new std::vector<Type_Message *>();
 
-		godot::UtilityFunctions::print("sub_main_mod gameFolder");
+		MBDebugLog("sub_main_mod gameFolder");
 		//SetConfig();
 		gameFolder = std::string(real_cdPathch) + "GAME/NETHERW";
 		cdFolder = std::string(real_cdPathch) + "CD_Files";
@@ -3232,7 +3244,7 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		//musicType and the AWE32 settings come from Godot (REMC2SetMusic); in remc2 VGA_Init calls it
 		init_sound();
 
-		godot::UtilityFunctions::print("sub_main_mod DoDisableGraphicsEnhance");
+		MBDebugLog("sub_main_mod DoDisableGraphicsEnhance");
 
 		if (CommandLineParams.DoDisableGraphicsEnhance()) {
 			Logger->debug("Disabling enhanced graphics");
@@ -3242,22 +3254,22 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		}
 		//Set Paths for game data
 		Logger->debug("Getting Game data paths");
-		godot::UtilityFunctions::print("sub_main_mod Getting Game data paths");
-		godot::UtilityFunctions::print("sub_main_mod gameFolder: ", godot::String(gameFolder.c_str()));
+		MBDebugLog("sub_main_mod Getting Game data paths");
+		MBDebugLog("sub_main_mod gameFolder: %s", gameFolder.c_str());
 		gameDataPath = GetSubDirectoryPath(gameFolder.c_str());
-		godot::UtilityFunctions::print("sub_main_mod gameDataPath: ", godot::String(gameDataPath.c_str()));
-		godot::UtilityFunctions::print("sub_main_mod cdFolder: ", godot::String(cdFolder.c_str()));
+		MBDebugLog("sub_main_mod gameDataPath: %s", gameDataPath.c_str());
+		MBDebugLog("sub_main_mod cdFolder: %s", cdFolder.c_str());
 		cdDataPath = GetSubDirectoryPath(cdFolder.c_str());
-		godot::UtilityFunctions::print("sub_main_mod cdDataPath: ", godot::String(cdDataPath.c_str()));
-		godot::UtilityFunctions::print("sub_main_mod highResGraphicsFolder: ", godot::String(highResGraphicsFolder.c_str()));
+		MBDebugLog("sub_main_mod cdDataPath: %s", cdDataPath.c_str());
+		MBDebugLog("sub_main_mod highResGraphicsFolder: %s", highResGraphicsFolder.c_str());
 		highResGraphicsPath = GetSubDirectoryPath(highResGraphicsFolder.c_str());
-		godot::UtilityFunctions::print("sub_main_mod highResGraphicsPath: ", godot::String(highResGraphicsPath.c_str()));
-		godot::UtilityFunctions::print("sub_main_mod fixedMenuGraphicsFolder: ", godot::String(fixedMenuGraphicsFolder.c_str()));
+		MBDebugLog("sub_main_mod highResGraphicsPath: %s", highResGraphicsPath.c_str());
+		MBDebugLog("sub_main_mod fixedMenuGraphicsFolder: %s", fixedMenuGraphicsFolder.c_str());
 		fixedMenuGraphicsPath = GetSubDirectoryPath(fixedMenuGraphicsFolder.c_str());
-		godot::UtilityFunctions::print("sub_main_mod fixedMenuGraphicsPath: ", godot::String(fixedMenuGraphicsPath.c_str()));
-		godot::UtilityFunctions::print("sub_main_mod VGA_Init");
+		MBDebugLog("sub_main_mod fixedMenuGraphicsPath: %s", fixedMenuGraphicsPath.c_str());
+		MBDebugLog("sub_main_mod VGA_Init");
 		VGA_Init(windowResWidth, windowResHeight, gameResWidth, gameResHeight, maintainAspectRatio, displayIndex);
-		godot::UtilityFunctions::print("sub_main_mod gamepad_init");
+		MBDebugLog("sub_main_mod gamepad_init");
 		gamepad_init(gameResWidth, gameResHeight);
 		if (std::string mainfile = GetSubDirectoryFile(gameFolder.c_str(), "CDATA", "TMAPS0-0.DAT"); !file_exists(mainfile.c_str())) //test original file
 		{
@@ -3273,9 +3285,9 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		} else {
 			//Logger->info("Original Game Data Found!");
 		}
-		godot::UtilityFunctions::print("sub_main_mod initposistruct");
+		MBDebugLog("sub_main_mod initposistruct");
 		initposistruct();
-		godot::UtilityFunctions::print("sub_main_mod sub_56210_process_command_line");
+		MBDebugLog("sub_main_mod sub_56210_process_command_line");
 		sub_56210_process_command_line(argc, argv); //236FD4 - 237210
 		if (CommandLineParams.ModeNetwork()) {
 			if (Iam_server || Iam_client)
@@ -3291,9 +3303,9 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 			StartRecording(CommandLineParams.GetRecordingPath().c_str());
 			m_InputRecorder->m_ResavePath = CommandLineParams.GetRecordingPath(); //with --record_file: add level saves
 		}
-		godot::UtilityFunctions::print("sub_main_mod Initialize");
+		MBDebugLog("sub_main_mod Initialize");
 		Initialize(); //236FDC - 23C8D0//rozdil 1E1000
-		godot::UtilityFunctions::print("sub_main_mod thread2_wait_for_continue");
+		MBDebugLog("sub_main_mod thread2_wait_for_continue");
 		thread2_wait_for_continue(Thread2_State::SUB_MAIN_BEFORE_LOOP);
 
 		sub_46830_main_loop_mod(v4); //227830
@@ -3327,12 +3339,15 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 #ifndef __ANDROID__
 	catch (const thread_exit_exception &e) {
 		//Logger->info("Immediate Exit called");
+		MBDebugLog("sub_main_mod quit requested");
 	} catch (const std::exception &e) {
 		//Logger->critical("Critical Error: {}", e.what());
+		MBDebugLog("sub_main_mod exception: %s", e.what());
 		exitCode = -1;
 	}
 #endif
 	//Logger->info("Exited Game");
+	MBDebugLog("sub_main_mod end");
 
 	// Tell Godot the game is over.  When we got here because Godot asked us to quit, there
 	// is nobody left to tell, and waiting would throw thread_exit_exception again - outside

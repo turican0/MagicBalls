@@ -1004,6 +1004,7 @@ func _process(_p_delta) -> void:
 			call_deferred("_do_change_scene")
 
 func _do_change_scene():
+	MBDebug.log("level ended, to the map")
 	Global.Main_Sounds.stopAllSounds()
 	fadeNode = Global.addFadeIn(fadeNode)
 	await fadeNode.fade_finished
@@ -1414,6 +1415,7 @@ func exit_game() -> void:
 	if is_exiting:
 		return
 	is_exiting = true
+	MBDebug.log("exit game")
 	if Global.MBEX:
 		Global.MBEX.REMC2EndGame()
 	set_process(false)

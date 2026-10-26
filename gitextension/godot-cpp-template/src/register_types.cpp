@@ -7,6 +7,7 @@
 
 #include "MBEXmain.h"
 #include "MBEX/entity_renderer.h"
+#include "MBEX/debug_log.h"
 
 using namespace godot;
 
@@ -15,8 +16,11 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	MBDebugLogInit();
+	MBDebugLog("extension initialized");
 	GDREGISTER_CLASS(MBEXclass);
 	GDREGISTER_CLASS(EntityRenderer);
+	GDREGISTER_CLASS(MBDebug);
 }
 
 void MBEXreleaseGodotObjects(); // MBEXmain.cpp
@@ -25,6 +29,7 @@ void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	MBDebugLog("extension uninitialized");
 	MBEXreleaseGodotObjects();
 }
 

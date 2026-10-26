@@ -3,6 +3,7 @@ extends Node
 var is_edit_mode: bool = false
 
 func _ready():
+	MBDebug.log("main scene ready")
 	_parse_command_line_args()
 	if is_edit_mode:
 		print("Starting in EDITOR mode")

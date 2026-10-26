@@ -173,6 +173,7 @@ var _le_mp_record_file:  LineEdit
 # =============================================
 
 func _ready() -> void:
+	MBDebug.log("settings screen")
 	_load_config()
 	_show_countdown()
 	await get_tree().process_frame
@@ -419,6 +420,7 @@ func _reset_countdown(secs: int) -> void:
 	_countdown_active = true
 
 func _launch_game() -> void:
+	MBDebug.log("launching the game")
 	_countdown_active = false
 	if _countdown_canvas:
 		_countdown_canvas.queue_free()

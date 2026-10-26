@@ -15,19 +15,23 @@ func init():
 	# only hidden while the engine starts (it blocks), confined after it - see mouse_free_for_load()
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	#Global.loadScreenInit()
+	MBDebug.log("engine init")
 	Main_DecodeLevel.MBEXinit()
 	Global.MBEX.REMC2SetInverseMouse(Global.inverse_mouseY)
+	MBDebug.log("sounds init")
 	Global.initSound()
 	#Main_DecodeLevel.anim1Begin($Control/Foreground)
 	Main_DecodeLevel.setLoadScreenBuffer(LoadScrRect)
 	Global.defaultLangIndex=Main_DecodeLevel.initLanguage(2)-1
 	Main_DecodeLevel.mouse_back_after_load(Input.MOUSE_MODE_CONFINED_HIDDEN)
+	MBDebug.log("engine init done")
 	
 	#Global.Main_Sounds.setSoundBank(3)
 	
 	runned=true
 	
 func beginMainMenu():
+	MBDebug.log("main menu")
 	Global.Main_Sounds.setSoundBank(0)
 	Global.countLang=getLangCount()
 	Global.defaultLangIndex=Main_DecodeLevel.initLanguage(Global.defaultLangIndex+1)-1
@@ -73,10 +77,12 @@ func getLangCount() -> int:
 	return count
 
 func beginInGame():
+	MBDebug.log("level loading")
 	var mode = Main_DecodeLevel.mouse_free_for_load()
 	Main_TerrainsMB.init(true)
 	Main_DecodeLevel.gameInit(true)
 	Main_DecodeLevel.mouse_back_after_load(mode)
+	MBDebug.log("level loaded")
 
 var inGameLoop=false
 
@@ -87,6 +93,8 @@ func _process(_p_delta) -> void:
 		return # the game is ended (window closed) - its memory is freed, the engine must not run
 
 	var endRunVar = Main_DecodeLevel.MBrun(inGameLoop)
+	if endRunVar != 0 and MBDebug.enabled():
+		MBDebug.log("engine run result %d" % endRunVar)
 	Main_DecodeLevel.SetBlur(inGameLoop)
 	var warpMouse = Main_DecodeLevel.MBgetWarpMouse()
 	if(warpMouse["is"]):

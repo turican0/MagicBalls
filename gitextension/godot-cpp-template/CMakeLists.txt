@@ -279,6 +279,8 @@ target_sources(${LIBNAME}
     src/MBEX/editor.h
     src/MBEX/entity_renderer.cpp
     src/MBEX/entity_renderer.h
+    src/MBEX/debug_log.cpp
+    src/MBEX/debug_log.h
     src/libxmi/xmi2mid.cpp
     src/libxmi/xmi2mid.h
     src/lib/stb_image.h

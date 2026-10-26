@@ -16,6 +16,7 @@
 #include "remc2/engine/Sound.h"
 
 #include "modified/remc2_mod.h"
+#include "MBEX/debug_log.h"
 
 #include "MBEX/editor.h"
 
@@ -1938,17 +1939,17 @@ void MBEXclass::REMC2SetMusic(String musicTypeName, String romFolder, bool magic
 }
 
 void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, String CustomLevelPath) {
-	UtilityFunctions::print("REMC2BeginGame START");
-	UtilityFunctions::print("REMC2BeginGame cdPath: ", cdPath);
-	UtilityFunctions::print("REMC2BeginGame gamePath: ", gamePath);
-	UtilityFunctions::print("REMC2BeginGame customLevel: ", customLevel);
-	UtilityFunctions::print("REMC2BeginGame CustomLevelPath: ", CustomLevelPath);
+	MBDebugLog("REMC2BeginGame START");
+	MBDebugLog("REMC2BeginGame cdPath: %s", cdPath.utf8().get_data());
+	MBDebugLog("REMC2BeginGame gamePath: %s", gamePath.utf8().get_data());
+	MBDebugLog("REMC2BeginGame customLevel: %d", (int)customLevel);
+	MBDebugLog("REMC2BeginGame CustomLevelPath: %s", CustomLevelPath.utf8().get_data());
 	saved_real_cdPath = PLATFORM_GLOBALIZE_PATH(cdPath);
 	// ── Android: res:// gamePath → zkopíruj do user://, použij user:// cestu ──
 	saved_real_gamePath = PLATFORM_GLOBALIZE_PATH(gamePath);
 	// ── konec Android výjimky ─────────────────────────────────────────────────
-	UtilityFunctions::print("REMC2BeginGame saved_real_cdPath: ", saved_real_cdPath);
-	UtilityFunctions::print("REMC2BeginGame saved_real_gamePath: ", saved_real_gamePath);
+	MBDebugLog("REMC2BeginGame saved_real_cdPath: %s", saved_real_cdPath.utf8().get_data());
+	MBDebugLog("REMC2BeginGame saved_real_gamePath: %s", saved_real_gamePath.utf8().get_data());
 	for (int i = 0; i < 16; ++i)
 		saved_argv[i] = nullptr;
 	saved_argv[0] = (char *)"game.exe";
@@ -1957,7 +1958,7 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 	if (customLevel == -1) {
 		if (CustomLevelPath == "") {
 			saved_argc = 3;
-			UtilityFunctions::print("REMC2BeginGame mode: default, argc=3");
+			MBDebugLog("REMC2BeginGame mode: default, argc=3");
 		} else {
 			saved_argc = 5;
 			saved_argv[3] = (char *)"--custom_level";
@@ -1965,7 +1966,7 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 			static std::string persistentPath;
 			persistentPath = globalCLPath.utf8().get_data();
 			saved_argv[4] = (char *)persistentPath.c_str();
-			UtilityFunctions::print("REMC2BeginGame mode: custom_level path: ", globalCLPath);
+			MBDebugLog("REMC2BeginGame mode: custom_level path: %s", globalCLPath.utf8().get_data());
 		}
 	} else {
 		saved_argc = 5;
@@ -1973,20 +1974,20 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 		static char levelBuffer[16];
 		snprintf(levelBuffer, sizeof(levelBuffer), "%d", customLevel);
 		saved_argv[4] = levelBuffer;
-		UtilityFunctions::print("REMC2BeginGame mode: set_level index: ", customLevel);
+		MBDebugLog("REMC2BeginGame mode: set_level index: %d", (int)customLevel);
 	}
 	for (std::string &arg : network_args) {
 		if (saved_argc >= 16)
 			break;
 		saved_argv[saved_argc++] = (char *)arg.c_str();
 	}
-	UtilityFunctions::print("REMC2BeginGame calling CommandLineParams.Init...");
+	MBDebugLog("REMC2BeginGame calling CommandLineParams.Init...");
 	CommandLineParams.Init(saved_argc, saved_argv);
-	UtilityFunctions::print("REMC2BeginGame CommandLineParams.Init done");
+	MBDebugLog("REMC2BeginGame CommandLineParams.Init done");
 	fixedMenuGraphics = true;
-	UtilityFunctions::print("REMC2BeginGame calling support_begin...");
+	MBDebugLog("REMC2BeginGame calling support_begin...");
 	support_begin();
-	UtilityFunctions::print("REMC2BeginGame support_begin done");
+	MBDebugLog("REMC2BeginGame support_begin done");
 	{
 		std::lock_guard<std::mutex> lock(main_mutex);
 		thread2_state = Thread2_State::BEGIN;
@@ -1994,31 +1995,31 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 		thread2_waiting = false;
 		thread1_waiting = true;
 	}
-	UtilityFunctions::print("REMC2BeginGame mutex state initialized");
+	MBDebugLog("REMC2BeginGame mutex state initialized");
 	static std::string persistentCdPath;
 	static std::string persistentGamePath;
 	persistentCdPath = saved_real_cdPath.utf8().get_data();
 	persistentGamePath = saved_real_gamePath.utf8().get_data();
-	UtilityFunctions::print("REMC2BeginGame persistentCdPath: ", String(persistentCdPath.c_str()));
-	UtilityFunctions::print("REMC2BeginGame persistentGamePath: ", String(persistentGamePath.c_str()));
-	UtilityFunctions::print("REMC2BeginGame starting thread 2...");
+	MBDebugLog("REMC2BeginGame persistentCdPath: %s", persistentCdPath.c_str());
+	MBDebugLog("REMC2BeginGame persistentGamePath: %s", persistentGamePath.c_str());
+	MBDebugLog("REMC2BeginGame starting thread 2...");
 	t2 = std::thread([this]() {
-		UtilityFunctions::print("Thread 2: started");
+		MBDebugLog("Thread 2: started");
 		sub_main_mod(saved_argc, saved_argv,
 				(char *)persistentCdPath.c_str(),
 				(char *)persistentGamePath.c_str());
-		UtilityFunctions::print("Thread 2: finished");
+		MBDebugLog("Thread 2: finished");
 	});
 	//t2.detach();
-	UtilityFunctions::print("REMC2BeginGame thread 2 detached, waiting...");
+	MBDebugLog("REMC2BeginGame thread 2 detached, waiting...");
 	{
 		std::unique_lock<std::mutex> lock(main_mutex);
 		main_cv.wait(lock, [] {
-			UtilityFunctions::print("REMC2BeginGame checking thread2_waiting: ", thread2_waiting);
+			MBDebugLog("REMC2BeginGame checking thread2_waiting: %d", (int)thread2_waiting);
 			return thread2_waiting == true;
 		});
 	}
-	UtilityFunctions::print("REMC2BeginGame thread2_waiting received, END");
+	MBDebugLog("REMC2BeginGame thread2_waiting received, END");
 }
 
 /*
@@ -2096,9 +2097,12 @@ void MBEXclass::REMC2EndGame() { //OK!!
 	if (gameEnded)
 		return;
 	gameEnded = true;
+	MBDebugLog("REMC2EndGame: stopping the engine thread");
 	request_thread2_quit();
+	MBDebugLog("REMC2EndGame: freeing the engine");
 	sub_main_mod_end();
 	support_end();
+	MBDebugLog("REMC2EndGame: done");
 	//MBEXstate = 6;
 }
 
