@@ -60,32 +60,38 @@ func updateMeshes(useMultimesh):
 		# The copies around the map are separate instances (sharing mesh and material) rather
 		# than one MultiMesh: a MultiMesh is culled as a whole, so all copies were always drawn.
 		var positions = []
-		if(Global.getLevelType()=="Cave"):
-			for x in [-1, 0, 1, 2]:
-				for z in [-1, 0, 1, 2]:
-					if x == 0 and z == 0: continue
-					positions.append(Vector3(x * size, 0, z * size))
-		else:
-			for x in [-2, -1, 0, 1, 2]:
-				for z in [-2, -1, 0, 1, 2]:
-					if x == 0 and z == 0: continue
-					positions.append(Vector3(x * size, 0, z * size))
+		var tiles = [-1, 0, 1, 2] if Global.getLevelType() == "Cave" else [-2, -1, 0, 1, 2]
+		for x in tiles:
+			for z in tiles:
+				positions.append(Vector3(x * size, 0, z * size))
 		var sources = [mesh_instance_bottom]
 		if Global.getLevelType()=="Cave" and mesh_instance_top:
 			sources.append(mesh_instance_top)
+		# The map and its copies are drawn in TERRAIN_CHUNKS x TERRAIN_CHUNKS pieces: each is culled on
+		# its own, for the view and the shadow maps (a whole map was drawn - 131k triangles, in every
+		# shadow split - as soon as a corner of it was seen). The map's own instance stays for the
+		# engine (it sets the material), hidden.
+		if _chunk_meshes.is_empty():
+			_chunk_meshes = Global.MBEX.terrain_chunk_meshes(TERRAIN_CHUNKS)
+		var cells = size / TERRAIN_CHUNKS
 		for source in sources:
+			source.visible = false
 			for pos in positions:
-				var copy := MeshInstance3D.new()
-				copy.mesh = source.mesh
-				copy.material_override = source.material_override
-				copy.custom_aabb = terrain_aabb
-				copy.position = pos
-				copy.cast_shadow = source.cast_shadow
-				add_child(copy)
-				_terrain_copies.append(copy)
+				for i in _chunk_meshes.size():
+					var piece := MeshInstance3D.new()
+					piece.mesh = _chunk_meshes[i]
+					piece.material_override = source.material_override
+					piece.custom_aabb = AABB(Vector3(i % TERRAIN_CHUNKS * cells, -TERRAIN_AABB_BELOW, i / TERRAIN_CHUNKS * cells),
+						Vector3(cells, TERRAIN_AABB_HEIGHT, cells))
+					piece.position = pos
+					piece.cast_shadow = source.cast_shadow
+					add_child(piece)
+					_terrain_copies.append(piece)
 
 const TERRAIN_AABB_BELOW = 16.0   # waves dip under the water level
 const TERRAIN_AABB_HEIGHT = 96.0  # height map tops out at 32, plus cave ceiling and waves
+const TERRAIN_CHUNKS = 4          # pieces per side of a map (64 x 64 cells each)
+static var _chunk_meshes: Array = [] # the same flat grid for every level
 var _terrain_copies: Array[MeshInstance3D] = []
 
 func _clear_terrain_copies() -> void:

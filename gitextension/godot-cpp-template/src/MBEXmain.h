@@ -9,6 +9,7 @@
 #include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/classes/mesh_instance3d.hpp>
 #include <godot_cpp/classes/surface_tool.hpp>
+#include <godot_cpp/classes/array_mesh.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/material.hpp>
 #include <godot_cpp/classes/standard_material3d.hpp>
@@ -99,6 +100,8 @@ public:
 	void set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool isCave);
 	//void initialize_grid_data();
 	void recalculate_mesh(bool isCave);
+	Array terrain_chunk_meshes(int chunks);
+	Ref<ArrayMesh> build_terrain_mesh(int x0, int y0, int x1, int y1);
 	void renew_terrain(bool isCave);
 	void update_gpu_heightmap(bool isCave);
 	void update_gpu_controlmap();

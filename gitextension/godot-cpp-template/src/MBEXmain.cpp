@@ -154,6 +154,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("GetPlayerPositionRotation"), &MBEXclass::GetPlayerPositionRotation);
 	godot::ClassDB::bind_method(D_METHOD("set_mesh_instances", "Node3D", "Node3D", "bool"), &MBEXclass::set_mesh_instances);
 	godot::ClassDB::bind_method(D_METHOD("recalculate_mesh", "bool"), &MBEXclass::recalculate_mesh);
+	godot::ClassDB::bind_method(D_METHOD("terrain_chunk_meshes", "chunks"), &MBEXclass::terrain_chunk_meshes);
 	godot::ClassDB::bind_method(D_METHOD("renew_terrain", "bool"), &MBEXclass::renew_terrain);
 	godot::ClassDB::bind_method(D_METHOD("getActiveSpells"), &MBEXclass::getActiveSpells);
 	//godot::ClassDB::bind_method(D_METHOD("getActiveSubSpells"), &MBEXclass::getActiveSubSpells);
@@ -801,12 +802,33 @@ void MBEXclass::set_mesh_instances(Node *p_node_bottom, Node *p_node_top, bool i
 }
 
 void MBEXclass::recalculate_mesh(bool isCave) {
+	Ref<ArrayMesh> mesh = build_terrain_mesh(0, 0, GRID_SIZE, GRID_SIZE);
+	mesh_instance_bottom->set_mesh(mesh);
+	if (isCave)
+		mesh_instance_top->set_mesh(mesh);
+	//renew_terrain();
+}
+
+// The terrain in chunks x chunks pieces (row by row, x fastest), the same as the cells of
+// recalculate_mesh: a piece outside the view or the shadow maps is culled, the whole map was drawn
+// as soon as a corner of it was seen.
+Array MBEXclass::terrain_chunk_meshes(int chunks) {
+	Array result;
+	const int cells = GRID_SIZE / chunks;
+	for (int cy = 0; cy < chunks; cy++)
+		for (int cx = 0; cx < chunks; cx++)
+			result.append(build_terrain_mesh(cx * cells, cy * cells, (cx + 1) * cells, (cy + 1) * cells));
+	return result;
+}
+
+// the flat grid of the cells x0..x1, y0..y1 - the shaders lift it by the height map
+Ref<ArrayMesh> MBEXclass::build_terrain_mesh(int x0, int y0, int x1, int y1) {
 	surface_tool.instantiate();
 	surface_tool->begin(Mesh::PRIMITIVE_TRIANGLES);
 	surface_tool->set_custom_format(0, SurfaceTool::CUSTOM_RGBA_FLOAT);
 
-	for (int x = 0; x < GRID_SIZE; x++) {
-		for (int y = 0; y < GRID_SIZE; y++) {
+	for (int x = x0; x < x1; x++) {
+		for (int y = y0; y < y1; y++) {
 			//int angle_idx = (y % GRID_SIZE) * GRID_SIZE + (x % GRID_SIZE);
 			//int textUV_42 = (mapAngle_13B4E0[angle_idx] >> 2) & 0x1C;
 
@@ -837,10 +859,7 @@ void MBEXclass::recalculate_mesh(bool isCave) {
 
 	surface_tool->generate_normals();
 	surface_tool->index();
-	mesh_instance_bottom->set_mesh(surface_tool->commit());
-	if (isCave)
-		mesh_instance_top->set_mesh(surface_tool->commit());
-	//renew_terrain();
+	return surface_tool->commit();
 }
 
 // True when src differs from the copy last uploaded (and then remembers it).  The maps only
