@@ -31,6 +31,7 @@ spdlog::logger *Logger = nullptr;
 	#include <stdarg.h>
 	#include <sys/stat.h>
     #include <cstdio>
+	#include <fnmatch.h>
 #endif
 
 static bool iequals(const std::string &a, const std::string &b) {
@@ -142,10 +143,10 @@ std::string get_exe_path() {
 	}
 	return "user://exe/";
 #elif defined _MSC_VER
-	LPWSTR buffer = new WCHAR[MAX_PATH];
-	//GetModuleFileName(NULL, buffer, MAX_PATH);
+	// the buffer was left unfilled (the call was commented out) and utf8_encode read past it
+	WCHAR buffer[MAX_PATH] = {};
+	GetModuleFileNameW(NULL, buffer, MAX_PATH);
 	std::string locstr = utf8_encode(buffer);
-	delete[] buffer;
 	std::string::size_type pos = std::string(locstr).find_last_of("\\/");
 	std::string strpathx = std::string(locstr).substr(0, pos)/*+"\\system.exe"*/;
 	return strpathx;
@@ -161,6 +162,29 @@ std::string get_exe_path() {
 #endif
 };
 
+#ifndef _MSC_VER
+// _findfirst gets a mask ("…/LANGUAGE/L*.TXT"), opendir only a directory: the mask was passed to
+// opendir, which always failed - the language dialog then used an unset file name and
+// my_findnext read the directory -1. The handle keeps the directory and the mask.
+struct FindHandle {
+	DIR *dir;
+	std::string mask;
+};
+
+static bool find_next_match(FindHandle *handle, _finddata_t *c_file) {
+	while (struct dirent *entry = readdir(handle->dir)) {
+		if (fnmatch(handle->mask.c_str(), entry->d_name, FNM_CASEFOLD) != 0)
+			continue;
+		strncpy(c_file->name, entry->d_name, sizeof(c_file->name) - 1);
+		c_file->name[sizeof(c_file->name) - 1] = '\0';
+		c_file->size = 0; // dirent has no size
+		c_file->attrib = (entry->d_type == DT_DIR) ? 0x10 : 0x00;
+		return true;
+	}
+	return false;
+}
+#endif
+
 long my_findfirst(char *path, _finddata_t *c_file) {
 	if (Logger)
 		Logger->debug("my_findfirst:fixed:{}", path);
@@ -171,17 +195,22 @@ long my_findfirst(char *path, _finddata_t *c_file) {
 	// Windows cesta přes MSVC
 	result = _findfirst(path, c_file);
 #else
-	// Android/Linux cesta přes dirent.h (REÁLNÁ IMPLEMENTACE)
-	DIR *dir = opendir(path);
+	c_file->name[0] = '\0';
+	std::string pathStr(path);
+	const std::string::size_type slash = pathStr.find_last_of('/');
+	std::string dirPath = (slash == std::string::npos) ? "." : pathStr.substr(0, slash);
+	const std::string mask = (slash == std::string::npos) ? pathStr : pathStr.substr(slash + 1);
+#ifdef __linux__
+	dirPath = casepath(dirPath);
+#endif
+	DIR *dir = opendir(dirPath.c_str());
 	if (dir) {
-		struct dirent *entry = readdir(dir);
-		if (entry) {
-			strncpy(c_file->name, entry->d_name, 259);
-			c_file->size = 0; // dirent nemá velikost, pro tu bys musel volat stat()
-			c_file->attrib = (entry->d_type == DT_DIR) ? 0x10 : 0x00;
-			result = (long)dir;
+		FindHandle *handle = new FindHandle{ dir, mask };
+		if (find_next_match(handle, c_file)) {
+			result = (long)handle;
 		} else {
 			closedir(dir);
+			delete handle;
 		}
 	}
 #endif
@@ -197,16 +226,8 @@ long my_findnext(long hFile, _finddata_t *c_file) {
 #ifdef _MSC_VER
 	result = _findnext(hFile, c_file);
 #else
-	// Android: Čtení dalšího záznamu v adresáři
-	DIR *dir = (DIR *)hFile;
-	if (dir) {
-		struct dirent *entry = readdir(dir);
-		if (entry) {
-			strncpy(c_file->name, entry->d_name, 259);
-			c_file->attrib = (entry->d_type == DT_DIR) ? 0x10 : 0x00;
-			result = 0;
-		}
-	}
+	if (hFile != -1 && hFile != 0 && find_next_match((FindHandle *)hFile, c_file))
+		result = 0;
 #endif
 
 	if (Logger)
@@ -219,7 +240,9 @@ void my_findclose(long hFile) {
 	_findclose(hFile);
 #else
 	if (hFile != -1 && hFile != 0) {
-		closedir((DIR *)hFile);
+		FindHandle *handle = (FindHandle *)hFile;
+		closedir(handle->dir);
+		delete handle;
 	}
 #endif
 }
