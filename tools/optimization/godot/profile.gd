@@ -7,7 +7,7 @@ extends Node
 #   MB_TEST_FRAMES  frames in the game to record
 #   MB_OUT          CSV path
 #   MB_FPS          frame limit (0 = none, default 0); vsync is off
-#   MB_SCALE        3D render scale (default 1.0)
+#   MB_SCALE        3D render scale (default 1.0), FSR below 1.0 as in the game (MB_SCALE_MODE=bilinear)
 #   MB_VARIANT      settings to try, comma separated: noshadows, nofog, nossao, noglow, msaa0, fxaa0
 #
 #   MB_GPU          1 = measure the GPU time of the viewport (makes the renderer sync every frame)
@@ -187,6 +187,9 @@ class Runner extends Node:
 		var scale := OS.get_environment("MB_SCALE")
 		if scale != "":
 			get_viewport().scaling_3d_scale = float(scale)
+			# as the settings do it: FSR below 100 % (MB_SCALE_MODE=bilinear to compare)
+			var fsr := float(scale) < 1.0 and OS.get_environment("MB_SCALE_MODE") != "bilinear"
+			get_viewport().scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR if fsr else Viewport.SCALING_3D_MODE_BILINEAR
 		var env: Environment = null
 		var we = scene.find_children("*", "WorldEnvironment", true, false)
 		if not we.is_empty():

@@ -127,6 +127,10 @@ Změřeno na Ultra po optimalizacích výše (level 5, GPU medián 2,49 ms před
 | Rozlišení 3D 85 % | −0,20 ms (na rychlé kartě; na slabé víc) | v nastavení |
 | Jedna ortogonální mapa stínů | pomalejší než 2 pásma | Nízké = 2 pásma 1024 |
 
+Ověření Nízká vs. Střední (level 25, každá 2×, harness s FSR jako hra): GPU Střední 1,56 ms, Nízká
+70 % FSR 1,18 ms, Nízká 100 % 1,25 ms, 70 % bilineárně 1,07 ms (průchod FSR ~0,1 ms). Celkový čas snímku
+kolísá mezi běhy o ±0,5 ms i s časem enginu, na grafice nezávislým – srovnávat GPU, ne čas snímku.
+
 Předvolby: Ultra (výchozí, plné detaily) = stíny Vysoké, odrazy, 100 %; Vysoká = stíny Střední;
 Střední = stíny Nízké, 85 %; Nízká = bez stínů a odrazů, 70 %. Skrytí kusů terénu za koncem mlhy
 (`visibility_range_end`) zamítnuto – mlha Sky3D na svém konci není neprůhledná, vzdálené kopce zmizely.
