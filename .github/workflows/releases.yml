@@ -385,7 +385,8 @@ jobs:
           EOF
 
           echo "=== Running import ==="
-          timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
+          # as for Android: 120 s can cut the import short (the whole import takes ~1100 s)
+          timeout 3600 godot --headless --path godot-code --editor --quit-after 120000 \
             > import_stdout.txt 2> import_stderr.txt || true
           cat import_stdout.txt || true
           cat import_stderr.txt || true
