@@ -3225,7 +3225,10 @@ int sub_main_mod(int argc, char **argv, char *real_cdPathch, char *real_gamePath
 		windowResHeight = 480; //added
 		gameResWidth = 640; //added
 		gameResHeight = 480; //added
-		maxGameFps = 1000; //added
+		// no frame limit in the engine, Godot paces the frames (Engine.max_fps); 0 turns LockFps off.
+		// It was 1000, which the uint8_t of LockFps made 232 - the engine thread slept ~4.5 ms
+		// in every frame while Godot waited for it.
+		maxGameFps = 0; //added
 		//musicType and the AWE32 settings come from Godot (REMC2SetMusic); in remc2 VGA_Init calls it
 		init_sound();
 
