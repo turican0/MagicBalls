@@ -56,7 +56,6 @@ const DEFAULTS = {
 		#"vsync":            0,   # 0=On 1=Off 2=Adaptive
 		"texture_quality":  2,   # 0=Low 1=Medium 2=High
 		#"view_distance":    7,   # 1..10
-		"force_vertex_shader": 0, # 0=Off 1=On (forces per-vertex shading instead of per-pixel, for low-end GPUs)
 		"bilinear_filtering": 1,  # 0=Nearest (pixelated) 1=Linear (bilinear, smooth)
 		"separate_render_thread": 0, # 0=Off 1=On (Godot's experimental render thread, after a restart; taken from the project setting)
 		# graphics quality: a preset (0=Ultra 1=High 2=Medium 3=Low 4=Custom) sets the ones below
@@ -64,6 +63,7 @@ const DEFAULTS = {
 		"shadow_quality":     3,  # 0=Off 1=Low 2=Medium 3=High
 		"reflections":        1,  # 0=Off 1=On
 		"render_scale":       0,  # index into Global.RENDER_SCALES (100 % 85 % 70 % 50 %)
+		"force_vertex_shader": 0, # 0=Off 1=On (per-vertex lighting for low-end GPUs, after a restart; taken from the project setting)
 	},
 	"audio": {
 		"master_volume":    100,
@@ -110,12 +110,12 @@ const RESOLUTIONS = [
 ]
 
 # Ultra (the full detail), High, Medium, Low: the values of QUALITY_KEYS
-const QUALITY_KEYS = ["shadow_quality", "reflections", "render_scale"]
+const QUALITY_KEYS = ["shadow_quality", "reflections", "render_scale", "force_vertex_shader"]
 const QUALITY_PRESETS = [
-	[3, 1, 0],
-	[2, 1, 0],
-	[1, 1, 1],
-	[0, 0, 2],
+	[3, 1, 0, 0],
+	[2, 1, 0, 0],
+	[1, 1, 1, 0],
+	[0, 0, 2, 1],
 ]
 const QUALITY_CUSTOM = 4
 
@@ -163,7 +163,6 @@ var _sel_quality_preset: OptionButton
 var _sel_quality: Array[OptionButton] = []
 
 # Rendering controls
-var _sel_force_vertex:  OptionButton
 var _sel_bilinear_filter: OptionButton
 var _sel_render_thread: OptionButton
 
@@ -259,8 +258,8 @@ func _load_config() -> void:
 				if _cfg.has_section_key(section, key):
 					_settings[section][key] = _cfg.get_value(section, key)
 	# what the engine started with (the project's default for this system, or user://override.cfg)
-	var model := int(ProjectSettings.get_setting_with_override("rendering/" + THREAD_MODEL_KEY))
-	_settings["video"]["separate_render_thread"] = 1 if model == 2 else 0
+	for key in RESTART_SETTINGS:
+		_settings["video"][key] = _engine_setting(key)
 
 func _save_config() -> void:
 	for section in _settings:
@@ -305,9 +304,6 @@ func _apply_settings() -> void:
 	var fps_idx = clamp(_settings["game"]["fps_limit"], 0, FPS_VALUES.size() - 1)
 	Engine.max_fps = FPS_VALUES[fps_idx]
 
-	# Force vertex shading
-	_apply_force_vertex_shader(_settings["video"].get("force_vertex_shader", 0))
-
 	# Bilinear filtering
 	_apply_bilinear_filtering(_settings["video"].get("bilinear_filtering", 1))
 
@@ -315,8 +311,6 @@ func _read_controls_into_settings() -> void:
 	_settings["video"]["resolution_index"] = _sel_resolution.selected
 	_settings["video"]["display_mode"]     = _sel_display.selected
 
-	# Force vertex shading
-	_settings["video"]["force_vertex_shader"] = _sel_force_vertex.selected
 	_settings["video"]["bilinear_filtering"]  = _sel_bilinear_filter.selected
 	_settings["video"]["separate_render_thread"] = _sel_render_thread.selected
 	_settings["video"]["quality_preset"] = _sel_quality_preset.selected
@@ -351,33 +345,44 @@ func _read_controls_into_settings() -> void:
 # RENDERING HELPERS
 # =============================================
 
-# Forces per-vertex shading instead of per-pixel shading.
-# Godot 4 has no built-in global ProjectSettings switch equivalent to Godot 3's
-# "rendering/quality/shading/force_vertex_shading", so this stores the flag in
-# Global for the rest of the game (materials/shaders) to read and react to.
-func _apply_force_vertex_shader(enabled_idx: int) -> void:
-	var enabled := (enabled_idx == 1)
-	if ProjectSettings.get_setting("rendering/shading/overrides/force_vertex_shading", false) != enabled:
-		ProjectSettings.set_setting("rendering/shading/overrides/force_vertex_shading", enabled)
-		ProjectSettings.save()
-
-# Godot's separate render thread is experimental (Godot warns it can crash; the game crashed on
-# Linux at random at the start, "corrupted size vs. prev_size" - maybe because of it, not proven;
-# and it lost the Vulkan device once in 17 replays on Windows). It is off by default (Godot's Safe
-# model) and the player can switch it on: 0.2-1.2 ms faster frames, 2.5-4 ms at p95/p99. The engine
-# reads the thread model only when it starts: the
-# setting is written to user://override.cfg (application/config/project_settings_override) and
-# the game restarts. Returns true when it restarts.
+# Settings the engine reads only when it starts: they are written to user://override.cfg
+# (application/config/project_settings_override) and the game restarts.
+# - Godot's separate render thread is experimental (Godot warns it can crash; the game crashed on
+#   Linux at random at the start, "corrupted size vs. prev_size" - maybe because of it, not proven;
+#   and it lost the Vulkan device once in 17 replays on Windows). It is off by default (Godot's Safe
+#   model) and the player can switch it on: 0.2-1.2 ms faster frames, 2.5-4 ms at p95/p99.
+# - Per-vertex instead of per-pixel lighting, for weak graphics cards (the Low quality). It was saved
+#   with ProjectSettings.save() into res://project.godot, which an exported game cannot write.
 const OVERRIDE_PATH := "user://override.cfg"
 const THREAD_MODEL_KEY := "driver/threads/thread_model"
+const VERTEX_SHADING_KEY := "shading/overrides/force_vertex_shading"
+const RESTART_SETTINGS := {
+	"separate_render_thread": THREAD_MODEL_KEY,
+	"force_vertex_shader":    VERTEX_SHADING_KEY,
+}
 
-func _apply_render_thread() -> bool:
-	var model := 2 if _settings["video"].get("separate_render_thread", 0) == 1 else 1
-	if model == int(ProjectSettings.get_setting_with_override("rendering/" + THREAD_MODEL_KEY)):
-		return false
+# the engine's value for an Off/On setting of RESTART_SETTINGS
+func _engine_value(key: String, on: bool) -> Variant:
+	if key == "separate_render_thread":
+		return 2 if on else 1
+	return on
+
+# the setting as the engine started with it: 0=Off 1=On
+func _engine_setting(key: String) -> int:
+	var value = ProjectSettings.get_setting_with_override("rendering/" + RESTART_SETTINGS[key])
+	return 1 if value == _engine_value(key, true) else 0
+
+# Returns true when the game restarts.
+func _apply_restart_settings() -> bool:
 	var cfg := ConfigFile.new()
 	cfg.load(OVERRIDE_PATH) # a missing file is fine
-	cfg.set_value("rendering", THREAD_MODEL_KEY, model)
+	var changed := false
+	for key in RESTART_SETTINGS:
+		if _settings["video"][key] != _engine_setting(key):
+			cfg.set_value("rendering", RESTART_SETTINGS[key], _engine_value(key, _settings["video"][key] == 1))
+			changed = true
+	if not changed:
+		return false
 	cfg.save(OVERRIDE_PATH)
 	OS.create_process(OS.get_executable_path(), OS.get_cmdline_args())
 	get_tree().quit()
@@ -671,7 +676,7 @@ func _on_apply_pressed() -> void:
 	_save_config()
 	# into the game's own setting; without game data yet the importer writes it after the import
 	Global.write_game_language(_sel_language.selected + 1)
-	if _apply_render_thread():
+	if _apply_restart_settings():
 		return
 	_settings_open = false
 	if is_instance_valid(_settings_canvas):
@@ -851,23 +856,17 @@ func _build_video_tab(tc: TabContainer) -> void:
 		_option(vbox, "SET_SHADOWS", ["OFF", "SH_LOW", "SH_MEDIUM", "SH_HIGH"], _settings["video"]["shadow_quality"]),
 		_option(vbox, "SET_REFLECTIONS", ["OFF", "ON"], _settings["video"]["reflections"]),
 		_option(vbox, "SET_RENDER_SCALE", ["100 %", "85 %", "70 %", "50 %"], _settings["video"]["render_scale"]),
+		_option(vbox, "SET_FORCE_VERTEX", ["OFF", "ON"], _settings["video"]["force_vertex_shader"]),
 	]
 	vbox.add_child(_note("NOTE_QUALITY"))
+	vbox.add_child(_note("NOTE_FORCE_VERTEX"))
 	_sel_quality_preset.item_selected.connect(_on_quality_preset_selected)
 	for sel in _sel_quality:
 		sel.item_selected.connect(func(_idx): _update_quality_preset())
+	_update_quality_preset() # the vertex shading comes from the engine and may not match the saved preset
 
 	# --- RENDERING ---
 	vbox.add_child(_section("SEC_RENDERING"))
-	_sel_force_vertex = _option(vbox, "SET_FORCE_VERTEX", ["OFF", "ON"],
-		_settings["video"]["force_vertex_shader"])
-
-	var note_vertex = Label.new()
-	note_vertex.add_theme_font_size_override("font_size", 11)
-	note_vertex.add_theme_color_override("font_color", Color(0.60, 0.60, 0.70))
-	note_vertex.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note_vertex.text = "NOTE_FORCE_VERTEX"
-	vbox.add_child(note_vertex)
 
 	_sel_bilinear_filter = _option(vbox, "SET_BILINEAR", ["FILTER_NEAREST", "FILTER_LINEAR"],
 		_settings["video"]["bilinear_filtering"])
