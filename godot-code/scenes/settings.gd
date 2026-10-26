@@ -54,6 +54,7 @@ const DEFAULTS = {
 		#"view_distance":    7,   # 1..10
 		"force_vertex_shader": 0, # 0=Off 1=On (forces per-vertex shading instead of per-pixel, for low-end GPUs)
 		"bilinear_filtering": 1,  # 0=Nearest (pixelated) 1=Linear (bilinear, smooth)
+		"separate_render_thread": 0, # 0=Off 1=On (Godot's experimental render thread, after a restart)
 	},
 	"audio": {
 		"master_volume":    100,
@@ -138,6 +139,7 @@ var _sel_fog_index:     OptionButton
 # Rendering controls
 var _sel_force_vertex:  OptionButton
 var _sel_bilinear_filter: OptionButton
+var _sel_render_thread: OptionButton
 
 var _sl_master:         HSlider
 var _sl_music:          HSlider
@@ -273,6 +275,7 @@ func _read_controls_into_settings() -> void:
 	# Force vertex shading
 	_settings["video"]["force_vertex_shader"] = _sel_force_vertex.selected
 	_settings["video"]["bilinear_filtering"]  = _sel_bilinear_filter.selected
+	_settings["video"]["separate_render_thread"] = _sel_render_thread.selected
 
 	_settings["audio"]["master_volume"] = int(_sl_master.value)
 	_settings["audio"]["music_volume"]  = int(_sl_music.value)
@@ -311,6 +314,26 @@ func _apply_force_vertex_shader(enabled_idx: int) -> void:
 	if ProjectSettings.get_setting("rendering/shading/overrides/force_vertex_shading", false) != enabled:
 		ProjectSettings.set_setting("rendering/shading/overrides/force_vertex_shading", enabled)
 		ProjectSettings.save()
+
+# Godot's separate render thread is experimental and crashed the game on Linux at the start
+# ("corrupted size vs. prev_size"), so the project renders on the main thread (thread_model 1) and
+# the render thread is a setting. The engine reads the thread model only when it starts: the
+# setting is written to user://override.cfg (application/config/project_settings_override) and
+# the game restarts. Returns true when it restarts.
+const OVERRIDE_PATH := "user://override.cfg"
+const THREAD_MODEL_KEY := "driver/threads/thread_model"
+
+func _apply_render_thread() -> bool:
+	var model := 2 if _settings["video"].get("separate_render_thread", 0) == 1 else 1
+	if model == int(ProjectSettings.get_setting("rendering/" + THREAD_MODEL_KEY)):
+		return false
+	var cfg := ConfigFile.new()
+	cfg.load(OVERRIDE_PATH) # a missing file is fine
+	cfg.set_value("rendering", THREAD_MODEL_KEY, model)
+	cfg.save(OVERRIDE_PATH)
+	OS.create_process(OS.get_executable_path(), OS.get_cmdline_args())
+	get_tree().quit()
+	return true
 
 # Toggles the default texture filtering used by 2D CanvasItems (UI controls,
 # Sprite2D, etc. that don't have an explicit texture_filter override).
@@ -590,6 +613,8 @@ func _open_settings() -> void:
 func _on_apply_pressed() -> void:
 	_read_controls_into_settings()
 	_save_config()
+	if _apply_render_thread():
+		return
 	_settings_open = false
 	if is_instance_valid(_settings_canvas):
 		_settings_canvas.queue_free()
@@ -638,6 +663,13 @@ func _build_video_tab(tc: TabContainer) -> void:
 	note_filter.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note_filter.text = "Off = sharp/pixelated textures, On = smooth/blurred textures. Affects UI and 2D sprites (not 3D mesh materials)."
 	vbox.add_child(note_filter)
+
+	_sel_render_thread = _option(vbox, "Separate Render Thread", ["Off", "On (experimental)"],
+		_settings["video"]["separate_render_thread"])
+	vbox.add_child(_warning_note("Prepares the picture on its own processor core while the game runs on another one. " +
+		"On processors with several cores it can give a few more frames per second. It is an experimental " +
+		"feature of the Godot engine: the game can crash, already at the start (seen on Linux). If the game " +
+		"crashes or freezes, switch it off. A change restarts the game."))
 
 func _build_audio_tab(tc: TabContainer) -> void:
 	var vbox = _make_tab("AUDIO", tc)
@@ -835,6 +867,27 @@ func _section(text: String) -> Label:
 	lbl.add_theme_color_override("font_color", UI_TITLE_COLOR)
 	lbl.add_theme_font_size_override("font_size", 13)
 	return lbl
+
+# a note with a yellow warning triangle in front of it (drawn - the default font may not have ⚠)
+func _warning_note(text: String) -> HBoxContainer:
+	var row = HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	var icon = Control.new()
+	icon.custom_minimum_size = Vector2(20, 18)
+	icon.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	icon.draw.connect(func():
+		icon.draw_colored_polygon(PackedVector2Array([Vector2(10, 0), Vector2(20, 18), Vector2(0, 18)]), Color(1.0, 0.8, 0.1))
+		icon.draw_rect(Rect2(9, 5, 2, 7), Color.BLACK)
+		icon.draw_rect(Rect2(9, 14, 2, 2), Color.BLACK))
+	row.add_child(icon)
+	var lbl = Label.new()
+	lbl.add_theme_font_size_override("font_size", 11)
+	lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.45))
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl.text = text
+	row.add_child(lbl)
+	return row
 
 func _option(parent: VBoxContainer, label_text: String,
 		items: Array, selected_idx: int) -> OptionButton:
