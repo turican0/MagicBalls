@@ -23,8 +23,10 @@ class EntityRenderer : public Node3D {
 	GDCLASS(EntityRenderer, Node3D)
 
 public:
-	static const int STRIDE = 31;
-	static const int ENTITY_COUNT = 1000;
+	// constexpr: inline, so they have a definition (std::min takes them by reference - MSVC links
+	// without one, the Android/Linux linker does not)
+	static constexpr int STRIDE = 31;
+	static constexpr int ENTITY_COUNT = 1000;
 
 	enum KindType {
 		KIND_NONE = 0, // not drawn
