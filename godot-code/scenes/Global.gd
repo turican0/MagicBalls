@@ -30,6 +30,35 @@ var mp_record_file:String = ""
 # on with the user argument --debug-sounds (MagicBalls.exe -- --debug-sounds)
 var debug_sounds:bool = "--debug-sounds" in OS.get_cmdline_user_args()
 
+# a remc2 recording played instead of the player (--play_file), "" = none
+var play_file:String = ""
+
+# Profiling (tools/optimization/godot/profile.gd): when on, the parts of a frame add their time
+# in ms to prof; the profiler reads and clears it every frame.
+var profiling:bool = false
+var prof:Dictionary = {}
+
+# per kind of entity (uid) / scene path: what making its nodes and loading its scene cost
+# ({what: [count, total ms, max ms]}), kept for the whole run
+var prof_entities:Dictionary = {}
+
+func prof_entity(key, what: String, start_usec: int) -> void:
+	if not profiling:
+		return
+	var ms := (Time.get_ticks_usec() - start_usec) / 1000.0
+	var item: Dictionary = prof_entities.get_or_add(key, {})
+	var s: Array = item.get_or_add(what, [0, 0.0, 0.0])
+	s[0] += 1
+	s[1] += ms
+	s[2] = max(s[2], ms)
+
+# Adds the time since start_usec to prof[key] and returns the current time for the next part.
+func prof_mark(key: String, start_usec: int) -> int:
+	var now := Time.get_ticks_usec()
+	if profiling:
+		prof[key] = prof.get(key, 0.0) + (now - start_usec) / 1000.0
+	return now
+
 var soundInited:bool = false
 var sounds_map = {}
 var music_map = {}

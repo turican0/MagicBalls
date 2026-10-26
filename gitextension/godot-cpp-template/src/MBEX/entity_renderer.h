@@ -90,6 +90,26 @@ private:
 	bool wizard_labels = false;
 	int multimesh_instances = 0;
 
+	// profiling (tools/optimization/godot/profile.gd), per kind of entity
+	struct KindStats {
+		Vector3i uid;
+		int frames = 0; // frames it was drawn in
+		int64_t drawn_sum = 0; // entities drawn (nodes or MultiMesh instances), summed over the frames
+		int drawn_max = 0;
+		double update_ms = 0; // update_node()
+		double show_ms = 0; // finish_frame() for its pool
+		double show_max_ms = 0;
+		int show_spikes = 0; // frames its finish_frame() took over 1 ms
+		int first_frame = -1; // profiled frame it was first drawn in
+	};
+	int profile_frame = 0; // frames since profiling was switched on
+	bool profiling = false;
+	std::unordered_map<int64_t, KindStats> kind_stats;
+	std::unordered_map<int64_t, int> drawn_this_frame;
+	std::unordered_map<int64_t, int> drawn_last_frame;
+	std::unordered_map<int64_t, bool> hidden_kinds; // not drawn - to measure what a kind costs
+	KindStats &stats_of(const Vector3i &uid);
+
 	static int64_t key_of(int act_class, int model, int lib_type);
 	static int64_t key_of(const Vector3i &uid);
 	static Entity read_entity(const float *data, int index);
@@ -118,4 +138,8 @@ public:
 	int active_node_count() const;
 	int multimesh_instance_count() const { return multimesh_instances; }
 	void clear();
+	void set_profiling(bool enabled) { profiling = enabled; }
+	Array get_kind_stats() const;
+	int drawn_last_frame_of(const Vector3i &uid) const;
+	void set_hidden_kinds(const Array &uids);
 };

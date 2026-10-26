@@ -17,6 +17,7 @@
 
 #include "modified/remc2_mod.h"
 #include "MBEX/debug_log.h"
+#include "modified/frame_profile.h"
 
 #include "MBEX/editor.h"
 
@@ -175,6 +176,8 @@ void MBEXclass::_bind_methods() {
 
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text", "text", "int"), &MBEXclass::REMC2BeginGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetNetwork", "mode", "serverIp", "serverPort", "clientPort", "debug", "recordFile"), &MBEXclass::REMC2SetNetwork);
+	godot::ClassDB::bind_method(D_METHOD("REMC2SetPlayFile", "playFile"), &MBEXclass::REMC2SetPlayFile);
+	godot::ClassDB::bind_method(D_METHOD("getFrameProfile"), &MBEXclass::getFrameProfile);
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetMusic", "musicType", "awe32RomFolder", "useMagicCarpet1Music", "awe32GmIntroMusic", "awe32BufferMs"), &MBEXclass::REMC2SetMusic);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
 
@@ -1927,6 +1930,27 @@ void MBEXclass::REMC2SetNetwork(int mode, String serverIp, int serverPort, int c
 	}
 }
 
+// Plays a recording of remc2 (--play_file, InputRecorder) - the profiling replays a level with it.
+// "" = no recording.
+void MBEXclass::REMC2SetPlayFile(String playFile) {
+	play_args.clear();
+	String file = playFile.strip_edges();
+	if (file.is_empty())
+		return;
+	play_args.push_back("--play_file");
+	play_args.push_back(PLATFORM_GLOBALIZE_PATH(file).utf8().get_data());
+}
+
+// The time of the engine parts in the last frame in ms (frame_profile.h).
+Dictionary MBEXclass::getFrameProfile() {
+	static const char *names[PROF_COUNT] = { "engine", "screen_image", "e_palette", "e_input", "e_entities",
+		"e_lighting", "e_objectives", "e_draw_2d", "e_minimap", "e_top_bar" };
+	Dictionary result;
+	for (int i = 0; i < PROF_COUNT; i++)
+		result[names[i]] = frameProfileUsec[i] / 1000.0;
+	return result;
+}
+
 // The music options of remc2-configurator (config.json "sound"), read by init_sound() in sub_main_mod.
 //   musicType: "ogg" or "midi" = Godot plays its own music, "awe32" = the XMI music through the
 //   Sound Blaster AWE32 emulation (falls back to the Godot music when the wave ROM is missing).
@@ -1977,6 +2001,11 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 		MBDebugLog("REMC2BeginGame mode: set_level index: %d", (int)customLevel);
 	}
 	for (std::string &arg : network_args) {
+		if (saved_argc >= 16)
+			break;
+		saved_argv[saved_argc++] = (char *)arg.c_str();
+	}
+	for (std::string &arg : play_args) {
 		if (saved_argc >= 16)
 			break;
 		saved_argv[saved_argc++] = (char *)arg.c_str();
@@ -2200,9 +2229,12 @@ int MBEXclass::REMC2Run(Dictionary inputs, int stage) {
 			//thread2_continue(Thread1_State::CONTINUE);
 			//if (!game_paused || oneFrameRun)
 			//{
+			FrameProfileClear();
+			FrameProfileScope prof(PROF_ENGINE_WAIT);
 			thread1_wait_for_continue(Thread1_State::CONTINUE);
 			oneFrameRun = false;
 			//}
+			prof.Switch(PROF_SCREEN_IMAGE);
 			Ref<Image> img;
 			if (inGameBeginSteps > 1 && graphics_enhance)
 				img = getScrBufferImg(MyUiBackGroundColorIdx); //NIGHT 254 or 10, cave 254 or 10, day 254 or 28

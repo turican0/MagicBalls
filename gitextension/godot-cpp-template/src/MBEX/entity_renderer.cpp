@@ -7,6 +7,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 
 namespace {
@@ -47,6 +48,10 @@ void EntityRenderer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("active_node_count"), &EntityRenderer::active_node_count);
 	ClassDB::bind_method(D_METHOD("multimesh_instance_count"), &EntityRenderer::multimesh_instance_count);
 	ClassDB::bind_method(D_METHOD("clear"), &EntityRenderer::clear);
+	ClassDB::bind_method(D_METHOD("set_profiling", "enabled"), &EntityRenderer::set_profiling);
+	ClassDB::bind_method(D_METHOD("get_kind_stats"), &EntityRenderer::get_kind_stats);
+	ClassDB::bind_method(D_METHOD("drawn_last_frame_of", "uid"), &EntityRenderer::drawn_last_frame_of);
+	ClassDB::bind_method(D_METHOD("set_hidden_kinds", "uids"), &EntityRenderer::set_hidden_kinds);
 	BIND_CONSTANT(KIND_NONE);
 	BIND_CONSTANT(KIND_NODE);
 	BIND_CONSTANT(KIND_BATCH);
@@ -204,9 +209,18 @@ Dictionary EntityRenderer::render(const PackedFloat32Array &data, const Transfor
 		const Vector3i uid = uid_of(e, skip);
 		if (skip)
 			continue;
-		auto it = kinds.find(key_of(uid));
+		const int64_t key = key_of(uid);
+		auto it = kinds.find(key);
 		if (it == kinds.end())
 			continue; // its scene is still loading
+		if (!hidden_kinds.empty() && hidden_kinds.count(key))
+			continue;
+		if (profiling && it->second.type != KIND_NONE) {
+			drawn_this_frame[key]++;
+			KindStats &s = stats_of(uid);
+			if (s.first_frame < 0)
+				s.first_frame = profile_frame;
+		}
 		if (it->second.type == KIND_BATCH) {
 			draw_batch(e, it->second);
 			continue;
@@ -222,8 +236,14 @@ Dictionary EntityRenderer::render(const PackedFloat32Array &data, const Transfor
 		Node3D *node = Object::cast_to<Node3D>(ObjectDB::get_instance(b->nodes[b->act_index]));
 		b->act_index++;
 		b->active_count++;
-		if (node)
-			update_node(node, e);
+		if (node) {
+			if (profiling) {
+				const auto start = std::chrono::steady_clock::now();
+				update_node(node, e);
+				stats_of(uid).update_ms += std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count();
+			} else
+				update_node(node, e);
+		}
 	}
 	update_multimeshes();
 	result["missing"] = missing;
@@ -401,6 +421,7 @@ Dictionary EntityRenderer::finish_frame() {
 			item.push_back(active_count);
 			ran_out.push_back(item);
 		}
+		const auto show_start = std::chrono::steady_clock::now();
 		for (int i = (int)b.nodes.size() - 1; i >= 0; i--) {
 			Node3D *node = Object::cast_to<Node3D>(ObjectDB::get_instance(b.nodes[i]));
 			if (!node) {
@@ -425,6 +446,14 @@ Dictionary EntityRenderer::finish_frame() {
 			if (node->get_process_mode() != mode)
 				node->set_process_mode(mode);
 		}
+		if (profiling) {
+			const double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - show_start).count();
+			KindStats &s = stats_of(b.uid);
+			s.show_ms += ms;
+			s.show_max_ms = std::max(s.show_max_ms, ms);
+			if (ms > 1.0)
+				s.show_spikes++;
+		}
 		if (b.nodes.empty()) {
 			buckets.erase(buckets.begin() + bi);
 			erased = true;
@@ -445,6 +474,17 @@ Dictionary EntityRenderer::finish_frame() {
 		for (size_t i = 0; i < buckets.size(); i++)
 			bucket_index[key_of(buckets[i].uid)] = (int)i;
 	}
+	if (profiling) {
+		for (const auto &entry : drawn_this_frame) {
+			KindStats &s = kind_stats[entry.first];
+			s.frames++;
+			s.drawn_sum += entry.second;
+			s.drawn_max = std::max(s.drawn_max, entry.second);
+		}
+		drawn_last_frame.swap(drawn_this_frame);
+		drawn_this_frame.clear();
+		profile_frame++;
+	}
 	Dictionary result;
 	result["particle_nodes"] = particle_nodes;
 	result["light_nodes"] = light_nodes;
@@ -460,6 +500,43 @@ int EntityRenderer::active_node_count() const {
 				if (node->is_visible())
 					count++;
 	return count;
+}
+
+EntityRenderer::KindStats &EntityRenderer::stats_of(const Vector3i &uid) {
+	KindStats &s = kind_stats[key_of(uid)];
+	s.uid = uid;
+	return s;
+}
+
+// per kind: uid, frames, drawn_avg, drawn_max, update_ms, show_ms, show_max_ms, show_spikes
+Array EntityRenderer::get_kind_stats() const {
+	Array result;
+	for (const auto &entry : kind_stats) {
+		const KindStats &s = entry.second;
+		Dictionary d;
+		d["uid"] = s.uid;
+		d["frames"] = s.frames;
+		d["drawn_avg"] = s.frames ? (double)s.drawn_sum / s.frames : 0.0;
+		d["drawn_max"] = s.drawn_max;
+		d["update_ms"] = s.update_ms;
+		d["show_ms"] = s.show_ms;
+		d["show_max_ms"] = s.show_max_ms;
+		d["show_spikes"] = s.show_spikes;
+		d["first_frame"] = s.first_frame;
+		result.push_back(d);
+	}
+	return result;
+}
+
+int EntityRenderer::drawn_last_frame_of(const Vector3i &uid) const {
+	auto it = drawn_last_frame.find(key_of(uid));
+	return it == drawn_last_frame.end() ? 0 : it->second;
+}
+
+void EntityRenderer::set_hidden_kinds(const Array &uids) {
+	hidden_kinds.clear();
+	for (int i = 0; i < uids.size(); i++)
+		hidden_kinds[key_of((Vector3i)uids[i])] = true;
 }
 
 // all nodes and MultiMeshes go (decode_level.gd clear_entites_pool, a new level)

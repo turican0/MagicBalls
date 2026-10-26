@@ -15,8 +15,10 @@ func init():
 	# only hidden while the engine starts (it blocks), confined after it - see mouse_free_for_load()
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	#Global.loadScreenInit()
+	var t := Time.get_ticks_usec()
 	MBDebug.log("engine init")
 	Main_DecodeLevel.MBEXinit()
+	Global.prof_entity("level", "engine_init", t)
 	Global.MBEX.REMC2SetInverseMouse(Global.inverse_mouseY)
 	MBDebug.log("sounds init")
 	Global.initSound()
@@ -25,7 +27,7 @@ func init():
 	Global.defaultLangIndex=Main_DecodeLevel.initLanguage(2)-1
 	Main_DecodeLevel.mouse_back_after_load(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	MBDebug.log("engine init done")
-	
+
 	#Global.Main_Sounds.setSoundBank(3)
 	
 	runned=true
@@ -77,11 +79,13 @@ func getLangCount() -> int:
 	return count
 
 func beginInGame():
+	var t := Time.get_ticks_usec()
 	MBDebug.log("level loading")
 	var mode = Main_DecodeLevel.mouse_free_for_load()
 	Main_TerrainsMB.init(true)
 	Main_DecodeLevel.gameInit(true)
 	Main_DecodeLevel.mouse_back_after_load(mode)
+	Global.prof_entity("level", "begin_in_game", t)
 	MBDebug.log("level loaded")
 
 var inGameLoop=false
@@ -95,6 +99,7 @@ func _process(_p_delta) -> void:
 	var endRunVar = Main_DecodeLevel.MBrun(inGameLoop)
 	if endRunVar != 0 and MBDebug.enabled():
 		MBDebug.log("engine run result %d" % endRunVar)
+	var t := Time.get_ticks_usec()
 	Main_DecodeLevel.SetBlur(inGameLoop)
 	var warpMouse = Main_DecodeLevel.MBgetWarpMouse()
 	if(warpMouse["is"]):
@@ -158,6 +163,7 @@ func _process(_p_delta) -> void:
 		Main_DecodeLevel.showNavigation(true)
 	else:
 		Main_DecodeLevel.showNavigation(false)
+	Global.prof_mark("gd_engine_post", t)
 	#if(inGameLoop):
 		#Main_Filter.show()
 	#else:

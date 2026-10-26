@@ -752,6 +752,7 @@ func _get_library_scene(source_dict: Dictionary, target_dict: Dictionary, key: V
 	if _loaded_scenes.has(path):
 		scene = _loaded_scenes[path] # null when it failed to load
 	else:
+		var t := Time.get_ticks_usec()
 		if _requested_scenes.has(path):
 			if not wait and ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 				return null
@@ -762,6 +763,7 @@ func _get_library_scene(source_dict: Dictionary, target_dict: Dictionary, key: V
 			_request_scene(path)
 			return null
 		_loaded_scenes[path] = scene
+		Global.prof_entity(path, "load_wait", t) # the main thread waited for the scene
 	target_dict[key] = scene
 	return scene
 
@@ -1055,6 +1057,7 @@ func _begin_level_pool() -> void:
 	_known_level_spells.clear()
 	_known_wizards.clear()
 	_pool_frame = 0
+	var t := Time.get_ticks_usec()
 	var level: int = Global.MBEX.GetLevelSpells()["level"]
 	var counts: Dictionary = PrefillData.LEVELS.get(level, {}).duplicate()
 	# all the mana spheres of the level, golden or taken by someone
@@ -1074,6 +1077,7 @@ func _begin_level_pool() -> void:
 	# made now, while the level is loading - some kinds take long to make (wizards build CSG and a
 	# viewport), which would be a hitch during the game
 	_fill_pool(-1)
+	Global.prof_entity("level", "prefill", t)
 	_request_library_load()
 
 # the wizards are there and get their spells only after the level starts, and they find more
@@ -1148,6 +1152,7 @@ func _fill_pool(budget_usec: int) -> void:
 			_pool_fill_queue.pop_front()
 			continue
 		waiting = 0
+		var t := Time.get_ticks_usec()
 		var node = scene.instantiate()
 		node.set_meta("uid", uid)
 		node.visible = false
@@ -1156,6 +1161,7 @@ func _fill_pool(budget_usec: int) -> void:
 		node.process_mode = Node.PROCESS_MODE_DISABLED # also what is below it, until it is used
 		add_child(node)
 		_add_pool_node(uid, node)
+		Global.prof_entity(uid, "prefill" if budget_usec < 0 else "fill", t)
 		if budget_usec >= 0 and Time.get_ticks_usec() - start > budget_usec:
 			return
 
@@ -1210,9 +1216,12 @@ func _finish_entities() -> void:
 
 func _update_lights_particles() -> void:
 	var camera = get_viewport().get_camera_3d()
+	var t := Time.get_ticks_usec()
 	if camera:
 		_light_budget.update_lights(_frame_lights, camera.global_position)
+	t = Global.prof_mark("ent_lights", t)
 	_entity_particles.emit(_frame_particles, get_process_delta_time())
+	Global.prof_mark("ent_particles", t)
 
 func clear_entites_pool() -> void:
 	_light_budget.clear()
@@ -1228,6 +1237,7 @@ func generate_unique_id() -> int:
 # The entities of the engine drawn this frame - the work per entity is done by EntityRenderer (C++);
 # here only what it asks for: the scene of a kind it does not know yet, a node when a pool ran out.
 func renderEntites(data_array: PackedFloat32Array) -> void:
+	var t := Time.get_ticks_usec()
 	for item in _entity_renderer.unknown_kinds(data_array):
 		_resolve_entity_kind(item[0])
 	var camera = get_viewport().get_camera_3d()
@@ -1246,8 +1256,11 @@ func renderEntites(data_array: PackedFloat32Array) -> void:
 		for n in missing.size():
 			_make_entity_node(data_array, missing[n], missing_uids[n])
 		_entity_renderer.render_missing(data_array, missing)
+	t = Global.prof_mark("ent_loop", t)
 	_finish_entities()
+	t = Global.prof_mark("ent_show_hide", t) # includes ent_lights and ent_particles
 	_fill_pool_step()
+	Global.prof_mark("ent_fill_pool", t)
 
 # Tells EntityRenderer how a kind of entity (class, model, 1 = library / 2 = library2) is drawn.
 # A scene still loading is not told - it is asked for again next frame and drawn once it is there.
@@ -1271,6 +1284,7 @@ func _resolve_entity_kind(uid: Vector3i) -> void:
 
 # the node of an entity whose kind has no free node in its pool
 func _make_entity_node(data_array: PackedFloat32Array, index: int, uid: Vector3i) -> void:
+	var t := Time.get_ticks_usec()
 	var info: Array = _kind_scenes[uid]
 	var new_node = info[0].instantiate()
 	if not info[1]:
@@ -1280,6 +1294,7 @@ func _make_entity_node(data_array: PackedFloat32Array, index: int, uid: Vector3i
 	new_node.set_meta("uid", uid)
 	add_child(new_node)
 	_add_pool_node(uid, new_node, true)
+	Global.prof_entity(uid, "ran_out", t) # made during a frame - a hitch
 
 
 var last_keys_state: Dictionary = {}
@@ -1809,11 +1824,14 @@ var defaultStepsCount=5
 var defaultStepsCountBlur=15
 func MBrun(inGame):
 	DL_inGame=inGame
+	var t := Time.get_ticks_usec()
 	_mouse_watchdog()
 	var locGraphicsEnhance = Global.MBEX.REMC2GetGraphicsEenhance()
 	getInputs()
 	Global.MBEX.updateFreeSoundPlayers(Global.Main_Sounds.get_free_player_indices())
+	t = Global.prof_mark("gd_input", t)
 	var result=Global.MBEX.REMC2Run(input_state,0)
+	t = Global.prof_mark("run", t)
 	if(inGame):
 		var mapMode=Global.MBEX.REMC2GetMapMode()
 		var camera = get_viewport().get_camera_3d()
@@ -1853,9 +1871,15 @@ func MBrun(inGame):
 				get_parent().get_node("SpiderWeb").show()
 			else:
 				get_parent().get_node("SpiderWeb").hide()
+			t = Global.prof_mark("gd_camera", t)
 			updatePlayer(getPlayerPosRot())
-			renderEntites(getEntites())
+			t = Global.prof_mark("gd_player", t)
+			var entities := getEntites()
+			t = Global.prof_mark("entities_get", t)
+			renderEntites(entities)
+			t = Time.get_ticks_usec() # renderEntites marks its own parts
 			Global.MBEX.renew_terrain((Global.getLevelType()=="Cave"))
+			t = Global.prof_mark("terrain", t)
 			var mods = Global.MBEX.getPaletteModifications()
 			var current_gain = mods[0]
 			var current_offset = mods[1]
@@ -1878,7 +1902,9 @@ func MBrun(inGame):
 		#get_parent().get_node("UILayer/UI").updateSpells(Global.MBEX.getActiveSpells())
 		#get_parent().get_node("UILayer/UI").updateSelectedSpells(Global.MBEX.getSelectedSpells())
 		#get_parent().get_node("UILayer/UI").updateMinimap(Global.MBEX.getMinimap())
-	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())	
+	t = Global.prof_mark("gd_misc", t)
+	Global.Main_Sounds.updateSounds(Global.MBEX.getPendingSoundActions())
+	Global.prof_mark("sounds", t)
 	return result
 
 func anim1Step() -> int:
@@ -1959,6 +1985,7 @@ func MBEXinit():
 		Global.MBEX = MBEXclass.new()
 		Global.MBEX.REMC2SetNetwork(Global.mp_mode, Global.mp_server_ip, Global.mp_server_port,
 			Global.mp_client_port, Global.mp_debug, Global.mp_record_file)
+		Global.MBEX.REMC2SetPlayFile(Global.play_file)
 		if Global.music_type == Global.MUSIC_AWE32:
 			Global.prepareAwe32Rom()
 		Global.MBEX.REMC2SetMusic(Global.MUSIC_TYPE_NAMES[Global.music_type], Global.AWE32_ROM_DIR,

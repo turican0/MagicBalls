@@ -52,3 +52,6 @@ build-android-arm64-debug/CMakeFiles/CMakeConfigureLog.yaml
 build-android-arm64-debug/CMakeCache.txt
 godot-code/MBEXout/bin/android.arm64-v8a/libEXTENSION-NAME.android.template_debug.arm64.so
 godot-code/MBEXout/bin/android.arm64-v8a/libEXTENSION-NAME.android.template_debug.arm64.debug.so
+# profiling runs (tools/optimization/run_variants.ps1) and the harness copied into the project
+tools/optimization/out/
+godot-code/zz_tools/

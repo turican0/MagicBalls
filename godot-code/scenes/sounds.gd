@@ -155,6 +155,7 @@ func updateSounds(soundActions:Array):
 		if not action_dict is Dictionary:
 			continue
 		var action: String = action_dict.get("action", "")
+		var t := Time.get_ticks_usec()
 		var p1: int = action_dict.get("p1", 0)
 		var p2: int = action_dict.get("p2", 0)
 		var p3: int = action_dict.get("p3", 0)
@@ -203,6 +204,7 @@ func updateSounds(soundActions:Array):
 				matchok=true
 		if(!matchok):
 			matchok=true
+		Global.prof_entity("sound:" + action, "call", t)
 
 func start_awe32_music(mix_rate: int) -> void:
 	stop_music()

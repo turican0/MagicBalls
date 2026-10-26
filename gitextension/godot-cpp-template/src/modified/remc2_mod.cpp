@@ -1,7 +1,15 @@
 #include "remc2_mod.h"
 #include "../MBEX/debug_log.h"
+#include "frame_profile.h"
 
 #include <godot_cpp/variant/utility_functions.hpp>
+
+int64_t frameProfileUsec[PROF_COUNT] = {};
+
+void FrameProfileClear() {
+	for (int64_t &usec : frameProfileUsec)
+		usec = 0;
+}
 
 void OnNetworkMessageReceived(std::string message); // sub_main.cpp
 extern long AnimCurrentTick; // Animation.cpp
@@ -1921,6 +1929,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 					//actPlayerIndex = DrawSpiderWeb();
 				}
 				if (D41A0_0.m_GameSettings.m_Display.m_wMiniMap) {
+					FrameProfileScope profMinimap(PROF_MINIMAP);
 					//added code
 					if (graphics_enhance)
 						switch (D41A0_0.terrain_2FECE.MapType) {
@@ -1969,6 +1978,7 @@ void DrawGameFrame_2BE30_mod() //20CE30
 
 				GetFont_6FC50(FontType_D419D);
 				if (D41A0_0.m_GameSettings.m_Display.m_wTopBar) {
+					FrameProfileScope profTopBar(PROF_TOP_BAR);
 					//Left
 					DrawSpellIcon_2E260(
 							spellLeftPosX,
@@ -2749,10 +2759,12 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 	//debug palette log
 #endif //DEBUG_PALETTE
 
+	FrameProfileScope prof(PROF_PALETTE);
 	PaletteChanges_47760_mod();
 	if (!(x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1)) {
 		sub_715B0(); //nothing draw //animate sprites
 	}
+	prof.Switch(PROF_INPUT);
 	ReadGameUserInputs_89D10(); //get keys
 
 	if (CommandLineParams.DoAutoChangeRes()) {
@@ -2840,6 +2852,7 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 	PlayerEvents_51BB0(); //nothing draw
 	//adress 228588
 	sub_848A0(); //nothing draw
+	prof.Switch(PROF_ENTITIES);
 	//adress 22858d
 	if (!game_paused || oneFrameRun) {
 		uint8_t speed = x_D41A0_BYTEARRAY_4_struct.speedIndex;
@@ -2854,13 +2867,16 @@ void DrawAndEventsInGame_47560_mod(int16_t turn) //228560
 				UpdateEntities_57730();
 		}
 	}
+	prof.Switch(PROF_LIGHTING);
 	sub_84B80(); //prepare lightting
+	prof.Switch(PROF_OBJECTIVES);
 	sub_58F00_game_objectives(); //nothing draw
 	PresentObjective_59820(); //nothing draw
 	if (!(x_D41A0_BYTEARRAY_4_struct.OptionsSettingFlag_24 & 1))
 		sub_57570(); //nothing draw
 	sub_575C0(); //nothing draw
 	PlayEntitySounds_6E150(); //nothing draw
+	prof.Switch(PROF_DRAW_2D);
 	DrawGameFrame_2BE30_mod();
 	//adress 2285ff
 	//add_compare(0x002285FF, CommandLineParams.DoDebugafterload());

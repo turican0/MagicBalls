@@ -273,6 +273,7 @@ target_sources(${LIBNAME}
     src/remc2/portability/ConfigToSdlScancodeMapping.h
     src/modified/remc2_mod.cpp
     src/modified/remc2_mod.h
+    src/modified/frame_profile.h
     src/MBEX/convertData.cpp
     src/MBEX/convertData.h
     src/MBEX/editor.cpp
