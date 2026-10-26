@@ -895,7 +895,11 @@ var last_saturation: float
 var runned: bool
 
 func SetRunned(sendRunned) -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	# the level may finish loading while the player is in another application
+	if get_window().has_focus():
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	else:
+		_mouse_release()
 	gameInit(true)
 	runned = sendRunned
 
@@ -913,6 +917,7 @@ func getLangTexts():
 
 var nextState=0
 func _process(_p_delta) -> void:
+	_mouse_watchdog() # also while a level loads, when MBrun does not run
 	if(!runned):
 		return
 	getInputs()
@@ -1608,7 +1613,9 @@ func _mouse_watchdog() -> void:
 	if !Global.canNotification:
 		return
 	if !get_window().has_focus():
-		if !mouse_released:
+		# by the cursor itself, not only mouse_released: something may have grabbed it while
+		# the window was in the background (a level finished loading)
+		if !mouse_released or Input.mouse_mode != Input.MOUSE_MODE_VISIBLE:
 			_mouse_release()
 	elif mouse_released and _is_fullscreen():
 		_mouse_grab()

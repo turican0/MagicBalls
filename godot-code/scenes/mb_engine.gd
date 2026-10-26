@@ -12,7 +12,9 @@ var FlagRect:TextureRect
 
 func init():
 	Engine.max_fps = 30
-	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
+	# not when the player has already switched to another application during the start
+	if get_window().has_focus():
+		Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
 	#Global.loadScreenInit()
 	Main_DecodeLevel.MBEXinit()
 	Global.MBEX.REMC2SetInverseMouse(Global.inverse_mouseY)
