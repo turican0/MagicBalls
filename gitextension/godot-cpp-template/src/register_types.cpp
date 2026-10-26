@@ -6,6 +6,7 @@
 #include <godot_cpp/godot.hpp>
 
 #include "MBEXmain.h"
+#include "MBEX/entity_renderer.h"
 
 using namespace godot;
 
@@ -15,6 +16,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 		return;
 	}
 	GDREGISTER_CLASS(MBEXclass);
+	GDREGISTER_CLASS(EntityRenderer);
 }
 
 void MBEXreleaseGodotObjects(); // MBEXmain.cpp

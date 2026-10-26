@@ -277,6 +277,8 @@ target_sources(${LIBNAME}
     src/MBEX/convertData.h
     src/MBEX/editor.cpp
     src/MBEX/editor.h
+    src/MBEX/entity_renderer.cpp
+    src/MBEX/entity_renderer.h
     src/libxmi/xmi2mid.cpp
     src/libxmi/xmi2mid.h
     src/lib/stb_image.h

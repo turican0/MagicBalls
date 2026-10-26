@@ -1,10 +1,11 @@
 extends Node3D
-# Draws entities whose scene is only meshes (no script, animation, light, particles, skin,
-# transparency - nothing whose look or behaviour depends on being its own node) with
+# Entities whose scene is only meshes (no script, animation, light, particles, skin,
+# transparency - nothing whose look or behaviour depends on being its own node) are drawn with
 # MultiMeshes instead of one node per entity: one MultiMeshInstance3D per mesh of the scene and
 # per piece of the map, so they are still culled and get their LOD by where they are.
+# This finds out which scenes can be drawn so and what their meshes are; EntityRenderer (C++)
+# draws them.
 
-const CHUNK_SIZE := 32.0
 const DRAW_SETTINGS := ["cast_shadow", "gi_mode", "layers", "lod_bias", "extra_cull_margin",
 	"visibility_range_begin", "visibility_range_end", "visibility_range_begin_margin",
 	"visibility_range_end_margin", "visibility_range_fade_mode", "ignore_occlusion_culling", "transparency"]
@@ -19,19 +20,25 @@ class Batch:
 	var parts: Array = [] # of Part
 	var scale_node: Transform3D # the "Scale" node as it is in the scene
 	var has_scale_node := false
-	var chunks: Dictionary = {} # Vector2i -> Chunk
-
-class Chunk:
-	var instances: Array = [] # of MultiMeshInstance3D, one per part
-	var buffers: Array = [] # of PackedFloat32Array being filled this frame
-	var shown: Array = [] # of PackedFloat32Array shown now
 
 var _info: Dictionary = {} # PackedScene -> Batch, or null when it can not be batched
+var _batch_ids: Dictionary = {} # PackedScene -> batch of EntityRenderer
+var renderer: EntityRenderer # draws the MultiMeshes (decode_level.gd renderEntites)
 
 func can_batch(scene: PackedScene) -> bool:
 	if not _info.has(scene):
 		_info[scene] = _make_batch(scene)
 	return _info[scene] != null
+
+# the batch of a scene which can_batch() in EntityRenderer, made the first time it is asked for
+func batch_id(scene: PackedScene) -> int:
+	if not _batch_ids.has(scene):
+		var batch: Batch = _info[scene]
+		var parts := []
+		for part in batch.parts:
+			parts.append({"mesh": part.mesh, "under_scale": part.under_scale, "local": part.local, "settings": part.settings})
+		_batch_ids[scene] = renderer.register_batch(parts, batch.scale_node, batch.has_scale_node)
+	return _batch_ids[scene]
 
 func _make_batch(scene: PackedScene) -> Batch:
 	var root: Node = scene.instantiate()
@@ -101,65 +108,3 @@ func _relative(node: Node3D, ancestor: Node3D) -> Transform3D:
 		t = n.transform * t
 		n = n.get_parent()
 	return t
-
-# One entity this frame: root is its node's transform, scale_override the scale of the "Scale"
-# node when the entity sets it (null keeps the scene's).
-func add(scene: PackedScene, root: Transform3D, scale_override) -> void:
-	var batch: Batch = _info[scene]
-	var scale_xform := batch.scale_node
-	if batch.has_scale_node and scale_override != null:
-		scale_xform = Transform3D(Basis(batch.scale_node.basis.get_rotation_quaternion()).scaled(scale_override), batch.scale_node.origin)
-	var key := Vector2i(floori(root.origin.x / CHUNK_SIZE), floori(root.origin.z / CHUNK_SIZE))
-	var chunk: Chunk = batch.chunks.get(key)
-	if chunk == null:
-		chunk = _make_chunk(batch)
-		batch.chunks[key] = chunk
-	for i in batch.parts.size():
-		var part: Part = batch.parts[i]
-		var t: Transform3D = root * scale_xform * part.local if part.under_scale else root * part.local
-		var b: Basis = t.basis
-		chunk.buffers[i].append_array([b.x.x, b.y.x, b.z.x, t.origin.x, b.x.y, b.y.y, b.z.y, t.origin.y, b.x.z, b.y.z, b.z.z, t.origin.z])
-
-func _make_chunk(batch: Batch) -> Chunk:
-	var chunk := Chunk.new()
-	for part in batch.parts:
-		var mmi := MultiMeshInstance3D.new()
-		var mm := MultiMesh.new()
-		mm.transform_format = MultiMesh.TRANSFORM_3D
-		mm.mesh = part.mesh
-		mmi.multimesh = mm
-		for property in part.settings:
-			mmi.set(property, part.settings[property])
-		add_child(mmi)
-		chunk.instances.append(mmi)
-		chunk.buffers.append(PackedFloat32Array())
-		chunk.shown.append(PackedFloat32Array())
-	return chunk
-
-# after all entities of the frame were added
-func update() -> void:
-	for batch in _info.values():
-		if batch == null:
-			continue
-		for chunk in batch.chunks.values():
-			for i in chunk.instances.size():
-				var buffer: PackedFloat32Array = chunk.buffers[i]
-				if buffer != chunk.shown[i]: # most of them stand still
-					var mmi: MultiMeshInstance3D = chunk.instances[i]
-					var count := buffer.size() / 12
-					if mmi.multimesh.instance_count != count:
-						mmi.multimesh.instance_count = count
-					if count > 0:
-						mmi.multimesh.buffer = buffer
-					mmi.visible = count > 0
-					chunk.shown[i] = buffer
-				chunk.buffers[i] = PackedFloat32Array()
-
-func clear() -> void:
-	for batch in _info.values():
-		if batch == null:
-			continue
-		for chunk in batch.chunks.values():
-			for mmi in chunk.instances:
-				mmi.queue_free()
-		batch.chunks.clear()

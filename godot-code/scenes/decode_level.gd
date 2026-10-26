@@ -504,6 +504,9 @@ func updateLibrary(a:int,b:int,c:int,path:String):
 	library[key] = path
 	# loaded when it is needed (_get_library_scene) or ahead of it (_begin_level_pool)
 	library_scenes.erase(key)
+	if _entity_renderer:
+		_entity_renderer.forget_kinds() # its scene is asked for again
+		_kind_scenes.clear()
 	_request_scene(path)
 
 var library2 = {
@@ -770,6 +773,9 @@ func _ready():
 	add_child(_entity_particles)
 	_entity_multimesh = EntityMultiMesh.new()
 	add_child(_entity_multimesh)
+	_entity_renderer = EntityRenderer.new()
+	add_child(_entity_renderer)
+	_entity_multimesh.renderer = _entity_renderer
 	_get_library_scene(library, library_scenes, DEFAULT_LIBRARY_KEY, true)
 	_get_library_scene(library2, library2_scenes, DEFAULT_LIBRARY_KEY, true)
 	#create_default_key_remap()
@@ -1005,16 +1011,6 @@ func _do_change_scene():
 	get_tree().change_scene_to_file("res://scenes/MapMenu.tscn")
 
 
-var entites_pool:Dictionary
-
-func add_to_entites_pool(uid: Vector3i, sendNode: Node) -> void:
-	_add_pool_node(uid, sendNode)
-	entites_pool[uid]["ran_out"] = true
-	# the new node is taken by this entity - move past it like add_pool_index() does, or the
-	# next entity of the same type in this frame was handed the same node and overwrote it
-	entites_pool[uid]["act_index"] += 1
-	entites_pool[uid]["active_count"] += 1
-
 # Nodes are made ahead of time, while the level loads, for every kind of entity the level and
 # the spells which can be cast in it will need, so they do not have to be made when many of them
 # show up at once (Meteor, Volcano, ...). See entity_prefill_data.gd. What turns up later (spells
@@ -1137,7 +1133,7 @@ func _fill_pool(budget_usec: int) -> void:
 	var waiting := 0
 	while waiting < _pool_fill_queue.size():
 		var uid: Vector3i = _pool_fill_queue[0]
-		var have: int = entites_pool[uid]["array"].size() if entites_pool.has(uid) else 0
+		var have: int = _pool_count(uid)
 		if have >= _pool_targets.get(uid, 0):
 			_pool_fill_queue.pop_front()
 			continue
@@ -1165,20 +1161,22 @@ const EntityLightBudget = preload("res://scenes/entity_light_budget.gd")
 const EntityParticles = preload("res://scenes/entity_particles.gd")
 const EntityMultiMesh = preload("res://scenes/entity_multimesh.gd")
 var _entity_multimesh: Node3D
+var _entity_renderer: EntityRenderer
 var _light_budget: Node3D
 var _entity_particles: Node3D
 var _frame_lights: Array = []
 var _frame_particles: Array = []
+var _kind_scenes: Dictionary = {} # uid drawn by nodes -> [its scene, from the library (not the default one)]
 
-# a new entity node goes into its pool bucket, inactive (beyond active_count)
-func _add_pool_node(uid: Vector3i, node: Node) -> void:
-	if not entites_pool.has(uid):
-		entites_pool[uid] = {"array": [], "active_count": 0, "act_index": 0, "lights": false, "particles": false, "ran_out": false}
-	entites_pool[uid]["array"].append(node)
+func _pool_count(uid: Vector3i) -> int:
+	return _entity_renderer.pool_size(uid)
+
+# a new entity node goes into its pool bucket (EntityRenderer), inactive until an entity takes it;
+# ran_out: made at once for an entity because the pool had no free node
+func _add_pool_node(uid: Vector3i, node: Node, ran_out: bool = false) -> void:
 	var particles = _entity_particles.register(node)
 	if not particles.is_empty():
 		node.set_meta("entity_particles", particles)
-		entites_pool[uid]["particles"] = true
 	var lights := []
 	for light in node.find_children("*", "OmniLight3D", true, false):
 		# the scene's own hidden lights are left alone
@@ -1186,65 +1184,29 @@ func _add_pool_node(uid: Vector3i, node: Node) -> void:
 			lights.append(light)
 	if not lights.is_empty():
 		node.set_meta("entity_lights", lights)
-		entites_pool[uid]["lights"] = true
+	_entity_renderer.add_pool_node(uid, node, not lights.is_empty(), not particles.is_empty(), ran_out)
 
-func get_first_entity_with_uid(uid: Vector3i) -> Node:
-	if entites_pool.has(uid) and not entites_pool[uid]["array"].is_empty():
-		if(entites_pool[uid]["act_index"]<entites_pool[uid]["array"].size()):
-			var result = entites_pool[uid]["array"][entites_pool[uid]["act_index"]]
-			return result
-		else:
-			return null;
-	return null
-
-func add_pool_index(uid: Vector3i):
-	if entites_pool.has(uid) and not entites_pool[uid]["array"].is_empty():
-		entites_pool[uid]["act_index"]+=1
-		entites_pool[uid]["active_count"] += 1
-
-func show_hide_entites() -> void:
+# EntityRenderer has shown the nodes used this frame and hidden the others; their lights and
+# particles are handled here
+func _finish_entities() -> void:
 	_frame_lights.clear()
 	_frame_particles.clear()
-	for uid in entites_pool.keys():
-		var bucket = entites_pool[uid]
-		var arr = bucket["array"]
-		var active_count = bucket["active_count"]
-		if bucket["particles"]:
-			for i in min(active_count, arr.size()):
-				_frame_particles.append_array(arr[i].get_meta("entity_particles", []))
-		# entites with a start script are freed instead of pooled, so they start again next time
-		var free_inactive: bool = uid.x == 14 and (uid.y == 461 or uid.y == 462)
-		# this kind ran out of nodes (one had to be made at once): keep some spare ones of it from
-		# now on, so more of it can show up without a hitch
-		if bucket["ran_out"]:
-			bucket["ran_out"] = false
-			_set_pool_target(uid, active_count + max(POOL_MIN_SPARE, int(active_count * POOL_SPARE)), false)
-		# backwards, so remove_at() does not shift the nodes still to be visited
-		for i in range(arr.size() - 1, -1, -1):
-			var node: Node = arr[i]
-			# only touch what changes - this runs for every pooled node every frame
-			var active: bool = i < active_count
-			if not active and free_inactive:
-				node.queue_free()
-				arr.remove_at(i)
-				continue
-			if node.visible != active:
-				node.visible = active
-			if node.is_processing() != active:
-				node.set_process(active)
-			if node.is_physics_processing() != active:
-				node.set_physics_process(active)
-		if arr.is_empty():
-			entites_pool.erase(uid)
-			continue
-		if bucket["lights"]:
-			for i in min(active_count, arr.size()):
-				for light in arr[i].get_meta("entity_lights", []):
-					# not in a part the entity's script has hidden (mushroom variants)
-					if light.get_parent().is_visible_in_tree():
-						_frame_lights.append(light)
-		bucket["act_index"] = 0
-		bucket["active_count"] = 0
+	var done: Dictionary = _entity_renderer.finish_frame()
+	for node in done["particle_nodes"]:
+		_frame_particles.append_array(node.get_meta("entity_particles", []))
+	# a kind ran out of nodes (one had to be made at once): keep some spare ones of it from now
+	# on, so more of it can show up without a hitch
+	for item in done["ran_out"]:
+		var active_count: int = item[1]
+		_set_pool_target(item[0], active_count + max(POOL_MIN_SPARE, int(active_count * POOL_SPARE)), false)
+	for node in done["light_nodes"]:
+		for light in node.get_meta("entity_lights", []):
+			# not in a part the entity's script has hidden (mushroom variants)
+			if light.get_parent().is_visible_in_tree():
+				_frame_lights.append(light)
+	_update_lights_particles()
+
+func _update_lights_particles() -> void:
 	var camera = get_viewport().get_camera_3d()
 	if camera:
 		_light_budget.update_lights(_frame_lights, camera.global_position)
@@ -1253,13 +1215,7 @@ func show_hide_entites() -> void:
 func clear_entites_pool() -> void:
 	_light_budget.clear()
 	_entity_particles.clear()
-	_entity_multimesh.clear()
-	for bucket in entites_pool.values():
-		var arr = bucket["array"]
-		for node in arr:
-			if is_instance_valid(node):
-				node.queue_free()
-	entites_pool.clear()
+	_entity_renderer.clear()
 
 static var _next_uid: int = 0
 func generate_unique_id() -> int:
@@ -1267,172 +1223,62 @@ func generate_unique_id() -> int:
 	return _next_uid
 
 
+# The entities of the engine drawn this frame - the work per entity is done by EntityRenderer (C++);
+# here only what it asks for: the scene of a kind it does not know yet, a node when a pool ran out.
 func renderEntites(data_array: PackedFloat32Array) -> void:
-	var WizardLabelsVisible:bool=Global.MBEX.REMC2GetWizardsLabelsVisible()
-	var entites_per_frame=0;
-	var stride = 31
-	var default_key = Vector3i(0, 999, 0)
-	var inv_256 = 1.0 / 256.0
+	for item in _entity_renderer.unknown_kinds(data_array):
+		_resolve_entity_kind(item[0])
 	var camera = get_viewport().get_camera_3d()
 	var has_camera = camera != null
 	var cam_pos = camera.global_position if has_camera else Vector3.ZERO
-	var rad_mult = PI / 1024.0 # Zjednodušeno z PI / (256 * 4)
-	#entites_pool = entites_pool_used
-	#entites_pool_used = {}
-	for i in range(pool_size):
-		var offset = i * stride
-		var pos = Vector3(data_array[offset], data_array[offset+2], data_array[offset+1])
-		var rot = Vector3(data_array[offset+3], data_array[offset+4], data_array[offset+5])
-		var actState = int(data_array[offset+6])
-		var actClass = int(data_array[offset+7])
-		var actModel = int(data_array[offset+8])
-		var actXtype = int(data_array[offset+9])
-		var actXsubtype = int(data_array[offset+10])
-		var actWord2C = int(data_array[offset+11])
-		var actSpeed = int(data_array[offset+12])
-		var actByte38 = int(data_array[offset+13])
-		var actByte39 = int(data_array[offset+14])
-		var actByte3A = int(data_array[offset+15])
-		var actId = int(data_array[offset+16])
-		var actByte0 = int(data_array[offset+17])
-		var actByte1 = int(data_array[offset+18])
-		var actByte2 = int(data_array[offset+19])
-		var actByte3 = int(data_array[offset+20])
-		var modelIndex = int(data_array[offset+21])
-		var rot2 = Vector3(data_array[offset+22], 0, 0)
-		#if((modelIndex>=22)&&(modelIndex<=56)):#flying centipede
-			#rot2 = Vector3(data_array[offset+22], data_array[offset+23], data_array[offset+24])
-		if((modelIndex==105)&&(modelIndex==116)):#arrow
-			rot2 = Vector3(data_array[offset+22], data_array[offset+23], data_array[offset+24])
-		#if((actClass==10)&&(modelIndex==58)||(modelIndex==67)):
-			#rot2 = Vector3(data_array[offset+22], data_array[offset+23], data_array[offset+24])
-		var actMana = int(data_array[offset+24])
-		var actLife = int(data_array[offset+25])
-		var actMaxMana = int(data_array[offset+26])
-		var actMaxLife = int(data_array[offset+27])
-		var actOwnerObject = int(data_array[offset+28])
-		var actBitmapScaleHelp = int(data_array[offset+29])
-		var actBitmapScale = int(data_array[offset+30])
-		
-		#if(actClass==5) and (actModel==14):
-			#continue;
-		
-		if modelIndex == 0 and actClass == 3:
-			Main_Player.MOVE_SPEED = actSpeed
-			Main_Player.LIFE = actLife
-			Main_Player.MANA = actMana
-		
-		var updateObject=false
-		var current_node = null
-		if not (actByte1 & 4):
-			var isDraw = (actByte0 & 1) == 0
-			if actClass == 3 and (modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 227 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251) and actLife <= 0:
-				isDraw = false#noDraw dead sorcerers
-			#if actClass == 5:
-				#if actLife <= 0:
-					#isDraw = false
-				#else:
-					#isDraw = true
-			var fromlib = false
-			var uid2 = Vector3i(actClass,modelIndex,0)
-			var scene_to_instance = null
-			var libType:int = 0
-			if isDraw and actClass in [2, 3, 5, 9, 10, 15]:
-				libType = 1
-				if library.has(uid2):
-					# null while the scene is still loading in the background - drawn once it is there
-					scene_to_instance = _get_library_scene(library, library_scenes, uid2, false)
-					fromlib = true
-				else:
-					scene_to_instance = library_scenes.get(default_key)
-			else:
-				libType = 2
-				if library2.has(uid2):
-					scene_to_instance = _get_library_scene(library2, library2_scenes, uid2, false)
-					fromlib = true
-				else:
-					scene_to_instance = library2_scenes.get(default_key)
-			var uid = Vector3i(actClass,modelIndex,libType)
-			if scene_to_instance != null and fromlib and _entity_multimesh.can_batch(scene_to_instance):
-				# only meshes - drawn with the others of its kind by a MultiMesh, no node of its own
-				var mm_scale = 1.0
-				if actClass == 10 and actModel == 39:
-					mm_scale = pow(actMana, 1.0 / 3.0) * 0.1
-				if actClass == 5 and actModel == 22:
-					mm_scale = actBitmapScale * inv_256
-				var mm_position = Vector3(data_array[offset] * inv_256, data_array[offset + 2] * inv_256, data_array[offset + 1] * inv_256)
-				if has_camera:
-					mm_position.x = cam_pos.x + fposmod(mm_position.x - cam_pos.x + 128.0, 256.0) - 128.0
-					mm_position.z = cam_pos.z + fposmod(mm_position.z - cam_pos.z + 128.0, 256.0) - 128.0
-					mm_position = to_local(mm_position)
-				var mm_basis = Basis.from_euler(Vector3(0, -rot2.x * rad_mult, 0)).scaled(Vector3(mm_scale, mm_scale, mm_scale))
-				var mm_bitmap_scale = null
-				if actBitmapScaleHelp:
-					var bs = actBitmapScale * inv_256
-					mm_bitmap_scale = Vector3(bs, bs, bs)
-				_entity_multimesh.add(scene_to_instance, Transform3D(mm_basis, mm_position), mm_bitmap_scale)
-			elif scene_to_instance != null:
-				current_node = get_first_entity_with_uid(uid)
-				if current_node == null:
-					var new_node = scene_to_instance.instantiate()
-					if not fromlib:
-						new_node.get_node("Label3D").text = "M:%d_C:%d_M:%d_S:%d_B0:%d" % [modelIndex, actClass, actModel, actState, actByte0]
-					new_node.set_meta("uid",uid)
-					add_child(new_node)
-					current_node = new_node
-					add_to_entites_pool(uid,new_node)
-					updateObject=true
-				else:
-					add_pool_index(uid)
-					updateObject=true
-		if (current_node&&updateObject):
-			if(modelIndex == 203 or modelIndex == 211 or modelIndex == 219 or modelIndex == 227 or modelIndex == 235 or modelIndex == 243 or modelIndex == 251):
-				current_node.updateHealthBar(actLife,actMaxLife,WizardLabelsVisible)
-			if(modelIndex == 411):#zobmie
-				#var nodeStateVisibility=current_node.get_fade_state()
-				var entityStateHidden=actByte2 & 0x80
-				if(entityStateHidden==0x80):
-					current_node.fade_out()
-				else:
-					current_node.fade_in()
-			if actBitmapScaleHelp:
-				var scale_scene_node = current_node.get_node_or_null("Scale")
-				if scale_scene_node:
-					var s = actBitmapScale * inv_256
-					var bitmap_scale = Vector3(s, s, s)
-					if scale_scene_node.scale != bitmap_scale:
-						scale_scene_node.scale = bitmap_scale
-			var entityScale = 1.0
-			if actClass == 10 and actModel == 39: # manSphere
-				entityScale = pow(actMana, 1.0 / 3.0) * 0.1 #alternative mana size computing
-				#entityScale = actBitmapScale * inv_256  #original sice mana computing
-			if actClass == 5 and actModel == 22: # manSphere from mana snake
-				entityScale = actBitmapScale * inv_256
-			# transforms are written only when they change: every write is pushed on to the
-			# renderer, and most entities stand still most of the time
-			var new_scale = Vector3(entityScale, entityScale, entityScale)
-			if current_node.scale != new_scale:
-				current_node.scale = new_scale
-			var base_pos_x = data_array[offset] * inv_256
-			var base_pos_y = data_array[offset + 2] * inv_256
-			var base_pos_z = data_array[offset + 1] * inv_256
-			if has_camera:
-				var new_x = cam_pos.x + fposmod(base_pos_x - cam_pos.x + 128.0, 256.0) - 128.0
-				var new_z = cam_pos.z + fposmod(base_pos_z - cam_pos.z + 128.0, 256.0) - 128.0
-				var new_global = Vector3(new_x, base_pos_y, new_z)
-				if current_node.global_position != new_global:
-					current_node.global_position = new_global
-			else:
-				var new_local = Vector3(base_pos_x, base_pos_y, base_pos_z)
-				if current_node.position != new_local:
-					current_node.position = new_local
-			var yaw = -rot2.x * rad_mult
-			var new_rotation = Vector3(0, yaw, 0)
-			if current_node.rotation != new_rotation:
-				current_node.rotation = new_rotation
-	_entity_multimesh.update()
-	show_hide_entites()
+	var drawn: Dictionary = _entity_renderer.render(data_array, global_transform.affine_inverse(), cam_pos,
+		has_camera, Global.MBEX.REMC2GetWizardsLabelsVisible())
+	var player: PackedInt32Array = drawn["player"]
+	if not player.is_empty():
+		Main_Player.MOVE_SPEED = player[0]
+		Main_Player.LIFE = player[1]
+		Main_Player.MANA = player[2]
+	var missing: PackedInt32Array = drawn["missing"]
+	if not missing.is_empty():
+		var missing_uids: Array = drawn["missing_uids"]
+		for n in missing.size():
+			_make_entity_node(data_array, missing[n], missing_uids[n])
+		_entity_renderer.render_missing(data_array, missing)
+	_finish_entities()
 	_fill_pool_step()
+
+# Tells EntityRenderer how a kind of entity (class, model, 1 = library / 2 = library2) is drawn.
+# A scene still loading is not told - it is asked for again next frame and drawn once it is there.
+func _resolve_entity_kind(uid: Vector3i) -> void:
+	var key := Vector3i(uid.x, uid.y, 0)
+	var source: Dictionary = library if uid.z == 1 else library2
+	var target: Dictionary = library_scenes if uid.z == 1 else library2_scenes
+	var fromlib := source.has(key)
+	if fromlib and source[key] == "":
+		_entity_renderer.set_kind(uid, EntityRenderer.KIND_NONE, -1)
+		return
+	var scene = _get_library_scene(source, target, key, false) if fromlib else target.get(DEFAULT_LIBRARY_KEY)
+	if scene == null:
+		return
+	if fromlib and _entity_multimesh.can_batch(scene):
+		# only meshes - drawn with the others of its kind by a MultiMesh, no node of its own
+		_entity_renderer.set_kind(uid, EntityRenderer.KIND_BATCH, _entity_multimesh.batch_id(scene))
+	else:
+		_kind_scenes[uid] = [scene, fromlib]
+		_entity_renderer.set_kind(uid, EntityRenderer.KIND_NODE, -1)
+
+# the node of an entity whose kind has no free node in its pool
+func _make_entity_node(data_array: PackedFloat32Array, index: int, uid: Vector3i) -> void:
+	var info: Array = _kind_scenes[uid]
+	var new_node = info[0].instantiate()
+	if not info[1]:
+		var offset := index * 31
+		new_node.get_node("Label3D").text = "M:%d_C:%d_M:%d_S:%d_B0:%d" % [int(data_array[offset + 21]),
+			int(data_array[offset + 7]), int(data_array[offset + 8]), int(data_array[offset + 6]), int(data_array[offset + 17])]
+	new_node.set_meta("uid", uid)
+	add_child(new_node)
+	_add_pool_node(uid, new_node, true)
+
 
 var last_keys_state: Dictionary = {}
 var last_mouse_buttons_state: Dictionary = {}
