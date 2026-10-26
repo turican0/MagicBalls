@@ -690,7 +690,7 @@ func _build_video_tab(tc: TabContainer) -> void:
 	_sel_quality_preset = _option(vbox, "SET_QUALITY", ["Q_ULTRA", "Q_HIGH", "Q_MEDIUM", "Q_LOW", "Q_CUSTOM"],
 		_settings["video"]["quality_preset"])
 	_sel_quality = [
-		_option(vbox, "SET_SHADOWS", ["OFF", "Q_LOW", "Q_MEDIUM", "Q_HIGH"], _settings["video"]["shadow_quality"]),
+		_option(vbox, "SET_SHADOWS", ["OFF", "SH_LOW", "SH_MEDIUM", "SH_HIGH"], _settings["video"]["shadow_quality"]),
 		_option(vbox, "SET_REFLECTIONS", ["OFF", "ON"], _settings["video"]["reflections"]),
 		_option(vbox, "SET_RENDER_SCALE", ["100 %", "85 %", "70 %", "50 %"], _settings["video"]["render_scale"]),
 	]
