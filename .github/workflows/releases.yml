@@ -131,7 +131,9 @@ jobs:
           $settingsPath = "C:\Users\runneradmin\AppData\Roaming\Godot\editor_settings-4.tres"
           $blenderDir = (Split-Path $env:BLENDER_PATH) -replace '\\', '/'
           New-Item -ItemType Directory -Force -Path (Split-Path $settingsPath)
-          Set-Content $settingsPath -Encoding UTF8 -Value "[gd_resource type=""EditorSettings"" format=3]`n`n[resource]`nfilesystem/import/blender/blender3_path = ""$blenderDir"""
+          # blender_path (the program) is the key of Godot 4.3+, blender3_path (the folder) the old one
+          $blenderExe = $env:BLENDER_PATH -replace '\\', '/'
+          Set-Content $settingsPath -Encoding UTF8 -Value "[gd_resource type=""EditorSettings"" format=3]`n`n[resource]`nfilesystem/import/blender/blender3_path = ""$blenderDir""`nfilesystem/import/blender/blender_path = ""$blenderExe"""
           Write-Host "Editor settings created with Blender path: $blenderDir"
 
           Write-Host "=== Running import ==="
@@ -379,6 +381,7 @@ jobs:
 
           [resource]
           filesystem/import/blender/blender3_path = "$BLENDER_DIR"
+          filesystem/import/blender/blender_path = "$BLENDER_PATH"
           EOF
 
           echo "=== Running import ==="
@@ -565,6 +568,16 @@ jobs:
           unzip -q "${TEMPLATES_FILENAME}" -d /tmp/templates
           mv /tmp/templates/templates/* "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable/"
 
+      # The models in .blend files are imported through Blender - without it they were left out and
+      # the APK had empty models.
+      - name: Install Blender
+        run: |
+          BLENDER_VERSION="5.1.0"
+          wget -q "https://download.blender.org/release/Blender5.1/blender-${BLENDER_VERSION}-linux-x64.tar.xz"
+          tar -xf "blender-${BLENDER_VERSION}-linux-x64.tar.xz"
+          BLENDER_PATH="$(pwd)/blender-${BLENDER_VERSION}-linux-x64/blender"
+          echo "BLENDER_PATH=$BLENDER_PATH" >> $GITHUB_ENV
+
       - name: Setup Android keystore (release signing)
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -590,11 +603,13 @@ jobs:
 
           [resource]
           export/android/android_sdk_path = "$ANDROID_SDK_ROOT"
+          filesystem/import/blender/blender_path = "$BLENDER_PATH"
           EOF
 
       - name: Import Godot project
         run: |
-          timeout 120 godot --headless --path godot-code --editor --quit-after 120000 \
+          # the .blend models go through Blender - 120 s were not enough for them
+          timeout 1200 godot --headless --path godot-code --editor --quit-after 120000 \
             > import_stdout.txt 2> import_stderr.txt || true
           cat import_stdout.txt || true
           cat import_stderr.txt || true
@@ -605,6 +620,25 @@ jobs:
           else
             echo "ERROR: .godot/imported was not created!" && exit 1
           fi
+
+      - name: Verify the models were imported
+        run: |
+          # every .blend has its imported scene, no imported file is empty - else the APK has empty models
+          FAILED=0
+          while IFS= read -r f; do
+            if ! ls "godot-code/.godot/imported/$(basename "$f")"-*.scn > /dev/null 2>&1; then
+              echo "ERROR: not imported: $f"
+              FAILED=1
+            fi
+          done < <(find godot-code -name "*.blend" -not -path "*/.godot/*")
+          EMPTY=$(find godot-code/.godot/imported -type f -size 0)
+          if [ -n "$EMPTY" ]; then
+            echo "ERROR: empty imported files:"
+            echo "$EMPTY"
+            FAILED=1
+          fi
+          [ "$FAILED" = 0 ] && echo "OK: all models imported"
+          exit $FAILED
 
       - name: Verify GDExtension loaded correctly
         run: |
