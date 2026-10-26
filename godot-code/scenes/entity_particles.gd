@@ -19,7 +19,8 @@ const SHAPES := [ParticleProcessMaterial.EMISSION_SHAPE_POINT, ParticleProcessMa
 	ParticleProcessMaterial.EMISSION_SHAPE_SPHERE_SURFACE, ParticleProcessMaterial.EMISSION_SHAPE_BOX]
 const MAX_PARTICLES := 20000 # per kind of particles - the oldest ones are reused above it
 
-# Takes over the particles of an entity node when it can, returns the nodes it took over.
+# Takes over the particles of an entity node when it can, returns the nodes it took over (their
+# markers, see _replace_with_marker).
 func register(node: Node) -> Array:
 	var taken := []
 	for p in node.find_children("*", "GPUParticles3D", true, false):
@@ -28,10 +29,33 @@ func register(node: Node) -> Array:
 		var key = _key_of(p)
 		if not _shared.has(key):
 			_shared[key] = _make_shared(p)
-		p.emitting = false
-		p.set_meta("shared_particles", key)
-		taken.append(p)
+		var marker := _replace_with_marker(p)
+		marker.set_meta("shared_particles", key)
+		taken.append(marker)
 	return taken
+
+# A taken over particle node draws nothing any more, it only tells where to emit from - it becomes
+# a plain Node3D at the same place (same name, its children move to it). A GPUParticles3D asks the
+# renderer whether it is active whenever it is shown, and with the render thread that makes the
+# main thread wait for it - every time a pooled entity with such particles was shown (fires of
+# Meteor and Volcano, fireballs, arrows: up to 135 ms in one frame).
+func _replace_with_marker(p: GPUParticles3D) -> Node3D:
+	var marker := Node3D.new()
+	marker.transform = p.transform
+	marker.visible = p.visible
+	marker.top_level = p.top_level
+	var parent := p.get_parent()
+	var index := p.get_index()
+	var node_name := p.name
+	for child in p.get_children():
+		p.remove_child(child)
+		marker.add_child(child)
+	parent.remove_child(p)
+	p.free()
+	parent.add_child(marker)
+	parent.move_child(marker, index)
+	marker.name = node_name
+	return marker
 
 func _can_share(p: GPUParticles3D) -> bool:
 	return p.emitting and not p.one_shot and p.explosiveness == 0.0 and p.randomness == 0.0 \
