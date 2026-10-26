@@ -34,6 +34,8 @@ albedo_texture = SubResource("NoiseTexture2D_4dyyh")
 material = SubResource("StandardMaterial3D_nxef6")
 radius = 0.25
 height = 0.5
+radial_segments = 16
+rings = 8
 
 [sub_resource type="Gradient" id="Gradient_tkruv"]
 offsets = PackedFloat32Array(0, 0.5466667, 1)
