@@ -55,6 +55,9 @@ user\AppData\Roaming\Godot\app_userdata\MagicBalls\
 ## Next version (in progress):
 -Much faster frames: level 5 from 19 ms to about 6 ms per frame (measured on one PC), the long stutters in level 25 (Meteor III) are gone<br>
 -Entities are drawn from C++, hidden entities no longer run their animations<br>
+-Faster rendering: terrain drawn in pieces, particle emitters sized to what is used (up to half the GPU time)<br>
+-Graphics quality settings: Ultra/High/Medium/Low with Shadows, Reflections and 3D Resolution<br>
+-Settings, importer and help translated into all 8 languages, language choice in the settings<br>
 -Lighter splash particles with seamless textures<br>
 -The mouse is free while the game loads or runs in the background<br>
 -Setting for the separate render thread (Video), off by default<br>

@@ -12,6 +12,7 @@ extends Node
 #
 #   MB_GPU          1 = measure the GPU time of the viewport (makes the renderer sync every frame)
 #   MB_DUMP_FRAME   frame to print the processing scripts and the heaviest geometry
+#   MB_QUALITY      quality settings "shadows,reflections" (0..3, 0..1; default 3,1 = Ultra)
 #   MB_SHOT_EVERY   save a screenshot every N frames to MB_SHOT_OUT-<frame>.png (e.g. for the README)
 #   MB_WINDOW       window size, e.g. 1920x1080
 #
@@ -418,6 +419,10 @@ func _ready():
 	Global.level_mode = 1
 	Global.custom_level = int(OS.get_environment("MB_TEST_LEVEL"))
 	Global.play_file = OS.get_environment("MB_PLAY_FILE")
+	var quality := OS.get_environment("MB_QUALITY").split(",")
+	if quality.size() == 2:
+		Global.shadow_quality = int(quality[0])
+		Global.reflections = quality[1] == "1"
 	var fps := OS.get_environment("MB_FPS")
 	Global.max_fps = int(fps) if fps != "" else 0
 	Global.master_volume = 0.0

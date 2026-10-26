@@ -1624,6 +1624,7 @@ func gameInit(useMultimesh):
 			get_parent().get_node("MultiMeshtop").hide()
 	clear_entites_pool()
 	_begin_level_pool()
+	Global.apply_quality(NodeSky3D)
 	setFog2()
 
 func setDayEntites():	
@@ -1776,7 +1777,8 @@ func sefFogEnd(value:float):
 		if light:
 			if not _shadow_max_distance.has(light_name):
 				_shadow_max_distance[light_name] = light.directional_shadow_max_distance
-			light.directional_shadow_max_distance = min(_shadow_max_distance[light_name], value)
+			light.directional_shadow_max_distance = min(_shadow_max_distance[light_name], value,
+				Global.SHADOW_DISTANCES[Global.shadow_quality])
 	
 func setFogFall(value:float):
 	var skydome:SkyDome = NodeSky3D.get_node_or_null(^"SkyDome")

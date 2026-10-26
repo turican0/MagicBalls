@@ -22,6 +22,14 @@ const SUN_MOON_CURVE: Curve = preload("res://addons/sky_3d/assets/resources/SunM
 const DAY_NIGHT_TRANSITION_ANGLE: float = deg_to_rad(90)  # Horizon
 
 var is_scene_built: bool = false
+## MagicBalls: false keeps the shadows of the sun and the moon off (the shadow quality setting);
+## SkyDome switches them on whenever a light shines.
+var lights_cast_shadows: bool = true:
+	set(value):
+		lights_cast_shadows = value
+		for light in [_sun_light_node, _moon_light_node]:
+			if light and not value:
+				light.shadow_enabled = false
 var fog_mesh: MeshInstance3D
 var sky_material: ShaderMaterial
 var cumulus_material: Material
@@ -327,7 +335,7 @@ func _update_sun_light_energy() -> void:
 	
 	if is_equal_approx(_sun_light_node.light_energy, 0.0) and _sun_light_node.shadow_enabled:
 		_sun_light_node.shadow_enabled = false
-	elif _sun_light_node.light_energy > 0.0 and not _sun_light_node.shadow_enabled:
+	elif _sun_light_node.light_energy > 0.0 and not _sun_light_node.shadow_enabled and lights_cast_shadows:
 		_sun_light_node.shadow_enabled = true
 
 
@@ -489,7 +497,7 @@ func _update_moon_light_energy() -> void:
 	
 	if is_equal_approx(_moon_light_node.light_energy, 0.0) and _moon_light_node.shadow_enabled:
 		_moon_light_node.shadow_enabled = false
-	elif _moon_light_node.light_energy > 0.0 and not _moon_light_node.shadow_enabled:
+	elif _moon_light_node.light_energy > 0.0 and not _moon_light_node.shadow_enabled and lights_cast_shadows:
 		_moon_light_node.shadow_enabled = true
 
 

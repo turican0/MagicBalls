@@ -22,6 +22,9 @@ se měřilo a generovala data, jsou v `tools/optimization/`.
 | Do not stall on showing entities with shared particles | Převzatý `GPUParticles3D` → `Node3D` (jinak `particles_is_inactive` při každém zobrazení – synchronizace renderu, až 135 ms). | `scenes/entity_particles.gd` |
 | Print the sound debug output only with --debug-sounds | `print()` u každého zvuku: 15 s za replay levelu 25, až 218 ms/snímek. | `scenes/sounds.gd` |
 | Stop the whole hidden pool nodes, not only their roots | `process_mode = DISABLED` pro skryté uzly – jejich AnimationPlayery/skeletony běžely; u uzlů vytvořených za hry to zakládalo GPU buffery desítkám skrytých skinovaných modelů (trhnutí až 690 ms, level 25). | `entity_renderer.cpp`, `decode_level.gd` |
+| Draw the terrain in pieces | Mapa a její kopie po 4×4 kusech 64×64 polí (`terrain_chunk_meshes`), každý kus se ořezává zvlášť – pro pohled i pásma stínů. GPU −17 až −23 %. | `MBEXmain.cpp`, `node_3d_test_terrain.gd` |
+| Size the shared particles to what the entities emit | `GPUParticles3D` kreslí celé `amount` (i mrtvé částice) v každém snímku a v každém pásmu stínů; sdílené emitory měly 20 000 → začínají na 8 entit a rostou. Primitiv 29M → 4M (level 5), GPU −10 až −33 %. | `entity_particles.gd` |
+| Add the graphics quality settings | VIDEO > KVALITA: předvolba + Stíny, Odrazy, Rozlišení 3D – viz níže. | `Global.gd` (`apply_quality`), `settings.gd`, `SkyDome.gd` |
 
 ## Jak to funguje
 
@@ -107,6 +110,26 @@ Pořadí kouzel (správné, `Spells.h` je špatně – je tam „???“): 0 Fire
 - Na GPU (ablace `MB_HIDE_KINDS`, level 5): nejvíc stojí castle orb (575k trojúhelníků v jednom kusu)
   a hornet (123k × 8), dohromady −1,9 ms; upíří lukostřelci jsou díky LOD levní, ale mají 45
   renderovacích objektů na kus.
+- Kusy terénu + velikost sdílených částic (GPU, medián, 1600×900): level 5 3,00 → 2,23 ms,
+  30,2M → 4,0M primitiv; level 25 2,71 → 1,40 ms, 27,0M → 1,4M primitiv.
+
+### Nastavení kvality (`MB_QUALITY="stíny,odrazy"`, `MB_SCALE`)
+Změřeno na Ultra po optimalizacích výše (level 5, GPU medián 2,49 ms před zmenšením částic):
+
+| Položka | GPU | Výsledek |
+|---|---|---|
+| Stíny vypnuté | −0,37 ms, primitiv −27M (s velkými emitory) | v nastavení (Vypnuto/Nízké/Střední/Vysoké) |
+| SSR vypnuté | −0,40 ms | v nastavení (Zapnuto/Vypnuto) |
+| SSR 128 kroků místo 512 | −0,08 ms | vždy 512 |
+| `mesh_lod_threshold` 8 | −0,15 ms | vždy výchozí |
+| Terén 3×3 místo 5×5 | −0,18 ms | vždy 5×5 |
+| Stíny částic (Ultra vs. bez) | −0,06 ms | vždy zapnuté |
+| Rozlišení 3D 85 % | −0,20 ms (na rychlé kartě; na slabé víc) | v nastavení |
+| Jedna ortogonální mapa stínů | pomalejší než 2 pásma | Nízké = 2 pásma 1024 |
+
+Předvolby: Ultra (výchozí, plné detaily) = stíny Vysoké, odrazy, 100 %; Vysoká = stíny Střední;
+Střední = stíny Nízké, 85 %; Nízká = bez stínů a odrazů, 70 %. Skrytí kusů terénu za koncem mlhy
+(`visibility_range_end`) zamítnuto – mlha Sky3D na svém konci není neprůhledná, vzdálené kopce zmizely.
 
 ## Co by šlo dál
 

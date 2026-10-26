@@ -171,6 +171,34 @@ var fog_presets = [
 	{"begin": 0.0,  "end": 8.0,   "density": 0.5}
 ]
 
+# Graphics quality (settings VIDEO > QUALITY) - only what costs the graphics card a lot (measured,
+# docs/optimization.md); the rest stays at the full detail everywhere.
+# Shadows: 0 = Off, 1 = Low, 2 = Medium, 3 = High (the full detail)
+var shadow_quality := 3
+var reflections := true     # screen space reflections (water)
+const RENDER_SCALES := [1.0, 0.85, 0.7, 0.5] # 3D resolution, set on the viewport by the settings
+const SHADOW_ATLAS_SIZES := [0, 1024, 2048, 4096]
+const SHADOW_MODES := [0, DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS, DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS,
+	DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS]
+const SHADOW_FILTERS := [0, RenderingServer.SHADOW_QUALITY_HARD, RenderingServer.SHADOW_QUALITY_SOFT_VERY_LOW,
+	RenderingServer.SHADOW_QUALITY_SOFT_LOW]
+# how far the shadows reach (never past the end of the fog, see decode_level.sefFogEnd)
+const SHADOW_DISTANCES := [0.0, 64.0, 128.0, 600.0]
+
+# sky = the level's WorldEnvironment (Sky3D) with SunLight, MoonLight and SkyDome
+func apply_quality(sky: WorldEnvironment) -> void:
+	sky.environment.ssr_enabled = reflections
+	var skydome = sky.get_node_or_null(^"SkyDome")
+	if skydome:
+		skydome.lights_cast_shadows = shadow_quality > 0
+	if shadow_quality > 0:
+		RenderingServer.directional_shadow_atlas_set_size(SHADOW_ATLAS_SIZES[shadow_quality], true)
+		RenderingServer.directional_soft_shadow_filter_set_quality(SHADOW_FILTERS[shadow_quality])
+		for light_name in [^"SunLight", ^"MoonLight"]:
+			var light: DirectionalLight3D = sky.get_node_or_null(light_name)
+			if light:
+				light.directional_shadow_mode = SHADOW_MODES[shadow_quality]
+
 func getLevelType():
 	return LevelType
 

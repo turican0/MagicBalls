@@ -55,6 +55,11 @@ const DEFAULTS = {
 		"force_vertex_shader": 0, # 0=Off 1=On (forces per-vertex shading instead of per-pixel, for low-end GPUs)
 		"bilinear_filtering": 1,  # 0=Nearest (pixelated) 1=Linear (bilinear, smooth)
 		"separate_render_thread": 0, # 0=Off 1=On (Godot's experimental render thread, after a restart; taken from the project setting)
+		# graphics quality: a preset (0=Ultra 1=High 2=Medium 3=Low 4=Custom) sets the ones below
+		"quality_preset":     0,
+		"shadow_quality":     3,  # 0=Off 1=Low 2=Medium 3=High
+		"reflections":        1,  # 0=Off 1=On
+		"render_scale":       0,  # index into Global.RENDER_SCALES (100 % 85 % 70 % 50 %)
 	},
 	"audio": {
 		"master_volume":    100,
@@ -100,6 +105,16 @@ const RESOLUTIONS = [
 	Vector2i(0, 0),
 ]
 
+# Ultra (the full detail), High, Medium, Low: the values of QUALITY_KEYS
+const QUALITY_KEYS = ["shadow_quality", "reflections", "render_scale"]
+const QUALITY_PRESETS = [
+	[3, 1, 0],
+	[2, 1, 0],
+	[1, 1, 1],
+	[0, 0, 2],
+]
+const QUALITY_CUSTOM = 4
+
 const RESOLUTION_NAMES = [
 	"640 × 480",
 	"800 × 600",
@@ -135,6 +150,10 @@ var _sl_view_dist:      HSlider
 var _sel_fps:           OptionButton
 var _sel_show_navigation: OptionButton
 var _sel_fog_index:     OptionButton
+
+# Quality controls: the preset, then one per QUALITY_KEYS
+var _sel_quality_preset: OptionButton
+var _sel_quality: Array[OptionButton] = []
 
 # Rendering controls
 var _sel_force_vertex:  OptionButton
@@ -264,6 +283,11 @@ func _apply_settings() -> void:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 	get_tree().root.content_scale_size = res
 
+	# 3D resolution: FSR upscales below 100 %, the 2D (menus, the game's own picture) stays sharp
+	var scale: float = Global.RENDER_SCALES[clamp(_settings["video"]["render_scale"], 0, Global.RENDER_SCALES.size() - 1)]
+	get_tree().root.scaling_3d_scale = scale
+	get_tree().root.scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR if scale < 1.0 else Viewport.SCALING_3D_MODE_BILINEAR
+
 	# FPS limit
 	var fps_idx = clamp(_settings["game"]["fps_limit"], 0, FPS_VALUES.size() - 1)
 	Engine.max_fps = FPS_VALUES[fps_idx]
@@ -282,6 +306,9 @@ func _read_controls_into_settings() -> void:
 	_settings["video"]["force_vertex_shader"] = _sel_force_vertex.selected
 	_settings["video"]["bilinear_filtering"]  = _sel_bilinear_filter.selected
 	_settings["video"]["separate_render_thread"] = _sel_render_thread.selected
+	_settings["video"]["quality_preset"] = _sel_quality_preset.selected
+	for i in QUALITY_KEYS.size():
+		_settings["video"][QUALITY_KEYS[i]] = _sel_quality[i].selected
 
 	_settings["audio"]["master_volume"] = int(_sl_master.value)
 	_settings["audio"]["music_volume"]  = int(_sl_music.value)
@@ -552,6 +579,8 @@ func SetGlobals() -> void:
 	Global.max_fps         = FPS_VALUES[fps_idx]
 	Global.show_navigation = _settings["game"]["show_navigation"] == 1
 	Global.force_vertex_shader = _settings["video"]["force_vertex_shader"] == 1
+	Global.shadow_quality     = _settings["video"]["shadow_quality"]
+	Global.reflections        = _settings["video"]["reflections"] == 1
 	Global.current_fog_index = clamp(_settings["game"]["current_fog_index"], 0, Global.fog_presets.size() - 1)
 	Global.mp_mode         = _settings["multiplayer"]["mode"]
 	Global.mp_server_ip    = _settings["multiplayer"]["server_ip"]
@@ -655,6 +684,20 @@ func _build_video_tab(tc: TabContainer) -> void:
 	_sel_display = _option(vbox, "SET_DISPLAY_MODE",
 		["DISPLAY_WINDOWED", "DISPLAY_FULLSCREEN", "DISPLAY_EXCLUSIVE"],
 		_settings["video"]["display_mode"])
+
+	# --- QUALITY ---
+	vbox.add_child(_section("SEC_QUALITY"))
+	_sel_quality_preset = _option(vbox, "SET_QUALITY", ["Q_ULTRA", "Q_HIGH", "Q_MEDIUM", "Q_LOW", "Q_CUSTOM"],
+		_settings["video"]["quality_preset"])
+	_sel_quality = [
+		_option(vbox, "SET_SHADOWS", ["OFF", "Q_LOW", "Q_MEDIUM", "Q_HIGH"], _settings["video"]["shadow_quality"]),
+		_option(vbox, "SET_REFLECTIONS", ["OFF", "ON"], _settings["video"]["reflections"]),
+		_option(vbox, "SET_RENDER_SCALE", ["100 %", "85 %", "70 %", "50 %"], _settings["video"]["render_scale"]),
+	]
+	vbox.add_child(_note("NOTE_QUALITY"))
+	_sel_quality_preset.item_selected.connect(_on_quality_preset_selected)
+	for sel in _sel_quality:
+		sel.item_selected.connect(func(_idx): _update_quality_preset())
 
 	# --- RENDERING ---
 	vbox.add_child(_section("SEC_RENDERING"))
@@ -802,6 +845,19 @@ func _update_multiplayer_visibility() -> void:
 	_sp_mp_client_port.get_parent().visible = (mode == 2)
 	_le_mp_record_file.get_parent().visible = (mode == 1)
 	_sel_mp_debug.get_parent().visible      = (mode != 0)
+
+# a preset sets the four quality settings
+func _on_quality_preset_selected(idx: int) -> void:
+	if idx == QUALITY_CUSTOM:
+		return
+	for i in QUALITY_KEYS.size():
+		_sel_quality[i].select(QUALITY_PRESETS[idx][i])
+
+# a changed quality setting: the preset it matches, else Custom
+func _update_quality_preset() -> void:
+	var values = _sel_quality.map(func(sel): return sel.selected)
+	var idx = QUALITY_PRESETS.find(values)
+	_sel_quality_preset.select(idx if idx >= 0 else QUALITY_CUSTOM)
 
 func _on_level_mode_changed(_idx: int) -> void:
 	_update_custom_level_visibility()

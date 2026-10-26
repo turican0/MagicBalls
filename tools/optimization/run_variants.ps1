@@ -2,7 +2,8 @@
 # once per run, and writes the CSVs to out/ (not committed). See docs/optimization.md.
 #
 # run_variants.ps1 -Prefix base -Frames 1500 -Gpu 0 -Runs "base=;", "noshadows=noshadows;", "half=;0.5"
-#   -Runs           name=variants;scale - variants of profile.gd (MB_VARIANT), scale = 3D render scale
+#   -Runs           name=variants;scale;quality - variants of profile.gd (MB_VARIANT), scale = 3D render
+#                   scale, quality = MB_QUALITY "shadows,reflections" (e.g. "low=;0.85;1,0")
 #   -Level / -Play  --set_level (level - 1) and the replay under -Replays (default level 5)
 #   -RenderThread   safe / separate (Godot's --render-thread)
 #   -Godot          the Godot 4.7 executable (default: MB_GODOT, else next to the repository)
@@ -22,9 +23,10 @@ $env:MB_TEST_FRAMES = "$Frames"
 $env:MB_GPU = $Gpu
 foreach ($r in $Runs) {
 	$name, $spec = $r.Split("=", 2)
-	$variant, $scale = $spec.Split(";", 2)
+	$variant, $scale, $quality = $spec.Split(";", 3)
 	$env:MB_VARIANT = $variant
 	$env:MB_SCALE = $scale
+	$env:MB_QUALITY = $quality
 	$env:MB_OUT = "$out/$Prefix-$name.csv"
 	$env:MB_STATE_OUT = "$out/$Prefix-$name-state"
 	$env:MB_SHOT_OUT = "$out/$Prefix-$name-shot"
