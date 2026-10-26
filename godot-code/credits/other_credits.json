@@ -1,0 +1,30 @@
+{
+ "team": [
+  {"name": "turican0", "role": "MagicBalls, REMC2", "url": "https://github.com/turican0"},
+  {"name": "TimmyD", "role": "", "url": ""}
+ ],
+ "components": [
+  {"title": "Godot Engine", "url": "https://godotengine.org/", "author": "Godot Engine contributors", "license": "MIT", "license_url": "https://opensource.org/licenses/MIT"},
+  {"title": "godot-cpp", "url": "https://github.com/godotengine/godot-cpp", "author": "Godot Engine contributors", "license": "MIT", "license_url": "https://opensource.org/licenses/MIT"},
+  {"title": "Sky3D", "url": "https://github.com/TokisanGames/Sky3D", "author": "Cory Petkovsek and contributors, J. Cuéllar", "license": "MIT", "license_url": "https://opensource.org/licenses/MIT"},
+  {"title": "The Milky Way panorama (Milkyway.jpg, modified as StarField.jpg)", "url": "https://www.eso.org/public/images/eso0932a/", "author": "ESO / S. Brunier", "license": "CC BY 4.0", "license_url": "https://creativecommons.org/licenses/by/4.0/"},
+  {"title": "Moon texture (Sky3D)", "url": "https://www.highend3d.com/downloads/3d-textures/c/16k-earth-w-4k-moon-free", "author": "GPoSM", "license": "MIT", "license_url": "https://opensource.org/licenses/MIT"},
+  {"title": "Godot MIDI Player", "url": "https://github.com/arlez80/godot-midi-player", "author": "Yui Kinomoto (@arlez80)", "license": "MIT", "license_url": "https://opensource.org/licenses/MIT"},
+  {"title": "GodotExplosionVFX", "url": "", "author": "Duarte David", "license": "MIT", "license_url": "https://opensource.org/licenses/MIT"},
+  {"title": "Ground037, Rock030, Rock023 textures", "url": "https://ambientcg.com/", "author": "ambientCG", "license": "CC0 1.0", "license_url": "https://docs.ambientcg.com/license/"},
+  {"title": "EMU8000 (AWE32) emulation based on 86Box", "url": "https://86box.net/", "author": "86Box contributors", "license": "GPL-2.0-or-later", "license_url": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"},
+  {"title": "RapidJSON", "url": "https://rapidjson.org/", "author": "THL A29 Limited (Tencent) and Milo Yip", "license": "MIT", "license_url": "https://opensource.org/licenses/MIT"},
+  {"title": "stb_image / stb_image_write", "url": "https://github.com/nothings/stb", "author": "Sean Barrett and contributors", "license": "Public domain / MIT", "license_url": ""},
+  {"title": "lib9660", "url": "", "author": "Erin Shepherd", "license": "ISC", "license_url": "https://opensource.org/licenses/ISC"},
+  {"title": "xmi2mid", "url": "", "author": "Peter \"Corsix\" Cawley", "license": "MIT", "license_url": "https://opensource.org/licenses/MIT"},
+  {"title": "GeneralUser GS SoundFont", "url": "https://schristiancollins.com/generaluser.php", "author": "S. Christian Collins", "license": "GeneralUser GS License", "license_url": "https://schristiancollins.com/generaluser.php"}
+ ],
+ "thanks": [
+  {"title": "Magic Carpet 2: The Netherworlds (the original game)", "url": "", "author": "Bullfrog Productions / Electronic Arts"},
+  {"title": "Magic Carpet 2 HD mod", "url": "https://github.com/thobbsinteractive/magic-carpet-2-hd", "author": ""},
+  {"title": "Spatial Fire Raymarched shader", "url": "https://godotshaders.com/shader/spatial-fire-raymarched/", "author": ""},
+  {"title": "Free VFX image sequences (fire flipbooks)", "url": "https://unity.com/blog/engine-platform/free-vfx-image-sequences-flipbooks", "author": "Unity Technologies"},
+  {"title": "Vibrant sun with bright rays (sun image)", "url": "https://www.vecteezy.com/", "author": "Vecteezy"},
+  {"title": "Chorium, FatBoy and Jnsgm2 SoundFonts", "url": "", "author": ""}
+ ]
+}

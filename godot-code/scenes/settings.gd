@@ -40,6 +40,10 @@ const COUNTDOWN_SECONDS = 3
 const EDITOR_KEY        = KEY_E
 const SETTINGS_KEY      = KEY_S
 const REIMPORT_KEY      = KEY_R
+const CREDITS_KEY       = KEY_C
+# made by tools/sketchfab_credits.py (models) and by hand (the rest), also the source of CREDITS.md
+const MODELS_CREDITS_PATH = "res://credits/models_credits.json"
+const OTHER_CREDITS_PATH  = "res://credits/other_credits.json"
 
 # =============================================
 # DEFAULT SETTINGS
@@ -141,6 +145,9 @@ var _countdown_active:  bool  = false
 var _settings_canvas:   CanvasLayer
 var _settings_open:     bool = false
 
+var _credits_canvas:    CanvasLayer
+var _credits_open:      bool = false
+
 # Control refs (filled during UI build)
 var _sel_resolution:    OptionButton
 var _sel_display:       OptionButton
@@ -207,11 +214,17 @@ func _input(event: InputEvent) -> void:
 			if event.keycode == KEY_ESCAPE:
 				_on_cancel_pressed()
 			return
+		if _credits_open:
+			if event.keycode == KEY_ESCAPE or event.keycode == CREDITS_KEY:
+				_close_credits()
+			return
 		if event.keycode == KEY_ESCAPE:
 			_countdown_active = false
 			_launch_game()
 		elif event.keycode == SETTINGS_KEY:
 			_open_settings()
+		elif event.keycode == CREDITS_KEY:
+			_open_credits()
 		elif event.keycode == REIMPORT_KEY:
 			_countdown_active = false
 			_reimport_scene()
@@ -429,17 +442,20 @@ func _show_countdown() -> void:
 	hint.add_theme_color_override("font_color", Color(0.50, 0.50, 0.60))
 	_countdown_canvas.add_child(hint)
 
-	var btn = Button.new()
-	btn.text = "SETTINGS"
-	btn.grow_horizontal = Control.GROW_DIRECTION_BOTH # a longer translation widens it to both sides
-	btn.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-	btn.offset_top    = -100
-	btn.offset_bottom = -50
-	btn.offset_left   = -80
-	btn.offset_right  = 80
-	_apply_button_theme(btn)
-	btn.pressed.connect(_open_settings)
-	_countdown_canvas.add_child(btn)
+	var buttons = HBoxContainer.new()
+	buttons.add_theme_constant_override("separation", 16)
+	buttons.grow_horizontal = Control.GROW_DIRECTION_BOTH # a longer translation widens it to both sides
+	buttons.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+	buttons.offset_top    = -100
+	buttons.offset_bottom = -50
+	_countdown_canvas.add_child(buttons)
+	for b in [["SETTINGS", _open_settings], ["CREDITS", _open_credits]]:
+		var btn = Button.new()
+		btn.text = b[0]
+		btn.custom_minimum_size = Vector2(160, 0)
+		_apply_button_theme(btn)
+		btn.pressed.connect(b[1])
+		buttons.add_child(btn)
 
 	_reset_countdown(COUNTDOWN_SECONDS)
 
@@ -669,6 +685,148 @@ func _on_cancel_pressed() -> void:
 	Global.set_text_language(_language_before)
 	_countdown_label.text = "LAUNCH_LOADING"
 	_reset_countdown(COUNTDOWN_SECONDS)
+
+# =============================================
+# CREDITS
+# =============================================
+
+func _open_credits() -> void:
+	if _settings_open or _credits_open:
+		return
+	_countdown_active = false
+	_credits_open     = true
+
+	_credits_canvas      = CanvasLayer.new()
+	_credits_canvas.name = "CreditsCanvas"
+	add_child(_credits_canvas)
+
+	var backdrop = ColorRect.new()
+	backdrop.color = Color(0, 0, 0, 0.85)
+	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_credits_canvas.add_child(backdrop)
+
+	var panel = Panel.new()
+	var screen = get_viewport().get_visible_rect().size
+	var pw = min(screen.x * 0.85, 860.0)
+	var ph = min(screen.y * 0.85, 620.0)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	panel.offset_left   = -pw / 2.0
+	panel.offset_right  =  pw / 2.0
+	panel.offset_top    = -ph / 2.0
+	panel.offset_bottom =  ph / 2.0
+	var ps = StyleBoxFlat.new()
+	ps.bg_color = UI_BG_COLOR
+	ps.border_color = UI_BORDER_COLOR
+	ps.set_border_width_all(UI_BORDER_WIDTH)
+	ps.set_corner_radius_all(UI_CORNER_RADIUS)
+	panel.add_theme_stylebox_override("panel", ps)
+	_credits_canvas.add_child(panel)
+
+	var root_vbox = VBoxContainer.new()
+	root_vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.add_child(root_vbox)
+
+	var header = _make_header()
+	header.get_child(0).text = "CREDITS"
+	root_vbox.add_child(header)
+
+	var mg = MarginContainer.new()
+	mg.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	for side in ["margin_top", "margin_bottom", "margin_left", "margin_right"]:
+		mg.add_theme_constant_override(side, 16)
+	root_vbox.add_child(mg)
+	var rtl = RichTextLabel.new()
+	rtl.bbcode_enabled = true
+	rtl.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED # names and titles stay as they are
+	rtl.add_theme_color_override("default_color", UI_TEXT_COLOR)
+	rtl.add_theme_font_size_override("normal_font_size", 14)
+	rtl.meta_clicked.connect(func(meta): OS.shell_open(str(meta)))
+	rtl.text = _credits_bbcode()
+	mg.add_child(rtl)
+
+	var footer = HBoxContainer.new()
+	footer.custom_minimum_size = Vector2(0, 52)
+	footer.alignment = BoxContainer.ALIGNMENT_END
+	var btn_close = Button.new()
+	btn_close.text = "CLOSE"
+	btn_close.custom_minimum_size = Vector2(110, 36)
+	_apply_button_theme(btn_close)
+	btn_close.pressed.connect(_close_credits)
+	var margin = MarginContainer.new()
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_child(btn_close)
+	footer.add_child(margin)
+	root_vbox.add_child(footer)
+
+func _close_credits() -> void:
+	_credits_open = false
+	if is_instance_valid(_credits_canvas):
+		_credits_canvas.queue_free()
+	_reset_countdown(COUNTDOWN_SECONDS)
+
+func _read_json(path: String) -> Variant:
+	var text = FileAccess.get_file_as_string(path)
+	return JSON.parse_string(text) if text != "" else null
+
+# a name or title as plain text (some contain [ ])
+func _bb(s: String) -> String:
+	return s.replace("[", "\u0001").replace("]", "[rb]").replace("\u0001", "[lb]")
+
+func _bb_link(text: String, url: String) -> String:
+	return "[url=%s]%s[/url]" % [url, _bb(text)] if url != "" else _bb(text)
+
+func _credits_bbcode() -> String:
+	var title_color = "#" + UI_TITLE_COLOR.to_html(false)
+	var dim = "[color=#9999b3]"
+	var heading = func(key: String) -> String:
+		return "\n[font_size=18][color=%s]%s[/color][/font_size]\n" % [title_color, tr(key)]
+	var models = _read_json(MODELS_CREDITS_PATH)
+	var other = _read_json(OTHER_CREDITS_PATH)
+	if models == null:
+		models = []
+	if other == null:
+		other = {}
+
+	var s = "[center][font_size=24][color=%s]MagicBalls[/color][/font_size]\n%s[/center]\n" % [title_color, tr("CREDITS_INTRO")]
+
+	s += heading.call("CREDITS_TEAM")
+	for t in other.get("team", []):
+		s += "[b]%s[/b]" % _bb_link(t["name"], t.get("url", ""))
+		if t.get("role", "") != "":
+			s += "  %s%s[/color]" % [dim, _bb(t["role"])]
+		s += "\n"
+
+	s += heading.call("CREDITS_MODELS")
+	var category = ""
+	var lost: Array = [] # models whose license is not known any more go to the thanks
+	for m in models:
+		if m.get("slug", "") == "unavailable":
+			lost.append(m)
+			continue
+		if m["category"] != category:
+			category = m["category"]
+			s += "[color=%s]%s[/color]\n" % [title_color, _bb(category)]
+		s += "  %s" % _bb_link(m["title"], m["url"])
+		if m.get("author", "") != "":
+			s += " – %s" % _bb_link(m["author"], m.get("author_url", ""))
+		if m.get("license", "") != "":
+			s += "  %s(%s)[/color]" % [dim, _bb_link(m["license"], m.get("license_url", ""))]
+		s += "\n"
+
+	s += heading.call("CREDITS_OTHER")
+	for c in other.get("components", []):
+		s += "%s – %s  %s(%s)[/color]\n" % [_bb_link(c["title"], c.get("url", "")), _bb(c.get("author", "")),
+			dim, _bb_link(c["license"], c.get("license_url", ""))]
+
+	s += heading.call("CREDITS_THANKS")
+	for t in other.get("thanks", []):
+		s += _bb_link(t["title"], t.get("url", ""))
+		if t.get("author", "") != "":
+			s += " – " + _bb(t["author"])
+		s += "\n"
+	for m in lost:
+		s += "%s  %s(Sketchfab)[/color]\n" % [_bb_link(m["title"], m["url"]), dim]
+	return s
 
 # =============================================
 # TAB BUILDERS
