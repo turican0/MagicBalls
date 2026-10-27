@@ -54,6 +54,11 @@ var prof_entities:Dictionary = {}
 # The log of the long frames (scenes/hitch_log.gd), on with the user argument --debug-hitches: every
 # frame over 30 ms with where its time went, and what happened in it (prof_events).
 var debug_hitches:bool = "--debug-hitches" in OS.get_cmdline_user_args()
+# skip the welcome screen, the intro and the animations (test sessions): --skip-videos (mb_engine)
+var skip_videos:bool = "--skip-videos" in OS.get_cmdline_user_args()
+# --level N (test sessions): the custom level N (1 = level 1) instead of the settings, with
+# --skip-videos straight into it
+var start_level:int = int(_user_arg("--level"))
 var prof_events: Array[String] = []
 
 func _ready() -> void:

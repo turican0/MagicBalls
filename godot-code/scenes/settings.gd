@@ -596,6 +596,9 @@ func SetGlobals() -> void:
 	Global.inverse_mouseY  = _settings["input"]["invert_y"]
 	Global.level_mode      = _settings["game"]["level_mode"]
 	Global.custom_level    = _settings["game"]["custom_level"]
+	if Global.start_level > 0: # --level N (test sessions): straight into level N
+		Global.level_mode   = 1
+		Global.custom_level = Global.start_level - 1
 	var fps_idx            = clamp(_settings["game"]["fps_limit"], 0, FPS_VALUES.size() - 1)
 	Global.max_fps         = FPS_VALUES[fps_idx]
 	Global.show_navigation = _settings["game"]["show_navigation"] == 1

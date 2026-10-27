@@ -34,6 +34,9 @@ func init():
 	
 func beginMainMenu():
 	MBDebug.log("main menu")
+	# with --level the menu is skipped too, into the level - only the first time, the menu after the
+	# level is for quitting
+	_skipping_video = Global.skip_videos and Global.start_level > 0 and not _level_started
 	Global.Main_Sounds.setSoundBank(0)
 	Global.countLang=getLangCount()
 	Global.defaultLangIndex=Main_DecodeLevel.initLanguage(Global.defaultLangIndex+1)-1
@@ -44,6 +47,29 @@ func beginMainMenu():
 
 func beginAnimation(soundIndex):
 	Global.Main_Sounds.setSoundBank(soundIndex)
+	# not the map between levels (sound bank 0): Space there starts the next level
+	_skipping_video = Global.skip_videos and soundIndex != 0
+
+# --skip-videos (for test sessions): from the start of the engine to the main menu (the welcome
+# screen, the intro) and in every animation, Space is pressed every half second - as a player
+# skipping them
+var _skipping_video: bool = Global.skip_videos
+var _skip_timer := 0.0
+var _level_started := false
+
+func _skip_video(delta: float) -> void:
+	_skip_timer += delta
+	if _skip_timer < 0.5:
+		return
+	_skip_timer = 0.0
+	var press := InputEventKey.new()
+	press.keycode = KEY_SPACE
+	press.physical_keycode = KEY_SPACE
+	press.pressed = true
+	Input.parse_input_event(press)
+	var release: InputEventKey = press.duplicate()
+	release.pressed = false
+	Input.parse_input_event.call_deferred(release)
 
 func set_language_texture(lang_id: int) -> bool:
 	var base_path := "user://convertdata/language/"
@@ -80,6 +106,7 @@ func getLangCount() -> int:
 	return count
 
 func beginInGame():
+	_level_started = true
 	var t := Time.get_ticks_usec()
 	MBDebug.log("level loading")
 	var mode = Main_DecodeLevel.mouse_free_for_load()
@@ -97,6 +124,8 @@ func _process(_p_delta) -> void:
 	if Main_DecodeLevel.is_exiting:
 		return # the game is ended (window closed) - its memory is freed, the engine must not run
 
+	if _skipping_video and not inGameLoop:
+		_skip_video(_p_delta)
 	var endRunVar = Main_DecodeLevel.MBrun(inGameLoop)
 	if endRunVar != 0 and MBDebug.enabled():
 		MBDebug.log("engine run result %d" % endRunVar)
