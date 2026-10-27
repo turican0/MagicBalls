@@ -7,6 +7,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
+#include <ctime>
 #include <functional>
 #include <mutex>
 #include <thread>
@@ -156,7 +157,13 @@ void MBDebugLogInit() {
 #else
 	g_file = fopen(path.utf8().get_data(), "w");
 #endif
-	MBDebugLog("debug log on, file %s", g_file ? path.utf8().get_data() : "(could not be opened)");
+	// the wall clock of the log's 0 s - to match the log with outside timings (when the process ended)
+	const auto now = std::chrono::system_clock::now();
+	const std::time_t seconds = std::chrono::system_clock::to_time_t(now);
+	const int ms = (int)(std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000);
+	char clock[32];
+	std::strftime(clock, sizeof(clock), "%H:%M:%S", std::localtime(&seconds));
+	MBDebugLog("debug log on at %s.%03d, file %s", clock, ms, g_file ? path.utf8().get_data() : "(could not be opened)");
 }
 
 // the handler's code goes away with the library: removed when it is unloaded, as late as possible

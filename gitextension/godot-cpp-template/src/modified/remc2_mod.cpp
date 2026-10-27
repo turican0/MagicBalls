@@ -58,9 +58,13 @@ void sub_main_mod_end() {
 	if (sub_main_cleaned)
 		return;
 	sub_main_cleaned = true;
+	MBDebugLog("end: removing devices");
 	sub_5BC20(); //23CC20 //remove devices?
+	MBDebugLog("end: cleaning memory");
 	sub_56730_clean_memory(); //237730
+	MBDebugLog("end: cleaning up sound");
 	clean_up_sound();
+	MBDebugLog("end: network and events");
 	if (CommandLineParams.ModeNetwork()) {
 		if (Iam_server || Iam_client) {
 			EndMyNetLib();

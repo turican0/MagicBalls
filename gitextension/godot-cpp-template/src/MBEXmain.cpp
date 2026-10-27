@@ -178,6 +178,7 @@ void MBEXclass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("REMC2BeginGame", "text", "text", "int"), &MBEXclass::REMC2BeginGame);
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetNetwork", "mode", "serverIp", "serverPort", "clientPort", "debug", "recordFile"), &MBEXclass::REMC2SetNetwork);
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetPlayFile", "playFile"), &MBEXclass::REMC2SetPlayFile);
+	godot::ClassDB::bind_method(D_METHOD("REMC2SetRecordFile", "recordFile"), &MBEXclass::REMC2SetRecordFile);
 	godot::ClassDB::bind_method(D_METHOD("getFrameProfile"), &MBEXclass::getFrameProfile);
 	godot::ClassDB::bind_method(D_METHOD("REMC2SetMusic", "musicType", "awe32RomFolder", "useMagicCarpet1Music", "awe32GmIntroMusic", "awe32BufferMs"), &MBEXclass::REMC2SetMusic);
 	godot::ClassDB::bind_method(D_METHOD("REMC2EndGame"), &MBEXclass::REMC2EndGame);
@@ -1960,6 +1961,17 @@ void MBEXclass::REMC2SetPlayFile(String playFile) {
 	play_args.push_back(PLATFORM_GLOBALIZE_PATH(file).utf8().get_data());
 }
 
+// Records the inputs of the game to a file (--record_file, InputRecorder) - a played session can
+// then be played again with REMC2SetPlayFile. "" = no recording.
+void MBEXclass::REMC2SetRecordFile(String recordFile) {
+	record_args.clear();
+	String file = recordFile.strip_edges();
+	if (file.is_empty())
+		return;
+	record_args.push_back("--record_file");
+	record_args.push_back(PLATFORM_GLOBALIZE_PATH(file).utf8().get_data());
+}
+
 // The time of the engine parts in the last frame in ms (frame_profile.h).
 Dictionary MBEXclass::getFrameProfile() {
 	static const char *names[PROF_COUNT] = { "engine", "screen_image", "e_palette", "e_input", "e_entities",
@@ -2020,6 +2032,11 @@ void MBEXclass::REMC2BeginGame(String cdPath, String gamePath, int customLevel, 
 		MBDebugLog("REMC2BeginGame mode: set_level index: %d", (int)customLevel);
 	}
 	for (std::string &arg : network_args) {
+		if (saved_argc >= 16)
+			break;
+		saved_argv[saved_argc++] = (char *)arg.c_str();
+	}
+	for (std::string &arg : record_args) {
 		if (saved_argc >= 16)
 			break;
 		saved_argv[saved_argc++] = (char *)arg.c_str();

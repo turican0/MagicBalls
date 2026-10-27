@@ -1430,7 +1430,10 @@ func exit_game() -> void:
 	if is_exiting:
 		return
 	is_exiting = true
-	MBDebug.log("exit game")
+	if MBDebug.enabled():
+		# a scene still loading on a worker thread is waited for when the program ends
+		var loading := _requested_scenes.keys().filter(func(p): return not _loaded_scenes.has(p))
+		MBDebug.log("exit game, scenes still loading: %d, waiting in the queue: %d" % [loading.size(), _background_scenes.size()])
 	if Global.MBEX:
 		Global.MBEX.REMC2EndGame()
 	set_process(false)
@@ -1988,6 +1991,7 @@ func MBEXinit():
 		Global.MBEX.REMC2SetNetwork(Global.mp_mode, Global.mp_server_ip, Global.mp_server_port,
 			Global.mp_client_port, Global.mp_debug, Global.mp_record_file)
 		Global.MBEX.REMC2SetPlayFile(Global.play_file)
+		Global.MBEX.REMC2SetRecordFile(Global.record_file)
 		if Global.music_type == Global.MUSIC_AWE32:
 			Global.prepareAwe32Rom()
 		Global.MBEX.REMC2SetMusic(Global.MUSIC_TYPE_NAMES[Global.music_type], Global.AWE32_ROM_DIR,

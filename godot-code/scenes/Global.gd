@@ -30,8 +30,17 @@ var mp_record_file:String = ""
 # on with the user argument --debug-sounds (MagicBalls.exe -- --debug-sounds)
 var debug_sounds:bool = "--debug-sounds" in OS.get_cmdline_user_args()
 
-# a remc2 recording played instead of the player (--play_file), "" = none
-var play_file:String = ""
+# a remc2 recording played instead of the player (--play_file), "" = none; the user argument
+# --play <file> (MagicBalls.exe -- --play session.dem) plays one in the normal game
+var play_file:String = _user_arg("--play")
+# the inputs of the game recorded to a file (--record_file): the user argument --record <file>
+var record_file:String = _user_arg("--record")
+
+# the value after a user argument (after --), "" without it
+static func _user_arg(name: String) -> String:
+	var args := OS.get_cmdline_user_args()
+	var i := args.find(name)
+	return args[i + 1] if i >= 0 and i + 1 < args.size() else ""
 
 # Profiling (tools/optimization/godot/profile.gd): when on, the parts of a frame add their time
 # in ms to prof; the profiler reads and clears it every frame.
@@ -42,10 +51,22 @@ var prof:Dictionary = {}
 # ({what: [count, total ms, max ms]}), kept for the whole run
 var prof_entities:Dictionary = {}
 
+# The log of the long frames (scenes/hitch_log.gd), on with the user argument --debug-hitches: every
+# frame over 30 ms with where its time went, and what happened in it (prof_events).
+var debug_hitches:bool = "--debug-hitches" in OS.get_cmdline_user_args()
+var prof_events: Array[String] = []
+
+func _ready() -> void:
+	if debug_hitches:
+		profiling = true
+		add_child(preload("res://scenes/hitch_log.gd").new())
+
 func prof_entity(key, what: String, start_usec: int) -> void:
 	if not profiling:
 		return
 	var ms := (Time.get_ticks_usec() - start_usec) / 1000.0
+	if debug_hitches and ms >= 1.0:
+		prof_events.append("%s %s %.1f ms" % [what, key, ms])
 	var item: Dictionary = prof_entities.get_or_add(key, {})
 	var s: Array = item.get_or_add(what, [0, 0.0, 0.0])
 	s[0] += 1

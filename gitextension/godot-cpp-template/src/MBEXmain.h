@@ -41,6 +41,8 @@ private:
 	std::vector<std::string> network_args;
 	// --play_file <recording>, set by REMC2SetPlayFile() before REMC2BeginGame()
 	std::vector<std::string> play_args;
+	// --record_file <recording>, set by REMC2SetRecordFile() before REMC2BeginGame()
+	std::vector<std::string> record_args;
 
 	MeshInstance3D *mesh_instance_bottom = nullptr;
 	MeshInstance3D *mesh_instance_top = nullptr;
@@ -130,6 +132,7 @@ public:
 	void REMC2SetNetwork(int mode, String serverIp, int serverPort, int clientPort, bool debug, String recordFile);
 	void REMC2SetMusic(String musicType, String awe32RomFolder, bool useMagicCarpet1Music, bool awe32GmIntroMusic, int awe32BufferMs);
 	void REMC2SetPlayFile(String playFile);
+	void REMC2SetRecordFile(String recordFile);
 	Dictionary getFrameProfile();
 	void REMC2EndGame();
 	//void REMC2BeginItem();
