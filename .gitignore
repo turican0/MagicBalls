@@ -55,3 +55,5 @@ godot-code/MBEXout/bin/android.arm64-v8a/libEXTENSION-NAME.android.template_debu
 # profiling runs (tools/optimization/run_variants.ps1) and the harness copied into the project
 tools/optimization/out/
 godot-code/zz_tools/
+# the AddressSanitizer build (docs/debugging.md)
+gitextension/godot-cpp-template/build-asan/
