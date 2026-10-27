@@ -235,7 +235,9 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 			outbufferx[i].blue = x_BYTE_181544_oldpalbufferx[i].blue + ((CurrentPaletteFade_181B44) * (newpalbufferx[i].blue - x_BYTE_181544_oldpalbufferx[i].blue) / shadow_levels);
 		}
 		sub_41A90_VGA_Palette_install(outbufferx);
-		fix_sub_9A0FC_wait_to_screen_beam(frameDelay);
+		// No blit and no frame of its own here: a single step is called once per game frame (the
+		// palette changes in the game), the frame shows it at its end. With a frame of its own every
+		// game frame of a fade took two frames - the game ran at half speed during every fade.
 
 		//compute darker palette
 		int old_sum = 0;
@@ -271,8 +273,6 @@ int16_t sub_90B27_VGA_pal_fadein_fadeout_mod(TColor *newpalbufferx, uint8_t shad
 			else
 				MBChangePalette(11, shadow_levels);
 		}
-
-		thread2_wait_for_continue(Thread2_State::FADEIN_FADEOUT_LOOP);
 	} else {
 		sub_A0D2C_VGA_get_Palette(x_BYTE_181544_oldpalbufferx);
 		if (!newpalbufferx) //ebp+14 - 355204
