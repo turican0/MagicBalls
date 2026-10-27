@@ -205,6 +205,11 @@ const SHADOW_FILTERS := [0, RenderingServer.SHADOW_QUALITY_HARD, RenderingServer
 	RenderingServer.SHADOW_QUALITY_SOFT_LOW]
 # how far the shadows reach (never past the end of the fog, see decode_level.sefFogEnd)
 const SHADOW_DISTANCES := [0.0, 64.0, 128.0, 600.0]
+# A coarser shadow map needs the shadow further from the surface, else the surfaces shadow
+# themselves in stripes (shadow acne - the crystal pillars at the end of level 1); High keeps the
+# defaults of DirectionalLight3D (bias 0.1, normal bias 1.0)
+const SHADOW_BIASES := [0.0, 0.2, 0.15, 0.1]
+const SHADOW_NORMAL_BIASES := [0.0, 4.0, 3.0, 1.0]
 
 # sky = the level's WorldEnvironment (Sky3D) with SunLight, MoonLight and SkyDome
 func apply_quality(sky: WorldEnvironment) -> void:
@@ -219,6 +224,8 @@ func apply_quality(sky: WorldEnvironment) -> void:
 			var light: DirectionalLight3D = sky.get_node_or_null(light_name)
 			if light:
 				light.directional_shadow_mode = SHADOW_MODES[shadow_quality]
+				light.shadow_bias = SHADOW_BIASES[shadow_quality]
+				light.shadow_normal_bias = SHADOW_NORMAL_BIASES[shadow_quality]
 
 func getLevelType():
 	return LevelType
