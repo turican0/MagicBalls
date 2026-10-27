@@ -412,7 +412,7 @@ var library = {
 	Vector3i(5,393,0): "res://entites/object_5_393_minibasket.tscn",#mini-torso
 	Vector3i(5,199,0): "res://entites/object_5_199_people4.tscn",#people4 199 200 201-OK
 	Vector3i(5,263,0): "res://entites/object_5_263_darklion.tscn",#lion zzzzzzzzzzzz
-	Vector3i(5,279,0): "res://entites/object_5_279_beetle.tscn",#beetle-OK
+	Vector3i(5,279,0): "res://entites/object_5_279_firefly.tscn",#firefly (the old one: object_5_279_beetle.tscn)
 	Vector3i(5,287,0): "res://entites/object_5_287_spider.tscn",#spider zzzzzzzzzzzz
 	
 	Vector3i(5,311,0): "res://entites/object_5_311_water_beast.tscn",#water beast

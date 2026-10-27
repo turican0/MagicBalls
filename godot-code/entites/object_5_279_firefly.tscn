@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entites/object_5_279_firefly.gd" id="1_ffly"]
+[ext_resource type="PackedScene" path="res://entites/sources/firefly/firefly.blend" id="3_ffly"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_ffly")
+light = NodePath("OmniLight3D")
+
+[node name="Firefly" parent="." instance=ExtResource("3_ffly")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04, 0.75)
+light_color = Color(0.85, 1, 0.45, 1)
+light_energy = 0.35
+omni_range = 20.0
