@@ -7,10 +7,12 @@ extends Node3D
 @export var light: NodePath # OmniLight3D, put at the lantern
 @export var glow_min: float = 0.05 # emission energy between flashes (the organ is pale, not lit)
 @export var glow_max: float = 2.5
-@export var light_min: float = 0.35 # light energy between flashes (the old firefly's light had 1.0)
-@export var light_max: float = 1.6
-@export var rise_time: float = 0.15
+@export var light_min: float = 0.0 # light energy between flashes - the light follows the lantern fully
+@export var light_max: float = 1.0
+@export var rise_time: float = 0.4
 @export var fade_time: float = 0.4
+@export var hold_min: float = 1 # full brightness of a flash (between the rise and the fade)
+@export var hold_max: float = 5
 @export var pause_min: float = 1.0 # dark pause between flashes (or bursts)
 @export var pause_max: float = 9.0
 
@@ -50,7 +52,7 @@ func _ready() -> void:
 
 func _next_flash() -> void:
 	_rise = rise_time * _rng.randf_range(0.7, 1.4)
-	_hold = _rng.randf_range(0.02, 0.15)
+	_hold = _rng.randf_range(hold_min, hold_max)
 	_fade = fade_time * _rng.randf_range(0.7, 1.8)
 	_peak = _rng.randf_range(0.7, 1.0)
 	if _burst > 0:
