@@ -1436,9 +1436,21 @@ func exit_game() -> void:
 		MBDebug.log("exit game, scenes still loading: %d, waiting in the queue: %d" % [loading.size(), _background_scenes.size()])
 	if Global.MBEX:
 		Global.MBEX.REMC2EndGame()
+	_finish_background_loading()
 	set_process(false)
 	set_physics_process(false)
 	get_tree().quit()
+
+# Scenes still loading on worker threads when the game quits: nothing new is started and the
+# running loads are waited for here, while the game is still whole.
+func _finish_background_loading() -> void:
+	_background_scenes.clear()
+	var t := Time.get_ticks_msec()
+	for path in _requested_scenes:
+		if not _loaded_scenes.has(path):
+			ResourceLoader.load_threaded_get(path)
+	if MBDebug.enabled():
+		MBDebug.log("exit game: background loading finished in %d ms" % (Time.get_ticks_msec() - t))
 
 # --- Mouse grab ---------------------------------------------------------------
 # The game draws its own cursor, so while it is played the OS cursor is hidden and confined
